@@ -1,0 +1,13 @@
+{
+  "name": "ICP Intelligence MCP - Customer Targeting",
+  "version": "1.0.2",
+  "description": "Deep ICP analysis with 9 tools: customer profiling, scoring models, buyer mapping, market sizing, and account prioritization.",
+  "author": "https://github.com/shashwatgtm",
+  "license": "MIT",
+  "repository": "https://github.com/shashwatgtm/icp-intelligence-mcp",
+  "runtime": "node",
+  "entry": "dist/index.js",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}

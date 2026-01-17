@@ -1,0 +1,41 @@
+{
+  "name": "@shashwatgtmalpha/icp-intelligence-mcp",
+  "mcpName": "io.github.shashwatgtm/icp-intelligence-mcp",
+  "version": "1.0.0",
+  "description": "ICP Intelligence - Pattern detection, scoring, market sizing",
+  "main": "dist/index.js",
+  "bin": {
+    "icp-intelligence-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "icp",
+    "ideal-customer-profile",
+    "b2b",
+    "gtm",
+    "market-sizing",
+    "tam-sam-som"
+  ],
+  "author": "Shashwat Ghosh <shashwat@helixgtm.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shashwatgtm/icp-intelligence-mcp.git"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
