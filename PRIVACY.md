@@ -1,59 +1,38 @@
-# Privacy Policy
+# Privacy Policy: ICP Intelligence MCP server
 
-## Overview
+Last updated: 2026-09-24. The same policy is published at https://icp-intelligence-mcp.netlify.app/privacy.html.
 
-This MCP (Model Context Protocol) server is part of the GTM Helix MCP Suite, developed by Shashwat Ghosh / Helix GTM Consulting.
+## Who we are
 
-## Data Collection
+ICP Intelligence is built and run by Shashwat Ghosh, Helix GTM Consulting. Contact: shashwat@gtmhelix.com.
 
-**This MCP does NOT collect, store, transmit, or process any personal data.**
+## What the hosted server receives
 
-### What This MCP Does
-- Processes inputs provided by the user during the current session
-- Generates outputs based on those inputs using AI models
-- Returns results directly to the user's Claude Desktop application
+When an AI assistant such as Claude calls one of the tools, the server at `https://icp-intelligence-mcp.netlify.app/mcp` receives the tool name and the inputs for that call. It does not receive your chat history, account details, files or anything else from your conversation.
 
-### What This MCP Does NOT Do
-- Store any user data between sessions
-- Transmit data to external servers
-- Collect analytics or usage metrics
-- Access files on your computer
-- Make network requests to third-party services
-- Retain any information after the session ends
+## How it is used and stored
 
-## Data Flow
+- Inputs are used only to build the text the tool returns, inside that one request.
+- Nothing is kept: no database, no file storage, no cache. Each request starts from nothing.
+- Our code does not log tool inputs or outputs.
+- No accounts, cookies, analytics or advertising.
 
-1. User provides input through Claude Desktop
-2. MCP processes the input locally
-3. Results are returned to Claude Desktop
-4. No data is retained after the session
+## Who else processes data
 
-## Third-Party Services
+- **Netlify** hosts the server and web pages and processes each request (including your IP address) under its own policy: https://www.netlify.com/privacy/
+- **Google Fonts:** the web pages (not the MCP server) load fonts from Google: https://policies.google.com/privacy
+- Your AI assistant's provider handles your conversation under its own policy.
 
-This MCP does not integrate with or send data to any third-party services.
+We do not sell or share data with anyone else.
 
-## Security
+## Retention
 
-- All processing happens locally within the Claude Desktop environment
-- No credentials or API keys are required
-- No external network connections are made
+We keep no tool inputs or outputs, so there is nothing for us to delete. Netlify keeps its own platform logs under its policy.
 
-## Updates
+## Local version (npm)
 
-This privacy policy may be updated to reflect changes in the MCP's functionality. Any updates will be published in the GitHub repository.
+The npm package `@shashwatgtmalpha/icp-intelligence-mcp` runs entirely on your computer over stdio and sends nothing to us.
 
-## Contact
+## Changes and contact
 
-For questions about this privacy policy:
-
-- **Author:** Shashwat Ghosh
-- **GitHub:** https://github.com/shashwatgtm
-- **Website:** https://gtmhelix.com
-
-## License
-
-This MCP is released under the MIT License.
-
----
-
-*Last updated: January 2025*
+We will update this policy if the handling of data changes. Questions: shashwat@gtmhelix.com.

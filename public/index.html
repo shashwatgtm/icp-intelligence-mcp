@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICP Intelligence MCP connector</title>
+<meta name="description" content="Ideal customer profile tools for B2B go-to-market teams">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23C1121F'/%3E%3Ctext x='32' y='47' font-family='Georgia,serif' font-style='italic' font-size='46' fill='white' text-anchor='middle'%3E%CE%B1%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ox:#641220;--signal:#C1121F;--paper:#FAF8F6;--ink:#1A0E10;--clay:#EAD9D5;--rose:#E5A8AC;--smoke:#7A6669}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 'IBM Plex Sans',system-ui,sans-serif}
+a{color:var(--signal)}
+header{background:var(--ox);color:#fff;padding:28px 20px}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+header .wrap{display:flex;gap:16px;align-items:center}
+.mark{width:38px;height:38px;background:var(--signal);color:#fff;display:flex;align-items:center;justify-content:center;font:italic 24px Georgia,serif;flex:none}
+h1,h2,h3{font-family:Archivo,system-ui,sans-serif}
+h1{font-weight:900;margin:0;font-size:28px}
+header p{margin:4px 0 0;color:#F6ECE9}
+h2{font-weight:800;margin:36px 0 12px}
+.mono{font:600 11.5px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1.7px;color:var(--smoke)}
+code,pre{font-family:'IBM Plex Mono',monospace;font-size:14px}
+pre{background:#fff;border:1.5px solid var(--clay);padding:14px;overflow-x:auto}
+.card{background:#fff;border:1.5px solid var(--clay);padding:16px 18px;margin:12px 0}
+table{border-collapse:collapse;width:100%;background:#fff}
+th,td{border:1.5px solid var(--clay);padding:8px 10px;text-align:left;vertical-align:top}
+th{font:600 11.5px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1.2px;color:var(--smoke)}
+footer{margin:48px 0 24px;color:var(--smoke);font-size:14px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="mark" aria-hidden="true">&alpha;</div><div><h1>ICP Intelligence</h1><p>Ideal customer profile tools for B2B go-to-market teams</p></div></div></header>
+<main class="wrap">
+
+<p>ICP Intelligence gives Claude nine tools for defining and using an ideal customer profile: a deep dive on your best customers, a scoring model, buyer group mapping, a TAM, SAM and SOM calculation, lookalike targeting criteria, account prioritization, gap analysis, ICP change tracking and interview synthesis. Every tool works only from the data you give it; it does not look anything up.</p>
+
+<h2>Connect</h2>
+<div class="card">
+<p class="mono">Server URL</p>
+<pre>https://icp-intelligence-mcp.netlify.app/mcp</pre>
+<p>Transport: Streamable HTTP (stateless, JSON responses). Authentication: none. Send MCP JSON-RPC messages with POST; other methods return 405, which is expected.</p>
+</div>
+
+<h3>Claude (web, desktop and mobile)</h3>
+<ol>
+<li>Open Customize, then Connectors, then Add custom connector.</li>
+<li>Name: ICP Intelligence. MCP server URL: <code>https://icp-intelligence-mcp.netlify.app/mcp</code>.</li>
+<li>Choose no sign-in, then Add. Turn the connector on for a chat with the + menu.</li>
+</ol>
+
+<h3>Claude Code</h3>
+<pre>claude mcp add --transport http icp-intelligence https://icp-intelligence-mcp.netlify.app/mcp</pre>
+
+<h3>Run it locally instead (npm, stdio)</h3>
+<pre>npx -y @shashwatgtmalpha/icp-intelligence-mcp</pre>
+<p>The npm package and this hosted server run the same code.</p>
+
+<h2>Tools</h2>
+<p>All tools only build text from the inputs you give them. They are marked read-only: they store nothing, change nothing and call no outside service.</p>
+<table>
+<tr><th>Tool</th><th>Title</th><th>What it does</th><th>Required inputs</th></tr>
+<tr><td><code>icp_deep_dive</code></td><td>ICP Deep Dive</td><td>Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior</td><td>none</td></tr>
+<tr><td><code>icp_scoring_model</code></td><td>ICP Scoring Model</td><td>Create qualification scoring model with auto-weighted criteria based on your success patterns</td><td>none</td></tr>
+<tr><td><code>buyer_group_analyzer</code></td><td>Buyer Group Analyzer</td><td>Map buyer group dynamics, influence relationships, and decision-making process</td><td>product_category</td></tr>
+<tr><td><code>tam_sam_som_calculator</code></td><td>TAM SAM SOM Calculator</td><td>Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)</td><td>total_potential_companies, average_contract_value</td></tr>
+<tr><td><code>lookalike_signal_generator</code></td><td>Lookalike Signal Generator</td><td>Generate platform-specific targeting criteria and search queries (generates criteria, not data)</td><td>champion_titles</td></tr>
+<tr><td><code>account_prioritization</code></td><td>Account Prioritization</td><td>Rank and prioritize accounts using multi-dimensional scoring</td><td>none</td></tr>
+<tr><td><code>icp_gap_analysis</code></td><td>ICP Gap Analysis</td><td>Analyze gaps between current customer base and ideal ICP</td><td>current_customers, ideal_icp</td></tr>
+<tr><td><code>icp_evolution_tracker</code></td><td>ICP Evolution Tracker</td><td>Track how your ICP should evolve based on market changes and data</td><td>current_icp</td></tr>
+<tr><td><code>icp_interview_synthesizer</code></td><td>ICP Interview Synthesizer</td><td>Extract ICP patterns from customer interview notes or transcripts</td><td>none</td></tr>
+</table>
+
+<h2>Example prompts</h2>
+<ol>
+<li>Use ICP Intelligence to do a deep dive on these customers for our clinic scheduling software: mid-size clinic groups with 5 to 20 locations, dental chains with 10+ clinics, physiotherapy franchises.</li>
+<li>Calculate TAM, SAM and SOM with ICP Intelligence: 12,000 potential companies, average contract value $8,000, 25% fit our ICP, year-one share target 1%.</li>
+<li>Map the buyer group for clinic scheduling software with ICP Intelligence. Deal size $15,000 ACV, target company size 200 to 1,000 employees, typical champion Operations Director.</li>
+</ol>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><strong>405 Method not allowed:</strong> you opened the server URL in a browser or sent a GET. Use an MCP client, which sends POST.</li>
+<li><strong>429 Too many requests:</strong> the server allows 300 requests per minute from one address. Wait a minute and try again.</li>
+<li><strong>"Missing required input":</strong> the tool was called without one of the required inputs listed above.</li>
+</ul>
+
+<h2>Support</h2>
+<p>Email <a href="mailto:shashwat@gtmhelix.com">shashwat@gtmhelix.com</a> or open an issue at <a href="https://github.com/shashwatgtm/icp-intelligence-mcp/issues">https://github.com/shashwatgtm/icp-intelligence-mcp/issues</a>.</p>
+<p>Privacy: see the <a href="/privacy.html">privacy policy</a>. Licence: MIT.</p>
+
+<footer class="mono">ICP Intelligence &middot; Shashwat Ghosh, Helix GTM Consulting &middot; <a href="/">Setup</a> &middot; <a href="/privacy.html">Privacy</a> &middot; <a href="https://github.com/shashwatgtm/icp-intelligence-mcp">Source</a> &middot; Updated 24 September 2026</footer>
+</main>
+</body>
+</html>
