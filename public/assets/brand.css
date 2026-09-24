@@ -124,3 +124,14 @@ footer.hx-footer {
 /* Dark sections: headings on ink need paper text (the index integration heading was ink on ink before) */
 #integration .section-title { color: var(--hx-paper) !important; }
 #integration .section-subtitle { color: var(--hx-paper-80) !important; }
+
+/* Banners under the shared header: remove the old offset left from the previous fixed header */
+.status-banner, .launch-banner { margin-top: 0 !important; }
+
+/* Integration panels: stack the text and code columns on small screens so nothing is cut off */
+@media (max-width: 760px) {
+  .integration-content { grid-template-columns: 1fr !important; }
+  .integration-content > * { min-width: 0; }
+  .code-block, .code-container, pre { max-width: 100%; overflow-x: auto; }
+  .integration-text h3 { overflow-wrap: anywhere; }
+}
