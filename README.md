@@ -262,19 +262,19 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 The same tools are also available as a hosted MCP server, so they work in Claude on the web, desktop and mobile without installing anything.
 
-- Server URL: `https://icp-intelligence-mcp.netlify.app/mcp`
+- Server URL: `https://icp-intelligence.gtmhelix.com/mcp`
 - Transport: Streamable HTTP (stateless, JSON responses). Authentication: none.
-- Setup guide: https://icp-intelligence-mcp.netlify.app/
+- Setup guide: https://icp-intelligence.gtmhelix.com/
 - In Claude: Customize, then Connectors, then Add custom connector, and paste the server URL.
-- In Claude Code: `claude mcp add --transport http icp-intelligence https://icp-intelligence-mcp.netlify.app/mcp`
+- In Claude Code: `claude mcp add --transport http icp-intelligence https://icp-intelligence.gtmhelix.com/mcp`
 
 The npm package (stdio) and the hosted server run the same `createServer()` code in `src/index.ts`.
 
-The tool reference on the setup page (https://icp-intelligence-mcp.netlify.app/) is generated from the code. Where it differs from the parameter tables earlier in this README, the setup page is correct.
+The tool reference on the setup page (https://icp-intelligence.gtmhelix.com/) is generated from the code. Where it differs from the parameter tables earlier in this README, the setup page is correct.
 
 ## Privacy Policy
 
-Full policy: https://icp-intelligence-mcp.netlify.app/privacy.html (also in [PRIVACY.md](PRIVACY.md)).
+Full policy: https://icp-intelligence.gtmhelix.com/privacy.html (also in [PRIVACY.md](PRIVACY.md)).
 
 - **Data collection:** the hosted server receives only the tool name and the inputs of each tool call. The npm package runs on your computer and sends nothing to us.
 - **Use and storage:** inputs are used only to build that call's reply. Nothing is stored: no database, no files, no cache, no logging of inputs or outputs by our code.

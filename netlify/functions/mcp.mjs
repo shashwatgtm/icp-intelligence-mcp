@@ -13,7 +13,7 @@ export default async (req) => {
         jsonrpc: "2.0",
         error: {
           code: -32000,
-          message: "Method not allowed. This MCP endpoint accepts POST requests only (Streamable HTTP, stateless). Setup instructions: https://icp-intelligence-mcp.netlify.app/",
+          message: "Method not allowed. This MCP endpoint accepts POST requests only (Streamable HTTP, stateless). Setup instructions: https://icp-intelligence.gtmhelix.com/",
         },
         id: null,
       }),

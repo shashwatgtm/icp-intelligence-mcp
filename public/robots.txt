@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /mcp
 
-Sitemap: https://icp-intelligence-mcp.netlify.app/sitemap.xml
+Sitemap: https://icp-intelligence.gtmhelix.com/sitemap.xml
