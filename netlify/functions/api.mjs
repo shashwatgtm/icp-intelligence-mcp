@@ -87,9 +87,8 @@ function validate(tool, input) {
   const required = (tool.inputSchema && tool.inputSchema.required) || [];
   const errors = [];
   const args = {};
-  for (const key of Object.keys(input)) {
-    if (!(key in props)) errors.push(`Unknown field: ${key}.`);
-  }
+  // Fields the tool does not declare are ignored, exactly as the MCP server ignores them, and reported back.
+  const ignored = Object.keys(input).filter((key) => !(key in props));
   for (const [key, prop] of Object.entries(props)) {
     if (input[key] === undefined || input[key] === null) continue;
     const v = coerce(prop, input[key], key, errors);
@@ -99,7 +98,7 @@ function validate(tool, input) {
     if (args[key] === undefined) errors.push(`${key} is required.`);
   }
   if (JSON.stringify(args).length > MAX_BODY_BYTES) errors.push("The input is too long.");
-  return { args, errors };
+  return { args, errors, ignored };
 }
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -158,11 +157,11 @@ export default async (req, context) => {
     const { tools } = await client.listTools();
     const tool = tools.find((t) => t.name === toolName);
     if (!tool) return reply(404, { ok: false, error: `Unknown tool: ${toolName}.` });
-    const { args, errors } = validate(tool, input);
+    const { args, errors, ignored } = validate(tool, input);
     if (errors.length) return reply(400, { ok: false, errors });
     const result = await client.callTool({ name: tool.name, arguments: args });
     const text = (result.content || []).filter((c) => c.type === "text").map((c) => c.text).join("\n\n");
-    return reply(result.isError ? 422 : 200, { ok: !result.isError, tool: tool.name, title: tool.title || tool.name, text, error: result.isError ? text : undefined });
+    return reply(result.isError ? 422 : 200, { ok: !result.isError, tool: tool.name, title: tool.title || tool.name, text, error: result.isError ? text : undefined, ignored_fields: ignored.length ? ignored : undefined });
   } catch {
     return reply(500, { ok: false, error: "The tool could not run. Please try again." });
   } finally {

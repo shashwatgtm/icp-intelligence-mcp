@@ -19,7 +19,7 @@ ICP Intelligence is built and run by Shashwat Ghosh, Helix GTM Consulting. Conta
 - Nothing is stored: there is no database, file storage or cache for inputs or answers. Answers are sent with `Cache-Control: no-store`.
 - Our code does not log your inputs or the answers.
 - The page does not save what you type in your browser either. It is gone when you close or reload the page.
-- There are no accounts, cookies, analytics, advertising or tracking scripts.
+- There are no accounts, cookies, analytics, advertising or tracking scripts. Fonts are served from this site, so loading a page contacts no one else.
 
 ## Limits that protect the service
 
@@ -29,7 +29,6 @@ ICP Intelligence is built and run by Shashwat Ghosh, Helix GTM Consulting. Conta
 ## Who else processes data
 
 - **Netlify** hosts the site and the functions. Like any web host it processes each request, including your IP address, and keeps its own platform logs under its policy: [netlify.com/privacy](https://www.netlify.com/privacy/).
-- **Google Fonts:** these pages load fonts from Google, which receives your IP address: [policies.google.com/privacy](https://policies.google.com/privacy).
 - If you use an AI assistant, its provider (for example Anthropic for Claude) handles your conversation under its own policy.
 
 We do not sell or share data with anyone else.
