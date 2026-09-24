@@ -1,5 +1,56 @@
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: Claude-User
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
 User-agent: *
 Allow: /
+Disallow: /api/
 Disallow: /mcp
 
 Sitemap: https://icp-intelligence.gtmhelix.com/sitemap.xml

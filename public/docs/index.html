@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICP Intelligence Docs: MCP Server and REST API | Helix GTM</title>
+<meta name="description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, generated from the server&#x27;s own schemas.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Shashwat Ghosh, Helix GTM Consulting">
+<link rel="canonical" href="https://icp-intelligence.gtmhelix.com/docs/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ICP Intelligence by Helix GTM Consulting">
+<meta property="og:title" content="ICP Intelligence Docs: MCP Server and REST API | Helix GTM">
+<meta property="og:description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, generated from the server&#x27;s own schemas.">
+<meta property="og:url" content="https://icp-intelligence.gtmhelix.com/docs/">
+<meta property="og:image" content="https://icp-intelligence.gtmhelix.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ICP Intelligence by Helix GTM Consulting">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ICP Intelligence Docs: MCP Server and REST API | Helix GTM">
+<meta name="twitter:description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, generated from the server&#x27;s own schemas.">
+<meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
+<meta name="twitter:creator" content="@Shashwat_Ghosh">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/brand.css">
+<link rel="stylesheet" href="/assets/app.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://www.gtmexpert.com/#org",
+   "name": "Helix GTM Consulting",
+   "alternateName": [
+    "GTMExpert",
+    "Helix GTM"
+   ],
+   "url": "https://www.gtmexpert.com",
+   "foundingDate": "2016",
+   "founder": {
+    "@id": "https://www.gtmexpert.com/#shashwat"
+   },
+   "sameAs": [
+    "https://github.com/shashwatgtm"
+   ]
+  },
+  {
+   "@type": "Person",
+   "@id": "https://www.gtmexpert.com/#shashwat",
+   "name": "Shashwat Ghosh",
+   "jobTitle": "GTM Alpha Consultant, AI GTM Expert and Fractional CMO",
+   "description": "Founder of Helix GTM Consulting, with 24+ years in B2B and 10+ years of fractional experience. Creator of the EPIC, IMPACT and CRAFT frameworks.",
+   "worksFor": {
+    "@id": "https://www.gtmexpert.com/#org"
+   },
+   "url": "https://www.gtmexpert.com",
+   "award": [
+    "B2B Marketer of the Year 2020, Fintech (CMO Asia)",
+    "LinkedIn Top Product Marketing Voice, #10 India and #52 Worldwide (2024)"
+   ],
+   "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bengaluru",
+    "addressRegion": "Karnataka",
+    "addressCountry": "IN"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/shashwatghosh-ai-b2b-gtm-fractionalcmo/",
+    "https://x.com/Shashwat_Ghosh",
+    "https://github.com/shashwatgtm"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://icp-intelligence.gtmhelix.com/#site",
+   "url": "https://icp-intelligence.gtmhelix.com/",
+   "name": "ICP Intelligence by Helix GTM Consulting",
+   "publisher": {
+    "@id": "https://www.gtmexpert.com/#org"
+   },
+   "inLanguage": "en"
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://icp-intelligence.gtmhelix.com/docs/#page",
+   "url": "https://icp-intelligence.gtmhelix.com/docs/",
+   "name": "ICP Intelligence Docs: MCP Server and REST API | Helix GTM",
+   "description": "How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, generated from the server's own schemas.",
+   "isPartOf": {
+    "@id": "https://icp-intelligence.gtmhelix.com/#site"
+   },
+   "about": {
+    "@id": "https://icp-intelligence.gtmhelix.com/#app"
+   },
+   "dateModified": "2026-09-25",
+   "inLanguage": "en",
+   "primaryImageOfPage": "https://icp-intelligence.gtmhelix.com/og.png"
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "https://icp-intelligence.gtmhelix.com/docs/#breadcrumbs",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://icp-intelligence.gtmhelix.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Docs",
+     "item": "https://icp-intelligence.gtmhelix.com/docs/"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="hx-skip" href="#main">Skip to content</a>
+<header class="hx-header">
+        <div class="hx-wrap hx-header-row">
+            <a class="hx-lockup" href="https://gtmalpha.gtmhelix.com/" aria-label="GTM Alpha home"><span class="hx-alpha" aria-hidden="true">&#945;</span><span class="hx-wordmark">GTM Alpha</span></a>
+            <nav class="hx-nav" aria-label="Main">
+                <a href="https://gtmalpha.gtmhelix.com/#features">Features</a>
+                <a href="https://gtmalpha.gtmhelix.com/#epic">EPIC Framework</a>
+                <a href="https://gtmalpha.gtmhelix.com/integration">Integration</a>
+                <a href="https://gtmalpha.gtmhelix.com/pricing">Pricing</a>
+                <a href="https://gtmalpha.gtmhelix.com/api-docs">API Docs</a>
+                <a href="https://gtmalpha.gtmhelix.com/consultation">Consultation</a>
+                <a href="https://gtmalpha.gtmhelix.com/#about">About Shashwat</a>
+                <a href="https://gtmexpert.com/" class="hx-cta">GTMExpert.com</a>
+            </nav>
+        </div>
+    </header>
+<nav class="hx-subnav" aria-label="ICP Intelligence"><div class="hx-wrap hx-subnav-row"><span class="hx-subnav-name">ICP Intelligence</span><div class="hx-subnav-links"><a href="/">Home</a><a href="/#tools">Tools</a><a href="/connect/">Connect</a><a href="/docs/" class="is-active" aria-current="page">Docs</a><a href="/faq/">FAQ</a><a href="/privacy/">Privacy</a><a href="https://tools.gtmhelix.com/" class="hx-subnav-hub">All tools and plugins</a></div></div></nav>
+<section class="hx-hero">
+  <div class="hx-wrap"><div class="hx-hero-inner">
+    <span class="hx-eyebrow">ICP Intelligence · documentation</span>
+    <h1>ICP Intelligence documentation</h1>
+    <p class="hx-lead">The MCP address, the REST API behind the web forms, and every field of all 9 tools.</p>
+  </div></div>
+</section>
+<main id="main" class="hx-body">
+
+<section class="hx-section" aria-labelledby="mcp-h">
+  <h2 id="mcp-h">MCP server</h2>
+  <ul class="hx-prose">
+    <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
+    <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
+    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.1.0.</li>
+    <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs the same tools over stdio.</li>
+  </ul>
+</section>
+
+<section class="hx-section" aria-labelledby="rest-h">
+  <h2 id="rest-h">REST API (used by the web forms)</h2>
+  <p class="hx-prose">Send <code>POST https://icp-intelligence.gtmhelix.com/api/tools/&lt;tool name&gt;</code> with a JSON body <code>{"input": {...}}</code>. The answer is JSON: <code>{"ok": true, "tool": "...", "title": "...", "text": "..."}</code>, where <code>text</code> is the same Markdown the MCP tool returns. The endpoint calls the same server code as the MCP address.</p>
+  <pre class="hx-code-block">curl -s -X POST https://icp-intelligence.gtmhelix.com/api/tools/icp_deep_dive \
+  -H "Content-Type: application/json" \
+  -d '{&quot;input&quot;: {&quot;customer_descriptions&quot;: &quot;Mid-size clinic groups with 5 to 20 locations, operations director buys, pain is no-shows; dental chains with 10+ clinics; physiotherapy franchises&quot;, &quot;product_category&quot;: &quot;clinic scheduling software&quot;}}'</pre>
+  <ul class="hx-prose">
+    <li>Errors: 400 with <code>errors</code> (missing or invalid fields), 404 for an unknown tool, 405 for methods other than POST, 413 above 32,000 bytes, 429 when the rate limit is reached, 500 if the tool fails.</li>
+    <li>Limits: 30 requests per minute per IP address; text fields up to 6,000 characters; lists up to 50 items.</li>
+    <li>Forms without JavaScript post <code>application/x-www-form-urlencoded</code> and get an HTML page back.</li>
+    <li>Nothing is stored and the input is not logged (see <a href="/privacy/">Privacy</a>).</li>
+  </ul>
+</section>
+
+<section class="hx-section" aria-labelledby="ref-h">
+  <h2 id="ref-h">Tool reference</h2>
+  <p class="hx-sub">Generated from the server's own input schemas on 25 September 2026.</p>
+</section>
+<section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
+  <h3 id="d-icp-deep-dive">ICP Deep Dive <code>icp_deep_dive</code></h3>
+  <p class="hx-prose">Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior <a href="/tools/icp-deep-dive/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>customers</code></td><td>list of objects</td><td>no</td><td></td><td>List of customer objects with available attributes</td></tr>
+<tr><td><code>customer_descriptions</code></td><td>string</td><td>no</td><td></td><td>Alternative: Describe your best customers in text format</td></tr>
+<tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>What type of product you sell</td></tr>
+  </tbody></table></div>
+</section>
+<section class="hx-section" id="icp-scoring-model" aria-labelledby="d-icp-scoring-model">
+  <h3 id="d-icp-scoring-model">ICP Scoring Model <code>icp_scoring_model</code></h3>
+  <p class="hx-prose">Create qualification scoring model with auto-weighted criteria based on your success patterns <a href="/tools/icp-scoring-model/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>scoring_criteria</code></td><td>list of objects</td><td>no</td><td></td><td>Criteria for scoring with importance levels</td></tr>
+<tr><td><code>success_correlation</code></td><td>string</td><td>no</td><td></td><td>What correlates with success? (e.g., &quot;deals with VP Sales champion close 2x faster&quot;)</td></tr>
+<tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td></td></tr>
+  </tbody></table></div>
+</section>
+<section class="hx-section" id="buyer-group-analyzer" aria-labelledby="d-buyer-group-analyzer">
+  <h3 id="d-buyer-group-analyzer">Buyer Group Analyzer <code>buyer_group_analyzer</code></h3>
+  <p class="hx-prose">Map buyer group dynamics, influence relationships, and decision-making process <a href="/tools/buyer-group-analyzer/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>deal_size</code></td><td>string</td><td>no</td><td></td><td>ACV range (e.g., &quot;$50K-100K&quot;)</td></tr>
+<tr><td><code>target_company_size</code></td><td>string</td><td>no</td><td></td><td>Company size (e.g., &quot;500-1000 employees&quot;)</td></tr>
+<tr><td><code>product_category</code></td><td>string</td><td>yes</td><td></td><td>What you sell</td></tr>
+<tr><td><code>known_stakeholders</code></td><td>list of strings</td><td>no</td><td></td><td>Roles you know are involved</td></tr>
+<tr><td><code>typical_champion</code></td><td>string</td><td>no</td><td></td><td>Your typical champion role</td></tr>
+  </tbody></table></div>
+</section>
+<section class="hx-section" id="tam-sam-som-calculator" aria-labelledby="d-tam-sam-som-calculator">
+  <h3 id="d-tam-sam-som-calculator">TAM SAM SOM Calculator <code>tam_sam_som_calculator</code></h3>
+  <p class="hx-prose">Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source) <a href="/tools/tam-sam-som-calculator/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>total_potential_companies</code></td><td>number</td><td>yes</td><td></td><td>Estimated total companies that could buy (from LinkedIn, industry reports)</td></tr>
+<tr><td><code>average_contract_value</code></td><td>number</td><td>yes</td><td></td><td>Your average ACV in dollars</td></tr>
+<tr><td><code>icp_percentage</code></td><td>number</td><td>no</td><td></td><td>Percentage that match your ICP (1-100)</td></tr>
+<tr><td><code>year1_market_share_target</code></td><td>number</td><td>no</td><td></td><td>Realistic Year 1 market share percentage (typically 1-5%)</td></tr>
+<tr><td><code>data_sources</code></td><td>string</td><td>no</td><td></td><td>Where you got your numbers (for documentation)</td></tr>
+<tr><td><code>segment_name</code></td><td>string</td><td>no</td><td></td><td>Name of the market segment</td></tr>
+  </tbody></table></div>
+</section>
+<section class="hx-section" id="lookalike-signal-generator" aria-labelledby="d-lookalike-signal-generator">
+  <h3 id="d-lookalike-signal-generator">Lookalike Signal Generator <code>lookalike_signal_generator</code></h3>
+  <p class="hx-prose">Generate platform-specific targeting criteria and search queries (generates criteria, not data) <a href="/tools/lookalike-signal-generator/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>icp_firmographics</code></td><td>object</td><td>no</td><td></td><td>Firmographic criteria</td></tr>
+<tr><td><code>icp_technographics</code></td><td>list of strings</td><td>no</td><td></td><td>Technologies your ICP typically uses</td></tr>
+<tr><td><code>champion_titles</code></td><td>list of strings</td><td>yes</td><td></td><td>Job titles of your champions</td></tr>
+<tr><td><code>buying_triggers</code></td><td>list of strings</td><td>no</td><td></td><td>Events that trigger buying</td></tr>
+<tr><td><code>platforms</code></td><td>list of strings</td><td>no</td><td></td><td>Platforms to generate criteria for (linkedin, google_ads, 6sense, zoominfo)</td></tr>
+  </tbody></table></div>
+</section>
+<section class="hx-section" id="account-prioritization" aria-labelledby="d-account-prioritization">
+  <h3 id="d-account-prioritization">Account Prioritization <code>account_prioritization</code></h3>
+  <p class="hx-prose">Rank and prioritize accounts using multi-dimensional scoring <a href="/tools/account-prioritization/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>accounts</code></td><td>list of objects</td><td>no</td><td></td><td>List of accounts to prioritize</td></tr>
+<tr><td><code>prioritization_weights</code></td><td>object</td><td>no</td><td></td><td>Custom weights (must sum to 100)</td></tr>
+  </tbody></table></div>
+</section>
+<section class="hx-section" id="icp-gap-analysis" aria-labelledby="d-icp-gap-analysis">
+  <h3 id="d-icp-gap-analysis">ICP Gap Analysis <code>icp_gap_analysis</code></h3>
+  <p class="hx-prose">Analyze gaps between current customer base and ideal ICP <a href="/tools/icp-gap-analysis/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>current_customers</code></td><td>string</td><td>yes</td><td></td><td>Description of your current customer base</td></tr>
+<tr><td><code>ideal_icp</code></td><td>string</td><td>yes</td><td></td><td>Description of your ideal customer profile</td></tr>
+<tr><td><code>current_metrics</code></td><td>object</td><td>no</td><td></td><td>Current performance metrics</td></tr>
+<tr><td><code>target_metrics</code></td><td>object</td><td>no</td><td></td><td>Target performance metrics</td></tr>
+  </tbody></table></div>
+</section>
+<section class="hx-section" id="icp-evolution-tracker" aria-labelledby="d-icp-evolution-tracker">
+  <h3 id="d-icp-evolution-tracker">ICP Evolution Tracker <code>icp_evolution_tracker</code></h3>
+  <p class="hx-prose">Track how your ICP should evolve based on market changes and data <a href="/tools/icp-evolution-tracker/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>current_icp</code></td><td>string</td><td>yes</td><td></td><td>Your current ICP definition</td></tr>
+<tr><td><code>recent_wins</code></td><td>string</td><td>no</td><td></td><td>Description of recent successful customers</td></tr>
+<tr><td><code>recent_losses</code></td><td>string</td><td>no</td><td></td><td>Description of recent lost deals</td></tr>
+<tr><td><code>market_changes</code></td><td>string</td><td>no</td><td></td><td>Recent market or competitive changes</td></tr>
+<tr><td><code>time_period</code></td><td>string</td><td>no</td><td></td><td>Time period for analysis (e.g., &quot;Q4 2024&quot;)</td></tr>
+  </tbody></table></div>
+</section>
+<section class="hx-section" id="icp-interview-synthesizer" aria-labelledby="d-icp-interview-synthesizer">
+  <h3 id="d-icp-interview-synthesizer">ICP Interview Synthesizer <code>icp_interview_synthesizer</code></h3>
+  <p class="hx-prose">Extract ICP patterns from customer interview notes or transcripts <a href="/tools/icp-interview-synthesizer/">Open the form</a>.</p>
+  <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>interview_notes</code></td><td>list of objects</td><td>no</td><td></td><td>Structured interview notes</td></tr>
+<tr><td><code>raw_transcripts</code></td><td>string</td><td>no</td><td></td><td>Alternative: Paste raw interview transcripts or notes</td></tr>
+<tr><td><code>analysis_focus</code></td><td>string</td><td>no</td><td></td><td>What to focus on: pain_points, buying_journey, value_props, all</td></tr>
+  </tbody></table></div>
+</section>
+
+</main>
+<footer class="hx-footer">
+        <div class="hx-wrap">
+            <div class="hx-footer-grid">
+                <div>
+                    <a class="hx-lockup" href="https://gtmalpha.gtmhelix.com/" aria-label="GTM Alpha home"><span class="hx-alpha" aria-hidden="true">&#945;</span><span class="hx-wordmark">GTM Alpha</span></a>
+                    <p>Professional go-to-market strategy consulting powered by Shashwat Ghosh's expertise and advanced AI integration.</p>
+                    <a href="https://www.linkedin.com/in/shashwatghosh-ai-b2b-gtm-fractionalcmo/">LinkedIn</a>
+                    <a href="https://x.com/Shashwat_Ghosh">X (Twitter)</a>
+                </div>
+                <div>
+                    <h4>Platform</h4>
+                    <a href="https://gtmalpha.gtmhelix.com/#features">Features</a>
+                    <a href="https://gtmalpha.gtmhelix.com/#epic">EPIC Framework</a>
+                    <a href="https://gtmalpha.gtmhelix.com/integration">Integration</a>
+                    <a href="https://gtmalpha.gtmhelix.com/pricing">Pricing</a>
+                    <a href="https://gtmalpha.gtmhelix.com/api-docs">API Docs</a>
+                    <a href="https://gtmalpha.gtmhelix.com/faq">FAQ</a>
+                </div>
+                <div>
+                    <h4>Connectors</h4>
+                    <a href="https://gtmalpha.gtmhelix.com/integration">GTM Alpha</a>
+                    <a href="https://craft-gtm.gtmhelix.com/">CRAFT GTM</a>
+                    <a href="https://craft-content.gtmhelix.com/">CRAFT Content</a>
+                    <a href="https://impact.gtmhelix.com/">IMPACT</a>
+                    <a href="https://icp-intelligence.gtmhelix.com/">ICP Intelligence</a>
+                    <a href="https://revenue-enablement.gtmhelix.com/">Revenue Enablement</a>
+                    <a href="https://tools.gtmhelix.com/">All tools and plugins</a>
+                </div>
+                <div>
+                    <h4>Connect</h4>
+                    <a href="https://gtmalpha.gtmhelix.com/consultation">Book Consultation</a>
+                    <a href="mailto:shashwat@hyperplays.in">Email Support</a>
+                    <a href="https://gtmexpert.com/">GTMExpert.com</a>
+                    <a href="https://gtmalpha.gtmhelix.com/privacy">Privacy</a>
+                    <a href="https://gtmalpha.gtmhelix.com/terms">Terms</a>
+                </div>
+            </div>
+            <div class="hx-footer-bottom">
+                <span>&copy; 2026 Helix GTM Consulting. GTM Alpha by Shashwat Ghosh.</span>
+                <span><a href="https://gtmalpha.gtmhelix.com/privacy">Privacy</a> &middot; <a href="https://gtmalpha.gtmhelix.com/terms">Terms</a> &middot; <a href="https://gtmalpha.gtmhelix.com/faq">FAQ</a></span>
+            </div>
+        </div>
+    </footer>
+<script src="/assets/app.js" defer></script>
+</body>
+</html>

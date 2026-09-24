@@ -1,0 +1,26 @@
+# Old address: pages redirect to the gtmhelix.com address. /mcp and /api/* are NOT listed, so they keep answering directly.
+# These rules sit at the top because Netlify applies the first match.
+https://icp-intelligence-mcp.netlify.app/  https://icp-intelligence.gtmhelix.com/  301!
+https://icp-intelligence-mcp.netlify.app/tools/icp-deep-dive/  https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/  301!
+https://icp-intelligence-mcp.netlify.app/tools/icp-scoring-model/  https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/  301!
+https://icp-intelligence-mcp.netlify.app/tools/buyer-group-analyzer/  https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/  301!
+https://icp-intelligence-mcp.netlify.app/tools/tam-sam-som-calculator/  https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/  301!
+https://icp-intelligence-mcp.netlify.app/tools/lookalike-signal-generator/  https://icp-intelligence.gtmhelix.com/tools/lookalike-signal-generator/  301!
+https://icp-intelligence-mcp.netlify.app/tools/account-prioritization/  https://icp-intelligence.gtmhelix.com/tools/account-prioritization/  301!
+https://icp-intelligence-mcp.netlify.app/tools/icp-gap-analysis/  https://icp-intelligence.gtmhelix.com/tools/icp-gap-analysis/  301!
+https://icp-intelligence-mcp.netlify.app/tools/icp-evolution-tracker/  https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/  301!
+https://icp-intelligence-mcp.netlify.app/tools/icp-interview-synthesizer/  https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/  301!
+https://icp-intelligence-mcp.netlify.app/connect/  https://icp-intelligence.gtmhelix.com/connect/  301!
+https://icp-intelligence-mcp.netlify.app/docs/  https://icp-intelligence.gtmhelix.com/docs/  301!
+https://icp-intelligence-mcp.netlify.app/faq/  https://icp-intelligence.gtmhelix.com/faq/  301!
+https://icp-intelligence-mcp.netlify.app/privacy/  https://icp-intelligence.gtmhelix.com/privacy/  301!
+https://icp-intelligence-mcp.netlify.app/index.html  https://icp-intelligence.gtmhelix.com/index.html  301!
+https://icp-intelligence-mcp.netlify.app/privacy  https://icp-intelligence.gtmhelix.com/privacy/  301!
+https://icp-intelligence-mcp.netlify.app/privacy.html  https://icp-intelligence.gtmhelix.com/privacy/  301!
+https://icp-intelligence-mcp.netlify.app/sitemap.xml  https://icp-intelligence.gtmhelix.com/sitemap.xml  301!
+https://icp-intelligence-mcp.netlify.app/llms.txt  https://icp-intelligence.gtmhelix.com/llms.txt  301!
+
+# Old page address on the new site
+/privacy.html  /privacy/  301!
+/privacy  /privacy/  301!
+

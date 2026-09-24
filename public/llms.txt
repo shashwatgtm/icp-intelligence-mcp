@@ -1,55 +1,71 @@
-# ICP Intelligence MCP connector
+# ICP Intelligence
 
-> ICP Intelligence gives Claude nine tools for defining and using an ideal customer profile: a deep dive on your best customers, a scoring model, buyer group mapping, a TAM, SAM and SOM calculation, lookalike targeting criteria, account prioritization, gap analysis, ICP change tracking and interview synthesis. Every tool works only from the data you give it; it does not look anything up.
+> ICP Intelligence is a free set of nine ideal customer profile tools by Shashwat Ghosh of Helix GTM Consulting. Give it your best customers, deals and market numbers, and it returns an ICP deep dive, a scoring model, a buying group map, TAM, SAM and SOM, lookalike criteria, account priorities, gaps, changes over time and interview themes.
 
+- Web app (no sign-in): https://icp-intelligence.gtmhelix.com/
 - MCP server URL (Streamable HTTP, no sign-in, read-only tools): https://icp-intelligence.gtmhelix.com/mcp
-- Setup and tools: https://icp-intelligence.gtmhelix.com/
-- Privacy policy: https://icp-intelligence.gtmhelix.com/privacy.html
+- Connect to Claude, ChatGPT, Cursor, VS Code, Windsurf: https://icp-intelligence.gtmhelix.com/connect/
+- Docs (MCP and REST, every field): https://icp-intelligence.gtmhelix.com/docs/
+- FAQ: https://icp-intelligence.gtmhelix.com/faq/
+- Privacy policy: https://icp-intelligence.gtmhelix.com/privacy/
 - Local npm package: @shashwatgtmalpha/icp-intelligence-mcp
 - Source code: https://github.com/shashwatgtm/icp-intelligence-mcp
 - Built by: Shashwat Ghosh, Helix GTM Consulting (https://www.gtmexpert.com)
+- All connectors and Claude plugins: https://tools.gtmhelix.com/
 
 ## Tools
 
-- ICP Deep Dive (icp_deep_dive): Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior
-- ICP Scoring Model (icp_scoring_model): Create qualification scoring model with auto-weighted criteria based on your success patterns
-- Buyer Group Analyzer (buyer_group_analyzer): Map buyer group dynamics, influence relationships, and decision-making process
-- TAM SAM SOM Calculator (tam_sam_som_calculator): Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)
-- Lookalike Signal Generator (lookalike_signal_generator): Generate platform-specific targeting criteria and search queries (generates criteria, not data)
-- Account Prioritization (account_prioritization): Rank and prioritize accounts using multi-dimensional scoring
-- ICP Gap Analysis (icp_gap_analysis): Analyze gaps between current customer base and ideal ICP
-- ICP Evolution Tracker (icp_evolution_tracker): Track how your ICP should evolve based on market changes and data
-- ICP Interview Synthesizer (icp_interview_synthesizer): Extract ICP patterns from customer interview notes or transcripts
+- [ICP Deep Dive](https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/) (`icp_deep_dive`): Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior
+- [ICP Scoring Model](https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/) (`icp_scoring_model`): Create qualification scoring model with auto-weighted criteria based on your success patterns
+- [Buyer Group Analyzer](https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/) (`buyer_group_analyzer`): Map buyer group dynamics, influence relationships, and decision-making process
+- [TAM SAM SOM Calculator](https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/) (`tam_sam_som_calculator`): Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)
+- [Lookalike Signal Generator](https://icp-intelligence.gtmhelix.com/tools/lookalike-signal-generator/) (`lookalike_signal_generator`): Generate platform-specific targeting criteria and search queries (generates criteria, not data)
+- [Account Prioritization](https://icp-intelligence.gtmhelix.com/tools/account-prioritization/) (`account_prioritization`): Rank and prioritize accounts using multi-dimensional scoring
+- [ICP Gap Analysis](https://icp-intelligence.gtmhelix.com/tools/icp-gap-analysis/) (`icp_gap_analysis`): Analyze gaps between current customer base and ideal ICP
+- [ICP Evolution Tracker](https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/) (`icp_evolution_tracker`): Track how your ICP should evolve based on market changes and data
+- [ICP Interview Synthesizer](https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/) (`icp_interview_synthesizer`): Extract ICP patterns from customer interview notes or transcripts
 
 ## Questions and answers
 
 ### What is ICP Intelligence?
 
-ICP Intelligence gives Claude nine tools for defining and using an ideal customer profile: a deep dive on your best customers, a scoring model, buyer group mapping, a TAM, SAM and SOM calculation, lookalike targeting criteria, account prioritization, gap analysis, ICP change tracking and interview synthesis. Every tool works only from the data you give it; it does not look anything up.
+ICP Intelligence is a free set of nine ideal customer profile tools by Shashwat Ghosh of Helix GTM Consulting. Give it your best customers, deals and market numbers, and it returns an ICP deep dive, a scoring model, a buying group map, TAM, SAM and SOM, lookalike criteria, account priorities, gaps, changes over time and interview themes.
 
-### How do I connect ICP Intelligence to Claude?
+### Is ICP Intelligence free, and do I need an account?
 
-In Claude, open Customize, then Connectors, then Add custom connector. Name it ICP Intelligence, paste the server URL https://icp-intelligence.gtmhelix.com/mcp, choose no sign-in and select Add. In Claude Code run: claude mcp add --transport http icp-intelligence https://icp-intelligence.gtmhelix.com/mcp
+It is free, and there is no account or sign-in. Use the tools in your browser here, or connect the MCP server to your AI assistant.
 
-### Does ICP Intelligence need an account, and what does it cost?
+### Does it use AI to write the answers?
 
-No account or sign-in is needed, and there is no charge. The server is public and every tool is read-only.
+No. Each tool applies fixed rules in the ICP Intelligence code to the inputs you give it. It does not call an AI model and does not look anything up. When you use it from Claude or another assistant, that assistant writes around the tool's answer.
 
-### Which tools does ICP Intelligence include?
+### What happens to what I type?
 
-9 tools: ICP Deep Dive, ICP Scoring Model, Buyer Group Analyzer, TAM SAM SOM Calculator, Lookalike Signal Generator, Account Prioritization, ICP Gap Analysis, ICP Evolution Tracker, ICP Interview Synthesizer.
+It is sent to this site's server, used once to build the answer, and dropped when the answer is sent back. Nothing is stored and nothing you type is logged. The privacy page has the details.
 
-### What data does ICP Intelligence keep?
+### How do I use ICP Intelligence in Claude?
 
-None. Each call is answered from the inputs you give it, and the server stores and logs nothing. Netlify, the host, keeps its own request logs. See the privacy policy.
+In Claude, open Customize, then Connectors, then Add custom connector. Name it ICP Intelligence, paste https://icp-intelligence.gtmhelix.com/mcp and choose no sign-in. The Connect page covers Claude Code, ChatGPT, Cursor, VS Code and Windsurf too.
 
-### Can I run ICP Intelligence on my own computer?
+### Who built it?
 
-Yes. Run npx -y @shashwatgtmalpha/icp-intelligence-mcp to use the same tools locally over stdio; nothing is sent to us.
+Shashwat Ghosh, founder of Helix GTM Consulting: a GTM Alpha consultant, AI GTM expert and fractional CMO with 24+ years in B2B and 10+ years of fractional experience, based in Bengaluru.
 
-### Who built ICP Intelligence?
+### Why do some answers look like templates?
 
-Shashwat Ghosh, founder of Helix GTM Consulting, a GTM Alpha consultant, AI GTM expert and fractional CMO with 24+ years in B2B and 10+ years of fractional experience.
+Several tools return a structured plan with placeholders where your inputs did not give a fact. That is deliberate: the tools do not invent numbers or names. Fill the placeholders in before you use the result.
+
+### Can I call the tools from my own code?
+
+Yes. Send POST https://icp-intelligence.gtmhelix.com/api/tools/<tool name> with a JSON body {"input": {...}}. The Docs page lists every field. Please keep to the rate limit of 30 requests per minute.
+
+### Is the source code public?
+
+Yes, at https://github.com/shashwatgtm/icp-intelligence-mcp under the MIT licence. The npm package @shashwatgtmalpha/icp-intelligence-mcp runs the same tools locally.
+
+### How do I report a problem?
+
+Email shashwat@gtmhelix.com or open an issue at https://github.com/shashwatgtm/icp-intelligence-mcp/issues.
 
 ## Other connectors by Helix GTM Consulting
 
