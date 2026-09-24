@@ -207,6 +207,23 @@
 </section>
 <main id="main" class="hx-body">
 
+<section class="hx-section" aria-labelledby="need-h">
+  <h2 id="need-h">What do I need to run Lookalike Signal Generator?</h2>
+  <p class="hx-sub">Free, no sign-up, no account. A web browser is enough; the answer comes back in a second or two.</p>
+  <div class="hx-table"><table><thead><tr><th>Input</th><th>Required?</th><th>What to enter</th></tr></thead><tbody>
+<tr><td>ICP firmographics</td><td>Optional</td><td>Firmographic criteria</td></tr>
+<tr><td>ICP technographics</td><td>Optional</td><td>Technologies your ICP typically uses</td></tr>
+<tr><td>Champion titles</td><td>Required</td><td>Job titles of your champions</td></tr>
+<tr><td>Buying triggers</td><td>Optional</td><td>Events that trigger buying</td></tr>
+<tr><td>Platforms</td><td>Optional</td><td>Platforms to generate criteria for (linkedin, google_ads, 6sense, zoominfo)</td></tr>
+  </tbody></table></div>
+  <ol class="hx-steps">
+    <li>Fill in the required inputs above in the form below, or press <em>Fill in a tested example</em>.</li>
+    <li>Press <em>Run Lookalike Signal Generator</em>.</li>
+    <li>Read the result on this page, then copy it and edit it before you use it.</li>
+  </ol>
+</section>
+
 <section class="hx-section" aria-labelledby="run-h">
   <h2 id="run-h">How do I run Lookalike Signal Generator in my browser?</h2>
   <p class="hx-sub">Required: Champion titles. Fields marked optional can be left empty.</p>
@@ -233,11 +250,191 @@
   <div class="hx-result-body" data-result></div>
 </section>
 
+<section class="hx-section" aria-labelledby="ex-h">
+  <h2 id="ex-h">What does Lookalike Signal Generator return for the tested example?</h2>
+  <p class="hx-prose">Generated from the live code on 25 September 2026 with the inputs behind <em>Fill in a tested example</em>. Your own inputs give a different result.</p>
+  <details class="hx-run"><summary>Show the full result</summary>
+  <div class="hx-result-body hx-output">
+<h3>Lookalike Signal &amp; Targeting Criteria</h3>
+<h4>ICP Summary</h4>
+<ul>
+<li><strong>Industries</strong>: Software, Technology</li>
+<li><strong>Company Sizes</strong>: 51-200, 201-500</li>
+<li><strong>Locations</strong>: United States</li>
+<li><strong>Technologies</strong>: Salesforce, HubSpot</li>
+<li><strong>Champion Titles</strong>: Operations Director, Practice Manager</li>
+<li><strong>Buying Triggers</strong>: new location opening, high no-show rate</li>
+</ul>
+<hr>
+<h4>🔍 LinkedIn Sales Navigator</h4>
+<h5>Search Query (Copy &amp; Paste Ready)</h5>
+<p><strong>Company Search</strong>:</p>
+<pre><code>Industry: Software OR Technology
+Company headcount: 51-200 OR 201-500
+Headquarters: United States
+Technologies used: Salesforce OR HubSpot</code></pre>
+<p><strong>Lead Search</strong>:</p>
+<pre><code>Current job title: "Operations Director" OR "Practice Manager"
+Current company headcount: 51-200 OR 201-500
+Current company industry: Software OR Technology
+Geography: United States</code></pre>
+<h5>Boolean Search String</h5>
+<pre><code>("Operations Director" OR "Practice Manager") AND ("Software" OR "Technology")</code></pre>
+<h5>Saved Search Strategy</h5>
+<ol>
+<li>Create search with criteria above</li>
+<li>Save search with alert enabled</li>
+<li>Check weekly for new matches</li>
+<li>Export to outreach sequences</li>
+</ol>
+<hr>
+<h4>📊 Google Ads Targeting</h4>
+<h5>Custom Intent Audiences</h5>
+<p><strong>Keywords to target</strong> (people searching for solutions):</p>
+<pre><code>"salesforce integration"
+"hubspot integration"
+"salesforce alternative"
+"hubspot alternative"
+"software software"
+"director tools"</code></pre>
+<h5>Custom Audience - Website Visitors</h5>
+<p>Target visitors to competitor sites:</p>
+<pre><code>competitor1.com
+competitor2.com
+g2.com/products/[competitor]</code></pre>
+<h5>In-Market Audiences</h5>
+<pre><code>Business Services &gt; Business Technology
+Software &gt; Software Software</code></pre>
+<hr>
+<h4>🎯 6sense / Intent Data Platforms</h4>
+<h5>Account Fit Criteria</h5>
+<pre><code>{
+  "firmographics": {
+    "industry": ["Software", "Technology"],
+    "employee_range": ["51-200", "201-500"],
+    "geography": ["United States"]
+  },
+  "technographics": {
+    "technologies_used": ["Salesforce", "HubSpot"]
+  }
+}</code></pre>
+<h5>Intent Topic Keywords</h5>
+<pre><code>Salesforce
+HubSpot
+Software solutions
+Technology solutions
+Director software
+Manager software</code></pre>
+<h5>Buying Stage Indicators</h5>
+<ul>
+<li><strong>Awareness</strong>: Researching generic topics</li>
+<li><strong>Consideration</strong>: Comparing specific vendors</li>
+<li><strong>Decision</strong>: Pricing pages, demo requests</li>
+</ul>
+<hr>
+<h4>📧 ZoomInfo / Apollo Filters</h4>
+<h5>Contact Search Criteria</h5>
+<pre><code>Job Titles: Operations Director, Practice Manager
+Company Size: 51-200, 201-500 employees
+Industry: Software, Technology
+Location: United States
+Technologies: Salesforce, HubSpot</code></pre>
+<h5>Intent Signals to Layer</h5>
+<ul>
+<li>Job changes in target titles (last 90 days)</li>
+<li>Funding events (Series A-C)</li>
+<li>Technology adoption changes</li>
+<li>Hiring for related roles</li>
+</ul>
+<hr>
+<h4>🚨 Buying Trigger Signals</h4>
+<h5>Trigger: new location opening</h5>
+<p><strong>Signal</strong>: New Operations Director joined in last 90 days</p>
+<p><strong>Why it matters</strong>: New leaders seek quick wins, open to new tools</p>
+<p><strong>How to track</strong>: LinkedIn alerts, ZoomInfo job changes</p>
+<h5>Trigger: high no-show rate</h5>
+<p><strong>Signal</strong>: Series A-C announcement</p>
+<p><strong>Why it matters</strong>: Budget allocated for scaling</p>
+<p><strong>How to track</strong>: Crunchbase alerts, TechCrunch, LinkedIn</p>
+<h5>Trigger: Expansion</h5>
+<p><strong>Signal</strong>: New office, new market, hiring surge</p>
+<p><strong>Why it matters</strong>: Existing processes breaking at scale</p>
+<p><strong>How to track</strong>: Job posting velocity, news alerts</p>
+<hr>
+<h4>📋 Implementation Checklist</h4>
+<h5>LinkedIn Sales Navigator</h5>
+<ul>
+<li>[ ] Build and save company search</li>
+<li>[ ] Build and save lead search</li>
+<li>[ ] Enable weekly alert emails</li>
+<li>[ ] Export first batch (25 leads)</li>
+<li>[ ] Add to outreach sequence</li>
+</ul>
+<h5>Google Ads</h5>
+<ul>
+<li>[ ] Create custom intent audience</li>
+<li>[ ] Create competitor website audience</li>
+<li>[ ] Set up retargeting pixel</li>
+<li>[ ] Launch awareness campaign</li>
+</ul>
+<h5>Intent Data (6sense/Bombora)</h5>
+<ul>
+<li>[ ] Configure account fit model</li>
+<li>[ ] Set up intent topic tracking</li>
+<li>[ ] Create daily alert for surging accounts</li>
+<li>[ ] Integrate with CRM</li>
+</ul>
+<h5>Contact Database</h5>
+<ul>
+<li>[ ] Run search with criteria</li>
+<li>[ ] Verify data quality (10% sample)</li>
+<li>[ ] Export qualified contacts</li>
+<li>[ ] Enrich with additional data</li>
+</ul>
+<hr>
+<h4>⚠️ Important Notes</h4>
+<p><strong>This tool generates targeting CRITERIA, not actual data.</strong></p>
+<p>To execute these searches, you need:</p>
+<ol>
+<li><strong>LinkedIn Sales Navigator</strong> subscription</li>
+<li><strong>Google Ads</strong> account with budget</li>
+<li><strong>6sense/Bombora</strong> intent data subscription (optional)</li>
+<li><strong>ZoomInfo/Apollo</strong> contact database subscription</li>
+</ol>
+<p>The criteria above are optimized for your ICP and ready to copy/paste into each platform.</p>
+<p><strong>Next Step</strong>: Use <code>account_prioritization</code> to rank accounts for outreach</p>
+  </div></details>
+</section>
+
+<section class="hx-section" aria-labelledby="not-t-h">
+  <h2 id="not-t-h">Who is Lookalike Signal Generator not ideal for?</h2>
+  <ul class="hx-prose">
+    <li>Anyone who cannot give the required inputs (Champion titles); the answer is built only from them.</li>
+    <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
+    <li>Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter.</li>
+  </ul>
+</section>
+
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use Lookalike Signal Generator from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s Lookalike Signal Generator tool. champion titles: [&quot;Operations Director&quot;, &quot;Practice Manager&quot;]; buying triggers: [&quot;new location opening&quot;, &quot;high no-show rate&quot;]; platforms: [&quot;linkedin&quot;].</blockquote>
-  <p class="hx-prose">MCP tool name: <code>lookalike_signal_generator</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/lookalike_signal_generator</code> (see <a href="/docs/#lookalike-signal-generator">Docs</a>).</p>
+  <p class="hx-prose">MCP tool name: <code>lookalike_signal_generator</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/lookalike_signal_generator</code> with this JSON body (see <a href="/docs/#lookalike-signal-generator">Docs</a>):</p>
+  <pre class="hx-code-block">{
+  &quot;input&quot;: {
+    &quot;champion_titles&quot;: [
+      &quot;Operations Director&quot;,
+      &quot;Practice Manager&quot;
+    ],
+    &quot;buying_triggers&quot;: [
+      &quot;new location opening&quot;,
+      &quot;high no-show rate&quot;
+    ],
+    &quot;platforms&quot;: [
+      &quot;linkedin&quot;
+    ]
+  }
+}</pre>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">

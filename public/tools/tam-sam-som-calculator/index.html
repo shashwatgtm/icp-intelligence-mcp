@@ -207,6 +207,24 @@
 </section>
 <main id="main" class="hx-body">
 
+<section class="hx-section" aria-labelledby="need-h">
+  <h2 id="need-h">What do I need to run TAM SAM SOM Calculator?</h2>
+  <p class="hx-sub">Free, no sign-up, no account. A web browser is enough; the answer comes back in a second or two.</p>
+  <div class="hx-table"><table><thead><tr><th>Input</th><th>Required?</th><th>What to enter</th></tr></thead><tbody>
+<tr><td>Total potential companies</td><td>Required</td><td>Estimated total companies that could buy (from LinkedIn, industry reports)</td></tr>
+<tr><td>Average contract value</td><td>Required</td><td>Your average ACV in dollars</td></tr>
+<tr><td>ICP percentage</td><td>Optional</td><td>Percentage that match your ICP (1-100)</td></tr>
+<tr><td>Year 1 market share target</td><td>Optional</td><td>Realistic Year 1 market share percentage (typically 1-5%)</td></tr>
+<tr><td>Data sources</td><td>Optional</td><td>Where you got your numbers (for documentation)</td></tr>
+<tr><td>Segment name</td><td>Optional</td><td>Name of the market segment</td></tr>
+  </tbody></table></div>
+  <ol class="hx-steps">
+    <li>Fill in the required inputs above in the form below, or press <em>Fill in a tested example</em>.</li>
+    <li>Press <em>Run TAM SAM SOM Calculator</em>.</li>
+    <li>Read the result on this page, then copy it and edit it before you use it.</li>
+  </ol>
+</section>
+
 <section class="hx-section" aria-labelledby="run-h">
   <h2 id="run-h">How do I run TAM SAM SOM Calculator in my browser?</h2>
   <p class="hx-sub">Required: Total potential companies, Average contract value. Fields marked optional can be left empty.</p>
@@ -234,11 +252,116 @@
   <div class="hx-result-body" data-result></div>
 </section>
 
+<section class="hx-section" aria-labelledby="ex-h">
+  <h2 id="ex-h">What does TAM SAM SOM Calculator return for the tested example?</h2>
+  <p class="hx-prose">Generated from the live code on 25 September 2026 with the inputs behind <em>Fill in a tested example</em>. Your own inputs give a different result.</p>
+  <details class="hx-run"><summary>Show the full result</summary>
+  <div class="hx-result-body hx-output">
+<h3>TAM/SAM/SOM Analysis</h3>
+<h4>Market: US clinic groups</h4>
+<hr>
+<h4>📊 Input Data</h4>
+<div class="hx-table"><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody><tr><td>Total Potential Companies</td><td>12,000</td><td>User-provided estimates</td></tr><tr><td>Average Contract Value</td><td>$8K</td><td>Your pricing</td></tr><tr><td>ICP Match Rate</td><td>25%</td><td>ICP analysis</td></tr><tr><td>Year 1 Market Share Target</td><td>1.0%</td><td>Conservative estimate</td></tr></tbody></table></div>
+<hr>
+<h4>🎯 Market Sizing Results</h4>
+<h5>TAM (Total Addressable Market)</h5>
+<pre><code>TAM = Total Potential Companies × ACV
+TAM = 12,000 × $8K</code></pre>
+<h5><strong>TAM = $96.0M</strong></h5>
+<p>*Everyone who could theoretically buy your product*</p>
+<hr>
+<h5>SAM (Serviceable Addressable Market)</h5>
+<pre><code>SAM = TAM × ICP Match Rate
+SAM = $96.0M × 25%</code></pre>
+<h5><strong>SAM = $24.0M</strong></h5>
+<p>*Companies that match your ICP and you can actually serve*</p>
+<hr>
+<h5>SOM (Serviceable Obtainable Market)</h5>
+<pre><code>SOM = SAM × Year 1 Market Share
+SOM = $24.0M × 1.0%</code></pre>
+<h5><strong>SOM = $240K</strong></h5>
+<p>*Realistic Year 1 revenue target*</p>
+<hr>
+<h4>📈 Visualization</h4>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│                         TAM                             │
+│                    $96.0M                         │
+│    ┌───────────────────────────────────────────┐        │
+│    │                  SAM                      │        │
+│    │             $24.0M                  │        │
+│    │    ┌─────────────────────────┐            │        │
+│    │    │          SOM            │            │        │
+│    │    │       $240K         │            │        │
+│    │    └─────────────────────────┘            │        │
+│    └───────────────────────────────────────────┘        │
+└─────────────────────────────────────────────────────────┘</code></pre>
+<hr>
+<h4>🎯 What This Means for Your Business</h4>
+<h5>Year 1 Target</h5>
+<ul>
+<li><strong>Revenue Goal</strong>: $240K</li>
+<li><strong>Deals Needed</strong>: ~30 closed customers</li>
+<li><strong>Monthly Target</strong>: ~3 deals/month</li>
+<li><strong>Pipeline Required</strong>: $720K (at 33% win rate)</li>
+</ul>
+<h5>Growth Path</h5>
+<div class="hx-table"><table><thead><tr><th>Year</th><th>Market Share</th><th>Revenue Target</th><th>Customers</th></tr></thead><tbody><tr><td>Year 1</td><td>1.0%</td><td>$240K</td><td>30</td></tr><tr><td>Year 2</td><td>2.0%</td><td>$480K</td><td>60</td></tr><tr><td>Year 3</td><td>4.0%</td><td>$960K</td><td>120</td></tr></tbody></table></div>
+<hr>
+<h4>⚠️ Assumptions &amp; Validation</h4>
+<h5>Key Assumptions</h5>
+<ol>
+<li><strong>Company count accuracy</strong>: Validate with LinkedIn Sales Navigator, industry reports</li>
+<li><strong>ACV assumption</strong>: Based on current pricing, may increase with enterprise deals</li>
+<li><strong>ICP match rate</strong>: Conservative estimate, refine with actual data</li>
+<li><strong>Market share</strong>: 1.0% is conservative for Year 1</li>
+</ol>
+<h5>Data Validation Checklist</h5>
+<ul>
+<li>[ ] Cross-reference company count with 2+ sources</li>
+<li>[ ] Validate ACV with recent closed deals</li>
+<li>[ ] Confirm ICP percentage with customer analysis</li>
+<li>[ ] Review market share against competitor data</li>
+</ul>
+<h5>How to Get Better Data</h5>
+<ol>
+<li><strong>LinkedIn Sales Navigator</strong>: Search with ICP filters, note company count</li>
+<li><strong>Industry Reports</strong>: Gartner, Forrester market sizing</li>
+<li><strong>Competitor Analysis</strong>: Estimate competitor customer counts</li>
+<li><strong>Customer Interviews</strong>: Ask about market perception</li>
+</ol>
+<hr>
+<h4>📋 Investor-Ready Summary</h4>
+<p>&gt; <strong>US clinic groups</strong> represents a <strong>$96.0M TAM</strong> with <strong>$24.0M SAM</strong> of companies matching our ICP. </p>
+<p>&gt; We target <strong>$240K SOM</strong> in Year 1, requiring <strong>30 customers</strong> at <strong>$8K ACV</strong>.</p>
+<p>&gt; </p>
+<p>&gt; *Sources: User-provided estimates*</p>
+<p><strong>Next Step</strong>: Use <code>lookalike_signal_generator</code> to create targeting criteria</p>
+  </div></details>
+</section>
+
+<section class="hx-section" aria-labelledby="not-t-h">
+  <h2 id="not-t-h">Who is TAM SAM SOM Calculator not ideal for?</h2>
+  <ul class="hx-prose">
+    <li>Anyone who cannot give the required inputs (Total potential companies, Average contract value); the answer is built only from them.</li>
+    <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
+    <li>Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter.</li>
+  </ul>
+</section>
+
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use TAM SAM SOM Calculator from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s TAM SAM SOM Calculator tool. total potential companies: 12000; average contract value: 8000; icp percentage: 25; year 1 market share target: 1; segment name: US clinic groups.</blockquote>
-  <p class="hx-prose">MCP tool name: <code>tam_sam_som_calculator</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/tam_sam_som_calculator</code> (see <a href="/docs/#tam-sam-som-calculator">Docs</a>).</p>
+  <p class="hx-prose">MCP tool name: <code>tam_sam_som_calculator</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/tam_sam_som_calculator</code> with this JSON body (see <a href="/docs/#tam-sam-som-calculator">Docs</a>):</p>
+  <pre class="hx-code-block">{
+  &quot;input&quot;: {
+    &quot;total_potential_companies&quot;: 12000,
+    &quot;average_contract_value&quot;: 8000,
+    &quot;icp_percentage&quot;: 25,
+    &quot;year1_market_share_target&quot;: 1,
+    &quot;segment_name&quot;: &quot;US clinic groups&quot;
+  }
+}</pre>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">

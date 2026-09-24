@@ -207,6 +207,21 @@
 </section>
 <main id="main" class="hx-body">
 
+<section class="hx-section" aria-labelledby="need-h">
+  <h2 id="need-h">What do I need to run ICP Interview Synthesizer?</h2>
+  <p class="hx-sub">Free, no sign-up, no account. A web browser is enough; the answer comes back in a second or two.</p>
+  <div class="hx-table"><table><thead><tr><th>Input</th><th>Required?</th><th>What to enter</th></tr></thead><tbody>
+<tr><td>Interview notes</td><td>Optional</td><td>Structured interview notes</td></tr>
+<tr><td>Raw transcripts</td><td>Optional</td><td>Alternative: Paste raw interview transcripts or notes</td></tr>
+<tr><td>Analysis focus</td><td>Optional</td><td>What to focus on: pain_points, buying_journey, value_props, all</td></tr>
+  </tbody></table></div>
+  <ol class="hx-steps">
+    <li>Fill in the required inputs above in the form below, or press <em>Fill in a tested example</em>.</li>
+    <li>Press <em>Run ICP Interview Synthesizer</em>.</li>
+    <li>Read the result on this page, then copy it and edit it before you use it.</li>
+  </ol>
+</section>
+
 <section class="hx-section" aria-labelledby="run-h">
   <h2 id="run-h">How do I run ICP Interview Synthesizer in my browser?</h2>
   <p class="hx-sub">Required: nothing; every field is optional. Fields marked optional can be left empty.</p>
@@ -231,11 +246,92 @@
   <div class="hx-result-body" data-result></div>
 </section>
 
+<section class="hx-section" aria-labelledby="ex-h">
+  <h2 id="ex-h">What does ICP Interview Synthesizer return for the tested example?</h2>
+  <p class="hx-prose">Generated from the live code on 25 September 2026 with the inputs behind <em>Fill in a tested example</em>. Your own inputs give a different result.</p>
+  <details class="hx-run"><summary>Show the full result</summary>
+  <div class="hx-result-body hx-output">
+<h3>Interview Analysis Request</h3>
+<h4>Raw Content Provided</h4>
+<pre><code>Interview 1: Ops director at a 12-clinic dental group; biggest pain no-shows; chose us for SMS reminders. Interview 2: Practice manager at a physio chain; pain rescheduling by phone; wanted online booking.</code></pre>
+<hr>
+<h4>📋 Structured Format Recommended</h4>
+<p>For better analysis, structure your interviews:</p>
+<pre><code>{
+  "interview_notes": [
+    {
+      "customer": "Acme Corp",
+      "role": "VP Sales",
+      "key_quotes": [
+        "We were spending 20 hours a week on manual data entry",
+        "The old system just couldn't scale with us"
+      ],
+      "pain_points": [
+        "Manual data entry",
+        "Scalability issues",
+        "Poor reporting"
+      ],
+      "buying_triggers": [
+        "New VP joined",
+        "Missed quarterly target"
+      ],
+      "value_realized": [
+        "Saved 15 hours/week",
+        "Real-time visibility"
+      ]
+    }
+  ]
+}</code></pre>
+<hr>
+<h4>🔍 Extraction Guidance</h4>
+<p>From your transcripts, extract:</p>
+<h5>Pain Points</h5>
+<ul>
+<li>What problems did they describe?</li>
+<li>What was frustrating them?</li>
+<li>What wasn't working?</li>
+</ul>
+<h5>Buying Triggers</h5>
+<ul>
+<li>What event made them look for a solution?</li>
+<li>What changed in their business?</li>
+<li>What was the timeline driver?</li>
+</ul>
+<h5>Value Realized</h5>
+<ul>
+<li>What outcomes did they achieve?</li>
+<li>What metrics improved?</li>
+<li>What would they tell others?</li>
+</ul>
+<h5>Key Quotes</h5>
+<ul>
+<li>Memorable phrases</li>
+<li>Emotional statements</li>
+<li>Concrete examples</li>
+</ul>
+<p>Re-run with structured data for full analysis.</p>
+  </div></details>
+</section>
+
+<section class="hx-section" aria-labelledby="not-t-h">
+  <h2 id="not-t-h">Who is ICP Interview Synthesizer not ideal for?</h2>
+  <ul class="hx-prose">
+    <li>Anyone who cannot give the required inputs (nothing; every field is optional); the answer is built only from them.</li>
+    <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
+    <li>Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter.</li>
+  </ul>
+</section>
+
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use ICP Interview Synthesizer from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Interview Synthesizer tool. raw transcripts: Interview 1: Ops director at a 12-clinic dental group; biggest pain no-shows; chose us for SMS reminders. Interview 2: Practice manager at a....</blockquote>
-  <p class="hx-prose">MCP tool name: <code>icp_interview_synthesizer</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/icp_interview_synthesizer</code> (see <a href="/docs/#icp-interview-synthesizer">Docs</a>).</p>
+  <p class="hx-prose">MCP tool name: <code>icp_interview_synthesizer</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/icp_interview_synthesizer</code> with this JSON body (see <a href="/docs/#icp-interview-synthesizer">Docs</a>):</p>
+  <pre class="hx-code-block">{
+  &quot;input&quot;: {
+    &quot;raw_transcripts&quot;: &quot;Interview 1: Ops director at a 12-clinic dental group; biggest pain no-shows; chose us for SMS reminders. Interview 2: Practice manager at a physio chain; pain rescheduling by phone; wanted online booking.&quot;
+  }
+}</pre>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">

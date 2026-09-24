@@ -207,6 +207,21 @@
 </section>
 <main id="main" class="hx-body">
 
+<section class="hx-section" aria-labelledby="need-h">
+  <h2 id="need-h">What do I need to run ICP Scoring Model?</h2>
+  <p class="hx-sub">Free, no sign-up, no account. A web browser is enough; the answer comes back in a second or two.</p>
+  <div class="hx-table"><table><thead><tr><th>Input</th><th>Required?</th><th>What to enter</th></tr></thead><tbody>
+<tr><td>Scoring criteria</td><td>Optional</td><td>Criteria for scoring with importance levels</td></tr>
+<tr><td>Success correlation</td><td>Optional</td><td>What correlates with success? (e.g., &quot;deals with VP Sales champion close 2x faster&quot;)</td></tr>
+<tr><td>Product category</td><td>Optional</td><td></td></tr>
+  </tbody></table></div>
+  <ol class="hx-steps">
+    <li>Fill in the required inputs above in the form below, or press <em>Fill in a tested example</em>.</li>
+    <li>Press <em>Run ICP Scoring Model</em>.</li>
+    <li>Read the result on this page, then copy it and edit it before you use it.</li>
+  </ol>
+</section>
+
 <section class="hx-section" aria-labelledby="run-h">
   <h2 id="run-h">How do I run ICP Scoring Model in my browser?</h2>
   <p class="hx-sub">Required: nothing; every field is optional. Fields marked optional can be left empty.</p>
@@ -231,11 +246,112 @@
   <div class="hx-result-body" data-result></div>
 </section>
 
+<section class="hx-section" aria-labelledby="ex-h">
+  <h2 id="ex-h">What does ICP Scoring Model return for the tested example?</h2>
+  <p class="hx-prose">Generated from the live code on 25 September 2026 with the inputs behind <em>Fill in a tested example</em>. Your own inputs give a different result.</p>
+  <details class="hx-run"><summary>Show the full result</summary>
+  <div class="hx-result-body hx-output">
+<h3>ICP Scoring Model</h3>
+<h4>Scoring Framework for clinic scheduling software</h4>
+<p><strong>Success Correlation Noted</strong>: Customers with 5+ locations and a central operations team renew most</p>
+<hr>
+<h4>📊 Scoring Criteria &amp; Weights</h4>
+<h5>Weight Distribution</h5>
+<div class="hx-table"><table><thead><tr><th>Priority</th><th>Weight Range</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>Critical</strong></td><td>20-25 pts</td><td>Must-have for qualification</td></tr><tr><td><strong>Important</strong></td><td>10-15 pts</td><td>Strong success indicators</td></tr><tr><td><strong>Nice-to-Have</strong></td><td>5-10 pts</td><td>Bonus factors</td></tr></tbody></table></div>
+<h5>Scoring Matrix</h5>
+<div class="hx-table"><table><thead><tr><th>Criterion</th><th>Weight</th><th>Scoring Values</th></tr></thead><tbody><tr><td><strong>Company Size</strong></td><td>25 pts</td><td>1000+ employees (25pts) / 200-1000 (20pts) / 50-200 (15pts) / &lt;50 (5pts)</td></tr><tr><td><strong>Industry Fit</strong></td><td>25 pts</td><td>Target vertical (25pts) / Adjacent (15pts) / Other B2B (10pts) / B2C (0pts)</td></tr><tr><td><strong>Budget Authority</strong></td><td>20 pts</td><td>Confirmed budget (20pts) / Budget planned (15pts) / Exploring (10pts) / No budget (0pts)</td></tr><tr><td><strong>Technology Fit</strong></td><td>15 pts</td><td>Uses key tech (15pts) / Compatible stack (10pts) / Unknown (5pts) / Incompatible (0pts)</td></tr><tr><td><strong>Buying Timeline</strong></td><td>15 pts</td><td>Active project (15pts) / This quarter (12pts) / This year (8pts) / Exploring (5pts)</td></tr></tbody></table></div>
+<p><strong>Maximum Score</strong>: 100 points</p>
+<hr>
+<h4>🎯 Qualification Tiers</h4>
+<div class="hx-table"><table><thead><tr><th>Tier</th><th>Score Range</th><th>Action</th><th>SLA</th></tr></thead><tbody><tr><td><strong>A - Hot</strong></td><td>80-100</td><td>Immediate outreach, fast-track</td><td>Demo within 24 hours</td></tr><tr><td><strong>B - Warm</strong></td><td>60-79</td><td>Priority follow-up</td><td>Demo within 48 hours</td></tr><tr><td><strong>C - Developing</strong></td><td>40-59</td><td>Nurture sequence</td><td>Weekly touch</td></tr><tr><td><strong>D - Unqualified</strong></td><td>0-39</td><td>Marketing nurture only</td><td>Auto-nurture</td></tr></tbody></table></div>
+<hr>
+<h4>📋 Qualification Scorecard Template</h4>
+<h5>Account: _______________</h5>
+<h5>Date: _______________</h5>
+<p><strong>Company Size</strong> (Max: 25 pts)</p>
+<p>☐ 1000+ employees (25pts)</p>
+<p>☐ 200-1000 (20pts)</p>
+<p>☐ 50-200 (15pts)</p>
+<p>☐ &lt;50 (5pts)</p>
+<p>Score: ___ / 25</p>
+<p><strong>Industry Fit</strong> (Max: 25 pts)</p>
+<p>☐ Target vertical (25pts)</p>
+<p>☐ Adjacent (15pts)</p>
+<p>☐ Other B2B (10pts)</p>
+<p>☐ B2C (0pts)</p>
+<p>Score: ___ / 25</p>
+<p><strong>Budget Authority</strong> (Max: 20 pts)</p>
+<p>☐ Confirmed budget (20pts)</p>
+<p>☐ Budget planned (15pts)</p>
+<p>☐ Exploring (10pts)</p>
+<p>☐ No budget (0pts)</p>
+<p>Score: ___ / 20</p>
+<p><strong>Technology Fit</strong> (Max: 15 pts)</p>
+<p>☐ Uses key tech (15pts)</p>
+<p>☐ Compatible stack (10pts)</p>
+<p>☐ Unknown (5pts)</p>
+<p>☐ Incompatible (0pts)</p>
+<p>Score: ___ / 15</p>
+<p><strong>Buying Timeline</strong> (Max: 15 pts)</p>
+<p>☐ Active project (15pts)</p>
+<p>☐ This quarter (12pts)</p>
+<p>☐ This year (8pts)</p>
+<p>☐ Exploring (5pts)</p>
+<p>Score: ___ / 15</p>
+<hr>
+<p><strong>TOTAL SCORE</strong>: ___ / 100</p>
+<p><strong>TIER</strong>: ☐ A (Hot)  ☐ B (Warm)  ☐ C (Developing)  ☐ D (Unqualified)</p>
+<hr>
+<h4>🔧 Implementation Guide</h4>
+<h5>In CRM (Salesforce/HubSpot)</h5>
+<ol>
+<li>Create custom field for each criterion</li>
+<li>Create formula field for total score</li>
+<li>Create automation rules for tier assignment</li>
+<li>Create dashboard to track score distribution</li>
+</ol>
+<h5>Score Validation Process</h5>
+<ul>
+<li><strong>Weekly</strong>: Review closed-won deals for scoring accuracy</li>
+<li><strong>Monthly</strong>: Adjust weights based on win/loss patterns</li>
+<li><strong>Quarterly</strong>: Full model review with sales leadership</li>
+</ul>
+<h5>Red Flags (Auto-Disqualify)</h5>
+<p>Even high scores should be reviewed if:</p>
+<ul>
+<li>[ ] No clear problem/need identified</li>
+<li>[ ] Competitor locked in with multi-year contract</li>
+<li>[ ] Decision maker not accessible</li>
+<li>[ ] Budget cycle misaligned by &gt;6 months</li>
+</ul>
+<hr>
+<h4>💡 Success Indicators to Track</h4>
+<p>Add these fields to your CRM to improve scoring over time:</p>
+<div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Why Track</th></tr></thead><tbody><tr><td>Days to Close</td><td>Number</td><td>Correlate with score</td></tr><tr><td>Win/Loss</td><td>Picklist</td><td>Validate scoring accuracy</td></tr><tr><td>Champion Title</td><td>Text</td><td>Find winning patterns</td></tr><tr><td>Trigger Event</td><td>Text</td><td>Identify timing signals</td></tr><tr><td>Competitor</td><td>Picklist</td><td>Track displacement success</td></tr></tbody></table></div>
+<p><strong>Next Step</strong>: Use <code>buyer_group_analyzer</code> to map decision-making dynamics</p>
+  </div></details>
+</section>
+
+<section class="hx-section" aria-labelledby="not-t-h">
+  <h2 id="not-t-h">Who is ICP Scoring Model not ideal for?</h2>
+  <ul class="hx-prose">
+    <li>Anyone who cannot give the required inputs (nothing; every field is optional); the answer is built only from them.</li>
+    <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
+    <li>Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter.</li>
+  </ul>
+</section>
+
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use ICP Scoring Model from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Scoring Model tool. product category: clinic scheduling software; success correlation: Customers with 5+ locations and a central operations team renew most.</blockquote>
-  <p class="hx-prose">MCP tool name: <code>icp_scoring_model</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/icp_scoring_model</code> (see <a href="/docs/#icp-scoring-model">Docs</a>).</p>
+  <p class="hx-prose">MCP tool name: <code>icp_scoring_model</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/icp_scoring_model</code> with this JSON body (see <a href="/docs/#icp-scoring-model">Docs</a>):</p>
+  <pre class="hx-code-block">{
+  &quot;input&quot;: {
+    &quot;product_category&quot;: &quot;clinic scheduling software&quot;,
+    &quot;success_correlation&quot;: &quot;Customers with 5+ locations and a central operations team renew most&quot;
+  }
+}</pre>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">

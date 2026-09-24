@@ -207,6 +207,21 @@
 </section>
 <main id="main" class="hx-body">
 
+<section class="hx-section" aria-labelledby="need-h">
+  <h2 id="need-h">What do I need to run ICP Deep Dive?</h2>
+  <p class="hx-sub">Free, no sign-up, no account. A web browser is enough; the answer comes back in a second or two.</p>
+  <div class="hx-table"><table><thead><tr><th>Input</th><th>Required?</th><th>What to enter</th></tr></thead><tbody>
+<tr><td>Customers</td><td>Optional</td><td>List of customer objects with available attributes</td></tr>
+<tr><td>Customer descriptions</td><td>Optional</td><td>Alternative: Describe your best customers in text format</td></tr>
+<tr><td>Product category</td><td>Optional</td><td>What type of product you sell</td></tr>
+  </tbody></table></div>
+  <ol class="hx-steps">
+    <li>Fill in the required inputs above in the form below, or press <em>Fill in a tested example</em>.</li>
+    <li>Press <em>Run ICP Deep Dive</em>.</li>
+    <li>Read the result on this page, then copy it and edit it before you use it.</li>
+  </ol>
+</section>
+
 <section class="hx-section" aria-labelledby="run-h">
   <h2 id="run-h">How do I run ICP Deep Dive in my browser?</h2>
   <p class="hx-sub">Required: nothing; every field is optional. Fields marked optional can be left empty.</p>
@@ -231,11 +246,71 @@
   <div class="hx-result-body" data-result></div>
 </section>
 
+<section class="hx-section" aria-labelledby="ex-h">
+  <h2 id="ex-h">What does ICP Deep Dive return for the tested example?</h2>
+  <p class="hx-prose">Generated from the live code on 25 September 2026 with the inputs behind <em>Fill in a tested example</em>. Your own inputs give a different result.</p>
+  <details class="hx-run"><summary>Show the full result</summary>
+  <div class="hx-result-body hx-output">
+<h3>ICP Pattern Analysis (from Description)</h3>
+<h4>Input Analyzed</h4>
+<pre><code>Mid-size clinic groups with 5 to 20 locations, operations director buys, pain is no-shows; dental chains with 10+ clinics; physiotherapy franchises</code></pre>
+<hr>
+<h4>📊 Detected Patterns</h4>
+<h5>Likely Company Size</h5>
+<p><strong>Mixed sizes</strong></p>
+<h5>Likely Industry</h5>
+<p><strong>Mixed industries</strong></p>
+<ul>
+<li>Tailor messaging to industry-specific pain points</li>
+<li>Research industry-specific compliance/requirements</li>
+</ul>
+<h5>Likely Stage</h5>
+<p><strong>Mixed stages</strong></p>
+<ul>
+<li>Match your pricing to their typical budget capacity</li>
+<li>Adjust value messaging to their growth priorities</li>
+</ul>
+<hr>
+<h4>⚠️ Recommendations</h4>
+<p>For more precise ICP analysis, provide structured customer data:</p>
+<pre><code>{
+  "customers": [
+    {
+      "name": "Customer A",
+      "industry": "SaaS",
+      "size": "100-500 employees",
+      "acv": 50000,
+      "sales_cycle_days": 90,
+      "tech_stack": ["Salesforce", "Slack", "AWS"],
+      "buying_trigger": "New VP Sales hired",
+      "champion_title": "VP Sales"
+    }
+  ]
+}</code></pre>
+<p><strong>Next Step</strong>: Collect structured data from your CRM, then re-run this analysis</p>
+  </div></details>
+</section>
+
+<section class="hx-section" aria-labelledby="not-t-h">
+  <h2 id="not-t-h">Who is ICP Deep Dive not ideal for?</h2>
+  <ul class="hx-prose">
+    <li>Anyone who cannot give the required inputs (nothing; every field is optional); the answer is built only from them.</li>
+    <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
+    <li>Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter.</li>
+  </ul>
+</section>
+
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use ICP Deep Dive from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Deep Dive tool. customer descriptions: Mid-size clinic groups with 5 to 20 locations, operations director buys, pain is no-shows; dental chains with 10+ clinics; physiotherapy fra...; product category: clinic scheduling software.</blockquote>
-  <p class="hx-prose">MCP tool name: <code>icp_deep_dive</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/icp_deep_dive</code> (see <a href="/docs/#icp-deep-dive">Docs</a>).</p>
+  <p class="hx-prose">MCP tool name: <code>icp_deep_dive</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/icp_deep_dive</code> with this JSON body (see <a href="/docs/#icp-deep-dive">Docs</a>):</p>
+  <pre class="hx-code-block">{
+  &quot;input&quot;: {
+    &quot;customer_descriptions&quot;: &quot;Mid-size clinic groups with 5 to 20 locations, operations director buys, pain is no-shows; dental chains with 10+ clinics; physiotherapy franchises&quot;,
+    &quot;product_category&quot;: &quot;clinic scheduling software&quot;
+  }
+}</pre>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">

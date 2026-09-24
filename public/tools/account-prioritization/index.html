@@ -207,6 +207,20 @@
 </section>
 <main id="main" class="hx-body">
 
+<section class="hx-section" aria-labelledby="need-h">
+  <h2 id="need-h">What do I need to run Account Prioritization?</h2>
+  <p class="hx-sub">Free, no sign-up, no account. A web browser is enough; the answer comes back in a second or two.</p>
+  <div class="hx-table"><table><thead><tr><th>Input</th><th>Required?</th><th>What to enter</th></tr></thead><tbody>
+<tr><td>Accounts</td><td>Optional</td><td>List of accounts to prioritize</td></tr>
+<tr><td>Prioritization weights</td><td>Optional</td><td>Custom weights (must sum to 100)</td></tr>
+  </tbody></table></div>
+  <ol class="hx-steps">
+    <li>Fill in the required inputs above in the form below, or press <em>Fill in a tested example</em>.</li>
+    <li>Press <em>Run Account Prioritization</em>.</li>
+    <li>Read the result on this page, then copy it and edit it before you use it.</li>
+  </ol>
+</section>
+
 <section class="hx-section" aria-labelledby="run-h">
   <h2 id="run-h">How do I run Account Prioritization in my browser?</h2>
   <p class="hx-sub">Required: nothing; every field is optional. Fields marked optional can be left empty.</p>
@@ -230,11 +244,88 @@
   <div class="hx-result-body" data-result></div>
 </section>
 
+<section class="hx-section" aria-labelledby="ex-h">
+  <h2 id="ex-h">What does Account Prioritization return for the tested example?</h2>
+  <p class="hx-prose">Generated from the live code on 25 September 2026 with the inputs behind <em>Fill in a tested example</em>. Your own inputs give a different result.</p>
+  <details class="hx-run"><summary>Show the full result</summary>
+  <div class="hx-result-body hx-output">
+<h3>Account Prioritization Results</h3>
+<h4>Scoring Weights</h4>
+<div class="hx-table"><table><thead><tr><th>Factor</th><th>Weight</th><th>Rationale</th></tr></thead><tbody><tr><td><strong>Fit</strong></td><td>40%</td><td>How well they match ICP</td></tr><tr><td><strong>Intent</strong></td><td>30%</td><td>Buying signals detected</td></tr><tr><td><strong>Relationship</strong></td><td>15%</td><td>Existing connections</td></tr><tr><td><strong>Timing</strong></td><td>15%</td><td>Urgency/readiness</td></tr></tbody></table></div>
+<hr>
+<h4>📊 Prioritized Account List</h4>
+<div class="hx-table"><table><thead><tr><th>Rank</th><th>Account</th><th>Fit</th><th>Intent</th><th>Relationship</th><th>Timing</th><th><strong>Score</strong></th><th>Tier</th></tr></thead><tbody><tr><td>1</td><td><strong>Clinic Group A</strong></td><td>80</td><td>60</td><td>50</td><td>unknown</td><td><strong>65</strong></td><td>B</td></tr><tr><td>2</td><td><strong>Clinic Group B</strong></td><td>55</td><td>90</td><td>50</td><td>unknown</td><td><strong>64</strong></td><td>B</td></tr></tbody></table></div>
+<hr>
+<h4>🎯 Tier Breakdown</h4>
+<h5>Tier A (Score 80+) - Immediate Action</h5>
+<ul>
+<li>None in this tier</li>
+</ul>
+<p><strong>Action</strong>: Personalized outreach within 24 hours, executive involvement</p>
+<h5>Tier B (Score 60-79) - High Priority</h5>
+<ul>
+<li><strong>Clinic Group A</strong> (65)</li>
+<li><strong>Clinic Group B</strong> (64)</li>
+</ul>
+<p><strong>Action</strong>: Targeted outreach this week, multi-touch sequence</p>
+<h5>Tier C (Score 40-59) - Nurture</h5>
+<ul>
+<li>None in this tier</li>
+</ul>
+<p><strong>Action</strong>: Add to nurture campaign, monitor for signal changes</p>
+<h5>Tier D (Score &lt;40) - Monitor</h5>
+<ul>
+<li>None in this tier</li>
+</ul>
+<p><strong>Action</strong>: Marketing nurture only, check quarterly</p>
+<hr>
+<h4>📋 Next Actions by Account</h4>
+<h5>1. Clinic Group A (Tier B)</h5>
+<ul>
+<li><strong>Why prioritized</strong>: Strong ICP fit</li>
+<li><strong>Gap to address</strong>: Build relationships</li>
+<li><strong>Recommended action</strong>: SDR sequence + warm intro</li>
+</ul>
+<h5>2. Clinic Group B (Tier B)</h5>
+<ul>
+<li><strong>Why prioritized</strong>: High buying intent</li>
+<li><strong>Gap to address</strong>: Validate fit</li>
+<li><strong>Recommended action</strong>: SDR sequence + warm intro</li>
+</ul>
+<p><strong>Next Step</strong>: Use <code>icp_gap_analysis</code> to compare current vs ideal customers</p>
+  </div></details>
+</section>
+
+<section class="hx-section" aria-labelledby="not-t-h">
+  <h2 id="not-t-h">Who is Account Prioritization not ideal for?</h2>
+  <ul class="hx-prose">
+    <li>Anyone who cannot give the required inputs (nothing; every field is optional); the answer is built only from them.</li>
+    <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
+    <li>Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter.</li>
+  </ul>
+</section>
+
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use Account Prioritization from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s Account Prioritization tool. accounts: [{&quot;name&quot;: &quot;Clinic Group A&quot;, &quot;fit_score&quot;: 80, &quot;intent_signals&quot;: 60}, {&quot;name&quot;: &quot;Clinic Group B&quot;, &quot;fit_score&quot;: 55, &quot;intent_signals&quot;: 90}].</blockquote>
-  <p class="hx-prose">MCP tool name: <code>account_prioritization</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/account_prioritization</code> (see <a href="/docs/#account-prioritization">Docs</a>).</p>
+  <p class="hx-prose">MCP tool name: <code>account_prioritization</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/account_prioritization</code> with this JSON body (see <a href="/docs/#account-prioritization">Docs</a>):</p>
+  <pre class="hx-code-block">{
+  &quot;input&quot;: {
+    &quot;accounts&quot;: [
+      {
+        &quot;name&quot;: &quot;Clinic Group A&quot;,
+        &quot;fit_score&quot;: 80,
+        &quot;intent_signals&quot;: 60
+      },
+      {
+        &quot;name&quot;: &quot;Clinic Group B&quot;,
+        &quot;fit_score&quot;: 55,
+        &quot;intent_signals&quot;: 90
+      }
+    ]
+  }
+}</pre>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">
