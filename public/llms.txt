@@ -1,0 +1,60 @@
+# ICP Intelligence MCP connector
+
+> ICP Intelligence gives Claude nine tools for defining and using an ideal customer profile: a deep dive on your best customers, a scoring model, buyer group mapping, a TAM, SAM and SOM calculation, lookalike targeting criteria, account prioritization, gap analysis, ICP change tracking and interview synthesis. Every tool works only from the data you give it; it does not look anything up.
+
+- MCP server URL (Streamable HTTP, no sign-in, read-only tools): https://icp-intelligence-mcp.netlify.app/mcp
+- Setup and tools: https://icp-intelligence-mcp.netlify.app/
+- Privacy policy: https://icp-intelligence-mcp.netlify.app/privacy.html
+- Local npm package: @shashwatgtmalpha/icp-intelligence-mcp
+- Source code: https://github.com/shashwatgtm/icp-intelligence-mcp
+- Built by: Shashwat Ghosh, Helix GTM Consulting (https://www.gtmexpert.com)
+
+## Tools
+
+- ICP Deep Dive (icp_deep_dive): Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior
+- ICP Scoring Model (icp_scoring_model): Create qualification scoring model with auto-weighted criteria based on your success patterns
+- Buyer Group Analyzer (buyer_group_analyzer): Map buyer group dynamics, influence relationships, and decision-making process
+- TAM SAM SOM Calculator (tam_sam_som_calculator): Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)
+- Lookalike Signal Generator (lookalike_signal_generator): Generate platform-specific targeting criteria and search queries (generates criteria, not data)
+- Account Prioritization (account_prioritization): Rank and prioritize accounts using multi-dimensional scoring
+- ICP Gap Analysis (icp_gap_analysis): Analyze gaps between current customer base and ideal ICP
+- ICP Evolution Tracker (icp_evolution_tracker): Track how your ICP should evolve based on market changes and data
+- ICP Interview Synthesizer (icp_interview_synthesizer): Extract ICP patterns from customer interview notes or transcripts
+
+## Questions and answers
+
+### What is ICP Intelligence?
+
+ICP Intelligence gives Claude nine tools for defining and using an ideal customer profile: a deep dive on your best customers, a scoring model, buyer group mapping, a TAM, SAM and SOM calculation, lookalike targeting criteria, account prioritization, gap analysis, ICP change tracking and interview synthesis. Every tool works only from the data you give it; it does not look anything up.
+
+### How do I connect ICP Intelligence to Claude?
+
+In Claude, open Customize, then Connectors, then Add custom connector. Name it ICP Intelligence, paste the server URL https://icp-intelligence-mcp.netlify.app/mcp, choose no sign-in and select Add. In Claude Code run: claude mcp add --transport http icp-intelligence https://icp-intelligence-mcp.netlify.app/mcp
+
+### Does ICP Intelligence need an account, and what does it cost?
+
+No account or sign-in is needed, and there is no charge. The server is public and every tool is read-only.
+
+### Which tools does ICP Intelligence include?
+
+9 tools: ICP Deep Dive, ICP Scoring Model, Buyer Group Analyzer, TAM SAM SOM Calculator, Lookalike Signal Generator, Account Prioritization, ICP Gap Analysis, ICP Evolution Tracker, ICP Interview Synthesizer.
+
+### What data does ICP Intelligence keep?
+
+None. Each call is answered from the inputs you give it, and the server stores and logs nothing. Netlify, the host, keeps its own request logs. See the privacy policy.
+
+### Can I run ICP Intelligence on my own computer?
+
+Yes. Run npx -y @shashwatgtmalpha/icp-intelligence-mcp to use the same tools locally over stdio; nothing is sent to us.
+
+### Who built ICP Intelligence?
+
+Shashwat Ghosh, founder of Helix GTM Consulting, a GTM Alpha consultant, AI GTM expert and fractional CMO with 24+ years in B2B and 10+ years of fractional experience.
+
+## Other connectors by Helix GTM Consulting
+
+- GTM Alpha: https://gtmalpha.netlify.app/integration
+- CRAFT GTM: https://craft-gtm-mcp.netlify.app/
+- CRAFT Content: https://craft-content-mcp.netlify.app/
+- IMPACT: https://impact-mcp.netlify.app/
+- Revenue Enablement: https://revenue-enablement-mcp.netlify.app/
