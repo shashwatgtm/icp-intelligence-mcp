@@ -84,3 +84,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hx-result-text { white-space: pre-wrap; background: var(--hx-paper); border: 1.5px solid var(--hx-clay); padding: 14px; }
 @media (max-width: 760px) { .hx-two { grid-template-columns: 1fr; } .hx-form { padding: 14px; } }
 .hx-body .hx-qa { padding: 0; margin-left: 0; margin-right: 0; max-width: none; }
+.hx-card-static { border: 1.5px solid var(--hx-clay); background: var(--hx-paper); padding: 18px; display: flex; flex-direction: column; }
+.hx-card-static a { display: inline; height: auto; border: 0; padding: 0; background: none; }
+.hx-card-static h3 a { color: var(--hx-ink); text-decoration: none; }
+.hx-card-static h3 a:hover { color: var(--hx-signal); }
+.hx-card-static p { color: var(--hx-ink-72); margin: 0 0 10px; font-size: 15px; }
+.hx-run { border-top: 1.5px solid var(--hx-clay); padding: 12px 0; }
+.hx-run summary { cursor: pointer; font-weight: 700; color: var(--hx-ink); }
+.hx-output { border-left: 3px solid var(--hx-clay); padding-left: 14px; margin-top: 10px; }

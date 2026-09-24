@@ -20,7 +20,6 @@ https://icp-intelligence-mcp.netlify.app/privacy.html  https://icp-intelligence.
 https://icp-intelligence-mcp.netlify.app/sitemap.xml  https://icp-intelligence.gtmhelix.com/sitemap.xml  301!
 https://icp-intelligence-mcp.netlify.app/llms.txt  https://icp-intelligence.gtmhelix.com/llms.txt  301!
 
-# Old page address on the new site
+# Old page address on the new site (no rule for /privacy: Netlify treats /privacy and /privacy/ as one path, so it would loop)
 /privacy.html  /privacy/  301!
-/privacy  /privacy/  301!
 
