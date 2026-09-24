@@ -132,6 +132,7 @@
    "url": "https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
+   "softwareRequirements": "None: a web browser, or any MCP client such as Claude for the MCP address",
    "operatingSystem": "Any",
    "isAccessibleForFree": true,
    "offers": {
@@ -201,12 +202,13 @@
     <span class="hx-eyebrow">ICP Intelligence · tool 4 of 9</span>
     <h1>TAM SAM SOM Calculator</h1>
     <p class="hx-lead">Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)</p>
+    <p class="hx-byline">By <a href="https://www.gtmexpert.com/" rel="author">Shashwat Ghosh</a>, founder of Helix GTM Consulting · Last updated <time datetime="2026-09-25">25 September 2026</time></p>
   </div></div>
 </section>
 <main id="main" class="hx-body">
 
 <section class="hx-section" aria-labelledby="run-h">
-  <h2 id="run-h">Run TAM SAM SOM Calculator in your browser</h2>
+  <h2 id="run-h">How do I run TAM SAM SOM Calculator in my browser?</h2>
   <p class="hx-sub">Required: Total potential companies, Average contract value. Fields marked optional can be left empty.</p>
   <form class="hx-form" method="post" action="/api/tools/tam_sam_som_calculator" data-tool="tam_sam_som_calculator" data-title="TAM SAM SOM Calculator">
 <div class="hx-field"><label for="f-total_potential_companies">Total potential companies <span class="hx-req" aria-hidden="true">*</span></label><input id="f-total_potential_companies" name="total_potential_companies" type="number" step="any" inputmode="decimal" data-kind="number" required aria-required="true" aria-describedby="f-total_potential_companies-help"><p class="hx-help" id="f-total_potential_companies-help">Estimated total companies that could buy (from LinkedIn, industry reports)</p></div>
@@ -233,14 +235,14 @@
 </section>
 
 <section class="hx-section" aria-labelledby="ai-h">
-  <h2 id="ai-h">Use it from Claude or another assistant</h2>
+  <h2 id="ai-h">How do I use TAM SAM SOM Calculator from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s TAM SAM SOM Calculator tool. total potential companies: 12000; average contract value: 8000; icp percentage: 25; year 1 market share target: 1; segment name: US clinic groups.</blockquote>
   <p class="hx-prose">MCP tool name: <code>tam_sam_som_calculator</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/tam_sam_som_calculator</code> (see <a href="/docs/#tam-sam-som-calculator">Docs</a>).</p>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">
-  <h2 id="works-h">How this tool works</h2>
+  <h2 id="works-h">How does TAM SAM SOM Calculator work?</h2>
   <p class="hx-prose">It applies fixed rules in the ICP Intelligence code to the inputs above and returns text. It does not call an AI model, does not look anything up, and does not store what you type. The web form and the MCP server run the same function, so the same input gives the same answer in both.</p>
   <p class="hx-pn"><a href="/tools/buyer-group-analyzer/">Previous: Buyer Group Analyzer</a><a href="/tools/lookalike-signal-generator/">Next: Lookalike Signal Generator</a></p>
 </section>
@@ -284,8 +286,8 @@
                 </div>
             </div>
             <div class="hx-footer-bottom">
-                <span>&copy; 2026 Helix GTM Consulting. GTM Alpha by Shashwat Ghosh.</span>
-                <span><a href="https://gtmalpha.gtmhelix.com/privacy">Privacy</a> &middot; <a href="https://gtmalpha.gtmhelix.com/terms">Terms</a> &middot; <a href="https://gtmalpha.gtmhelix.com/faq">FAQ</a></span>
+                <span>&copy; 2026 Helix GTM Consulting. ICP Intelligence by Shashwat Ghosh.</span>
+                <span><a href="/privacy/">Privacy</a> &middot; <a href="/faq/">FAQ</a></span>
             </div>
         </div>
     </footer>

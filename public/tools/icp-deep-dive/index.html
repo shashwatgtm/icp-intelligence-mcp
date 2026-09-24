@@ -132,6 +132,7 @@
    "url": "https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
+   "softwareRequirements": "None: a web browser, or any MCP client such as Claude for the MCP address",
    "operatingSystem": "Any",
    "isAccessibleForFree": true,
    "offers": {
@@ -201,12 +202,13 @@
     <span class="hx-eyebrow">ICP Intelligence · tool 1 of 9</span>
     <h1>ICP Deep Dive</h1>
     <p class="hx-lead">Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior</p>
+    <p class="hx-byline">By <a href="https://www.gtmexpert.com/" rel="author">Shashwat Ghosh</a>, founder of Helix GTM Consulting · Last updated <time datetime="2026-09-25">25 September 2026</time></p>
   </div></div>
 </section>
 <main id="main" class="hx-body">
 
 <section class="hx-section" aria-labelledby="run-h">
-  <h2 id="run-h">Run ICP Deep Dive in your browser</h2>
+  <h2 id="run-h">How do I run ICP Deep Dive in my browser?</h2>
   <p class="hx-sub">Required: nothing; every field is optional. Fields marked optional can be left empty.</p>
   <form class="hx-form" method="post" action="/api/tools/icp_deep_dive" data-tool="icp_deep_dive" data-title="ICP Deep Dive">
 <div class="hx-field"><label for="f-customers">Customers <span class="hx-opt">(optional)</span></label><textarea id="f-customers" name="customers" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-customers-help"></textarea><p class="hx-help" id="f-customers-help">List of customer objects with available attributes Enter a JSON list of objects. Fields: name (string), industry (string), size (string), acv (number), sales_cycle_days (number), tech_stack (array), buying_trigger (string), champion_title (string).</p></div>
@@ -230,14 +232,14 @@
 </section>
 
 <section class="hx-section" aria-labelledby="ai-h">
-  <h2 id="ai-h">Use it from Claude or another assistant</h2>
+  <h2 id="ai-h">How do I use ICP Deep Dive from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Deep Dive tool. customer descriptions: Mid-size clinic groups with 5 to 20 locations, operations director buys, pain is no-shows; dental chains with 10+ clinics; physiotherapy fra...; product category: clinic scheduling software.</blockquote>
   <p class="hx-prose">MCP tool name: <code>icp_deep_dive</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/icp_deep_dive</code> (see <a href="/docs/#icp-deep-dive">Docs</a>).</p>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">
-  <h2 id="works-h">How this tool works</h2>
+  <h2 id="works-h">How does ICP Deep Dive work?</h2>
   <p class="hx-prose">It applies fixed rules in the ICP Intelligence code to the inputs above and returns text. It does not call an AI model, does not look anything up, and does not store what you type. The web form and the MCP server run the same function, so the same input gives the same answer in both.</p>
   <p class="hx-pn"><a href="/tools/icp-scoring-model/">Next: ICP Scoring Model</a></p>
 </section>
@@ -281,8 +283,8 @@
                 </div>
             </div>
             <div class="hx-footer-bottom">
-                <span>&copy; 2026 Helix GTM Consulting. GTM Alpha by Shashwat Ghosh.</span>
-                <span><a href="https://gtmalpha.gtmhelix.com/privacy">Privacy</a> &middot; <a href="https://gtmalpha.gtmhelix.com/terms">Terms</a> &middot; <a href="https://gtmalpha.gtmhelix.com/faq">FAQ</a></span>
+                <span>&copy; 2026 Helix GTM Consulting. ICP Intelligence by Shashwat Ghosh.</span>
+                <span><a href="/privacy/">Privacy</a> &middot; <a href="/faq/">FAQ</a></span>
             </div>
         </div>
     </footer>

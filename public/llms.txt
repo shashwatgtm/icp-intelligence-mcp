@@ -1,6 +1,6 @@
 # ICP Intelligence
 
-> ICP Intelligence is a free set of nine ideal customer profile tools by Shashwat Ghosh of Helix GTM Consulting. Give it your best customers, deals and market numbers, and it returns an ICP deep dive, a scoring model, a buying group map, TAM, SAM and SOM, lookalike criteria, account priorities, gaps, changes over time and interview themes.
+> ICP Intelligence is a free MCP server and web app with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting. Give it your best customers, deals and market numbers, and it returns an ICP deep dive, a scoring model, a buying group map, TAM, SAM and SOM, lookalike criteria, account priorities, gaps, ICP changes and interview themes.
 
 - Web app (no sign-in): https://icp-intelligence.gtmhelix.com/
 - MCP server URL (Streamable HTTP, no sign-in, read-only tools): https://icp-intelligence.gtmhelix.com/mcp
@@ -29,7 +29,7 @@
 
 ### What is ICP Intelligence?
 
-ICP Intelligence is a free set of nine ideal customer profile tools by Shashwat Ghosh of Helix GTM Consulting. Give it your best customers, deals and market numbers, and it returns an ICP deep dive, a scoring model, a buying group map, TAM, SAM and SOM, lookalike criteria, account priorities, gaps, changes over time and interview themes.
+ICP Intelligence is a free MCP server and web app with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting. Give it your best customers, deals and market numbers, and it returns an ICP deep dive, a scoring model, a buying group map, TAM, SAM and SOM, lookalike criteria, account priorities, gaps, ICP changes and interview themes.
 
 ### Is ICP Intelligence free, and do I need an account?
 
@@ -62,6 +62,10 @@ Yes. Send POST https://icp-intelligence.gtmhelix.com/api/tools/<tool name> with 
 ### Is the source code public?
 
 Yes, at https://github.com/shashwatgtm/icp-intelligence-mcp under the MIT licence. The npm package @shashwatgtmalpha/icp-intelligence-mcp runs the same tools locally.
+
+### Who is ICP Intelligence not ideal for?
+
+Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies. Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter. Teams that need saved models or CRM sync: nothing is stored and no CRM is connected.
 
 ### How do I report a problem?
 

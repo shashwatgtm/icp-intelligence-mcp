@@ -132,6 +132,7 @@
    "url": "https://icp-intelligence.gtmhelix.com/tools/lookalike-signal-generator/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
+   "softwareRequirements": "None: a web browser, or any MCP client such as Claude for the MCP address",
    "operatingSystem": "Any",
    "isAccessibleForFree": true,
    "offers": {
@@ -201,12 +202,13 @@
     <span class="hx-eyebrow">ICP Intelligence · tool 5 of 9</span>
     <h1>Lookalike Signal Generator</h1>
     <p class="hx-lead">Generate platform-specific targeting criteria and search queries (generates criteria, not data)</p>
+    <p class="hx-byline">By <a href="https://www.gtmexpert.com/" rel="author">Shashwat Ghosh</a>, founder of Helix GTM Consulting · Last updated <time datetime="2026-09-25">25 September 2026</time></p>
   </div></div>
 </section>
 <main id="main" class="hx-body">
 
 <section class="hx-section" aria-labelledby="run-h">
-  <h2 id="run-h">Run Lookalike Signal Generator in your browser</h2>
+  <h2 id="run-h">How do I run Lookalike Signal Generator in my browser?</h2>
   <p class="hx-sub">Required: Champion titles. Fields marked optional can be left empty.</p>
   <form class="hx-form" method="post" action="/api/tools/lookalike_signal_generator" data-tool="lookalike_signal_generator" data-title="Lookalike Signal Generator">
 <div class="hx-field"><label for="f-icp_firmographics">ICP firmographics <span class="hx-opt">(optional)</span></label><textarea id="f-icp_firmographics" name="icp_firmographics" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-icp_firmographics-help"></textarea><p class="hx-help" id="f-icp_firmographics-help">Firmographic criteria Enter a JSON object. Fields: industries (array), company_sizes (array), locations (array), funding_stages (array).</p></div>
@@ -232,14 +234,14 @@
 </section>
 
 <section class="hx-section" aria-labelledby="ai-h">
-  <h2 id="ai-h">Use it from Claude or another assistant</h2>
+  <h2 id="ai-h">How do I use Lookalike Signal Generator from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
   <blockquote class="hx-quote">Use ICP Intelligence&#x27;s Lookalike Signal Generator tool. champion titles: [&quot;Operations Director&quot;, &quot;Practice Manager&quot;]; buying triggers: [&quot;new location opening&quot;, &quot;high no-show rate&quot;]; platforms: [&quot;linkedin&quot;].</blockquote>
   <p class="hx-prose">MCP tool name: <code>lookalike_signal_generator</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/lookalike_signal_generator</code> (see <a href="/docs/#lookalike-signal-generator">Docs</a>).</p>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">
-  <h2 id="works-h">How this tool works</h2>
+  <h2 id="works-h">How does Lookalike Signal Generator work?</h2>
   <p class="hx-prose">It applies fixed rules in the ICP Intelligence code to the inputs above and returns text. It does not call an AI model, does not look anything up, and does not store what you type. The web form and the MCP server run the same function, so the same input gives the same answer in both.</p>
   <p class="hx-pn"><a href="/tools/tam-sam-som-calculator/">Previous: TAM SAM SOM Calculator</a><a href="/tools/account-prioritization/">Next: Account Prioritization</a></p>
 </section>
@@ -283,8 +285,8 @@
                 </div>
             </div>
             <div class="hx-footer-bottom">
-                <span>&copy; 2026 Helix GTM Consulting. GTM Alpha by Shashwat Ghosh.</span>
-                <span><a href="https://gtmalpha.gtmhelix.com/privacy">Privacy</a> &middot; <a href="https://gtmalpha.gtmhelix.com/terms">Terms</a> &middot; <a href="https://gtmalpha.gtmhelix.com/faq">FAQ</a></span>
+                <span>&copy; 2026 Helix GTM Consulting. ICP Intelligence by Shashwat Ghosh.</span>
+                <span><a href="/privacy/">Privacy</a> &middot; <a href="/faq/">FAQ</a></span>
             </div>
         </div>
     </footer>

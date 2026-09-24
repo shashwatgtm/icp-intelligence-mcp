@@ -135,3 +135,7 @@ footer.hx-footer {
   .code-block, .code-container, pre { max-width: 100%; overflow-x: auto; }
   .integration-text h3 { overflow-wrap: anywhere; }
 }
+
+/* Byline and last-updated date under each hero */
+.hx-hero .hx-byline { font-size: 14px !important; color: var(--hx-ink-72) !important; margin-top: 10px; }
+.hx-hero .hx-byline a { color: var(--hx-ink) !important; }

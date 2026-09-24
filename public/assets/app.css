@@ -92,3 +92,5 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hx-run { border-top: 1.5px solid var(--hx-clay); padding: 12px 0; }
 .hx-run summary { cursor: pointer; font-weight: 700; color: var(--hx-ink); }
 .hx-output { border-left: 3px solid var(--hx-clay); padding-left: 14px; margin-top: 10px; }
+.hx-hero .hx-byline { font-size: 14px !important; color: var(--hx-ink-72) !important; margin-top: 10px; }
+.hx-hero .hx-byline a { color: var(--hx-ink) !important; }
