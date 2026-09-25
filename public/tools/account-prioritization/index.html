@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Account Prioritization | ICP Intelligence by Helix GTM</title>
-<meta name="description" content="Run Account Prioritization free in your browser or in Claude. Rank and prioritize accounts using multi-dimensional scoring">
+<meta name="description" content="Run Account Prioritization free in your browser or in Claude. Free, with no sign-in. By Helix GTM Consulting. Read-only MCP tools. Nothing you type is stored.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Shashwat Ghosh, Helix GTM Consulting">
 <link rel="canonical" href="https://icp-intelligence.gtmhelix.com/tools/account-prioritization/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ICP Intelligence by Helix GTM Consulting">
 <meta property="og:title" content="Account Prioritization | ICP Intelligence by Helix GTM">
-<meta property="og:description" content="Run Account Prioritization free in your browser or in Claude. Rank and prioritize accounts using multi-dimensional scoring">
+<meta property="og:description" content="Run Account Prioritization free in your browser or in Claude. Free, with no sign-in. By Helix GTM Consulting. Read-only MCP tools. Nothing you type is stored.">
 <meta property="og:url" content="https://icp-intelligence.gtmhelix.com/tools/account-prioritization/">
 <meta property="og:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="ICP Intelligence by Helix GTM Consulting">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Account Prioritization | ICP Intelligence by Helix GTM">
-<meta name="twitter:description" content="Run Account Prioritization free in your browser or in Claude. Rank and prioritize accounts using multi-dimensional scoring">
+<meta name="twitter:description" content="Run Account Prioritization free in your browser or in Claude. Free, with no sign-in. By Helix GTM Consulting. Read-only MCP tools. Nothing you type is stored.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -108,7 +108,7 @@
    "@id": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/#page",
    "url": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/",
    "name": "Account Prioritization | ICP Intelligence by Helix GTM",
-   "description": "Run Account Prioritization free in your browser or in Claude. Rank and prioritize accounts using multi-dimensional scoring",
+   "description": "Run Account Prioritization free in your browser or in Claude. Free, with no sign-in. By Helix GTM Consulting. Read-only MCP tools. Nothing you type is stored.",
    "isPartOf": {
     "@id": "https://icp-intelligence.gtmhelix.com/#site"
    },
@@ -228,8 +228,8 @@
   <h2 id="need-h">What do I need to run Account Prioritization?</h2>
   <p class="hx-sub">Free, no sign-up, no account. A web browser is enough; the answer comes back in a second or two.</p>
   <div class="hx-table"><table><thead><tr><th>Input</th><th>Required?</th><th>What to enter</th></tr></thead><tbody>
-<tr><td>Accounts</td><td>Optional</td><td>List of accounts to prioritize</td></tr>
-<tr><td>Prioritization weights</td><td>Optional</td><td>Custom weights (must sum to 100)</td></tr>
+<tr><td>Accounts</td><td>Optional</td><td>List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing</td></tr>
+<tr><td>Prioritization weights</td><td>Optional</td><td>Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100</td></tr>
   </tbody></table></div>
   <ol class="hx-steps">
     <li>Fill in the required inputs above in the form below, or press <em>Fill in a tested example</em>.</li>
@@ -242,8 +242,8 @@
   <h2 id="run-h">How do I run Account Prioritization in my browser?</h2>
   <p class="hx-sub">Required: nothing; every field is optional. Fields marked optional can be left empty.</p>
   <form class="hx-form" method="post" action="/api/tools/account_prioritization" data-tool="account_prioritization" data-title="Account Prioritization">
-<div class="hx-field"><label for="f-accounts">Accounts <span class="hx-opt">(optional)</span></label><textarea id="f-accounts" name="accounts" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-accounts-help"></textarea><p class="hx-help" id="f-accounts-help">List of accounts to prioritize Enter a JSON list of objects. Fields: name (string), fit_score (number: 1-100), intent_signals (number: 1-100 or 0 if unknown), relationship (number: 1-100 based on existing connections), timing (string: now/soon/later/unknown).</p></div>
-<div class="hx-field"><label for="f-prioritization_weights">Prioritization weights <span class="hx-opt">(optional)</span></label><textarea id="f-prioritization_weights" name="prioritization_weights" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-prioritization_weights-help"></textarea><p class="hx-help" id="f-prioritization_weights-help">Custom weights (must sum to 100) Enter a JSON object. Fields: fit (number), intent (number), relationship (number), timing (number).</p></div>
+<div class="hx-field"><label for="f-accounts">Accounts <span class="hx-opt">(optional)</span></label><textarea id="f-accounts" name="accounts" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-accounts-help"></textarea><p class="hx-help" id="f-accounts-help">List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing Enter a JSON list of objects. Fields: name (string), fit_score (number: 1-100), intent_signals (number: 1-100 or 0 if unknown), relationship (number: 1-100 based on existing connections), timing (string: now/soon/later/unknown).</p></div>
+<div class="hx-field"><label for="f-prioritization_weights">Prioritization weights <span class="hx-opt">(optional)</span></label><textarea id="f-prioritization_weights" name="prioritization_weights" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-prioritization_weights-help"></textarea><p class="hx-help" id="f-prioritization_weights-help">Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100 Enter a JSON object. Fields: fit (number), intent (number), relationship (number), timing (number).</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-account_prioritization">Leave this empty</label><input id="hp-account_prioritization" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run Account Prioritization</button>
@@ -252,7 +252,7 @@
     </div>
     
   </form>
-  <script type="application/json" data-example>{"accounts": "[\n {\n  \"name\": \"Clinic Group A\",\n  \"fit_score\": 80,\n  \"intent_signals\": 60\n },\n {\n  \"name\": \"Clinic Group B\",\n  \"fit_score\": 55,\n  \"intent_signals\": 90\n }\n]"}</script>
+  <script type="application/json" data-example>{"accounts": "[\n {\n  \"name\": \"Clinic Group A\",\n  \"fit_score\": 80,\n  \"intent_signals\": 60,\n  \"relationship\": 40,\n  \"timing\": \"soon\"\n },\n {\n  \"name\": \"Clinic Group B\",\n  \"fit_score\": 55,\n  \"intent_signals\": 90,\n  \"relationship\": 70,\n  \"timing\": \"now\"\n }\n]"}</script>
 </section>
 
 <section class="hx-section hx-result" id="result" aria-live="polite" aria-labelledby="result-h" hidden>
@@ -268,28 +268,34 @@
   <div class="hx-result-body hx-output">
 <h3>Account Prioritization Results</h3>
 <h4>Scoring Weights</h4>
+<p>Example figures: replace with your own. You supplied no weights, so these are the default weights.</p>
 <div class="hx-table"><table><thead><tr><th>Factor</th><th>Weight</th><th>Rationale</th></tr></thead><tbody><tr><td><strong>Fit</strong></td><td>40%</td><td>How well they match ICP</td></tr><tr><td><strong>Intent</strong></td><td>30%</td><td>Buying signals detected</td></tr><tr><td><strong>Relationship</strong></td><td>15%</td><td>Existing connections</td></tr><tr><td><strong>Timing</strong></td><td>15%</td><td>Urgency/readiness</td></tr></tbody></table></div>
 <hr>
 <h4>📊 Prioritized Account List</h4>
-<div class="hx-table"><table><thead><tr><th>Rank</th><th>Account</th><th>Fit</th><th>Intent</th><th>Relationship</th><th>Timing</th><th><strong>Score</strong></th><th>Tier</th></tr></thead><tbody><tr><td>1</td><td><strong>Clinic Group A</strong></td><td>80</td><td>60</td><td>50</td><td>unknown</td><td><strong>65</strong></td><td>B</td></tr><tr><td>2</td><td><strong>Clinic Group B</strong></td><td>55</td><td>90</td><td>50</td><td>unknown</td><td><strong>64</strong></td><td>B</td></tr></tbody></table></div>
+<p>Example figures: replace with your own. The scores use the default weights and a preset score for each timing value; (default) marks a value your input did not supply, so the tool used its default.</p>
+<div class="hx-table"><table><thead><tr><th>Rank</th><th>Account</th><th>Fit</th><th>Intent</th><th>Relationship</th><th>Timing</th><th><strong>Score</strong></th><th>Tier</th></tr></thead><tbody><tr><td>1</td><td><strong>Clinic Group B</strong></td><td>55</td><td>90</td><td>70</td><td>now</td><td><strong>75</strong></td><td>B</td></tr><tr><td>2</td><td><strong>Clinic Group A</strong></td><td>80</td><td>60</td><td>40</td><td>soon</td><td><strong>67</strong></td><td>B</td></tr></tbody></table></div>
 <hr>
 <h4>🎯 Tier Breakdown</h4>
+<p>Example figures: replace with your own.</p>
 <h5>Tier A (Score 80+) - Immediate Action</h5>
 <ul>
 <li>None in this tier</li>
 </ul>
 <p><strong>Action</strong>: Personalized outreach within 24 hours, executive involvement</p>
+<p>Example figures: replace with your own.</p>
 <h5>Tier B (Score 60-79) - High Priority</h5>
 <ul>
-<li><strong>Clinic Group A</strong> (65)</li>
-<li><strong>Clinic Group B</strong> (64)</li>
+<li><strong>Clinic Group B</strong> (75)</li>
+<li><strong>Clinic Group A</strong> (67)</li>
 </ul>
 <p><strong>Action</strong>: Targeted outreach this week, multi-touch sequence</p>
+<p>Example figures: replace with your own.</p>
 <h5>Tier C (Score 40-59) - Nurture</h5>
 <ul>
 <li>None in this tier</li>
 </ul>
 <p><strong>Action</strong>: Add to nurture campaign, monitor for signal changes</p>
+<p>Example figures: replace with your own.</p>
 <h5>Tier D (Score &lt;40) - Monitor</h5>
 <ul>
 <li>None in this tier</li>
@@ -297,19 +303,20 @@
 <p><strong>Action</strong>: Marketing nurture only, check quarterly</p>
 <hr>
 <h4>📋 Next Actions by Account</h4>
-<h5>1. Clinic Group A (Tier B)</h5>
-<ul>
-<li><strong>Why prioritized</strong>: Strong ICP fit</li>
-<li><strong>Gap to address</strong>: Build relationships</li>
-<li><strong>Recommended action</strong>: SDR sequence + warm intro</li>
-</ul>
-<h5>2. Clinic Group B (Tier B)</h5>
+<h5>1. Clinic Group B (Tier B)</h5>
 <ul>
 <li><strong>Why prioritized</strong>: High buying intent</li>
 <li><strong>Gap to address</strong>: Validate fit</li>
 <li><strong>Recommended action</strong>: SDR sequence + warm intro</li>
 </ul>
+<h5>2. Clinic Group A (Tier B)</h5>
+<ul>
+<li><strong>Why prioritized</strong>: Strong ICP fit</li>
+<li><strong>Gap to address</strong>: Build relationships</li>
+<li><strong>Recommended action</strong>: SDR sequence + warm intro</li>
+</ul>
 <p><strong>Next Step</strong>: Use <code>icp_gap_analysis</code> to compare current vs ideal customers</p>
+<p>Suggested timings, lengths and counts: adjust them to your own.</p>
   </div></details>
 </section>
 
@@ -325,7 +332,7 @@
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use Account Prioritization from Claude?</h2>
   <p class="hx-prose">Connect ICP Intelligence once (see <a href="/connect/">Connect</a>), then ask in plain words. A prompt built from the tested example:</p>
-  <blockquote class="hx-quote">Use ICP Intelligence&#x27;s Account Prioritization tool. accounts: [{&quot;name&quot;: &quot;Clinic Group A&quot;, &quot;fit_score&quot;: 80, &quot;intent_signals&quot;: 60}, {&quot;name&quot;: &quot;Clinic Group B&quot;, &quot;fit_score&quot;: 55, &quot;intent_signals&quot;: 90}].</blockquote>
+  <blockquote class="hx-quote">Use ICP Intelligence&#x27;s Account Prioritization tool. accounts: [{&quot;name&quot;: &quot;Clinic Group A&quot;, &quot;fit_score&quot;: 80, &quot;intent_signals&quot;: 60, &quot;relationship&quot;: 40, &quot;timing&quot;: &quot;soon&quot;}, {&quot;name&quot;: &quot;Clinic Group B&quot;, &quot;fit_sc....</blockquote>
   <p class="hx-prose">MCP tool name: <code>account_prioritization</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/account_prioritization</code> with this JSON body (see <a href="/docs/#account-prioritization">Docs</a>):</p>
   <pre class="hx-code-block">{
   &quot;input&quot;: {
@@ -333,12 +340,16 @@
       {
         &quot;name&quot;: &quot;Clinic Group A&quot;,
         &quot;fit_score&quot;: 80,
-        &quot;intent_signals&quot;: 60
+        &quot;intent_signals&quot;: 60,
+        &quot;relationship&quot;: 40,
+        &quot;timing&quot;: &quot;soon&quot;
       },
       {
         &quot;name&quot;: &quot;Clinic Group B&quot;,
         &quot;fit_score&quot;: 55,
-        &quot;intent_signals&quot;: 90
+        &quot;intent_signals&quot;: 90,
+        &quot;relationship&quot;: 70,
+        &quot;timing&quot;: &quot;now&quot;
       }
     ]
   }
@@ -347,7 +358,7 @@
 
 <section class="hx-section" aria-labelledby="works-h">
   <h2 id="works-h">How does Account Prioritization work?</h2>
-  <p class="hx-prose">It applies fixed rules in the ICP Intelligence code to the inputs above and returns text. It does not call an AI model, does not look anything up, and does not store what you type. The web form and the MCP server run the same function, so the same input gives the same answer in both.</p>
+  <p class="hx-prose">It applies fixed rules in the ICP Intelligence code to the inputs above and returns text. It does not call an AI model, does not look anything up, and does not store what you type. The web form and the MCP server call the same tool code, so the same input gives the same answer in both.</p>
   <p class="hx-pn"><a href="/tools/lookalike-signal-generator/">Previous: Lookalike Signal Generator</a><a href="/tools/icp-gap-analysis/">Next: ICP Gap Analysis</a></p>
 </section>
 

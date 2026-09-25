@@ -16,13 +16,13 @@
 ## Tools
 
 - [ICP Deep Dive](https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/) (`icp_deep_dive`): Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior
-- [ICP Scoring Model](https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/) (`icp_scoring_model`): Create qualification scoring model with auto-weighted criteria based on your success patterns
+- [ICP Scoring Model](https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/) (`icp_scoring_model`): Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights
 - [Buyer Group Analyzer](https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/) (`buyer_group_analyzer`): Map buyer group dynamics, influence relationships, and decision-making process
 - [TAM SAM SOM Calculator](https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/) (`tam_sam_som_calculator`): Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)
 - [Lookalike Signal Generator](https://icp-intelligence.gtmhelix.com/tools/lookalike-signal-generator/) (`lookalike_signal_generator`): Generate platform-specific targeting criteria and search queries (generates criteria, not data)
 - [Account Prioritization](https://icp-intelligence.gtmhelix.com/tools/account-prioritization/) (`account_prioritization`): Rank and prioritize accounts using multi-dimensional scoring
 - [ICP Gap Analysis](https://icp-intelligence.gtmhelix.com/tools/icp-gap-analysis/) (`icp_gap_analysis`): Analyze gaps between current customer base and ideal ICP
-- [ICP Evolution Tracker](https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/) (`icp_evolution_tracker`): Track how your ICP should evolve based on market changes and data
+- [ICP Evolution Tracker](https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/) (`icp_evolution_tracker`): Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text
 - [ICP Interview Synthesizer](https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/) (`icp_interview_synthesizer`): Extract ICP patterns from customer interview notes or transcripts
 
 ## Questions and answers
@@ -53,7 +53,7 @@ Shashwat Ghosh, Co-Founder and Fractional CMO of Helix GTM Consulting, a busines
 
 ### Why do some answers look like templates?
 
-Several tools return a structured plan with placeholders where your inputs did not give a fact. That is deliberate: the tools do not invent numbers or names. Fill the placeholders in before you use the result.
+Several tools return a structured plan with [placeholders] where your inputs did not give a fact. When an answer shows a benchmark, target, rate, weight or other figure you did not supply, it is labelled "Example figure: replace with your own". Figures calculated from your inputs are not labelled. Suggested lengths, timings and counts are marked as suggestions. Replace every example and placeholder before you use the result.
 
 ### Can I call the tools from my own code?
 

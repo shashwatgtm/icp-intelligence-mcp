@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ICP Interview Synthesizer | ICP Intelligence by Helix GTM</title>
-<meta name="description" content="Run ICP Interview Synthesizer free in your browser or in Claude. Extract ICP patterns from customer interview notes or transcripts">
+<meta name="description" content="Run ICP Interview Synthesizer free in your browser or in Claude. Free, with no sign-in. By Helix GTM Consulting. Read-only MCP tools. Works in Claude.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Shashwat Ghosh, Helix GTM Consulting">
 <link rel="canonical" href="https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ICP Intelligence by Helix GTM Consulting">
 <meta property="og:title" content="ICP Interview Synthesizer | ICP Intelligence by Helix GTM">
-<meta property="og:description" content="Run ICP Interview Synthesizer free in your browser or in Claude. Extract ICP patterns from customer interview notes or transcripts">
+<meta property="og:description" content="Run ICP Interview Synthesizer free in your browser or in Claude. Free, with no sign-in. By Helix GTM Consulting. Read-only MCP tools. Works in Claude.">
 <meta property="og:url" content="https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/">
 <meta property="og:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="ICP Intelligence by Helix GTM Consulting">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ICP Interview Synthesizer | ICP Intelligence by Helix GTM">
-<meta name="twitter:description" content="Run ICP Interview Synthesizer free in your browser or in Claude. Extract ICP patterns from customer interview notes or transcripts">
+<meta name="twitter:description" content="Run ICP Interview Synthesizer free in your browser or in Claude. Free, with no sign-in. By Helix GTM Consulting. Read-only MCP tools. Works in Claude.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -108,7 +108,7 @@
    "@id": "https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/#page",
    "url": "https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/",
    "name": "ICP Interview Synthesizer | ICP Intelligence by Helix GTM",
-   "description": "Run ICP Interview Synthesizer free in your browser or in Claude. Extract ICP patterns from customer interview notes or transcripts",
+   "description": "Run ICP Interview Synthesizer free in your browser or in Claude. Free, with no sign-in. By Helix GTM Consulting. Read-only MCP tools. Works in Claude.",
    "isPartOf": {
     "@id": "https://icp-intelligence.gtmhelix.com/#site"
    },
@@ -230,7 +230,7 @@
   <div class="hx-table"><table><thead><tr><th>Input</th><th>Required?</th><th>What to enter</th></tr></thead><tbody>
 <tr><td>Interview notes</td><td>Optional</td><td>Structured interview notes</td></tr>
 <tr><td>Raw transcripts</td><td>Optional</td><td>Alternative: Paste raw interview transcripts or notes</td></tr>
-<tr><td>Analysis focus</td><td>Optional</td><td>What to focus on: pain_points, buying_journey, value_props, all</td></tr>
+<tr><td>Analysis focus</td><td>Optional</td><td>Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)</td></tr>
   </tbody></table></div>
   <ol class="hx-steps">
     <li>Fill in the required inputs above in the form below, or press <em>Fill in a tested example</em>.</li>
@@ -245,7 +245,7 @@
   <form class="hx-form" method="post" action="/api/tools/icp_interview_synthesizer" data-tool="icp_interview_synthesizer" data-title="ICP Interview Synthesizer">
 <div class="hx-field"><label for="f-interview_notes">Interview notes <span class="hx-opt">(optional)</span></label><textarea id="f-interview_notes" name="interview_notes" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-interview_notes-help"></textarea><p class="hx-help" id="f-interview_notes-help">Structured interview notes Enter a JSON list of objects. Fields: customer (string), role (string), key_quotes (array), pain_points (array), buying_triggers (array), value_realized (array).</p></div>
 <div class="hx-field"><label for="f-raw_transcripts">Raw transcripts <span class="hx-opt">(optional)</span></label><textarea id="f-raw_transcripts" name="raw_transcripts" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-raw_transcripts-help"></textarea><p class="hx-help" id="f-raw_transcripts-help">Alternative: Paste raw interview transcripts or notes</p></div>
-<div class="hx-field"><label for="f-analysis_focus">Analysis focus <span class="hx-opt">(optional)</span></label><textarea id="f-analysis_focus" name="analysis_focus" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-analysis_focus-help"></textarea><p class="hx-help" id="f-analysis_focus-help">What to focus on: pain_points, buying_journey, value_props, all</p></div>
+<div class="hx-field"><label for="f-analysis_focus">Analysis focus <span class="hx-opt">(optional)</span></label><textarea id="f-analysis_focus" name="analysis_focus" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-analysis_focus-help"></textarea><p class="hx-help" id="f-analysis_focus-help">Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-icp_interview_synthesizer">Leave this empty</label><input id="hp-icp_interview_synthesizer" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run ICP Interview Synthesizer</button>
@@ -273,7 +273,8 @@
 <pre><code>Interview 1: Ops director at a 12-clinic dental group; biggest pain no-shows; chose us for SMS reminders. Interview 2: Practice manager at a physio chain; pain rescheduling by phone; wanted online booking.</code></pre>
 <hr>
 <h4>📋 Structured Format Recommended</h4>
-<p>For better analysis, structure your interviews:</p>
+<p>For better analysis, structure your interviews in this format. Example only, not from your input: the customer, quotes, pain points and results below are made up to show the format.</p>
+<p>Example figures: replace with your own.</p>
 <pre><code>{
   "interview_notes": [
     {
@@ -353,7 +354,7 @@
 
 <section class="hx-section" aria-labelledby="works-h">
   <h2 id="works-h">How does ICP Interview Synthesizer work?</h2>
-  <p class="hx-prose">It applies fixed rules in the ICP Intelligence code to the inputs above and returns text. It does not call an AI model, does not look anything up, and does not store what you type. The web form and the MCP server run the same function, so the same input gives the same answer in both.</p>
+  <p class="hx-prose">It applies fixed rules in the ICP Intelligence code to the inputs above and returns text. It does not call an AI model, does not look anything up, and does not store what you type. The web form and the MCP server call the same tool code, so the same input gives the same answer in both.</p>
   <p class="hx-pn"><a href="/tools/icp-evolution-tracker/">Previous: ICP Evolution Tracker</a></p>
 </section>
 

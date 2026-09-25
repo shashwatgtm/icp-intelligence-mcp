@@ -1,5 +1,4 @@
-# ICP Intelligence MCP v1.0.0
-
+# ICP Intelligence MCP v1.1.0
 **Deep ICP Analysis with Pattern Detection** - 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
 
 [![NPM Version](https://img.shields.io/npm/v/@shashwatgtmalpha/icp-intelligence-mcp)](https://www.npmjs.com/package/@shashwatgtmalpha/icp-intelligence-mcp)
@@ -30,21 +29,104 @@ Add to your `claude_desktop_config.json`:
 
 ---
 
-## 🛠️ Tools Overview
+## Tools and inputs
 
-| Tool | Purpose | Primary Output |
-|------|---------|----------------|
-| `icp_deep_dive` | Pattern detection from customer data | ICP profile with attributes |
-| `icp_scoring_model` | Auto-weighted qualification scorecards | Lead/account scoring model |
-| `icp_gap_analysis` | Current vs ideal customer comparison | Metric gaps & recommendations |
-| `icp_evolution_tracker` | Dynamic ICP monitoring | Win/loss pattern trends |
-| `icp_interview_synthesizer` | Extract patterns from interviews | Voice of customer insights |
-| `buyer_group_analyzer` | Decision dynamics mapping | Buying committee profiles |
-| `tam_sam_som_calculator` | Bottom-up market sizing | Market size with deal targets |
-| `lookalike_signal_generator` | Platform-specific targeting | Ad platform targeting criteria |
-| `account_prioritization` | Multi-dimensional ranking | Prioritized account tiers |
+Generated on 25 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.1.0, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
 
----
+| # | Tool | Title | What it does |
+|---|---|---|---|
+| 1 | `icp_deep_dive` | ICP Deep Dive | Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior |
+| 2 | `icp_scoring_model` | ICP Scoring Model | Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights |
+| 3 | `buyer_group_analyzer` | Buyer Group Analyzer | Map buyer group dynamics, influence relationships, and decision-making process |
+| 4 | `tam_sam_som_calculator` | TAM SAM SOM Calculator | Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source) |
+| 5 | `lookalike_signal_generator` | Lookalike Signal Generator | Generate platform-specific targeting criteria and search queries (generates criteria, not data) |
+| 6 | `account_prioritization` | Account Prioritization | Rank and prioritize accounts using multi-dimensional scoring |
+| 7 | `icp_gap_analysis` | ICP Gap Analysis | Analyze gaps between current customer base and ideal ICP |
+| 8 | `icp_evolution_tracker` | ICP Evolution Tracker | Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text |
+| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from customer interview notes or transcripts |
+
+### Inputs of each tool
+
+#### 1. ICP Deep Dive (`icp_deep_dive`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `customers` | No | array of object | List of customer objects with available attributes |
+| `customer_descriptions` | No | string | Alternative: Describe your best customers in text format |
+| `product_category` | No | string | What type of product you sell |
+
+#### 2. ICP Scoring Model (`icp_scoring_model`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `scoring_criteria` | No | array of object | Criteria for scoring with importance levels |
+| `success_correlation` | No | string | What correlates with success? (e.g., "deals with VP Sales champion close 2x faster") |
+| `product_category` | No | string |  |
+
+#### 3. Buyer Group Analyzer (`buyer_group_analyzer`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `product_category` | Yes | string | What you sell |
+| `deal_size` | No | string | ACV range (e.g., "$50K-100K") |
+| `target_company_size` | No | string | Company size (e.g., "500-1000 employees") |
+| `known_stakeholders` | No | array of string | Roles you know are involved |
+| `typical_champion` | No | string | Your typical champion role |
+
+#### 4. TAM SAM SOM Calculator (`tam_sam_som_calculator`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `total_potential_companies` | Yes | number | Estimated total companies that could buy (from LinkedIn, industry reports) |
+| `average_contract_value` | Yes | number | Your average ACV in dollars |
+| `icp_percentage` | No | number | Percentage that match your ICP (1-100) |
+| `year1_market_share_target` | No | number | Realistic Year 1 market share percentage (typically 1-5%) |
+| `data_sources` | No | string | Where you got your numbers (for documentation) |
+| `segment_name` | No | string | Name of the market segment |
+
+#### 5. Lookalike Signal Generator (`lookalike_signal_generator`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `champion_titles` | Yes | array of string | Job titles of your champions |
+| `icp_firmographics` | No | object | Firmographic criteria |
+| `icp_technographics` | No | array of string | Technologies your ICP typically uses |
+| `buying_triggers` | No | array of string | Events that trigger buying |
+| `platforms` | No | array of string | Accepted but not used yet: the output always includes every platform section (linkedin, google_ads, 6sense, zoominfo) |
+
+#### 6. Account Prioritization (`account_prioritization`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `accounts` | No | array of object | List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing |
+| `prioritization_weights` | No | object | Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100 |
+
+#### 7. ICP Gap Analysis (`icp_gap_analysis`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `current_customers` | Yes | string | Description of your current customer base |
+| `ideal_icp` | Yes | string | Description of your ideal customer profile |
+| `current_metrics` | No | object | Current performance metrics |
+| `target_metrics` | No | object | Target performance metrics |
+
+#### 8. ICP Evolution Tracker (`icp_evolution_tracker`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `current_icp` | Yes | string | Your current ICP definition |
+| `recent_wins` | No | string | Description of recent successful customers |
+| `recent_losses` | No | string | Description of recent lost deals |
+| `market_changes` | No | string | Recent market or competitive changes |
+| `time_period` | No | string | Time period for analysis (e.g., "Q4 2024") |
+
+#### 9. ICP Interview Synthesizer (`icp_interview_synthesizer`)
+
+| Input | Required | Type | Description |
+|---|---|---|---|
+| `interview_notes` | No | array of object | Structured interview notes |
+| `raw_transcripts` | No | string | Alternative: Paste raw interview transcripts or notes |
+| `analysis_focus` | No | string | Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all) |
 
 ## 👤 Who Is This For?
 
@@ -84,130 +166,6 @@ This MCP is included in these user-focused Agent bundles:
 | **🎯 Product Marketing Engine** | 12 tools | PMMs |
 | **📊 Demand Gen & Ops** | 10 tools | Demand gen, marketing ops |
 | **💼 Account Executive Deal Desk** | 12 tools | AEs, account managers |
-
----
-
-## 📖 Tool Details
-
-### 1. ICP Deep Dive (`icp_deep_dive`)
-
-Detect patterns from customer data to define ICP attributes.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `customer_data` | ✅ | Description of current customers |
-| `best_customers` | ❌ | Characteristics of top customers |
-| `industry_focus` | ❌ | Industry context |
-
-**Output:** ICP profile with firmographics, technographics, behavioral signals, and champion characteristics.
-
-### 2. ICP Scoring Model (`icp_scoring_model`)
-
-Generate auto-weighted qualification scorecards.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `icp_attributes` | ✅ | Key ICP characteristics |
-| `deal_data` | ❌ | Win/loss data for weighting |
-| `scoring_type` | ❌ | lead, account, opportunity |
-
-**Output:** Weighted scorecard with tiers, thresholds, and implementation guidance.
-
-### 3. ICP Gap Analysis (`icp_gap_analysis`)
-
-Compare current customers to ideal profile.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `current_customers` | ✅ | Current customer characteristics |
-| `ideal_icp` | ✅ | Target ICP definition |
-| `key_metrics` | ❌ | Metrics to compare (ACV, retention, etc.) |
-
-**Output:** Gap matrix, metric comparison, recommendations for ICP refinement.
-
-### 4. ICP Evolution Tracker (`icp_evolution_tracker`)
-
-Monitor ICP changes over time.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `historical_data` | ✅ | Past customer/deal data |
-| `time_period` | ❌ | Analysis timeframe |
-| `win_loss_patterns` | ❌ | Recent win/loss trends |
-
-**Output:** ICP drift analysis, emerging segments, recommended adjustments.
-
-### 5. ICP Interview Synthesizer (`icp_interview_synthesizer`)
-
-Extract patterns from customer interviews.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `interview_notes` | ✅ | Interview transcripts or notes |
-| `interview_type` | ❌ | discovery, win, loss, churn |
-| `focus_areas` | ❌ | Specific areas to analyze |
-
-**Output:** Pattern themes, quotes, ICP refinement recommendations.
-
-### 6. Buyer Group Analyzer (`buyer_group_analyzer`)
-
-Map buying committee decision dynamics.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `product` | ✅ | Your product/service |
-| `target_company_size` | ✅ | SMB, mid-market, enterprise |
-| `deal_complexity` | ❌ | simple, moderate, complex |
-
-**Output:** Committee map (champion, economic, technical, user, blocker) with engagement strategies.
-
-### 7. TAM SAM SOM Calculator (`tam_sam_som_calculator`)
-
-Bottom-up market sizing with deal targets.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `product` | ✅ | Your product/service |
-| `target_segments` | ✅ | Market segments |
-| `pricing` | ✅ | Price point or ACV |
-| `geographic_focus` | ❌ | Target geography |
-| `data_sources` | ❌ | Available market data |
-
-**Output:** TAM/SAM/SOM with methodology, assumptions, and quarterly deal targets.
-
-### 8. Lookalike Signal Generator (`lookalike_signal_generator`)
-
-Generate platform-specific targeting criteria.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `icp_profile` | ✅ | ICP characteristics |
-| `platforms` | ✅ | linkedin, google_ads, 6sense, zoominfo, etc. |
-| `budget_tier` | ❌ | low, medium, high |
-
-**Output:** Platform-specific targeting fields, audience sizes, recommended exclusions.
-
-### 9. Account Prioritization (`account_prioritization`)
-
-Multi-dimensional account ranking.
-
-**Inputs:**
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `accounts` | ✅ | List of accounts to prioritize |
-| `icp_criteria` | ✅ | Scoring criteria |
-| `intent_signals` | ❌ | Available intent data |
-| `relationship_data` | ❌ | Existing relationships |
-
-**Output:** Tiered account list (Tier 1/2/3) with scoring rationale and engagement recommendations.
 
 ---
 
@@ -255,7 +213,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-*Part of the GTM Helix MCP Suite - AI-powered B2B go-to-market tools*
+*Part of the Helix GTM Consulting MCP suite: rule-based B2B go-to-market tools (no AI model runs inside them)*
 
 
 ## Hosted connector (Streamable HTTP)

@@ -26,7 +26,11 @@ export default async (req) => {
     enableJsonResponse: true,
   });
   await server.connect(transport);
-  return transport.handleRequest(req);
+  const res = await transport.handleRequest(req);
+  // Answers are never cached (privacy page: web and MCP answers are sent with Cache-Control: no-store).
+  const headers = new Headers(res.headers);
+  headers.set("Cache-Control", "no-store");
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
 };
 
 export const config = {

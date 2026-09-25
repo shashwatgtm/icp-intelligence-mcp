@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ICP Intelligence Docs: MCP Server and REST API | Helix GTM</title>
-<meta name="description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, generated from the server&#x27;s own schemas.">
+<meta name="description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, from the server&#x27;s own schemas. Read-only MCP tools.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Shashwat Ghosh, Helix GTM Consulting">
 <link rel="canonical" href="https://icp-intelligence.gtmhelix.com/docs/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ICP Intelligence by Helix GTM Consulting">
 <meta property="og:title" content="ICP Intelligence Docs: MCP Server and REST API | Helix GTM">
-<meta property="og:description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, generated from the server&#x27;s own schemas.">
+<meta property="og:description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, from the server&#x27;s own schemas. Read-only MCP tools.">
 <meta property="og:url" content="https://icp-intelligence.gtmhelix.com/docs/">
 <meta property="og:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="ICP Intelligence by Helix GTM Consulting">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ICP Intelligence Docs: MCP Server and REST API | Helix GTM">
-<meta name="twitter:description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, generated from the server&#x27;s own schemas.">
+<meta name="twitter:description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, from the server&#x27;s own schemas. Read-only MCP tools.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -108,7 +108,7 @@
    "@id": "https://icp-intelligence.gtmhelix.com/docs/#page",
    "url": "https://icp-intelligence.gtmhelix.com/docs/",
    "name": "ICP Intelligence Docs: MCP Server and REST API | Helix GTM",
-   "description": "How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, generated from the server's own schemas.",
+   "description": "How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, from the server's own schemas. Read-only MCP tools.",
    "isPartOf": {
     "@id": "https://icp-intelligence.gtmhelix.com/#site"
    },
@@ -182,7 +182,7 @@
   <p class="hx-prose">Send <code>POST https://icp-intelligence.gtmhelix.com/api/tools/&lt;tool name&gt;</code> with a JSON body <code>{"input": {...}}</code>. The answer is JSON: <code>{"ok": true, "tool": "...", "title": "...", "text": "..."}</code>, where <code>text</code> is the same Markdown the MCP tool returns. The endpoint calls the same server code as the MCP address.</p>
   <pre class="hx-code-block">curl -s -X POST https://icp-intelligence.gtmhelix.com/api/tools/icp_deep_dive \
   -H "Content-Type: application/json" \
-  -d '{&quot;input&quot;: {&quot;customer_descriptions&quot;: &quot;Mid-size clinic groups with 5 to 20 locations, operations director buys, pain is no-shows; dental chains with 10+ clinics; physiotherapy franchises&quot;, &quot;product_category&quot;: &quot;clinic scheduling software&quot;}}'</pre>
+  -d '{&quot;input&quot;: {&quot;customer_descriptions&quot;: &quot;Mid-market healthcare clinic groups with 5 to 20 locations, Series A funded; the operations director buys and the pain is no-shows. Also healthcare dental chains with 10+ clinics and physiotherapy franchises.&quot;, &quot;product_category&quot;: &quot;clinic scheduling software&quot;}}'</pre>
   <ul class="hx-prose">
     <li>Errors: 400 with <code>errors</code> (missing or invalid fields), 404 for an unknown tool, 405 for methods other than POST, 413 above 32,000 bytes, 429 when the rate limit is reached, 500 if the tool fails.</li>
     <li>Limits: 30 requests per minute per IP address; text fields up to 6,000 characters; lists up to 50 items.</li>
@@ -206,7 +206,7 @@
 </section>
 <section class="hx-section" id="icp-scoring-model" aria-labelledby="d-icp-scoring-model">
   <h3 id="d-icp-scoring-model">ICP Scoring Model <code>icp_scoring_model</code></h3>
-  <p class="hx-prose">Create qualification scoring model with auto-weighted criteria based on your success patterns <a href="/tools/icp-scoring-model/">Open the form</a>.</p>
+  <p class="hx-prose">Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights <a href="/tools/icp-scoring-model/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>scoring_criteria</code></td><td>list of objects</td><td>no</td><td></td><td>Criteria for scoring with importance levels</td></tr>
 <tr><td><code>success_correlation</code></td><td>string</td><td>no</td><td></td><td>What correlates with success? (e.g., &quot;deals with VP Sales champion close 2x faster&quot;)</td></tr>
@@ -244,15 +244,15 @@
 <tr><td><code>icp_technographics</code></td><td>list of strings</td><td>no</td><td></td><td>Technologies your ICP typically uses</td></tr>
 <tr><td><code>champion_titles</code></td><td>list of strings</td><td>yes</td><td></td><td>Job titles of your champions</td></tr>
 <tr><td><code>buying_triggers</code></td><td>list of strings</td><td>no</td><td></td><td>Events that trigger buying</td></tr>
-<tr><td><code>platforms</code></td><td>list of strings</td><td>no</td><td></td><td>Platforms to generate criteria for (linkedin, google_ads, 6sense, zoominfo)</td></tr>
+<tr><td><code>platforms</code></td><td>list of strings</td><td>no</td><td></td><td>Accepted but not used yet: the output always includes every platform section (linkedin, google_ads, 6sense, zoominfo)</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="account-prioritization" aria-labelledby="d-account-prioritization">
   <h3 id="d-account-prioritization">Account Prioritization <code>account_prioritization</code></h3>
   <p class="hx-prose">Rank and prioritize accounts using multi-dimensional scoring <a href="/tools/account-prioritization/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
-<tr><td><code>accounts</code></td><td>list of objects</td><td>no</td><td></td><td>List of accounts to prioritize</td></tr>
-<tr><td><code>prioritization_weights</code></td><td>object</td><td>no</td><td></td><td>Custom weights (must sum to 100)</td></tr>
+<tr><td><code>accounts</code></td><td>list of objects</td><td>no</td><td></td><td>List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing</td></tr>
+<tr><td><code>prioritization_weights</code></td><td>object</td><td>no</td><td></td><td>Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="icp-gap-analysis" aria-labelledby="d-icp-gap-analysis">
@@ -267,7 +267,7 @@
 </section>
 <section class="hx-section" id="icp-evolution-tracker" aria-labelledby="d-icp-evolution-tracker">
   <h3 id="d-icp-evolution-tracker">ICP Evolution Tracker <code>icp_evolution_tracker</code></h3>
-  <p class="hx-prose">Track how your ICP should evolve based on market changes and data <a href="/tools/icp-evolution-tracker/">Open the form</a>.</p>
+  <p class="hx-prose">Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text <a href="/tools/icp-evolution-tracker/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>current_icp</code></td><td>string</td><td>yes</td><td></td><td>Your current ICP definition</td></tr>
 <tr><td><code>recent_wins</code></td><td>string</td><td>no</td><td></td><td>Description of recent successful customers</td></tr>
@@ -282,7 +282,7 @@
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>interview_notes</code></td><td>list of objects</td><td>no</td><td></td><td>Structured interview notes</td></tr>
 <tr><td><code>raw_transcripts</code></td><td>string</td><td>no</td><td></td><td>Alternative: Paste raw interview transcripts or notes</td></tr>
-<tr><td><code>analysis_focus</code></td><td>string</td><td>no</td><td></td><td>What to focus on: pain_points, buying_journey, value_props, all</td></tr>
+<tr><td><code>analysis_focus</code></td><td>string</td><td>no</td><td></td><td>Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)</td></tr>
   </tbody></table></div>
 </section>
 

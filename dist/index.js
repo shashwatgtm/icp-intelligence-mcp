@@ -11,6 +11,12 @@ const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 // =============================================================================
 // 9 Tools for ICP definition, scoring, market sizing, and signal generation
 // =============================================================================
+// Output labels (run 5, owner decision 1). A figure that is not the user's input, and not computed only
+// from it, carries EXAMPLE on its own line, or sits under an EXAMPLES line placed directly above its table,
+// list or code block. SUGGESTED closes outputs that suggest lengths, timings or counts.
+const EXAMPLE = '(Example figure: replace with your own)';
+const EXAMPLES = 'Example figures: replace with your own.';
+const SUGGESTED = 'Suggested timings, lengths and counts: adjust them to your own.';
 // =============================================================================
 // TOOL DEFINITIONS
 // =============================================================================
@@ -125,9 +131,9 @@ ${topSizes.length > 0 ? topSizes.map(([size, count]) => `- **${size}**: ${count}
 ### Deal Economics
 | Metric | Value |
 |--------|-------|
-| Average ACV | $${avgACV.toLocaleString()} |
-| ACV Range | $${minACV.toLocaleString()} - $${maxACV.toLocaleString()} |
-| Avg Sales Cycle | ${avgCycle} days |
+| Average ACV | ${acvs.length > 0 ? `$${avgACV.toLocaleString('en-US')}` : 'not supplied'} |
+| ACV Range | ${acvs.length > 0 ? `$${minACV.toLocaleString('en-US')} - $${maxACV.toLocaleString('en-US')}` : 'not supplied'} |
+| Avg Sales Cycle | ${cycles.length > 0 ? `${avgCycle} days` : 'not supplied'} |
 
 **Pattern**: ${avgACV > 50000 ? 'Enterprise deal profile - expect complex buying process' :
                     avgACV > 15000 ? 'Mid-market deal profile - balance speed and value' :
@@ -163,11 +169,11 @@ Based on pattern analysis:
 **Ideal Customer Profile**:
 - **Industry**: ${topIndustries[0]?.[0] || '[Primary industry]'}${topIndustries[1] ? ` or ${topIndustries[1][0]}` : ''}
 - **Size**: ${topSizes[0]?.[0] || '[Target size]'}
-- **Budget**: $${Math.round(avgACV * 0.8).toLocaleString()} - $${Math.round(avgACV * 1.2).toLocaleString()} ACV capacity
+- **Budget**: ${acvs.length > 0 ? `$${Math.round(avgACV * 0.8).toLocaleString('en-US')} - $${Math.round(avgACV * 1.2).toLocaleString('en-US')} ACV capacity ${EXAMPLE}` : 'not supplied'}
 - **Tech Stack**: Uses ${topTech[0]?.[0] || '[Key technology]'}${topTech[1] ? ` + ${topTech[1][0]}` : ''}
 - **Buying Trigger**: ${topTriggers[0]?.[0] || '[Trigger event]'}
 - **Champion**: ${topChampions[0]?.[0] || '[Champion role]'}
-- **Sales Cycle**: ~${avgCycle || 60} days expected
+- **Sales Cycle**: ~${avgCycle || 60} days expected${avgCycle ? '' : ` ${EXAMPLE}`}
 
 ---
 
@@ -211,10 +217,10 @@ ${args.customer_descriptions}
 ## 📊 Detected Patterns
 
 ### Likely Company Size
-**${patterns.size}**
-${patterns.size === 'Enterprise (1000+)' ? '- Expect 6-12 month sales cycles, multi-stakeholder buying' : ''}
-${patterns.size === 'Mid-market (100-1000)' ? '- Expect 3-6 month sales cycles, departmental buying' : ''}
-${patterns.size === 'SMB (10-100)' ? '- Expect 1-3 month sales cycles, founder/exec buying' : ''}
+**${patterns.size}**${/\d/.test(patterns.size) ? ` ${EXAMPLE}` : ''}
+${patterns.size === 'Enterprise (1000+)' ? `- Expect 6-12 month sales cycles, multi-stakeholder buying ${EXAMPLE}` : ''}
+${patterns.size === 'Mid-market (100-1000)' ? `- Expect 3-6 month sales cycles, departmental buying ${EXAMPLE}` : ''}
+${patterns.size === 'SMB (10-100)' ? `- Expect 1-3 month sales cycles, founder/exec buying ${EXAMPLE}` : ''}
 
 ### Likely Industry
 **${patterns.industry}**
@@ -230,8 +236,9 @@ ${patterns.size === 'SMB (10-100)' ? '- Expect 1-3 month sales cycles, founder/e
 
 ## ⚠️ Recommendations
 
-For more precise ICP analysis, provide structured customer data:
+For more precise ICP analysis, provide structured customer data in this format (the customer below is an example, not taken from your input):
 
+${EXAMPLES}
 \`\`\`json
 {
   "customers": [
@@ -254,9 +261,10 @@ For more precise ICP analysis, provide structured customer data:
             }
             return `# ICP Deep Dive
 
-Please provide customer data in one of these formats:
+Please provide customer data in one of these formats (the values shown are examples):
 
 **Option 1: Structured Data**
+${EXAMPLES}
 \`\`\`json
 {
   "customers": [
@@ -275,6 +283,7 @@ Please provide customer data in one of these formats:
 \`\`\`
 
 **Option 2: Text Description**
+${EXAMPLES}
 \`\`\`json
 {
   "customer_descriptions": "Our best customers are Series B SaaS companies with 50-200 employees. They typically use Salesforce and have a VP of Sales who becomes our champion."
@@ -289,7 +298,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
     // Tool 2: ICP Scoring Model - Auto-Weighted Qualification
     // ---------------------------------------------------------------------------
     icp_scoring_model: {
-        description: 'Create qualification scoring model with auto-weighted criteria based on your success patterns',
+        description: 'Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights',
         inputSchema: {
             type: 'object',
             properties: {
@@ -347,7 +356,12 @@ ${correlations ? `\n**Success Correlation Noted**: ${correlations}\n` : ''}
 
 ## 📊 Scoring Criteria & Weights
 
+${args.scoring_criteria && args.scoring_criteria.length > 0
+                ? 'The weights below are preset by importance level (critical, important, nice to have); they are not calculated from your data.'
+                : 'You supplied no scoring criteria, so the criteria, points and bands below are an example model, not calculated from your data.'}
+
 ### Weight Distribution
+${EXAMPLES}
 | Priority | Weight Range | Purpose |
 |----------|--------------|---------|
 | **Critical** | 20-25 pts | Must-have for qualification |
@@ -356,16 +370,18 @@ ${correlations ? `\n**Success Correlation Noted**: ${correlations}\n` : ''}
 
 ### Scoring Matrix
 
+${EXAMPLES}
 | Criterion | Weight | Scoring Values |
 |-----------|--------|----------------|
 ${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' / ')} |`).join('\n')}
 
-**Maximum Score**: ${criteria.reduce((sum, c) => sum + c.weight, 0)} points
+**Maximum Score**: ${criteria.reduce((sum, c) => sum + c.weight, 0)} points ${EXAMPLE}
 
 ---
 
 ## 🎯 Qualification Tiers
 
+${EXAMPLES}
 | Tier | Score Range | Action | SLA |
 |------|-------------|--------|-----|
 | **A - Hot** | 80-100 | Immediate outreach, fast-track | Demo within 24 hours |
@@ -381,6 +397,7 @@ ${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' 
 ### Date: _______________
 
 ${criteria.map(c => `
+${EXAMPLES}
 **${c.criterion}** (Max: ${c.weight} pts)
 ${c.values.map((v, i) => `☐ ${v}`).join('\n')}
 Score: ___ / ${c.weight}
@@ -388,7 +405,7 @@ Score: ___ / ${c.weight}
 
 ---
 
-**TOTAL SCORE**: ___ / ${criteria.reduce((sum, c) => sum + c.weight, 0)}
+**TOTAL SCORE**: ___ / ${criteria.reduce((sum, c) => sum + c.weight, 0)} ${EXAMPLE}
 
 **TIER**: ☐ A (Hot)  ☐ B (Warm)  ☐ C (Developing)  ☐ D (Unqualified)
 
@@ -412,7 +429,7 @@ Even high scores should be reviewed if:
 - [ ] No clear problem/need identified
 - [ ] Competitor locked in with multi-year contract
 - [ ] Decision maker not accessible
-- [ ] Budget cycle misaligned by >6 months
+- [ ] Budget cycle misaligned by >6 months ${EXAMPLE}
 
 ---
 
@@ -429,6 +446,8 @@ Add these fields to your CRM to improve scoring over time:
 | Competitor | Picklist | Track displacement success |
 
 **Next Step**: Use \`buyer_group_analyzer\` to map decision-making dynamics
+
+${SUGGESTED}
 `;
         }
     },
@@ -483,7 +502,7 @@ Add these fields to your CRM to improve scoring over time:
                     economic: { role: 'CRO/CEO', concern: 'Revenue growth, sales efficiency', message: 'Drive 20%+ revenue improvement with measurable ROI' },
                     technical: { role: 'Sales Ops/RevOps', concern: 'CRM integration, data quality', message: 'Seamless Salesforce sync, no data cleanup' },
                     user: { role: 'Sales Reps', concern: 'Ease of use, time savings', message: 'Spend time selling, not on admin work' },
-                    blocker: { role: 'IT Security', concern: 'Data security, compliance', mitigation: 'SOC 2 certified, SSO supported, data encryption' }
+                    blocker: { role: 'IT Security', concern: 'Data security, compliance', mitigation: '[Your certifications, for example SOC 2], SSO supported, data encryption' }
                 };
             }
             else if (categoryLower.includes('marketing') || categoryLower.includes('demand')) {
@@ -513,12 +532,14 @@ Add these fields to your CRM to improve scoring over time:
                     blocker: { role: 'Legal/Procurement', concern: 'Risk, compliance', mitigation: 'Standard terms, enterprise-ready' }
                 };
             }
+            // Labels only: a preset message that carries a figure is an example, not a fact about the user's product.
+            const exIfFigure = (text) => /\d/.test(text.replace(/SOC 2/g, '')) ? ` ${EXAMPLE}` : '';
             return `# Buyer Group Analysis
 
 ## Deal Context
 - **Product**: ${args.product_category}
-- **Deal Size**: ${dealSize}
-- **Target Company**: ${companySize}
+- **Deal Size**: ${dealSize}${args.deal_size ? '' : ` ${EXAMPLE}`}
+- **Target Company**: ${companySize}${args.target_company_size ? '' : ` ${EXAMPLE}`}
 - **Known Stakeholders**: ${args.known_stakeholders?.join(', ') || 'Not specified'}
 
 ---
@@ -528,7 +549,7 @@ Add these fields to your CRM to improve scoring over time:
 ### 🏆 Champion (Your Internal Advocate)
 **Role**: ${buyingGroup.champion.role}
 **Their Concern**: ${buyingGroup.champion.concern}
-**Your Message**: "${buyingGroup.champion.message}"
+**Your Message**: "${buyingGroup.champion.message}"${exIfFigure(buyingGroup.champion.message)}
 
 **Champion Engagement Strategy**:
 - Lead with their specific pain points
@@ -539,7 +560,7 @@ Add these fields to your CRM to improve scoring over time:
 ### 💰 Economic Buyer (Budget Authority)
 **Role**: ${buyingGroup.economic.role}
 **Their Concern**: ${buyingGroup.economic.concern}
-**Your Message**: "${buyingGroup.economic.message}"
+**Your Message**: "${buyingGroup.economic.message}"${exIfFigure(buyingGroup.economic.message)}
 
 **Economic Buyer Strategy**:
 - Lead with business outcomes, not features
@@ -550,7 +571,7 @@ Add these fields to your CRM to improve scoring over time:
 ### 🔧 Technical Evaluator (Implementation Voice)
 **Role**: ${buyingGroup.technical.role}
 **Their Concern**: ${buyingGroup.technical.concern}
-**Your Message**: "${buyingGroup.technical.message}"
+**Your Message**: "${buyingGroup.technical.message}"${exIfFigure(buyingGroup.technical.message)}
 
 **Technical Strategy**:
 - Provide sandbox/POC access
@@ -561,7 +582,7 @@ Add these fields to your CRM to improve scoring over time:
 ### 👤 End User (Day-to-Day User)
 **Role**: ${buyingGroup.user.role}
 **Their Concern**: ${buyingGroup.user.concern}
-**Your Message**: "${buyingGroup.user.message}"
+**Your Message**: "${buyingGroup.user.message}"${exIfFigure(buyingGroup.user.message)}
 
 **User Strategy**:
 - Demo through their lens
@@ -572,7 +593,7 @@ Add these fields to your CRM to improve scoring over time:
 ### ⚠️ Potential Blocker
 **Role**: ${buyingGroup.blocker.role}
 **Their Concern**: ${buyingGroup.blocker.concern}
-**Mitigation**: "${buyingGroup.blocker.mitigation}"
+**Mitigation**: "${buyingGroup.blocker.mitigation}"${exIfFigure(buyingGroup.blocker.mitigation)}
 
 **Blocker Strategy**:
 - Engage early, not late
@@ -620,7 +641,7 @@ Track your coverage of the buying group:
 | End User | ☐ | ☐ | ☐ | ☐ |
 | Blocker | ☐ | ☐ | ☐ | ☐ |
 
-**Goal**: Minimum 3 of 5 roles engaged before proposal
+**Goal**: Minimum 3 of 5 roles engaged before proposal ${EXAMPLE}
 
 ---
 
@@ -647,6 +668,8 @@ Track your coverage of the buying group:
 3. "What would make you actually use a new tool?"
 
 **Next Step**: Use \`tam_sam_som_calculator\` to size your market
+
+${SUGGESTED}
 `;
         }
     },
@@ -691,7 +714,7 @@ Track your coverage of the buying group:
             const icpPercent = (args.icp_percentage || 30) / 100;
             const marketSharePercent = (args.year1_market_share_target || 3) / 100;
             const segment = args.segment_name || 'Target Market';
-            const sources = args.data_sources || 'User-provided estimates';
+            const sources = args.data_sources || 'Your input';
             // Calculate TAM/SAM/SOM
             const tam = totalCompanies * acv;
             const sam = tam * icpPercent;
@@ -708,6 +731,13 @@ Track your coverage of the buying group:
                     return `$${(num / 1000).toFixed(0)}K`;
                 return `$${num}`;
             };
+            // Labels only: an ICP match rate or market share the user did not supply is a preset example,
+            // and so is every value computed with it.
+            const icpGiven = !!args.icp_percentage;
+            const shareGiven = !!args.year1_market_share_target;
+            const icpEx = icpGiven ? '' : ` ${EXAMPLE}`;
+            const shareEx = shareGiven ? '' : ` ${EXAMPLE}`;
+            const somEx = icpGiven && shareGiven ? '' : ` ${EXAMPLE}`;
             return `# TAM/SAM/SOM Analysis
 
 ## Market: ${segment}
@@ -718,10 +748,10 @@ Track your coverage of the buying group:
 
 | Input | Value | Source |
 |-------|-------|--------|
-| Total Potential Companies | ${totalCompanies.toLocaleString()} | ${sources} |
-| Average Contract Value | ${formatCurrency(acv)} | Your pricing |
-| ICP Match Rate | ${(icpPercent * 100).toFixed(0)}% | ICP analysis |
-| Year 1 Market Share Target | ${(marketSharePercent * 100).toFixed(1)}% | Conservative estimate |
+| Total Potential Companies | ${totalCompanies.toLocaleString('en-US')} | ${sources} |
+| Average Contract Value | ${formatCurrency(acv)} | Your input |
+| ICP Match Rate | ${(icpPercent * 100).toFixed(0)}%${icpEx} | ${icpGiven ? 'Your input' : 'Not supplied'} |
+| Year 1 Market Share Target | ${(marketSharePercent * 100).toFixed(1)}%${shareEx} | ${shareGiven ? 'Your input' : 'Not supplied'} |
 
 ---
 
@@ -730,7 +760,7 @@ Track your coverage of the buying group:
 ### TAM (Total Addressable Market)
 \`\`\`
 TAM = Total Potential Companies × ACV
-TAM = ${totalCompanies.toLocaleString()} × ${formatCurrency(acv)}
+TAM = ${totalCompanies.toLocaleString('en-US')} × ${formatCurrency(acv)}
 \`\`\`
 ### **TAM = ${formatCurrency(tam)}**
 
@@ -741,9 +771,9 @@ TAM = ${totalCompanies.toLocaleString()} × ${formatCurrency(acv)}
 ### SAM (Serviceable Addressable Market)
 \`\`\`
 SAM = TAM × ICP Match Rate
-SAM = ${formatCurrency(tam)} × ${(icpPercent * 100).toFixed(0)}%
+SAM = ${formatCurrency(tam)} × ${(icpPercent * 100).toFixed(0)}%${icpEx}
 \`\`\`
-### **SAM = ${formatCurrency(sam)}**
+### **SAM = ${formatCurrency(sam)}**${icpEx}
 
 *Companies that match your ICP and you can actually serve*
 
@@ -752,9 +782,9 @@ SAM = ${formatCurrency(tam)} × ${(icpPercent * 100).toFixed(0)}%
 ### SOM (Serviceable Obtainable Market)
 \`\`\`
 SOM = SAM × Year 1 Market Share
-SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%
+SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%${somEx}
 \`\`\`
-### **SOM = ${formatCurrency(som)}**
+### **SOM = ${formatCurrency(som)}**${somEx}
 
 *Realistic Year 1 revenue target*
 
@@ -762,7 +792,7 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%
 
 ## 📈 Visualization
 
-\`\`\`
+${somEx ? `Values computed with a preset rate you did not supply are examples.\n${EXAMPLES}\n` : ''}\`\`\`
 ┌─────────────────────────────────────────────────────────┐
 │                         TAM                             │
 │                    ${formatCurrency(tam)}                         │
@@ -782,17 +812,18 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%
 ## 🎯 What This Means for Your Business
 
 ### Year 1 Target
-- **Revenue Goal**: ${formatCurrency(som)}
-- **Deals Needed**: ~${targetDeals} closed customers
-- **Monthly Target**: ~${Math.ceil(targetDeals / 12)} deals/month
-- **Pipeline Required**: ${formatCurrency(som * 3)} (at 33% win rate)
+- **Revenue Goal**: ${formatCurrency(som)}${somEx}
+- **Deals Needed**: ~${targetDeals} closed customers${somEx}
+- **Monthly Target**: ~${Math.ceil(targetDeals / 12)} deals/month${somEx}
+- **Pipeline Required**: ${formatCurrency(som * 3)} (at 33% win rate) ${EXAMPLE}
 
 ### Growth Path
+Later years assume your market share doubles each year.
 | Year | Market Share | Revenue Target | Customers |
 |------|--------------|----------------|-----------|
-| Year 1 | ${(marketSharePercent * 100).toFixed(1)}% | ${formatCurrency(som)} | ${targetDeals} |
-| Year 2 | ${(marketSharePercent * 2 * 100).toFixed(1)}% | ${formatCurrency(som * 2)} | ${targetDeals * 2} |
-| Year 3 | ${(marketSharePercent * 4 * 100).toFixed(1)}% | ${formatCurrency(som * 4)} | ${targetDeals * 4} |
+| Year 1 | ${(marketSharePercent * 100).toFixed(1)}%${shareEx} | ${formatCurrency(som)}${shareGiven ? somEx : ''} | ${targetDeals} |
+| Year 2 | ${(marketSharePercent * 2 * 100).toFixed(1)}% ${EXAMPLE} | ${formatCurrency(som * 2)} | ${targetDeals * 2} |
+| Year 3 | ${(marketSharePercent * 4 * 100).toFixed(1)}% ${EXAMPLE} | ${formatCurrency(som * 4)} | ${targetDeals * 4} |
 
 ---
 
@@ -801,18 +832,18 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%
 ### Key Assumptions
 1. **Company count accuracy**: Validate with LinkedIn Sales Navigator, industry reports
 2. **ACV assumption**: Based on current pricing, may increase with enterprise deals
-3. **ICP match rate**: Conservative estimate, refine with actual data
-4. **Market share**: ${(marketSharePercent * 100).toFixed(1)}% is ${marketSharePercent <= 0.03 ? 'conservative' : marketSharePercent <= 0.05 ? 'moderate' : 'aggressive'} for Year 1
+3. **ICP match rate**: ${icpGiven ? 'Your estimate' : 'Not supplied, so a preset example is used'}; refine with actual data
+4. **Market share**: ${(marketSharePercent * 100).toFixed(1)}%${shareEx} is ${marketSharePercent <= 0.03 ? 'conservative' : marketSharePercent <= 0.05 ? 'moderate' : 'aggressive'} for Year 1
 
 ### Data Validation Checklist
-- [ ] Cross-reference company count with 2+ sources
+- [ ] Cross-reference company count with 2+ sources ${EXAMPLE}
 - [ ] Validate ACV with recent closed deals
 - [ ] Confirm ICP percentage with customer analysis
 - [ ] Review market share against competitor data
 
 ### How to Get Better Data
 1. **LinkedIn Sales Navigator**: Search with ICP filters, note company count
-2. **Industry Reports**: Gartner, Forrester market sizing
+2. **Industry Reports**: market sizing from industry analyst reports
 3. **Competitor Analysis**: Estimate competitor customer counts
 4. **Customer Interviews**: Ask about market perception
 
@@ -820,10 +851,10 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%
 
 ## 📋 Investor-Ready Summary
 
-> **${segment}** represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP. 
-> We target **${formatCurrency(som)} SOM** in Year 1, requiring **${targetDeals} customers** at **${formatCurrency(acv)} ACV**.
+> **${segment}** represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP.${icpEx} 
+> We target **${formatCurrency(som)} SOM** in Year 1, requiring **${targetDeals} customers** at **${formatCurrency(acv)} ACV**.${somEx}
 > 
-> *Sources: ${sources}*
+> *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
 
 **Next Step**: Use \`lookalike_signal_generator\` to create targeting criteria
 `;
@@ -865,7 +896,7 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%
                 platforms: {
                     type: 'array',
                     items: { type: 'string' },
-                    description: 'Platforms to generate criteria for (linkedin, google_ads, 6sense, zoominfo)'
+                    description: 'Accepted but not used yet: the output always includes every platform section (linkedin, google_ads, 6sense, zoominfo)'
                 }
             },
             required: ['champion_titles']
@@ -879,15 +910,21 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%
             const titles = args.champion_titles;
             const triggers = args.buying_triggers || ['New leadership hire', 'Funding round', 'Expansion'];
             const platforms = args.platforms || ['linkedin', 'google_ads', '6sense'];
+            // Labels only: fields the input did not supply are filled with example values; the default company
+            // sizes are example figures, so a code block that shows them gets an example label line above it.
+            const notSupplied = (given) => given ? '' : ' (not supplied: example values)';
+            const sizesEx = firmographics.company_sizes ? '' : ` ${EXAMPLE}`;
+            const sizesBlock = firmographics.company_sizes ? '' : `${EXAMPLES}\n`;
+            const anyExample = !firmographics.industries || !firmographics.company_sizes || !firmographics.locations || !args.icp_technographics || !args.buying_triggers;
             return `# Lookalike Signal & Targeting Criteria
 
 ## ICP Summary
-- **Industries**: ${industries.join(', ')}
-- **Company Sizes**: ${sizes.join(', ')}
-- **Locations**: ${locations.join(', ')}
-- **Technologies**: ${tech.join(', ')}
+- **Industries**: ${industries.join(', ')}${notSupplied(firmographics.industries)}
+- **Company Sizes**: ${sizes.join(', ')}${sizesEx}
+- **Locations**: ${locations.join(', ')}${notSupplied(firmographics.locations)}
+- **Technologies**: ${tech.join(', ')}${notSupplied(args.icp_technographics)}
 - **Champion Titles**: ${titles.join(', ')}
-- **Buying Triggers**: ${triggers.join(', ')}
+- **Buying Triggers**: ${triggers.join(', ')}${notSupplied(args.buying_triggers)}
 
 ---
 
@@ -896,7 +933,7 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%
 ### Search Query (Copy & Paste Ready)
 
 **Company Search**:
-\`\`\`
+${sizesBlock}\`\`\`
 Industry: ${industries.join(' OR ')}
 Company headcount: ${sizes.join(' OR ')}
 Headquarters: ${locations.join(' OR ')}
@@ -904,7 +941,7 @@ Technologies used: ${tech.join(' OR ')}
 \`\`\`
 
 **Lead Search**:
-\`\`\`
+${sizesBlock}\`\`\`
 Current job title: ${titles.map(t => `"${t}"`).join(' OR ')}
 Current company headcount: ${sizes.join(' OR ')}
 Current company industry: ${industries.join(' OR ')}
@@ -954,7 +991,7 @@ Software > ${industries[0] || 'Enterprise'} Software
 ## 🎯 6sense / Intent Data Platforms
 
 ### Account Fit Criteria
-\`\`\`json
+${sizesBlock}\`\`\`json
 {
   "firmographics": {
     "industry": [${industries.map(i => `"${i}"`).join(', ')}],
@@ -984,7 +1021,7 @@ ${titles.map(t => `${t.split(' ').pop()} software`).join('\n')}
 ## 📧 ZoomInfo / Apollo Filters
 
 ### Contact Search Criteria
-\`\`\`
+${sizesBlock}\`\`\`
 Job Titles: ${titles.join(', ')}
 Company Size: ${sizes.join(', ')} employees
 Industry: ${industries.join(', ')}
@@ -1025,7 +1062,7 @@ Technologies: ${tech.join(', ')}
 - [ ] Build and save company search
 - [ ] Build and save lead search
 - [ ] Enable weekly alert emails
-- [ ] Export first batch (25 leads)
+- [ ] Export first batch (25 leads) ${EXAMPLE}
 - [ ] Add to outreach sequence
 
 ### Google Ads
@@ -1042,7 +1079,7 @@ Technologies: ${tech.join(', ')}
 
 ### Contact Database
 - [ ] Run search with criteria
-- [ ] Verify data quality (10% sample)
+- [ ] Verify data quality (10% sample) ${EXAMPLE}
 - [ ] Export qualified contacts
 - [ ] Enrich with additional data
 
@@ -1058,9 +1095,13 @@ To execute these searches, you need:
 3. **6sense/Bombora** intent data subscription (optional)
 4. **ZoomInfo/Apollo** contact database subscription
 
-The criteria above are optimized for your ICP and ready to copy/paste into each platform.
+${anyExample
+                ? 'The criteria above are built from your inputs, with example values in the fields you did not supply: replace those before you copy the criteria into each platform.'
+                : 'The criteria above are built from your inputs and ready to copy/paste into each platform.'}
 
 **Next Step**: Use \`account_prioritization\` to rank accounts for outreach
+
+${SUGGESTED}
 `;
         }
     },
@@ -1084,7 +1125,7 @@ The criteria above are optimized for your ICP and ready to copy/paste into each 
                             timing: { type: 'string', description: 'now/soon/later/unknown' }
                         }
                     },
-                    description: 'List of accounts to prioritize'
+                    description: 'List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing'
                 },
                 prioritization_weights: {
                     type: 'object',
@@ -1094,7 +1135,7 @@ The criteria above are optimized for your ICP and ready to copy/paste into each 
                         relationship: { type: 'number' },
                         timing: { type: 'number' }
                     },
-                    description: 'Custom weights (must sum to 100)'
+                    description: 'Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100'
                 }
             }
         },
@@ -1106,6 +1147,10 @@ The criteria above are optimized for your ICP and ready to copy/paste into each 
                 relationship: args.prioritization_weights?.relationship || 15,
                 timing: args.prioritization_weights?.timing || 15
             };
+            // Labels only: a weight the input did not supply is the default (an example figure).
+            const givenWeights = args.prioritization_weights || {};
+            const noWeights = !(givenWeights.fit || givenWeights.intent || givenWeights.relationship || givenWeights.timing);
+            const wEx = (given) => (noWeights || given) ? '' : ` ${EXAMPLE}`;
             // If accounts provided, score them
             if (args.accounts && args.accounts.length > 0) {
                 const timingScore = (timing) => {
@@ -1133,7 +1178,9 @@ The criteria above are optimized for your ICP and ready to copy/paste into each 
                         timing: account.timing || 'unknown',
                         timingScore: timingScoreValue,
                         totalScore,
-                        tier: totalScore >= 80 ? 'A' : totalScore >= 60 ? 'B' : totalScore >= 40 ? 'C' : 'D'
+                        tier: totalScore >= 80 ? 'A' : totalScore >= 60 ? 'B' : totalScore >= 40 ? 'C' : 'D',
+                        // Labels only: the values that fell back to the default because the account did not supply them.
+                        defaults: { fit: !account.fit_score, intent: !account.intent_signals, relationship: !account.relationship, timing: !account.timing }
                     };
                 });
                 // Sort by total score
@@ -1141,40 +1188,45 @@ The criteria above are optimized for your ICP and ready to copy/paste into each 
                 return `# Account Prioritization Results
 
 ## Scoring Weights
-| Factor | Weight | Rationale |
+${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default weights.\n` : ''}| Factor | Weight | Rationale |
 |--------|--------|-----------|
-| **Fit** | ${weights.fit}% | How well they match ICP |
-| **Intent** | ${weights.intent}% | Buying signals detected |
-| **Relationship** | ${weights.relationship}% | Existing connections |
-| **Timing** | ${weights.timing}% | Urgency/readiness |
+| **Fit** | ${weights.fit}%${wEx(givenWeights.fit)} | How well they match ICP |
+| **Intent** | ${weights.intent}%${wEx(givenWeights.intent)} | Buying signals detected |
+| **Relationship** | ${weights.relationship}%${wEx(givenWeights.relationship)} | Existing connections |
+| **Timing** | ${weights.timing}%${wEx(givenWeights.timing)} | Urgency/readiness |
 
 ---
 
 ## 📊 Prioritized Account List
 
+${EXAMPLES} The scores use ${noWeights ? 'the default weights and ' : ''}a preset score for each timing value; (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
 |------|---------|-----|--------|--------------|--------|-----------|------|
-${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit} | ${a.intent} | ${a.relationship} | ${a.timing} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
+${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit}${a.defaults.fit ? ' (default)' : ''} | ${a.intent}${a.defaults.intent ? ' (default)' : ''} | ${a.relationship}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
 
 ---
 
 ## 🎯 Tier Breakdown
 
+${EXAMPLES}
 ### Tier A (Score 80+) - Immediate Action
 ${scoredAccounts.filter(a => a.tier === 'A').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Personalized outreach within 24 hours, executive involvement
 
+${EXAMPLES}
 ### Tier B (Score 60-79) - High Priority
 ${scoredAccounts.filter(a => a.tier === 'B').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Targeted outreach this week, multi-touch sequence
 
+${EXAMPLES}
 ### Tier C (Score 40-59) - Nurture
 ${scoredAccounts.filter(a => a.tier === 'C').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Add to nurture campaign, monitor for signal changes
 
+${EXAMPLES}
 ### Tier D (Score <40) - Monitor
 ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
@@ -1192,6 +1244,8 @@ ${scoredAccounts.slice(0, 5).map((a, i) => `
 `).join('')}
 
 **Next Step**: Use \`icp_gap_analysis\` to compare current vs ideal customers
+
+${SUGGESTED}
 `;
             }
             // If no accounts, provide the framework
@@ -1200,6 +1254,7 @@ ${scoredAccounts.slice(0, 5).map((a, i) => `
 ## Scoring Model
 
 ### Weight Distribution
+${EXAMPLES}
 | Factor | Default Weight | Description |
 |--------|---------------|-------------|
 | **Fit** | 40% | ICP match (firmographics, technographics) |
@@ -1208,6 +1263,7 @@ ${scoredAccounts.slice(0, 5).map((a, i) => `
 | **Timing** | 15% | Budget cycle, urgency indicators |
 
 ### Scoring Scale
+${EXAMPLES}
 - **90-100**: Exceptional (top 5%)
 - **70-89**: Strong (top 25%)
 - **50-69**: Moderate (middle)
@@ -1218,8 +1274,9 @@ ${scoredAccounts.slice(0, 5).map((a, i) => `
 
 ## 📋 How to Use
 
-Provide accounts in this format:
+Provide accounts in this format (the accounts and scores below are examples; the tool reads name, fit_score, intent_signals, relationship and timing):
 
+${EXAMPLES}
 \`\`\`json
 {
   "accounts": [
@@ -1242,6 +1299,7 @@ Provide accounts in this format:
 \`\`\`
 
 ### Timing Values
+${EXAMPLES}
 - **now**: Active buying process
 - **soon**: Next 1-3 months
 - **later**: 6+ months out
@@ -1251,6 +1309,7 @@ Provide accounts in this format:
 
 ## 🎯 Tier Actions
 
+${EXAMPLES}
 | Tier | Score | Volume % | Action | SLA |
 |------|-------|----------|--------|-----|
 | A | 80+ | 10% | Executive outreach | 24 hours |
@@ -1259,6 +1318,8 @@ Provide accounts in this format:
 | D | <40 | 30% | Marketing only | Monthly |
 
 Provide your accounts to get prioritized ranking.
+
+${SUGGESTED}
 `;
         }
     },
@@ -1331,6 +1392,17 @@ Provide your accounts to get prioritized ranking.
                 churn: ((metrics.current.churn - metrics.target.churn) / metrics.current.churn * 100).toFixed(0),
                 nps: ((metrics.target.nps - metrics.current.nps) / metrics.current.nps * 100).toFixed(0)
             };
+            // Labels only: a metric the input did not supply is a preset example, and so is a gap computed with it.
+            const given = {
+                acv: [!!current.avg_acv, !!target.avg_acv],
+                cycle: [!!current.avg_sales_cycle, !!target.avg_sales_cycle],
+                winRate: [!!current.win_rate, !!target.win_rate],
+                churn: [!!current.churn_rate, !!target.churn_rate],
+                nps: [!!current.nps, !!target.nps]
+            };
+            const noneGiven = !Object.values(given).some(([c, t]) => c || t);
+            const cellEx = (supplied) => (noneGiven || supplied) ? '' : ` ${EXAMPLE}`;
+            const gapEx = ([c, t]) => (c && t) ? '' : ` ${EXAMPLE}`;
             return `# ICP Gap Analysis
 
 ## Profile Comparison
@@ -1345,19 +1417,19 @@ ${args.ideal_icp}
 
 ## 📊 Metric Gaps
 
-| Metric | Current | Target | Gap | Priority |
+${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so every value in this table is a preset example.\n` : ''}| Metric | Current | Target | Gap | Priority |
 |--------|---------|--------|-----|----------|
-| **Avg ACV** | $${metrics.current.acv.toLocaleString()} | $${metrics.target.acv.toLocaleString()} | +${gaps.acv}% needed | ${parseInt(gaps.acv) > 50 ? '🔴 High' : parseInt(gaps.acv) > 25 ? '🟡 Medium' : '🟢 Low'} |
-| **Sales Cycle** | ${metrics.current.cycle} days | ${metrics.target.cycle} days | -${gaps.cycle}% needed | ${parseInt(gaps.cycle) > 30 ? '🔴 High' : parseInt(gaps.cycle) > 15 ? '🟡 Medium' : '🟢 Low'} |
-| **Win Rate** | ${metrics.current.winRate}% | ${metrics.target.winRate}% | +${gaps.winRate}% needed | ${parseInt(gaps.winRate) > 40 ? '🔴 High' : parseInt(gaps.winRate) > 20 ? '🟡 Medium' : '🟢 Low'} |
-| **Churn Rate** | ${metrics.current.churn}% | ${metrics.target.churn}% | -${gaps.churn}% needed | ${parseInt(gaps.churn) > 40 ? '🔴 High' : parseInt(gaps.churn) > 20 ? '🟡 Medium' : '🟢 Low'} |
-| **NPS** | ${metrics.current.nps} | ${metrics.target.nps} | +${gaps.nps}% needed | ${parseInt(gaps.nps) > 50 ? '🔴 High' : parseInt(gaps.nps) > 25 ? '🟡 Medium' : '🟢 Low'} |
+| **Avg ACV** | $${metrics.current.acv.toLocaleString('en-US')}${cellEx(given.acv[0])} | $${metrics.target.acv.toLocaleString('en-US')}${cellEx(given.acv[1])} | +${gaps.acv}% needed | ${parseInt(gaps.acv) > 50 ? '🔴 High' : parseInt(gaps.acv) > 25 ? '🟡 Medium' : '🟢 Low'} |
+| **Sales Cycle** | ${metrics.current.cycle} days${cellEx(given.cycle[0])} | ${metrics.target.cycle} days${cellEx(given.cycle[1])} | -${gaps.cycle}% needed | ${parseInt(gaps.cycle) > 30 ? '🔴 High' : parseInt(gaps.cycle) > 15 ? '🟡 Medium' : '🟢 Low'} |
+| **Win Rate** | ${metrics.current.winRate}%${cellEx(given.winRate[0])} | ${metrics.target.winRate}%${cellEx(given.winRate[1])} | +${gaps.winRate}% needed | ${parseInt(gaps.winRate) > 40 ? '🔴 High' : parseInt(gaps.winRate) > 20 ? '🟡 Medium' : '🟢 Low'} |
+| **Churn Rate** | ${metrics.current.churn}%${cellEx(given.churn[0])} | ${metrics.target.churn}%${cellEx(given.churn[1])} | -${gaps.churn}% needed | ${parseInt(gaps.churn) > 40 ? '🔴 High' : parseInt(gaps.churn) > 20 ? '🟡 Medium' : '🟢 Low'} |
+| **NPS** | ${metrics.current.nps}${cellEx(given.nps[0])} | ${metrics.target.nps}${cellEx(given.nps[1])} | +${gaps.nps}% needed | ${parseInt(gaps.nps) > 50 ? '🔴 High' : parseInt(gaps.nps) > 25 ? '🟡 Medium' : '🟢 Low'} |
 
 ---
 
 ## 🔍 Gap Root Cause Analysis
 
-### ACV Gap (+${gaps.acv}% needed)
+### ACV Gap (+${gaps.acv}% needed)${gapEx(given.acv)}
 **Current**: Selling to smaller companies or at lower price points
 **Root Causes**:
 - Targeting companies without budget
@@ -1371,7 +1443,7 @@ ${args.ideal_icp}
 - Add pricing tiers for enterprise
 - Build reference customers in target segment
 
-### Sales Cycle Gap (-${gaps.cycle}% reduction needed)
+### Sales Cycle Gap (-${gaps.cycle}% reduction needed)${gapEx(given.cycle)}
 **Current**: Deals taking too long to close
 **Root Causes**:
 - Unclear value proposition
@@ -1385,7 +1457,7 @@ ${args.ideal_icp}
 - Create better competitive positioning
 - Streamline procurement requirements
 
-### Win Rate Gap (+${gaps.winRate}% improvement needed)
+### Win Rate Gap (+${gaps.winRate}% improvement needed)${gapEx(given.winRate)}
 **Current**: Losing too many deals
 **Root Causes**:
 - Poor qualification upfront
@@ -1399,7 +1471,7 @@ ${args.ideal_icp}
 - Quantify cost of inaction
 - Review pricing competitiveness
 
-### Churn Gap (-${gaps.churn}% reduction needed)
+### Churn Gap (-${gaps.churn}% reduction needed)${gapEx(given.churn)}
 **Current**: Customers not staying
 **Root Causes**:
 - Wrong customers being sold
@@ -1419,16 +1491,18 @@ ${args.ideal_icp}
 
 Based on gap analysis, tighten your ICP on:
 
+The company size and budget thresholds below are presets tied to the target ACV${given.acv[1] ? '' : ', which you did not supply'}.
+
 ### Must-Have Criteria (Add These)
-1. **Minimum company size**: ${metrics.target.acv > 50000 ? '500+' : metrics.target.acv > 25000 ? '200+' : '50+'} employees
+1. **Minimum company size**: ${metrics.target.acv > 50000 ? '500+' : metrics.target.acv > 25000 ? '200+' : '50+'} employees ${EXAMPLE}
 2. **Budget confirmation**: Must have ${metrics.target.acv > 50000 ? 'confirmed budget or strategic priority' : 'allocated budget'}
 3. **Champion access**: ${metrics.target.cycle < 60 ? 'Direct access to decision maker' : 'Clear path to decision maker'}
 4. **Use case fit**: ${metrics.current.churn > 10 ? 'Primary use case (not secondary/experimental)' : 'Defined use case'}
 
 ### Disqualification Criteria (Add These)
-1. **Too small**: Under ${metrics.target.acv > 50000 ? '200' : metrics.target.acv > 25000 ? '50' : '20'} employees
+1. **Too small**: Under ${metrics.target.acv > 50000 ? '200' : metrics.target.acv > 25000 ? '50' : '20'} employees ${EXAMPLE}
 2. **Wrong stage**: ${metrics.target.cycle < 60 ? 'No active project or timeline' : 'No defined need'}
-3. **Budget mismatch**: Can't afford $${Math.round(metrics.target.acv * 0.8).toLocaleString()} minimum
+3. **Budget mismatch**: Can't afford $${Math.round(metrics.target.acv * 0.8).toLocaleString('en-US')} minimum ${EXAMPLE}
 4. **Tech incompatibility**: Missing required integrations
 
 ---
@@ -1460,6 +1534,8 @@ Based on gap analysis, tighten your ICP on:
 - [ ] Adjust based on initial data
 
 **Next Step**: Use \`icp_evolution_tracker\` to monitor ICP changes over time
+
+${SUGGESTED}
 `;
         }
     },
@@ -1467,7 +1543,7 @@ Based on gap analysis, tighten your ICP on:
     // Tool 8: ICP Evolution Tracker - Dynamic ICP Monitoring
     // ---------------------------------------------------------------------------
     icp_evolution_tracker: {
-        description: 'Track how your ICP should evolve based on market changes and data',
+        description: 'Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text',
         inputSchema: {
             type: 'object',
             properties: {
@@ -1511,7 +1587,7 @@ ${args.current_icp}
 ${args.recent_wins || '*No win data provided*'}
 
 **Pattern Detection**:
-${args.recent_wins ? `- Analyzing win patterns to identify emerging ICP characteristics...
+${args.recent_wins ? `- This tool does not analyze the text; check these wins for emerging ICP characteristics
 - Look for: Common company sizes, industries, buying triggers, champion roles
 - Consider: What made these deals successful? New segment emerging?` :
                 '- Provide recent win descriptions to identify patterns'}
@@ -1520,7 +1596,7 @@ ${args.recent_wins ? `- Analyzing win patterns to identify emerging ICP characte
 ${args.recent_losses || '*No loss data provided*'}
 
 **Pattern Detection**:
-${args.recent_losses ? `- Analyzing loss patterns to identify ICP refinements needed...
+${args.recent_losses ? `- This tool does not analyze the text; check these losses for the ICP refinements they suggest
 - Look for: Common rejection reasons, competitor wins, deal killers
 - Consider: Should these have been disqualified earlier?` :
                 '- Provide recent loss descriptions to identify anti-patterns'}
@@ -1533,7 +1609,7 @@ ${args.recent_losses ? `- Analyzing loss patterns to identify ICP refinements ne
 ${args.market_changes || '*No market changes provided*'}
 
 **ICP Implications**:
-${args.market_changes ? `- Assessing how market changes affect your ideal customer...
+${args.market_changes ? `- This tool does not analyze the text; check how these market changes affect your ideal customer
 - Consider: New buyer behaviors, budget shifts, competitive landscape
 - Evaluate: Should ICP expand or contract based on changes?` :
                 '- Provide market changes to assess ICP impact'}
@@ -1612,6 +1688,7 @@ ${args.recent_losses ? `
 
 Automatically review ICP when:
 
+${EXAMPLES}
 | Trigger | Threshold | Action |
 |---------|-----------|--------|
 | Win rate drops | >10% decline | Review ICP breadth |
@@ -1653,7 +1730,7 @@ Automatically review ICP when:
                 },
                 analysis_focus: {
                     type: 'string',
-                    description: 'What to focus on: pain_points, buying_journey, value_props, all'
+                    description: 'Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)'
                 }
             }
         },
@@ -1770,8 +1847,9 @@ ${args.raw_transcripts.substring(0, 500)}${args.raw_transcripts.length > 500 ? '
 
 ## 📋 Structured Format Recommended
 
-For better analysis, structure your interviews:
+For better analysis, structure your interviews in this format. Example only, not from your input: the customer, quotes, pain points and results below are made up to show the format.
 
+${EXAMPLES}
 \`\`\`json
 {
   "interview_notes": [
@@ -1857,6 +1935,7 @@ Provide interview data in one of these formats:
 \`\`\`
 
 ## Analysis Focus Options
+The analysis_focus input is accepted but not used yet: every run gives the complete analysis.
 - **pain_points**: Focus on problem patterns
 - **buying_journey**: Focus on triggers and process
 - **value_props**: Focus on outcomes and value
