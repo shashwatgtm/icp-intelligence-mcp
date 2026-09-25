@@ -1,7 +1,7 @@
 {
   "name": "@shashwatgtmalpha/icp-intelligence-mcp",
   "mcpName": "io.github.shashwatgtm/icp-intelligence-mcp",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "ICP Intelligence MCP server: ICP deep dives, scoring models, buyer groups, TAM/SAM/SOM, lookalike signals, account prioritization, gap analysis and interview synthesis. Runs locally over stdio (npm) or hosted over Streamable HTTP.",
   "main": "dist/index.js",
   "bin": {
@@ -37,5 +37,12 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "PRIVACY.md",
+    "LICENSE",
+    "manifest.json"
+  ]
 }

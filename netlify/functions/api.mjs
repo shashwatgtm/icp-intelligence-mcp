@@ -36,6 +36,7 @@ function coerce(prop, raw, key, errors) {
     if (typeof raw === "string" && raw.trim() === "") return undefined;
     const n = typeof raw === "number" ? raw : Number(String(raw).replace(/,/g, "").trim());
     if (!Number.isFinite(n)) { errors.push(`${key} must be a number.`); return undefined; }
+    if (typeof prop.minimum === "number" && n < prop.minimum) { errors.push(`${key} must be ${prop.minimum} or more.`); return undefined; }
     return n;
   }
   if (type === "boolean") {
@@ -95,7 +96,8 @@ function validate(tool, input) {
     if (v !== undefined) args[key] = v;
   }
   for (const key of required) {
-    if (args[key] === undefined) errors.push(`${key} is required.`);
+    // A value that was refused above already has its own message; do not add "is required" as well.
+    if (args[key] === undefined && !errors.some((m) => m.startsWith(`${key} `))) errors.push(`${key} is required.`);
   }
   if (JSON.stringify(args).length > MAX_BODY_BYTES) errors.push("The input is too long.");
   return { args, errors, ignored };

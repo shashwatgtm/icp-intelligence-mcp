@@ -154,3 +154,8 @@ footer.hx-footer {
 .docs-section p code, .docs-section li code, .docs-section td code { color: var(--hx-ink); background: rgba(26, 14, 16, 0.06); padding: 1px 4px; }
 .container p a:not([class]), .container li a:not([class]) { text-decoration: underline; }
 .hx-sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+/* Message page of the Premium Audit form (netlify/lib/premium-audit.js): checks that failed, shown without inline styles */
+.hx-message { padding-top: 48px; padding-bottom: 48px; max-width: 720px; }
+.hx-message li { margin: 6px 0; }
+/* Honeypot field of the Premium Audit form: off screen for people, still in the form for bots (netlify/lib/premium-audit.js refuses it when filled) */
+.hx-hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }

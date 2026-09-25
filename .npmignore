@@ -1,7 +1,3 @@
-node_modules/
-.netlify/
-deno.lock
-
 # Never publish or commit MCP Registry tokens or environment files (run 6)
 .mcpregistry_*
 .env

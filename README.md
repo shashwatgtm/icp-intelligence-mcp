@@ -1,4 +1,4 @@
-# ICP Intelligence MCP v1.1.0
+# ICP Intelligence MCP v1.2.0
 **Deep ICP Analysis with Pattern Detection** - 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
 
 [![NPM Version](https://img.shields.io/npm/v/@shashwatgtmalpha/icp-intelligence-mcp)](https://www.npmjs.com/package/@shashwatgtmalpha/icp-intelligence-mcp)
@@ -31,7 +31,7 @@ Add to your `claude_desktop_config.json`:
 
 ## Tools and inputs
 
-Generated on 25 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.1.0, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
+Generated on 26 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.2.0, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
 
 | # | Tool | Title | What it does |
 |---|---|---|---|
@@ -77,8 +77,8 @@ Generated on 25 September 2026 from the server's own tool list (`tools/list` of 
 
 | Input | Required | Type | Description |
 |---|---|---|---|
-| `total_potential_companies` | Yes | number | Estimated total companies that could buy (from LinkedIn, industry reports) |
-| `average_contract_value` | Yes | number | Your average ACV in dollars |
+| `total_potential_companies` | Yes | number (0 or more) | Estimated total companies that could buy (from LinkedIn, industry reports) |
+| `average_contract_value` | Yes | number (0 or more) | Your average ACV in dollars |
 | `icp_percentage` | No | number | Percentage that match your ICP (1-100) |
 | `year1_market_share_target` | No | number | Realistic Year 1 market share percentage (typically 1-5%) |
 | `data_sources` | No | string | Where you got your numbers (for documentation) |
