@@ -79,8 +79,8 @@ Generated on 26 September 2026 from the server's own tool list (`tools/list` of 
 |---|---|---|---|
 | `total_potential_companies` | Yes | number (0 or more) | Estimated total companies that could buy (from LinkedIn, industry reports) |
 | `average_contract_value` | Yes | number (0 or more) | Your average ACV in dollars |
-| `icp_percentage` | No | number | Percentage that match your ICP (1-100) |
-| `year1_market_share_target` | No | number | Realistic Year 1 market share percentage (typically 1-5%) |
+| `icp_percentage` | No | number (0 or more) | Percentage that match your ICP (1-100) |
+| `year1_market_share_target` | No | number (0 or more) | Realistic Year 1 market share percentage (typically 1-5%) |
 | `data_sources` | No | string | Where you got your numbers (for documentation) |
 | `segment_name` | No | string | Name of the market segment |
 

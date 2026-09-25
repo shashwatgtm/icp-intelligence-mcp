@@ -37,8 +37,8 @@ const tools = {
                             name: { type: 'string' },
                             industry: { type: 'string' },
                             size: { type: 'string' },
-                            acv: { type: 'number' },
-                            sales_cycle_days: { type: 'number' },
+                            acv: { type: 'number', minimum: 0 },
+                            sales_cycle_days: { type: 'number', minimum: 0 },
                             tech_stack: { type: 'array', items: { type: 'string' } },
                             buying_trigger: { type: 'string' },
                             champion_title: { type: 'string' }
@@ -131,7 +131,7 @@ ${topSizes.length > 0 ? topSizes.map(([size, count]) => `- **${size}**: ${count}
 ### Deal Economics
 | Metric | Value |
 |--------|-------|
-| Average ACV | ${acvs.length > 0 ? `$${avgACV.toLocaleString('en-US')}` : 'not supplied'} |
+| Average ACV | ${acvs.length > 0 ? `$${Math.round(avgACV).toLocaleString('en-US')}` : 'not supplied'} |
 | ACV Range | ${acvs.length > 0 ? `$${minACV.toLocaleString('en-US')} - $${maxACV.toLocaleString('en-US')}` : 'not supplied'} |
 | Avg Sales Cycle | ${cycles.length > 0 ? `${avgCycle} days` : 'not supplied'} |
 
@@ -693,10 +693,12 @@ ${SUGGESTED}
                 },
                 icp_percentage: {
                     type: 'number',
+                    minimum: 0,
                     description: 'Percentage that match your ICP (1-100)'
                 },
                 year1_market_share_target: {
                     type: 'number',
+                    minimum: 0,
                     description: 'Realistic Year 1 market share percentage (typically 1-5%)'
                 },
                 data_sources: {
@@ -751,7 +753,7 @@ ${SUGGESTED}
 | Input | Value | Source |
 |-------|-------|--------|
 | Total Potential Companies | ${totalCompanies.toLocaleString('en-US')} | ${sources} |
-| Average Contract Value | ${formatCurrency(acv)} | Your input |
+| Average Contract Value | $${acv.toLocaleString('en-US')} | Your input |
 | ICP Match Rate | ${(icpPercent * 100).toFixed(0)}%${icpEx} | ${icpGiven ? 'Your input' : 'Not supplied'} |
 | Year 1 Market Share Target | ${(marketSharePercent * 100).toFixed(1)}%${shareEx} | ${shareGiven ? 'Your input' : 'Not supplied'} |
 
@@ -762,7 +764,7 @@ ${SUGGESTED}
 ### TAM (Total Addressable Market)
 \`\`\`
 TAM = Total Potential Companies × ACV
-TAM = ${totalCompanies.toLocaleString('en-US')} × ${formatCurrency(acv)}
+TAM = ${totalCompanies.toLocaleString('en-US')} × $${acv.toLocaleString('en-US')}
 \`\`\`
 ### **TAM = ${formatCurrency(tam)}**
 
@@ -1121,9 +1123,9 @@ ${SUGGESTED}
                         type: 'object',
                         properties: {
                             name: { type: 'string' },
-                            fit_score: { type: 'number', description: '1-100' },
-                            intent_signals: { type: 'number', description: '1-100 or 0 if unknown' },
-                            relationship: { type: 'number', description: '1-100 based on existing connections' },
+                            fit_score: { type: 'number', minimum: 0, description: '1-100' },
+                            intent_signals: { type: 'number', minimum: 0, description: '1-100 or 0 if unknown' },
+                            relationship: { type: 'number', minimum: 0, description: '1-100 based on existing connections' },
                             timing: { type: 'string', description: 'now/soon/later/unknown' }
                         }
                     },
@@ -1344,8 +1346,8 @@ ${SUGGESTED}
                 current_metrics: {
                     type: 'object',
                     properties: {
-                        avg_acv: { type: 'number' },
-                        avg_sales_cycle: { type: 'number' },
+                        avg_acv: { type: 'number', minimum: 0 },
+                        avg_sales_cycle: { type: 'number', minimum: 0 },
                         win_rate: { type: 'number' },
                         churn_rate: { type: 'number' },
                         nps: { type: 'number' }
@@ -1355,8 +1357,8 @@ ${SUGGESTED}
                 target_metrics: {
                     type: 'object',
                     properties: {
-                        avg_acv: { type: 'number' },
-                        avg_sales_cycle: { type: 'number' },
+                        avg_acv: { type: 'number', minimum: 0 },
+                        avg_sales_cycle: { type: 'number', minimum: 0 },
                         win_rate: { type: 'number' },
                         churn_rate: { type: 'number' },
                         nps: { type: 'number' }
@@ -1394,6 +1396,9 @@ ${SUGGESTED}
                 churn: ((metrics.current.churn - metrics.target.churn) / metrics.current.churn * 100).toFixed(0),
                 nps: ((metrics.target.nps - metrics.current.nps) / metrics.current.nps * 100).toFixed(0)
             };
+            // A gap in the other direction (the target is already met) says so instead of printing a double sign.
+            const upGap = (g, word) => (parseFloat(g) >= 0 ? `+${g}% ${word}needed` : `already above target, no ${word || 'increase '}needed`);
+            const downGap = (g, word) => (parseFloat(g) >= 0 ? `-${g}% ${word}needed` : `target is ${-parseFloat(g)}% above today, no ${word || 'reduction '}needed`);
             // Labels only: a metric the input did not supply is a preset example, and so is a gap computed with it.
             const given = {
                 acv: [!!current.avg_acv, !!target.avg_acv],
@@ -1421,17 +1426,17 @@ ${args.ideal_icp}
 
 ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so every value in this table is a preset example.\n` : ''}| Metric | Current | Target | Gap | Priority |
 |--------|---------|--------|-----|----------|
-| **Avg ACV** | $${metrics.current.acv.toLocaleString('en-US')}${cellEx(given.acv[0])} | $${metrics.target.acv.toLocaleString('en-US')}${cellEx(given.acv[1])} | +${gaps.acv}% needed | ${parseInt(gaps.acv) > 50 ? '🔴 High' : parseInt(gaps.acv) > 25 ? '🟡 Medium' : '🟢 Low'} |
-| **Sales Cycle** | ${metrics.current.cycle} days${cellEx(given.cycle[0])} | ${metrics.target.cycle} days${cellEx(given.cycle[1])} | -${gaps.cycle}% needed | ${parseInt(gaps.cycle) > 30 ? '🔴 High' : parseInt(gaps.cycle) > 15 ? '🟡 Medium' : '🟢 Low'} |
-| **Win Rate** | ${metrics.current.winRate}%${cellEx(given.winRate[0])} | ${metrics.target.winRate}%${cellEx(given.winRate[1])} | +${gaps.winRate}% needed | ${parseInt(gaps.winRate) > 40 ? '🔴 High' : parseInt(gaps.winRate) > 20 ? '🟡 Medium' : '🟢 Low'} |
-| **Churn Rate** | ${metrics.current.churn}%${cellEx(given.churn[0])} | ${metrics.target.churn}%${cellEx(given.churn[1])} | -${gaps.churn}% needed | ${parseInt(gaps.churn) > 40 ? '🔴 High' : parseInt(gaps.churn) > 20 ? '🟡 Medium' : '🟢 Low'} |
-| **NPS** | ${metrics.current.nps}${cellEx(given.nps[0])} | ${metrics.target.nps}${cellEx(given.nps[1])} | +${gaps.nps}% needed | ${parseInt(gaps.nps) > 50 ? '🔴 High' : parseInt(gaps.nps) > 25 ? '🟡 Medium' : '🟢 Low'} |
+| **Avg ACV** | $${metrics.current.acv.toLocaleString('en-US')}${cellEx(given.acv[0])} | $${metrics.target.acv.toLocaleString('en-US')}${cellEx(given.acv[1])} | ${upGap(gaps.acv, '')} | ${parseInt(gaps.acv) > 50 ? '🔴 High' : parseInt(gaps.acv) > 25 ? '🟡 Medium' : '🟢 Low'} |
+| **Sales Cycle** | ${metrics.current.cycle} days${cellEx(given.cycle[0])} | ${metrics.target.cycle} days${cellEx(given.cycle[1])} | ${downGap(gaps.cycle, '')} | ${parseInt(gaps.cycle) > 30 ? '🔴 High' : parseInt(gaps.cycle) > 15 ? '🟡 Medium' : '🟢 Low'} |
+| **Win Rate** | ${metrics.current.winRate}%${cellEx(given.winRate[0])} | ${metrics.target.winRate}%${cellEx(given.winRate[1])} | ${upGap(gaps.winRate, '')} | ${parseInt(gaps.winRate) > 40 ? '🔴 High' : parseInt(gaps.winRate) > 20 ? '🟡 Medium' : '🟢 Low'} |
+| **Churn Rate** | ${metrics.current.churn}%${cellEx(given.churn[0])} | ${metrics.target.churn}%${cellEx(given.churn[1])} | ${downGap(gaps.churn, '')} | ${parseInt(gaps.churn) > 40 ? '🔴 High' : parseInt(gaps.churn) > 20 ? '🟡 Medium' : '🟢 Low'} |
+| **NPS** | ${metrics.current.nps}${cellEx(given.nps[0])} | ${metrics.target.nps}${cellEx(given.nps[1])} | ${upGap(gaps.nps, '')} | ${parseInt(gaps.nps) > 50 ? '🔴 High' : parseInt(gaps.nps) > 25 ? '🟡 Medium' : '🟢 Low'} |
 
 ---
 
 ## 🔍 Gap Root Cause Analysis
 
-### ACV Gap (+${gaps.acv}% needed)${gapEx(given.acv)}
+### ACV Gap (${upGap(gaps.acv, '')})${gapEx(given.acv)}
 **Current**: Selling to smaller companies or at lower price points
 **Root Causes**:
 - Targeting companies without budget
@@ -1445,7 +1450,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 - Add pricing tiers for enterprise
 - Build reference customers in target segment
 
-### Sales Cycle Gap (-${gaps.cycle}% reduction needed)${gapEx(given.cycle)}
+### Sales Cycle Gap (${downGap(gaps.cycle, 'reduction ')})${gapEx(given.cycle)}
 **Current**: Deals taking too long to close
 **Root Causes**:
 - Unclear value proposition
@@ -1459,7 +1464,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 - Create better competitive positioning
 - Streamline procurement requirements
 
-### Win Rate Gap (+${gaps.winRate}% improvement needed)${gapEx(given.winRate)}
+### Win Rate Gap (${upGap(gaps.winRate, 'improvement ')})${gapEx(given.winRate)}
 **Current**: Losing too many deals
 **Root Causes**:
 - Poor qualification upfront
@@ -1473,7 +1478,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 - Quantify cost of inaction
 - Review pricing competitiveness
 
-### Churn Gap (-${gaps.churn}% reduction needed)${gapEx(given.churn)}
+### Churn Gap (${downGap(gaps.churn, 'reduction ')})${gapEx(given.churn)}
 **Current**: Customers not staying
 **Root Causes**:
 - Wrong customers being sold
@@ -1978,6 +1983,29 @@ function withMeta(tool) {
         annotations: { title, readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     };
 }
+const NEGATIVE_AMOUNT = /(^|[\s(:=])[-\u2212]\$\s*\d|\$\s*[-\u2212]\s*\d|^\s*[-\u2212]\s*\d/;
+function checkLimits(schema, value, path, problems) {
+    if (schema.properties && value && typeof value === "object" && !Array.isArray(value)) {
+        for (const [key, p] of Object.entries(schema.properties)) {
+            checkLimits(p, value[key], path ? `${path}.${key}` : key, problems);
+        }
+        return;
+    }
+    if (schema.items && Array.isArray(value)) {
+        value.forEach((item, i) => checkLimits(schema.items, item, `${path}[${i}]`, problems));
+        return;
+    }
+    if (schema.type !== "number" && schema.type !== "integer")
+        return;
+    const v = typeof value === "string" && value.trim() !== "" ? Number(value) : value;
+    if (typeof v !== "number" || !Number.isFinite(v))
+        return;
+    if (typeof schema.minimum === "number" && v < schema.minimum)
+        problems.push(`${path} must be ${schema.minimum} or more`);
+    if (typeof schema.maximum === "number" && v > schema.maximum)
+        problems.push(`${path} must be ${schema.maximum} or less`);
+}
+const AMOUNT_TEXT = { buyer_group_analyzer: ["deal_size"] };
 function checkRequiredInputs(name, args) {
     const tool = tools[name];
     if (!tool) {
@@ -1988,17 +2016,16 @@ function checkRequiredInputs(name, args) {
     if (missing.length > 0) {
         return `Missing required input for ${name}: ${missing.join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and call the tool again.`;
     }
-    // Decision N2 (run 6): amounts, counts and durations cannot be negative; the schema says which (minimum).
-    const props = (tool.inputSchema.properties ?? {});
-    const below = Object.entries(props)
-        .filter(([key, p]) => {
+    // Decision N2 (run 6): amounts, counts and durations cannot be negative; the schema says which (minimum, maximum).
+    const problems = [];
+    checkLimits(tool.inputSchema, args ?? {}, "", problems);
+    for (const key of AMOUNT_TEXT[name] ?? []) {
         const raw = args?.[key];
-        const v = typeof raw === "string" && raw.trim() !== "" ? Number(raw) : raw;
-        return typeof p.minimum === "number" && typeof v === "number" && Number.isFinite(v) && v < p.minimum;
-    })
-        .map(([key, p]) => `${key} must be ${p.minimum} or more`);
-    if (below.length > 0) {
-        return `Invalid input for ${name}: ${below.join("; ")}.`;
+        if (typeof raw === "string" && NEGATIVE_AMOUNT.test(raw))
+            problems.push(`${key} must not contain a negative amount`);
+    }
+    if (problems.length > 0) {
+        return `Invalid input for ${name}: ${problems.join("; ")}.`;
     }
     return null;
 }

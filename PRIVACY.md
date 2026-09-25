@@ -24,7 +24,7 @@ ICP Intelligence is built and run by Shashwat Ghosh, Helix GTM Consulting. Conta
 ## Limits that protect the service
 
 - Rate limits: 30 web form requests and 300 MCP requests per minute from one IP address. Netlify counts requests per IP address for this; we do not see or keep those counts.
-- Requests larger than 32,000 bytes, text fields longer than 6,000 characters and lists longer than 50 items are refused before the tool runs.
+- Requests larger than 32,000 bytes, and top-level text fields longer than 6,000 characters or lists longer than 50 items, are refused before the tool runs (fields inside a list or object count toward the 32,000 bytes).
 
 ## Who else processes data
 

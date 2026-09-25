@@ -248,8 +248,8 @@
   <form class="hx-form" method="post" action="/api/tools/tam_sam_som_calculator" data-tool="tam_sam_som_calculator" data-title="TAM SAM SOM Calculator">
 <div class="hx-field"><label for="f-total_potential_companies">Total potential companies <span class="hx-req" aria-hidden="true">*</span></label><input id="f-total_potential_companies" name="total_potential_companies" type="number" step="any" inputmode="decimal" min="0" data-kind="number" required aria-required="true" aria-describedby="f-total_potential_companies-help"><p class="hx-help" id="f-total_potential_companies-help">Estimated total companies that could buy (from LinkedIn, industry reports)</p></div>
 <div class="hx-field"><label for="f-average_contract_value">Average contract value <span class="hx-req" aria-hidden="true">*</span></label><input id="f-average_contract_value" name="average_contract_value" type="number" step="any" inputmode="decimal" min="0" data-kind="number" required aria-required="true" aria-describedby="f-average_contract_value-help"><p class="hx-help" id="f-average_contract_value-help">Your average ACV in dollars</p></div>
-<div class="hx-field"><label for="f-icp_percentage">ICP percentage <span class="hx-opt">(optional)</span></label><input id="f-icp_percentage" name="icp_percentage" type="number" step="any" inputmode="decimal" data-kind="number" aria-describedby="f-icp_percentage-help"><p class="hx-help" id="f-icp_percentage-help">Percentage that match your ICP (1-100)</p></div>
-<div class="hx-field"><label for="f-year1_market_share_target">Year 1 market share target <span class="hx-opt">(optional)</span></label><input id="f-year1_market_share_target" name="year1_market_share_target" type="number" step="any" inputmode="decimal" data-kind="number" aria-describedby="f-year1_market_share_target-help"><p class="hx-help" id="f-year1_market_share_target-help">Realistic Year 1 market share percentage (typically 1-5%)</p></div>
+<div class="hx-field"><label for="f-icp_percentage">ICP percentage <span class="hx-opt">(optional)</span></label><input id="f-icp_percentage" name="icp_percentage" type="number" step="any" inputmode="decimal" min="0" data-kind="number" aria-describedby="f-icp_percentage-help"><p class="hx-help" id="f-icp_percentage-help">Percentage that match your ICP (1-100)</p></div>
+<div class="hx-field"><label for="f-year1_market_share_target">Year 1 market share target <span class="hx-opt">(optional)</span></label><input id="f-year1_market_share_target" name="year1_market_share_target" type="number" step="any" inputmode="decimal" min="0" data-kind="number" aria-describedby="f-year1_market_share_target-help"><p class="hx-help" id="f-year1_market_share_target-help">Realistic Year 1 market share percentage (typically 1-5%)</p></div>
 <div class="hx-field"><label for="f-data_sources">Data sources <span class="hx-opt">(optional)</span></label><textarea id="f-data_sources" name="data_sources" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-data_sources-help"></textarea><p class="hx-help" id="f-data_sources-help">Where you got your numbers (for documentation)</p></div>
 <div class="hx-field"><label for="f-segment_name">Segment name <span class="hx-opt">(optional)</span></label><input id="f-segment_name" name="segment_name" type="text" maxlength="6000" data-kind="string" aria-describedby="f-segment_name-help"><p class="hx-help" id="f-segment_name-help">Name of the market segment</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-tam_sam_som_calculator">Leave this empty</label><input id="hp-tam_sam_som_calculator" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
@@ -278,12 +278,12 @@
 <h4>Market: US clinic groups</h4>
 <hr>
 <h4>📊 Input Data</h4>
-<div class="hx-table"><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody><tr><td>Total Potential Companies</td><td>12,000</td><td>Your input</td></tr><tr><td>Average Contract Value</td><td>$8K</td><td>Your input</td></tr><tr><td>ICP Match Rate</td><td>25%</td><td>Your input</td></tr><tr><td>Year 1 Market Share Target</td><td>1.0%</td><td>Your input</td></tr></tbody></table></div>
+<div class="hx-table"><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody><tr><td>Total Potential Companies</td><td>12,000</td><td>Your input</td></tr><tr><td>Average Contract Value</td><td>$8,000</td><td>Your input</td></tr><tr><td>ICP Match Rate</td><td>25%</td><td>Your input</td></tr><tr><td>Year 1 Market Share Target</td><td>1.0%</td><td>Your input</td></tr></tbody></table></div>
 <hr>
 <h4>🎯 Market Sizing Results</h4>
 <h5>TAM (Total Addressable Market)</h5>
 <pre><code>TAM = Total Potential Companies × ACV
-TAM = 12,000 × $8K</code></pre>
+TAM = 12,000 × $8,000</code></pre>
 <h5><strong>TAM = $96.0M</strong></h5>
 <p>*Everyone who could theoretically buy your product*</p>
 <hr>
@@ -362,7 +362,7 @@ SOM = $24.0M × 1.0%</code></pre>
   <ul class="hx-prose">
     <li>Anyone who cannot give the required inputs (Total potential companies, Average contract value); the answer is built only from them.</li>
     <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
-    <li>Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter.</li>
+    <li>Market sizing without your own numbers: TAM, SAM and SOM are built from the figures you enter; an ICP match rate or market share you leave out is filled with a labelled example (30% and 3%).</li>
   </ul>
 </section>
 

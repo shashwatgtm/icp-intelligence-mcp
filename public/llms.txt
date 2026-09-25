@@ -61,11 +61,11 @@ Yes. Send POST https://icp-intelligence.gtmhelix.com/api/tools/<tool name> with 
 
 ### Is the source code public?
 
-Yes, at https://github.com/shashwatgtm/icp-intelligence-mcp under the MIT licence. The npm package @shashwatgtmalpha/icp-intelligence-mcp runs the same tools locally.
+Yes, at https://github.com/shashwatgtm/icp-intelligence-mcp under the MIT licence. The npm package @shashwatgtmalpha/icp-intelligence-mcp runs these tools locally; it can lag behind this site until a new version is published.
 
 ### Who is ICP Intelligence not ideal for?
 
-Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies. Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter. Teams that need saved models or CRM sync: nothing is stored and no CRM is connected.
+Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies. Market sizing without your own numbers: TAM, SAM and SOM are built from the figures you enter; an ICP match rate or market share you leave out is filled with a labelled example (30% and 3%). Teams that need saved models or CRM sync: nothing is stored and no CRM is connected.
 
 ### How do I report a problem?
 
