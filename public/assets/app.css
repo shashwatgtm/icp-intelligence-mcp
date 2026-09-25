@@ -43,6 +43,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hx-who-tools a { font-size: 14.5px; }
 .hx-links li { margin: 6px 0; }
 .hx-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.hx-two > * { min-width: 0; } /* run 4: code blocks scroll inside the panel instead of widening the page on phones */
 .hx-panel { border: 1.5px solid var(--hx-clay); padding: 16px 18px; background: var(--hx-paper); }
 .hx-panel ol { margin: 8px 0 0; padding-left: 20px; color: var(--hx-ink-72); }
 .hx-panel li { margin: 6px 0; }
