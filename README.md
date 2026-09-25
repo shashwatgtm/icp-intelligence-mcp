@@ -241,7 +241,7 @@ This MCP is built on the principle that **ICP is dynamic, not static**. The best
 
 ## 👨‍💻 Author
 
-**Shashwat Ghosh** - Founder, Helix GTM Consulting
+**Shashwat Ghosh**, Co-Founder and Fractional CMO, Helix GTM Consulting
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/shashwatghosh)
 [![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2)](https://twitter.com/Shashwat_Ghosh)
