@@ -45,7 +45,7 @@ It is sent to this site's server, used once to build the answer, and dropped whe
 
 ### How do I use ICP Intelligence in Claude?
 
-In Claude, open Customize, then Connectors, then Add custom connector. Name it ICP Intelligence, paste https://icp-intelligence.gtmhelix.com/mcp and choose no sign-in. The Connect page covers Claude Code, ChatGPT, Cursor, VS Code and Windsurf too.
+In Claude, open Customize, then Connectors, select + and then Add custom connector. Name it ICP Intelligence, paste https://icp-intelligence.gtmhelix.com/mcp and choose no sign-in. The Connect page covers Claude Code, ChatGPT, Cursor, VS Code and Windsurf too.
 
 ### Who built it?
 

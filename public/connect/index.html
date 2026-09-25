@@ -146,7 +146,7 @@
      "@type": "HowToStep",
      "position": 1,
      "name": "Open connectors",
-     "text": "In Claude, open Customize, then Connectors, then Add custom connector."
+     "text": "In Claude, open Customize, then Connectors, select +, then Add custom connector."
     },
     {
      "@type": "HowToStep",
@@ -198,6 +198,27 @@
 </section>
 <main id="main" class="hx-body">
 
+<section class="hx-section" aria-labelledby="before-h">
+  <h2 id="before-h">Before you connect</h2>
+  <ul class="hx-prose">
+    <li><strong>Claude plan:</strong> any. Custom connectors work on Claude's Free, Pro, Max, Team and Enterprise plans; the Free plan allows one custom connector.</li>
+    <li><strong>Team or Enterprise:</strong> only an Owner can add a custom connector, under Organization settings, Connectors, Add, Custom, Web. Members then turn it on under Customize, Connectors.</li>
+    <li><strong>Accounts and keys:</strong> none. There is no sign-in and no API key.</li>
+    <li><strong>Local use:</strong> the npm package needs Node.js 18 or later.</li>
+  </ul>
+</section>
+
+<section class="hx-section" aria-labelledby="does-h">
+  <h2 id="does-h">What ICP Intelligence does and does not do</h2>
+  <p class="hx-prose">All 9 tools are read-only: each one builds a text answer from the inputs you give it and changes nothing anywhere. What you type is used once to build the answer and is not stored or logged. It is not ideal for:</p>
+  <ul class="hx-prose">
+    <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
+    <li>Market sizing without your own numbers: TAM, SAM and SOM come only from the figures you enter.</li>
+    <li>Teams that need saved models or CRM sync: nothing is stored and no CRM is connected.</li>
+    <li>Writing to your CRM or other tools: no tool can.</li>
+  </ul>
+</section>
+
 <section class="hx-section" aria-labelledby="addr-h">
   <h2 id="addr-h">The MCP server address</h2>
   <div class="hx-panel"><pre class="hx-addr">https://icp-intelligence.gtmhelix.com/mcp</pre>
@@ -207,12 +228,12 @@
 <section class="hx-section" aria-labelledby="claude-h">
   <h2 id="claude-h">Claude (web, desktop and mobile)</h2>
   <ol class="hx-steps">
-    <li>Open <strong>Customize</strong>, then <strong>Connectors</strong>, then <strong>Add custom connector</strong>.</li>
+    <li>Open <strong>Customize</strong>, then <strong>Connectors</strong>, select <strong>+</strong>, then <strong>Add custom connector</strong>.</li>
     <li>Name: <code>ICP Intelligence</code>. Remote MCP server URL: <code>https://icp-intelligence.gtmhelix.com/mcp</code>.</li>
     <li>Leave the sign-in fields empty and select <strong>Add</strong>.</li>
     <li>In a chat, turn the connector on from the tools menu and ask, for example: <em>Use ICP Intelligence to do a deep dive on these customers for our clinic scheduling software: mid-size clinic groups with 5 to 20 locations, dental chains with 10+ clinics, physiotherapy franchises.</em></li>
   </ol>
-  <p class="hx-help">Custom connectors are available on Claude's Free, Pro, Max, Team and Enterprise plans; on Team and Enterprise an Owner may need to allow them.</p>
+  <p class="hx-help">On Team and Enterprise, an Owner adds the connector first under Organization settings, Connectors, Add, Custom, Web; each member then turns it on under Customize, Connectors.</p>
 </section>
 
 <section class="hx-section" aria-labelledby="cc-h">
