@@ -75,6 +75,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hx-result-body hr { border: 0; border-top: 1.5px solid var(--hx-clay); margin: 18px 0; }
 .hx-table, .hx-result-body .hx-table { overflow-x: auto; margin: 12px 0; }
 .hx-table table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.hx-table-wide table { min-width: 640px; } /* run 4: 4-column tables scroll inside their box on phones */
 .hx-table th, .hx-table td { border: 1.5px solid var(--hx-clay); padding: 8px 10px; text-align: left; vertical-align: top; }
 .hx-table th { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--hx-ink-72); }
 .hx-error { border: 1.5px solid var(--hx-signal); padding: 12px 14px; color: var(--hx-ink); }
