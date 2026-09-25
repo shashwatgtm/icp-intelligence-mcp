@@ -49,7 +49,7 @@ In Claude, open Customize, then Connectors, then Add custom connector. Name it I
 
 ### Who built it?
 
-Shashwat Ghosh, founder of Helix GTM Consulting: a GTM Alpha consultant, AI GTM expert and fractional CMO with 24+ years in B2B and 10+ years of fractional experience, based in Bengaluru.
+Shashwat Ghosh, Co-Founder and Fractional CMO of Helix GTM Consulting, a business consulting firm founded in 2022 in Bengaluru. He has 24+ years in B2B and 10+ years of fractional experience, and created the EPIC, IMPACT and CRAFT frameworks and the Hub-Spoke Messaging Methodology.
 
 ### Why do some answers look like templates?
 
