@@ -212,3 +212,16 @@ footer.hx-footer .hx7-built-links a { display: inline; margin: 0; color: var(--h
 .hx7-built-photo, .hx7-strip-photo, .hx7-cred-photo { flex: none; display: block; }
 .hx7-built-photo { width: 72px; height: 72px; }
 .hx7-strip-photo { width: 44px; height: 44px; }
+
+/* ---------- independent verifier fixes (run 7, 14:50 IST) ---------- */
+/* Tables: words wrap between words, never inside one; the tool name column keeps a readable width (the table box scrolls on its own if needed). */
+.hx-table td, .hx-table th { overflow-wrap: break-word; word-break: normal; }
+.hx-table td:first-child, .hx-table th:first-child { min-width: 9rem; }
+/* GTM Alpha: centred section headings are centred as boxes too; stat labels never split a word. */
+.section-header .section-title { margin-left: auto; margin-right: auto; }
+.stat-label, .stat-number { overflow-wrap: normal; word-break: normal; }
+@media (max-width: 480px) {
+  .stats-grid { gap: 8px !important; }
+  .stat-item { padding: 16px 6px !important; }
+  .stat-label { font-size: 10px !important; letter-spacing: 0 !important; }
+}
