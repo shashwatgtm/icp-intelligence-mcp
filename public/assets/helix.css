@@ -366,3 +366,8 @@ hr { border: 0 !important; border-top: 1.5px solid var(--h7-ink-12) !important; 
 .code-block { border: 1.5px solid var(--h7-ink-12) !important; border-left: 4px solid var(--h7-ox) !important; }
 hr { color: var(--h7-ink-12) !important; }
 select, textarea, input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]) { border-color: var(--h7-ink-70); }
+/* run 8 E5 check (E5-N1): readable GTM Alpha controls and links on the light setup panel; ring segments never filled */
+.copy-btn { background: var(--h7-ox) !important; color: var(--h7-paper) !important; border: 0 !important; }
+.page-content a:not(.btn-primary):not(.hx-btn):not(.tab-btn) { color: var(--h7-ox) !important; }
+.page-content [style*="rgba(250, 248, 246"], .page-content [style*="#FAF8F6"] { color: var(--h7-ink) !important; }
+.hx8-svg .v-ringseg { fill: none !important; }
