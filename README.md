@@ -1,4 +1,4 @@
-# ICP Intelligence MCP v1.2.1
+# ICP Intelligence MCP v1.2.2
 **Deep ICP Analysis with Pattern Detection** - 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
 
 [![NPM Version](https://img.shields.io/npm/v/@shashwatgtmalpha/icp-intelligence-mcp)](https://www.npmjs.com/package/@shashwatgtmalpha/icp-intelligence-mcp)
@@ -31,7 +31,7 @@ Add to your `claude_desktop_config.json`:
 
 ## Tools and inputs
 
-Generated on 26 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.2.1, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
+Generated on 27 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.2.2, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
 
 | # | Tool | Title | What it does |
 |---|---|---|---|
@@ -201,8 +201,8 @@ This MCP is built on the principle that **ICP is dynamic, not static**. The best
 
 **Shashwat Ghosh**, Co-Founder and Fractional CMO, Helix GTM Consulting, with 24+ years in B2B and 10+ years of fractional experience
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/shashwatghosh)
-[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2)](https://twitter.com/Shashwat_Ghosh)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/shashwatghosh-ai-b2b-gtm-fractionalcmo/)
+[![X](https://img.shields.io/badge/X-Follow-1A0E10)](https://x.com/Shashwat_Ghosh)
 [![Website](https://img.shields.io/badge/Website-gtmhelix.com-green)](https://gtmhelix.com)
 
 ---

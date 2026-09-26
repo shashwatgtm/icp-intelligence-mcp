@@ -11,6 +11,11 @@ const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 // =============================================================================
 // 9 Tools for ICP definition, scoring, market sizing, and signal generation
 // =============================================================================
+// Text only: add a word such as "software" after a phrase unless the phrase already ends with it (no "software software").
+function withSoftware(phrase, word) {
+    const p = phrase.trim();
+    return p.toLowerCase() === word.toLowerCase() || p.toLowerCase().endsWith(` ${word.toLowerCase()}`) ? p : `${p} ${word}`;
+}
 // Output labels (run 5, owner decision 1). A figure that is not the user's input, and not computed only
 // from it, carries EXAMPLE on its own line, or sits under an EXAMPLES line placed directly above its table,
 // list or code block. SUGGESTED closes outputs that suggest lengths, timings or counts.
@@ -972,7 +977,7 @@ Geography: ${locations.join(' OR ')}
 \`\`\`
 ${tech.map(t => `"${t.toLowerCase()} integration"`).join('\n')}
 ${tech.map(t => `"${t.toLowerCase()} alternative"`).join('\n')}
-"${industries[0]?.toLowerCase() || 'b2b'} software"
+"${withSoftware(industries[0]?.toLowerCase() || 'b2b', 'software')}"
 "${titles[0]?.split(' ').pop()?.toLowerCase() || 'sales'} tools"
 \`\`\`
 
@@ -987,7 +992,7 @@ g2.com/products/[competitor]
 ### In-Market Audiences
 \`\`\`
 Business Services > Business Technology
-Software > ${industries[0] || 'Enterprise'} Software
+Software > ${withSoftware(industries[0] || 'Enterprise', 'Software')}
 \`\`\`
 
 ---
@@ -1012,7 +1017,7 @@ ${sizesBlock}\`\`\`json
 \`\`\`
 ${tech.join('\n')}
 ${industries.map(i => `${i} solutions`).join('\n')}
-${titles.map(t => `${t.split(' ').pop()} software`).join('\n')}
+${titles.map(t => withSoftware(t.split(' ').pop() || '', 'software')).join('\n')}
 \`\`\`
 
 ### Buying Stage Indicators
@@ -1810,7 +1815,7 @@ ${topRoles.length > 0 ? topRoles.map(([role, count], i) => `${i + 1}. **${role}*
 ${allQuotes.slice(0, 5).map((q, i) => `
 ### Quote ${i + 1}
 > "${q.quote}"
-> — ${q.role || 'Customer'}${q.customer ? ` at ${q.customer}` : ''}
+> (${q.role || 'Customer'}${q.customer ? ` at ${q.customer}` : ''})
 `).join('\n')}
 
 ---
@@ -1968,7 +1973,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.1';
+exports.SERVER_VERSION = '1.2.2';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",
