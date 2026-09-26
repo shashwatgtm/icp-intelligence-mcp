@@ -303,7 +303,7 @@ footer.hx-footer .hx7-built-links a { color: var(--h7-ink) !important; }
 pre, .hx-code-block, .hx-output pre, .hx-result-body pre { background: #fff !important; color: var(--h7-ink) !important; border: 1.5px solid var(--h7-ink-12) !important; border-left: 4px solid var(--h7-ox) !important; }
 pre code { background: transparent !important; color: inherit !important; }
 hr { border: 0 !important; border-top: 1.5px solid var(--h7-ink-12) !important; }
-.hx-form textarea, .hx-form input[type="text"], .hx-form input[type="email"], .hx-field textarea { border: 1.5px solid var(--h7-ink-70) !important; background: #fff !important; color: var(--h7-ink) !important; font: inherit; width: 100%; padding: 10px 12px; box-sizing: border-box; }
+.hx-form textarea, .hx-form input:not([type="hidden"]), .hx-field textarea { border: 1.5px solid var(--h7-ink-70) !important; background: #fff !important; color: var(--h7-ink) !important; font: inherit; width: 100%; padding: 10px 12px; box-sizing: border-box; }
 .hx7-results { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 @media (max-width: 700px) { .hx7-results { grid-template-columns: 1fr !important; } }
 
@@ -364,3 +364,5 @@ hr { border: 0 !important; border-top: 1.5px solid var(--h7-ink-12) !important; 
 .page-content .code-header, .page-content .file-location { background: var(--h7-clay) !important; color: var(--h7-ink) !important; border-color: var(--h7-ink-12) !important; }
 .code-block, .code-block .key, .code-block .string, .code-block .bracket, .code-block span { background: #fff !important; color: var(--h7-ink) !important; }
 .code-block { border: 1.5px solid var(--h7-ink-12) !important; border-left: 4px solid var(--h7-ox) !important; }
+hr { color: var(--h7-ink-12) !important; }
+select, textarea, input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]) { border-color: var(--h7-ink-70); }
