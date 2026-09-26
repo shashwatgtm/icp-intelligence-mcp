@@ -229,3 +229,8 @@ footer.hx-footer .hx7-built-links a { display: inline; margin: 0; color: var(--h
 main table td, main table th { overflow-wrap: break-word; word-break: normal; }
 @media (max-width: 600px) { main table { display: block; max-width: 100%; overflow-x: auto; } }
 .hx-wordmark { overflow-wrap: normal; word-break: normal; }
+/* Re-check 2 (15:15 IST): in auto-width tables Chrome treats break-word as a break point, so cells use normal wrapping
+   (the table box scrolls instead) and only links may break; badges never split. */
+main table td, main table th, .hx-table td, .hx-table th { overflow-wrap: normal; }
+main table td a, .hx-table td a { overflow-wrap: anywhere; }
+.free-badge { white-space: nowrap; }
