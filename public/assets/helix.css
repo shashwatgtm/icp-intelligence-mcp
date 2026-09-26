@@ -225,3 +225,7 @@ footer.hx-footer .hx7-built-links a { display: inline; margin: 0; color: var(--h
   .stat-item { padding: 16px 6px !important; }
   .stat-label { font-size: 10px !important; letter-spacing: 0 !important; }
 }
+/* Verifier re-check (15:04 IST): every table (not only .hx-table) keeps whole words and scrolls in its own box on phones; the wordmark never splits a word. */
+main table td, main table th { overflow-wrap: break-word; word-break: normal; }
+@media (max-width: 600px) { main table { display: block; max-width: 100%; overflow-x: auto; } }
+.hx-wordmark { overflow-wrap: normal; word-break: normal; }
