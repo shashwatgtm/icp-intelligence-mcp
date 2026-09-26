@@ -234,3 +234,133 @@ main table td, main table th { overflow-wrap: break-word; word-break: normal; }
 main table td, main table th, .hx-table td, .hx-table th { overflow-wrap: normal; }
 main table td a, .hx-table td a { overflow-wrap: anywhere; }
 .free-badge { white-space: nowrap; }
+
+/* ---------- run 8: plain EPIC scorecard (hero) ---------- */
+.hx8-sc { margin: 0; background: #fff; border: 1.5px solid var(--h7-ink-12); border-top: 4px solid var(--h7-ox); padding: 20px 22px; max-width: 560px; }
+.hx8-sc-k { font-family: var(--h7-mono); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--h7-ox); margin: 0 0 8px; }
+.hx8-sc-in { font-family: var(--h7-display); font-size: 18px; line-height: 1.35; color: var(--h7-ink); margin: 0 0 16px; }
+.hx8-sc-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.hx8-sc-rows li { display: grid; grid-template-columns: minmax(8.5rem, 11rem) 1fr auto; align-items: center; gap: 12px; font-size: 15px; }
+.hx8-sc-l { color: var(--h7-ink); font-weight: 600; }
+.hx8-sc-bar { height: 14px; background: var(--h7-clay); position: relative; overflow: hidden; }
+.hx8-sc-bar i { position: absolute; inset: 0 auto 0 0; background: var(--h7-ink-70); animation: hx8-grow 1.1s cubic-bezier(.2,.7,.2,1) both; }
+.hx8-sc-rows li.is-lead .hx8-sc-bar i { background: var(--h7-signal); }
+.hx8-sc-rows li b { font-family: var(--h7-mono); font-size: 15px; color: var(--h7-ink); white-space: nowrap; }
+.hx8-sc-rows li b small { font-size: 12px; font-weight: 400; color: var(--h7-ink-70); }
+.hx8-sc-v { margin: 18px 0 8px; font-family: var(--h7-display); font-weight: 800; font-size: 22px; color: var(--h7-ox); }
+.hx8-sc figcaption { font-size: 13.5px; line-height: 1.5; color: var(--h7-ink-70); }
+.hx8-sc-cta { display: inline-block; margin-top: 12px; font-weight: 700; color: var(--h7-ink); text-decoration: underline; text-decoration-color: var(--h7-signal); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+@keyframes hx8-grow { from { width: 0; } }
+@media (max-width: 420px) { .hx8-sc { padding: 16px 14px; } .hx8-sc-rows li { grid-template-columns: 1fr auto; } .hx8-sc-bar { grid-column: 1 / -1; grid-row: 2; } }
+@media (prefers-reduced-motion: reduce) { .hx8-sc-bar i { animation: none; } }
+
+/* ---------- run 8: story section (result tiles, recognition), proof line, collapsed developer block ---------- */
+.hx8-story { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+@media (min-width: 900px) { .hx8-story { grid-template-columns: 200px minmax(0, 1fr); align-items: start; } }
+.hx8-story .hx7-cred-photo img { width: 200px; height: 200px; object-fit: cover; }
+.hx8-narr { font-size: 19px; line-height: 1.6; max-width: 62ch; color: var(--h7-ink); margin: 0 0 8px; }
+.hx8-role { font-family: var(--h7-mono); font-size: 13px; color: var(--h7-ox); margin: 0 0 18px; }
+.hx8-tiles { list-style: none; margin: 24px 0 8px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.hx8-tiles li { background: #fff; border: 1.5px solid var(--h7-ink-12); border-top: 3px solid var(--h7-ox); padding: 16px 16px 14px; }
+.hx8-tile-co { display: block; font-family: var(--h7-mono); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--h7-ox); }
+.hx8-tiles b { display: block; font-family: var(--h7-display); font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--h7-ink); margin-top: 6px; }
+.hx8-tile-l { display: block; font-size: 14px; color: var(--h7-ink-70); margin-bottom: 8px; }
+.hx8-tiles p { margin: 0; font-size: 14px; line-height: 1.45; color: var(--h7-ink); }
+.hx8-awards { list-style: none; margin: 18px 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.hx8-awards li { background: var(--h7-clay); color: var(--h7-ink); font-size: 13.5px; padding: 6px 10px; }
+.hx8-proof { margin-top: 24px; padding: 14px 16px; background: var(--h7-clay); border-left: 4px solid var(--h7-signal); font-size: 15px; line-height: 1.5; color: var(--h7-ink); }
+.hx8-motions { list-style: none; margin: 20px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.hx8-motions li { background: #fff; border: 1.5px solid var(--h7-ink-12); border-top: 4px solid var(--h7-ox); padding: 18px; }
+.hx8-motions li b.hx8-letter { display: inline-block; width: 34px; height: 34px; line-height: 34px; text-align: center; background: var(--h7-signal); color: var(--h7-paper); font-family: var(--h7-display); font-size: 20px; margin-bottom: 8px; }
+.hx8-motions h3 { margin: 4px 0 6px; }
+.hx8-motions p { margin: 0 0 8px; }
+.hx8-dev { margin-top: 32px; border: 1.5px solid var(--h7-ink-12); background: #fff; }
+.hx8-dev > summary { cursor: pointer; padding: 12px 16px; font-family: var(--h7-mono); font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--h7-ox); }
+.hx8-dev > div { padding: 0 16px 16px; }
+
+/* ---------- run 8 (E9 colour rule: no dark backgrounds): clay footer and table heads; the approved layout is unchanged ---------- */
+footer.hx-footer { background: var(--h7-clay) !important; color: var(--h7-ink) !important; border-top: 4px solid var(--h7-ox) !important; }
+footer.hx-footer p, footer.hx-footer a { color: var(--h7-ink) !important; }
+footer.hx-footer a:hover { color: var(--h7-ox) !important; }
+footer.hx-footer .hx-foot-h, footer.hx-footer h4 { color: var(--h7-ox) !important; }
+footer.hx-footer .hx-wordmark { color: var(--h7-ink) !important; }
+footer.hx-footer .hx-footer-bottom { border-top-color: var(--h7-ink-12) !important; color: var(--h7-ink) !important; }
+.hx7-built { border-bottom-color: var(--h7-ink-12); }
+.hx7-built-h { color: var(--h7-ink) !important; }
+footer.hx-footer .hx7-built-links a { color: var(--h7-ink) !important; }
+.hx7-giant { color: rgba(26, 14, 16, .14) !important; }
+.hx-table th { background: var(--h7-clay) !important; color: var(--h7-ink) !important; border-bottom: 2px solid var(--h7-ink) !important; }
+.h7-demo svg { background: var(--h7-paper); }
+
+/* ---------- run 8: gtmhelix.com hero headline fits its column (no word breaks) ---------- */
+.hx-hero.h7-home.hx8-home h1 { font-size: clamp(40px, 4.6vw, 76px) !important; line-height: 1 !important; overflow-wrap: normal !important; word-break: normal !important; hyphens: manual !important; max-width: 14ch; }
+.hx8-home .h7-hero-grid { align-items: center; }
+
+/* run 8: scorecard bar widths as classes (strict CSP: no inline style attributes) */
+.hx8-v0 { width: 0%; } .hx8-v1 { width: 10%; } .hx8-v2 { width: 20%; } .hx8-v3 { width: 30%; } .hx8-v4 { width: 40%; } .hx8-v5 { width: 50%; } .hx8-v6 { width: 60%; } .hx8-v7 { width: 70%; } .hx8-v8 { width: 80%; } .hx8-v9 { width: 90%; } .hx8-v10 { width: 100%; }
+
+/* ---------- run 8 (E9): code blocks, rules and form fields in Helix colours (no dark areas, no default greys) ---------- */
+pre, .hx-code-block, .hx-output pre, .hx-result-body pre { background: #fff !important; color: var(--h7-ink) !important; border: 1.5px solid var(--h7-ink-12) !important; border-left: 4px solid var(--h7-ox) !important; }
+pre code { background: transparent !important; color: inherit !important; }
+hr { border: 0 !important; border-top: 1.5px solid var(--h7-ink-12) !important; }
+.hx-form textarea, .hx-form input[type="text"], .hx-form input[type="email"], .hx-field textarea { border: 1.5px solid var(--h7-ink-70) !important; background: #fff !important; color: var(--h7-ink) !important; font: inherit; width: 100%; padding: 10px 12px; box-sizing: border-box; }
+.hx7-results { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+@media (max-width: 700px) { .hx7-results { grid-template-columns: 1fr !important; } }
+
+/* ---------- run 8 E5: visual library (work/run8/visuals.py); still under reduced motion ---------- */
+.hx8-vis { margin: 24px 0; max-width: 560px; }
+.hx8-vis svg { display: block; width: 100%; height: auto; overflow: visible; }
+.hx8-vis figcaption { font-size: 13.5px; line-height: 1.5; color: var(--h7-ink-70); margin-top: 8px; }
+.hx8-svg text { font-family: var(--h7-display); fill: var(--h7-ink); }
+.hx8-svg .v-t { font-size: 14px; } .hx8-svg .v-ts { font-size: 12.5px; } .hx8-svg .v-tb { font-size: 14px; font-weight: 700; }
+.hx8-svg .v-tm, .hx8-svg .v-k, .hx8-svg .v-tmp { font-family: var(--h7-mono); font-size: 12px; }
+.hx8-svg .v-k { font-weight: 600; letter-spacing: .08em; fill: var(--h7-ox); text-transform: uppercase; }
+.hx8-svg .v-tp, .hx8-svg .v-tmp { fill: var(--h7-paper); font-size: 12.5px; }
+.hx8-svg .v-letter { font-size: 22px; font-weight: 800; fill: var(--h7-paper); }
+.hx8-svg .v-big { font-size: 26px; font-weight: 800; }
+.hx8-svg .v-oxt { fill: var(--h7-ox); } .hx8-svg .v-sigt { fill: var(--h7-signal); }
+.hx8-svg .v-strike { text-decoration: line-through; fill: var(--h7-ink-70); }
+.hx8-svg .v-ox { fill: var(--h7-ox); } .hx8-svg .v-sig { fill: var(--h7-signal); } .hx8-svg .v-ink7 { fill: rgba(26, 14, 16, .72); }
+.hx8-svg .v-clay { fill: var(--h7-clay); } .hx8-svg .v-clayd { fill: #EAD9D5; stroke: var(--h7-ox); stroke-width: 1.5; } .hx8-svg .v-paper { fill: var(--h7-paper); }
+.hx8-svg .v-paperb { fill: #fff; stroke: rgba(26, 14, 16, .3); stroke-width: 1.5; }
+.hx8-svg .v-line { stroke: rgba(26, 14, 16, .3); stroke-width: 1.5; fill: none; }
+.hx8-svg .v-link { stroke: var(--h7-ox); stroke-width: 2; fill: none; }
+.hx8-svg .v-spine { stroke: var(--h7-ink); stroke-width: 3; fill: none; }
+.hx8-svg .v-arc { stroke: var(--h7-clay); stroke-width: 18; fill: none; } .hx8-svg .v-arcv { stroke: var(--h7-signal); stroke-width: 18; fill: none; }
+.hx8-svg .v-needle { stroke: var(--h7-ox); stroke-width: 4; }
+.hx8-svg .v-ringseg { fill: none; stroke-width: 26; }
+.hx8-svg .v-oxs { stroke: var(--h7-ox); } .hx8-svg .v-sigs { stroke: var(--h7-signal); } .hx8-svg .v-ink7s { stroke: rgba(26, 14, 16, .72); fill: rgba(26, 14, 16, .72); } .hx8-svg .v-clayds { stroke: #EAD9D5; }
+.hx8-svg .v-clays { fill: var(--h7-clay); stroke: var(--h7-ox); stroke-width: 1.5; }
+.hx8-svg .v-grow, .hx8-svg .v-grow-y, .hx8-svg .v-pop, .hx8-svg .v-drop, .hx8-svg .v-slide, .hx8-svg .v-fall { transform-box: fill-box; }
+.hx8-svg .v-grow { transform-origin: left center; animation: hx8v-grow .9s cubic-bezier(.2,.7,.2,1) both; }
+.hx8-svg .v-grow-y { transform-origin: center bottom; animation: hx8v-growy .9s cubic-bezier(.2,.7,.2,1) both; }
+.hx8-svg .v-pop { transform-origin: center; animation: hx8v-pop .6s cubic-bezier(.2,.8,.3,1.2) both; }
+.hx8-svg .v-drop { animation: hx8v-drop .6s ease-out both; }
+.hx8-svg .v-slide { animation: hx8v-slide .7s ease-out both; }
+.hx8-svg .v-fall { animation: hx8v-fall 1.2s ease-in both; }
+.hx8-svg .v-fade { animation: hx8v-fade .8s ease-out both; }
+.hx8-svg .v-draw { stroke-dasharray: 600; stroke-dashoffset: 0; animation: hx8v-draw 1.2s ease-out both; }
+.hx8-svg .v-tilt { transform-box: view-box; transform-origin: 180px 70px; animation: hx8v-tilt 1.6s ease-in-out both; }
+.hx8-svg .d1 { animation-delay: .1s; } .hx8-svg .d2 { animation-delay: .2s; } .hx8-svg .d3 { animation-delay: .3s; } .hx8-svg .d4 { animation-delay: .4s; } .hx8-svg .d5 { animation-delay: .5s; }
+.hx8-svg .d6 { animation-delay: .6s; } .hx8-svg .d7 { animation-delay: .7s; } .hx8-svg .d8 { animation-delay: .8s; } .hx8-svg .d9 { animation-delay: .9s; }
+@keyframes hx8v-grow { from { transform: scaleX(0); } }
+@keyframes hx8v-growy { from { transform: scaleY(0); } }
+@keyframes hx8v-pop { from { transform: scale(.4); opacity: 0; } }
+@keyframes hx8v-drop { from { transform: translateY(-14px); opacity: 0; } }
+@keyframes hx8v-slide { from { transform: translateX(-18px); opacity: 0; } }
+@keyframes hx8v-fall { from { transform: translateY(0); opacity: 1; } to { transform: translateY(70px); opacity: 0; } }
+@keyframes hx8v-fade { from { opacity: 0; } }
+@keyframes hx8v-draw { from { stroke-dashoffset: 600; } }
+@keyframes hx8v-tilt { 0% { transform: rotate(-6deg); } 100% { transform: rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .hx8-svg * { animation: none !important; } }
+
+/* ---------- run 8 (E9, no dark areas): GTM Alpha /integration setup panel and /api-docs code blocks in light Helix colours ---------- */
+.page-content { background: var(--h7-paper) !important; color: var(--h7-ink) !important; }
+.page-content .section-title, .page-content .tab-panel h3, .page-content h3, .page-content h4 { color: var(--h7-ink) !important; }
+.page-content .section-subtitle, .page-content p, .page-content li { color: var(--h7-ink) !important; }
+.page-content .tab-btn { background: #fff !important; color: var(--h7-ink) !important; border-color: var(--h7-ink-12) !important; }
+.page-content .tab-btn.active { background: var(--h7-ox) !important; color: var(--h7-paper) !important; }
+.page-content .tab-content, .page-content .code-container { background: #fff !important; border-color: var(--h7-ink-12) !important; }
+.page-content .code-header, .page-content .file-location { background: var(--h7-clay) !important; color: var(--h7-ink) !important; border-color: var(--h7-ink-12) !important; }
+.code-block, .code-block .key, .code-block .string, .code-block .bracket, .code-block span { background: #fff !important; color: var(--h7-ink) !important; }
+.code-block { border: 1.5px solid var(--h7-ink-12) !important; border-left: 4px solid var(--h7-ox) !important; }
