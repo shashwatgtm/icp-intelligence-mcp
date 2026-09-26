@@ -739,7 +739,7 @@ ${SUGGESTED}
         },
         average_contract_value: {
           type: 'number',
-          minimum: 0,
+          exclusiveMinimum: 0,
           description: 'Your average ACV in dollars'
         },
         icp_percentage: {
@@ -1490,40 +1490,46 @@ ${SUGGESTED}
       // Set defaults for metrics
       const metrics = {
         current: {
-          acv: current.avg_acv || 25000,
-          cycle: current.avg_sales_cycle || 90,
-          winRate: current.win_rate || 20,
-          churn: current.churn_rate || 15,
-          nps: current.nps || 30
+          acv: current.avg_acv ?? 25000,
+          cycle: current.avg_sales_cycle ?? 90,
+          winRate: current.win_rate ?? 20,
+          churn: current.churn_rate ?? 15,
+          nps: current.nps ?? 30
         },
         target: {
-          acv: target.avg_acv || 50000,
-          cycle: target.avg_sales_cycle || 60,
-          winRate: target.win_rate || 30,
-          churn: target.churn_rate || 8,
-          nps: target.nps || 50
+          acv: target.avg_acv ?? 50000,
+          cycle: target.avg_sales_cycle ?? 60,
+          winRate: target.win_rate ?? 30,
+          churn: target.churn_rate ?? 8,
+          nps: target.nps ?? 50
         }
       };
       
       // Calculate gaps
+      // A percentage of a base of 0 or below means nothing, so that gap is 'n/a' and its severity is not rated (run 7, T1).
+      const pct = (diff: number, base: number) => (base > 0 ? (diff / base * 100).toFixed(0) : 'n/a');
       const gaps = {
-        acv: ((metrics.target.acv - metrics.current.acv) / metrics.current.acv * 100).toFixed(0),
-        cycle: ((metrics.current.cycle - metrics.target.cycle) / metrics.current.cycle * 100).toFixed(0),
-        winRate: ((metrics.target.winRate - metrics.current.winRate) / metrics.current.winRate * 100).toFixed(0),
-        churn: ((metrics.current.churn - metrics.target.churn) / metrics.current.churn * 100).toFixed(0),
-        nps: ((metrics.target.nps - metrics.current.nps) / metrics.current.nps * 100).toFixed(0)
+        acv: pct(metrics.target.acv - metrics.current.acv, metrics.current.acv),
+        cycle: pct(metrics.current.cycle - metrics.target.cycle, metrics.current.cycle),
+        winRate: pct(metrics.target.winRate - metrics.current.winRate, metrics.current.winRate),
+        churn: pct(metrics.current.churn - metrics.target.churn, metrics.current.churn),
+        nps: pct(metrics.target.nps - metrics.current.nps, metrics.current.nps)
       };
+      // NPS runs from -100 to 100, so its gap is shown in points: target minus today (run 7, T1).
+      const npsPoints = metrics.target.nps - metrics.current.nps;
+      const npsGap = npsPoints > 0 ? `+${npsPoints} points needed` : npsPoints === 0 ? 'target met, no increase needed' : `already ${-npsPoints} points above target, no increase needed`;
+      const sev = (g: string, high: number, medium: number) => (g === 'n/a' ? 'Not rated' : parseInt(g) > high ? '🔴 High' : parseInt(g) > medium ? '🟡 Medium' : '🟢 Low');
 
       // A gap in the other direction (the target is already met) says so instead of printing a double sign.
-      const upGap = (g: string, word: string) => (parseFloat(g) >= 0 ? `+${g}% ${word}needed` : `already above target, no ${word || 'increase '}needed`);
-      const downGap = (g: string, word: string) => (parseFloat(g) >= 0 ? `-${g}% ${word}needed` : `target is ${-parseFloat(g)}% above today, no ${word || 'reduction '}needed`);
+      const upGap = (g: string, word: string) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) >= 0 ? `+${g}% ${word}needed` : `already above target, no ${word || 'increase '}needed`);
+      const downGap = (g: string, word: string) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) >= 0 ? `-${g}% ${word}needed` : `target is ${-parseFloat(g)}% above today, no ${word || 'reduction '}needed`);
       // Labels only: a metric the input did not supply is a preset example, and so is a gap computed with it.
       const given = {
-        acv: [!!current.avg_acv, !!target.avg_acv],
-        cycle: [!!current.avg_sales_cycle, !!target.avg_sales_cycle],
-        winRate: [!!current.win_rate, !!target.win_rate],
-        churn: [!!current.churn_rate, !!target.churn_rate],
-        nps: [!!current.nps, !!target.nps]
+        acv: [current.avg_acv != null, target.avg_acv != null],
+        cycle: [current.avg_sales_cycle != null, target.avg_sales_cycle != null],
+        winRate: [current.win_rate != null, target.win_rate != null],
+        churn: [current.churn_rate != null, target.churn_rate != null],
+        nps: [current.nps != null, target.nps != null]
       };
       const noneGiven = !Object.values(given).some(([c, t]) => c || t);
       const cellEx = (supplied: boolean) => (noneGiven || supplied) ? '' : ` ${EXAMPLE}`;
@@ -1545,11 +1551,11 @@ ${args.ideal_icp}
 
 ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so every value in this table is a preset example.\n` : ''}| Metric | Current | Target | Gap | Priority |
 |--------|---------|--------|-----|----------|
-| **Avg ACV** | $${metrics.current.acv.toLocaleString('en-US')}${cellEx(given.acv[0])} | $${metrics.target.acv.toLocaleString('en-US')}${cellEx(given.acv[1])} | ${upGap(gaps.acv, '')} | ${parseInt(gaps.acv) > 50 ? '🔴 High' : parseInt(gaps.acv) > 25 ? '🟡 Medium' : '🟢 Low'} |
-| **Sales Cycle** | ${metrics.current.cycle} days${cellEx(given.cycle[0])} | ${metrics.target.cycle} days${cellEx(given.cycle[1])} | ${downGap(gaps.cycle, '')} | ${parseInt(gaps.cycle) > 30 ? '🔴 High' : parseInt(gaps.cycle) > 15 ? '🟡 Medium' : '🟢 Low'} |
-| **Win Rate** | ${metrics.current.winRate}%${cellEx(given.winRate[0])} | ${metrics.target.winRate}%${cellEx(given.winRate[1])} | ${upGap(gaps.winRate, '')} | ${parseInt(gaps.winRate) > 40 ? '🔴 High' : parseInt(gaps.winRate) > 20 ? '🟡 Medium' : '🟢 Low'} |
-| **Churn Rate** | ${metrics.current.churn}%${cellEx(given.churn[0])} | ${metrics.target.churn}%${cellEx(given.churn[1])} | ${downGap(gaps.churn, '')} | ${parseInt(gaps.churn) > 40 ? '🔴 High' : parseInt(gaps.churn) > 20 ? '🟡 Medium' : '🟢 Low'} |
-| **NPS** | ${metrics.current.nps}${cellEx(given.nps[0])} | ${metrics.target.nps}${cellEx(given.nps[1])} | ${upGap(gaps.nps, '')} | ${parseInt(gaps.nps) > 50 ? '🔴 High' : parseInt(gaps.nps) > 25 ? '🟡 Medium' : '🟢 Low'} |
+| **Avg ACV** | $${metrics.current.acv.toLocaleString('en-US')}${cellEx(given.acv[0])} | $${metrics.target.acv.toLocaleString('en-US')}${cellEx(given.acv[1])} | ${upGap(gaps.acv, '')} | ${sev(gaps.acv, 50, 25)} |
+| **Sales Cycle** | ${metrics.current.cycle} days${cellEx(given.cycle[0])} | ${metrics.target.cycle} days${cellEx(given.cycle[1])} | ${downGap(gaps.cycle, '')} | ${sev(gaps.cycle, 30, 15)} |
+| **Win Rate** | ${metrics.current.winRate}%${cellEx(given.winRate[0])} | ${metrics.target.winRate}%${cellEx(given.winRate[1])} | ${upGap(gaps.winRate, '')} | ${sev(gaps.winRate, 40, 20)} |
+| **Churn Rate** | ${metrics.current.churn}%${cellEx(given.churn[0])} | ${metrics.target.churn}%${cellEx(given.churn[1])} | ${downGap(gaps.churn, '')} | ${sev(gaps.churn, 40, 20)} |
+| **NPS** | ${metrics.current.nps}${cellEx(given.nps[0])} | ${metrics.target.nps}${cellEx(given.nps[1])} | ${npsGap} | ${sev(gaps.nps, 50, 25)} |
 
 ---
 
@@ -2123,7 +2129,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // =============================================================================
 
 export const SERVER_NAME = 'icp-intelligence-mcp';
-export const SERVER_VERSION = '1.2.0';
+export const SERVER_VERSION = '1.2.1';
 
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES: Record<string, string> = {
@@ -2147,29 +2153,49 @@ function withMeta<T extends { name: string }>(tool: T) {
   };
 }
 
-// Decision N2 (run 6, extended after the independent check): numbers inside lists and objects follow their schema's
-// minimum and maximum too, and a text field that holds one amount (AMOUNT_TEXT) cannot hold a negative amount.
-type SchemaNode = { type?: string; minimum?: number; maximum?: number; properties?: Record<string, SchemaNode>; items?: SchemaNode };
-const NEGATIVE_AMOUNT = /(^|[\s(:=])[-\u2212]\$\s*\d|\$\s*[-\u2212]\s*\d|^\s*[-\u2212]\s*\d/;
-function checkLimits(schema: SchemaNode, value: unknown, path: string, problems: string[]): void {
-  if (schema.properties && value && typeof value === "object" && !Array.isArray(value)) {
-    for (const [key, p] of Object.entries(schema.properties)) {
-      checkLimits(p, (value as Record<string, unknown>)[key], path ? `${path}.${key}` : key, problems);
-    }
+// Decision N2 (run 6) and the run 7 fixes (T2, T3, T5, T6): every input is checked against its schema before a tool runs,
+// at any depth. A number sent as text is read the way the web form reads it (commas allowed) or refused; minimum,
+// exclusiveMinimum and maximum hold; a choice must be one of the listed values; a text field that holds money
+// (MONEY_TEXT) cannot hold a negative amount (a negative percentage such as "-12% growth" is fine); a metrics text
+// (METRIC_TEXT) cannot hold negative money but may hold a negative NPS or growth rate; a field that must
+// hold one amount (ONE_AMOUNT) cannot hold a range.
+type SchemaNode = { type?: string; minimum?: number; exclusiveMinimum?: number; maximum?: number; enum?: unknown[]; properties?: Record<string, SchemaNode>; items?: SchemaNode };
+const NEGATIVE_AMOUNT = /\$\s*[-\u2212]\s*\d|(^|[\s(:=,;])[-\u2212](?:\$|usd|inr|eur|gbp|rs\.?|\u20b9|\u20ac|\u00a3)?\s?\d[\d,]*(?:\.\d+)?(?![\d,.]|\s*%)/i;
+const NEGATIVE_MONEY = /[-−]\s?[$₹€£]\s*\d|[$₹€£]\s*[-−]\s*\d|\b(?:mrr|arr|cac|ltv|acv)\b[:\s]*[-−]\s*\d/i;
+const AMOUNT_RANGE = /\d\s*[kmb]?\s*(?:-|\u2013|\u2014|to)\s*[$\u20b9\u20ac\u00a3]?\s*\d/i;
+function checkValue(schema: SchemaNode, holder: Record<string, unknown> | unknown[], key: string | number, path: string, problems: string[]): void {
+  const box = holder as Record<string | number, unknown>;
+  const value = box[key];
+  if (value === undefined || value === null) return;
+  if (schema.properties && typeof value === "object" && !Array.isArray(value)) {
+    for (const [k, p] of Object.entries(schema.properties)) checkValue(p, value as Record<string, unknown>, k, path ? `${path}.${k}` : k, problems);
     return;
   }
   if (schema.items && Array.isArray(value)) {
-    value.forEach((item, i) => checkLimits(schema.items as SchemaNode, item, `${path}[${i}]`, problems));
+    value.forEach((_, i) => checkValue(schema.items as SchemaNode, value, i, `${path}[${i}]`, problems));
+    return;
+  }
+  if (Array.isArray(schema.enum) && typeof value === "string" && !schema.enum.includes(value)) {
+    problems.push(`${path} must be one of: ${schema.enum.join(", ")}`);
     return;
   }
   if (schema.type !== "number" && schema.type !== "integer") return;
-  const v = typeof value === "string" && value.trim() !== "" ? Number(value) : value;
-  if (typeof v !== "number" || !Number.isFinite(v)) return;
+  let v = value;
+  if (typeof v === "string") {
+    const n = v.trim() === "" ? NaN : Number(v.replace(/,/g, "").trim());
+    if (!Number.isFinite(n)) { problems.push(`${path} must be a number, written with digits only (for example 220000)`); return; }
+    box[key] = n;
+    v = n;
+  }
+  if (typeof v !== "number" || !Number.isFinite(v)) { problems.push(`${path} must be a number`); return; }
   if (typeof schema.minimum === "number" && v < schema.minimum) problems.push(`${path} must be ${schema.minimum} or more`);
+  if (typeof schema.exclusiveMinimum === "number" && v <= schema.exclusiveMinimum) problems.push(`${path} must be more than ${schema.exclusiveMinimum}`);
   if (typeof schema.maximum === "number" && v > schema.maximum) problems.push(`${path} must be ${schema.maximum} or less`);
 }
 
-const AMOUNT_TEXT: Record<string, string[]> = { buyer_group_analyzer: ["deal_size"] };
+const MONEY_TEXT: Record<string, string[]> = { buyer_group_analyzer: ["deal_size"] };
+const METRIC_TEXT: Record<string, string[]> = {};
+const ONE_AMOUNT: Record<string, string[]> = {};
 
 function checkRequiredInputs(name: string, args: Record<string, unknown> | undefined): string | null {
   const tool = (tools as Record<string, { inputSchema: { required?: string[] } }>)[name];
@@ -2181,12 +2207,22 @@ function checkRequiredInputs(name: string, args: Record<string, unknown> | undef
   if (missing.length > 0) {
     return `Missing required input for ${name}: ${missing.join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and call the tool again.`;
   }
-  // Decision N2 (run 6): amounts, counts and durations cannot be negative; the schema says which (minimum, maximum).
+  // Decision N2 (run 6) and run 7: schema limits at any depth, choices, money text and single amounts.
   const problems: string[] = [];
-  checkLimits(tool.inputSchema as unknown as SchemaNode, args ?? {}, "", problems);
-  for (const key of AMOUNT_TEXT[name] ?? []) {
+  if (args) {
+    for (const [k, p] of Object.entries((tool.inputSchema as unknown as SchemaNode).properties ?? {})) checkValue(p, args, k, k, problems);
+  }
+  for (const key of MONEY_TEXT[name] ?? []) {
     const raw = args?.[key];
     if (typeof raw === "string" && NEGATIVE_AMOUNT.test(raw)) problems.push(`${key} must not contain a negative amount`);
+  }
+  for (const key of METRIC_TEXT[name] ?? []) {
+    const raw = args?.[key];
+    if (typeof raw === "string" && NEGATIVE_MONEY.test(raw)) problems.push(`${key} must not contain a negative amount of money`);
+  }
+  for (const key of ONE_AMOUNT[name] ?? []) {
+    const raw = args?.[key];
+    if (typeof raw === "string" && AMOUNT_RANGE.test(raw)) problems.push(`${key} must be one amount, not a range (for example $75,000)`);
   }
   if (problems.length > 0) {
     return `Invalid input for ${name}: ${problems.join("; ")}.`;

@@ -1,4 +1,4 @@
-# ICP Intelligence MCP v1.2.0
+# ICP Intelligence MCP v1.2.1
 **Deep ICP Analysis with Pattern Detection** - 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
 
 [![NPM Version](https://img.shields.io/npm/v/@shashwatgtmalpha/icp-intelligence-mcp)](https://www.npmjs.com/package/@shashwatgtmalpha/icp-intelligence-mcp)
@@ -31,7 +31,7 @@ Add to your `claude_desktop_config.json`:
 
 ## Tools and inputs
 
-Generated on 26 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.2.0, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
+Generated on 26 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.2.1, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
 
 | # | Tool | Title | What it does |
 |---|---|---|---|
@@ -78,7 +78,7 @@ Generated on 26 September 2026 from the server's own tool list (`tools/list` of 
 | Input | Required | Type | Description |
 |---|---|---|---|
 | `total_potential_companies` | Yes | number (0 or more) | Estimated total companies that could buy (from LinkedIn, industry reports) |
-| `average_contract_value` | Yes | number (0 or more) | Your average ACV in dollars |
+| `average_contract_value` | Yes | number (more than 0) | Your average ACV in dollars |
 | `icp_percentage` | No | number (0 or more) | Percentage that match your ICP (1-100) |
 | `year1_market_share_target` | No | number (0 or more) | Realistic Year 1 market share percentage (typically 1-5%) |
 | `data_sources` | No | string | Where you got your numbers (for documentation) |
@@ -199,7 +199,7 @@ This MCP is built on the principle that **ICP is dynamic, not static**. The best
 
 ## 👨‍💻 Author
 
-**Shashwat Ghosh**, Co-Founder and Fractional CMO, Helix GTM Consulting
+**Shashwat Ghosh**, Co-Founder and Fractional CMO, Helix GTM Consulting, with 24+ years in B2B and 10+ years of fractional experience
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/shashwatghosh)
 [![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2)](https://twitter.com/Shashwat_Ghosh)

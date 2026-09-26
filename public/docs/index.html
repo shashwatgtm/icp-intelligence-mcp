@@ -172,7 +172,7 @@
   <ul class="hx-prose">
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
     <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
-    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.0.</li>
+    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.1.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
   </ul>
 </section>
@@ -229,7 +229,7 @@
   <p class="hx-prose">Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source) <a href="/tools/tam-sam-som-calculator/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>total_potential_companies</code></td><td>number (0 or more)</td><td>yes</td><td></td><td>Estimated total companies that could buy (from LinkedIn, industry reports)</td></tr>
-<tr><td><code>average_contract_value</code></td><td>number (0 or more)</td><td>yes</td><td></td><td>Your average ACV in dollars</td></tr>
+<tr><td><code>average_contract_value</code></td><td>number (more than 0)</td><td>yes</td><td></td><td>Your average ACV in dollars</td></tr>
 <tr><td><code>icp_percentage</code></td><td>number (0 or more)</td><td>no</td><td></td><td>Percentage that match your ICP (1-100)</td></tr>
 <tr><td><code>year1_market_share_target</code></td><td>number (0 or more)</td><td>no</td><td></td><td>Realistic Year 1 market share percentage (typically 1-5%)</td></tr>
 <tr><td><code>data_sources</code></td><td>string</td><td>no</td><td></td><td>Where you got your numbers (for documentation)</td></tr>
