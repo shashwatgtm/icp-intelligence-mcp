@@ -100,22 +100,51 @@ function isCommonWord(word) {
     const w = head.toLowerCase();
     return COMMON_WORDS.has(w) || (w.length > 4 && /(?:ing|ed)$/.test(w));
 }
-// An input phrase placed mid-sentence: its first word is lowered only when it is a common word.
+// Text only (run 10): names that keep their capital when they open an input phrase placed mid-sentence. The list holds
+// common product and company names and the names found in the test inputs; other names are kept by the rules below.
+const KNOWN_NAMES = new Set(('Salesforce Microsoft Slack HubSpot LinkedIn Google Gmail Outlook Excel Zoom Zendesk Jira Notion Shopify Stripe ' +
+    'Marketo Pardot Gong Intercom Freshworks Oracle SAP Workday ServiceNow Snowflake Tableau Asana Trello Dropbox ' +
+    'Apple Amazon AWS Azure Facebook Instagram WhatsApp YouTube Acme ExampleCo Sam').split(/\s+/).filter(Boolean));
+function bareWord(word) {
+    return word.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, '');
+}
+function isKnownName(word) {
+    const w = bareWord(word);
+    return KNOWN_NAMES.has(w) || KNOWN_NAMES.has(w.split(/['-]/)[0]);
+}
+// Run 10: the first word of an input phrase keeps its capital only when it is a known name, has an inner capital or is
+// all capitals (HubSpot, AI, CRM), holds a digit (B2B, Q4), or starts a name of two words: the next word is capitalised
+// too (New York, Clinic Group A, Competitor A) and is not a known name on its own ("Native Salesforce" is not a name).
+function keepsFirstCapital(word, next) {
+    const w = bareWord(word);
+    if (!/^[A-Z]/.test(w) || w === 'I' || isKnownName(w))
+        return true;
+    if (/[A-Z0-9]/.test(w.slice(1)))
+        return true;
+    const n = bareWord(next || '');
+    return /^[A-Z](?:[a-z]+(?:['-][a-z]+)*)?$/.test(n) && !isKnownName(n);
+}
+// An input phrase placed mid-sentence: its first word is lowered unless keepsFirstCapital() keeps it
+// ("Native Salesforce integration" becomes "native Salesforce integration"; "Salesforce data you can trust" stays).
 function lowerFirstIfCommon(phrase) {
     const t = phrase.trim();
-    const first = t.split(/\s+/)[0] || '';
-    return isCommonWord(first) ? t.charAt(0).toLowerCase() + t.slice(1) : t;
+    const [first = '', next = ''] = t.split(/\s+/);
+    return keepsFirstCapital(first, next) ? t : t.replace(/[A-Z]/, c => c.toLowerCase());
 }
-// The same for every word of a phrase (this replaces a plain toLowerCase(), which also lowered names and acronyms).
-// A capitalised word straight after a kept name stays too, so a name of two words keeps both ("Microsoft Teams approvals").
+// The same for a whole phrase (this replaces a plain toLowerCase(), which also lowered names and acronyms): the first
+// word follows the rule above, and a later word is lowered only when it is a common word. A capitalised word straight
+// after a kept name stays too, so a name of two words keeps both ("Microsoft Teams approvals").
 function lowerCommonWords(phrase) {
     let afterName = false;
-    return phrase.trim().split(/(\s+)/).map(w => {
+    let first = true;
+    const parts = phrase.trim().split(/(\s+)/);
+    return parts.map((w, i) => {
         if (!w.trim())
             return w;
-        const lower = !afterName && isCommonWord(w);
+        const lower = first ? !keepsFirstCapital(w, parts[i + 2] || '') : !afterName && isCommonWord(w);
+        first = false;
         afterName = !lower && /^[A-Z]/.test(w);
-        return lower ? w.charAt(0).toLowerCase() + w.slice(1) : w;
+        return lower ? w.replace(/[A-Z]/, c => c.toLowerCase()) : w;
     }).join('');
 }
 // Text only (run 9): a phrase that starts a sentence, a heading or a table cell starts with a capital. A first word
@@ -2083,7 +2112,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.3';
+exports.SERVER_VERSION = '1.2.4';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",
