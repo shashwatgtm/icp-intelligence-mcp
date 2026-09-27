@@ -501,6 +501,6 @@ footer.hx-footer .hx-footer-bottom, footer.hx-footer .hx-footer-bottom *, .hx7-l
    text); the small SVG text is 13 units, so it stays at least 11 px when a 360 px phone draws the visual about 312 px wide;
    under 480 px the eyebrow's dotted rule is hidden, so "1 of 8" does not wrap. */
 .hx8-vis { max-width: 440px; }
-.hx8-vis.hx9-term, .hx8-vis.hx9-diagram { max-width: 520px; }
+.hx8-vis.hx9-term, .hx8-vis.hx9-diagram { max-width: 440px; }
 .hx8-svg .v-ts, .hx8-svg .v-tp, .hx8-svg .v-tm, .hx8-svg .v-k, .hx8-svg .v-tmp { font-size: 13px !important; }
 @media (max-width: 480px) { .hx-hero .hx-eyebrow::after { display: none; } }
