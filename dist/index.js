@@ -999,7 +999,7 @@ Later years assume your market share doubles each year.
 
 ## 📋 Investor-Ready Summary
 
-> The **${segment}** segment represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP.${icpEx} 
+> The **${lowerFirstIfCommon(segment)}** segment represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP.${icpEx} 
 > We target **${formatCurrency(som)} SOM** in Year 1, requiring **${targetDeals} customers** at **${formatCurrency(acv)} ACV**.${somEx}
 > 
 > *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
@@ -2112,7 +2112,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.4';
+exports.SERVER_VERSION = '1.2.5';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",
