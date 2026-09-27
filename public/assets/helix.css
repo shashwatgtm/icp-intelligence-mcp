@@ -579,3 +579,7 @@ footer.hx-footer .hx-footer-grid > div > a { display: flex !important; }
   .hx9-gh .hx9-crumbs > :nth-last-child(3) { flex: 0 1 auto; min-width: 0; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 44px; }
   .hx9-gh .hx9-crumbs > [aria-current] { flex: 1 1 auto; min-width: 30%; }
 }
+/* run 10 checks on the wave 2 drafts: card buttons fill the card width so they line up across a row; a section that holds a
+   wide table keeps the full width (its table columns were squeezed beside the heading) */
+.hx10-card .hx10-actions .hx-btn, .hx10-job .hx10-actions .hx-btn { flex: 1 1 100%; }
+@media (min-width: 1280px) { .hx-body > .hx-section:has(.hx-table-wide) { display: block; } }

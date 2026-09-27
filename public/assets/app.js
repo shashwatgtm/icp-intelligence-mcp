@@ -123,7 +123,7 @@
         if (data.ok) {
           lastText = data.text || "";
           show(section, markdown(lastText));
-          // A2.4: say so when this answer came from the made-up example (hidden again once the visitor edits the form)
+          // A2.4: say so when this answer came from the made-up example (R10-16: hidden again as soon as the visitor edits the form)
           var exNote = section.querySelector("[data-example-note]");
           if (exNote) exNote.hidden = form.getAttribute("data-from-example") !== "1";
         } else {
@@ -141,7 +141,15 @@
       var example = {};
       try { example = JSON.parse(exEl.textContent || "{}"); } catch (err) { example = {}; }
       if (!Object.keys(example).length) fill.hidden = true;
-      form.addEventListener("input", function () { form.removeAttribute("data-from-example"); });
+      // R10-16: the made-up example note hides as soon as the visitor edits any field (or clears the form), not on the next Run
+      var hideNote = function () {
+        form.removeAttribute("data-from-example");
+        var n = section && section.querySelector("[data-example-note]");
+        if (n) n.hidden = true;
+      };
+      form.addEventListener("input", hideNote);
+      form.addEventListener("change", hideNote);
+      form.addEventListener("reset", hideNote);
       fill.addEventListener("click", function () {
         form.reset();
         Object.keys(example).forEach(function (k) {
