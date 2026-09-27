@@ -504,3 +504,78 @@ footer.hx-footer .hx-footer-bottom, footer.hx-footer .hx-footer-bottom *, .hx7-l
 .hx8-vis.hx9-term, .hx8-vis.hx9-diagram { max-width: 440px; }
 .hx8-svg .v-ts, .hx8-svg .v-tp, .hx8-svg .v-tm, .hx8-svg .v-k, .hx8-svg .v-tmp { font-size: 13px !important; }
 @media (max-width: 480px) { .hx-hero .hx-eyebrow::after { display: none; } }
+
+/* ================= run 10 ================= */
+/* R10-A1-4: the outlined secondary button (same size and type as .hx-btn, so both kinds of card read as one system) */
+.hx-btn.hx10-outline { background: transparent !important; color: var(--h7-ox) !important; box-shadow: inset 0 0 0 1.5px var(--h7-ox) !important; }
+.hx-btn.hx10-outline:hover, .hx-btn.hx10-outline:focus-visible { background: var(--h7-ox) !important; color: var(--h7-paper) !important; }
+.hx10-404 { gap: 12px 16px; }
+
+/* R10-14 (D1, D2): wide screens. Headings wrap in balanced lines and may run longer before they wrap. From 1280 px a section's
+   H2 sits in a 300 px left column (sticky under the header) and the section's content beside it (the chat reviewer's tested
+   rule). On tool pages the visual sits beside the intro in the hero (.hx10-split, set by gen_site3.py). */
+h1, h2, h3 { text-wrap: balance; }
+.hx-section h2 { max-width: 40ch !important; }
+.hx-hero h1, main h1 { max-width: 34ch !important; }
+.hx-hero.hx9-home h1, .hx9-home h1 { max-width: 24ch !important; }
+.hx10-split-vis { margin: 22px 0 0; }
+@media (min-width: 1280px) {
+  .hx-body > .hx-section { display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 64px; align-items: start; }
+  .hx-body > .hx-section > h2 { grid-column: 1; grid-row: 1 / span 40; position: sticky; top: 136px; font-size: 28px !important; max-width: none !important; }
+  .hx-body > .hx-section > :not(h2) { grid-column: 2; }
+  .hx-hero .hx-hero-inner.hx10-split { max-width: none; display: grid; grid-template-columns: minmax(0, 1fr) 440px; column-gap: 56px; align-items: center; }
+  .hx-hero .hx10-split .hx10-split-vis { margin: 0; }
+}
+
+/* R10-A1-1: the connector and plugin diagrams side by side from 1024 px, the same size; stacked below */
+.hx10-diagrams { display: grid; gap: 20px; margin: 24px 0; align-items: start; }
+.hx10-diagrams .hx8-vis { max-width: none; margin: 0; }
+@media (min-width: 1024px) { .hx10-diagrams { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.hx10-term-row { max-width: 440px; margin: 8px 0 0; }
+
+/* R10-A1-2, A1-4, A1-7: cards are columns with their buttons at the bottom, lined up across a row; the tool count sits on its
+   own small line; no job card fades when a role is picked (the matches get a border and move first) */
+.hx10-card, .hx10-job { display: flex !important; flex-direction: column; }
+.hx10-actions { margin: auto 0 0 !important; padding-top: 14px; display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; }
+.hx10-actions .hx-btn { text-align: center; }
+.h7-card-top .hx-card-kicker { display: block; }
+.hx10-kick2 { display: block; margin-top: 4px; font-size: 12px !important; letter-spacing: .04em !important; text-transform: none !important; color: var(--h7-ink-70); font-weight: 400 !important; }
+.hx10-card-fit { background: var(--h7-clay) !important; }
+.hx9-jobs { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important; }
+.hx9-job.is-dim { opacity: 1 !important; }
+.hx9-job.is-hit { order: -1; }
+.hx10-ex { background: #fff; border: 1.5px solid var(--h7-ink-12); border-top: 2px solid var(--h7-ox); padding: 12px; margin: 0 0 12px; font-size: 15px; line-height: 1.45; }
+.hx10-ex-k { font-family: var(--h7-mono); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--h7-ox); margin: 0 0 8px; }
+.hx10-ex-q { font-weight: 700; margin: 0 0 6px; color: var(--h7-ink); }
+.hx10-ex-l { margin: 0 0 4px; }
+.hx10-ex-big { font-family: var(--h7-display); font-size: 20px; font-weight: 800; color: var(--h7-ox); margin: 0 0 6px; }
+.hx10-ex-list { list-style: none; margin: 0; padding: 0; }
+.hx10-ex-list li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--h7-ink-12); }
+.hx10-ex-n { font-size: 13px; color: var(--h7-ink-70); margin: 6px 0 0; }
+.hx10-bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.hx10-bars li { display: grid; gap: 2px; font-size: 14px; }
+.hx10-bar { display: block; height: 12px; }
+.hx10-bar-0 { width: 100%; background: var(--h7-ox); } .hx10-bar-1 { width: 66%; background: var(--h7-signal); } .hx10-bar-2 { width: 33%; background: rgba(26, 14, 16, .72); }
+.hx10-dl { margin-top: 14px; }
+
+/* R10-23: the answer-first block under the H1 */
+.hx10-answer { margin: 14px 0 0; padding: 10px 14px; background: #fff; border-left: 4px solid var(--h7-signal); font-size: 17px !important; line-height: 1.55; color: var(--h7-ink); max-width: 72ch; }
+/* R10-19: the frameworks list on /about/; R10-18: the start choice on the form */
+.hx10-fw { margin: 0; }
+.hx10-fw dt { font-family: var(--h7-display); font-weight: 800; font-size: 20px; color: var(--h7-ox); margin: 14px 0 4px; }
+.hx10-fw dd { margin: 0; max-width: 70ch; }
+.hx10-choice { border: 0; padding: 0; margin: 0 0 16px; }
+.hx10-choice legend { font-weight: 600; margin-bottom: 6px; }
+.hx10-choice label { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+
+/* R10-15: tap targets of at least 44 px (header links, breadcrumb, footer, next-step and profile links, question toggles) */
+.hx9-crumbs a, .hx9-crumbs [aria-current], .hx9-site a, .hx9-next a, .hx7-links a, .hx9-all a, .hx-who-tools a { display: inline-flex; align-items: center; min-height: 44px; }
+footer.hx-footer .hx-footer-grid a, footer.hx-footer .hx7-built-links a, footer.hx-footer .hx-footer-bottom a { display: inline-flex !important; align-items: center; min-height: 44px; }
+footer.hx-footer .hx-footer-grid > div > a { display: flex !important; }
+.hx-qa summary { min-height: 44px; }
+/* R10-15 (finding D3): on phones the breadcrumb keeps the parent and the current page; earlier crumbs are hidden */
+@media (max-width: 860px) {
+  .hx9-gh .hx9-crumbs > :not(:nth-last-child(-n+3)) { display: none; }
+  .hx9-gh .hx9-crumbs > :nth-last-child(3) { flex: 0 1 auto; min-width: 0; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 44px; }
+  .hx9-gh .hx9-crumbs > [aria-current] { flex: 1 1 auto; min-width: 30%; }
+}
