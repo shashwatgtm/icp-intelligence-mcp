@@ -465,3 +465,6 @@ main h3, .hx-section h3, section h3 { font-size: var(--fs-h3) !important; line-h
 .hx8-svg .v-tp { font-size: 13px !important; }
 .hx8-vis { min-width: 0; }
 .hx9-visrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin: 20px 0; }
+.hx8-proof { font-size: var(--fs-body) !important; }
+.hx-section > h2, .hx-qa > h2, h2.section-title, .section-title { font-size: var(--fs-h2) !important; line-height: 1.12 !important; }
+footer.hx-footer .hx-footer-bottom, footer.hx-footer .hx-footer-bottom *, .hx7-label, .hx-eyebrow { font-size: max(12px, 1em) !important; }
