@@ -576,7 +576,7 @@ footer.hx-footer .hx-footer-grid > div > a { display: flex !important; }
 /* R10-15 (finding D3): on phones the breadcrumb keeps the parent and the current page; earlier crumbs are hidden */
 @media (max-width: 860px) {
   .hx9-gh .hx9-crumbs > :not(:nth-last-child(-n+3)) { display: none; }
-  .hx9-gh .hx9-crumbs > :nth-last-child(3) { flex: 0 1 auto; min-width: 0; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 44px; }
+  .hx9-gh .hx9-crumbs > :nth-last-child(3) { flex: 0 1 auto; min-width: min(4.5em, 40%); max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 44px; }
   .hx9-gh .hx9-crumbs > [aria-current] { flex: 1 1 auto; min-width: 30%; }
 }
 /* run 10 checks on the wave 2 drafts: card buttons fill the card width so they line up across a row; a section that holds a
@@ -585,3 +585,6 @@ footer.hx-footer .hx-footer-grid > div > a { display: flex !important; }
 @media (min-width: 1280px) { .hx-body > .hx-section:has(.hx-table-wide) { display: block; } }
 /* app.css gives every card paragraph flex: 1, which took the free space the button row's auto margin needs */
 .hx10-card > p { flex: 0 0 auto !important; }
+/* R10-15 (GTM Alpha helper's measure): the header logo and menu links were 30 and 40 px tall; at least 44 px everywhere */
+.hx9-logo { min-height: 44px; }
+.hx9-nav a { min-height: 44px; display: inline-flex; align-items: center; }
