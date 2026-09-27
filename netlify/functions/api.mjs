@@ -103,13 +103,24 @@ function validate(tool, input) {
   return { args, errors, ignored };
 }
 
+// Run 10 R10-10: the security headers of the static pages (_headers does not reach function answers). The HTML answer
+// page loads only this site's two stylesheets, so its policy allows nothing else. The build adds ?v=<hash> to the links.
+const SECURITY = {
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Strict-Transport-Security": "max-age=31536000",
+};
+const PAGE_CSP = "default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'";
+const JSON_CSP = "default-src 'none'; frame-ancestors 'none'";
+
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 function htmlPage(title, bodyHtml, status) {
   const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
-    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/brand.css"><link rel="stylesheet" href="/assets/app.css"></head>` +
+    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/brand.css?v=58a48228fa"><link rel="stylesheet" href="/assets/app.css?v=6cc27b2b2b"></head>` +
     `<body><main class="hx-body hx-result-page">${bodyHtml}</main></body></html>`;
-  return new Response(page, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+  return new Response(page, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": PAGE_CSP } });
 }
 
 export default async (req, context) => {
@@ -123,12 +134,12 @@ export default async (req, context) => {
         : `<h1>Could not run the tool</h1><ul>${(payload.errors || [payload.error]).map((e) => `<li>${esc(e)}</li>`).join("")}</ul>${back}`;
       return htmlPage(payload.ok ? payload.title : "Could not run the tool", body, status);
     }
-    return new Response(JSON.stringify(payload), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } });
+    return new Response(JSON.stringify(payload), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": JSON_CSP } });
   };
 
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ ok: false, error: "Use POST with a JSON body: {\"input\": {...}}. See /docs/." }),
-      { status: 405, headers: { "Content-Type": "application/json", Allow: "POST" } });
+      { status: 405, headers: { "Content-Type": "application/json", Allow: "POST", ...SECURITY, "Content-Security-Policy": JSON_CSP } });
   }
   const raw = await req.text();
   if (raw.length > MAX_BODY_BYTES) return reply(413, { ok: false, error: "The request is too large." });
