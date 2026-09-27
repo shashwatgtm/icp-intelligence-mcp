@@ -588,3 +588,16 @@ footer.hx-footer .hx-footer-grid > div > a { display: flex !important; }
 /* R10-15 (GTM Alpha helper's measure): the header logo and menu links were 30 and 40 px tall; at least 44 px everywhere */
 .hx9-logo { min-height: 44px; }
 .hx9-nav a { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* ================= run 10, R10-28: fixes for the independent verifier's findings ================= */
+/* P2: the start choice on the Work with Shashwat form (app.css made each radio as wide as a text field) */
+.hx10-choice label { justify-content: flex-start; font-weight: 400; margin: 0; }
+.hx10-choice input[type=radio] { width: 20px !important; height: 20px; min-height: 0; flex: 0 0 20px; margin: 0; padding: 0; accent-color: var(--h7-ox); }
+/* claim 10: a section whose only heading is for screen readers (the form) uses the whole width instead of an empty left column */
+@media (min-width: 1280px) { .hx-body > .hx-section:has(> h2.hx-sr-only) { display: block; } }
+/* P15: stacked diagrams (under 1024 px) stay at a readable size instead of filling the width */
+@media (max-width: 1023px) { .hx10-diagrams .hx8-vis { max-width: 560px; } }
+/* P15: the four EPIC motions sit two by two, never three and one */
+@media (min-width: 700px) { .hx8-motions { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* P17: the current breadcrumb item is cut with an ellipsis, not mid-word (a flex item cannot show an ellipsis) */
+.hx9-gh .hx9-crumbs > [aria-current] { display: block; line-height: 44px; white-space: nowrap; }
