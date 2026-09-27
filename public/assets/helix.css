@@ -559,7 +559,7 @@ h1, h2, h3 { text-wrap: balance; }
 .hx10-dl { margin-top: 14px; }
 
 /* R10-23: the answer-first block under the H1 */
-.hx10-answer { margin: 14px 0 0; padding: 10px 14px; background: #fff; border-left: 4px solid var(--h7-signal); font-size: 17px !important; line-height: 1.55; color: var(--h7-ink); max-width: 72ch; }
+.hx10-answer { margin: 18px 0 0; padding: 10px 14px; background: #fff; border-left: 4px solid var(--h7-signal); font-size: 16px !important; line-height: 1.5; color: var(--h7-ink); max-width: 72ch; }
 /* R10-19: the frameworks list on /about/; R10-18: the start choice on the form */
 .hx10-fw { margin: 0; }
 .hx10-fw dt { font-family: var(--h7-display); font-weight: 800; font-size: 20px; color: var(--h7-ox); margin: 14px 0 4px; }
