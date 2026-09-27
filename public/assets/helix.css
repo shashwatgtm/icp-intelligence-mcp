@@ -583,3 +583,5 @@ footer.hx-footer .hx-footer-grid > div > a { display: flex !important; }
    wide table keeps the full width (its table columns were squeezed beside the heading) */
 .hx10-card .hx10-actions .hx-btn, .hx10-job .hx10-actions .hx-btn { flex: 1 1 100%; }
 @media (min-width: 1280px) { .hx-body > .hx-section:has(.hx-table-wide) { display: block; } }
+/* app.css gives every card paragraph flex: 1, which took the free space the button row's auto margin needs */
+.hx10-card > p { flex: 0 0 auto !important; }
