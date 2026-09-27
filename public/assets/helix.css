@@ -468,3 +468,39 @@ main h3, .hx-section h3, section h3 { font-size: var(--fs-h3) !important; line-h
 .hx8-proof { font-size: var(--fs-body) !important; }
 .hx-section > h2, .hx-qa > h2, h2.section-title, .section-title { font-size: var(--fs-h2) !important; line-height: 1.12 !important; }
 footer.hx-footer .hx-footer-bottom, footer.hx-footer .hx-footer-bottom *, .hx7-label, .hx-eyebrow { font-size: max(12px, 1em) !important; }
+
+/* ================= run 9 addendum 2, A2.2: the header on phones, and one header geometry everywhere =================
+   Every box in the header is border-box, and its container is 1248 px wide including 24 px padding each side, so the logo
+   sits at the same x on every site (it was 1200 px on GTM Alpha and the Offbeat reports, 1248 px elsewhere). Row 2 has the
+   same height everywhere. The last breadcrumb stays on one line with an ellipsis. On phones (860 px and below) the header
+   scrolls away with the page, Menu sits in row 1 at the top right, and row 2 is hidden when it has no breadcrumb. */
+.hx9-gh, .hx9-gh *, .hx9-gh *::before, .hx9-gh *::after { box-sizing: border-box; }
+.hx9-gh .hx-wrap { max-width: 1248px; margin-left: auto; margin-right: auto; padding-left: 24px; padding-right: 24px; }
+.hx9-gh .hx9-row2-in { min-height: 54px; flex-wrap: nowrap; }  /* one line: a long breadcrumb shortens with an ellipsis instead */
+.hx9-gh .hx9-crumbs { flex-wrap: nowrap; min-width: 0; flex: 1 1 auto; overflow: hidden; }
+.hx9-gh .hx9-crumbs > * { flex: none; white-space: nowrap; }
+.hx9-gh .hx9-crumbs > [aria-current] { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.hx9-gh .hx9-site { flex: none; }
+@media (max-width: 860px) {
+  .hx9-gh { position: relative; }
+  .hx9-gh .hx9-row1 { padding-right: 112px; }
+  .hx9-gh .hx9-row2-in { min-height: 44px; }
+  .hx9-gh .hx9-row2.hx9-row2-nocrumb, .hx9-gh .hx9-row2:not(:has(.hx9-crumbs)) { display: none; }
+  .hx9-gh .hx9-mm { position: absolute; top: 8px; right: 16px; bottom: auto; left: auto; z-index: 60; }
+  .hx9-gh .hx9-mm > summary { min-height: 44px; padding: 12px 18px; font-size: 14px; box-shadow: none; }
+  .hx9-gh .hx9-mm-panel { position: absolute; top: calc(100% + 8px); right: 0; left: auto; bottom: auto; width: min(320px, calc(100vw - 32px)); }
+  body { padding-bottom: 0; }
+}
+
+/* run 9 addendum 2, A2.3 and A2.4: the note over an example answer, and the next step under every answer */
+.hx9-example-note { margin: 12px 0 0; padding: 10px 14px; background: #FAF8F6; border-left: 4px solid var(--h7-signal); font-size: 17px; }
+.hx9-next { margin: 20px 0 0; padding-top: 14px; border-top: 1.5px solid var(--h7-ink-12); display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; font-size: 17px; }
+.hx9-next a { color: var(--h7-ox) !important; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+/* run 9 addendum 2, A2.15: tool visuals drawn 360 wide are shown at most 440 px wide (at 560 their labels grew past body
+   text); the small SVG text is 13 units, so it stays at least 11 px when a 360 px phone draws the visual about 312 px wide;
+   under 480 px the eyebrow's dotted rule is hidden, so "1 of 8" does not wrap. */
+.hx8-vis { max-width: 440px; }
+.hx8-vis.hx9-term, .hx8-vis.hx9-diagram { max-width: 520px; }
+.hx8-svg .v-ts, .hx8-svg .v-tp, .hx8-svg .v-tm, .hx8-svg .v-k, .hx8-svg .v-tmp { font-size: 13px !important; }
+@media (max-width: 480px) { .hx-hero .hx-eyebrow::after { display: none; } }

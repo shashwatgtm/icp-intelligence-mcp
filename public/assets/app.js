@@ -123,6 +123,9 @@
         if (data.ok) {
           lastText = data.text || "";
           show(section, markdown(lastText));
+          // A2.4: say so when this answer came from the made-up example (hidden again once the visitor edits the form)
+          var exNote = section.querySelector("[data-example-note]");
+          if (exNote) exNote.hidden = form.getAttribute("data-from-example") !== "1";
         } else {
           var errs = data.errors || [data.error || "Something went wrong."];
           show(section, '<div class="hx-error"><p><strong>Could not run the tool.</strong></p><ul>' + errs.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ul></div>");
@@ -138,6 +141,7 @@
       var example = {};
       try { example = JSON.parse(exEl.textContent || "{}"); } catch (err) { example = {}; }
       if (!Object.keys(example).length) fill.hidden = true;
+      form.addEventListener("input", function () { form.removeAttribute("data-from-example"); });
       fill.addEventListener("click", function () {
         form.reset();
         Object.keys(example).forEach(function (k) {
@@ -146,6 +150,7 @@
           if (el.type === "checkbox") el.checked = example[k] === true || example[k] === "true";
           else el.value = example[k];
         });
+        form.setAttribute("data-from-example", "1");
         if (form.requestSubmit) form.requestSubmit(); else form.querySelector('[type="submit"]').click();
       });
       if (/(^|[?&])example=1(&|$)/.test(location.search) && Object.keys(example).length) fill.click();
