@@ -73,7 +73,7 @@ Email shashwat@gtmhelix.com or open an issue at https://github.com/shashwatgtm/i
 
 ## Other connectors by Helix GTM Consulting
 
-- GTM Alpha: https://gtmalpha.gtmhelix.com/integration
+- GTM Alpha: https://gtmalpha.gtmhelix.com/
 - CRAFT GTM: https://craft-gtm.gtmhelix.com/
 - CRAFT Content: https://craft-content.gtmhelix.com/
 - IMPACT: https://impact.gtmhelix.com/

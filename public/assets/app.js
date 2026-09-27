@@ -46,16 +46,22 @@
       var h = line.match(/^(#{1,6})\s+(.*)$/);
       if (h) { closeList(); var lv = Math.min(h[1].length + 1, 6); out.push("<h" + lv + ">" + inline(h[2]) + "</h" + lv + ">"); i++; continue; }
       if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(line)) { closeList(); out.push("<hr>"); i++; continue; }
-      var ul = line.match(/^\s*[-*+]\s+(.*)$/), ol = line.match(/^\s*\d+[.)]\s+(.*)$/);
+      var ul = line.match(/^\s*[-*+]\s+(.*)$/), ol = line.match(/^\s*(\d+)[.)]\s+(.*)$/);
       if (ul || ol) {
         var want = ul ? "ul" : "ol";
         if (list !== want) { closeList(); out.push("<" + want + ">"); list = want; }
-        out.push("<li>" + inline((ul || ol)[1]) + "</li>");
+        if (ol) out.push('<li value="' + ol[1] + '">' + inline(ol[2]) + "</li>");
+        else out.push("<li>" + inline(ul[1]) + "</li>");
         i++; continue;
       }
       var q = line.match(/^>\s?(.*)$/);
       if (q) { closeList(); out.push("<blockquote>" + inline(q[1]) + "</blockquote>"); i++; continue; }
-      if (/^\s*$/.test(line)) { closeList(); i++; continue; }
+      if (/^\s*$/.test(line)) {
+        var k = i + 1;
+        while (k < lines.length && /^\s*$/.test(lines[k])) k++;
+        if (list === "ol" && k < lines.length && /^\s*\d+[.)]\s+/.test(lines[k])) { i = k; continue; }
+        closeList(); i++; continue;
+      }
       closeList();
       var para = [line];
       i++;
@@ -140,7 +146,9 @@
           if (el.type === "checkbox") el.checked = example[k] === true || example[k] === "true";
           else el.value = example[k];
         });
+        if (form.requestSubmit) form.requestSubmit(); else form.querySelector('[type="submit"]').click();
       });
+      if (/(^|[?&])example=1(&|$)/.test(location.search) && Object.keys(example).length) fill.click();
     }
     var copy = section && section.querySelector("[data-copy]");
     if (copy) {
