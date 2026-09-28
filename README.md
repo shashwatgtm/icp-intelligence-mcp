@@ -1,9 +1,9 @@
-# ICP Intelligence MCP v1.2.5
+# ICP Intelligence MCP v1.2.6
 **Deep ICP Analysis with Pattern Detection** - 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
 
 ## Use it hosted (no install)
 
-Add `https://icp-intelligence.gtmhelix.com/mcp` to Claude or ChatGPT as a custom connector. It needs no sign-in and always runs the newest version (1.2.5). The same tools run as a free web app with a form per tool at https://icp-intelligence.gtmhelix.com/, and the setup steps are at https://icp-intelligence.gtmhelix.com/connect/.
+Add `https://icp-intelligence.gtmhelix.com/mcp` to Claude or ChatGPT as a custom connector. It needs no sign-in and always runs the newest version (1.2.6). The same tools run as a free web app with a form per tool at https://icp-intelligence.gtmhelix.com/, and the setup steps are at https://icp-intelligence.gtmhelix.com/connect/.
 
 The npm package below is an older version (1.0.0 on npm on 27 September 2026) until the next npm release. Use it only if you need a local stdio server.
 
@@ -38,11 +38,11 @@ Add to your `claude_desktop_config.json`:
 
 ## Tools and inputs
 
-Generated on 27 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.2.5, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
+Generated on 27 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.2.6, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
 
 | # | Tool | Title | What it does |
 |---|---|---|---|
-| 1 | `icp_deep_dive` | ICP Deep Dive | Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior |
+| 1 | `icp_deep_dive` | ICP Deep Dive | Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior |
 | 2 | `icp_scoring_model` | ICP Scoring Model | Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights |
 | 3 | `buyer_group_analyzer` | Buyer Group Analyzer | Map buyer group dynamics, influence relationships, and decision-making process |
 | 4 | `tam_sam_som_calculator` | TAM SAM SOM Calculator | Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source) |
