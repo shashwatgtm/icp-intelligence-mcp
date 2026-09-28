@@ -791,22 +791,22 @@ ${SUGGESTED}
 \`\`\`
                     ┌─────────────────┐
                     │ ECONOMIC BUYER  │
-                    │ ${buyingGroup.economic.role.substring(0, 15)}    │
+                    │ ${buyingGroup.economic.role}    │
                     └────────┬────────┘
                              │ approves
                     ┌────────▼────────┐
          influences │    CHAMPION     │ influences
-        ┌───────────│ ${buyingGroup.champion.role.substring(0, 15)}    │───────────┐
+        ┌───────────│ ${buyingGroup.champion.role}    │───────────┐
         │           └────────┬────────┘           │
         ▼                    │                    ▼
 ┌───────────────┐   advocates for    ┌───────────────┐
 │   TECHNICAL   │◄───────────────────│     USER      │
-│ ${buyingGroup.technical.role.substring(0, 13)}  │    validates       │ ${buyingGroup.user.role.substring(0, 13)}    │
+│ ${buyingGroup.technical.role}  │    validates       │ ${buyingGroup.user.role}    │
 └───────────────┘                    └───────────────┘
         │                                      │
         │          ┌───────────────┐           │
         └─────────►│    BLOCKER    │◄──────────┘
-          reviews  │ ${buyingGroup.blocker.role.substring(0, 13)}  │  reviews
+          reviews  │ ${buyingGroup.blocker.role}  │  reviews
                    └───────────────┘
 \`\`\`
 
@@ -2151,7 +2151,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.6';
+exports.SERVER_VERSION = '1.2.7';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",
