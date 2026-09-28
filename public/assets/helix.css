@@ -573,3 +573,5 @@ footer.hx-footer, .ft { background: var(--rose-mid); color: var(--ink); margin: 
   .trow .open { background: #F2AAB3; color: #1A0E10; }
   .trow:hover .open, .trow:focus-visible .open { background: #641220; color: #FAF8F6; }
 }
+/* code inside a window: the window is the frame (no second border) */
+.win pre.hx11-in-win, .win-body > pre { border: 0; margin: 0; box-shadow: none; }
