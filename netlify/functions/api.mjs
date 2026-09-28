@@ -118,7 +118,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 
 function htmlPage(title, bodyHtml, status) {
   const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
-    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f"><link rel="stylesheet" href="/assets/helix.css?v=b4849665a1"></head>` +
+    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f"><link rel="stylesheet" href="/assets/helix.css?v=3c3a05a8f8"></head>` +
     `<body><main class="hx-body hx-result-page" id="main">${bodyHtml}</main></body></html>`;
   return new Response(page, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": PAGE_CSP } });
 }
