@@ -15,7 +15,7 @@
 
 ## Tools
 
-- [ICP Deep Dive](https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/) (`icp_deep_dive`): Analyze customer data to detect ICP patterns - firmographics, technographics, buying behavior
+- [ICP Deep Dive](https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/) (`icp_deep_dive`): Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior
 - [ICP Scoring Model](https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/) (`icp_scoring_model`): Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights
 - [Buyer Group Analyzer](https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/) (`buyer_group_analyzer`): Map buyer group dynamics, influence relationships, and decision-making process
 - [TAM SAM SOM Calculator](https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/) (`tam_sam_som_calculator`): Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)

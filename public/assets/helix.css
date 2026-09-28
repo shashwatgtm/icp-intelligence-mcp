@@ -576,7 +576,7 @@ footer.hx-footer .hx-footer-grid > div > a { display: flex !important; }
 /* R10-15 (finding D3): on phones the breadcrumb keeps the parent and the current page; earlier crumbs are hidden */
 @media (max-width: 860px) {
   .hx9-gh .hx9-crumbs > :not(:nth-last-child(-n+3)) { display: none; }
-  .hx9-gh .hx9-crumbs > :nth-last-child(3) { flex: 0 1 auto; min-width: min(4.5em, 40%); max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 44px; }
+  .hx9-gh .hx9-crumbs > :nth-last-child(3) { flex: 0 1 auto; min-width: 0; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 44px; }
   .hx9-gh .hx9-crumbs > [aria-current] { flex: 1 1 auto; min-width: 30%; }
 }
 /* run 10 checks on the wave 2 drafts: card buttons fill the card width so they line up across a row; a section that holds a
@@ -601,3 +601,24 @@ footer.hx-footer .hx-footer-grid > div > a { display: flex !important; }
 @media (min-width: 700px) { .hx8-motions { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 /* P17: the current breadcrumb item is cut with an ellipsis, not mid-word (a flex item cannot show an ellipsis) */
 .hx9-gh .hx9-crumbs > [aria-current] { display: block; line-height: 44px; white-space: nowrap; }
+
+/* ================= run 11 Phase 1 (R11-03, R11-07): fixes shipped before the B2 redesign replaces this layer ================= */
+/* R11-03 (M1): a section with more than one H2 (the connector privacy pages) keeps every heading in the text flow; the
+   left-column rule above stacked all 8 headings in column 1 and they overlapped from 1280 px */
+@media (min-width: 1280px) {
+  .hx-body > .hx-section:has(> h2 ~ h2) { display: block; }
+  .hx-body > .hx-section:has(> h2 ~ h2) > h2 { position: static; font-size: var(--fs-h2) !important; }
+}
+/* R11-03 (M4): code in table cells never breaks inside a word (app.css and brand.css set overflow-wrap: anywhere on code);
+   a wide table scrolls inside its own box */
+.hx-table code, main table code, main table td code { overflow-wrap: normal !important; word-break: normal !important; white-space: nowrap; }
+.hx-table { max-width: 100%; overflow-x: auto; }
+/* R11-03 (M3): the job card buttons stay on one line */
+.hx9-job .hx-btn, .hx10-job .hx-btn { white-space: nowrap; padding-left: 14px !important; padding-right: 14px !important; letter-spacing: .04em; }
+/* R11-07 (D8): one "Made-up example" chip per card, in place of the "Example: ... a made-up buyer" labels */
+.hx11-chip { display: inline-block; background: #F6D4D8; color: var(--h7-ink); font: 600 12px/1.2 var(--h7-mono); letter-spacing: .04em; padding: 4px 8px; margin-right: 6px; }
+/* R11-03 / M11: every button-styled link and button is at least 44 px tall (the B2 layer raises this to 50 px) */
+.hx-btn, a.hx-btn, button.hx-btn { min-height: 44px; display: inline-flex !important; align-items: center; justify-content: center; }
+/* R11-03: connector card buttons with tighter letter spacing (hub; nowrap overflowed the card, so they may wrap); every details toggle at least 44 px tall (plugin pages) */
+.hx10-card .hx10-actions .hx-btn { letter-spacing: .02em; padding-left: 12px !important; padding-right: 12px !important; }
+details.hx-run > summary, .hx8-dev > summary { min-height: 44px; display: flex; align-items: center; }
