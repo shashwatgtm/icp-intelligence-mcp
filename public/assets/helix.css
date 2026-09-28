@@ -45,6 +45,9 @@ hr { border: 0; border-top: 1.5px solid var(--line); }
 
 /* ================= 3. type: one rule per heading level; contexts change the variables ================= */
 h1, h2, h3, h4 { font-family: var(--display); color: inherit; margin: 0; text-wrap: balance; }
+/* R11-22: while Archivo is not yet loaded (font-display optional keeps the fallback on a first visit), weight-800 headings use Arial scaled to Archivo's width (87%) and vertical metrics, so they break into the same lines (Arial Bold is 12% wider). local() fonts are not downloaded. */
+@font-face { font-family: "Archivo Fallback Heavy"; src: local("Arial Bold"), local("Arial-BoldMT"), local("Arial"); font-weight: 700 900; size-adjust: 87%; ascent-override: 88%; descent-override: 21%; line-gap-override: 0%; }
+h1, h2 { font-family: "Archivo", "Archivo Fallback Heavy", Arial, sans-serif; }
 h1 { font-weight: 800; font-size: var(--h1); line-height: .93; letter-spacing: -.045em; }
 h2 { font-weight: 800; font-size: var(--h2); line-height: .94; letter-spacing: -.04em; }
 h3 { font-weight: 800; font-size: var(--card); line-height: 1.04; letter-spacing: -.03em; }
