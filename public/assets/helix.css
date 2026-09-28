@@ -214,6 +214,8 @@ header.hx-header, .hx9-mm { display: none; }
 .hx7-strip-photo img, .hx7-built-photo img { width: 44px; height: 44px; display: block; border: 1.5px solid var(--edge); }
 .hx7-strip p { margin: 0; flex: 1 1 260px; font-size: 16px; }
 .hx7-strip a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font-weight: 700; text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 4px; }
+/* R11-16: standalone links are tap targets too (D6: at least 44 px): list links, card title links, the link after a FAQ */
+.hx7-list li > a:first-child, .card h3 > a, details + p > a { display: inline-flex; align-items: center; min-height: 44px; }
 .hx7-list li { padding: 12px 0; border-bottom: 1px solid var(--line); }
 @media (max-width: 900px) { .sh-grid, .hx8-story, .hx7-cred-grid { grid-template-columns: minmax(0, 1fr); } .hx9-photo, .hx7-cred-photo { max-width: 320px; } .tiles, .hx8-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .hx7-results { grid-template-columns: minmax(0, 1fr); } .tiles, .hx8-tiles { gap: 10px; } .tile, .hx8-tiles li { padding: 12px; } .tile b, .hx8-tiles b { font-size: 30px; } }
