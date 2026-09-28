@@ -149,7 +149,7 @@ header.hx-header, .hx9-mm { display: none; }
 /* R11-A2-18 f and g: short windows (landscape phones, 200% zoom) and print keep the bar in the flow, so it never covers much */
 /* R11-A2-18 e, narrowed in R11-A3-6 b: under 380 px wide the logo shows its "h" mark only (the link keeps its name); at 360 px logo,
    Work with Shashwat and Menu do not fit one row with the 13 px wordmark (measured in evidence/run11/a3/) */
-@media (max-width: 379px) { .hx9-word { display: none; } }
+@media (max-width: 389px) { .hx9-word { display: none; } }  /* R11-A3 verifier: with IBM Plex Mono cached the phone button is 158 px and HELIX GTM wraps at 380 (1 line from 389 up); under 390 the h mark alone shows */
 @media (max-height: 500px) { .hx9-gh { position: static; } html { scroll-padding-top: 16px; } }
 @media print { .hx9-gh { position: static; } .hx9-menu { display: none; } }
 
