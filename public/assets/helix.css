@@ -12,7 +12,7 @@
   --muted: #5A4B4E; --white: #FFFFFF; --rose: #F6D4D8; --rose-mid: #F2AAB3; --sky: #CFE6F5;
   --line: rgba(26, 14, 16, .16); --edge: var(--ink); --shadow: var(--ink); --link: var(--ink);
   --bar-1: var(--ox); --bar-2: var(--signal); --bar-3: rgba(26, 14, 16, .55);
-  --display: "Archivo", Arial, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace; --pixel: "VT323", "IBM Plex Mono", monospace;
+  --display: "Archivo", Arial, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace; --pixel: "VT323", "VT323 Fallback", "IBM Plex Mono", monospace;
   --gut: clamp(16px, 3.2vw, 48px); --maxw: 1440px;
   --h1-home: clamp(50px, 9.2vw, 140px); /* D6 says 144 px at most; 140 keeps "Agencies sell hours." on one line in the 1,308 px measure (R11-16: 2 lines from 1366 px) */ --h1: clamp(44px, 7vw, 112px); --h2: clamp(40px, 6.8vw, 104px);
   --stat: clamp(72px, 10vw, 152px); --tile: clamp(34px, 3.6vw, 56px); --card: clamp(26px, 2.3vw, 34px);
@@ -46,6 +46,10 @@ hr { border: 0; border-top: 1.5px solid var(--line); }
 /* ================= 3. type: one rule per heading level; contexts change the variables ================= */
 h1, h2, h3, h4 { font-family: var(--display); color: inherit; margin: 0; text-wrap: balance; }
 /* R11-22, corrected in R11-A2-8: while Archivo is not yet loaded (font-display optional keeps the fallback on a first visit), headings use Arial Bold (local, nothing downloaded) scaled to Archivo 800's width. Measured on this PC in Chrome and Edge (evidence/run11/a2/fallback-*.json): without this face a weight-800 "Arial" heading renders in Arial Black, 12% wider than Archivo; Arial Bold is 97.1% of Archivo's width (median of the 37 H1 and H2 strings of the 9 homes), so size-adjust 103% puts the median within 1%. */
+/* R11-A3-11: while VT323 is not yet loaded (font-display optional keeps the fallback on a first visit), window titles and tags use a local
+   monospace face scaled to VT323's width: 70% (median of the 30 titles and tags of the 9 homes and hub /tools/ against Courier New, the
+   0.6 em width shared by Menlo, Droid Sans Mono, Noto Sans Mono and DejaVu Sans Mono; Consolas, narrower, comes last). Nothing is downloaded. */
+@font-face { font-family: "VT323 Fallback"; src: local("Courier New"), local("CourierNewPSMT"), local("Menlo"), local("Courier"), local("Droid Sans Mono"), local("Noto Sans Mono"), local("DejaVu Sans Mono"), local("Cutive Mono"), local("Consolas"); size-adjust: 66%; }  /* R11-A3-13: VT323 advances 0.4 em per character, Courier New, Menlo and Noto Sans Mono 0.6 em (0.4 / 0.6 = 66.7%, measured on hub /tools/); 66% keeps the fallback about 1% narrower so no tag gains a line */
 @font-face { font-family: "Archivo Fallback Heavy"; src: local("Arial Bold"), local("Arial-BoldMT"), local("Arial"); font-weight: 700 900; size-adjust: 103%; ascent-override: 88%; descent-override: 21%; line-gap-override: 0%; }
 h1, h2 { font-family: "Archivo", "Archivo Fallback Heavy", Arial, sans-serif; }
 h1 { font-weight: 800; font-size: var(--h1); line-height: .93; letter-spacing: -.045em; }
@@ -106,8 +110,10 @@ header.hx-header, .hx9-mm { display: none; }
 .hx9-crumbs a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 4px; }
 .hx9-crumbs [aria-current] { color: var(--ink); font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hx9-sep { color: var(--muted); }
-/* R11-A1-9: short header and footer links (FAQ, Docs, Home, RSS) are at least 44 px wide too */
-.hx9-nav a, .hx9-site a, .hx9-crumbs a, .hx-footer a, .hx-footer-bottom a { min-width: 44px; }
+/* R11-A1-9: short header and footer links (FAQ, Docs, Home, RSS) are at least 44 px wide too; R11-A3-6 c: only on touch screens
+   and narrow windows, where tapping needs it (on laptops it widened row 2 so it wrapped at 1366 on 3 tool pages) */
+@media (pointer: coarse), (max-width: 760px) { .hx9-nav a, .hx9-site a, .hx9-crumbs a, .hx-footer a, .hx-footer-bottom a { min-width: 44px; } }
+.hx9-logo { min-width: 44px; } /* R11-A3-6 b */
 .hx9-site { display: flex; flex-wrap: wrap; gap: 0 14px; margin-left: auto; }
 .hx9-site a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; font: 600 13px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
 .hx9-site a:hover, .hx9-site a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 5px; }
@@ -128,16 +134,22 @@ header.hx-header, .hx9-mm { display: none; }
   .hx9-site { margin-left: 0; gap: 0 12px; }
   .hx9-site a { font-size: 12px; }
   .hx9-crumbs > :not(:nth-last-child(-n+3)) { display: none; }
-  /* R11-A1-6: row 2 (site tag, breadcrumb, site links) stays one 44 px line on phones and scrolls sideways inside itself, never the page */
-  .hx9-row2-in { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; min-height: 48px; gap: 0 14px; }
-  .hx9-row2-in > * { flex: none; }
-  .hx9-row2 .hx9-site, .hx9-row2 .hx9-crumbs { flex-wrap: nowrap; }
+  /* R11-A3-7: row 2 (site tag, breadcrumb, site links) wraps onto a second line on phones, so every link shows; no inner scrollbar */
+  .hx9-row2-in { flex-wrap: wrap; min-height: 48px; gap: 0 14px; }
   .hx9-row2 .tag { font-size: 20px; }
+  /* R11-A3-6 b: the wordmark stays at 13 px (helix-b2-inner.html .logo-word); the button and Menu are a little tighter so one row fits */
+  .hx9-logo { gap: 8px; } .hx9-mark { width: 34px; height: 34px; font-size: 26px; } .hx9-word { font-size: 13px; letter-spacing: .12em; }
+  .hx9-row1 { gap: 6px; } .hx9-menu > summary { padding: 0 8px; }
+  /* a.hx-btn outranks .hx9-cta, so the phone button kept 14 px text and 24 px padding; this selector wins (helix-b2-inner.html: 12 px on phones) */
+  .hx9-row1 a.hx9-cta { min-height: 44px; font-size: 12px; padding: 10px 8px; letter-spacing: .04em; }
+  /* R11-A3-12: a figure around a window (the gtmhelix.com hero chat) had the browser's 40 px side margins; phones use the full column */
+  .hx-fig { margin-left: 0; margin-right: 0; }
 }
 
 /* R11-A2-18 f and g: short windows (landscape phones, 200% zoom) and print keep the bar in the flow, so it never covers much */
-/* R11-A2-18 e: under 420 px wide the logo shows its "h" mark only (the link keeps its name), so logo, Work with Shashwat and Menu fit one row */
-@media (max-width: 420px) { .hx9-word { display: none; } }
+/* R11-A2-18 e, narrowed in R11-A3-6 b: under 380 px wide the logo shows its "h" mark only (the link keeps its name); at 360 px logo,
+   Work with Shashwat and Menu do not fit one row with the 13 px wordmark (measured in evidence/run11/a3/) */
+@media (max-width: 379px) { .hx9-word { display: none; } }
 @media (max-height: 500px) { .hx9-gh { position: static; } html { scroll-padding-top: 16px; } }
 @media print { .hx9-gh { position: static; } .hx9-menu { display: none; } }
 

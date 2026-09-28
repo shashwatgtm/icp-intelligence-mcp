@@ -24,8 +24,9 @@
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/VT323-latin-400.woff2?v=8ddbebcc10" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f">
-<link rel="stylesheet" href="/assets/helix.css?v=7437fad4e9">
+<link rel="stylesheet" href="/assets/helix.css?v=1f4ac88e6f">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -147,7 +148,7 @@
    "about": {
     "@id": "https://icp-intelligence.gtmhelix.com/#app"
    },
-   "dateModified": "2026-09-28",
+   "dateModified": "2026-09-29",
    "inLanguage": "en",
    "primaryImageOfPage": "https://icp-intelligence.gtmhelix.com/og.png"
   },
@@ -195,7 +196,7 @@
     <div class="crop"><span class="cm tl" aria-hidden="true"></span><span class="cm tr" aria-hidden="true"></span><span class="cm bl" aria-hidden="true"></span><span class="cm br" aria-hidden="true"></span><h1 id="h1">ICP Intelligence docs</h1></div>
     <div class="hx-hero-text"><div class="hx10-split-text">
       <p class="sub">The MCP address, the REST API behind the web forms, and every field of all 9 tools.</p>
-      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-09-28">28 September 2026</time></p>
+      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-09-29">29 September 2026</time></p>
     </div></div>
   </div>
 </section>
@@ -207,7 +208,7 @@
   <ul class="hx-prose">
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
     <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
-    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.7.</li>
+    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.8.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
   </ul>
 </section>
@@ -239,13 +240,14 @@
 <tr><td>1.2.4</td><td>27 September 2026</td><td>GitHub, commit 11d5332</td></tr>
 <tr><td>1.2.5</td><td>27 September 2026</td><td>GitHub, commit c276b55</td></tr>
 <tr><td>1.2.6</td><td>28 September 2026</td><td>GitHub, commit 8414dcb</td></tr>
-<tr><td>1.2.7 (this site)</td><td>28 September 2026</td><td>GitHub, commit 8ec007c</td></tr>
+<tr><td>1.2.7</td><td>28 September 2026</td><td>GitHub, commit 8ec007c</td></tr>
+<tr><td>1.2.8 (this site)</td><td>29 September 2026</td><td>GitHub, commit b6f989d</td></tr>
   </tbody></table></div>
 </section>
 
 <section class="hx-section" aria-labelledby="ref-h">
   <h2 id="ref-h">Tool reference</h2>
-  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.7.</p>
+  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.8.</p>
 </section>
 <section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
   <h3 id="d-icp-deep-dive">ICP Deep Dive</h3>

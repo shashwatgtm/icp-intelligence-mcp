@@ -24,8 +24,9 @@
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/VT323-latin-400.woff2?v=8ddbebcc10" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f">
-<link rel="stylesheet" href="/assets/helix.css?v=7437fad4e9">
+<link rel="stylesheet" href="/assets/helix.css?v=1f4ac88e6f">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -147,7 +148,7 @@
    "about": {
     "@id": "https://icp-intelligence.gtmhelix.com/#app"
    },
-   "dateModified": "2026-09-28",
+   "dateModified": "2026-09-29",
    "inLanguage": "en",
    "primaryImageOfPage": "https://icp-intelligence.gtmhelix.com/og.png"
   },
@@ -195,7 +196,7 @@
     <div class="crop"><span class="cm tl" aria-hidden="true"></span><span class="cm tr" aria-hidden="true"></span><span class="cm bl" aria-hidden="true"></span><span class="cm br" aria-hidden="true"></span><h1 id="h1">Privacy policy</h1></div>
     <div class="hx-hero-text"><div class="hx10-split-text">
       <p class="sub">What the web forms and AI assistants send us, and what happens to it. Short version: used once, never stored.</p>
-      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-09-28">28 September 2026</time></p>
+      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-09-29">29 September 2026</time></p>
     </div></div>
   </div>
 </section>
@@ -223,7 +224,7 @@
 <h2>Limits that protect the service</h2>
 <ul>
 <li>Rate limits: 30 web form requests and 300 MCP requests per minute from one IP address. Netlify counts requests per IP address for this; we do not see or keep those counts.</li>
-<li>On the web forms, requests larger than 32,000 bytes, and top-level text fields longer than 6,000 characters or lists longer than 50 items, are refused before the tool runs (fields inside a list or object count toward the 32,000 bytes). MCP calls have no size limit of their own beyond Netlify's.</li>
+<li>On the web forms, requests larger than 32,000 bytes, and top-level text fields longer than 6,000 characters or lists longer than 50 items, are refused before the tool runs (fields inside a list or object count toward the 32,000 bytes). MCP calls larger than 262,144 bytes, batches of several calls, document fields (<code>raw_transcripts</code>) longer than 100,000 characters and other text fields longer than 4,000 characters are refused before the tool runs.</li>
 </ul>
 
 <h2>Who else processes data</h2>
