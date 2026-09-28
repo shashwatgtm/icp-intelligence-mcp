@@ -111,15 +111,15 @@ const SECURITY = {
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "Strict-Transport-Security": "max-age=31536000",
 };
-const PAGE_CSP = "default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'";
+const PAGE_CSP = "default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'";
 const JSON_CSP = "default-src 'none'; frame-ancestors 'none'";
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 function htmlPage(title, bodyHtml, status) {
   const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
-    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/brand.css?v=58a48228fa"><link rel="stylesheet" href="/assets/app.css?v=6cc27b2b2b"></head>` +
-    `<body><main class="hx-body hx-result-page">${bodyHtml}</main></body></html>`;
+    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/fonts.css?v=0a033e1003"><link rel="stylesheet" href="/assets/helix.css?v=a72085390c"></head>` +
+    `<body><main class="hx-body hx-result-page" id="main">${bodyHtml}</main></body></html>`;
   return new Response(page, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": PAGE_CSP } });
 }
 
