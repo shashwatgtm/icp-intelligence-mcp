@@ -6,13 +6,24 @@
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createServer } from "../../src/index.ts";
 
-// Run 11 addendum 2 (R11-A2-3): the same limits as GTM Alpha's /mcp (gtm-alpha-secure netlify/functions/mcp-sse.js).
-// The whole request may be at most 64 KB (65,536 bytes), one JSON-RPC message per request (no batches), and each text
-// input at most 4,000 characters. The checks sit here, before the SDK, so the tool definitions in tools/list are
-// unchanged; a request inside the limits runs exactly as before. Any error thrown here answers -32603 with a plain
-// message (no stack, no file path).
-const MAX_BODY = 65536;
+// Run 11 addendum 2 (R11-A2-3), addendum 3 (R11-A3-9) and addendum 4 (R11-A4-1): limits and input checks before the SDK,
+// so the tool definitions in tools/list are unchanged and a request inside the limits runs exactly as before.
+// - The whole request may be at most 256 KB (262,144 bytes), counted in bytes, and holds one JSON-RPC message (no batches).
+// - A text input may be at most 4,000 characters, at any depth. The long-text fields below (a pasted document, article,
+//   transcript, notes or content) may be at most 100,000 characters.
+// - A tools/call argument whose JSON type does not match the tool's input schema is refused as a tool error.
+// - A tool name that is not text, or is longer than 100 characters, answers "Unknown tool" and is never echoed.
+// Any error thrown here answers -32603 with a plain message (no stack, no file path).
+const MAX_BODY = 262144;
 const MAX_TEXT = 4000;
+const MAX_LONG_TEXT = 100000;
+const MAX_NAME = 100;
+// Tool name to the fields that take a pasted document, article, transcript, notes or content.
+const LONG_TEXT = {
+  "icp_interview_synthesizer": [
+    "raw_transcripts"
+  ]
+};
 // Answers are never cached (privacy page: web and MCP answers are sent with Cache-Control: no-store).
 const SECURITY_HEADERS = {
   "Cache-Control": "no-store",
@@ -34,15 +45,91 @@ function toolError(id, text) {
   });
 }
 
-// Every text input longer than MAX_TEXT, at any depth (a list of competitors is checked item by item).
-function tooLong(value, name, out) {
-  if (typeof value === "string") {
-    if (value.length > MAX_TEXT) out.push(name + " is longer than " + MAX_TEXT + " characters");
-  } else if (Array.isArray(value)) {
-    value.forEach((v, i) => tooLong(v, name + "[" + i + "]", out));
-  } else if (value && typeof value === "object") {
-    for (const key of Object.keys(value)) tooLong(value[key], name ? name + "." + key : key, out);
+// The input schema of every tool, read once from the server's own tools/list (the same answer clients get).
+let schemasPromise = null;
+function toolSchemas() {
+  if (!schemasPromise) {
+    schemasPromise = (async () => {
+      const server = createServer();
+      const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
+      await server.connect(transport);
+      const list = { jsonrpc: "2.0", id: 1, method: "tools/list" };
+      const res = await transport.handleRequest(
+        new Request("http://localhost/mcp", {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "application/json, text/event-stream" },
+          body: JSON.stringify(list),
+        }),
+        { parsedBody: list }
+      );
+      const tools = (await res.json()).result.tools;
+      return new Map(tools.map((t) => [t.name, t.inputSchema || {}]));
+    })().catch((error) => {
+      schemasPromise = null;
+      throw error;
+    });
   }
+  return schemasPromise;
+}
+
+const TYPE_WORDS = {
+  string: "text",
+  number: "a number",
+  integer: "a whole number",
+  boolean: "true or false",
+  array: "a list",
+  object: "an object",
+};
+
+// Every argument whose JSON type does not match the schema. Nested values are checked only where the schema describes
+// them (object properties, list items). A null or missing object member counts as not given (the tool's own required
+// check handles it); a null list item is refused. A number field also accepts text: the tool reads a number sent as
+// text the way the web form does, or refuses it with its own message (run 6 decision N2).
+function wrongType(schema, value, name, out, isItem) {
+  if (value === undefined || (value === null && !isItem) || !schema || typeof schema !== "object") return out;
+  const type = schema.type;
+  let ok = true;
+  if (type === "string") ok = typeof value === "string";
+  else if (type === "number") ok = typeof value === "number" || typeof value === "string";
+  else if (type === "integer") ok = Number.isInteger(value) || typeof value === "string";
+  else if (type === "boolean") ok = typeof value === "boolean";
+  else if (type === "array") ok = Array.isArray(value);
+  else if (type === "object") ok = value !== null && typeof value === "object" && !Array.isArray(value);
+  if (!ok) {
+    out.push(name + " must be " + TYPE_WORDS[type] + ".");
+    return out;
+  }
+  if (type === "array" && schema.items && typeof schema.items === "object") {
+    value.forEach((v, i) => wrongType(schema.items, v, name + "[" + i + "]", out, true));
+  } else if (type === "object" && schema.properties) {
+    for (const [key, sub] of Object.entries(schema.properties)) wrongType(sub, value[key], name ? name + "." + key : key, out, false);
+  }
+  return out;
+}
+
+const count = (n) => n.toLocaleString("en-US");
+
+// Every text input over its limit, at any depth (a list of competitors is checked item by item).
+function tooLong(value, name, out, limit) {
+  if (typeof value === "string") {
+    if (value.length > limit) {
+      out.push(
+        name + " is longer than " + count(limit) + " characters. " + (limit > MAX_TEXT ? "Shorten it or split it into parts." : "Shorten it.")
+      );
+    }
+  } else if (Array.isArray(value)) {
+    value.forEach((v, i) => tooLong(v, name + "[" + i + "]", out, MAX_TEXT));
+  } else if (value && typeof value === "object") {
+    for (const key of Object.keys(value)) tooLong(value[key], name ? name + "." + key : key, out, MAX_TEXT);
+  }
+  return out;
+}
+
+function argumentsTooLong(tool, args) {
+  const out = [];
+  if (!args || typeof args !== "object" || Array.isArray(args)) return tooLong(args, "arguments", out, MAX_TEXT);
+  const long = LONG_TEXT[tool] || [];
+  for (const key of Object.keys(args)) tooLong(args[key], key, out, long.includes(key) ? MAX_LONG_TEXT : MAX_TEXT);
   return out;
 }
 
@@ -60,11 +147,11 @@ export default async (req) => {
   try {
     const declared = Number(req.headers.get("content-length") || 0);
     if (declared > MAX_BODY) {
-      return rpcError(null, -32600, "Invalid request: the request body is larger than 64 KB.", 413);
+      return rpcError(null, -32600, "Invalid request: the request body is larger than 256 KB (262,144 bytes).", 413);
     }
     const bytes = new Uint8Array(await req.arrayBuffer());
     if (bytes.byteLength > MAX_BODY) {
-      return rpcError(null, -32600, "Invalid request: the request body is larger than 64 KB.", 413);
+      return rpcError(null, -32600, "Invalid request: the request body is larger than 256 KB (262,144 bytes).", 413);
     }
     let body;
     try {
@@ -78,9 +165,21 @@ export default async (req) => {
     if (body && body.id !== undefined) id = body.id;
     if (body && body.method === "tools/call" && body.id !== undefined) {
       const params = body.params && typeof body.params === "object" ? body.params : {};
-      const long = tooLong(params.arguments, "", []);
+      const schemas = await toolSchemas();
+      const name = params.name;
+      if (typeof name !== "string" || name.length > MAX_NAME) {
+        return toolError(body.id, "Unknown tool. Available tools: " + [...schemas.keys()].join(", ") + ".");
+      }
+      const args = params.arguments;
+      if (schemas.has(name) && args !== undefined && args !== null) {
+        const wrong = wrongType(schemas.get(name), args, "", [], false).map((p) => (p.startsWith(" must") ? "arguments" + p : p));
+        if (wrong.length > 0) {
+          return toolError(body.id, "Invalid input for " + name + ": " + wrong.join(" "));
+        }
+      }
+      const long = argumentsTooLong(name, args);
       if (long.length > 0) {
-        return toolError(body.id, "Invalid input for " + String(params.name).slice(0, 100) + ": " + long.join("; ") + ".");
+        return toolError(body.id, "Invalid input for " + name + ": " + long.join(" "));
       }
     }
     const server = createServer();

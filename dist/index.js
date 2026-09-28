@@ -198,6 +198,55 @@ function cap(phrase) {
 // from it, carries EXAMPLE on its own line, or sits under an EXAMPLES line placed directly above its table,
 // list or code block. SUGGESTED closes outputs that suggest lengths, timings or counts.
 const EXAMPLE = '(Example figure: replace with your own)';
+// Run 11 addendum 3 (R11-A3-8a): the buyer group influence map. Every box has the same width, set by the longest role
+// (at least as wide as "ECONOMIC BUYER"), every role is padded to that width (never cut), and every line of the map
+// has the same length.
+function influenceMap(g) {
+    const roles = [g.economic.role, g.champion.role, g.technical.role, g.user.role, g.blocker.role].map(r => String(r).replace(/\s+/g, ' ').trim());
+    let w = Math.max('ECONOMIC BUYER'.length, ...roles.map(r => r.length));
+    if (w % 2 === 1)
+        w++;
+    const inner = w + 2;
+    const box = inner + 2;
+    const gap = 20;
+    const total = box * 2 + gap;
+    const cx = (total - box) / 2;
+    const lc = Math.floor(box / 2);
+    const rc = box + gap + lc;
+    const mid = cx + 1 + Math.floor(inner / 2);
+    const center = (t) => { const l = Math.floor((inner - t.length) / 2); return ' '.repeat(l) + t + ' '.repeat(inner - t.length - l); };
+    const text = (t) => '│ ' + t.padEnd(w) + ' │';
+    const title = (t) => '│' + center(t) + '│';
+    const edge = (a, b, c) => a + (c ? '─'.repeat(mid - cx - 1) + c + '─'.repeat(cx + inner - mid) : '─'.repeat(inner)) + b;
+    const row = (cells) => {
+        const line = Array.from({ length: total }, () => ' ');
+        for (const [at, s] of cells)
+            [...s].forEach((ch, i) => { line[at + i] = ch; });
+        return line.join('');
+    };
+    const [economic, champion, technical, user, blocker] = roles;
+    return [
+        row([[cx, edge('┌', '┐')]]),
+        row([[cx, title('ECONOMIC BUYER')]]),
+        row([[cx, text(economic)]]),
+        row([[cx, edge('└', '┘', '┬')]]),
+        row([[mid, '│ approves']]),
+        row([[cx, edge('┌', '┐', '▼')]]),
+        row([[cx - 11, 'influences '], [cx, title('CHAMPION')], [cx + box, ' influences']]),
+        row([[lc, '┌' + '─'.repeat(cx - lc - 1)], [cx, text(champion)], [cx + box, '─'.repeat(rc - cx - box) + '┐']]),
+        row([[lc, '│'], [cx, edge('└', '┘', '┬')], [rc, '│']]),
+        row([[lc, '▼'], [mid, '│'], [rc, '▼']]),
+        row([[0, edge('┌', '┐')], [box, '   advocates for'], [box + gap, edge('┌', '┐')]]),
+        row([[0, title('TECHNICAL')], [box, '◄' + '─'.repeat(gap - 1)], [box + gap, title('USER')]]),
+        row([[0, text(technical)], [box, '    validates'], [box + gap, text(user)]]),
+        row([[0, edge('└', '┘')], [box + gap, edge('└', '┘')]]),
+        row([[lc, '│'], [rc, '│']]),
+        row([[lc, '│'], [cx, edge('┌', '┐')], [rc, '│']]),
+        row([[lc, '└' + '─'.repeat(cx - lc - 2) + '►'], [cx, title('BLOCKER')], [cx + box, '◄' + '─'.repeat(rc - cx - box - 1) + '┘']]),
+        row([[cx - 9, 'reviews'], [cx, text(blocker)], [cx + box + 2, 'reviews']]),
+        row([[cx, edge('└', '┘')]]),
+    ].join('\n');
+}
 const EXAMPLES = 'Example figures: replace with your own.';
 const SUGGESTED = 'Suggested timings, lengths and counts: adjust them to your own.';
 // =============================================================================
@@ -567,10 +616,10 @@ ${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' 
 ${EXAMPLES}
 | Tier | Score Range | Action | SLA |
 |------|-------------|--------|-----|
-| **A - Hot** | 80-100 | Immediate outreach, fast-track | Demo within 24 hours |
-| **B - Warm** | 60-79 | Priority follow-up | Demo within 48 hours |
-| **C - Developing** | 40-59 | Nurture sequence | Weekly touch |
-| **D - Unqualified** | 0-39 | Marketing nurture only | Auto-nurture |
+| **A: Hot** | 80-100 | Immediate outreach, fast-track | Demo within 24 hours |
+| **B: Warm** | 60-79 | Priority follow-up | Demo within 48 hours |
+| **C: Developing** | 40-59 | Nurture sequence | Weekly touch |
+| **D: Unqualified** | 0-39 | Marketing nurture only | Auto-nurture |
 
 ---
 
@@ -789,25 +838,7 @@ ${SUGGESTED}
 ## 🔄 Influence Map
 
 \`\`\`
-                    ┌─────────────────┐
-                    │ ECONOMIC BUYER  │
-                    │ ${buyingGroup.economic.role}    │
-                    └────────┬────────┘
-                             │ approves
-                    ┌────────▼────────┐
-         influences │    CHAMPION     │ influences
-        ┌───────────│ ${buyingGroup.champion.role}    │───────────┐
-        │           └────────┬────────┘           │
-        ▼                    │                    ▼
-┌───────────────┐   advocates for    ┌───────────────┐
-│   TECHNICAL   │◄───────────────────│     USER      │
-│ ${buyingGroup.technical.role}  │    validates       │ ${buyingGroup.user.role}    │
-└───────────────┘                    └───────────────┘
-        │                                      │
-        │          ┌───────────────┐           │
-        └─────────►│    BLOCKER    │◄──────────┘
-          reviews  │ ${buyingGroup.blocker.role}  │  reviews
-                   └───────────────┘
+${influenceMap(buyingGroup)}
 \`\`\`
 
 ---
@@ -2151,7 +2182,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.7';
+exports.SERVER_VERSION = '1.2.8';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",
