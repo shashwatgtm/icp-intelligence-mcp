@@ -582,6 +582,15 @@ This tool will analyze patterns across your customers to identify your ideal pro
                     values: c.values || ['High fit', 'Medium fit', 'Low fit']
                 }))
                 : defaultCriteria;
+            // D30: the qualification tiers are bands of the maximum score (sum of criteria weights),
+            // not fixed points, so they stay correct when the weights are not the 100-point default.
+            const maxScore = criteria.reduce((sum, c) => sum + c.weight, 0);
+            const tierALo = Math.ceil(0.8 * maxScore);
+            const tierBLo = Math.ceil(0.6 * maxScore);
+            const tierCLo = Math.ceil(0.4 * maxScore);
+            const tierBHi = tierALo - 1;
+            const tierCHi = tierBLo - 1;
+            const tierDHi = tierCLo - 1;
             return `# ICP Scoring Model
 
 ## Scoring Framework for ${category}
@@ -610,7 +619,7 @@ ${EXAMPLES} Every point value and band below is an example.
 |-----------|--------|----------------|
 ${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' / ')} |`).join('\n')}
 
-**Maximum Score**: ${criteria.reduce((sum, c) => sum + c.weight, 0)} points ${EXAMPLE}
+**Maximum Score**: ${maxScore} points ${EXAMPLE}
 
 ---
 
@@ -618,10 +627,12 @@ ${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' 
 
 | Tier | Score Range | Action | SLA |
 |------|-------------|--------|-----|
-| **A: Hot** | 80-100 | Immediate outreach, fast-track | Demo within 24 hours |
-| **B: Warm** | 60-79 | Priority follow-up | Demo within 48 hours |
-| **C: Developing** | 40-59 | Nurture sequence | Weekly touch |
-| **D: Unqualified** | 0-39 | Marketing nurture only | Auto-nurture |
+| **A: Hot** | ${tierALo}-${maxScore} | Immediate outreach, fast-track | Demo within 24 hours |
+| **B: Warm** | ${tierBLo}-${tierBHi} | Priority follow-up | Demo within 48 hours |
+| **C: Developing** | ${tierCLo}-${tierCHi} | Nurture sequence | Weekly touch |
+| **D: Unqualified** | 0-${tierDHi} | Marketing nurture only | Auto-nurture |
+
+The bands are 80%, 60% and 40% of your maximum score of ${maxScore} points.
 
 ---
 
@@ -2186,7 +2197,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.10';
+exports.SERVER_VERSION = '1.2.11';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",
