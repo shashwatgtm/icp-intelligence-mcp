@@ -23,7 +23,7 @@
 - [Account Prioritization](https://icp-intelligence.gtmhelix.com/tools/account-prioritization/) (`account_prioritization`): Rank and prioritize accounts using multi-dimensional scoring
 - [ICP Gap Analysis](https://icp-intelligence.gtmhelix.com/tools/icp-gap-analysis/) (`icp_gap_analysis`): Analyze gaps between current customer base and ideal ICP
 - [ICP Evolution Tracker](https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/) (`icp_evolution_tracker`): Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text
-- [ICP Interview Synthesizer](https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/) (`icp_interview_synthesizer`): Extract ICP patterns from customer interview notes or transcripts
+- [ICP Interview Synthesizer](https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/) (`icp_interview_synthesizer`): Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed.
 
 ## Questions and answers
 

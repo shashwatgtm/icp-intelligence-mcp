@@ -179,7 +179,7 @@
    "@type": "WebApplication",
    "@id": "https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/#app",
    "name": "ICP Interview Synthesizer (ICP Intelligence)",
-   "description": "Extract ICP patterns from customer interview notes or transcripts",
+   "description": "Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed.",
    "url": "https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
@@ -249,7 +249,7 @@
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run ICP Interview Synthesizer">
   <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Interview Synthesizer</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_interview_synthesizer" data-tool="icp_interview_synthesizer" data-title="ICP Interview Synthesizer"><p class="hx-help">Every field is optional. You can add: Interview notes, Raw transcripts.</p>
-<div class="hx-field"><label for="f-interview_notes">Interview notes <span class="hx-opt">(optional)</span></label><textarea id="f-interview_notes" name="interview_notes" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-interview_notes-help"></textarea><p class="hx-help" id="f-interview_notes-help">One entry per interview. For example: [{&quot;customer&quot;: &quot;Clinic Group A&quot;, &quot;role&quot;: &quot;Operations Director&quot;, &quot;pain_points&quot;: [&quot;no-shows&quot;], &quot;buying_triggers&quot;: [&quot;new location&quot;], &quot;value_realized&quot;: [&quot;fewer no-shows&quot;], &quot;key_quotes&quot;: [&quot;the customer&#x27;s own words&quot;]}]</p></div>
+<div class="hx-field"><label for="f-interview_notes">Interview notes, one interview per line: customer | role | pain points | buying triggers | value realized | key quotes <span class="hx-opt">(optional)</span></label><textarea id="f-interview_notes" name="interview_notes" rows="4" data-kind="rows" data-rows="{&quot;sep&quot;: &quot;|&quot;, &quot;item&quot;: &quot;;&quot;, &quot;cols&quot;: [[&quot;customer&quot;, &quot;s&quot;, &quot;customer&quot;], [&quot;role&quot;, &quot;s&quot;, &quot;role&quot;], [&quot;pain_points&quot;, &quot;l&quot;, &quot;pain points&quot;], [&quot;buying_triggers&quot;, &quot;l&quot;, &quot;buying triggers&quot;], [&quot;value_realized&quot;, &quot;l&quot;, &quot;value realized&quot;], [&quot;key_quotes&quot;, &quot;l&quot;, &quot;key quotes&quot;]], &quot;min&quot;: 6, &quot;max&quot;: 6, &quot;need&quot;: &quot;6 parts separated by |: customer, role, pain points, buying triggers, value realized, key quotes&quot;}" aria-describedby="f-interview_notes-help"></textarea><p class="hx-help" id="f-interview_notes-help">6 parts per line, separated by |. Put several items in one part with ; between them. For example: Clinic Group A | Operations Director | no-shows; phone rescheduling | new location | fewer no-shows | We lost a chair a day to no-shows</p></div>
 <div class="hx-field"><label for="f-raw_transcripts">Raw transcripts <span class="hx-opt">(optional)</span></label><textarea id="f-raw_transcripts" name="raw_transcripts" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-raw_transcripts-help f-raw_transcripts-limit"></textarea><p class="hx-help" id="f-raw_transcripts-help">Alternative: Paste raw interview transcripts or notes</p><p class="hx-help" id="f-raw_transcripts-limit">Up to 6,000 characters in this form. For a longer document, use ICP Intelligence in Claude, which takes up to 100,000.</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-icp_interview_synthesizer">Leave this empty</label><input id="hp-icp_interview_synthesizer" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
@@ -259,7 +259,7 @@
     </div>
     
   </form>
-  <script type="application/json" data-example>{"raw_transcripts": "Interview 1: Ops director at a 12-clinic dental group; biggest pain no-shows; chose us for SMS reminders. Interview 2: Practice manager at a physio chain; pain rescheduling by phone; wanted online booking."}</script></div>
+  <script type="application/json" data-example>{"interview_notes": "Clinic Group A | Operations Director | No-shows; Manual reminder calls | New location opening | Fewer no-shows | No-shows cost us a chair a day across 12 clinics.\nClinic Group B | Practice Manager | No-shows; Rescheduling by phone | Patients asking for online booking | Online booking; Fewer no-shows | Rescheduling by phone takes half my morning."}</script></div>
 </section>
 
 <section class="hx-section" id="result" aria-live="polite" aria-labelledby="result-h" hidden>
@@ -270,66 +270,78 @@
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
   <p class="hx-prose">From version 1.2.8 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
-  <div class="win "><div class="win-bar"><span class="t">Example: ICP Interview Synthesizer</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><div class="win-body"><details class="hx-run"><summary>Show the full result</summary><div class="hx-result-body hx-output"><h3>Interview Analysis Request</h3>
-<h4>Raw Content Provided</h4>
-<pre><code>Interview 1: Ops director at a 12-clinic dental group; biggest pain no-shows; chose us for SMS reminders. Interview 2: Practice manager at a physio chain; pain rescheduling by phone; wanted online booking.</code></pre>
+  <div class="win "><div class="win-bar"><span class="t">Example: ICP Interview Synthesizer</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><div class="win-body"><details class="hx-run"><summary>Show the full result</summary><div class="hx-result-body hx-output"><h3>Customer Interview Synthesis</h3>
+<h4>Interviews Analyzed</h4>
+<p><strong>Count</strong>: 2 interviews</p>
+<p><strong>Roles Represented</strong>: Operations Director, Practice Manager</p>
 <hr>
-<h4>Structured Format Recommended</h4>
-<p>For better analysis, structure your interviews in this format. Example only, not from your input: the customer, quotes, pain points and results below are made up to show the format.</p>
-<p>Example figures: replace with your own.</p>
-<pre><code>{
-  "interview_notes": [
-    {
-      "customer": "Acme Corp",
-      "role": "VP Sales",
-      "key_quotes": [
-        "We were spending 20 hours a week on manual data entry",
-        "The old system just couldn't scale with us"
-      ],
-      "pain_points": [
-        "Manual data entry",
-        "Scalability issues",
-        "Poor reporting"
-      ],
-      "buying_triggers": [
-        "New VP joined",
-        "Missed quarterly target"
-      ],
-      "value_realized": [
-        "Saved 15 hours/week",
-        "Real-time visibility"
-      ]
-    }
-  ]
-}</code></pre>
+<h4>Pattern Analysis</h4>
+<h5>Top Pain Points (by frequency)</h5>
+<ol>
+<li value="1"><strong>"No-shows"</strong> - mentioned 2x (100% of interviews)</li>
+<li value="2"><strong>"Manual reminder calls"</strong> - mentioned 1x (50% of interviews)</li>
+<li value="3"><strong>"Rescheduling by phone"</strong> - mentioned 1x (50% of interviews)</li>
+</ol>
+<p><strong>ICP Implication</strong>: Target customers experiencing these pain points</p>
+<h5>Top Buying Triggers</h5>
+<ol>
+<li value="1"><strong>New location opening</strong> - 1x (50%)</li>
+<li value="2"><strong>Patients asking for online booking</strong> - 1x (50%)</li>
+</ol>
+<p><strong>ICP Implication</strong>: Time outreach around these events</p>
+<h5>Value Realized (Post-Purchase)</h5>
+<ol>
+<li value="1"><strong>Fewer no-shows</strong> - 2x (100%)</li>
+<li value="2"><strong>Online booking</strong> - 1x (50%)</li>
+</ol>
+<p><strong>ICP Implication</strong>: Lead with these outcomes in messaging</p>
+<h5>Champion Roles</h5>
+<ol>
+<li value="1"><strong>Operations Director</strong> - 1x (50%)</li>
+<li value="2"><strong>Practice Manager</strong> - 1x (50%)</li>
+</ol>
+<p><strong>ICP Implication</strong>: Focus outreach on these titles</p>
 <hr>
-<h4>Extraction Guidance</h4>
-<p>From your transcripts, extract:</p>
-<h5>Pain Points</h5>
+<h4>Key Quotes</h4>
+<h5>Quote 1</h5>
+<blockquote>"No-shows cost us a chair a day across 12 clinics."</blockquote>
+<blockquote>(Operations Director at Clinic Group A)</blockquote>
+<h5>Quote 2</h5>
+<blockquote>"Rescheduling by phone takes half my morning."</blockquote>
+<blockquote>(Practice Manager at Clinic Group B)</blockquote>
+<hr>
+<h4>ICP Refinements from Interviews</h4>
+<h5>Add to ICP</h5>
+<p>Based on patterns, your ideal customer:</p>
 <ul>
-<li>What problems did they describe?</li>
-<li>What was frustrating them?</li>
-<li>What wasn't working?</li>
+<li>Experiences: "No-shows"</li>
+<li>Is triggered by: New location opening</li>
+<li>Champion is: Operations Director</li>
+<li>Seeks outcome: Fewer no-shows</li>
 </ul>
-<h5>Buying Triggers</h5>
+<h5>Messaging Updates</h5>
+<p>Based on customer language, update:</p>
 <ul>
-<li>What event made them look for a solution?</li>
-<li>What changed in their business?</li>
-<li>What was the timeline driver?</li>
+<li><strong>Pain messaging</strong>: "No-shows"</li>
+<li><strong>Value messaging</strong>: "Fewer no-shows"</li>
 </ul>
-<h5>Value Realized</h5>
-<ul>
-<li>What outcomes did they achieve?</li>
-<li>What metrics improved?</li>
-<li>What would they tell others?</li>
-</ul>
-<h5>Key Quotes</h5>
-<ul>
-<li>Memorable phrases</li>
-<li>Emotional statements</li>
-<li>Concrete examples</li>
-</ul>
-<p>Re-run with structured data for full analysis.</p></div></details></div></div>
+<h5>Discovery Questions to Add</h5>
+<ol>
+<li value="1">"How are you currently handling no-shows?"</li>
+<li value="2">"How are you currently handling manual reminder calls?"</li>
+<li value="3">"How are you currently handling rescheduling by phone?"</li>
+</ol>
+<hr>
+<h4>Interview Template for Next Round</h4>
+<p>Based on gaps in this analysis, ask about:</p>
+<ol>
+<li value="1"><strong>Pain Exploration</strong>: "What's the biggest challenge you face with [area]?"</li>
+<li value="2"><strong>Trigger Events</strong>: "What made you start looking for a solution?"</li>
+<li value="3"><strong>Value Measurement</strong>: "How do you measure success?"</li>
+<li value="4"><strong>Buying Process</strong>: "Who else was involved in the decision?"</li>
+<li value="5"><strong>Alternatives Considered</strong>: "What else did you evaluate?"</li>
+</ol>
+<p><strong>Next Step</strong>: Conduct more interviews to strengthen pattern confidence</p></div></details></div></div>
   
 </section>
 <aside class="hx7-strip" aria-label="Built by Shashwat Ghosh"><div class="hx-wrap hx7-strip-row"><picture class="hx7-strip-photo"><source srcset="/assets/shashwat-ghosh-160.webp?v=c5d0d41b0c" type="image/webp"><img src="/assets/shashwat-ghosh-160.jpg?v=b453d25fa4" width="160" height="160" alt="Shashwat Ghosh" decoding="async"></picture><p><b>Built by Shashwat Ghosh</b>, Co-Founder and Fractional CMO, Helix GTM Consulting, with 24+ years in B2B and 10+ years fractional.</p><a href="https://gtmhelix.com/about/">About Shashwat</a></div></aside>
@@ -344,7 +356,7 @@
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use ICP Interview Synthesizer from Claude?</h2>
   <p class="hx-prose">Add ICP Intelligence once (see <a href="/connect/">Use it in Claude or ChatGPT</a>), then ask in plain words. A prompt built from the tested example:</p>
-  <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Interview Synthesizer tool. raw transcripts: Interview 1: Ops director at a 12-clinic dental group; biggest pain no-shows; chose us for SMS reminders. Interview 2: Practice manager at a physio chain; pain rescheduling by phone; wanted online booking.</blockquote>
+  <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Interview Synthesizer tool. interview notes: Clinic Group A (role Operations Director, key quotes No-shows cost us a chair a day across 12 clinics., pain points No-shows, Manual reminder calls, buying triggers New location opening, value realized Fewer no-shows); Clinic Group B (role Practice Manager, key quotes Rescheduling by phone takes half my morning., pain points No-shows, Rescheduling by phone, buying triggers Patients asking for online booking, value realized Online booking, Fewer no-shows).</blockquote>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">
@@ -364,7 +376,43 @@
   <p class="hx-prose">MCP tool name: <code>icp_interview_synthesizer</code>. REST: <code>POST https://icp-intelligence.gtmhelix.com/api/tools/icp_interview_synthesizer</code> with this JSON body (see <a href="/docs/#icp-interview-synthesizer">Docs</a>):</p>
   <pre class="hx-code-block">{
   &quot;input&quot;: {
-    &quot;raw_transcripts&quot;: &quot;Interview 1: Ops director at a 12-clinic dental group; biggest pain no-shows; chose us for SMS reminders. Interview 2: Practice manager at a physio chain; pain rescheduling by phone; wanted online booking.&quot;
+    &quot;interview_notes&quot;: [
+      {
+        &quot;customer&quot;: &quot;Clinic Group A&quot;,
+        &quot;role&quot;: &quot;Operations Director&quot;,
+        &quot;key_quotes&quot;: [
+          &quot;No-shows cost us a chair a day across 12 clinics.&quot;
+        ],
+        &quot;pain_points&quot;: [
+          &quot;No-shows&quot;,
+          &quot;Manual reminder calls&quot;
+        ],
+        &quot;buying_triggers&quot;: [
+          &quot;New location opening&quot;
+        ],
+        &quot;value_realized&quot;: [
+          &quot;Fewer no-shows&quot;
+        ]
+      },
+      {
+        &quot;customer&quot;: &quot;Clinic Group B&quot;,
+        &quot;role&quot;: &quot;Practice Manager&quot;,
+        &quot;key_quotes&quot;: [
+          &quot;Rescheduling by phone takes half my morning.&quot;
+        ],
+        &quot;pain_points&quot;: [
+          &quot;No-shows&quot;,
+          &quot;Rescheduling by phone&quot;
+        ],
+        &quot;buying_triggers&quot;: [
+          &quot;Patients asking for online booking&quot;
+        ],
+        &quot;value_realized&quot;: [
+          &quot;Online booking&quot;,
+          &quot;Fewer no-shows&quot;
+        ]
+      }
+    ]
   }
 }</pre>
   </details>
@@ -420,6 +468,6 @@
             </div>
         </div>
     </footer>
-<script src="/assets/app.js?v=47d60caaff" defer></script>
+<script src="/assets/app.js?v=27f577e13d" defer></script>
 </body>
 </html>

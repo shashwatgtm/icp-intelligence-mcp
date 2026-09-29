@@ -249,7 +249,7 @@
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run ICP Scoring Model">
   <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Scoring Model</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_scoring_model" data-tool="icp_scoring_model" data-title="ICP Scoring Model"><p class="hx-help">Every field is optional. You can add: Scoring criteria, Success correlation, Product category.</p>
-<div class="hx-field"><label for="f-scoring_criteria">Scoring criteria <span class="hx-opt">(optional)</span></label><textarea id="f-scoring_criteria" name="scoring_criteria" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-scoring_criteria-help"></textarea><p class="hx-help" id="f-scoring_criteria-help">One entry per criterion. Importance is critical, important or nice_to_have. For example: [{&quot;criterion&quot;: &quot;Number of locations&quot;, &quot;importance&quot;: &quot;critical&quot;, &quot;values&quot;: [&quot;5 or more&quot;]}]</p></div>
+<div class="hx-field"><label for="f-scoring_criteria">Scoring criteria, one per line: criterion, importance, values <span class="hx-opt">(optional)</span></label><textarea id="f-scoring_criteria" name="scoring_criteria" rows="4" data-kind="rows" data-rows="{&quot;sep&quot;: &quot;,&quot;, &quot;cols&quot;: [[&quot;criterion&quot;, &quot;s&quot;, &quot;criterion&quot;], [&quot;importance&quot;, &quot;e&quot;, &quot;importance&quot;, [&quot;critical&quot;, &quot;important&quot;, &quot;nice_to_have&quot;]]], &quot;rest&quot;: &quot;values&quot;, &quot;min&quot;: 3, &quot;need&quot;: &quot;at least 3 values: criterion, importance, then one or more values&quot;}" aria-describedby="f-scoring_criteria-help"></textarea><p class="hx-help" id="f-scoring_criteria-help">Importance is critical, important or nice_to_have; then one or more values, separated by commas. For example: Number of locations, critical, 5 or more, 2 to 4</p></div>
 <div class="hx-field"><label for="f-success_correlation">Success correlation <span class="hx-opt">(optional)</span></label><textarea id="f-success_correlation" name="success_correlation" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-success_correlation-help"></textarea><p class="hx-help" id="f-success_correlation-help">What correlates with success? (e.g., &quot;deals with VP Sales champion close 2x faster&quot;)</p></div>
 <div class="hx-field"><label for="f-product_category">Product category <span class="hx-opt">(optional)</span></label><textarea id="f-product_category" name="product_category" rows="3" maxlength="6000" data-kind="string"></textarea></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-icp_scoring_model">Leave this empty</label><input id="hp-icp_scoring_model" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
@@ -260,7 +260,7 @@
     </div>
     
   </form>
-  <script type="application/json" data-example>{"product_category": "clinic scheduling software", "success_correlation": "Customers with 5+ locations and a central operations team renew most"}</script></div>
+  <script type="application/json" data-example>{"product_category": "clinic scheduling software", "scoring_criteria": "Number of locations, critical, 5 or more, 2 to 4, 1\nCentral operations team, important, Yes, No", "success_correlation": "Customers with 5+ locations and a central operations team renew most"}</script></div>
 </section>
 
 <section class="hx-section" id="result" aria-live="polite" aria-labelledby="result-h" hidden>
@@ -276,14 +276,14 @@
 <p><strong>Success Correlation Noted</strong>: Customers with 5+ locations and a central operations team renew most</p>
 <hr>
 <h4>Scoring Criteria &amp; Weights</h4>
-<p>You supplied no scoring criteria, so the criteria, points and bands below are an example model, not calculated from your data.</p>
+<p>The weights below are preset by importance level (critical, important, nice to have); they are not calculated from your data.</p>
 <h5>Weight Distribution</h5>
 <p>Example figures: replace with your own.</p>
 <div class="hx-table"><table><thead><tr><th>Priority</th><th>Weight Range</th><th>Purpose</th></tr></thead><tbody><tr><td><strong>Critical</strong></td><td>20-25 pts</td><td>Must-have for qualification</td></tr><tr><td><strong>Important</strong></td><td>10-15 pts</td><td>Strong success indicators</td></tr><tr><td><strong>Nice-to-Have</strong></td><td>5-10 pts</td><td>Bonus factors</td></tr></tbody></table></div>
 <h5>Scoring Matrix</h5>
 <p>Example figures: replace with your own.</p>
-<div class="hx-table"><table><thead><tr><th>Criterion</th><th>Weight</th><th>Scoring Values</th></tr></thead><tbody><tr><td><strong>Company Size</strong></td><td>25 pts</td><td>1000+ employees (25pts) / 200-1000 (20pts) / 50-200 (15pts) / &lt;50 (5pts)</td></tr><tr><td><strong>Industry Fit</strong></td><td>25 pts</td><td>Target vertical (25pts) / Adjacent (15pts) / Other B2B (10pts) / B2C (0pts)</td></tr><tr><td><strong>Budget Authority</strong></td><td>20 pts</td><td>Confirmed budget (20pts) / Budget planned (15pts) / Exploring (10pts) / No budget (0pts)</td></tr><tr><td><strong>Technology Fit</strong></td><td>15 pts</td><td>Uses key tech (15pts) / Compatible stack (10pts) / Unknown (5pts) / Incompatible (0pts)</td></tr><tr><td><strong>Buying Timeline</strong></td><td>15 pts</td><td>Active project (15pts) / This quarter (12pts) / This year (8pts) / Exploring (5pts)</td></tr></tbody></table></div>
-<p><strong>Maximum Score</strong>: 100 points (Example figure: replace with your own)</p>
+<div class="hx-table"><table><thead><tr><th>Criterion</th><th>Weight</th><th>Scoring Values</th></tr></thead><tbody><tr><td><strong>Number of locations</strong></td><td>25 pts</td><td>5 or more / 2 to 4 / 1</td></tr><tr><td><strong>Central operations team</strong></td><td>15 pts</td><td>Yes / No</td></tr></tbody></table></div>
+<p><strong>Maximum Score</strong>: 40 points (Example figure: replace with your own)</p>
 <hr>
 <h4>Qualification Tiers</h4>
 <p>Example figures: replace with your own.</p>
@@ -293,43 +293,19 @@
 <h5>Account: _______________</h5>
 <h5>Date: _______________</h5>
 <p>Example figures: replace with your own.</p>
-<p><strong>Company Size</strong> (Max: 25 pts)</p>
-<p>[ ] 1000+ employees (25pts)</p>
-<p>[ ] 200-1000 (20pts)</p>
-<p>[ ] 50-200 (15pts)</p>
-<p>[ ] &lt;50 (5pts)</p>
+<p><strong>Number of locations</strong> (Max: 25 pts)</p>
+<p>[ ] 5 or more</p>
+<p>[ ] 2 to 4</p>
+<p>[ ] 1</p>
 <p>Score: ___ / 25</p>
 <p>Example figures: replace with your own.</p>
-<p><strong>Industry Fit</strong> (Max: 25 pts)</p>
-<p>[ ] Target vertical (25pts)</p>
-<p>[ ] Adjacent (15pts)</p>
-<p>[ ] Other B2B (10pts)</p>
-<p>[ ] B2C (0pts)</p>
-<p>Score: ___ / 25</p>
-<p>Example figures: replace with your own.</p>
-<p><strong>Budget Authority</strong> (Max: 20 pts)</p>
-<p>[ ] Confirmed budget (20pts)</p>
-<p>[ ] Budget planned (15pts)</p>
-<p>[ ] Exploring (10pts)</p>
-<p>[ ] No budget (0pts)</p>
-<p>Score: ___ / 20</p>
-<p>Example figures: replace with your own.</p>
-<p><strong>Technology Fit</strong> (Max: 15 pts)</p>
-<p>[ ] Uses key tech (15pts)</p>
-<p>[ ] Compatible stack (10pts)</p>
-<p>[ ] Unknown (5pts)</p>
-<p>[ ] Incompatible (0pts)</p>
-<p>Score: ___ / 15</p>
-<p>Example figures: replace with your own.</p>
-<p><strong>Buying Timeline</strong> (Max: 15 pts)</p>
-<p>[ ] Active project (15pts)</p>
-<p>[ ] This quarter (12pts)</p>
-<p>[ ] This year (8pts)</p>
-<p>[ ] Exploring (5pts)</p>
+<p><strong>Central operations team</strong> (Max: 15 pts)</p>
+<p>[ ] Yes</p>
+<p>[ ] No</p>
 <p>Score: ___ / 15</p>
 <hr>
-<p><strong>TOTAL SCORE</strong>: ___ / 100 (Example figure: replace with your own)</p>
-<p><strong>TIER</strong>: [ ] A (Hot) [ ] B (Warm) [ ] C (Developing) [ ] D (Unqualified)</p>
+<p><strong>TOTAL SCORE</strong>: ___ / 40 (Example figure: replace with your own)</p>
+<p><strong>TIER</strong>: [ ] A (Hot)  [ ] B (Warm)  [ ] C (Developing)  [ ] D (Unqualified)</p>
 <hr>
 <h4>Implementation Guide</h4>
 <h5>In CRM (Salesforce/HubSpot)</h5>
@@ -373,7 +349,7 @@
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use ICP Scoring Model from Claude?</h2>
   <p class="hx-prose">Add ICP Intelligence once (see <a href="/connect/">Use it in Claude or ChatGPT</a>), then ask in plain words. A prompt built from the tested example:</p>
-  <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Scoring Model tool. product category: clinic scheduling software; success correlation: Customers with 5+ locations and a central operations team renew most.</blockquote>
+  <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Scoring Model tool. product category: clinic scheduling software; scoring criteria: Number of locations (importance critical, values 5 or more, 2 to 4, 1); Central operations team (importance important, values Yes, No); success correlation: Customers with 5+ locations and a central operations team renew most.</blockquote>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">
@@ -394,6 +370,25 @@
   <pre class="hx-code-block">{
   &quot;input&quot;: {
     &quot;product_category&quot;: &quot;clinic scheduling software&quot;,
+    &quot;scoring_criteria&quot;: [
+      {
+        &quot;criterion&quot;: &quot;Number of locations&quot;,
+        &quot;importance&quot;: &quot;critical&quot;,
+        &quot;values&quot;: [
+          &quot;5 or more&quot;,
+          &quot;2 to 4&quot;,
+          &quot;1&quot;
+        ]
+      },
+      {
+        &quot;criterion&quot;: &quot;Central operations team&quot;,
+        &quot;importance&quot;: &quot;important&quot;,
+        &quot;values&quot;: [
+          &quot;Yes&quot;,
+          &quot;No&quot;
+        ]
+      }
+    ],
     &quot;success_correlation&quot;: &quot;Customers with 5+ locations and a central operations team renew most&quot;
   }
 }</pre>
@@ -450,6 +445,6 @@
             </div>
         </div>
     </footer>
-<script src="/assets/app.js?v=47d60caaff" defer></script>
+<script src="/assets/app.js?v=27f577e13d" defer></script>
 </body>
 </html>

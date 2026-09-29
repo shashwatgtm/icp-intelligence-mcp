@@ -251,8 +251,8 @@
   <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Gap Analysis</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_gap_analysis" data-tool="icp_gap_analysis" data-title="ICP Gap Analysis"><p class="hx-help">You need: Current customers, Ideal ICP. You can add: Your current numbers, Your target numbers.</p>
 <div class="hx-field"><label for="f-current_customers">Current customers <span class="hx-req" aria-hidden="true">*</span></label><textarea id="f-current_customers" name="current_customers" rows="3" maxlength="6000" data-kind="string" required aria-required="true" aria-describedby="f-current_customers-help"></textarea><p class="hx-help" id="f-current_customers-help">Description of your current customer base</p></div>
 <div class="hx-field"><label for="f-ideal_icp">Ideal ICP <span class="hx-req" aria-hidden="true">*</span></label><textarea id="f-ideal_icp" name="ideal_icp" rows="3" maxlength="6000" data-kind="string" required aria-required="true" aria-describedby="f-ideal_icp-help"></textarea><p class="hx-help" id="f-ideal_icp-help">Description of your ideal customer profile</p></div>
-<div class="hx-field"><label for="f-current_metrics">Your current numbers <span class="hx-opt">(optional)</span></label><textarea id="f-current_metrics" name="current_metrics" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-current_metrics-help"></textarea><p class="hx-help" id="f-current_metrics-help">Any of five numbers. For example: {&quot;avg_acv&quot;: 12000, &quot;avg_sales_cycle&quot;: 60, &quot;win_rate&quot;: 20, &quot;churn_rate&quot;: 15, &quot;nps&quot;: 30}. Sales cycle is in days; rates are percentages.</p></div>
-<div class="hx-field"><label for="f-target_metrics">Your target numbers <span class="hx-opt">(optional)</span></label><textarea id="f-target_metrics" name="target_metrics" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-target_metrics-help"></textarea><p class="hx-help" id="f-target_metrics-help">The same five numbers as your current numbers. For example: {&quot;avg_acv&quot;: 20000, &quot;avg_sales_cycle&quot;: 45, &quot;win_rate&quot;: 30, &quot;churn_rate&quot;: 8, &quot;nps&quot;: 45}</p></div>
+<div class="hx-field"><label for="f-current_metrics-avg_acv">Current average ACV in dollars <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-avg_acv" name="current_metrics.avg_acv" type="number" step="any" inputmode="decimal" min="0" data-kind="number" aria-describedby="f-current_metrics-avg_acv-help"><p class="hx-help" id="f-current_metrics-avg_acv-help">Any of five numbers.</p></div><div class="hx-field"><label for="f-current_metrics-avg_sales_cycle">Current sales cycle in days <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-avg_sales_cycle" name="current_metrics.avg_sales_cycle" type="number" step="any" inputmode="decimal" min="0" data-kind="number"></div><div class="hx-field"><label for="f-current_metrics-win_rate">Current win rate in percent <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-win_rate" name="current_metrics.win_rate" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-current_metrics-churn_rate">Current churn rate in percent <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-churn_rate" name="current_metrics.churn_rate" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-current_metrics-nps">Current NPS <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-nps" name="current_metrics.nps" type="number" step="any" inputmode="decimal" data-kind="number"></div>
+<div class="hx-field"><label for="f-target_metrics-avg_acv">Target average ACV in dollars <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-avg_acv" name="target_metrics.avg_acv" type="number" step="any" inputmode="decimal" min="0" data-kind="number" aria-describedby="f-target_metrics-avg_acv-help"><p class="hx-help" id="f-target_metrics-avg_acv-help">The same five numbers, as your targets.</p></div><div class="hx-field"><label for="f-target_metrics-avg_sales_cycle">Target sales cycle in days <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-avg_sales_cycle" name="target_metrics.avg_sales_cycle" type="number" step="any" inputmode="decimal" min="0" data-kind="number"></div><div class="hx-field"><label for="f-target_metrics-win_rate">Target win rate in percent <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-win_rate" name="target_metrics.win_rate" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-target_metrics-churn_rate">Target churn rate in percent <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-churn_rate" name="target_metrics.churn_rate" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-target_metrics-nps">Target NPS <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-nps" name="target_metrics.nps" type="number" step="any" inputmode="decimal" data-kind="number"></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-icp_gap_analysis">Leave this empty</label><input id="hp-icp_gap_analysis" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run ICP Gap Analysis</button>
@@ -261,7 +261,7 @@
     </div>
     
   </form>
-  <script type="application/json" data-example>{"current_customers": "Single-location clinics, owner-operated", "ideal_icp": "Multi-location clinic groups with an operations team"}</script></div>
+  <script type="application/json" data-example>{"current_customers": "Single-location clinics, owner-operated", "ideal_icp": "Multi-location clinic groups with an operations team", "current_metrics.avg_acv": "6000", "current_metrics.avg_sales_cycle": "30", "current_metrics.win_rate": "25", "current_metrics.churn_rate": "18", "current_metrics.nps": "28", "target_metrics.avg_acv": "15000", "target_metrics.avg_sales_cycle": "45", "target_metrics.win_rate": "30", "target_metrics.churn_rate": "8", "target_metrics.nps": "45"}</script></div>
 </section>
 
 <section class="hx-section" id="result" aria-live="polite" aria-labelledby="result-h" hidden>
@@ -280,11 +280,10 @@
 <p>Multi-location clinic groups with an operations team</p>
 <hr>
 <h4>Metric Gaps</h4>
-<p>Example figures: replace with your own. You did not supply current or target metrics, so every value in this table is a preset example.</p>
-<div class="hx-table"><table><thead><tr><th>Metric</th><th>Current</th><th>Target</th><th>Gap</th><th>Priority</th></tr></thead><tbody><tr><td><strong>Avg ACV</strong></td><td>$25,000</td><td>$50,000</td><td>+100% needed</td><td>High</td></tr><tr><td><strong>Sales Cycle</strong></td><td>90 days</td><td>60 days</td><td>-33% needed</td><td>High</td></tr><tr><td><strong>Win Rate</strong></td><td>20%</td><td>30%</td><td>+50% needed</td><td>High</td></tr><tr><td><strong>Churn Rate</strong></td><td>15%</td><td>8%</td><td>-47% needed</td><td>High</td></tr><tr><td><strong>NPS</strong></td><td>30</td><td>50</td><td>+20 points needed</td><td>High</td></tr></tbody></table></div>
+<div class="hx-table"><table><thead><tr><th>Metric</th><th>Current</th><th>Target</th><th>Gap</th><th>Priority</th></tr></thead><tbody><tr><td><strong>Avg ACV</strong></td><td>$6,000</td><td>$15,000</td><td>+150% needed</td><td>High</td></tr><tr><td><strong>Sales Cycle</strong></td><td>30 days</td><td>45 days</td><td>target is 50% above today, no reduction needed</td><td>Low</td></tr><tr><td><strong>Win Rate</strong></td><td>25%</td><td>30%</td><td>+20% needed</td><td>Low</td></tr><tr><td><strong>Churn Rate</strong></td><td>18%</td><td>8%</td><td>-56% needed</td><td>High</td></tr><tr><td><strong>NPS</strong></td><td>28</td><td>45</td><td>+17 points needed</td><td>High</td></tr></tbody></table></div>
 <hr>
 <h4>Gap Root Cause Analysis</h4>
-<h5>ACV Gap (+100% needed) (Example figure: replace with your own)</h5>
+<h5>ACV Gap (+150% needed)</h5>
 <p><strong>Current</strong>: Selling to smaller companies or at lower price points</p>
 <p><strong>Root Causes</strong>:</p>
 <ul>
@@ -300,7 +299,7 @@
 <li>Add pricing tiers for enterprise</li>
 <li>Build reference customers in target segment</li>
 </ul>
-<h5>Sales Cycle Gap (33% reduction needed) (Example figure: replace with your own)</h5>
+<h5>Sales Cycle Gap (target is 50% above today, no reduction needed)</h5>
 <p><strong>Current</strong>: Deals taking too long to close</p>
 <p><strong>Root Causes</strong>:</p>
 <ul>
@@ -316,7 +315,7 @@
 <li>Create better competitive positioning</li>
 <li>Streamline procurement requirements</li>
 </ul>
-<h5>Win Rate Gap (+50% improvement needed) (Example figure: replace with your own)</h5>
+<h5>Win Rate Gap (+20% improvement needed)</h5>
 <p><strong>Current</strong>: Losing too many deals</p>
 <p><strong>Root Causes</strong>:</p>
 <ul>
@@ -332,7 +331,7 @@
 <li>Quantify cost of inaction</li>
 <li>Review pricing competitiveness</li>
 </ul>
-<h5>Churn Gap (47% reduction needed) (Example figure: replace with your own)</h5>
+<h5>Churn Gap (56% reduction needed)</h5>
 <p><strong>Current</strong>: Customers not staying</p>
 <p><strong>Root Causes</strong>:</p>
 <ul>
@@ -351,19 +350,19 @@
 <hr>
 <h4>Recommended ICP Refinements</h4>
 <p>Based on gap analysis, tighten your ICP on:</p>
-<p>The company size and budget thresholds below are presets tied to the target ACV, which you did not supply.</p>
+<p>The company size and budget thresholds below are presets tied to the target ACV.</p>
 <h5>Must-Have Criteria (Add These)</h5>
 <ol>
-<li value="1"><strong>Minimum company size</strong>: 200+ employees (Example figure: replace with your own)</li>
+<li value="1"><strong>Minimum company size</strong>: 50+ employees (Example figure: replace with your own)</li>
 <li value="2"><strong>Budget confirmation</strong>: Must have allocated budget</li>
-<li value="3"><strong>Champion access</strong>: Clear path to decision maker</li>
+<li value="3"><strong>Champion access</strong>: Direct access to decision maker</li>
 <li value="4"><strong>Use case fit</strong>: Primary use case (not secondary/experimental)</li>
 </ol>
 <h5>Disqualification Criteria (Add These)</h5>
 <ol>
-<li value="1"><strong>Too small</strong>: Under 50 employees (Example figure: replace with your own)</li>
-<li value="2"><strong>Wrong stage</strong>: No defined need</li>
-<li value="3"><strong>Budget mismatch</strong>: Can't afford $40,000 minimum (Example figure: replace with your own)</li>
+<li value="1"><strong>Too small</strong>: Under 20 employees (Example figure: replace with your own)</li>
+<li value="2"><strong>Wrong stage</strong>: No active project or timeline</li>
+<li value="3"><strong>Budget mismatch</strong>: Can't afford $12,000 minimum (Example figure: replace with your own)</li>
 <li value="4"><strong>Tech incompatibility</strong>: Missing required integrations</li>
 </ol>
 <hr>
@@ -413,7 +412,7 @@
 <section class="hx-section" aria-labelledby="ai-h">
   <h2 id="ai-h">How do I use ICP Gap Analysis from Claude?</h2>
   <p class="hx-prose">Add ICP Intelligence once (see <a href="/connect/">Use it in Claude or ChatGPT</a>), then ask in plain words. A prompt built from the tested example:</p>
-  <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Gap Analysis tool. current customers: Single-location clinics, owner-operated; ideal ICP: Multi-location clinic groups with an operations team.</blockquote>
+  <blockquote class="hx-quote">Use ICP Intelligence&#x27;s ICP Gap Analysis tool. current customers: Single-location clinics, owner-operated; ideal ICP: Multi-location clinic groups with an operations team; current metrics: avg ACV 6000, avg sales cycle 30, win rate 25, churn rate 18, NPS 28; target metrics: avg ACV 15000, avg sales cycle 45, win rate 30, churn rate 8, NPS 45.</blockquote>
 </section>
 
 <section class="hx-section" aria-labelledby="works-h">
@@ -434,7 +433,21 @@
   <pre class="hx-code-block">{
   &quot;input&quot;: {
     &quot;current_customers&quot;: &quot;Single-location clinics, owner-operated&quot;,
-    &quot;ideal_icp&quot;: &quot;Multi-location clinic groups with an operations team&quot;
+    &quot;ideal_icp&quot;: &quot;Multi-location clinic groups with an operations team&quot;,
+    &quot;current_metrics&quot;: {
+      &quot;avg_acv&quot;: 6000,
+      &quot;avg_sales_cycle&quot;: 30,
+      &quot;win_rate&quot;: 25,
+      &quot;churn_rate&quot;: 18,
+      &quot;nps&quot;: 28
+    },
+    &quot;target_metrics&quot;: {
+      &quot;avg_acv&quot;: 15000,
+      &quot;avg_sales_cycle&quot;: 45,
+      &quot;win_rate&quot;: 30,
+      &quot;churn_rate&quot;: 8,
+      &quot;nps&quot;: 45
+    }
   }
 }</pre>
   </details>
@@ -490,6 +503,6 @@
             </div>
         </div>
     </footer>
-<script src="/assets/app.js?v=47d60caaff" defer></script>
+<script src="/assets/app.js?v=27f577e13d" defer></script>
 </body>
 </html>

@@ -249,8 +249,8 @@
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run Account Prioritization">
   <div class="win hx-form-win"><div class="win-bar"><span class="t">Run Account Prioritization</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/account_prioritization" data-tool="account_prioritization" data-title="Account Prioritization"><p class="hx-help">Every field is optional. You can add: Accounts to rank, Your own weights in percent.</p>
-<div class="hx-field"><label for="f-accounts">Accounts to rank <span class="hx-opt">(optional)</span></label><textarea id="f-accounts" name="accounts" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-accounts-help"></textarea><p class="hx-help" id="f-accounts-help">One entry per account. Scores run from 0 to 100; timing is now, soon, later or unknown. For example: [{&quot;name&quot;: &quot;Clinic Group A&quot;, &quot;fit_score&quot;: 80, &quot;intent_signals&quot;: 60, &quot;relationship&quot;: 40, &quot;timing&quot;: &quot;soon&quot;}]</p></div>
-<div class="hx-field"><label for="f-prioritization_weights">Your own weights in percent <span class="hx-opt">(optional)</span></label><textarea id="f-prioritization_weights" name="prioritization_weights" rows="6" class="hx-code" spellcheck="false" data-kind="json" aria-describedby="f-prioritization_weights-help"></textarea><p class="hx-help" id="f-prioritization_weights-help">Leave it empty to use the defaults (fit 40, intent 30, relationship 15, timing 15). For example: {&quot;fit&quot;: 50, &quot;intent&quot;: 30, &quot;relationship&quot;: 10, &quot;timing&quot;: 10}</p></div>
+<div class="hx-field"><label for="f-accounts">Accounts to rank, one per line: name, fit, intent, relationship, timing <span class="hx-opt">(optional)</span></label><textarea id="f-accounts" name="accounts" rows="4" data-kind="rows" data-rows="{&quot;sep&quot;: &quot;,&quot;, &quot;cols&quot;: [[&quot;name&quot;, &quot;s&quot;, &quot;name&quot;], [&quot;fit_score&quot;, &quot;n&quot;, &quot;fit&quot;], [&quot;intent_signals&quot;, &quot;n&quot;, &quot;intent&quot;], [&quot;relationship&quot;, &quot;n&quot;, &quot;relationship&quot;], [&quot;timing&quot;, &quot;s&quot;, &quot;timing&quot;]], &quot;min&quot;: 5, &quot;max&quot;: 5, &quot;need&quot;: &quot;5 values: name, fit, intent, relationship, timing&quot;}" aria-describedby="f-accounts-help"></textarea><p class="hx-help" id="f-accounts-help">5 values per line, separated by commas. Fit, intent and relationship run from 0 to 100; timing is now, soon, later or unknown. For example: Clinic Group A, 80, 60, 40, soon</p></div>
+<div class="hx-field"><label for="f-prioritization_weights-fit">Your weight for fit, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-fit" name="prioritization_weights.fit" type="number" step="any" inputmode="decimal" data-kind="number" aria-describedby="f-prioritization_weights-fit-help"><p class="hx-help" id="f-prioritization_weights-fit-help">Leave these empty to use the defaults (fit 40, intent 30, relationship 15, timing 15).</p></div><div class="hx-field"><label for="f-prioritization_weights-intent">Your weight for intent, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-intent" name="prioritization_weights.intent" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-prioritization_weights-relationship">Your weight for relationship, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-relationship" name="prioritization_weights.relationship" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-prioritization_weights-timing">Your weight for timing, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-timing" name="prioritization_weights.timing" type="number" step="any" inputmode="decimal" data-kind="number"></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-account_prioritization">Leave this empty</label><input id="hp-account_prioritization" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run Account Prioritization</button>
@@ -259,7 +259,7 @@
     </div>
     
   </form>
-  <script type="application/json" data-example>{"accounts": "[\n {\n  \"name\": \"Clinic Group A\",\n  \"fit_score\": 80,\n  \"intent_signals\": 60,\n  \"relationship\": 40,\n  \"timing\": \"soon\"\n },\n {\n  \"name\": \"Clinic Group B\",\n  \"fit_score\": 55,\n  \"intent_signals\": 90,\n  \"relationship\": 70,\n  \"timing\": \"now\"\n }\n]"}</script></div>
+  <script type="application/json" data-example>{"accounts": "Clinic Group A, 80, 60, 40, soon\nClinic Group B, 55, 90, 70, now"}</script></div>
 </section>
 
 <section class="hx-section" id="result" aria-live="polite" aria-labelledby="result-h" hidden>
@@ -426,6 +426,6 @@
             </div>
         </div>
     </footer>
-<script src="/assets/app.js?v=47d60caaff" defer></script>
+<script src="/assets/app.js?v=27f577e13d" defer></script>
 </body>
 </html>

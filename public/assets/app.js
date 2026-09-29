@@ -1,5 +1,8 @@
 // Connector web app: runs a tool from its form and shows the answer. Without JavaScript the same form posts to the
 // same endpoint and gets an HTML page back. Nothing typed is saved in the browser.
+// R12-13 (icp12, D15): the ICP Intelligence copy of app.js (gen_site3.py copies it for the icp site only). It differs from
+// app.js only in collect(): a "rows" box (one entry per line, values split by data-rows sep) and inputs named "parent.part"
+// are turned back into the same JSON body the API received when visitors typed JSON.
 (function () {
   "use strict";
 
@@ -72,22 +75,71 @@
     return out.join("\n");
   }
 
+  function words(list) {
+    return list.length < 2 ? list.join("") : list.slice(0, -1).join(", ") + " or " + list[list.length - 1];
+  }
+  // R12-13: one entry per line; a wrong line gets a plain message such as "Line 2 needs 5 values: name, fit, intent, relationship, timing."
+  function rows(v, spec, problems) {
+    var out = [];
+    v.split(/\r?\n/).forEach(function (line, idx) {
+      if (!line.trim()) return;
+      var n = idx + 1, bad = false, obj = {};
+      var parts = line.split(spec.sep).map(function (s) { return s.trim(); });
+      if (parts.length < spec.min || (spec.max && parts.length > spec.max)) { problems.push("Line " + n + " needs " + spec.need + "."); return; }
+      spec.cols.forEach(function (c, j) {
+        var val = parts[j];
+        if (val === undefined || val === "") return;
+        if (c[1] === "n") {
+          var num = Number(val);
+          if (!isFinite(num)) { problems.push("Line " + n + ": " + c[2] + " must be a number."); bad = true; } else obj[c[0]] = num;
+        } else if (c[1] === "l") {
+          var items = val.split(spec.item).map(function (s) { return s.trim(); }).filter(Boolean);
+          if (items.length) obj[c[0]] = items;
+        } else if (c[1] === "e") {
+          var pick = val.toLowerCase().replace(/\s+/g, "_");
+          if (c[3].indexOf(pick) < 0) { problems.push("Line " + n + ": " + c[2] + " must be " + words(c[3]) + "."); bad = true; } else obj[c[0]] = pick;
+        } else {
+          obj[c[0]] = val;
+        }
+      });
+      if (spec.rest) {
+        var rest = parts.slice(spec.cols.length).filter(Boolean);
+        if (rest.length) obj[spec.rest] = rest;
+      }
+      if (!bad) out.push(obj);
+    });
+    return out;
+  }
+
   function collect(form) {
     var input = {}, problems = [];
+    // R12-13: an input named "parent.part" fills one part of the object "parent"
+    var put = function (key, value) {
+      var dot = key.indexOf(".");
+      if (dot < 1) { input[key] = value; return; }
+      var parent = key.slice(0, dot);
+      if (!input[parent] || typeof input[parent] !== "object") input[parent] = {};
+      input[parent][key.slice(dot + 1)] = value;
+    };
     form.querySelectorAll("[data-kind]").forEach(function (el) {
       var kind = el.getAttribute("data-kind"), key = el.name, v;
-      if (kind === "boolean") { if (el.checked) input[key] = true; return; }
+      if (kind === "boolean") { if (el.checked) put(key, true); return; }
       v = (el.value || "").trim();
       if (v === "") return;
       if (kind === "number") {
         var n = Number(v.replace(/,/g, ""));
-        if (!isFinite(n)) problems.push(key + " must be a number."); else input[key] = n;
+        if (!isFinite(n)) problems.push(key + " must be a number."); else put(key, n);
       } else if (kind === "lines") {
-        input[key] = v.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean);
+        put(key, v.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean));
+      } else if (kind === "rows") {
+        var spec = {};
+        try { spec = JSON.parse(el.getAttribute("data-rows") || "{}"); } catch (err) { spec = {}; }
+        var list = rows(el.value || "", spec, problems);
+        if (list.length) put(key, list);
       } else if (kind === "json") {
-        try { input[key] = JSON.parse(v); } catch (err) { problems.push(key + " is not valid JSON."); }
+        try { put(key, JSON.parse(v)); } catch (err) { problems.push(key + " is not valid JSON."); }
       } else {
-        input[key] = v;
+        put(key, v);
       }
     });
     var hp = form.querySelector('[name="leave_this_empty"]');
