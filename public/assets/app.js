@@ -94,10 +94,14 @@
     return { input: input, problems: problems, hp: hp ? hp.value : "" };
   }
 
+  // R12-11 i (SH-M7): smooth scroll only when reduced motion is off; then focus moves to the result (tabindex -1, set below)
   function show(section, html) {
     section.hidden = false;
-    section.querySelector("[data-result]").innerHTML = html;
-    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    var result = section.querySelector("[data-result]");
+    result.innerHTML = html;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    section.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    if (result.focus) { try { result.focus({ preventScroll: true }); } catch (err) { result.focus(); } }
   }
 
   document.querySelectorAll("form.hx-form").forEach(function (form) {

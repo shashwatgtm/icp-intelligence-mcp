@@ -1,6 +1,6 @@
 # ICP Intelligence
 
-> ICP Intelligence is a free web app and AI connector with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting. Give it your best customers, deals and market numbers, and it returns an ICP deep dive, a scoring model, a buying group map, TAM, SAM and SOM, lookalike criteria, account priorities, gaps, ICP changes and interview themes.
+> ICP Intelligence is a free web app and AI connector with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting, for founders and demand generation heads. Give it your best customers, deals and market numbers, and it returns an ICP, TAM, SAM and SOM, and account priorities. Add https://icp-intelligence.gtmhelix.com/mcp in Claude or ChatGPT, no sign-in.
 
 - Web app (no sign-in): https://icp-intelligence.gtmhelix.com/
 - MCP server URL (Streamable HTTP, no sign-in, read-only tools): https://icp-intelligence.gtmhelix.com/mcp
@@ -29,7 +29,7 @@
 
 ### What is ICP Intelligence?
 
-ICP Intelligence is a free web app and AI connector with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting. Give it your best customers, deals and market numbers, and it returns an ICP deep dive, a scoring model, a buying group map, TAM, SAM and SOM, lookalike criteria, account priorities, gaps, ICP changes and interview themes.
+ICP Intelligence is a free web app and AI connector with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting, for founders and demand generation heads. Give it your best customers, deals and market numbers, and it returns an ICP, TAM, SAM and SOM, and account priorities. Add https://icp-intelligence.gtmhelix.com/mcp in Claude or ChatGPT, no sign-in.
 
 ### Is ICP Intelligence free, and do I need an account?
 
@@ -49,7 +49,7 @@ In Claude, open Customize, then Connectors, select + and then Add custom connect
 
 ### Who built it?
 
-Shashwat Ghosh, Co-Founder and Fractional CMO of Helix GTM Consulting, a business consulting firm founded in 2022 in Bengaluru. He has 24+ years in B2B and 10+ years of fractional experience, and created the EPIC, IMPACT and CRAFT frameworks and the Hub-Spoke Messaging Methodology.
+Shashwat Ghosh, Co-Founder and Fractional CMO of Helix GTM Consulting, founded in 2022 in Bengaluru. He has 24+ years in B2B and 10+ years of fractional experience, and created the EPIC, IMPACT and CRAFT frameworks and the Hub-Spoke Messaging Methodology.
 
 ### Why do some answers look like templates?
 

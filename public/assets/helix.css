@@ -46,9 +46,9 @@ hr { border: 0; border-top: 1.5px solid var(--line); }
 /* ================= 3. type: one rule per heading level; contexts change the variables ================= */
 h1, h2, h3, h4 { font-family: var(--display); color: inherit; margin: 0; text-wrap: balance; }
 /* R11-22, corrected in R11-A2-8: while Archivo is not yet loaded (font-display optional keeps the fallback on a first visit), headings use Arial Bold (local, nothing downloaded) scaled to Archivo 800's width. Measured on this PC in Chrome and Edge (evidence/run11/a2/fallback-*.json): without this face a weight-800 "Arial" heading renders in Arial Black, 12% wider than Archivo; Arial Bold is 97.1% of Archivo's width (median of the 37 H1 and H2 strings of the 9 homes), so size-adjust 103% puts the median within 1%. */
-/* R11-A3-11: while VT323 is not yet loaded (font-display optional keeps the fallback on a first visit), window titles and tags use a local
-   monospace face scaled to VT323's width: 70% (median of the 30 titles and tags of the 9 homes and hub /tools/ against Courier New, the
-   0.6 em width shared by Menlo, Droid Sans Mono, Noto Sans Mono and DejaVu Sans Mono; Consolas, narrower, comes last). Nothing is downloaded. */
+/* R11-A3-11, corrected in R11-A3-13: while VT323 is not yet loaded (font-display optional keeps the fallback on a first visit), window
+   titles and tags use a local monospace face scaled to VT323's width: 66% (VT323 advances 0.4 em per character; Courier New, Menlo,
+   Droid Sans Mono, Noto Sans Mono and DejaVu Sans Mono 0.6 em; Consolas, narrower, comes last). Nothing is downloaded. */
 @font-face { font-family: "VT323 Fallback"; src: local("Courier New"), local("CourierNewPSMT"), local("Menlo"), local("Courier"), local("Droid Sans Mono"), local("Noto Sans Mono"), local("DejaVu Sans Mono"), local("Cutive Mono"), local("Consolas"); size-adjust: 66%; }  /* R11-A3-13: VT323 advances 0.4 em per character, Courier New, Menlo and Noto Sans Mono 0.6 em (0.4 / 0.6 = 66.7%, measured on hub /tools/); 66% keeps the fallback about 1% narrower so no tag gains a line */
 @font-face { font-family: "Archivo Fallback Heavy"; src: local("Arial Bold"), local("Arial-BoldMT"), local("Arial"); font-weight: 700 900; size-adjust: 103%; ascent-override: 88%; descent-override: 21%; line-gap-override: 0%; }
 h1, h2 { font-family: "Archivo", "Archivo Fallback Heavy", Arial, sans-serif; }
@@ -100,7 +100,7 @@ header.hx-header, .hx9-mm { display: none; }
 .hx9-word { font: 600 15px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
 .hx9-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; margin-left: auto; }
 .hx9-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font: 600 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
-.hx9-nav a:hover, .hx9-nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.hx9-nav a:hover, .hx9-nav a[aria-current="page"], .hx9-nav a.hx9-on { text-decoration: underline; text-decoration-color: var(--signal); text-decoration-thickness: 2px; text-underline-offset: 5px; }
 .hx9-cta { min-height: 44px; padding: 10px 16px; font-size: 13px; }
 .hx9-row2 { border-bottom: 1px solid var(--line); background: var(--paper); } /* R11-A2-18: after the header now, so the line moves to its foot (same look) */
 .hx9-menu { display: none; }
@@ -116,7 +116,7 @@ header.hx-header, .hx9-mm { display: none; }
 .hx9-logo { min-width: 44px; } /* R11-A3-6 b */
 .hx9-site { display: flex; flex-wrap: wrap; gap: 0 14px; margin-left: auto; }
 .hx9-site a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; font: 600 13px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
-.hx9-site a:hover, .hx9-site a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 5px; }
+.hx9-site a:hover, .hx9-site a[aria-current="page"], .hx9-site a.hx9-on { text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 5px; }
 @media (max-width: 900px) {
   /* R11-A2-18 e: one row of at most 64 px: logo, Work with Shashwat, Menu; the four links are in the Menu panel */
   html { scroll-padding-top: 80px; }
@@ -128,14 +128,23 @@ header.hx-header, .hx9-mm { display: none; }
   .hx9-menu > summary::-webkit-details-marker { display: none; }
   .hx9-menu-nav { position: absolute; right: 16px; top: 100%; z-index: 51; display: flex; flex-direction: column; min-width: 200px; max-height: calc(100dvh - 64px); overflow-y: auto; padding: 8px 0; background: var(--paper); border: 1px solid var(--line); }
   .hx9-menu-nav a { display: flex; align-items: center; min-height: 44px; padding: 0 16px; font: 600 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
-  .hx9-menu-nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 5px; }
+  .hx9-menu-nav a[aria-current="page"], .hx9-menu-nav a.hx9-on { text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 5px; }
   .hx9-menu:not([open]) .hx9-menu-nav { display: none; }
   .hx9-row2-in { padding-top: 4px; padding-bottom: 4px; }
   .hx9-site { margin-left: 0; gap: 0 12px; }
   .hx9-site a { font-size: 12px; }
   .hx9-crumbs > :not(:nth-last-child(-n+3)) { display: none; }
-  /* R11-A3-7: row 2 (site tag, breadcrumb, site links) wraps onto a second line on phones, so every link shows; no inner scrollbar */
-  .hx9-row2-in { flex-wrap: wrap; min-height: 48px; gap: 0 14px; }
+  /* R12-10 (R11-A5-9, owner yes; replaces the R11-A3-7 wrap): row 2 keeps only the site tag and the breadcrumb, on one line; this
+     site's own links are in the Menu panel under "This site" (chrome.py gheader), so none is lost */
+  .hx9-row2-in { flex-wrap: nowrap; min-height: 48px; gap: 0 14px; }
+  .hx9-row2 .hx9-site { display: none; }
+  .hx9-row2-linksonly { display: none; }
+  .hx9-row2 .tag { flex: none; }
+  .hx9-crumbs { flex-wrap: nowrap; overflow: hidden; white-space: nowrap; }
+  .hx9-crumbs > * { flex: none; }
+  .hx9-crumbs > [aria-current] { flex: 0 1 auto; }
+  .hx9-menu-site { display: flex; flex-direction: column; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .hx9-menu-lbl { padding: 6px 16px 2px; font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .hx9-row2 .tag { font-size: 20px; }
   /* R11-A3-6 b: the wordmark stays at 13 px (helix-b2-inner.html .logo-word); the button and Menu are a little tighter so one row fits */
   .hx9-logo { gap: 8px; } .hx9-mark { width: 34px; height: 34px; font-size: 26px; } .hx9-word { font-size: 13px; letter-spacing: .12em; }
@@ -147,8 +156,8 @@ header.hx-header, .hx9-mm { display: none; }
 }
 
 /* R11-A2-18 f and g: short windows (landscape phones, 200% zoom) and print keep the bar in the flow, so it never covers much */
-/* R11-A2-18 e, narrowed in R11-A3-6 b: under 380 px wide the logo shows its "h" mark only (the link keeps its name); at 360 px logo,
-   Work with Shashwat and Menu do not fit one row with the 13 px wordmark (measured in evidence/run11/a3/) */
+/* R11-A2-18 e, R11-A3-6 b and the R11-A3 verifier fix: under 390 px wide the logo shows its "h" mark only (the link keeps its name);
+   below that, logo, Work with Shashwat and Menu do not fit one row with the 13 px wordmark (measured in evidence/run11/a3/) */
 @media (max-width: 389px) { .hx9-word { display: none; } }  /* R11-A3 verifier: with IBM Plex Mono cached the phone button is 158 px and HELIX GTM wraps at 380 (1 line from 389 up); under 390 the h mark alone shows */
 @media (max-height: 500px) { .hx9-gh { position: static; } html { scroll-padding-top: 16px; } }
 @media print { .hx9-gh { position: static; } .hx9-menu { display: none; } }

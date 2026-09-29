@@ -118,7 +118,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 
 function htmlPage(title, bodyHtml, status) {
   const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
-    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f"><link rel="stylesheet" href="/assets/helix.css?v=7918cc1ca1"></head>` +
+    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f"><link rel="stylesheet" href="/assets/helix.css?v=bb6dd8a7a6"></head>` +
     `<body><main class="hx-body hx-result-page" id="main">${bodyHtml}</main></body></html>`;
   return new Response(page, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": PAGE_CSP } });
 }
@@ -142,7 +142,8 @@ export default async (req, context) => {
       { status: 405, headers: { "Content-Type": "application/json", Allow: "POST", ...SECURITY, "Content-Security-Policy": JSON_CSP } });
   }
   const raw = await req.text();
-  if (raw.length > MAX_BODY_BYTES) return reply(413, { ok: false, error: "The request is too large." });
+  // R12-11 d (SH-M14): the limit is in bytes, so count the UTF-8 bytes, not the characters
+  if (new TextEncoder().encode(raw).length > MAX_BODY_BYTES) return reply(413, { ok: false, error: "The request is too large." });
 
   let input = {};
   let honeypot = "";
