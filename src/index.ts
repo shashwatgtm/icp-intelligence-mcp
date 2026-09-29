@@ -368,48 +368,48 @@ const tools = {
 ### Industry Distribution
 ${topIndustries.length > 0 ? topIndustries.map(([ind, count]) => `- **${ind}**: ${count} customers (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No industry data provided'}
 
-**Pattern**: ${topIndustries.length > 0 && topIndustries[0][1] > customers.length * 0.5 ? 
+**Pattern**: ${topIndustries.length === 0 ? 'none yet, add this data' : topIndustries[0][1] > customers.length * 0.5 ? 
   `Strong concentration in ${topIndustries[0][0]} (${Math.round(topIndustries[0][1]/customers.length*100)}%)` : 
-  'Diverse industry mix - consider vertical specialization'}
+  'Diverse industry mix, consider vertical specialization'}
 
 ### Company Size Distribution
 ${topSizes.length > 0 ? topSizes.map(([size, count]) => `- **${size}**: ${count} customers (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No size data provided'}
 
 **Pattern**: ${topSizes.length > 0 ? 
   `Primary segment: ${topSizes[0][0]} companies` : 
-  'Need size data to identify segment'}
+  'none yet, add this data'}
 
 ### Deal Economics
 | Metric | Value |
 |--------|-------|
 | Average ACV | ${acvs.length > 0 ? `$${Math.round(avgACV).toLocaleString('en-US')}` : 'not supplied'} |
-| ACV Range | ${acvs.length > 0 ? `$${minACV.toLocaleString('en-US')} - $${maxACV.toLocaleString('en-US')}` : 'not supplied'} |
+| ACV Range | ${acvs.length > 0 ? `$${minACV.toLocaleString('en-US')} to $${maxACV.toLocaleString('en-US')}` : 'not supplied'} |
 | Avg Sales Cycle | ${cycles.length > 0 ? `${avgCycle} days` : 'not supplied'} |
 
-**Pattern**: ${avgACV > 50000 ? 'Enterprise deal profile - expect complex buying process' : 
-              avgACV > 15000 ? 'Mid-market deal profile - balance speed and value' : 
-              'SMB/PLG deal profile - optimize for volume'}
+**Pattern**: ${acvs.length === 0 ? 'none yet, add this data' : avgACV > 50000 ? 'Enterprise deal profile: expect complex buying process' : 
+              avgACV > 15000 ? 'Mid-market deal profile: balance speed and value' : 
+              'SMB/PLG deal profile: optimize for volume'}
 
 ### Technology Stack Signals
 ${topTech.length > 0 ? topTech.map(([tech, count]) => `- **${tech}**: ${count} customers (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No tech stack data provided'}
 
 **Pattern**: ${topTech.length > 0 ? 
   `Use "${topTech[0][0]}" as primary technographic filter` : 
-  'Collect tech stack data to identify targeting signals'}
+  'none yet, add this data'}
 
 ### Champion Roles
 ${topChampions.length > 0 ? topChampions.map(([role, count]) => `- **${role}**: ${count} deals (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No champion data provided'}
 
 **Pattern**: ${topChampions.length > 0 ? 
-  `Primary champion: ${topChampions[0][0]} - lead with their pain points` : 
-  'Track champion roles to optimize outreach'}
+  `Primary champion: ${topChampions[0][0]}; lead with their pain points` : 
+  'none yet, add this data'}
 
 ### Buying Triggers
 ${topTriggers.length > 0 ? topTriggers.map(([trigger, count]) => `- **${trigger}**: ${count} deals (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No trigger data provided'}
 
 **Pattern**: ${topTriggers.length > 0 ? 
-  `Top trigger: "${topTriggers[0][0]}" - use in outbound messaging` : 
-  'Identify triggers to improve targeting'}
+  `Top trigger: "${topTriggers[0][0]}"; use in outbound messaging` : 
+  'none yet, add this data'}
 
 ---
 
@@ -418,13 +418,14 @@ ${topTriggers.length > 0 ? topTriggers.map(([trigger, count]) => `- **${trigger}
 Based on pattern analysis:
 
 **Ideal Customer Profile**:
-- **Industry**: ${topIndustries[0]?.[0] || '[Primary industry]'}${topIndustries[1] ? ` or ${topIndustries[1][0]}` : ''}
-- **Size**: ${topSizes[0]?.[0] || '[Target size]'}
-- **Budget**: ${acvs.length > 0 ? `$${Math.round(avgACV * 0.8).toLocaleString('en-US')} - $${Math.round(avgACV * 1.2).toLocaleString('en-US')} ACV capacity ${EXAMPLE}` : 'not supplied'}
-- **Tech Stack**: Uses ${topTech[0]?.[0] || '[Key technology]'}${topTech[1] ? ` + ${topTech[1][0]}` : ''}
-- **Buying Trigger**: ${topTriggers[0]?.[0] || '[Trigger event]'}
-- **Champion**: ${topChampions[0]?.[0] || '[Champion role]'}
-- **Sales Cycle**: ~${avgCycle || 60} days expected${avgCycle ? '' : ` ${EXAMPLE}`}
+${[topIndustries[0] ? `- **Industry**: ${topIndustries[0][0]}${topIndustries[1] ? ` or ${topIndustries[1][0]}` : ''}` : '',
+  topSizes[0] ? `- **Size**: ${topSizes[0][0]}` : '',
+  `- **Budget**: ${acvs.length > 0 ? `$${Math.round(avgACV * 0.8).toLocaleString('en-US')} to $${Math.round(avgACV * 1.2).toLocaleString('en-US')} ACV capacity ${EXAMPLE}` : 'not supplied'}`,
+  topTech[0] ? `- **Tech Stack**: Uses ${topTech[0][0]}${topTech[1] ? ` + ${topTech[1][0]}` : ''}` : '',
+  topTriggers[0] ? `- **Buying Trigger**: ${topTriggers[0][0]}` : '',
+  topChampions[0] ? `- **Champion**: ${topChampions[0][0]}` : '',
+  `- **Sales Cycle**: ~${avgCycle || 60} days expected${avgCycle ? '' : ` ${EXAMPLE}`}`].filter(Boolean).join('\n')}
+${(() => { const miss = [topIndustries[0] ? '' : 'industry', topSizes[0] ? '' : 'size', topTech[0] ? '' : 'tech stack', topTriggers[0] ? '' : 'trigger', topChampions[0] ? '' : 'champion'].filter(Boolean); return miss.length ? `\nAdd ${miss.length > 1 ? miss.slice(0, -1).join(', ') + ' and ' + miss[miss.length - 1] : miss[0]} to fill this profile.` : ''; })()}
 
 ---
 
@@ -459,6 +460,8 @@ ${topTriggers.length === 0 ? 'Note: **Trigger data missing**. Ask "Why now?" in 
                 desc.includes('public') || desc.includes('enterprise') ? 'Public/Enterprise' : 'Mixed stages'
         };
         
+        // Run 12 (R12-21): the stage the user typed, when there is one, instead of a range
+        const stageTyped = [...new Set((args.customer_descriptions.match(/\bseries [a-d]\b/gi) || []).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', ');
         return `# ICP Pattern Analysis (from Description)
 
 ## Input Analyzed
@@ -482,7 +485,7 @@ ${patterns.size === 'SMB (10-100)' ? `- Expect 1-3 month sales cycles, founder/e
 - Research industry-specific compliance/requirements
 
 ### Likely Stage
-**${patterns.stage}**
+**${stageTyped || patterns.stage}**
 - Match your pricing to their typical budget capacity
 - Adjust value messaging to their growth priorities
 
@@ -617,7 +620,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
       return `# ICP Scoring Model
 
 ## Scoring Framework for ${category}
-${correlations ? `\n**Success Correlation Noted**: ${correlations}\n` : ''}
+${correlations ? `\n**Success Correlation Noted**: ${correlations}\nConsider adding this as a criterion of your own.\n` : ''}
 
 ---
 
@@ -627,8 +630,9 @@ ${args.scoring_criteria && args.scoring_criteria.length > 0
   ? 'The weights below are preset by importance level (critical, important, nice to have); they are not calculated from your data.'
   : 'You supplied no scoring criteria, so the criteria, points and bands below are an example model, not calculated from your data.'}
 
+${EXAMPLES} Every point value and band below is an example.
+
 ### Weight Distribution
-${EXAMPLES}
 | Priority | Weight Range | Purpose |
 |----------|--------------|---------|
 | **Critical** | 20-25 pts | Must-have for qualification |
@@ -637,7 +641,6 @@ ${EXAMPLES}
 
 ### Scoring Matrix
 
-${EXAMPLES}
 | Criterion | Weight | Scoring Values |
 |-----------|--------|----------------|
 ${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' / ')} |`).join('\n')}
@@ -648,7 +651,6 @@ ${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' 
 
 ## Qualification Tiers
 
-${EXAMPLES}
 | Tier | Score Range | Action | SLA |
 |------|-------------|--------|-----|
 | **A: Hot** | 80-100 | Immediate outreach, fast-track | Demo within 24 hours |
@@ -664,7 +666,6 @@ ${EXAMPLES}
 ### Date: _______________
 
 ${criteria.map(c => `
-${EXAMPLES}
 **${c.criterion}** (Max: ${c.weight} pts)
 ${c.values.map((v, i) => `[ ] ${v}`).join('\n')}
 Score: ___ / ${c.weight}
@@ -798,11 +799,12 @@ ${SUGGESTED}
         };
       } else {
         buyingGroup = {
-          champion: { role: champion, concern: 'Solving their core pain point', message: 'Directly addresses their key challenge' },
-          economic: { role: 'C-Level Sponsor', concern: 'ROI, strategic fit', message: 'Clear business impact, fast payback' },
-          technical: { role: 'IT/Tech Lead', concern: 'Integration, maintenance', message: 'Easy setup, low ongoing overhead' },
-          user: { role: 'End Users', concern: 'Ease of use, daily workflow', message: 'Makes their job easier, not harder' },
-          blocker: { role: 'Legal/Procurement', concern: 'Risk, compliance', mitigation: 'Standard terms, enterprise-ready' }
+          // Run 12 (R12-21): no preset for this category, so the lines that would read as findings are prompts to fill in
+          champion: { role: champion, concern: '[Their main concern, for example no-shows]', message: '[Your answer to that concern, in one line]' },
+          economic: { role: 'C-Level Sponsor', concern: 'ROI, strategic fit', message: '[The business impact you can prove]' },
+          technical: { role: 'IT/Tech Lead', concern: 'Integration, maintenance', message: '[How setup and upkeep work with your product]' },
+          user: { role: 'End Users', concern: 'Ease of use, daily workflow', message: '[What changes in their working day]' },
+          blocker: { role: 'Legal/Procurement', concern: 'Risk, compliance', mitigation: '[Your standard terms and compliance answer]' }
         };
       }
       // Labels only: a preset message that carries a figure is an example, not a fact about the user's product.
@@ -994,7 +996,7 @@ ${SUGGESTED}
       
       // Format numbers
       const formatCurrency = (num: number) => {
-        if (num >= 1000000000) return `$${(num / 1000000000).toFixed(1)}B`;
+        if (num >= 1000000000) return `$${(num / 1000000000).toFixed(2)}B`;
         if (num >= 1000000) return `$${(num / 1000000).toFixed(1)}M`;
         if (num >= 1000) return `$${(num / 1000).toFixed(0)}K`;
         return `$${num}`;
@@ -1065,13 +1067,13 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%${somEx
 ${somEx ? `Values computed with a preset rate you did not supply are examples.\n${EXAMPLES}\n` : ''}\`\`\`
 ┌─────────────────────────────────────────────────────────┐
 │                         TAM                             │
-│                    ${formatCurrency(tam)}                         │
+│${('                    ' + formatCurrency(tam)).padEnd(57)}│
 │    ┌───────────────────────────────────────────┐        │
 │    │                  SAM                      │        │
-│    │             ${formatCurrency(sam)}                  │        │
+│    │${('             ' + formatCurrency(sam)).padEnd(43)}│        │
 │    │    ┌─────────────────────────┐            │        │
 │    │    │          SOM            │            │        │
-│    │    │       ${formatCurrency(som)}         │            │        │
+│    │    │${('       ' + formatCurrency(som)).padEnd(25)}│            │        │
 │    │    └─────────────────────────┘            │        │
 │    └───────────────────────────────────────────┘        │
 └─────────────────────────────────────────────────────────┘
@@ -1106,7 +1108,7 @@ Later years assume your market share doubles each year.
 4. **Market share**: ${(marketSharePercent * 100).toFixed(1)}%${shareEx} is ${marketSharePercent <= 0.03 ? 'conservative' : marketSharePercent <= 0.05 ? 'moderate' : 'aggressive'} for Year 1
 
 ### Data Validation Checklist
-- [ ] Cross-reference company count with 2+ sources ${EXAMPLE}
+- [ ] Cross-reference company count with 2+ sources
 - [ ] Validate ACV with recent closed deals
 - [ ] Confirm ICP percentage with customer analysis
 - [ ] Review market share against competitor data
@@ -1121,8 +1123,8 @@ Later years assume your market share doubles each year.
 
 ## Investor-Ready Summary
 
-> The **${lowerFirstIfCommon(segment)}** segment represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP.${icpEx} 
-> We target **${formatCurrency(som)} SOM** in Year 1, requiring **${targetDeals} customers** at **${formatCurrency(acv)} ACV**.${somEx}
+> The **${lowerFirstIfCommon(segment)}** segment represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP. 
+> We target **${formatCurrency(som)} SOM** in Year 1, requiring **${targetDeals} customers** at **${formatCurrency(acv)} ACV**.
 > 
 > *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
 
@@ -1252,10 +1254,9 @@ Geography: ${locations.join(' OR ')}
 ${tech.map(t => `"${t.toLowerCase()} integration"`).join('\n')}
 ${tech.map(t => `"${t.toLowerCase()} alternative"`).join('\n')}
 "${withSoftware(industries[0]?.toLowerCase() || 'b2b', 'software')}"
-"${titles[0]?.split(' ').pop()?.toLowerCase() || 'sales'} tools"
 \`\`\`
 
-### Custom Audience - Website Visitors
+### Custom Audience: Website Visitors
 Target visitors to competitor sites:
 \`\`\`
 competitor1.com
@@ -1291,7 +1292,6 @@ ${sizesBlock}\`\`\`json
 \`\`\`
 ${tech.join('\n')}
 ${industries.map(i => `${i} solutions`).join('\n')}
-${titles.map(t => withSoftware(t.split(' ').pop() || '', 'software')).join('\n')}
 \`\`\`
 
 ### Buying Stage Indicators
@@ -1333,7 +1333,7 @@ Technologies: ${tech.join(', ')}
 **How to track**: Crunchbase alerts, TechCrunch, LinkedIn
 
 ### Trigger: ${cap(triggers[2] || 'Expansion')}
-**Signal**: New office, new market, hiring surge
+**Signal**: ${triggers[2] ? `${cap(triggers[2])} announced` : 'New office, new market, hiring surge'}
 **Why it matters**: Existing processes breaking at scale
 **How to track**: Job posting velocity, news alerts
 
@@ -1505,7 +1505,7 @@ ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default wei
 
 ## Prioritized Account List
 
-${EXAMPLES} The scores use ${noWeights ? 'the default weights and ' : ''}a preset score for each timing value; (default) marks a value your input did not supply, so the tool used its default.
+Your scores are shown as given; ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'}. (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
 |------|---------|-----|--------|--------------|--------|-----------|------|
 ${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit}${a.defaults.fit ? ' (default)' : ''} | ${a.intent}${a.defaults.intent ? ' (default)' : ''} | ${a.relationship}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
@@ -1515,25 +1515,25 @@ ${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit}${a.default
 ## Tier Breakdown
 
 ${EXAMPLES}
-### Tier A (Score 80+) - Immediate Action
+### Tier A (Score 80+): Immediate Action
 ${scoredAccounts.filter(a => a.tier === 'A').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Personalized outreach within 24 hours, executive involvement
 
 ${EXAMPLES}
-### Tier B (Score 60-79) - High Priority
+### Tier B (Score 60-79): High Priority
 ${scoredAccounts.filter(a => a.tier === 'B').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Targeted outreach this week, multi-touch sequence
 
 ${EXAMPLES}
-### Tier C (Score 40-59) - Nurture
+### Tier C (Score 40-59): Nurture
 ${scoredAccounts.filter(a => a.tier === 'C').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Add to nurture campaign, monitor for signal changes
 
 ${EXAMPLES}
-### Tier D (Score <40) - Monitor
+### Tier D (Score <40): Monitor
 ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Marketing nurture only, check quarterly
@@ -1557,6 +1557,8 @@ ${SUGGESTED}
 
       // If no accounts, provide the framework
       return `# Account Prioritization Framework
+
+Provide your accounts to get prioritized ranking.
 
 ## Scoring Model
 
@@ -1623,8 +1625,6 @@ ${EXAMPLES}
 | B | 60-79 | 25% | AE prioritized | 48 hours |
 | C | 40-59 | 35% | SDR sequences | 1 week |
 | D | <40 | 30% | Marketing only | Monthly |
-
-Provide your accounts to get prioritized ranking.
 
 ${SUGGESTED}
 `;
@@ -1740,6 +1740,9 @@ ${SUGGESTED}
       const noneGiven = !Object.values(given).some(([c, t]) => c || t);
       const cellEx = (supplied: boolean) => (noneGiven || supplied) ? '' : ` ${EXAMPLE}`;
       const gapEx = ([c, t]: boolean[]) => (c && t) ? '' : ` ${EXAMPLE}`;
+      // Run 12 (R12-21): a priority computed only from preset values says so; a root-cause line shows only when the gap points that way.
+      const pri = (word: string) => (noneGiven && word !== 'Not rated' ? `${word} (on example values)` : word);
+      const behind = (g: string) => g !== 'n/a' && parseFloat(g) > 0;
 
       return `# ICP Gap Analysis
 
@@ -1757,19 +1760,18 @@ ${args.ideal_icp}
 
 ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so every value in this table is a preset example.\n` : ''}| Metric | Current | Target | Gap | Priority |
 |--------|---------|--------|-----|----------|
-| **Avg ACV** | $${metrics.current.acv.toLocaleString('en-US')}${cellEx(given.acv[0])} | $${metrics.target.acv.toLocaleString('en-US')}${cellEx(given.acv[1])} | ${upGap(gaps.acv, '')} | ${sev(gaps.acv, 50, 25)} |
-| **Sales Cycle** | ${metrics.current.cycle} days${cellEx(given.cycle[0])} | ${metrics.target.cycle} days${cellEx(given.cycle[1])} | ${downGap(gaps.cycle, '')} | ${sev(gaps.cycle, 30, 15)} |
-| **Win Rate** | ${metrics.current.winRate}%${cellEx(given.winRate[0])} | ${metrics.target.winRate}%${cellEx(given.winRate[1])} | ${upGap(gaps.winRate, '')} | ${sev(gaps.winRate, 40, 20)} |
-| **Churn Rate** | ${metrics.current.churn}%${cellEx(given.churn[0])} | ${metrics.target.churn}%${cellEx(given.churn[1])} | ${downGap(gaps.churn, '')} | ${sev(gaps.churn, 40, 20)} |
-| **NPS** | ${metrics.current.nps}${cellEx(given.nps[0])} | ${metrics.target.nps}${cellEx(given.nps[1])} | ${npsGap} | ${sev(gaps.nps, 50, 25)} |
+| **Avg ACV** | $${metrics.current.acv.toLocaleString('en-US')}${cellEx(given.acv[0])} | $${metrics.target.acv.toLocaleString('en-US')}${cellEx(given.acv[1])} | ${upGap(gaps.acv, '')} | ${pri(sev(gaps.acv, 50, 25))} |
+| **Sales Cycle** | ${metrics.current.cycle} days${cellEx(given.cycle[0])} | ${metrics.target.cycle} days${cellEx(given.cycle[1])} | ${downGap(gaps.cycle, '')} | ${pri(sev(gaps.cycle, 30, 15))} |
+| **Win Rate** | ${metrics.current.winRate}%${cellEx(given.winRate[0])} | ${metrics.target.winRate}%${cellEx(given.winRate[1])} | ${upGap(gaps.winRate, '')} | ${pri(sev(gaps.winRate, 40, 20))} |
+| **Churn Rate** | ${metrics.current.churn}%${cellEx(given.churn[0])} | ${metrics.target.churn}%${cellEx(given.churn[1])} | ${downGap(gaps.churn, '')} | ${pri(sev(gaps.churn, 40, 20))} |
+| **NPS** | ${metrics.current.nps}${cellEx(given.nps[0])} | ${metrics.target.nps}${cellEx(given.nps[1])} | ${npsGap} | ${pri(sev(gaps.nps, 50, 25))} |
 
 ---
 
 ## Gap Root Cause Analysis
 
 ### ACV Gap (${upGap(gaps.acv, '')})${gapEx(given.acv)}
-**Current**: Selling to smaller companies or at lower price points
-**Root Causes**:
+${behind(gaps.acv) ? '**Current**: Selling to smaller companies or at lower price points\n' : ''}**Common causes to check**:
 - Targeting companies without budget
 - Not selling to decision-makers
 - Discounting too aggressively
@@ -1782,8 +1784,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 - Build reference customers in target segment
 
 ### Sales Cycle Gap (${downGap(gaps.cycle, 'reduction ')})${gapEx(given.cycle)}
-**Current**: Deals taking too long to close
-**Root Causes**:
+${behind(gaps.cycle) ? '**Current**: Deals taking too long to close\n' : ''}**Common causes to check**:
 - Unclear value proposition
 - Too many stakeholders involved
 - Missing champion support
@@ -1796,8 +1797,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 - Streamline procurement requirements
 
 ### Win Rate Gap (${upGap(gaps.winRate, 'improvement ')})${gapEx(given.winRate)}
-**Current**: Losing too many deals
-**Root Causes**:
+${behind(gaps.winRate) ? '**Current**: Losing too many deals\n' : ''}**Common causes to check**:
 - Poor qualification upfront
 - Weak differentiation
 - Losing to status quo
@@ -1810,8 +1810,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 - Review pricing competitiveness
 
 ### Churn Gap (${downGap(gaps.churn, 'reduction ')})${gapEx(given.churn)}
-**Current**: Customers not staying
-**Root Causes**:
+${behind(gaps.churn) ? '**Current**: Customers not staying\n' : ''}**Common causes to check**:
 - Wrong customers being sold
 - Poor onboarding
 - Value not realized
@@ -1920,6 +1919,8 @@ ${SUGGESTED}
       
       return `# ICP Evolution Analysis
 
+This is a review checklist: it lays your notes next to what to check. It does not analyze the text.
+
 ## Current ICP
 ${args.current_icp}
 
@@ -1933,7 +1934,7 @@ ${args.current_icp}
 ${args.recent_wins || '*No win data provided*'}
 
 **Pattern Detection**:
-${args.recent_wins ? `- This tool does not analyze the text; check these wins for emerging ICP characteristics
+${args.recent_wins ? `- Check these wins for emerging ICP characteristics
 - Look for: Common company sizes, industries, buying triggers, champion roles
 - Consider: What made these deals successful? New segment emerging?` : 
 '- Provide recent win descriptions to identify patterns'}
@@ -1942,7 +1943,7 @@ ${args.recent_wins ? `- This tool does not analyze the text; check these wins fo
 ${args.recent_losses || '*No loss data provided*'}
 
 **Pattern Detection**:
-${args.recent_losses ? `- This tool does not analyze the text; check these losses for the ICP refinements they suggest
+${args.recent_losses ? `- Check these losses for the ICP refinements they suggest
 - Look for: Common rejection reasons, competitor wins, deal killers
 - Consider: Should these have been disqualified earlier?` :
 '- Provide recent loss descriptions to identify anti-patterns'}
@@ -1955,7 +1956,7 @@ ${args.recent_losses ? `- This tool does not analyze the text; check these losse
 ${args.market_changes || '*No market changes provided*'}
 
 **ICP Implications**:
-${args.market_changes ? `- This tool does not analyze the text; check how these market changes affect your ideal customer
+${args.market_changes ? `- Check how these market changes affect your ideal customer
 - Consider: New buyer behaviors, budget shifts, competitive landscape
 - Evaluate: Should ICP expand or contract based on changes?` :
 '- Provide market changes to assess ICP impact'}
@@ -2017,9 +2018,9 @@ ${args.recent_losses ? `
 
 | Quarter | ICP Change | Rationale | Impact |
 |---------|-----------|-----------|--------|
-| ${period} | [Pending analysis] | [Based on this review] | [Measure next quarter] |
-| | | | |
-| | | | |
+| ${period} | [Your ICP change] | [Why, from this review] | [What to measure next quarter] |
+| [Next quarter] | [Your ICP change] | [Why] | [Result] |
+| [Quarter after] | [Your ICP change] | [Why] | [Result] |
 
 ### Metrics to Track
 - **Win rate by ICP fit score**: Should improve if ICP is right
@@ -2137,28 +2138,28 @@ ${EXAMPLES}
 
 ### Top Pain Points (by frequency)
 ${topPains.length > 0 ? topPains.map(([pain, count], i) => 
-  `${i + 1}. **"${pain}"** - mentioned ${count}x (${Math.round(count/interviews.length*100)}% of interviews)`
+  `${i + 1}. **"${pain}"**: mentioned ${count}x (${Math.round(count/interviews.length*100)}% of interviews)`
 ).join('\n') : '- No pain points captured'}
 
 **ICP Implication**: Target customers experiencing these pain points
 
 ### Top Buying Triggers
 ${topTriggers.length > 0 ? topTriggers.map(([trigger, count], i) => 
-  `${i + 1}. **${trigger}** - ${count}x (${Math.round(count/interviews.length*100)}%)`
+  `${i + 1}. **${trigger}**: ${count}x (${Math.round(count/interviews.length*100)}%)`
 ).join('\n') : '- No triggers captured'}
 
 **ICP Implication**: Time outreach around these events
 
 ### Value Realized (Post-Purchase)
 ${topValue.length > 0 ? topValue.map(([value, count], i) => 
-  `${i + 1}. **${value}** - ${count}x (${Math.round(count/interviews.length*100)}%)`
+  `${i + 1}. **${value}**: ${count}x (${Math.round(count/interviews.length*100)}%)`
 ).join('\n') : '- No value data captured'}
 
 **ICP Implication**: Lead with these outcomes in messaging
 
 ### Champion Roles
 ${topRoles.length > 0 ? topRoles.map(([role, count], i) => 
-  `${i + 1}. **${role}** - ${count}x (${Math.round(count/interviews.length*100)}%)`
+  `${i + 1}. **${role}**: ${count}x (${Math.round(count/interviews.length*100)}%)`
 ).join('\n') : '- No roles captured'}
 
 **ICP Implication**: Focus outreach on these titles
