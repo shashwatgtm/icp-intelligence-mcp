@@ -2052,7 +2052,7 @@ ${EXAMPLES}
   // Tool 9: ICP Interview Synthesizer - Pattern Extraction from Interviews
   // ---------------------------------------------------------------------------
   icp_interview_synthesizer: {
-    description: 'Extract ICP patterns from customer interview notes or transcripts',
+    description: 'Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -2212,9 +2212,9 @@ Based on gaps in this analysis, ask about:
       
       // If raw transcripts provided
       if (args.raw_transcripts) {
-        return `# Interview Analysis Request
+        return `Your notes are below. This tool analyses structured notes only.
 
-## Raw Content Provided
+## Your Notes
 \`\`\`
 ${args.raw_transcripts.substring(0, 500)}${args.raw_transcripts.length > 500 ? '...' : ''}
 \`\`\`

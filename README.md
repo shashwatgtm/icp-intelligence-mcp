@@ -50,7 +50,7 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | 6 | `account_prioritization` | Account Prioritization | Rank and prioritize accounts using multi-dimensional scoring |
 | 7 | `icp_gap_analysis` | ICP Gap Analysis | Analyze gaps between current customer base and ideal ICP |
 | 8 | `icp_evolution_tracker` | ICP Evolution Tracker | Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text |
-| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from customer interview notes or transcripts |
+| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed. |
 
 ### Inputs of each tool
 
