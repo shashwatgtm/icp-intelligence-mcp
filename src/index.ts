@@ -773,29 +773,31 @@ ${SUGGESTED}
         blocker: { role: '', concern: '', mitigation: '' }
       };
       
+      // Run 12 (B5 sweep): a preset message says something about the user's product that the input did not give, so each
+      // one carries the condition "[Only if true and provable: ...]" (the words and figures are kept).
       if (categoryLower.includes('sales') || categoryLower.includes('crm') || categoryLower.includes('revenue')) {
         buyingGroup = {
-          champion: { role: 'VP/Director Sales', concern: 'Quota attainment, rep productivity', message: 'Help reps hit quota with less effort' },
-          economic: { role: 'CRO/CEO', concern: 'Revenue growth, sales efficiency', message: 'Drive 20%+ revenue improvement with measurable ROI' },
-          technical: { role: 'Sales Ops/RevOps', concern: 'CRM integration, data quality', message: 'Seamless Salesforce sync, no data cleanup' },
-          user: { role: 'Sales Reps', concern: 'Ease of use, time savings', message: 'Spend time selling, not on admin work' },
-          blocker: { role: 'IT Security', concern: 'Data security, compliance', mitigation: '[Your certifications, for example SOC 2], SSO supported, data encryption' }
+          champion: { role: 'VP/Director Sales', concern: 'Quota attainment, rep productivity', message: '[Only if true and provable: Help reps hit quota with less effort]' },
+          economic: { role: 'CRO/CEO', concern: 'Revenue growth, sales efficiency', message: '[Only if true and provable: Drive 20%+ revenue improvement with measurable ROI]' },
+          technical: { role: 'Sales Ops/RevOps', concern: 'CRM integration, data quality', message: '[Only if true and provable: Seamless Salesforce sync, no data cleanup]' },
+          user: { role: 'Sales Reps', concern: 'Ease of use, time savings', message: '[Only if true and provable: Spend time selling, not on admin work]' },
+          blocker: { role: 'IT Security', concern: 'Data security, compliance', mitigation: '[Your certifications, for example SOC 2], [Only if true and provable: SSO supported, data encryption]' }
         };
       } else if (categoryLower.includes('marketing') || categoryLower.includes('demand')) {
         buyingGroup = {
-          champion: { role: 'VP/Director Marketing', concern: 'Pipeline contribution, campaign ROI', message: 'Generate 30% more pipeline from same budget' },
-          economic: { role: 'CMO/CEO', concern: 'Marketing efficiency, brand impact', message: 'Prove marketing ROI to the board' },
-          technical: { role: 'Marketing Ops', concern: 'Tech stack integration, workflow', message: 'Fits your existing stack, no migration pain' },
-          user: { role: 'Campaign Managers', concern: 'Ease of execution, reporting', message: 'Launch campaigns in hours, not weeks' },
-          blocker: { role: 'Finance', concern: 'Budget justification', mitigation: 'Clear ROI calculator, flexible pricing' }
+          champion: { role: 'VP/Director Marketing', concern: 'Pipeline contribution, campaign ROI', message: '[Only if true and provable: Generate 30% more pipeline from same budget]' },
+          economic: { role: 'CMO/CEO', concern: 'Marketing efficiency, brand impact', message: '[Only if true and provable: Prove marketing ROI to the board]' },
+          technical: { role: 'Marketing Ops', concern: 'Tech stack integration, workflow', message: '[Only if true and provable: Fits your existing stack, no migration pain]' },
+          user: { role: 'Campaign Managers', concern: 'Ease of execution, reporting', message: '[Only if true and provable: Launch campaigns in hours, not weeks]' },
+          blocker: { role: 'Finance', concern: 'Budget justification', mitigation: '[Only if true and provable: Clear ROI calculator, flexible pricing]' }
         };
       } else if (categoryLower.includes('security') || categoryLower.includes('compliance')) {
         buyingGroup = {
-          champion: { role: 'CISO/Security Director', concern: 'Risk reduction, compliance', message: 'Reduce attack surface by 80%' },
-          economic: { role: 'CIO/CFO', concern: 'Risk vs cost, insurance impact', message: 'Avoid $5M average breach cost' },
-          technical: { role: 'Security Engineers', concern: 'Technical depth, alert quality', message: 'Fewer false positives, actionable alerts' },
-          user: { role: 'SOC Team', concern: 'Alert fatigue, efficiency', message: 'Cut investigation time by 60%' },
-          blocker: { role: 'Procurement', concern: 'Vendor consolidation', mitigation: 'Replaces 3+ point solutions' }
+          champion: { role: 'CISO/Security Director', concern: 'Risk reduction, compliance', message: '[Only if true and provable: Reduce attack surface by 80%]' },
+          economic: { role: 'CIO/CFO', concern: 'Risk vs cost, insurance impact', message: '[Only if true and provable: Avoid $5M average breach cost]' },
+          technical: { role: 'Security Engineers', concern: 'Technical depth, alert quality', message: '[Only if true and provable: Fewer false positives, actionable alerts]' },
+          user: { role: 'SOC Team', concern: 'Alert fatigue, efficiency', message: '[Only if true and provable: Cut investigation time by 60%]' },
+          blocker: { role: 'Procurement', concern: 'Vendor consolidation', mitigation: '[Only if true and provable: Replaces 3+ point solutions]' }
         };
       } else {
         buyingGroup = {
@@ -1771,7 +1773,8 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 ## Gap Root Cause Analysis
 
 ### ACV Gap (${upGap(gaps.acv, '')})${gapEx(given.acv)}
-${behind(gaps.acv) ? '**Current**: Selling to smaller companies or at lower price points\n' : ''}**Common causes to check**:
+${behind(gaps.acv) ? '**Current**: Average deal value below your target\n' : ''}**Common causes to check**:
+- Selling to smaller companies or at lower price points
 - Targeting companies without budget
 - Not selling to decision-makers
 - Discounting too aggressively
