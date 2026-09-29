@@ -1,4 +1,4 @@
-/* helix-report.css: the Helix report standard (run 13, owner decision D22, 29 September 2026).
+/* helix-report.css: the Helix report standard (run 13, owner decision D22, 29 September 2026; run 14 R14-10b: dark mode is screen only).
    One file, the same in every repo (rule B34). Load it after helix.css. It uses only helix.css tokens: no new colour,
    font or icon. The markup contract is work/run13/report/contract.md. Report words and numbers never change (B35).
    Sections: 1 frame, 2 title block, 3 body type, 4 tables and callouts, 5 footer, 6 print and PDF. */
@@ -44,7 +44,7 @@
 .hxr-foot { margin: 28px 0 0; padding: 14px 0 0; border-top: 1.5px solid var(--line); font: 500 13px/1.6 var(--mono); color: var(--muted); }
 .hxr-foot a { color: var(--ink); }
 
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .hxr-body blockquote, .hxr-insight, .hxr-note { background: #3A2226; color: #FAF8F6; }
   .hxr-body th { background: #3A2226; color: #FAF8F6; }
   .hxr-tag { background: #FAF8F6; color: #1A0E10; }
@@ -102,6 +102,8 @@
   .hxr-note, .hxr-insight, .hxr-body blockquote, .hxr-body th { background: none !important; color: #1A0E10 !important; }
   .hxr-note, .hxr-insight, .hxr-body blockquote { border: 1.5px solid #1A0E10 !important; border-left-width: 4px !important; }
   .hxr-body th { border-bottom: 2px solid #1A0E10 !important; }
+  /* run 14 R14-10b: the site's dark-mode code colours (helix.css section 25) never reach the paper */
+  .hxr code, .hxr kbd, .hxr samp { background: none !important; color: #1A0E10 !important; }
 
   /* charts keep their colours */
   .hxr-chart, .hxr-chart *, svg, svg * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
