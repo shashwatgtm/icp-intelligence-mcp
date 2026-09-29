@@ -201,7 +201,7 @@
   <ul class="hx-prose">
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
     <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
-    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.9.</li>
+    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.10.</li>
     <li>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document fields <code>customer_descriptions</code> (ICP Deep Dive) and <code>raw_transcripts</code> (ICP Interview Synthesizer), which take up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
   </ul>
@@ -236,13 +236,14 @@
 <tr><td>1.2.6</td><td>28 September 2026</td><td>GitHub, commit 8414dcb</td></tr>
 <tr><td>1.2.7</td><td>28 September 2026</td><td>GitHub, commit 8ec007c</td></tr>
 <tr><td>1.2.8</td><td>29 September 2026</td><td>GitHub, commit b6f989d</td></tr>
-<tr><td>1.2.9 (this site)</td><td>29 September 2026</td><td>GitHub, commit 0561894</td></tr>
+<tr><td>1.2.9</td><td>29 September 2026</td><td>GitHub, commit 0561894</td></tr>
+<tr><td>1.2.10 (this site)</td><td>29 September 2026</td><td>GitHub, commit 4b79099</td></tr>
   </tbody></table></div>
 </section>
 
 <section class="hx-section" aria-labelledby="ref-h">
   <h2 id="ref-h">Tool reference</h2>
-  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.9.</p>
+  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.10.</p>
 </section>
 <section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
   <h3 id="d-icp-deep-dive">ICP Deep Dive</h3>
