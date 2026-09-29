@@ -69,7 +69,10 @@
   form, .hx-form, button, .hx-btn, .btn, .hx-cta-row, .hx10-actions, .hx-actions, .hx9-next, .hx-result-actions,
   .hxr-actions, .hxr-noprint, [role="tablist"], .subscribe-btn, .ob-sub-cta, .newsletter, .hx-subscribe { display: none !important; }
   /* a page that holds a report prints the report only */
-  main:has(.hxr) :not(:has(.hxr), .hxr, .hxr *) { display: none !important; }
+  main:has(.hxr) :not(:has(.hxr, .hxr-head), .hxr, .hxr *, .hxr-head, .hxr-head *) { display: none !important; }
+  /* a title block that sits outside the frame (the GTM Alpha sample page) prints plainly */
+  main:has(.hxr) :has(> .hxr-head), main:has(.hxr) .hxr-head { background: none !important; box-shadow: none !important; }
+  main:has(.hxr) :has(> .hxr-head)::before, main:has(.hxr) :has(> .hxr-head)::after, main:has(.hxr) .hxr-head::before, main:has(.hxr) .hxr-head::after { display: none !important; }
   /* connector tool pages: the Run result when there is one, else the Example answer (app.js opens it before printing) */
   main:has(#result:not([hidden]) .hxr) section:has(.hxr-example) { display: none !important; }
   main:has(#result[hidden]) #result { display: none !important; }
@@ -87,6 +90,7 @@
   /* keep headings with what follows; never split a row, figure, tile, card, callout or chart */
   h1, h2, h3, h4, h5, h6, .hxr-title, .hxr-h2, .hxr-h3, .hxr-h4 { break-after: avoid; page-break-after: avoid; break-inside: avoid; }
   tr, figure, img, svg, blockquote, pre, .hxr-keep, .hxr-insight, .hxr-note, .hx-table table tr, .chip { break-inside: avoid; page-break-inside: avoid; }
+  .hxr :is(h2, h3, h4, .hxr-h2, .hxr-h3, .hxr-h4) + * { break-before: avoid; page-break-before: avoid; }
   thead { display: table-header-group; }
   tfoot { display: table-footer-group; }
   p, li { orphans: 3; widows: 3; }
