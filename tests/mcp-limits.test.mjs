@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 const { default: handler, config } = await import(new URL("../netlify/functions/mcp.mjs", import.meta.url));
 
 // The fields that take a pasted document, article, transcript, notes or content (100,000 characters; every other text 4,000).
-const LONG_TEXT = {"icp_interview_synthesizer": ["raw_transcripts"]};
+const LONG_TEXT = {"icp_deep_dive": ["customer_descriptions"], "icp_interview_synthesizer": ["raw_transcripts"]};
 const MAX_BODY = 262144;
 const ACCEPT = "application/json, text/event-stream";
 const TYPE_WORDS = { string: "text", number: "a number", integer: "a whole number", boolean: "true or false", array: "a list", object: "an object" };

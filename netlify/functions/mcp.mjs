@@ -20,6 +20,9 @@ const MAX_LONG_TEXT = 100000;
 const MAX_NAME = 100;
 // Tool name to the fields that take a pasted document, article, transcript, notes or content.
 const LONG_TEXT = {
+  "icp_deep_dive": [
+    "customer_descriptions"
+  ],
   "icp_interview_synthesizer": [
     "raw_transcripts"
   ]
