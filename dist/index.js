@@ -344,7 +344,7 @@ const tools = {
 
 ---
 
-## 📊 Detected Patterns
+## Detected Patterns
 
 ### Industry Distribution
 ${topIndustries.length > 0 ? topIndustries.map(([ind, count]) => `- **${ind}**: ${count} customers (${Math.round(count / customers.length * 100)}%)`).join('\n') : '- No industry data provided'}
@@ -394,7 +394,7 @@ ${topTriggers.length > 0 ? topTriggers.map(([trigger, count]) => `- **${trigger}
 
 ---
 
-## 🎯 Synthesized ICP
+## Synthesized ICP
 
 Based on pattern analysis:
 
@@ -409,13 +409,13 @@ Based on pattern analysis:
 
 ---
 
-## 💡 Data Gaps to Fill
+## Data Gaps to Fill
 
-${topIndustries.length === 0 ? '⚠️ **Industry data missing** - Add industry field to customer records\n' : ''}
-${topSizes.length === 0 ? '⚠️ **Size data missing** - Add employee count/revenue tier\n' : ''}
-${topTech.length === 0 ? '⚠️ **Tech stack missing** - Track technologies customers use\n' : ''}
-${topChampions.length === 0 ? '⚠️ **Champion data missing** - Record buyer titles on deals\n' : ''}
-${topTriggers.length === 0 ? '⚠️ **Trigger data missing** - Ask "Why now?" in discovery\n' : ''}
+${topIndustries.length === 0 ? 'Note: **Industry data missing**. Add industry field to customer records\n' : ''}
+${topSizes.length === 0 ? 'Note: **Size data missing**. Add employee count/revenue tier\n' : ''}
+${topTech.length === 0 ? 'Note: **Tech stack missing**. Track technologies customers use\n' : ''}
+${topChampions.length === 0 ? 'Note: **Champion data missing**. Record buyer titles on deals\n' : ''}
+${topTriggers.length === 0 ? 'Note: **Trigger data missing**. Ask "Why now?" in discovery\n' : ''}
 
 **Next Step**: Use \`icp_scoring_model\` to create a qualification scorecard
 `;
@@ -446,7 +446,7 @@ ${args.customer_descriptions}
 
 ---
 
-## 📊 Detected Patterns
+## Detected Patterns
 
 ### Likely Company Size
 **${patterns.size}**${/\d/.test(patterns.size) ? ` ${EXAMPLE}` : ''}
@@ -466,7 +466,7 @@ ${patterns.size === 'SMB (10-100)' ? `- Expect 1-3 month sales cycles, founder/e
 
 ---
 
-## ⚠️ Recommendations
+## Recommendations
 
 For more precise ICP analysis, provide structured customer data in this format (the customer below is an example, not taken from your input):
 
@@ -586,7 +586,7 @@ ${correlations ? `\n**Success Correlation Noted**: ${correlations}\n` : ''}
 
 ---
 
-## 📊 Scoring Criteria & Weights
+## Scoring Criteria & Weights
 
 ${args.scoring_criteria && args.scoring_criteria.length > 0
                 ? 'The weights below are preset by importance level (critical, important, nice to have); they are not calculated from your data.'
@@ -611,7 +611,7 @@ ${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' 
 
 ---
 
-## 🎯 Qualification Tiers
+## Qualification Tiers
 
 ${EXAMPLES}
 | Tier | Score Range | Action | SLA |
@@ -623,7 +623,7 @@ ${EXAMPLES}
 
 ---
 
-## 📋 Qualification Scorecard Template
+## Qualification Scorecard Template
 
 ### Account: _______________
 ### Date: _______________
@@ -631,7 +631,7 @@ ${EXAMPLES}
 ${criteria.map(c => `
 ${EXAMPLES}
 **${c.criterion}** (Max: ${c.weight} pts)
-${c.values.map((v, i) => `☐ ${v}`).join('\n')}
+${c.values.map((v, i) => `[ ] ${v}`).join('\n')}
 Score: ___ / ${c.weight}
 `).join('\n')}
 
@@ -639,11 +639,11 @@ Score: ___ / ${c.weight}
 
 **TOTAL SCORE**: ___ / ${criteria.reduce((sum, c) => sum + c.weight, 0)} ${EXAMPLE}
 
-**TIER**: ☐ A (Hot)  ☐ B (Warm)  ☐ C (Developing)  ☐ D (Unqualified)
+**TIER**: [ ] A (Hot)  [ ] B (Warm)  [ ] C (Developing)  [ ] D (Unqualified)
 
 ---
 
-## 🔧 Implementation Guide
+## Implementation Guide
 
 ### In CRM (Salesforce/HubSpot)
 1. Create custom field for each criterion
@@ -665,7 +665,7 @@ Even high scores should be reviewed if:
 
 ---
 
-## 💡 Success Indicators to Track
+## Success Indicators to Track
 
 Add these fields to your CRM to improve scoring over time:
 
@@ -776,9 +776,9 @@ ${SUGGESTED}
 
 ---
 
-## 👥 Buying Group Map
+## Buying Group Map
 
-### 🏆 Champion (Your Internal Advocate)
+### Champion (Your Internal Advocate)
 **Role**: ${buyingGroup.champion.role}
 **Their Concern**: ${buyingGroup.champion.concern}
 **Your Message**: "${buyingGroup.champion.message}"${exIfFigure(buyingGroup.champion.message)}
@@ -789,7 +789,7 @@ ${SUGGESTED}
 - Make them look good to leadership
 - Give them early wins to share
 
-### 💰 Economic Buyer (Budget Authority)
+### Economic Buyer (Budget Authority)
 **Role**: ${buyingGroup.economic.role}
 **Their Concern**: ${buyingGroup.economic.concern}
 **Your Message**: "${buyingGroup.economic.message}"${exIfFigure(buyingGroup.economic.message)}
@@ -800,7 +800,7 @@ ${SUGGESTED}
 - Connect to strategic priorities
 - Reference similar company results
 
-### 🔧 Technical Evaluator (Implementation Voice)
+### Technical Evaluator (Implementation Voice)
 **Role**: ${buyingGroup.technical.role}
 **Their Concern**: ${buyingGroup.technical.concern}
 **Your Message**: "${buyingGroup.technical.message}"${exIfFigure(buyingGroup.technical.message)}
@@ -811,7 +811,7 @@ ${SUGGESTED}
 - Offer technical deep-dive call
 - Address security questionnaire proactively
 
-### 👤 End User (Day-to-Day User)
+### End User (Day-to-Day User)
 **Role**: ${buyingGroup.user.role}
 **Their Concern**: ${buyingGroup.user.concern}
 **Your Message**: "${buyingGroup.user.message}"${exIfFigure(buyingGroup.user.message)}
@@ -822,7 +822,7 @@ ${SUGGESTED}
 - Minimize learning curve fear
 - Get pilot users as advocates
 
-### ⚠️ Potential Blocker
+### Potential Blocker
 **Role**: ${buyingGroup.blocker.role}
 **Their Concern**: ${buyingGroup.blocker.concern}
 **Mitigation**: "${buyingGroup.blocker.mitigation}"${exIfFigure(buyingGroup.blocker.mitigation)}
@@ -835,7 +835,7 @@ ${SUGGESTED}
 
 ---
 
-## 🔄 Influence Map
+## Influence Map
 
 \`\`\`
 ${influenceMap(buyingGroup)}
@@ -843,23 +843,23 @@ ${influenceMap(buyingGroup)}
 
 ---
 
-## 📋 Multi-Threading Checklist
+## Multi-Threading Checklist
 
 Track your coverage of the buying group:
 
 | Role | Identified | Contacted | Meeting Held | Aligned |
 |------|-----------|-----------|--------------|---------|
-| Champion | ☐ | ☐ | ☐ | ☐ |
-| Economic Buyer | ☐ | ☐ | ☐ | ☐ |
-| Technical | ☐ | ☐ | ☐ | ☐ |
-| End User | ☐ | ☐ | ☐ | ☐ |
-| Blocker | ☐ | ☐ | ☐ | ☐ |
+| Champion | [ ] | [ ] | [ ] | [ ] |
+| Economic Buyer | [ ] | [ ] | [ ] | [ ] |
+| Technical | [ ] | [ ] | [ ] | [ ] |
+| End User | [ ] | [ ] | [ ] | [ ] |
+| Blocker | [ ] | [ ] | [ ] | [ ] |
 
 **Goal**: Minimum 3 of 5 roles engaged before proposal ${EXAMPLE}
 
 ---
 
-## 💬 Role-Specific Discovery Questions
+## Role-Specific Discovery Questions
 
 ### For Champions
 1. "What would success look like for you personally?"
@@ -962,7 +962,7 @@ ${SUGGESTED}
 
 ---
 
-## 📊 Input Data
+## Input Data
 
 | Input | Value | Source |
 |-------|-------|--------|
@@ -973,7 +973,7 @@ ${SUGGESTED}
 
 ---
 
-## 🎯 Market Sizing Results
+## Market Sizing Results
 
 ### TAM (Total Addressable Market)
 \`\`\`
@@ -1008,7 +1008,7 @@ SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%${somEx
 
 ---
 
-## 📈 Visualization
+## Visualization
 
 ${somEx ? `Values computed with a preset rate you did not supply are examples.\n${EXAMPLES}\n` : ''}\`\`\`
 ┌─────────────────────────────────────────────────────────┐
@@ -1027,7 +1027,7 @@ ${somEx ? `Values computed with a preset rate you did not supply are examples.\n
 
 ---
 
-## 🎯 What This Means for Your Business
+## What This Means for Your Business
 
 ### Year 1 Target
 - **Revenue Goal**: ${formatCurrency(som)}${somEx}
@@ -1045,7 +1045,7 @@ Later years assume your market share doubles each year.
 
 ---
 
-## ⚠️ Assumptions & Validation
+## Assumptions & Validation
 
 ### Key Assumptions
 1. **Company count accuracy**: Validate with LinkedIn Sales Navigator, industry reports
@@ -1067,7 +1067,7 @@ Later years assume your market share doubles each year.
 
 ---
 
-## 📋 Investor-Ready Summary
+## Investor-Ready Summary
 
 > The **${lowerFirstIfCommon(segment)}** segment represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP.${icpEx} 
 > We target **${formatCurrency(som)} SOM** in Year 1, requiring **${targetDeals} customers** at **${formatCurrency(acv)} ACV**.${somEx}
@@ -1146,7 +1146,7 @@ Later years assume your market share doubles each year.
 
 ---
 
-## 🔍 LinkedIn Sales Navigator
+## LinkedIn Sales Navigator
 
 ### Search Query (Copy & Paste Ready)
 
@@ -1179,7 +1179,7 @@ Geography: ${locations.join(' OR ')}
 
 ---
 
-## 📊 Google Ads Targeting
+## Google Ads Targeting
 
 ### Custom Intent Audiences
 **Keywords to target** (people searching for solutions):
@@ -1206,7 +1206,7 @@ Software > ${withSoftware(industries[0] || 'Enterprise', 'Software')}
 
 ---
 
-## 🎯 6sense / Intent Data Platforms
+## 6sense / Intent Data Platforms
 
 ### Account Fit Criteria
 ${sizesBlock}\`\`\`json
@@ -1236,7 +1236,7 @@ ${titles.map(t => withSoftware(t.split(' ').pop() || '', 'software')).join('\n')
 
 ---
 
-## 📧 ZoomInfo / Apollo Filters
+## ZoomInfo / Apollo Filters
 
 ### Contact Search Criteria
 ${sizesBlock}\`\`\`
@@ -1255,7 +1255,7 @@ Technologies: ${tech.join(', ')}
 
 ---
 
-## 🚨 Buying Trigger Signals
+## Buying Trigger Signals
 
 ### Trigger: ${cap(triggers[0] || 'New Leadership Hire')}
 **Signal**: New ${titles[0] || 'VP'} joined in last 90 days
@@ -1274,7 +1274,7 @@ Technologies: ${tech.join(', ')}
 
 ---
 
-## 📋 Implementation Checklist
+## Implementation Checklist
 
 ### LinkedIn Sales Navigator
 - [ ] Build and save company search
@@ -1303,7 +1303,7 @@ Technologies: ${tech.join(', ')}
 
 ---
 
-## ⚠️ Important Notes
+## Important Notes
 
 **This tool generates targeting CRITERIA, not actual data.**
 
@@ -1415,7 +1415,7 @@ ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default wei
 
 ---
 
-## 📊 Prioritized Account List
+## Prioritized Account List
 
 ${EXAMPLES} The scores use ${noWeights ? 'the default weights and ' : ''}a preset score for each timing value; (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
@@ -1424,7 +1424,7 @@ ${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit}${a.default
 
 ---
 
-## 🎯 Tier Breakdown
+## Tier Breakdown
 
 ${EXAMPLES}
 ### Tier A (Score 80+) - Immediate Action
@@ -1452,7 +1452,7 @@ ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.tota
 
 ---
 
-## 📋 Next Actions by Account
+## Next Actions by Account
 
 ${scoredAccounts.slice(0, 5).map((a, i) => `
 ### ${i + 1}. ${a.name} (Tier ${a.tier})
@@ -1490,7 +1490,7 @@ ${EXAMPLES}
 
 ---
 
-## 📋 How to Use
+## How to Use
 
 Provide accounts in this format (the accounts and scores below are examples; the tool reads name, fit_score, intent_signals, relationship and timing):
 
@@ -1525,7 +1525,7 @@ ${EXAMPLES}
 
 ---
 
-## 🎯 Tier Actions
+## Tier Actions
 
 ${EXAMPLES}
 | Tier | Score | Volume % | Action | SLA |
@@ -1615,7 +1615,7 @@ ${SUGGESTED}
             // NPS runs from -100 to 100, so its gap is shown in points: target minus today (run 7, T1).
             const npsPoints = metrics.target.nps - metrics.current.nps;
             const npsGap = npsPoints > 0 ? `+${npsPoints} points needed` : npsPoints === 0 ? 'target met, no increase needed' : `already ${-npsPoints} points above target, no increase needed`;
-            const sev = (g, high, medium) => (g === 'n/a' ? 'Not rated' : parseInt(g) > high ? '🔴 High' : parseInt(g) > medium ? '🟡 Medium' : '🟢 Low');
+            const sev = (g, high, medium) => (g === 'n/a' ? 'Not rated' : parseInt(g) > high ? 'High' : parseInt(g) > medium ? 'Medium' : 'Low');
             // A gap in the other direction (the target is already met) says so instead of printing a double sign.
             const upGap = (g, word) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) >= 0 ? `+${g}% ${word}needed` : `already above target, no ${word || 'increase '}needed`);
             const downGap = (g, word) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) >= 0 ? (word ? `${g}% ${word}needed` : `-${g}% needed`) : `target is ${-parseFloat(g)}% above today, no ${word || 'reduction '}needed`);
@@ -1642,7 +1642,7 @@ ${args.ideal_icp}
 
 ---
 
-## 📊 Metric Gaps
+## Metric Gaps
 
 ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so every value in this table is a preset example.\n` : ''}| Metric | Current | Target | Gap | Priority |
 |--------|---------|--------|-----|----------|
@@ -1654,7 +1654,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 
 ---
 
-## 🔍 Gap Root Cause Analysis
+## Gap Root Cause Analysis
 
 ### ACV Gap (${upGap(gaps.acv, '')})${gapEx(given.acv)}
 **Current**: Selling to smaller companies or at lower price points
@@ -1714,7 +1714,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 
 ---
 
-## 🎯 Recommended ICP Refinements
+## Recommended ICP Refinements
 
 Based on gap analysis, tighten your ICP on:
 
@@ -1734,7 +1734,7 @@ The company size and budget thresholds below are presets tied to the target ACV$
 
 ---
 
-## 📋 30-Day Action Plan
+## 30-Day Action Plan
 
 ### Week 1: Qualification
 - [ ] Update ICP documentation with new criteria
@@ -1808,7 +1808,7 @@ ${args.current_icp}
 
 ---
 
-## 📊 Win/Loss Pattern Analysis
+## Win/Loss Pattern Analysis
 
 ### Recent Wins
 ${args.recent_wins || '*No win data provided*'}
@@ -1830,7 +1830,7 @@ ${args.recent_losses ? `- This tool does not analyze the text; check these losse
 
 ---
 
-## 🌊 Market Change Impact
+## Market Change Impact
 
 ### Market Changes Identified
 ${args.market_changes || '*No market changes provided*'}
@@ -1843,7 +1843,7 @@ ${args.market_changes ? `- This tool does not analyze the text; check how these 
 
 ---
 
-## 🔄 ICP Evolution Framework
+## ICP Evolution Framework
 
 ### Quarterly Review Checklist
 
@@ -1865,16 +1865,16 @@ ${args.market_changes ? `- This tool does not analyze the text; check how these 
 
 | Signal | Expand ICP | Contract ICP | No Change |
 |--------|-----------|--------------|-----------|
-| Winning in new segments | ✅ | | |
-| Losing in core segment | | ✅ | |
-| Stable win rates | | | ✅ |
-| New competitor threat | | ✅ | |
-| Market expansion | ✅ | | |
-| High churn segment | | ✅ | |
+| Winning in new segments | Yes | No | No |
+| Losing in core segment | No | Yes | No |
+| Stable win rates | No | No | Yes |
+| New competitor threat | No | Yes | No |
+| Market expansion | Yes | No | No |
+| High churn segment | No | Yes | No |
 
 ---
 
-## 📈 Recommended ICP Updates
+## Recommended ICP Updates
 
 ### Potential Additions (Based on Wins)
 ${args.recent_wins ? `
@@ -1894,7 +1894,7 @@ ${args.recent_losses ? `
 
 ---
 
-## 📋 ICP Evolution Tracking Template
+## ICP Evolution Tracking Template
 
 | Quarter | ICP Change | Rationale | Impact |
 |---------|-----------|-----------|--------|
@@ -1911,7 +1911,7 @@ ${args.recent_losses ? `
 
 ---
 
-## 🚨 ICP Change Triggers
+## ICP Change Triggers
 
 Automatically review ICP when:
 
@@ -1995,7 +1995,7 @@ ${EXAMPLES}
 
 ---
 
-## 📊 Pattern Analysis
+## Pattern Analysis
 
 ### Top Pain Points (by frequency)
 ${topPains.length > 0 ? topPains.map(([pain, count], i) => `${i + 1}. **"${pain}"** - mentioned ${count}x (${Math.round(count / interviews.length * 100)}% of interviews)`).join('\n') : '- No pain points captured'}
@@ -2019,7 +2019,7 @@ ${topRoles.length > 0 ? topRoles.map(([role, count], i) => `${i + 1}. **${role}*
 
 ---
 
-## 💬 Key Quotes
+## Key Quotes
 
 ${allQuotes.slice(0, 5).map((q, i) => `
 ### Quote ${i + 1}
@@ -2029,7 +2029,7 @@ ${allQuotes.slice(0, 5).map((q, i) => `
 
 ---
 
-## 🎯 ICP Refinements from Interviews
+## ICP Refinements from Interviews
 
 ### Add to ICP
 Based on patterns, your ideal customer:
@@ -2048,7 +2048,7 @@ ${topPains.slice(0, 3).map((p, i) => `${i + 1}. "How are you currently handling 
 
 ---
 
-## 📋 Interview Template for Next Round
+## Interview Template for Next Round
 
 Based on gaps in this analysis, ask about:
 
@@ -2072,7 +2072,7 @@ ${args.raw_transcripts.substring(0, 500)}${args.raw_transcripts.length > 500 ? '
 
 ---
 
-## 📋 Structured Format Recommended
+## Structured Format Recommended
 
 For better analysis, structure your interviews in this format. Example only, not from your input: the customer, quotes, pain points and results below are made up to show the format.
 
@@ -2107,7 +2107,7 @@ ${EXAMPLES}
 
 ---
 
-## 🔍 Extraction Guidance
+## Extraction Guidance
 
 From your transcripts, extract:
 
