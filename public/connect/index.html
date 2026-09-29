@@ -267,6 +267,7 @@
   <p>Tools:</p>
   <ul><li><a href="/tools/icp-deep-dive/">ICP Deep Dive</a>: Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior</li><li><a href="/tools/icp-scoring-model/">ICP Scoring Model</a>: Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust.</li><li><a href="/tools/buyer-group-analyzer/">Buyer Group Analyzer</a>: Map buyer group dynamics, influence relationships, and decision-making process</li><li><a href="/tools/tam-sam-som-calculator/">TAM SAM SOM Calculator</a>: Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)</li><li><a href="/tools/lookalike-signal-generator/">Lookalike Signal Generator</a>: Generate platform-specific targeting criteria and search queries (generates criteria, not data)</li><li><a href="/tools/account-prioritization/">Account Prioritization</a>: Rank and prioritize accounts using multi-dimensional scoring</li><li><a href="/tools/icp-gap-analysis/">ICP Gap Analysis</a>: Analyze gaps between current customer base and ideal ICP</li><li><a href="/tools/icp-evolution-tracker/">ICP Evolution Tracker</a>: Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check.</li><li><a href="/tools/icp-interview-synthesizer/">ICP Interview Synthesizer</a>: Extract ICP patterns from customer interview notes.</li></ul>
   <p>Support: <a href="mailto:shashwat@gtmhelix.com">shashwat@gtmhelix.com</a> or <a href="https://github.com/shashwatgtm/icp-intelligence-mcp/issues">GitHub issues</a></p>
+  <p>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document fields <code>customer_descriptions</code> (ICP Deep Dive) and <code>raw_transcripts</code> (ICP Interview Synthesizer), which take up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</p>
   <p>Privacy policy: <a href="/privacy/">https://icp-intelligence.gtmhelix.com/privacy/</a></p></div>
 </section>
 
@@ -394,6 +395,6 @@
             </div>
         </div>
     </footer>
-<script src="/assets/app.js?v=27f577e13d" defer></script>
+<script src="/assets/app.js?v=c6277343de" defer></script>
 </body>
 </html>

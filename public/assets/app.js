@@ -47,7 +47,7 @@
         continue;
       }
       var h = line.match(/^(#{1,6})\s+(.*)$/);
-      if (h) { closeList(); var lv = Math.min(h[1].length + 1, 6); out.push("<h" + lv + ">" + inline(h[2]) + "</h" + lv + ">"); i++; continue; }
+      if (h) { closeList(); var lv = Math.min(h[1].length + 3, 6), cls = ["hxr-h2", "hxr-h3", "hxr-h4"][Math.min(h[1].length, 3) - 1]; out.push("<h" + lv + ' class="' + cls + '">' + inline(h[2]) + "</h" + lv + ">"); i++; continue; }
       if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(line)) { closeList(); out.push("<hr>"); i++; continue; }
       var ul = line.match(/^\s*[-*+]\s+(.*)$/), ol = line.match(/^\s*(\d+)[.)]\s+(.*)$/);
       if (ul || ol) {
@@ -181,7 +181,13 @@
           show(section, markdown(lastText));
           // A2.4: say so when this answer came from the made-up example (R10-16: hidden again as soon as the visitor edits the form)
           var exNote = section.querySelector("[data-example-note]");
-          if (exNote) exNote.hidden = form.getAttribute("data-from-example") !== "1";
+          var fromEx = form.getAttribute("data-from-example") === "1";
+          if (exNote) exNote.hidden = !fromEx;
+          // D22: the date the answer was made (the visitor's clock) and what it was based on
+          var day = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+          section.querySelectorAll("[data-hxr-date]").forEach(function (el) { el.textContent = day; });
+          var basis = section.querySelector("[data-hxr-basis]");
+          if (basis) basis.textContent = fromEx ? "Based on the made-up example inputs" : "Based on what you entered";
         } else {
           var errs = data.errors || [data.error || "Something went wrong."];
           show(section, '<div class="hx-error"><p><strong>Could not run the tool.</strong></p><ul>' + errs.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ul></div>");
@@ -227,4 +233,21 @@
     }
     if (body) body.setAttribute("tabindex", "-1");
   });
+
+  // D22: "Print or save as PDF" is the browser's own print. With no Run result, the Example answer is opened first.
+  document.querySelectorAll("[data-print]").forEach(function (b) { b.addEventListener("click", function () { window.print(); }); });
+  var opened = [];
+  window.addEventListener("beforeprint", function () {
+    var res = document.getElementById("result");
+    if (res && !res.hidden) return;
+    document.querySelectorAll(".hxr-example details:not([open])").forEach(function (d) { d.open = true; opened.push(d); });
+  });
+  window.addEventListener("afterprint", function () { opened.forEach(function (d) { d.open = false; }); opened = []; });
+
+  // Home and hub "Try it with an example" cards link to #ex-h: open the example on arrival so the answer shows first screen.
+  if (location.hash === "#ex-h") {
+    document.querySelectorAll(".hxr-example details").forEach(function (d) { d.open = true; });
+    var exTarget = document.getElementById("ex-h");
+    if (exTarget) exTarget.scrollIntoView();
+  }
 })();

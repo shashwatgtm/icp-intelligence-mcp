@@ -118,7 +118,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 
 function htmlPage(title, bodyHtml, status) {
   const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
-    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f"><link rel="stylesheet" href="/assets/helix.css?v=bb6dd8a7a6"></head>` +
+    `<meta name="robots" content="noindex"><title>${esc(title)}</title><link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f"><link rel="stylesheet" href="/assets/helix.css?v=bb6dd8a7a6"><link rel="stylesheet" href="/assets/helix-report.css?v=c4b45d0331"></head>` +
     `<body><main class="hx-body hx-result-page" id="main">${bodyHtml}</main></body></html>`;
   return new Response(page, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": PAGE_CSP } });
 }
@@ -129,9 +129,20 @@ export default async (req, context) => {
   const reply = (status, payload) => {
     if (wantsHtml) {
       const back = `<p><a href="/tools/${esc(String(toolName || "").replace(/_/g, "-"))}/">Back to the tool</a></p>`;
-      const body = payload.ok
-        ? `<h1>${esc(payload.title)}</h1><p class="hx-mono">Result</p><pre class="hx-result-text">${esc(payload.text)}</pre>${back}`
-        : `<h1>Could not run the tool</h1><ul>${(payload.errors || [payload.error]).map((e) => `<li>${esc(e)}</li>`).join("")}</ul>${back}`;
+      let body;
+      if (payload.ok) {
+        // R13-11: the report frame, contract.md; JS-off page is its own h1 (the report is the page)
+        const pageAddr = new URL(req.url).origin + `/tools/${esc(String(toolName || "").replace(/_/g, "-"))}/`;
+        const dateStr = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+        body = `<article class="hxr hxr-run" aria-labelledby="result-t"><header class="hxr-head">` +
+          `<p class="hxr-tag">ICP Intelligence report</p>` +
+          `<h1 class="hxr-title" id="result-t">${esc(payload.title)}: your result</h1>` +
+          `<p class="hxr-meta"><span>${esc(dateStr)}</span><span>Made with ${esc(payload.title)} by Helix GTM Consulting</span><span>Based on what you entered</span><span>${esc(pageAddr)}</span></p></header>` +
+          `<div class="hxr-body"><pre class="hx-result-text">${esc(payload.text)}</pre></div>` +
+          `<footer class="hxr-foot"><span>Built by Shashwat Ghosh</span><span>${esc(pageAddr)}</span><span>${esc(dateStr)}</span></footer></article>${back}`;
+      } else {
+        body = `<h1>Could not run the tool</h1><ul>${(payload.errors || [payload.error]).map((e) => `<li>${esc(e)}</li>`).join("")}</ul>${back}`;
+      }
       return htmlPage(payload.ok ? payload.title : "Could not run the tool", body, status);
     }
     return new Response(JSON.stringify(payload), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": JSON_CSP } });

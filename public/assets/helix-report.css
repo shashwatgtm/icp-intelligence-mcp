@@ -1,0 +1,108 @@
+/* helix-report.css: the Helix report standard (run 13, owner decision D22, 29 September 2026).
+   One file, the same in every repo (rule B34). Load it after helix.css. It uses only helix.css tokens: no new colour,
+   font or icon. The markup contract is work/run13/report/contract.md. Report words and numbers never change (B35).
+   Sections: 1 frame, 2 title block, 3 body type, 4 tables and callouts, 5 footer, 6 print and PDF. */
+
+/* ================= 1. frame: one column, at most 960 px, no hero gradient, no hard shadow ================= */
+.hxr { max-width: 960px; margin: 24px 0 0; padding: clamp(18px, 3vw, 40px); background: var(--white); color: var(--ink);
+  border: 1.5px solid var(--line); border-top: 6px solid var(--ox); box-shadow: none; border-radius: 0; }
+.hxr * { border-radius: 0; }
+.hxr-body { max-width: 72ch; overflow-wrap: break-word; }
+.hxr-body > .hx-table, .hxr-body > table, .hxr-body > figure, .hxr-body > .hxr-wide { max-width: none; }
+.hxr-body p, .hxr-body li { max-width: 72ch; }
+
+/* ================= 2. title block: pixel tag, H1, meta line ================= */
+.hxr-head { margin: 0 0 20px; padding: 0 0 18px; border-bottom: 1.5px solid var(--line); }
+.hxr-tag { display: inline-block; margin: 0; font: 400 22px/1 var(--pixel); letter-spacing: .02em; padding: 5px 10px 4px; background: var(--ink); color: var(--paper); }
+.hxr-title { margin: 14px 0 10px; font-family: "Archivo", "Archivo Fallback Heavy", Arial, sans-serif; font-weight: 800;
+  font-size: clamp(32px, 4.2vw, 52px); line-height: 1; letter-spacing: -.035em; color: var(--ink); text-wrap: balance; max-width: 24ch; }
+.hxr-meta { margin: 0; font: 500 13px/1.6 var(--mono); color: var(--muted); max-width: none; }
+.hxr-meta > span { display: inline; }
+.hxr-meta > span + span::before, .hxr-foot > span + span::before { content: " \00B7  "; }
+.hxr-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; margin: 0 0 16px; }
+
+/* ================= 3. body: one heading scale in every report type ================= */
+/* H2 28 to 38 px with the 10 px signal square; H3 22 to 26 px; H4 18 px. Classes hxr-h2/3/4 give the same levels
+   whatever the tag (the connector answers sit under the page's own H1 and H2). */
+.hxr-body h2, .hxr-body .hxr-h2 { font-family: "Archivo", "Archivo Fallback Heavy", Arial, sans-serif; font-weight: 800;
+  font-size: clamp(28px, 2.6vw, 38px); line-height: 1.02; letter-spacing: -.03em; margin: 36px 0 12px; }
+.hxr-body h2:not(.hxr-h3):not(.hxr-h4)::before, .hxr-body .hxr-h2::before { content: ""; display: block; width: 10px; height: 10px; background: var(--signal); margin: 0 0 14px; }
+.hxr-body h3, .hxr-body .hxr-h3 { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 1.8vw, 26px); line-height: 1.1; letter-spacing: -.02em; margin: 28px 0 10px; }
+.hxr-body h4, .hxr-body .hxr-h4 { font-family: var(--display); font-weight: 700; font-size: 18px; line-height: 1.25; letter-spacing: 0; margin: 20px 0 6px; }
+.hxr-body > :first-child { margin-top: 0; }
+.hxr-body h5:not([class]), .hxr-body h6:not([class]) { font-size: 18px; font-weight: 700; margin: 16px 0 6px; }
+
+/* ================= 4. tables and callouts: the existing styles, square corners ================= */
+.hxr-body table { border-collapse: collapse; width: 100%; font-size: 16px; background: var(--white); }
+.hxr-body th, .hxr-body td { border: 1.5px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+.hxr-body th { font: 600 13px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); background: var(--clay); border-bottom: 2px solid var(--edge); }
+.hxr-body blockquote, .hxr-insight { margin: 16px 0; padding: 14px 18px; background: var(--clay); color: #1A0E10; border-left: 4px solid var(--ox); font-style: normal; }
+.hxr-note { margin: 12px 0 0; padding: 10px 14px; background: var(--rose); color: #1A0E10; border-left: 4px solid var(--signal); font-size: 17px; }
+.hxr-body pre { background: var(--paper); box-shadow: none; }
+
+/* ================= 5. footer inside the report ================= */
+.hxr-foot { margin: 28px 0 0; padding: 14px 0 0; border-top: 1.5px solid var(--line); font: 500 13px/1.6 var(--mono); color: var(--muted); }
+.hxr-foot a { color: var(--ink); }
+
+@media (prefers-color-scheme: dark) {
+  .hxr-body blockquote, .hxr-insight, .hxr-note { background: #3A2226; color: #FAF8F6; }
+  .hxr-body th { background: #3A2226; color: #FAF8F6; }
+  .hxr-tag { background: #FAF8F6; color: #1A0E10; }
+}
+@media (max-width: 560px) {
+  .hxr { padding: 16px 14px; }
+  .hxr-title { font-size: clamp(28px, 8vw, 36px); }
+}
+
+/* ================= 6. print and PDF: only the report, on white paper, light colours ================= */
+.hxr-url-print { display: none; }
+@media print {
+  @page { size: A4; margin: 16mm 14mm 18mm; }
+  html:root { --ink: #1A0E10; --paper: #FAF8F6; --white: #FFFFFF; --muted: #5A4B4E; --ox: #641220; --line: rgba(26, 14, 16, .16);
+    --edge: #1A0E10; --shadow: #1A0E10; --link: #1A0E10; --rose-mid: #F2AAB3; --bar-1: #641220; --bar-2: #C1121F; --bar-3: rgba(26, 14, 16, .55);
+    --hx-ink-55: rgba(26, 14, 16, .55); color-scheme: light; }
+  html, body { background: #FFFFFF !important; color: #1A0E10 !important; }
+  body { font-size: 11pt; }
+
+  /* the page around the report never prints */
+  .hx9-gh, .hx9-row2, .hx-skip, .hx9-menu, footer.hx-footer, .hx-footer, .hx7-built, .hx7-strip, .hx7-cred,
+  form, .hx-form, button, .hx-btn, .btn, .hx-cta-row, .hx10-actions, .hx-actions, .hx9-next, .hx-result-actions,
+  .hxr-actions, .hxr-noprint, [role="tablist"], .subscribe-btn, .ob-sub-cta, .newsletter, .hx-subscribe { display: none !important; }
+  /* a page that holds a report prints the report only */
+  main:has(.hxr) :not(:has(.hxr), .hxr, .hxr *) { display: none !important; }
+  /* connector tool pages: the Run result when there is one, else the Example answer (app.js opens it before printing) */
+  main:has(#result:not([hidden]) .hxr) section:has(.hxr-example) { display: none !important; }
+  main:has(#result[hidden]) #result { display: none !important; }
+  .hxr details > summary { display: none !important; }
+  .hxr details::details-content { display: block; content-visibility: visible; }
+
+  .hxr { max-width: none; margin: 0; padding: 0; border: 0; border-top: 6px solid #641220; background: #FFFFFF; box-shadow: none; }
+  .hxr-head { padding-top: 8px; }
+  .hxr-body, .hxr-body p, .hxr-body li { max-width: none; }
+  .hxr-title { font-size: 26pt; max-width: none; }
+  .hxr-body h2, .hxr-body .hxr-h2 { font-size: 18pt; margin-top: 18pt; }
+  .hxr-body h3, .hxr-body .hxr-h3 { font-size: 14pt; margin-top: 12pt; }
+  .hxr-body h4, .hxr-body .hxr-h4 { font-size: 11.5pt; }
+
+  /* keep headings with what follows; never split a row, figure, tile, card, callout or chart */
+  h1, h2, h3, h4, h5, h6, .hxr-title, .hxr-h2, .hxr-h3, .hxr-h4 { break-after: avoid; page-break-after: avoid; break-inside: avoid; }
+  tr, figure, img, svg, blockquote, pre, .hxr-keep, .hxr-insight, .hxr-note, .hx-table table tr, .chip { break-inside: avoid; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  tfoot { display: table-footer-group; }
+  p, li { orphans: 3; widows: 3; }
+  .hx-table { overflow: visible; }
+  .hxr-body table { font-size: 9.5pt; }
+
+  /* labels print as ink text with a 1.5 px ink border, so they survive "background graphics" off */
+  .hxr-tag, .tag, .chip, .hx11-chip, .hx-card-kicker, .win-bar, .hx-mono, .hxr-label { background: none !important; color: #1A0E10 !important; border: 1.5px solid #1A0E10 !important; box-shadow: none !important; }
+  .hxr-note, .hxr-insight, .hxr-body blockquote, .hxr-body th { background: none !important; color: #1A0E10 !important; }
+  .hxr-note, .hxr-insight, .hxr-body blockquote { border: 1.5px solid #1A0E10 !important; border-left-width: 4px !important; }
+  .hxr-body th { border-bottom: 2px solid #1A0E10 !important; }
+
+  /* charts keep their colours */
+  .hxr-chart, .hxr-chart *, svg, svg * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+  /* after each outside link, its address in IBM Plex Mono 9 pt (print only) */
+  .hxr-body a[href^="http"]::after { content: " (" attr(href) ")"; font: 400 9pt/1.3 var(--mono); color: #5A4B4E; overflow-wrap: anywhere; }
+  .hxr-url-print { display: inline; }
+}
