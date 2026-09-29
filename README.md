@@ -1,5 +1,5 @@
 # ICP Intelligence MCP v1.2.8
-**Deep ICP Analysis with Pattern Detection** - 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
+**Deep ICP Analysis with Pattern Detection**: 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
 
 ## Use it hosted (no install)
 
@@ -12,7 +12,7 @@ The npm package below is an older version (1.0.0 on npm on 27 September 2026) un
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP Registry](https://img.shields.io/badge/MCP-Registry-blue)](https://registry.modelcontextprotocol.io)
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Run directly with npx
@@ -38,7 +38,7 @@ Add to your `claude_desktop_config.json`:
 
 ## Tools and inputs
 
-Generated on 27 September 2026 from the server's own tool list (`tools/list` of icp-intelligence-mcp 1.2.6, the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
+Generated on 27 September 2026 from the server's own tool list, and checked again on 29 September 2026 against `tools/list` of icp-intelligence-mcp 1.2.8 (the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
 
 | # | Tool | Title | What it does |
 |---|---|---|---|
@@ -135,7 +135,7 @@ Generated on 27 September 2026 from the server's own tool list (`tools/list` of 
 | `raw_transcripts` | No | string | Alternative: Paste raw interview transcripts or notes |
 | `analysis_focus` | No | string | Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all) |
 
-## 👤 Who Is This For?
+## Who Is This For?
 
 ### Primary Users
 
@@ -162,21 +162,9 @@ Generated on 27 September 2026 from the server's own tool list (`tools/list` of 
 | "I need targeting criteria for ad platforms" | `lookalike_signal_generator` |
 | "I need to prioritize our target accounts" | `account_prioritization` |
 
-### Recommended Agent Skills
-
-This MCP is included in these user-focused Agent bundles:
-
-| Agent Bundle | Tools Count | Best For |
-|--------------|-------------|----------|
-| **🎯 Founder GTM Copilot** | 10 tools | Founders, early-stage CEOs |
-| **📞 SDR Toolkit** | 8 tools | SDRs, BDRs |
-| **🎯 Product Marketing Engine** | 12 tools | PMMs |
-| **📊 Demand Gen & Ops** | 10 tools | Demand gen, marketing ops |
-| **💼 Account Executive Deal Desk** | 12 tools | AEs, account managers |
-
 ---
 
-## 🔗 Related MCPs
+## Related MCPs
 
 | MCP | Focus | Tools | Link |
 |-----|-------|-------|------|
@@ -187,7 +175,7 @@ This MCP is included in these user-focused Agent bundles:
 
 ---
 
-## 📚 ICP Intelligence Philosophy
+## ICP Intelligence Philosophy
 
 This MCP is built on the principle that **ICP is dynamic, not static**. The best B2B companies continuously refine their ICP based on:
 
@@ -204,7 +192,7 @@ This MCP is built on the principle that **ICP is dynamic, not static**. The best
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Shashwat Ghosh**, Co-Founder and Fractional CMO, Helix GTM Consulting, with 24+ years in B2B and 10+ years of fractional experience
 
@@ -214,9 +202,9 @@ This MCP is built on the principle that **ICP is dynamic, not static**. The best
 
 ---
 
-## 📄 License
+## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT License: see [LICENSE](LICENSE) for details.
 
 ---
 
@@ -229,20 +217,20 @@ The same tools are also available as a hosted MCP server, so they work in Claude
 
 - Server URL: `https://icp-intelligence.gtmhelix.com/mcp`
 - Transport: Streamable HTTP (stateless, JSON responses). Authentication: none.
-- Setup guide: https://icp-intelligence.gtmhelix.com/
+- Setup guide: https://icp-intelligence.gtmhelix.com/connect/
 - In Claude: Customize, then Connectors, then Add custom connector, and paste the server URL.
 - In Claude Code: `claude mcp add --transport http icp-intelligence https://icp-intelligence.gtmhelix.com/mcp`
 
 The npm package (stdio) and the hosted server run the same `createServer()` code in `src/index.ts`.
 
-The tool reference on the setup page (https://icp-intelligence.gtmhelix.com/) is generated from the code. Where it differs from the parameter tables earlier in this README, the setup page is correct.
+The tool reference on the docs page (https://icp-intelligence.gtmhelix.com/docs/) is generated from the code. Where it differs from the parameter tables earlier in this README, the docs page is correct.
 
 ## Privacy Policy
 
-Full policy: https://icp-intelligence.gtmhelix.com/privacy.html (also in [PRIVACY.md](PRIVACY.md)).
+Full policy: https://icp-intelligence.gtmhelix.com/privacy/ (also in [PRIVACY.md](PRIVACY.md)).
 
 - **Data collection:** the hosted server receives only the tool name and the inputs of each tool call. The npm package runs on your computer and sends nothing to us.
 - **Use and storage:** inputs are used only to build that call's reply. Nothing is stored: no database, no files, no cache, no logging of inputs or outputs by our code.
-- **Third-party sharing:** none by us. Netlify hosts the server and processes requests under its own policy (https://www.netlify.com/privacy/). The web pages load fonts from Google Fonts.
+- **Third-party sharing:** none by us. Netlify hosts the server and processes requests under its own policy (https://www.netlify.com/privacy/). Fonts are served from this site, so loading a page contacts no one else.
 - **Retention:** we keep no tool inputs or outputs. Netlify keeps its own platform logs under its policy.
 - **Contact:** shashwat@gtmhelix.com

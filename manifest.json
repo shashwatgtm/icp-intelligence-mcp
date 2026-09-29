@@ -1,5 +1,5 @@
 {
-  "name": "ICP Intelligence MCP - Customer Targeting",
+  "name": "ICP Intelligence MCP: Customer Targeting",
   "version": "1.2.8",
   "description": "Deep ICP analysis with 9 tools: customer profiling, scoring models, buyer mapping, market sizing, and account prioritization.",
   "author": "https://github.com/shashwatgtm",
@@ -8,6 +8,6 @@
   "runtime": "node",
   "entry": "dist/index.js",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.30.1"
   }
 }
