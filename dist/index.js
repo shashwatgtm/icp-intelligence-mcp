@@ -643,7 +643,7 @@ The bands are 80%, 60% and 40% of your maximum score of ${maxScore} points.
 
 ${criteria.map(c => `
 **${c.criterion}** (Max: ${c.weight} pts)
-${c.values.map((v, i) => `[ ] ${v}`).join('\n')}
+${c.values.length ? c.values.map((v, i) => `[ ] ${v}`).join('\n') : '[ ] [no values supplied: add the values you score]'}
 Score: ___ / ${c.weight}
 `).join('\n')}
 
@@ -2219,7 +2219,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.13';
+exports.SERVER_VERSION = '1.2.14';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",
