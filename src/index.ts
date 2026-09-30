@@ -14,6 +14,12 @@ import {
 // =============================================================================
 
 // Text only: add a word such as "software" after a phrase unless the phrase already ends with it (no "software software").
+// Run 17 D56 (backlog items 8 and 15): a market share under 0.05% prints as given (0.03%, not 0.0%);
+// every share of 0.05% or more prints as before, with one decimal.
+function sharePct(fraction: number): string {
+  const v = fraction * 100;
+  return v > 0 && v < 0.05 ? `${Number(v.toPrecision(2))}%` : `${v.toFixed(1)}%`;
+}
 function withSoftware(phrase: string, word: string): string {
   const p = phrase.trim();
   return p.toLowerCase() === word.toLowerCase() || p.toLowerCase().endsWith(` ${word.toLowerCase()}`) ? p : `${p} ${word}`;
@@ -1047,7 +1053,7 @@ ${SUGGESTED}
 | Total Potential Companies | ${totalCompanies.toLocaleString('en-US')} | ${sources} |
 | Average Contract Value | $${acv.toLocaleString('en-US')} | Your input |
 | ICP Match Rate | ${(icpPercent * 100).toFixed(0)}%${icpEx} | ${icpGiven ? 'Your input' : 'Not supplied'} |
-| Year 1 Market Share Target | ${(marketSharePercent * 100).toFixed(1)}%${shareEx} | ${shareGiven ? 'Your input' : 'Not supplied'} |
+| Year 1 Market Share Target | ${sharePct(marketSharePercent)}${shareEx} | ${shareGiven ? 'Your input' : 'Not supplied'} |
 
 ---
 
@@ -1078,7 +1084,7 @@ SAM = ${formatCurrency(tam)} × ${(icpPercent * 100).toFixed(0)}%${icpEx}
 ### SOM (Serviceable Obtainable Market)
 \`\`\`
 SOM = SAM × Year 1 Market Share
-SOM = ${formatCurrency(sam)} × ${(marketSharePercent * 100).toFixed(1)}%${somEx}
+SOM = ${formatCurrency(sam)} × ${sharePct(marketSharePercent)}${somEx}
 \`\`\`
 ### **SOM = ${formatCurrency(som)}**${somEx}
 
@@ -1117,9 +1123,9 @@ ${somEx ? `Values computed with a preset rate you did not supply are examples.\n
 Later years assume your market share doubles each year.
 | Year | Market Share | Revenue Target | Customers |
 |------|--------------|----------------|-----------|
-| Year 1 | ${(marketSharePercent * 100).toFixed(1)}%${shareEx} | ${formatCurrency(som)}${shareGiven ? somEx : ''} | ${countText(targetDeals, som / acv)} |
-| Year 2 | ${(marketSharePercent * 2 * 100).toFixed(1)}% ${EXAMPLE} | ${formatCurrency(som * 2)} | ${countText(targetDeals * 2, (som * 2) / acv)} |
-| Year 3 | ${(marketSharePercent * 4 * 100).toFixed(1)}% ${EXAMPLE} | ${formatCurrency(som * 4)} | ${countText(targetDeals * 4, (som * 4) / acv)} |
+| Year 1 | ${sharePct(marketSharePercent)}${shareEx} | ${formatCurrency(som)}${shareGiven ? somEx : ''} | ${countText(targetDeals, som / acv)} |
+| Year 2 | ${sharePct(marketSharePercent * 2)} ${EXAMPLE} | ${formatCurrency(som * 2)} | ${countText(targetDeals * 2, (som * 2) / acv)} |
+| Year 3 | ${sharePct(marketSharePercent * 4)} ${EXAMPLE} | ${formatCurrency(som * 4)} | ${countText(targetDeals * 4, (som * 4) / acv)} |
 
 ---
 
@@ -1129,7 +1135,7 @@ Later years assume your market share doubles each year.
 1. **Company count accuracy**: Validate with LinkedIn Sales Navigator, industry reports
 2. **ACV assumption**: Based on current pricing, may increase with enterprise deals
 3. **ICP match rate**: ${icpGiven ? 'Your estimate' : 'Not supplied, so a preset example is used'}; refine with actual data
-4. **Market share**: ${(marketSharePercent * 100).toFixed(1)}%${shareEx} is ${marketSharePercent <= 0.03 ? 'conservative' : marketSharePercent <= 0.05 ? 'moderate' : 'aggressive'} for Year 1
+4. **Market share**: ${sharePct(marketSharePercent)}${shareEx} is ${marketSharePercent <= 0.03 ? 'conservative' : marketSharePercent <= 0.05 ? 'moderate' : 'aggressive'} for Year 1
 
 ### Data Validation Checklist
 - [ ] Cross-reference company count with 2+ sources
@@ -1584,7 +1590,7 @@ ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.tota
 
 ${scoredAccounts.slice(0, 5).map((a, i) => `
 ### ${i + 1}. ${a.name} (Tier ${a.tier})
-- **Why prioritized**: ${a.fit >= 80 ? 'Strong ICP fit' : a.intent >= 80 ? 'High buying intent' : a.relationship >= 80 ? 'Strong relationship' : 'Balanced scoring'}
+- **Why prioritized**: ${weights.fit > 0 && a.fit >= 80 ? 'Strong ICP fit' : weights.intent > 0 && a.intent >= 80 ? 'High buying intent' : weights.relationship > 0 && a.relationship >= 80 ? 'Strong relationship' : 'Balanced scoring'}
 - **Gap to address**: ${a.fit < 60 ? 'Validate fit' : a.intent < 60 ? 'Generate engagement' : a.relationship < 60 ? 'Build relationships' : 'Verify timing'}
 - **Recommended action**: ${a.tier === 'A' ? 'Personal outreach from AE' : a.tier === 'B' ? 'SDR sequence + warm intro' : 'Marketing nurture'}
 `).join('')}
