@@ -653,7 +653,7 @@ ${EXAMPLES} Every point value and band below is an example.
 
 | Criterion | Weight | Scoring Values |
 |-----------|--------|----------------|
-${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.join(' / ')} |`).join('\n')}
+${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.length ? c.values.join(' / ') : '[no values supplied: add the values you score]'} |`).join('\n')}
 
 **Maximum Score**: ${maxScore} points ${EXAMPLE}
 
@@ -1010,7 +1010,8 @@ ${SUGGESTED}
       
       // Format numbers
       const formatCurrency = (num: number) => {
-        if (num >= 1000000000) return `$${(num / 1000000000).toFixed(2)}B`;
+        // Run 15 R15-32 (D38): separators, and never an exponent however large the figure
+        if (num >= 1000000000) return `$${(num / 1000000000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
         if (num >= 1000000) return `$${(num / 1000000).toFixed(1)}M`;
         if (num >= 1000) return `$${(num / 1000).toFixed(0)}K`;
         // D38 (run 15): display only. A raw float (6 or more decimal places, or an exponent) prints with 2 decimals.
@@ -1019,7 +1020,7 @@ ${SUGGESTED}
         return `$${num}`;
       };
       // D38 (run 15): a count that rounds to 0 from a positive value says so. The count itself is unchanged.
-      const countText = (n: number, raw: number, prefix = '') => (n === 0 && raw > 0 ? 'fewer than 1 (rounds to 0)' : `${prefix}${n}`);
+      const countText = (n: number, raw: number, prefix = '') => (n === 0 && raw > 0 ? 'fewer than 1 (rounds to 0)' : `${prefix}${n.toLocaleString('en-US')}`);
 
       // Labels only: an ICP match rate or market share the user did not supply is a preset example,
       // and so is every value computed with it.
@@ -1205,6 +1206,11 @@ Later years assume your market share doubles each year.
       buying_triggers?: string[];
       platforms?: string[];
     }) => {
+      // Run 15 R15-32: an empty list is treated like a list left out (it printed blank lines such as 'Technologies: ')
+      const ne = <T>(a?: T[]) => (Array.isArray(a) && a.length ? a : undefined);
+      const f0 = args.icp_firmographics || {};
+      args = { ...args, icp_technographics: ne(args.icp_technographics), buying_triggers: ne(args.buying_triggers), platforms: ne(args.platforms),
+        icp_firmographics: { ...f0, industries: ne(f0.industries), company_sizes: ne(f0.company_sizes), locations: ne(f0.locations), funding_stages: ne(f0.funding_stages) } };
       const firmographics = args.icp_firmographics || {};
       const industries = firmographics.industries || ['Software', 'Technology'];
       const sizes = firmographics.company_sizes || ['51-200', '201-500'];
@@ -1754,8 +1760,8 @@ ${SUGGESTED}
       const sev = (g: string, high: number, medium: number) => (g === 'n/a' ? 'Not rated' : parseInt(g) > high ? 'High' : parseInt(g) > medium ? 'Medium' : 'Low');
 
       // A gap in the other direction (the target is already met) says so instead of printing a double sign.
-      const upGap = (g: string, word: string) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) >= 0 ? `+${g}% ${word}needed` : `already above target, no ${word || 'increase '}needed`);
-      const downGap = (g: string, word: string) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) >= 0 ? (word ? `${g}% ${word}needed` : `-${g}% needed`) : `target is ${-parseFloat(g)}% above today, no ${word || 'reduction '}needed`);
+      const upGap = (g: string, word: string) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) === 0 ? 'target met, no change needed' : parseFloat(g) >= 0 ? `+${g}% ${word}needed` : `already above target, no ${word || 'increase '}needed`);
+      const downGap = (g: string, word: string) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) === 0 ? 'target met, no change needed' : parseFloat(g) >= 0 ? (word ? `${g}% ${word}needed` : `-${g}% needed`) : `target is ${-parseFloat(g)}% above today, no ${word || 'reduction '}needed`);
       // Labels only: a metric the input did not supply is a preset example, and so is a gap computed with it.
       const given = {
         acv: [current.avg_acv != null, target.avg_acv != null],
@@ -1770,6 +1776,9 @@ ${SUGGESTED}
       // Run 12 (R12-21): a priority computed only from preset values says so; a root-cause line shows only when the gap points that way.
       const pri = (word: string) => (noneGiven && word !== 'Not rated' ? `${word} (on example values)` : word);
       const behind = (g: string) => g !== 'n/a' && parseFloat(g) > 0;
+      // Run 15 R15-32: with both values given and no gap, there is nothing to fix on that metric
+      const noGap = (pair: boolean[], g: string) => pair[0] && pair[1] && g !== 'n/a' && parseFloat(g) <= 0;
+      const NO_GAP = 'No gap: you are at or better than your target on this metric, so there is nothing to fix here.\n';
 
       return `# ICP Gap Analysis
 
@@ -1798,7 +1807,7 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 ## Gap Root Cause Analysis
 
 ### ACV Gap (${upGap(gaps.acv, '')})${gapEx(given.acv)}
-${behind(gaps.acv) ? '**Current**: Average deal value below your target\n' : ''}**Common causes to check**:
+${noGap(given.acv, gaps.acv) ? NO_GAP : `${behind(gaps.acv) ? '**Current**: Average deal value below your target\n' : ''}**Common causes to check**:
 - Selling to smaller companies or at lower price points
 - Targeting companies without budget
 - Not selling to decision-makers
@@ -1809,10 +1818,10 @@ ${behind(gaps.acv) ? '**Current**: Average deal value below your target\n' : ''}
 - Tighten company size filter in ICP
 - Train on value-based selling
 - Add pricing tiers for enterprise
-- Build reference customers in target segment
+- Build reference customers in target segment`}
 
 ### Sales Cycle Gap (${downGap(gaps.cycle, 'reduction ')})${gapEx(given.cycle)}
-${behind(gaps.cycle) ? '**Current**: Deals taking too long to close\n' : ''}**Common causes to check**:
+${noGap(given.cycle, gaps.cycle) ? NO_GAP : `${behind(gaps.cycle) ? '**Current**: Deals taking too long to close\n' : ''}**Common causes to check**:
 - Unclear value proposition
 - Too many stakeholders involved
 - Missing champion support
@@ -1822,10 +1831,10 @@ ${behind(gaps.cycle) ? '**Current**: Deals taking too long to close\n' : ''}**Co
 - Improve demo-to-close process
 - Identify and enable champions earlier
 - Create better competitive positioning
-- Streamline procurement requirements
+- Streamline procurement requirements`}
 
 ### Win Rate Gap (${upGap(gaps.winRate, 'improvement ')})${gapEx(given.winRate)}
-${behind(gaps.winRate) ? '**Current**: Losing too many deals\n' : ''}**Common causes to check**:
+${noGap(given.winRate, gaps.winRate) ? NO_GAP : `${behind(gaps.winRate) ? '**Current**: Losing too many deals\n' : ''}**Common causes to check**:
 - Poor qualification upfront
 - Weak differentiation
 - Losing to status quo
@@ -1835,10 +1844,10 @@ ${behind(gaps.winRate) ? '**Current**: Losing too many deals\n' : ''}**Common ca
 - Implement stricter qualification (BANT/MEDDPICC)
 - Sharpen competitive battle cards
 - Quantify cost of inaction
-- Review pricing competitiveness
+- Review pricing competitiveness`}
 
 ### Churn Gap (${downGap(gaps.churn, 'reduction ')})${gapEx(given.churn)}
-${behind(gaps.churn) ? '**Current**: Customers not staying\n' : ''}**Common causes to check**:
+${noGap(given.churn, gaps.churn) ? NO_GAP : `${behind(gaps.churn) ? '**Current**: Customers not staying\n' : ''}**Common causes to check**:
 - Wrong customers being sold
 - Poor onboarding
 - Value not realized
@@ -1848,7 +1857,7 @@ ${behind(gaps.churn) ? '**Current**: Customers not staying\n' : ''}**Common caus
 - Stricter ICP qualification
 - Improve customer success handoff
 - Track time-to-value metrics
-- Implement early warning system
+- Implement early warning system`}
 
 ---
 
@@ -2364,7 +2373,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // =============================================================================
 
 export const SERVER_NAME = 'icp-intelligence-mcp';
-export const SERVER_VERSION = '1.2.12';
+export const SERVER_VERSION = '1.2.13';
 
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES: Record<string, string> = {
@@ -2458,6 +2467,23 @@ function checkRequiredInputs(name: string, args: Record<string, unknown> | undef
   for (const key of ONE_AMOUNT[name] ?? []) {
     const raw = args?.[key];
     if (typeof raw === "string" && AMOUNT_RANGE.test(raw)) problems.push(`${key} must be one amount, not a range (for example $75,000)`);
+  }
+  // Run 15 R15-32 (edge-case matrix): a percentage cannot pass 100, a 1-100 score cannot pass 100, and NPS runs from -100 to 100.
+  const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : null);
+  if (name === "tam_sam_som_calculator") {
+    for (const k of ["icp_percentage", "year1_market_share_target"]) { const v = num(args?.[k]); if (v !== null && v > 100) problems.push(`${k} must be 100 or less (it is a percentage)`); }
+  }
+  if (name === "account_prioritization" && Array.isArray(args?.accounts)) {
+    (args!.accounts as Array<Record<string, unknown>>).forEach((a, i) => {
+      for (const k of ["fit_score", "intent_signals", "relationship"]) { const v = num(a && a[k]); if (v !== null && v > 100) problems.push(`accounts[${i}].${k} must be 100 or less (scores run from 0 to 100)`); }
+    });
+  }
+  if (name === "icp_gap_analysis") {
+    for (const side of ["current_metrics", "target_metrics"]) {
+      const m = (args?.[side] || {}) as Record<string, unknown>;
+      for (const k of ["win_rate", "churn_rate"]) { const v = num(m[k]); if (v !== null && (v < 0 || v > 100)) problems.push(`${side}.${k} must be from 0 to 100 (it is a percentage)`); }
+      const n = num(m.nps); if (n !== null && (n < -100 || n > 100)) problems.push(`${side}.nps must be from -100 to 100`);
+    }
   }
   if (problems.length > 0) {
     return `Invalid input for ${name}: ${problems.join("; ")}.`;
