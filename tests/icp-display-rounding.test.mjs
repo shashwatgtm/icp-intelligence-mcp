@@ -23,10 +23,10 @@ test("D38: 1 company at $1 prints no raw float; pipeline $0.03", async () => {
   const out = await call({ total_potential_companies: 1, average_contract_value: 1 });
   assert.doesNotMatch(out, RAW);
   assert.match(out, /- \*\*Pipeline Required\*\*: \$0\.03 \(at 33% win rate\)/);
-  // unchanged figures: TAM $1, SAM $0.3, SOM $0.009 (3 decimals, not a raw float)
+  // TAM $1 unchanged; run 16 N2 (D50): money under $1 prints 2 decimals, so SAM $0.3 is $0.30 and SOM $0.009 is $0.01
   assert.match(out, /### \*\*TAM = \$1\*\*/);
-  assert.match(out, /### \*\*SAM = \$0\.3\*\*/);
-  assert.match(out, /### \*\*SOM = \$0\.009\*\*/);
+  assert.match(out, /### \*\*SAM = \$0\.30\*\*/);
+  assert.match(out, /### \*\*SOM = \$0\.01\*\*/);
 });
 
 test("D38: counts that round to 0 from a positive value say so", async () => {
@@ -44,5 +44,8 @@ test("D38: counts that round to 0 from a positive value say so", async () => {
 
 test("D38: ordinary inputs are byte-identical to version 1.2.11", async () => {
   assert.equal(await call({ total_potential_companies: 5000, average_contract_value: 24000, icp_percentage: 30, year1_market_share_target: 2, segment_name: "Clinic groups" }), fixture("tam-ordinary-1.2.11.md"));
-  assert.equal(await call({ total_potential_companies: 400, average_contract_value: 900 }), fixture("tam-small-1.2.11.md"));
+  // run 16 D47: a figure in thousands shows one decimal when it is not a whole thousand; these are the only changes
+  const d47 = fixture("tam-small-1.2.11.md").replaceAll("$3K", "$3.2K").replace("       $3.2K               ", "       $3.2K             ")
+    .replace("**Pipeline Required**: $10K", "**Pipeline Required**: $9.7K").replace("| $6K |", "| $6.5K |");
+  assert.equal(await call({ total_potential_companies: 400, average_contract_value: 900 }), d47);
 });
