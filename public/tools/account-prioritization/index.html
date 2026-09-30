@@ -147,7 +147,7 @@
    "about": {
     "@id": "https://icp-intelligence.gtmhelix.com/#app"
    },
-   "dateModified": "2026-09-30",
+   "dateModified": "2026-10-01",
    "inLanguage": "en",
    "primaryImageOfPage": "https://icp-intelligence.gtmhelix.com/og.png"
   },
@@ -247,7 +247,7 @@
     <div class="hero-grid"><div class="hx10-split-text">
       <p class="sub">Give it your accounts with fit, intent, relationship and timing scores. Get a ranked list, a tier for each account and the next action for each one.</p>
       <p class="hx10-actions hx11-tool-acts"><a class="hx-btn" href="?example=1#run">Try it with an example</a><a class="slink" href="#run">Use your own details</a></p>
-      <p class="hx-byline">Last updated <time datetime="2026-09-30">30 September 2026</time></p>
+      <p class="hx-byline">Last updated <time datetime="2026-10-01">1 October 2026</time></p>
     </div><figure class="hx8-vis hx10-split-vis "><svg viewBox="0 0 360 212" width="360" height="212" role="img" aria-labelledby="v6t v6d" class="hx8-svg"><title id="v6t">Accounts into tiers</title><desc id="v6d">Accounts into tiers: accounts sorted into Tier A: Immediate Action, Tier B: High Priority, Tier C: Nurture, Tier D: Monitor.</desc><text x="0" y="16" class="v-k" text-anchor="start">Accounts into tiers</text><rect x="0" y="30" width="360" height="38" class="v-ox"/><text x="10" y="54" class="v-tp" text-anchor="start">Tier A: Immediate Action</text><circle cx="340" cy="49" r="7" class="v-paper v-drop d0"/><circle cx="318" cy="49" r="7" class="v-paper v-drop d1"/><circle cx="296" cy="49" r="7" class="v-paper v-drop d2"/><circle cx="274" cy="49" r="7" class="v-paper v-drop d3"/><circle cx="252" cy="49" r="7" class="v-paper v-drop d4"/><rect x="0" y="74" width="360" height="38" class="v-sig"/><text x="10" y="98" class="v-tp" text-anchor="start">Tier B: High Priority</text><circle cx="340" cy="93" r="7" class="v-paper v-drop d1"/><circle cx="318" cy="93" r="7" class="v-paper v-drop d2"/><circle cx="296" cy="93" r="7" class="v-paper v-drop d3"/><circle cx="274" cy="93" r="7" class="v-paper v-drop d4"/><rect x="0" y="118" width="360" height="38" class="v-ink7"/><text x="10" y="142" class="v-tp" text-anchor="start">Tier C: Nurture</text><circle cx="340" cy="137" r="7" class="v-paper v-drop d2"/><circle cx="318" cy="137" r="7" class="v-paper v-drop d3"/><circle cx="296" cy="137" r="7" class="v-paper v-drop d4"/><rect x="0" y="162" width="360" height="38" class="v-clayd"/><text x="10" y="186" class="v-ts" text-anchor="start">Tier D: Monitor</text><circle cx="340" cy="181" r="7" class="v-paper v-drop d3"/><circle cx="318" cy="181" r="7" class="v-paper v-drop d4"/></svg><figcaption>How the answer is laid out, using the sections the tool prints.</figcaption></figure></div>
   </div>
 </section>
@@ -256,7 +256,7 @@
 <section class="hx-section hx-run-sec" id="run" aria-label="Run Account Prioritization">
   <div class="win hx-form-win"><div class="win-bar"><span class="t">Run Account Prioritization</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/account_prioritization" data-tool="account_prioritization" data-title="Account Prioritization"><p class="hx-help">Every field is optional. You can add: Accounts to rank, Your own weights in percent.</p>
 <div class="hx-field"><label for="f-accounts">Accounts to rank, one per line: name, fit, intent, relationship, timing <span class="hx-opt">(optional)</span></label><textarea id="f-accounts" name="accounts" rows="4" data-kind="rows" data-rows="{&quot;sep&quot;: &quot;,&quot;, &quot;cols&quot;: [[&quot;name&quot;, &quot;s&quot;, &quot;name&quot;], [&quot;fit_score&quot;, &quot;n&quot;, &quot;fit&quot;], [&quot;intent_signals&quot;, &quot;n&quot;, &quot;intent&quot;], [&quot;relationship&quot;, &quot;n&quot;, &quot;relationship&quot;], [&quot;timing&quot;, &quot;s&quot;, &quot;timing&quot;]], &quot;min&quot;: 5, &quot;max&quot;: 5, &quot;need&quot;: &quot;5 values: name, fit, intent, relationship, timing&quot;}" aria-describedby="f-accounts-help"></textarea><p class="hx-help" id="f-accounts-help">5 values per line, separated by commas. Fit, intent and relationship run from 0 to 100; timing is now, soon, later or unknown. For example: Clinic Group A, 80, 60, 40, soon</p></div>
-<div class="hx-field"><label for="f-prioritization_weights-fit">Your weight for fit, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-fit" name="prioritization_weights.fit" type="number" step="any" inputmode="decimal" data-kind="number" aria-describedby="f-prioritization_weights-fit-help"><p class="hx-help" id="f-prioritization_weights-fit-help">Leave these empty to use the defaults (fit 40, intent 30, relationship 15, timing 15).</p></div><div class="hx-field"><label for="f-prioritization_weights-intent">Your weight for intent, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-intent" name="prioritization_weights.intent" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-prioritization_weights-relationship">Your weight for relationship, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-relationship" name="prioritization_weights.relationship" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-prioritization_weights-timing">Your weight for timing, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-timing" name="prioritization_weights.timing" type="number" step="any" inputmode="decimal" data-kind="number"></div>
+<div class="hx-field"><label for="f-prioritization_weights-fit">Your weight for fit, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-fit" name="prioritization_weights.fit" type="number" step="any" inputmode="decimal" data-kind="number" aria-describedby="f-prioritization_weights-fit-help"><p class="hx-help" id="f-prioritization_weights-fit-help">Leave these empty to use the defaults (fit 40, intent 30, relationship 15, timing 15). The weights do not have to add up to 100.</p></div><div class="hx-field"><label for="f-prioritization_weights-intent">Your weight for intent, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-intent" name="prioritization_weights.intent" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-prioritization_weights-relationship">Your weight for relationship, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-relationship" name="prioritization_weights.relationship" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-prioritization_weights-timing">Your weight for timing, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-timing" name="prioritization_weights.timing" type="number" step="any" inputmode="decimal" data-kind="number"></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-account_prioritization">Leave this empty</label><input id="hp-account_prioritization" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run Account Prioritization</button>
@@ -286,7 +286,7 @@
 
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
-  <p class="hx-prose">From version 1.2.15 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
+  <p class="hx-prose">From version 1.2.16 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
   <article class="hxr hxr-example" aria-labelledby="ex-t">
     <header class="hxr-head">
       <p class="hxr-tag">ICP Intelligence report</p>
@@ -355,7 +355,6 @@
   <h2 id="not-t-h">Who is Account Prioritization not ideal for?</h2>
   <ul class="hx-prose">
     <li>Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies.</li>
-    <li>Market sizing without your own numbers: TAM, SAM and SOM are built from the figures you enter; an ICP match rate or market share you leave out is filled with a labelled example (30% and 3%).</li>
   </ul>
 </section>
 
