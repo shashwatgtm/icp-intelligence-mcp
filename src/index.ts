@@ -1013,8 +1013,13 @@ ${SUGGESTED}
         if (num >= 1000000000) return `$${(num / 1000000000).toFixed(2)}B`;
         if (num >= 1000000) return `$${(num / 1000000).toFixed(1)}M`;
         if (num >= 1000) return `$${(num / 1000).toFixed(0)}K`;
+        // D38 (run 15): display only. A raw float (6 or more decimal places, or an exponent) prints with 2 decimals.
+        const text = String(num);
+        if (/e/i.test(text) || (text.split('.')[1] || '').length >= 6) return `$${num.toFixed(2)}`;
         return `$${num}`;
       };
+      // D38 (run 15): a count that rounds to 0 from a positive value says so. The count itself is unchanged.
+      const countText = (n: number, raw: number, prefix = '') => (n === 0 && raw > 0 ? 'fewer than 1 (rounds to 0)' : `${prefix}${n}`);
 
       // Labels only: an ICP match rate or market share the user did not supply is a preset example,
       // and so is every value computed with it.
@@ -1099,17 +1104,17 @@ ${somEx ? `Values computed with a preset rate you did not supply are examples.\n
 
 ### Year 1 Target
 - **Revenue Goal**: ${formatCurrency(som)}${somEx}
-- **Deals Needed**: ~${targetDeals} closed customers${somEx}
-- **Monthly Target**: ~${Math.ceil(targetDeals / 12)} deals/month${somEx}
+- **Deals Needed**: ${countText(targetDeals, som / acv, '~')} closed customers${somEx}
+- **Monthly Target**: ${countText(Math.ceil(targetDeals / 12), som / acv, '~')} deals/month${somEx}
 - **Pipeline Required**: ${formatCurrency(som * 3)} (at 33% win rate) ${EXAMPLE}
 
 ### Growth Path
 Later years assume your market share doubles each year.
 | Year | Market Share | Revenue Target | Customers |
 |------|--------------|----------------|-----------|
-| Year 1 | ${(marketSharePercent * 100).toFixed(1)}%${shareEx} | ${formatCurrency(som)}${shareGiven ? somEx : ''} | ${targetDeals} |
-| Year 2 | ${(marketSharePercent * 2 * 100).toFixed(1)}% ${EXAMPLE} | ${formatCurrency(som * 2)} | ${targetDeals * 2} |
-| Year 3 | ${(marketSharePercent * 4 * 100).toFixed(1)}% ${EXAMPLE} | ${formatCurrency(som * 4)} | ${targetDeals * 4} |
+| Year 1 | ${(marketSharePercent * 100).toFixed(1)}%${shareEx} | ${formatCurrency(som)}${shareGiven ? somEx : ''} | ${countText(targetDeals, som / acv)} |
+| Year 2 | ${(marketSharePercent * 2 * 100).toFixed(1)}% ${EXAMPLE} | ${formatCurrency(som * 2)} | ${countText(targetDeals * 2, (som * 2) / acv)} |
+| Year 3 | ${(marketSharePercent * 4 * 100).toFixed(1)}% ${EXAMPLE} | ${formatCurrency(som * 4)} | ${countText(targetDeals * 4, (som * 4) / acv)} |
 
 ---
 
@@ -1138,7 +1143,7 @@ Later years assume your market share doubles each year.
 ## Investor-Ready Summary
 
 > The **${lowerFirstIfCommon(segment)}** segment represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP. 
-> We target **${formatCurrency(som)} SOM** in Year 1, requiring **${targetDeals} customers** at **${formatCurrency(acv)} ACV**.
+> We target **${formatCurrency(som)} SOM** in Year 1, requiring **${countText(targetDeals, som / acv)} customers** at **${formatCurrency(acv)} ACV**.
 > 
 > *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
 
@@ -1475,6 +1480,12 @@ ${SUGGESTED}
           }
         };
         
+        // D41 (run 15): the tier cut-offs are 80%, 60% and 40% of the highest possible score W, the sum of the four weights
+        // (ceil in integer-safe form; with the default weights W = 100 they are 80, 60 and 40, as before).
+        const W = weights.fit + weights.intent + weights.relationship + weights.timing;
+        const cut = (p: number) => Math.ceil((W * p) / 100);
+        const tierA = cut(80), tierB = cut(60), tierC = cut(40);
+
         const scoredAccounts = args.accounts.map(account => {
           const fitScore = account.fit_score || 50;
           const intentScore = account.intent_signals || 50;
@@ -1496,7 +1507,7 @@ ${SUGGESTED}
             timing: account.timing || 'unknown',
             timingScore: timingScoreValue,
             totalScore,
-            tier: totalScore >= 80 ? 'A' : totalScore >= 60 ? 'B' : totalScore >= 40 ? 'C' : 'D',
+            tier: totalScore >= tierA ? 'A' : totalScore >= tierB ? 'B' : totalScore >= tierC ? 'C' : 'D',
             // Labels only: the values that fell back to the default because the account did not supply them.
             defaults: { fit: !account.fit_score, intent: !account.intent_signals, relationship: !account.relationship, timing: !account.timing }
           };
@@ -1528,26 +1539,28 @@ ${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit}${a.default
 
 ## Tier Breakdown
 
+The tiers are 80%, 60% and 40% of the highest possible score, ${W} points, the sum of your weights.
+
 ${EXAMPLES}
-### Tier A (Score 80+): Immediate Action
+### Tier A (Score ${tierA}+): Immediate Action
 ${scoredAccounts.filter(a => a.tier === 'A').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Personalized outreach within 24 hours, executive involvement
 
 ${EXAMPLES}
-### Tier B (Score 60-79): High Priority
+### Tier B (Score ${tierB}-${tierA - 1}): High Priority
 ${scoredAccounts.filter(a => a.tier === 'B').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Targeted outreach this week, multi-touch sequence
 
 ${EXAMPLES}
-### Tier C (Score 40-59): Nurture
+### Tier C (Score ${tierC}-${tierB - 1}): Nurture
 ${scoredAccounts.filter(a => a.tier === 'C').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Add to nurture campaign, monitor for signal changes
 
 ${EXAMPLES}
-### Tier D (Score <40): Monitor
+### Tier D (Score <${tierC}): Monitor
 ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.totalScore})`).join('\n') || '- None in this tier'}
 
 **Action**: Marketing nurture only, check quarterly
@@ -2351,7 +2364,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // =============================================================================
 
 export const SERVER_NAME = 'icp-intelligence-mcp';
-export const SERVER_VERSION = '1.2.11';
+export const SERVER_VERSION = '1.2.12';
 
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES: Record<string, string> = {
