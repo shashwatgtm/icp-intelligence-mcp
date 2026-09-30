@@ -13,6 +13,48 @@ const MAX_BODY_BYTES = 32000;
 const MAX_TEXT = 6000;
 const MAX_ITEMS = 50;
 const HONEYPOT = "leave_this_empty";
+// Run 15 D39: the "one per line" boxes of this site's forms, written by the build from the pages' own data-rows attributes
+// (the spec the browser script uses). Empty on sites without such boxes.
+const ROWS = {"accounts": {"cols": [["name", "s", "name"], ["fit_score", "n", "fit"], ["intent_signals", "n", "intent"], ["relationship", "n", "relationship"], ["timing", "s", "timing"]], "max": 5, "min": 5, "need": "5 values: name, fit, intent, relationship, timing", "sep": ","}, "customers": {"cols": [["name", "s", "name"], ["industry", "s", "industry"], ["size", "s", "size"], ["acv", "n", "ACV"], ["champion_title", "s", "champion title"], ["sales_cycle_days", "n", "sales cycle days"], ["buying_trigger", "s", "buying trigger"]], "min": 5, "need": "at least 5 values: name, industry, size, ACV, champion title", "rest": "tech_stack", "sep": ","}, "interview_notes": {"cols": [["customer", "s", "customer"], ["role", "s", "role"], ["pain_points", "l", "pain points"], ["buying_triggers", "l", "buying triggers"], ["value_realized", "l", "value realized"], ["key_quotes", "l", "key quotes"]], "item": ";", "max": 6, "min": 6, "need": "6 parts separated by |: customer, role, pain points, buying triggers, value realized, key quotes", "sep": "|"}, "scoring_criteria": {"cols": [["criterion", "s", "criterion"], ["importance", "e", "importance", ["critical", "important", "nice_to_have"]]], "min": 3, "need": "at least 3 values: criterion, importance, then one or more values", "rest": "values", "sep": ","}};
+
+// Run 15 D39: with JavaScript off a rows box arrives as plain text. Turn it into the list exactly as the browser's rows()
+// does (work/hosted/app-icp.js), with the same messages, so the answer is the same with JavaScript on or off.
+function listWords(list) {
+  return list.length < 2 ? list.join("") : list.slice(0, -1).join(", ") + " or " + list[list.length - 1];
+}
+function rowsFromText(v, spec, problems) {
+  const out = [];
+  v.split(/\r?\n/).forEach((line, idx) => {
+    if (!line.trim()) return;
+    const n = idx + 1;
+    let bad = false;
+    const obj = {};
+    const parts = line.split(spec.sep).map((s) => s.trim());
+    if (parts.length < spec.min || (spec.max && parts.length > spec.max)) { problems.push("Line " + n + " needs " + spec.need + "."); return; }
+    spec.cols.forEach((c, j) => {
+      const val = parts[j];
+      if (val === undefined || val === "") return;
+      if (c[1] === "n") {
+        const num = Number(val);
+        if (!isFinite(num)) { problems.push("Line " + n + ": " + c[2] + " must be a number."); bad = true; } else obj[c[0]] = num;
+      } else if (c[1] === "l") {
+        const items = val.split(spec.item).map((s) => s.trim()).filter(Boolean);
+        if (items.length) obj[c[0]] = items;
+      } else if (c[1] === "e") {
+        const pick = val.toLowerCase().replace(/\s+/g, "_");
+        if (c[3].indexOf(pick) < 0) { problems.push("Line " + n + ": " + c[2] + " must be " + listWords(c[3]) + "."); bad = true; } else obj[c[0]] = pick;
+      } else {
+        obj[c[0]] = val;
+      }
+    });
+    if (spec.rest) {
+      const rest = parts.slice(spec.cols.length).filter(Boolean);
+      if (rest.length) obj[spec.rest] = rest;
+    }
+    if (!bad) out.push(obj);
+  });
+  return out;
+}
 
 async function connectClient() {
   const [clientSide, serverSide] = InMemoryTransport.createLinkedPair();
@@ -176,12 +218,47 @@ export default async (req, context) => {
   }
   if (honeypot) return reply(400, { ok: false, error: "The request could not be processed." });
 
+  // Run 15 D39: a form post (JavaScript off) is read the way the browser script reads the same form: a rows box that is not
+  // JSON becomes its list, and a box named "parent.part" fills one part of the object "parent" (empty boxes are left out).
+  const parts = {};
+  if (wantsHtml) {
+    const problems = [];
+    for (const [k, v] of Object.entries(input)) {
+      if (ROWS[k] && typeof v === "string" && v.trim() !== "" && !v.trim().startsWith("[")) {
+        const list = rowsFromText(v, ROWS[k], problems);
+        if (list.length) input[k] = list; else delete input[k];
+      }
+    }
+    for (const k of Object.keys(input)) {
+      const dot = k.indexOf(".");
+      if (dot < 1) continue;
+      const v = input[k];
+      delete input[k];
+      if (typeof v === "string" && v.trim() === "") continue;
+      (parts[k.slice(0, dot)] ||= {})[k.slice(dot + 1)] = v;
+    }
+    if (problems.length) return reply(400, { ok: false, errors: problems });
+  }
+
   let client;
   try {
     client = await connectClient();
     const { tools } = await client.listTools();
     const tool = tools.find((t) => t.name === toolName);
     if (!tool) return reply(404, { ok: false, error: `Unknown tool: ${toolName}.` });
+    // Run 15 D39: each part of an object from a form post gets the type its schema asks for (a number box gives a number).
+    const partErrors = [];
+    const props = (tool.inputSchema && tool.inputSchema.properties) || {};
+    for (const [parent, sub] of Object.entries(parts)) {
+      const subProps = (props[parent] && props[parent].properties) || {};
+      const obj = {};
+      for (const [sk, sv] of Object.entries(sub)) {
+        const c = coerce(subProps[sk] || { type: "string" }, sv, `${parent}.${sk}`, partErrors);
+        if (c !== undefined) obj[sk] = c;
+      }
+      if (Object.keys(obj).length) input[parent] = obj;
+    }
+    if (partErrors.length) return reply(400, { ok: false, errors: partErrors });
     const { args, errors, ignored } = validate(tool, input);
     if (errors.length) return reply(400, { ok: false, errors });
     const result = await client.callTool({ name: tool.name, arguments: args });

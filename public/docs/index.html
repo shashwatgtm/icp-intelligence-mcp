@@ -141,7 +141,7 @@
    "about": {
     "@id": "https://icp-intelligence.gtmhelix.com/#app"
    },
-   "dateModified": "2026-09-29",
+   "dateModified": "2026-09-30",
    "inLanguage": "en",
    "primaryImageOfPage": "https://icp-intelligence.gtmhelix.com/og.png"
   },
@@ -189,7 +189,7 @@
     <div class="crop"><span class="cm tl" aria-hidden="true"></span><span class="cm tr" aria-hidden="true"></span><span class="cm bl" aria-hidden="true"></span><span class="cm br" aria-hidden="true"></span><h1 id="h1">ICP Intelligence docs</h1></div>
     <div class="hx-hero-text"><div class="hx10-split-text">
       <p class="sub">The MCP address, the REST API behind the web forms, and every field of all 9 tools.</p>
-      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-09-29">29 September 2026</time></p>
+      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-09-30">30 September 2026</time></p>
     </div></div>
   </div>
 </section>
@@ -201,7 +201,7 @@
   <ul class="hx-prose">
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
     <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
-    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.11.</li>
+    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.12.</li>
     <li>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document fields <code>customer_descriptions</code> (ICP Deep Dive) and <code>raw_transcripts</code> (ICP Interview Synthesizer), which take up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
   </ul>
@@ -238,13 +238,14 @@
 <tr><td>1.2.8</td><td>29 September 2026</td><td>GitHub, commit b6f989d</td></tr>
 <tr><td>1.2.9</td><td>29 September 2026</td><td>GitHub, commit 0561894</td></tr>
 <tr><td>1.2.10</td><td>29 September 2026</td><td>GitHub, commit 4b79099</td></tr>
-<tr><td>1.2.11 (this site)</td><td>29 September 2026</td><td>GitHub, commit 8ee0c3f</td></tr>
+<tr><td>1.2.11</td><td>29 September 2026</td><td>GitHub, commit 8ee0c3f</td></tr>
+<tr><td>1.2.12 (this site)</td><td>30 September 2026</td><td>GitHub, commit 65a8779</td></tr>
   </tbody></table></div>
 </section>
 
 <section class="hx-section" aria-labelledby="ref-h">
   <h2 id="ref-h">Tool reference</h2>
-  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.11.</p>
+  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.12.</p>
 </section>
 <section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
   <h3 id="d-icp-deep-dive">ICP Deep Dive</h3>
