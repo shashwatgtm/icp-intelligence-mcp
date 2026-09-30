@@ -2447,7 +2447,10 @@ function checkRequiredInputs(name: string, args: Record<string, unknown> | undef
     return `Unknown tool: ${name}. Available tools: ${Object.keys(tools).join(', ')}.`;
   }
   const required = tool.inputSchema.required ?? [];
-  const missing = required.filter((key) => args?.[key] === undefined || args?.[key] === null);
+  // Run 16 R16-10 (rule B52): a required text (a string with no fixed list of choices) that is empty or only whitespace counts as missing.
+  const props = ((tool.inputSchema as { properties?: Record<string, { type?: string; enum?: unknown[] }> }).properties ?? {});
+  const blankText = (key: string) => typeof args?.[key] === "string" && (args[key] as string).trim() === "" && props[key]?.type === "string" && !Array.isArray(props[key]?.enum);
+  const missing = required.filter((key) => args?.[key] === undefined || args?.[key] === null || blankText(key));
   if (missing.length > 0) {
     return `Missing required input for ${name}: ${missing.join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and call the tool again.`;
   }
