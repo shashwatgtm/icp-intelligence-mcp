@@ -944,8 +944,9 @@ ${SUGGESTED}
         execute: (args) => {
             const totalCompanies = args.total_potential_companies;
             const acv = args.average_contract_value;
-            const icpPercent = (args.icp_percentage || 30) / 100;
-            const marketSharePercent = (args.year1_market_share_target || 3) / 100;
+            // Run 16 D45: a typed 0 is used as 0; only an omitted or null value takes the preset.
+            const icpPercent = (args.icp_percentage ?? 30) / 100;
+            const marketSharePercent = (args.year1_market_share_target ?? 3) / 100;
             const segment = args.segment_name || 'Target Market';
             const sources = args.data_sources || 'Your input';
             // Calculate TAM/SAM/SOM
@@ -961,8 +962,12 @@ ${SUGGESTED}
                     return `$${(num / 1000000000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
                 if (num >= 1000000)
                     return `$${(num / 1000000).toFixed(1)}M`;
+                // Run 16 D47: one decimal when the figure is not a whole thousand ($2,400 as $2.4K; $2,000 stays $2K).
                 if (num >= 1000)
-                    return `$${(num / 1000).toFixed(0)}K`;
+                    return `$${(num / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+                // Run 16 N2 (D50): money under $1 prints 2 decimals; a positive amount that rounds to $0.00 says so.
+                if (num > 0 && num < 1)
+                    return num.toFixed(2) === '0.00' ? 'under $0.01' : `$${num.toFixed(2)}`;
                 // D38 (run 15): display only. A raw float (6 or more decimal places, or an exponent) prints with 2 decimals.
                 const text = String(num);
                 if (/e/i.test(text) || (text.split('.')[1] || '').length >= 6)
@@ -973,8 +978,8 @@ ${SUGGESTED}
             const countText = (n, raw, prefix = '') => (n === 0 && raw > 0 ? 'fewer than 1 (rounds to 0)' : `${prefix}${n.toLocaleString('en-US')}`);
             // Labels only: an ICP match rate or market share the user did not supply is a preset example,
             // and so is every value computed with it.
-            const icpGiven = !!args.icp_percentage;
-            const shareGiven = !!args.year1_market_share_target;
+            const icpGiven = args.icp_percentage !== undefined && args.icp_percentage !== null;
+            const shareGiven = args.year1_market_share_target !== undefined && args.year1_market_share_target !== null;
             const icpEx = icpGiven ? '' : ` ${EXAMPLE}`;
             const shareEx = shareGiven ? '' : ` ${EXAMPLE}`;
             const somEx = icpGiven && shareGiven ? '' : ` ${EXAMPLE}`;
@@ -1385,15 +1390,17 @@ ${SUGGESTED}
         execute: (args) => {
             // Default weights
             const weights = {
-                fit: args.prioritization_weights?.fit || 40,
-                intent: args.prioritization_weights?.intent || 30,
-                relationship: args.prioritization_weights?.relationship || 15,
-                timing: args.prioritization_weights?.timing || 15
+                // Run 16 D45: a weight given as 0 is used as 0; only an omitted or null weight takes its default.
+                fit: args.prioritization_weights?.fit ?? 40,
+                intent: args.prioritization_weights?.intent ?? 30,
+                relationship: args.prioritization_weights?.relationship ?? 15,
+                timing: args.prioritization_weights?.timing ?? 15
             };
             // Labels only: a weight the input did not supply is the default (an example figure).
             const givenWeights = args.prioritization_weights || {};
-            const noWeights = !(givenWeights.fit || givenWeights.intent || givenWeights.relationship || givenWeights.timing);
-            const wEx = (given) => (noWeights || given) ? '' : ` ${EXAMPLE}`;
+            const has = (v) => v !== undefined && v !== null;
+            const noWeights = !(has(givenWeights.fit) || has(givenWeights.intent) || has(givenWeights.relationship) || has(givenWeights.timing));
+            const wEx = (given) => (noWeights || has(given)) ? '' : ` ${EXAMPLE}`;
             // If accounts provided, score them
             if (args.accounts && args.accounts.length > 0) {
                 const timingScore = (timing) => {
@@ -1410,9 +1417,10 @@ ${SUGGESTED}
                 const cut = (p) => Math.ceil((W * p) / 100);
                 const tierA = cut(80), tierB = cut(60), tierC = cut(40);
                 const scoredAccounts = args.accounts.map(account => {
-                    const fitScore = account.fit_score || 50;
-                    const intentScore = account.intent_signals || 50;
-                    const relationshipScore = account.relationship || 50;
+                    // Run 16 D45: a score given as 0 is used as 0; only an omitted or null score takes the default 50.
+                    const fitScore = account.fit_score ?? 50;
+                    const intentScore = account.intent_signals ?? 50;
+                    const relationshipScore = account.relationship ?? 50;
                     const timingScoreValue = timingScore(account.timing || 'unknown');
                     const totalScore = Math.round((fitScore * weights.fit / 100) +
                         (intentScore * weights.intent / 100) +
@@ -1428,7 +1436,7 @@ ${SUGGESTED}
                         totalScore,
                         tier: totalScore >= tierA ? 'A' : totalScore >= tierB ? 'B' : totalScore >= tierC ? 'C' : 'D',
                         // Labels only: the values that fell back to the default because the account did not supply them.
-                        defaults: { fit: !account.fit_score, intent: !account.intent_signals, relationship: !account.relationship, timing: !account.timing }
+                        defaults: { fit: account.fit_score == null, intent: account.intent_signals == null, relationship: account.relationship == null, timing: !account.timing }
                     };
                 });
                 // Sort by total score
@@ -2329,6 +2337,12 @@ function checkRequiredInputs(name, args) {
             if (v !== null && v > 100)
                 problems.push(`${k} must be 100 or less (it is a percentage)`);
         }
+    }
+    // Run 16 D45: a weight given as 0 is used as 0, so four weights of 0 leave nothing to score with.
+    if (name === "account_prioritization") {
+        const w = (args?.prioritization_weights && typeof args.prioritization_weights === "object" ? args.prioritization_weights : {});
+        if (["fit", "intent", "relationship", "timing"].every((k) => w[k] === 0))
+            problems.push("at least one weight must be more than 0");
     }
     if (name === "account_prioritization" && Array.isArray(args?.accounts)) {
         args.accounts.forEach((a, i) => {
