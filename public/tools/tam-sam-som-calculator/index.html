@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Calculate TAM, SAM and SOM bottom-up, from how many companies could buy and your average contract value. Free in a browser or Claude, with no sign-in.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
-<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
@@ -211,7 +211,7 @@
    "@type": "WebApplication",
    "@id": "https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/#app",
    "name": "TAM SAM SOM Calculator (ICP Intelligence)",
-   "description": "Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)",
+   "description": "Calculate TAM/SAM/SOM bottom-up from your company count, ACV, ICP match rate and Year 1 share (calculation framework, not a data source). Sector notes are added when your inputs name one of the supported sectors",
    "url": "https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
@@ -280,13 +280,14 @@
 
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run TAM SAM SOM Calculator">
-  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run TAM SAM SOM Calculator</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/tam_sam_som_calculator" data-tool="tam_sam_som_calculator" data-title="TAM SAM SOM Calculator"><p class="hx-help">You need: Total potential companies, Average contract value. You can add: ICP percentage, Year 1 market share target, Data sources, Segment name.</p>
+  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run TAM SAM SOM Calculator</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/tam_sam_som_calculator" data-tool="tam_sam_som_calculator" data-title="TAM SAM SOM Calculator"><p class="hx-help">You need: Total potential companies, Average contract value. You can add: ICP percentage, Year 1 market share target, Data sources, Segment name, Company.</p>
 <div class="hx-field"><label for="f-total_potential_companies">Total potential companies <span class="hx-req" aria-hidden="true">*</span></label><input id="f-total_potential_companies" name="total_potential_companies" type="number" step="any" inputmode="decimal" min="0" data-kind="number" required aria-required="true" aria-describedby="f-total_potential_companies-help"><p class="hx-help" id="f-total_potential_companies-help">Estimated total companies that could buy (from LinkedIn, industry reports)</p></div>
 <div class="hx-field"><label for="f-average_contract_value">Average contract value <span class="hx-req" aria-hidden="true">*</span></label><input id="f-average_contract_value" name="average_contract_value" type="number" step="any" inputmode="decimal" data-kind="number" required aria-required="true" aria-describedby="f-average_contract_value-help"><p class="hx-help" id="f-average_contract_value-help">Your average ACV in dollars</p></div>
 <div class="hx-field"><label for="f-icp_percentage">ICP percentage <span class="hx-opt">(optional)</span></label><input id="f-icp_percentage" name="icp_percentage" type="number" step="any" inputmode="decimal" min="0" data-kind="number" aria-describedby="f-icp_percentage-help"><p class="hx-help" id="f-icp_percentage-help">Percentage that match your ICP (1-100)</p></div>
 <div class="hx-field"><label for="f-year1_market_share_target">Year 1 market share target <span class="hx-opt">(optional)</span></label><input id="f-year1_market_share_target" name="year1_market_share_target" type="number" step="any" inputmode="decimal" min="0" data-kind="number" aria-describedby="f-year1_market_share_target-help"><p class="hx-help" id="f-year1_market_share_target-help">Realistic Year 1 market share percentage (typically 1-5%)</p></div>
 <div class="hx-field"><label for="f-data_sources">Data sources <span class="hx-opt">(optional)</span></label><textarea id="f-data_sources" name="data_sources" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-data_sources-help"></textarea><p class="hx-help" id="f-data_sources-help">Where you got your numbers (for documentation)</p></div>
 <div class="hx-field"><label for="f-segment_name">Segment name <span class="hx-opt">(optional)</span></label><input id="f-segment_name" name="segment_name" type="text" maxlength="6000" data-kind="string" aria-describedby="f-segment_name-help"><p class="hx-help" id="f-segment_name-help">Name of the market segment</p></div>
+<div class="hx-field"><label for="f-company">Company <span class="hx-opt">(optional)</span></label><input id="f-company" name="company" type="text" maxlength="6000" data-kind="string" aria-describedby="f-company-help"><p class="hx-help" id="f-company-help">Optional: your company or product name, so the answer can name it</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-tam_sam_som_calculator">Leave this empty</label><input id="hp-tam_sam_som_calculator" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run TAM SAM SOM Calculator</button>
@@ -316,7 +317,7 @@
 
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
-  <p class="hx-prose">From version 1.2.16 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
+  <p class="hx-prose">From version 1.2.17 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
   <article class="hxr hxr-example" aria-labelledby="ex-t">
     <header class="hxr-head">
       <p class="hxr-tag">ICP Intelligence report</p>
@@ -326,6 +327,10 @@
     <div class="hxr-actions"><button type="button" class="hx-btn hx-btn-ghost" data-print>Print or save as PDF</button></div>
     <details class="hx-run"><summary>Show the full result</summary><div class="hxr-body hx-result-body hx-output"><h4 class="hxr-h2">TAM/SAM/SOM Analysis</h4>
 <h5 class="hxr-h3">Market: Indian mid-size companies with an ERP</h5>
+<ul>
+<li><strong>Company</strong>: not given (add the company input to name your company or product in this answer)</li>
+</ul>
+<p><em>Sector: not clear from your inputs (name the industry or what you sell for sector notes).</em></p>
 <hr>
 <h5 class="hxr-h3">Input Data</h5>
 <div class="hx-table"><table><thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead><tbody><tr><td>Total Potential Companies</td><td>9,000</td><td>Your input</td></tr><tr><td>Average Contract Value</td><td>$24,000</td><td>Your input</td></tr><tr><td>ICP Match Rate</td><td>30% (Example figure: replace with your own)</td><td>Not supplied</td></tr><tr><td>Year 1 Market Share Target</td><td>3.0% (Example figure: replace with your own)</td><td>Not supplied</td></tr></tbody></table></div>
@@ -371,7 +376,7 @@ SOM = $64.8M × 3.0% (Example figure: replace with your own)</code></pre>
 <li><strong>Revenue Goal</strong>: $1.9M (Example figure: replace with your own)</li>
 <li><strong>Deals Needed</strong>: ~81 closed customers (Example figure: replace with your own)</li>
 <li><strong>Monthly Target</strong>: ~7 deals/month (Example figure: replace with your own)</li>
-<li><strong>Pipeline Required</strong>: $5.8M (at 33% win rate) (Example figure: replace with your own)</li>
+<li><strong>Pipeline Required</strong>: $5.8M (SOM × 3, a 1 in 3 win rate) (Example figure: replace with your own)</li>
 </ul>
 <h6 class="hxr-h4">Growth Path</h6>
 <p>Later years assume your market share doubles each year.</p>
@@ -381,9 +386,9 @@ SOM = $64.8M × 3.0% (Example figure: replace with your own)</code></pre>
 <h6 class="hxr-h4">Key Assumptions</h6>
 <ol>
 <li value="1"><strong>Company count accuracy</strong>: Validate with LinkedIn Sales Navigator, industry reports</li>
-<li value="2"><strong>ACV assumption</strong>: Based on current pricing, may increase with enterprise deals</li>
+<li value="2"><strong>ACV</strong>: $24,000, your input; check it against your last closed deals in this segment</li>
 <li value="3"><strong>ICP match rate</strong>: Not supplied, so a preset example is used; refine with actual data</li>
-<li value="4"><strong>Market share</strong>: 3.0% (Example figure: replace with your own) is conservative for Year 1</li>
+<li value="4"><strong>Market share</strong>: 3.0% (Example figure: replace with your own) of SAM in Year 1 means ~81 new customers; check that number against the deals your team closed last year</li>
 </ol>
 <h6 class="hxr-h4">Data Validation Checklist</h6>
 <ul>

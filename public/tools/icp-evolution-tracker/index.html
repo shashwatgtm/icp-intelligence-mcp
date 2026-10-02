@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Review how your ICP should evolve from your current ideal customer profile, recent wins, losses and market changes. Free, no sign-in.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
-<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
@@ -211,7 +211,7 @@
    "@type": "WebApplication",
    "@id": "https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/#app",
    "name": "ICP Evolution Tracker (ICP Intelligence)",
-   "description": "Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text",
+   "description": "Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP and states a candidate change for each (an addition to test, a disqualifier to test, an implication to check), with a review checklist. It does not compute win rates; check each candidate against your CRM",
    "url": "https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
@@ -280,12 +280,14 @@
 
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run ICP Evolution Tracker">
-  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Evolution Tracker</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_evolution_tracker" data-tool="icp_evolution_tracker" data-title="ICP Evolution Tracker"><p class="hx-help">You need: Current ICP. You can add: Recent wins, Recent losses, Market changes, Time period.</p>
+  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Evolution Tracker</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_evolution_tracker" data-tool="icp_evolution_tracker" data-title="ICP Evolution Tracker"><p class="hx-help">You need: Current ICP. You can add: Recent wins, Recent losses, Market changes, Time period, Product category, Company.</p>
 <div class="hx-field"><label for="f-current_icp">Current ICP <span class="hx-req" aria-hidden="true">*</span></label><textarea id="f-current_icp" name="current_icp" rows="3" maxlength="6000" data-kind="string" required aria-required="true" aria-describedby="f-current_icp-help"></textarea><p class="hx-help" id="f-current_icp-help">Your current ICP definition</p></div>
 <div class="hx-field"><label for="f-recent_wins">Recent wins <span class="hx-opt">(optional)</span></label><textarea id="f-recent_wins" name="recent_wins" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-recent_wins-help"></textarea><p class="hx-help" id="f-recent_wins-help">Description of recent successful customers</p></div>
 <div class="hx-field"><label for="f-recent_losses">Recent losses <span class="hx-opt">(optional)</span></label><textarea id="f-recent_losses" name="recent_losses" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-recent_losses-help"></textarea><p class="hx-help" id="f-recent_losses-help">Description of recent lost deals</p></div>
 <div class="hx-field"><label for="f-market_changes">Market changes <span class="hx-opt">(optional)</span></label><textarea id="f-market_changes" name="market_changes" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-market_changes-help"></textarea><p class="hx-help" id="f-market_changes-help">Recent market or competitive changes</p></div>
-<div class="hx-field"><label for="f-time_period">Time period <span class="hx-opt">(optional)</span></label><input id="f-time_period" name="time_period" type="text" maxlength="6000" data-kind="string" aria-describedby="f-time_period-help"><p class="hx-help" id="f-time_period-help">Time period for analysis (e.g., &quot;Q4 2024&quot;)</p></div>
+<div class="hx-field"><label for="f-time_period">Time period <span class="hx-opt">(optional)</span></label><input id="f-time_period" name="time_period" type="text" maxlength="6000" data-kind="string" aria-describedby="f-time_period-help"><p class="hx-help" id="f-time_period-help">Time period for analysis (e.g., &quot;Q3 2026&quot;)</p></div>
+<div class="hx-field"><label for="f-product_category">Product category <span class="hx-opt">(optional)</span></label><textarea id="f-product_category" name="product_category" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-product_category-help"></textarea><p class="hx-help" id="f-product_category-help">Optional: what you sell, used for sector notes</p></div>
+<div class="hx-field"><label for="f-company">Company <span class="hx-opt">(optional)</span></label><input id="f-company" name="company" type="text" maxlength="6000" data-kind="string" aria-describedby="f-company-help"><p class="hx-help" id="f-company-help">Optional: your company or product name, so the answer can name it</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-icp_evolution_tracker">Leave this empty</label><input id="hp-icp_evolution_tracker" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run ICP Evolution Tracker</button>
@@ -315,7 +317,7 @@
 
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
-  <p class="hx-prose">From version 1.2.16 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
+  <p class="hx-prose">From version 1.2.17 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
   <article class="hxr hxr-example" aria-labelledby="ex-t">
     <header class="hxr-head">
       <p class="hxr-tag">ICP Intelligence report</p>
@@ -324,37 +326,33 @@
     </header>
     <div class="hxr-actions"><button type="button" class="hx-btn hx-btn-ghost" data-print>Print or save as PDF</button></div>
     <details class="hx-run"><summary>Show the full result</summary><div class="hxr-body hx-result-body hx-output"><h4 class="hxr-h2">ICP Evolution Analysis</h4>
-<p>This is a review checklist: it lays your notes next to what to check. It does not analyze the text.</p>
+<ul>
+<li><strong>Company</strong>: not given (add the company input to name your company or product in this answer)</li>
+</ul>
+<p><em>Sector: read from your inputs as fintech.</em></p>
+<p>This review reads your notes against your current ICP and states candidate changes. Each candidate is a hypothesis: check it against your CRM before you change the ICP.</p>
 <h5 class="hxr-h3">Current ICP</h5>
-<p>Mid-size manufacturers with field sales teams</p>
+<blockquote>Mid-size manufacturers with field sales teams</blockquote>
 <h5 class="hxr-h3">Analysis Period: last quarter</h5>
 <hr>
 <h5 class="hxr-h3">Win/Loss Pattern Analysis</h5>
 <h6 class="hxr-h4">Recent Wins</h6>
-<p>IT services firms with heavy travel spend</p>
-<p><strong>Pattern Detection</strong>:</p>
 <ul>
-<li>Check these wins for emerging ICP characteristics</li>
-<li>Look for: Common company sizes, industries, buying triggers, champion roles</li>
-<li>Consider: What made these deals successful? New segment emerging?</li>
+<li><strong>Candidate addition</strong>: "IT services firms with heavy travel spend": this is not in your current ICP; test adding it if these deals closed faster or larger than your average</li>
 </ul>
 <h6 class="hxr-h4">Recent Losses</h6>
-<p>Large enterprises wanting an ERP-only expense module</p>
-<p><strong>Pattern Detection</strong>:</p>
 <ul>
-<li>Check these losses for the ICP refinements they suggest</li>
-<li>Look for: Common rejection reasons, competitor wins, deal killers</li>
-<li>Consider: Should these have been disqualified earlier?</li>
+<li><strong>Candidate disqualifier</strong>: "Large enterprises wanting an ERP-only expense module": lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP</li>
 </ul>
 <hr>
 <h5 class="hxr-h3">Market Change Impact</h5>
-<h6 class="hxr-h4">Market Changes Identified</h6>
-<p>More finance teams now ask for card spend and expense claims in one tool</p>
-<p><strong>ICP Implications</strong>:</p>
 <ul>
-<li>Check how these market changes affect your ideal customer</li>
-<li>Consider: New buyer behaviors, budget shifts, competitive landscape</li>
-<li>Evaluate: Should ICP expand or contract based on changes?</li>
+<li><strong>Implication to check</strong>: "More finance teams now ask for card spend and expense claims in one tool": check which segments of your ICP this moves toward you or away from you, and update the qualifying questions</li>
+</ul>
+<h6 class="hxr-h4">Sector notes: fintech</h6>
+<ul>
+<li><strong>Who usually decides:</strong> The CFO signs; the Finance Controller or the head of the affected finance team champions; internal audit and compliance review controls; IT checks ERP integration and security; HR joins when employees are affected.</li>
+<li><strong>What this sector measures:</strong> days to close the books, reconciliation effort, policy breach rate, approval cycle time, audit findings, cost per transaction, payment success rate.</li>
 </ul>
 <hr>
 <h5 class="hxr-h3">ICP Evolution Framework</h5>
@@ -378,24 +376,8 @@
 <h6 class="hxr-h4">ICP Evolution Decision Matrix</h6>
 <div class="hx-table"><table><thead><tr><th>Signal</th><th>Expand ICP</th><th>Contract ICP</th><th>No Change</th></tr></thead><tbody><tr><td>Winning in new segments</td><td>Yes</td><td>No</td><td>No</td></tr><tr><td>Losing in core segment</td><td>No</td><td>Yes</td><td>No</td></tr><tr><td>Stable win rates</td><td>No</td><td>No</td><td>Yes</td></tr><tr><td>New competitor threat</td><td>No</td><td>Yes</td><td>No</td></tr><tr><td>Market expansion</td><td>Yes</td><td>No</td><td>No</td></tr><tr><td>High churn segment</td><td>No</td><td>Yes</td><td>No</td></tr></tbody></table></div>
 <hr>
-<h5 class="hxr-h3">Recommended ICP Updates</h5>
-<h6 class="hxr-h4">Potential Additions (Based on Wins)</h6>
-<ol>
-<li value="1"><strong>New segment signal</strong>: Look for patterns in recent wins</li>
-<li value="2"><strong>Technology indicators</strong>: New tools correlating with success</li>
-<li value="3"><strong>Buying triggers</strong>: Events that led to purchase</li>
-<li value="4"><strong>Champion profiles</strong>: Roles that drove deals</li>
-</ol>
-<h6 class="hxr-h4">Potential Removals (Based on Losses/Churn)</h6>
-<ol>
-<li value="1"><strong>Disqualification signals</strong>: Common patterns in losses</li>
-<li value="2"><strong>False positive indicators</strong>: Looked good, didn't convert</li>
-<li value="3"><strong>Churn predictors</strong>: Early warning signs</li>
-<li value="4"><strong>Resource drains</strong>: High effort, low outcome segments</li>
-</ol>
-<hr>
 <h5 class="hxr-h3">ICP Evolution Tracking Template</h5>
-<div class="hx-table"><table><thead><tr><th>Quarter</th><th>ICP Change</th><th>Rationale</th><th>Impact</th></tr></thead><tbody><tr><td>last quarter</td><td>[Your ICP change]</td><td>[Why, from this review]</td><td>[What to measure next quarter]</td></tr><tr><td>[Next quarter]</td><td>[Your ICP change]</td><td>[Why]</td><td>[Result]</td></tr><tr><td>[Quarter after]</td><td>[Your ICP change]</td><td>[Why]</td><td>[Result]</td></tr></tbody></table></div>
+<div class="hx-table"><table><thead><tr><th>Quarter</th><th>ICP Change</th><th>Rationale</th><th>Impact</th></tr></thead><tbody><tr><td>last quarter</td><td>Test adding "IT services firms with heavy travel spend"</td><td>From this review: 1 win, 1 loss, 1 market change</td><td>Win rate and cycle of the deals that match it, next quarter</td></tr><tr><td>Next quarter</td><td>(to fill in)</td><td>(to fill in)</td><td>(to fill in)</td></tr><tr><td>Quarter after</td><td>(to fill in)</td><td>(to fill in)</td><td>(to fill in)</td></tr></tbody></table></div>
 <h6 class="hxr-h4">Metrics to Track</h6>
 <ul>
 <li><strong>Win rate by ICP fit score</strong>: Should improve if ICP is right</li>

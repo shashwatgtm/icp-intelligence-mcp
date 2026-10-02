@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Map your buying group and its influence from what you sell, your deal size and typical champion. Free in a browser or Claude, with no sign-in.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
-<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
@@ -211,7 +211,7 @@
    "@type": "WebApplication",
    "@id": "https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/#app",
    "name": "Buyer Group Analyzer (ICP Intelligence)",
-   "description": "Map buyer group dynamics, influence relationships, and decision-making process",
+   "description": "Map the buyer group for a deal: the champion you name, your known stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role's concern and message prompts, an influence map and discovery questions. Sector roles and questions are added when your inputs name one of the supported sectors",
    "url": "https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
@@ -280,12 +280,14 @@
 
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run Buyer Group Analyzer">
-  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run Buyer Group Analyzer</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/buyer_group_analyzer" data-tool="buyer_group_analyzer" data-title="Buyer Group Analyzer"><p class="hx-help">You need: Product category. You can add: Deal size, Target company size, Known stakeholders, Typical champion.</p>
+  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run Buyer Group Analyzer</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/buyer_group_analyzer" data-tool="buyer_group_analyzer" data-title="Buyer Group Analyzer"><p class="hx-help">You need: Product category. You can add: Deal size, Target company size, Known stakeholders, Typical champion, Company, Business model.</p>
 <div class="hx-field"><label for="f-deal_size">Deal size <span class="hx-opt">(optional)</span></label><input id="f-deal_size" name="deal_size" type="text" maxlength="6000" data-kind="string" aria-describedby="f-deal_size-help"><p class="hx-help" id="f-deal_size-help">ACV range (e.g., &quot;$50K-100K&quot;)</p></div>
 <div class="hx-field"><label for="f-target_company_size">Target company size <span class="hx-opt">(optional)</span></label><input id="f-target_company_size" name="target_company_size" type="text" maxlength="6000" data-kind="string" aria-describedby="f-target_company_size-help"><p class="hx-help" id="f-target_company_size-help">Company size (e.g., &quot;500-1000 employees&quot;)</p></div>
 <div class="hx-field"><label for="f-product_category">Product category <span class="hx-req" aria-hidden="true">*</span></label><textarea id="f-product_category" name="product_category" rows="3" maxlength="6000" data-kind="string" required aria-required="true" aria-describedby="f-product_category-help"></textarea><p class="hx-help" id="f-product_category-help">What you sell</p></div>
 <div class="hx-field"><label for="f-known_stakeholders">Known stakeholders <span class="hx-opt">(optional)</span></label><textarea id="f-known_stakeholders" name="known_stakeholders" rows="4" data-kind="lines" aria-describedby="f-known_stakeholders-help"></textarea><p class="hx-help" id="f-known_stakeholders-help">Roles you know are involved. One item per line.</p></div>
 <div class="hx-field"><label for="f-typical_champion">Typical champion <span class="hx-opt">(optional)</span></label><textarea id="f-typical_champion" name="typical_champion" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-typical_champion-help"></textarea><p class="hx-help" id="f-typical_champion-help">Your typical champion role</p></div>
+<div class="hx-field"><label for="f-company">Company <span class="hx-opt">(optional)</span></label><input id="f-company" name="company" type="text" maxlength="6000" data-kind="string" aria-describedby="f-company-help"><p class="hx-help" id="f-company-help">Optional: your company or product name, so the answer can name it</p></div>
+<div class="hx-field"><label for="f-business_model">Business model <span class="hx-opt">(optional)</span></label><select id="f-business_model" name="business_model" data-kind="string" aria-describedby="f-business_model-help"><option value="">Not specified</option><option value="saas">SaaS</option><option value="services">Services</option><option value="connectivity">Connectivity</option><option value="transactions">Transactions</option><option value="marketplace">Marketplace</option><option value="hardware_software">Hardware software</option><option value="investment">Investment</option></select><p class="hx-help" id="f-business_model-help">Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-buyer_group_analyzer">Leave this empty</label><input id="hp-buyer_group_analyzer" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run Buyer Group Analyzer</button>
@@ -315,7 +317,7 @@
 
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
-  <p class="hx-prose">From version 1.2.16 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
+  <p class="hx-prose">From version 1.2.17 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
   <article class="hxr hxr-example" aria-labelledby="ex-t">
     <header class="hxr-head">
       <p class="hxr-tag">ICP Intelligence report</p>
@@ -326,17 +328,20 @@
     <details class="hx-run"><summary>Show the full result</summary><div class="hxr-body hx-result-body hx-output"><h4 class="hxr-h2">Buyer Group Analysis</h4>
 <h5 class="hxr-h3">Deal Context</h5>
 <ul>
+<li><strong>Company</strong>: not given (add the company input to name your company or product in this answer)</li>
 <li><strong>Product</strong>: spend management software</li>
 <li><strong>Deal Size</strong>: $24,000 ACV</li>
 <li><strong>Target Company</strong>: 300-3000 employees</li>
 <li><strong>Known Stakeholders</strong>: Not specified</li>
 </ul>
+<p><em>Sector: read from your inputs as fintech. Business model: software subscription (read from your inputs; set Business model to change it).</em></p>
+<p>The deal size and company size are shown for context: the roles below come from your champion, your stakeholders and the sector, not from the deal size.</p>
 <hr>
 <h5 class="hxr-h3">Buying Group Map</h5>
 <h6 class="hxr-h4">Champion (Your Internal Advocate)</h6>
 <p><strong>Role</strong>: Finance Controller</p>
-<p><strong>Their Concern</strong>: [Their main concern, for example no-shows]</p>
-<p><strong>Your Message</strong>: "[Your answer to that concern, in one line]"</p>
+<p><strong>Their Concern</strong>: Ask them; in fintech this role is usually measured on days to close the books, reconciliation effort and policy breach rate</p>
+<p><strong>Your Message</strong>: "[Fill in: your answer to that concern, in one line]"</p>
 <p><strong>Champion Engagement Strategy</strong>:</p>
 <ul>
 <li>Lead with their specific pain points</li>
@@ -345,9 +350,9 @@
 <li>Give them early wins to share</li>
 </ul>
 <h6 class="hxr-h4">Economic Buyer (Budget Authority)</h6>
-<p><strong>Role</strong>: C-Level Sponsor</p>
+<p><strong>Role</strong>: Chief Financial Officer</p>
 <p><strong>Their Concern</strong>: ROI, strategic fit</p>
-<p><strong>Your Message</strong>: "[The business impact you can prove]"</p>
+<p><strong>Your Message</strong>: "[Fill in: the business impact you can prove]"</p>
 <p><strong>Economic Buyer Strategy</strong>:</p>
 <ul>
 <li>Lead with business outcomes, not features</li>
@@ -356,9 +361,9 @@
 <li>Reference similar company results</li>
 </ul>
 <h6 class="hxr-h4">Technical Evaluator (Implementation Voice)</h6>
-<p><strong>Role</strong>: IT/Tech Lead</p>
+<p><strong>Role</strong>: Head of IT</p>
 <p><strong>Their Concern</strong>: Integration, maintenance</p>
-<p><strong>Your Message</strong>: "[How setup and upkeep work with your product]"</p>
+<p><strong>Your Message</strong>: "[Fill in: how setup and upkeep work with your product]"</p>
 <p><strong>Technical Strategy</strong>:</p>
 <ul>
 <li>Provide sandbox/POC access</li>
@@ -369,7 +374,7 @@
 <h6 class="hxr-h4">End User (Day-to-Day User)</h6>
 <p><strong>Role</strong>: End Users</p>
 <p><strong>Their Concern</strong>: Ease of use, daily workflow</p>
-<p><strong>Your Message</strong>: "[What changes in their working day]"</p>
+<p><strong>Your Message</strong>: "[Fill in: what changes in their working day]"</p>
 <p><strong>User Strategy</strong>:</p>
 <ul>
 <li>Demo through their lens</li>
@@ -378,9 +383,9 @@
 <li>Get pilot users as advocates</li>
 </ul>
 <h6 class="hxr-h4">Potential Blocker</h6>
-<p><strong>Role</strong>: Legal/Procurement</p>
+<p><strong>Role</strong>: Internal Audit Lead</p>
 <p><strong>Their Concern</strong>: Risk, compliance</p>
-<p><strong>Mitigation</strong>: "[Your standard terms and compliance answer]"</p>
+<p><strong>Mitigation</strong>: "[Fill in: your standard terms and compliance answer]"</p>
 <p><strong>Blocker Strategy</strong>:</p>
 <ul>
 <li>Engage early, not late</li>
@@ -390,25 +395,31 @@
 </ul>
 <hr>
 <h5 class="hxr-h3">Influence Map</h5>
-<pre><code>                     ┌────────────────────┐                     
-                     │   ECONOMIC BUYER   │                     
-                     │ C-Level Sponsor    │                     
-                     └──────────┬─────────┘                     
-                                │ approves                      
-                     ┌──────────▼─────────┐                     
-          influences │      CHAMPION      │ influences          
-           ┌─────────│ Finance Controller │──────────┐          
-           │         └──────────┬─────────┘          │          
-           ▼                    │                    ▼          
-┌────────────────────┐   advocates for    ┌────────────────────┐
-│     TECHNICAL      │◄───────────────────│        USER        │
-│ IT/Tech Lead       │    validates       │ End Users          │
-└────────────────────┘                    └────────────────────┘
-           │                                         │          
-           │         ┌────────────────────┐          │          
-           └────────►│      BLOCKER       │◄─────────┘          
-            reviews  │ Legal/Procurement  │  reviews            
-                     └────────────────────┘                     </code></pre>
+<pre><code>                        ┌──────────────────────────┐                        
+                        │      ECONOMIC BUYER      │                        
+                        │ Chief Financial Officer  │                        
+                        └─────────────┬────────────┘                        
+                                      │ approves                            
+                        ┌─────────────▼────────────┐                        
+             influences │         CHAMPION         │ influences             
+              ┌─────────│ Finance Controller       │──────────┐             
+              │         └─────────────┬────────────┘          │             
+              ▼                       │                       ▼             
+┌──────────────────────────┐   advocates for    ┌──────────────────────────┐
+│        TECHNICAL         │◄───────────────────│           USER           │
+│ Head of IT               │    validates       │ End Users                │
+└──────────────────────────┘                    └──────────────────────────┘
+              │                                               │             
+              │         ┌──────────────────────────┐          │             
+              └────────►│         BLOCKER          │◄─────────┘             
+               reviews  │ Internal Audit Lead      │  reviews               
+                        └──────────────────────────┘                        </code></pre>
+<h6 class="hxr-h4">Sector notes: fintech</h6>
+<ul>
+<li><strong>Who usually decides:</strong> The CFO signs; the Finance Controller or the head of the affected finance team champions; internal audit and compliance review controls; IT checks ERP integration and security; HR joins when employees are affected.</li>
+<li><strong>Objections this sector often raises:</strong> our erp already does this; security and compliance review; migration will disrupt the close; regulatory caution.</li>
+<li><strong>A proof point that lands:</strong> Close time or reconciliation effort before and after for one entity, signed off by the finance controller.</li>
+</ul>
 <hr>
 <h5 class="hxr-h3">Multi-Threading Checklist</h5>
 <p>Track your coverage of the buying group:</p>
@@ -439,6 +450,14 @@
 <li value="1">"Walk me through your current workflow for this"</li>
 <li value="2">"What's the most frustrating part of your day?"</li>
 <li value="3">"What would make you actually use a new tool?"</li>
+</ol>
+<h6 class="hxr-h4">Sector questions (fintech)</h6>
+<ol>
+<li value="1">"How many days does the month-end close take today, and which step takes longest?"</li>
+<li value="2">"How are card spends, claims and invoices matched to the ledger today, and by whom?"</li>
+<li value="3">"What did the last audit say about spend controls or approvals?"</li>
+<li value="4">"Which ERP or ledger must every transaction post into, and who owns that integration?"</li>
+<li value="5">"Which reviews (security, compliance, internal audit) must a new finance tool pass, and how long do they take?"</li>
 </ol>
 <p><strong>Next Step</strong>: Use TAM SAM SOM Calculator to size your market</p>
 <p>Suggested timings, lengths and counts: adjust them to your own.</p></div></details>

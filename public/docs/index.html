@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="How to call the 9 ICP Intelligence tools over MCP or REST: addresses, limits, errors and every input field, from the server&#x27;s own schemas.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
-<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
@@ -232,7 +232,7 @@
   <ul class="hx-prose">
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
     <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
-    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.16.</li>
+    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.17.</li>
     <li>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document fields <code>customer_descriptions</code> (ICP Deep Dive) and <code>raw_transcripts</code> (ICP Interview Synthesizer), which take up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
   </ul>
@@ -274,50 +274,56 @@
 <tr><td>1.2.13</td><td>30 September 2026</td><td>GitHub, commit c376531</td></tr>
 <tr><td>1.2.14</td><td>30 September 2026</td><td>GitHub, commit ca26a26</td></tr>
 <tr><td>1.2.15</td><td>30 September 2026</td><td>GitHub, commit 170d76b</td></tr>
-<tr><td>1.2.16 (this site)</td><td>1 October 2026</td><td>GitHub, commit 56a76f8</td></tr>
+<tr><td>1.2.16</td><td>1 October 2026</td><td>GitHub, commit 56a76f8</td></tr>
+<tr><td>1.2.17 (this site)</td><td>2 October 2026</td><td>GitHub, commit 1674b18</td></tr>
   </tbody></table></div>
 </section>
 
 <section class="hx-section" aria-labelledby="ref-h">
   <h2 id="ref-h">Tool reference</h2>
-  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.16.</p>
+  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.17.</p>
 </section>
 <section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
   <h3 id="d-icp-deep-dive">ICP Deep Dive</h3>
   <p><code>icp_deep_dive</code></p>
-  <p class="hx-prose">Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior. <a href="/tools/icp-deep-dive/">Open the form</a>.</p>
+  <p class="hx-prose">Analyze customer data to detect ICP patterns (industry, size, deal size, sales cycle, tech stack, triggers, champion roles). Ties are named as ties, the budget is the ACV range seen in your customers, and sector notes are added when your inputs name one of the supported sectors. <a href="/tools/icp-deep-dive/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>customers</code></td><td>list of objects</td><td>no</td><td></td><td>List of customer objects with available attributes</td></tr>
 <tr><td><code>customer_descriptions</code></td><td>string</td><td>no</td><td></td><td>Alternative: Describe your best customers in text format</td></tr>
 <tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>What type of product you sell</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
+<tr><td><code>business_model</code></td><td>string</td><td>no</td><td>saas, services, connectivity, transactions, marketplace, hardware_software, investment</td><td>Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="icp-scoring-model" aria-labelledby="d-icp-scoring-model">
   <h3 id="d-icp-scoring-model">ICP Scoring Model</h3>
   <p><code>icp_scoring_model</code></p>
-  <p class="hx-prose">Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights. <a href="/tools/icp-scoring-model/">Open the form</a>.</p>
+  <p class="hx-prose">Create a lead qualification scoring template: criteria with example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust. Your success pattern is matched to your criteria; it does not set the weights. Sector notes are added when your inputs name one of the supported sectors. <a href="/tools/icp-scoring-model/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>scoring_criteria</code></td><td>list of objects</td><td>no</td><td></td><td>Criteria for scoring with importance levels</td></tr>
 <tr><td><code>success_correlation</code></td><td>string</td><td>no</td><td></td><td>What correlates with success? (e.g., &quot;deals with VP Sales champion close 2x faster&quot;)</td></tr>
 <tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>What you sell, as a product category, for example spend management software.</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="buyer-group-analyzer" aria-labelledby="d-buyer-group-analyzer">
   <h3 id="d-buyer-group-analyzer">Buyer Group Analyzer</h3>
   <p><code>buyer_group_analyzer</code></p>
-  <p class="hx-prose">Map buyer group dynamics, influence relationships, and decision-making process. <a href="/tools/buyer-group-analyzer/">Open the form</a>.</p>
+  <p class="hx-prose">Map the buyer group for a deal: the champion you name, your known stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role&#x27;s concern and message prompts, an influence map and discovery questions. Sector roles and questions are added when your inputs name one of the supported sectors. <a href="/tools/buyer-group-analyzer/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>deal_size</code></td><td>string</td><td>no</td><td></td><td>ACV range (e.g., &quot;$50K-100K&quot;)</td></tr>
 <tr><td><code>target_company_size</code></td><td>string</td><td>no</td><td></td><td>Company size (e.g., &quot;500-1000 employees&quot;)</td></tr>
 <tr><td><code>product_category</code></td><td>string</td><td>yes</td><td></td><td>What you sell</td></tr>
 <tr><td><code>known_stakeholders</code></td><td>list of strings</td><td>no</td><td></td><td>Roles you know are involved</td></tr>
 <tr><td><code>typical_champion</code></td><td>string</td><td>no</td><td></td><td>Your typical champion role</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
+<tr><td><code>business_model</code></td><td>string</td><td>no</td><td>saas, services, connectivity, transactions, marketplace, hardware_software, investment</td><td>Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="tam-sam-som-calculator" aria-labelledby="d-tam-sam-som-calculator">
   <h3 id="d-tam-sam-som-calculator">TAM SAM SOM Calculator</h3>
   <p><code>tam_sam_som_calculator</code></p>
-  <p class="hx-prose">Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source). <a href="/tools/tam-sam-som-calculator/">Open the form</a>.</p>
+  <p class="hx-prose">Calculate TAM/SAM/SOM bottom-up from your company count, ACV, ICP match rate and Year 1 share (calculation framework, not a data source). Sector notes are added when your inputs name one of the supported sectors. <a href="/tools/tam-sam-som-calculator/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>total_potential_companies</code></td><td>number (0 or more)</td><td>yes</td><td></td><td>Estimated total companies that could buy (from LinkedIn, industry reports)</td></tr>
 <tr><td><code>average_contract_value</code></td><td>number (more than 0)</td><td>yes</td><td></td><td>Your average ACV in dollars</td></tr>
@@ -325,60 +331,71 @@
 <tr><td><code>year1_market_share_target</code></td><td>number (0 or more)</td><td>no</td><td></td><td>Realistic Year 1 market share percentage (typically 1-5%)</td></tr>
 <tr><td><code>data_sources</code></td><td>string</td><td>no</td><td></td><td>Where you got your numbers (for documentation)</td></tr>
 <tr><td><code>segment_name</code></td><td>string</td><td>no</td><td></td><td>Name of the market segment</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="lookalike-signal-generator" aria-labelledby="d-lookalike-signal-generator">
   <h3 id="d-lookalike-signal-generator">Lookalike Signal Generator</h3>
   <p><code>lookalike_signal_generator</code></p>
-  <p class="hx-prose">Generate platform-specific targeting criteria and search queries (generates criteria, not data). <a href="/tools/lookalike-signal-generator/">Open the form</a>.</p>
+  <p class="hx-prose">Generate platform-specific targeting criteria and search queries from your firmographics, technographics, champion titles and buying triggers (generates criteria, not data). Each trigger gets its own signal; search keywords come from what you sell and the sector; platforms limits the sections. <a href="/tools/lookalike-signal-generator/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>icp_firmographics</code></td><td>object</td><td>no</td><td></td><td>Firmographic criteria</td></tr>
 <tr><td><code>icp_technographics</code></td><td>list of strings</td><td>no</td><td></td><td>Technologies your ICP typically uses</td></tr>
 <tr><td><code>champion_titles</code></td><td>list of strings</td><td>yes</td><td></td><td>Job titles of your champions</td></tr>
 <tr><td><code>buying_triggers</code></td><td>list of strings</td><td>no</td><td></td><td>Events that trigger buying</td></tr>
-<tr><td><code>platforms</code></td><td>list of strings</td><td>no</td><td></td><td>Accepted but not used yet: the output always includes every platform section (linkedin, google_ads, 6sense, zoominfo)</td></tr>
+<tr><td><code>platforms</code></td><td>list of strings</td><td>no</td><td></td><td>Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included</td></tr>
+<tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell (for example &quot;spend management software&quot;), used for search keywords and sector notes</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="account-prioritization" aria-labelledby="d-account-prioritization">
   <h3 id="d-account-prioritization">Account Prioritization</h3>
   <p><code>account_prioritization</code></p>
-  <p class="hx-prose">Rank and prioritize accounts using multi-dimensional scoring. <a href="/tools/account-prioritization/">Open the form</a>.</p>
+  <p class="hx-prose">Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points. <a href="/tools/account-prioritization/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>accounts</code></td><td>list of objects</td><td>no</td><td></td><td>List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing</td></tr>
 <tr><td><code>prioritization_weights</code></td><td>object</td><td>no</td><td></td><td>Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="icp-gap-analysis" aria-labelledby="d-icp-gap-analysis">
   <h3 id="d-icp-gap-analysis">ICP Gap Analysis</h3>
   <p><code>icp_gap_analysis</code></p>
-  <p class="hx-prose">Analyze gaps between current customer base and ideal ICP. <a href="/tools/icp-gap-analysis/">Open the form</a>.</p>
+  <p class="hx-prose">Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors. <a href="/tools/icp-gap-analysis/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>current_customers</code></td><td>string</td><td>yes</td><td></td><td>Description of your current customer base</td></tr>
 <tr><td><code>ideal_icp</code></td><td>string</td><td>yes</td><td></td><td>Description of your ideal customer profile</td></tr>
 <tr><td><code>current_metrics</code></td><td>object</td><td>no</td><td></td><td>Current performance metrics</td></tr>
 <tr><td><code>target_metrics</code></td><td>object</td><td>no</td><td></td><td>Target performance metrics</td></tr>
+<tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell, used for sector notes</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
+<tr><td><code>business_model</code></td><td>string</td><td>no</td><td>saas, services, connectivity, transactions, marketplace, hardware_software, investment</td><td>Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="icp-evolution-tracker" aria-labelledby="d-icp-evolution-tracker">
   <h3 id="d-icp-evolution-tracker">ICP Evolution Tracker</h3>
   <p><code>icp_evolution_tracker</code></p>
-  <p class="hx-prose">Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text. <a href="/tools/icp-evolution-tracker/">Open the form</a>.</p>
+  <p class="hx-prose">Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP and states a candidate change for each (an addition to test, a disqualifier to test, an implication to check), with a review checklist. It does not compute win rates; check each candidate against your CRM. <a href="/tools/icp-evolution-tracker/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>current_icp</code></td><td>string</td><td>yes</td><td></td><td>Your current ICP definition</td></tr>
 <tr><td><code>recent_wins</code></td><td>string</td><td>no</td><td></td><td>Description of recent successful customers</td></tr>
 <tr><td><code>recent_losses</code></td><td>string</td><td>no</td><td></td><td>Description of recent lost deals</td></tr>
 <tr><td><code>market_changes</code></td><td>string</td><td>no</td><td></td><td>Recent market or competitive changes</td></tr>
-<tr><td><code>time_period</code></td><td>string</td><td>no</td><td></td><td>Time period for analysis (e.g., &quot;Q4 2024&quot;)</td></tr>
+<tr><td><code>time_period</code></td><td>string</td><td>no</td><td></td><td>Time period for analysis (e.g., &quot;Q3 2026&quot;)</td></tr>
+<tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell, used for sector notes</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="icp-interview-synthesizer" aria-labelledby="d-icp-interview-synthesizer">
   <h3 id="d-icp-interview-synthesizer">ICP Interview Synthesizer</h3>
   <p><code>icp_interview_synthesizer</code></p>
-  <p class="hx-prose">Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed. <a href="/tools/icp-interview-synthesizer/">Open the form</a>.</p>
+  <p class="hx-prose">Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analysed. <a href="/tools/icp-interview-synthesizer/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>interview_notes</code></td><td>list of objects</td><td>no</td><td></td><td>Structured interview notes</td></tr>
 <tr><td><code>raw_transcripts</code></td><td>string</td><td>no</td><td></td><td>Alternative: Paste raw interview transcripts or notes</td></tr>
 <tr><td><code>analysis_focus</code></td><td>string</td><td>no</td><td></td><td>Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)</td></tr>
+<tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell, used for sector notes</td></tr>
+<tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>
 </section>
 </div>

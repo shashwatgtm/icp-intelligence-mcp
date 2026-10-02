@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Generate targeting criteria for each platform from your champions&#x27; job titles, plus any company profile, technologies or buying triggers. Free, no sign-in.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
-<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
@@ -211,7 +211,7 @@
    "@type": "WebApplication",
    "@id": "https://icp-intelligence.gtmhelix.com/tools/lookalike-signal-generator/#app",
    "name": "Lookalike Signal Generator (ICP Intelligence)",
-   "description": "Generate platform-specific targeting criteria and search queries (generates criteria, not data)",
+   "description": "Generate platform-specific targeting criteria and search queries from your firmographics, technographics, champion titles and buying triggers (generates criteria, not data). Each trigger gets its own signal; search keywords come from what you sell and the sector; platforms limits the sections",
    "url": "https://icp-intelligence.gtmhelix.com/tools/lookalike-signal-generator/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
@@ -280,11 +280,14 @@
 
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run Lookalike Signal Generator">
-  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run Lookalike Signal Generator</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/lookalike_signal_generator" data-tool="lookalike_signal_generator" data-title="Lookalike Signal Generator"><p class="hx-help">You need: Champion titles. You can add: Company profile of your ideal customer, ICP technographics, Buying triggers.</p>
+  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run Lookalike Signal Generator</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/lookalike_signal_generator" data-tool="lookalike_signal_generator" data-title="Lookalike Signal Generator"><p class="hx-help">You need: Champion titles. You can add: Company profile of your ideal customer, ICP technographics, Buying triggers, Platforms, Product category, Company.</p>
 <div class="hx-field"><label for="f-icp_firmographics-industries">Industries of your ideal customer <span class="hx-opt">(optional)</span></label><textarea id="f-icp_firmographics-industries" name="icp_firmographics.industries" rows="4" data-kind="lines" aria-describedby="f-icp_firmographics-industries-help"></textarea><p class="hx-help" id="f-icp_firmographics-industries-help">One item per line.</p></div><div class="hx-field"><label for="f-icp_firmographics-company_sizes">Company sizes of your ideal customer <span class="hx-opt">(optional)</span></label><textarea id="f-icp_firmographics-company_sizes" name="icp_firmographics.company_sizes" rows="4" data-kind="lines" aria-describedby="f-icp_firmographics-company_sizes-help"></textarea><p class="hx-help" id="f-icp_firmographics-company_sizes-help">One item per line.</p></div><div class="hx-field"><label for="f-icp_firmographics-locations">Locations of your ideal customer <span class="hx-opt">(optional)</span></label><textarea id="f-icp_firmographics-locations" name="icp_firmographics.locations" rows="4" data-kind="lines" aria-describedby="f-icp_firmographics-locations-help"></textarea><p class="hx-help" id="f-icp_firmographics-locations-help">One item per line.</p></div><div class="hx-field"><label for="f-icp_firmographics-funding_stages">Funding stages of your ideal customer <span class="hx-opt">(optional)</span></label><textarea id="f-icp_firmographics-funding_stages" name="icp_firmographics.funding_stages" rows="4" data-kind="lines" aria-describedby="f-icp_firmographics-funding_stages-help"></textarea><p class="hx-help" id="f-icp_firmographics-funding_stages-help">One item per line.</p></div>
 <div class="hx-field"><label for="f-icp_technographics">ICP technographics <span class="hx-opt">(optional)</span></label><textarea id="f-icp_technographics" name="icp_technographics" rows="4" data-kind="lines" aria-describedby="f-icp_technographics-help"></textarea><p class="hx-help" id="f-icp_technographics-help">Technologies your ICP typically uses. One item per line.</p></div>
 <div class="hx-field"><label for="f-champion_titles">Champion titles <span class="hx-req" aria-hidden="true">*</span></label><textarea id="f-champion_titles" name="champion_titles" rows="4" data-kind="lines" required aria-required="true" aria-describedby="f-champion_titles-help"></textarea><p class="hx-help" id="f-champion_titles-help">Job titles of your champions. One item per line.</p></div>
 <div class="hx-field"><label for="f-buying_triggers">Buying triggers <span class="hx-opt">(optional)</span></label><textarea id="f-buying_triggers" name="buying_triggers" rows="4" data-kind="lines" aria-describedby="f-buying_triggers-help"></textarea><p class="hx-help" id="f-buying_triggers-help">Events that trigger buying. One item per line.</p></div>
+<div class="hx-field"><label for="f-platforms">Platforms <span class="hx-opt">(optional)</span></label><textarea id="f-platforms" name="platforms" rows="4" data-kind="lines" aria-describedby="f-platforms-help"></textarea><p class="hx-help" id="f-platforms-help">Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included. One item per line.</p></div>
+<div class="hx-field"><label for="f-product_category">Product category <span class="hx-opt">(optional)</span></label><textarea id="f-product_category" name="product_category" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-product_category-help"></textarea><p class="hx-help" id="f-product_category-help">Optional: what you sell (for example &quot;spend management software&quot;), used for search keywords and sector notes</p></div>
+<div class="hx-field"><label for="f-company">Company <span class="hx-opt">(optional)</span></label><input id="f-company" name="company" type="text" maxlength="6000" data-kind="string" aria-describedby="f-company-help"><p class="hx-help" id="f-company-help">Optional: your company or product name, so the answer can name it</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-lookalike_signal_generator">Leave this empty</label><input id="hp-lookalike_signal_generator" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run Lookalike Signal Generator</button>
@@ -314,7 +317,7 @@
 
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
-  <p class="hx-prose">From version 1.2.16 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
+  <p class="hx-prose">From version 1.2.17 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
   <article class="hxr hxr-example" aria-labelledby="ex-t">
     <header class="hxr-head">
       <p class="hxr-tag">ICP Intelligence report</p>
@@ -323,14 +326,21 @@
     </header>
     <div class="hxr-actions"><button type="button" class="hx-btn hx-btn-ghost" data-print>Print or save as PDF</button></div>
     <details class="hx-run"><summary>Show the full result</summary><div class="hxr-body hx-result-body hx-output"><h4 class="hxr-h2">Lookalike Signal &amp; Targeting Criteria</h4>
+<ul>
+<li><strong>Company</strong>: not given (add the company input to name your company or product in this answer)</li>
+<li><strong>What you sell</strong>: not given (add Product category for search keywords)</li>
+</ul>
+<p><em>Sector: read from your inputs as fintech.</em></p>
 <h5 class="hxr-h3">ICP Summary</h5>
 <ul>
 <li><strong>Industries</strong>: Manufacturing, IT services</li>
 <li><strong>Company Sizes</strong>: 201-500, 501-1000, 1001-5000</li>
 <li><strong>Locations</strong>: India</li>
+<li><strong>Funding Stages</strong>: not supplied</li>
 <li><strong>Technologies</strong>: SAP, Tally, Oracle NetSuite</li>
 <li><strong>Champion Titles</strong>: Finance Controller, Head of Accounts Payable</li>
 <li><strong>Buying Triggers</strong>: new CFO hire, audit finding, ERP migration</li>
+<li><strong>Other roles in a fintech buying group</strong> (not in your input): Chief Financial Officer, Head of Treasury, Internal Audit Lead, Compliance Officer, Head of IT</li>
 </ul>
 <hr>
 <h5 class="hxr-h3">LinkedIn Sales Navigator</h5>
@@ -357,22 +367,19 @@ Geography: India</code></pre>
 <hr>
 <h5 class="hxr-h3">Google Ads Targeting</h5>
 <h6 class="hxr-h4">Custom Intent Audiences</h6>
-<p><strong>Keywords to target</strong> (people searching for solutions):</p>
-<pre><code>"sap integration"
+<p><strong>Keywords to target</strong> (people searching for what you sell):</p>
+<pre><code>"reconciliation tool"
+"month-end close tool"
+"policy controls tool"
+"audit trail tool"
+"sap integration"
 "tally integration"
-"oracle netsuite integration"
-"sap alternative"
-"tally alternative"
-"oracle netsuite alternative"
-"manufacturing software"</code></pre>
+"oracle netsuite integration"</code></pre>
+<p>Add Product category (what you sell) for search keywords about your product: this tool does not guess it.</p>
 <h6 class="hxr-h4">Custom Audience: Website Visitors</h6>
-<p>Target visitors to competitor sites:</p>
-<pre><code>competitor1.com
-competitor2.com
-g2.com/products/[competitor]</code></pre>
+<p>Target visitors to the sites of the competitors your buyers compare you with (add their addresses).</p>
 <h6 class="hxr-h4">In-Market Audiences</h6>
-<pre><code>Business Services &gt; Business Technology
-Software &gt; Manufacturing Software</code></pre>
+<p>Pick the in-market category Google Ads offers that is closest to fintech buyers (search the category list for: reconciliation, month-end close, policy controls). This tool does not invent a category name.</p>
 <hr>
 <h5 class="hxr-h3">6sense / Intent Data Platforms</h5>
 <h6 class="hxr-h4">Account Fit Criteria</h6>
@@ -387,11 +394,14 @@ Software &gt; Manufacturing Software</code></pre>
   }
 }</code></pre>
 <h6 class="hxr-h4">Intent Topic Keywords</h6>
-<pre><code>SAP
+<pre><code>reconciliation
+month-end close
+policy controls
+audit trail
+accounts payable
+SAP
 Tally
-Oracle NetSuite
-Manufacturing solutions
-IT services solutions</code></pre>
+Oracle NetSuite</code></pre>
 <h6 class="hxr-h4">Buying Stage Indicators</h6>
 <ul>
 <li><strong>Awareness</strong>: Researching generic topics</li>
@@ -409,24 +419,28 @@ Technologies: SAP, Tally, Oracle NetSuite</code></pre>
 <h6 class="hxr-h4">Intent Signals to Layer</h6>
 <ul>
 <li>Job changes in target titles (last 90 days)</li>
-<li>Funding events (Series A-C)</li>
 <li>Technology adoption changes</li>
 <li>Hiring for related roles</li>
 </ul>
 <hr>
 <h5 class="hxr-h3">Buying Trigger Signals</h5>
 <h6 class="hxr-h4">Trigger: New CFO hire</h6>
-<p><strong>Signal</strong>: New Finance Controller joined in last 90 days</p>
-<p><strong>Why it matters</strong>: New leaders seek quick wins, open to new tools</p>
+<p><strong>Signal</strong>: A new Finance Controller or a related leader joined in the last 90 days</p>
+<p><strong>Why it matters</strong>: New leaders review tools and processes early</p>
 <p><strong>How to track</strong>: LinkedIn alerts, ZoomInfo job changes</p>
 <h6 class="hxr-h4">Trigger: Audit finding</h6>
-<p><strong>Signal</strong>: Series A-C announcement</p>
-<p><strong>Why it matters</strong>: Budget allocated for scaling</p>
-<p><strong>How to track</strong>: Crunchbase alerts, TechCrunch, LinkedIn</p>
+<p><strong>Signal</strong>: Audit findings, regulatory notices or incidents made public, and hiring for audit, risk or compliance roles</p>
+<p><strong>Why it matters</strong>: A finding sets a deadline and a budget owner</p>
+<p><strong>How to track</strong>: News alerts, annual reports and filings, job posts</p>
 <h6 class="hxr-h4">Trigger: ERP migration</h6>
-<p><strong>Signal</strong>: ERP migration announced</p>
-<p><strong>Why it matters</strong>: Existing processes breaking at scale</p>
-<p><strong>How to track</strong>: Job posting velocity, news alerts</p>
+<p><strong>Signal</strong>: Job posts and announcements that mention the new system or the migration</p>
+<p><strong>Why it matters</strong>: A system change reopens the processes around it</p>
+<p><strong>How to track</strong>: Job posting alerts, technographic change data, news alerts</p>
+<h6 class="hxr-h4">Sector notes: fintech</h6>
+<ul>
+<li><strong>What this sector measures:</strong> days to close the books, reconciliation effort, policy breach rate, approval cycle time, audit findings, cost per transaction, payment success rate.</li>
+<li><strong>A proof point that lands:</strong> Close time or reconciliation effort before and after for one entity, signed off by the finance controller.</li>
+</ul>
 <hr>
 <h5 class="hxr-h3">Implementation Checklist</h5>
 <h6 class="hxr-h4">LinkedIn Sales Navigator</h6>

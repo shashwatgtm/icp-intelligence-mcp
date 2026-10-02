@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Rank and prioritize your accounts using fit, intent, relationship and timing scores. Free in a browser or Claude, with no sign-in.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
-<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
@@ -211,7 +211,7 @@
    "@type": "WebApplication",
    "@id": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/#app",
    "name": "Account Prioritization (ICP Intelligence)",
-   "description": "Rank and prioritize accounts using multi-dimensional scoring",
+   "description": "Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points",
    "url": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
@@ -280,9 +280,10 @@
 
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run Account Prioritization">
-  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run Account Prioritization</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/account_prioritization" data-tool="account_prioritization" data-title="Account Prioritization"><p class="hx-help">Every field is optional. You can add: Accounts to rank, Your own weights in percent.</p>
+  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run Account Prioritization</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/account_prioritization" data-tool="account_prioritization" data-title="Account Prioritization"><p class="hx-help">Every field is optional. You can add: Accounts to rank, Your own weights in percent, Company.</p>
 <div class="hx-field"><label for="f-accounts">Accounts to rank, one per line: name, fit, intent, relationship, timing <span class="hx-opt">(optional)</span></label><textarea id="f-accounts" name="accounts" rows="4" data-kind="rows" data-rows="{&quot;sep&quot;: &quot;,&quot;, &quot;cols&quot;: [[&quot;name&quot;, &quot;s&quot;, &quot;name&quot;], [&quot;fit_score&quot;, &quot;n&quot;, &quot;fit&quot;], [&quot;intent_signals&quot;, &quot;n&quot;, &quot;intent&quot;], [&quot;relationship&quot;, &quot;n&quot;, &quot;relationship&quot;], [&quot;timing&quot;, &quot;s&quot;, &quot;timing&quot;]], &quot;min&quot;: 5, &quot;max&quot;: 5, &quot;need&quot;: &quot;5 values: name, fit, intent, relationship, timing&quot;}" aria-describedby="f-accounts-help"></textarea><p class="hx-help" id="f-accounts-help">5 values per line, separated by commas. Fit, intent and relationship run from 0 to 100; timing is now, soon, later or unknown. For example: Example Manufacturing Co, 80, 60, 40, soon</p></div>
 <div class="hx-field"><label for="f-prioritization_weights-fit">Your weight for fit, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-fit" name="prioritization_weights.fit" type="number" step="any" inputmode="decimal" data-kind="number" aria-describedby="f-prioritization_weights-fit-help"><p class="hx-help" id="f-prioritization_weights-fit-help">Leave these empty to use the defaults (fit 40, intent 30, relationship 15, timing 15). The weights do not have to add up to 100.</p></div><div class="hx-field"><label for="f-prioritization_weights-intent">Your weight for intent, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-intent" name="prioritization_weights.intent" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-prioritization_weights-relationship">Your weight for relationship, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-relationship" name="prioritization_weights.relationship" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-prioritization_weights-timing">Your weight for timing, in percent <span class="hx-opt">(optional)</span></label><input id="f-prioritization_weights-timing" name="prioritization_weights.timing" type="number" step="any" inputmode="decimal" data-kind="number"></div>
+<div class="hx-field"><label for="f-company">Company <span class="hx-opt">(optional)</span></label><input id="f-company" name="company" type="text" maxlength="6000" data-kind="string" aria-describedby="f-company-help"><p class="hx-help" id="f-company-help">Optional: your company or product name, so the answer can name it</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-account_prioritization">Leave this empty</label><input id="hp-account_prioritization" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run Account Prioritization</button>
@@ -312,7 +313,7 @@
 
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
-  <p class="hx-prose">From version 1.2.16 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
+  <p class="hx-prose">From version 1.2.17 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
   <article class="hxr hxr-example" aria-labelledby="ex-t">
     <header class="hxr-head">
       <p class="hxr-tag">ICP Intelligence report</p>
@@ -321,13 +322,16 @@
     </header>
     <div class="hxr-actions"><button type="button" class="hx-btn hx-btn-ghost" data-print>Print or save as PDF</button></div>
     <details class="hx-run"><summary>Show the full result</summary><div class="hxr-body hx-result-body hx-output"><h4 class="hxr-h2">Account Prioritization Results</h4>
+<ul>
+<li><strong>Company</strong>: not given (add the company input to name your company or product in this answer)</li>
+</ul>
 <h5 class="hxr-h3">Scoring Weights</h5>
 <p>Example figures: replace with your own. You supplied no weights, so these are the default weights.</p>
 <div class="hx-table"><table><thead><tr><th>Factor</th><th>Weight</th><th>Rationale</th></tr></thead><tbody><tr><td><strong>Fit</strong></td><td>40%</td><td>How well they match ICP</td></tr><tr><td><strong>Intent</strong></td><td>30%</td><td>Buying signals detected</td></tr><tr><td><strong>Relationship</strong></td><td>15%</td><td>Existing connections</td></tr><tr><td><strong>Timing</strong></td><td>15%</td><td>Urgency/readiness</td></tr></tbody></table></div>
 <hr>
 <h5 class="hxr-h3">Prioritized Account List</h5>
-<p>Your scores are shown as given; the weights and timing points are the defaults. (default) marks a value your input did not supply, so the tool used its default.</p>
-<div class="hx-table"><table><thead><tr><th>Rank</th><th>Account</th><th>Fit</th><th>Intent</th><th>Relationship</th><th>Timing</th><th><strong>Score</strong></th><th>Tier</th></tr></thead><tbody><tr><td>1</td><td><strong>Example IT Services Co</strong></td><td>55</td><td>90</td><td>70</td><td>now</td><td><strong>75</strong></td><td>B</td></tr><tr><td>2</td><td><strong>Example Manufacturing Co</strong></td><td>80</td><td>60</td><td>40</td><td>soon</td><td><strong>67</strong></td><td>B</td></tr></tbody></table></div>
+<p>Your scores are shown as given; the weights and timing points are the defaults (now 100, soon 70, later 40, unknown 50 points). (default) marks a value your input did not supply, so the tool used its default.</p>
+<div class="hx-table"><table><thead><tr><th>Rank</th><th>Account</th><th>Fit</th><th>Intent</th><th>Relationship</th><th>Timing</th><th><strong>Score</strong></th><th>Tier</th></tr></thead><tbody><tr><td>1</td><td><strong>Example IT Services Co</strong></td><td>55</td><td>90</td><td>70</td><td>now (100 pts)</td><td><strong>75</strong></td><td>B</td></tr><tr><td>2</td><td><strong>Example Manufacturing Co</strong></td><td>80</td><td>60</td><td>40</td><td>soon (70 pts)</td><td><strong>67</strong></td><td>B</td></tr></tbody></table></div>
 <hr>
 <h5 class="hxr-h3">Tier Breakdown</h5>
 <p>The tiers are 80%, 60% and 40% of the highest possible score, 100 points, the sum of your weights.</p>
@@ -360,13 +364,13 @@
 <h5 class="hxr-h3">Next Actions by Account</h5>
 <h6 class="hxr-h4">1. Example IT Services Co (Tier B)</h6>
 <ul>
-<li><strong>Why prioritized</strong>: High buying intent</li>
+<li><strong>Why prioritized</strong>: High buying intent (the most points come from intent 90 × 30% = 27 points of 75)</li>
 <li><strong>Gap to address</strong>: Validate fit</li>
 <li><strong>Recommended action</strong>: SDR sequence + warm intro</li>
 </ul>
 <h6 class="hxr-h4">2. Example Manufacturing Co (Tier B)</h6>
 <ul>
-<li><strong>Why prioritized</strong>: Strong ICP fit</li>
+<li><strong>Why prioritized</strong>: Strong ICP fit (the most points come from fit 80 × 40% = 32 points of 67)</li>
 <li><strong>Gap to address</strong>: Build relationships</li>
 <li><strong>Recommended action</strong>: SDR sequence + warm intro</li>
 </ul>

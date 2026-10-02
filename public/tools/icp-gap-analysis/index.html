@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Find gaps between your customers and ICP from a description of each. Free in a browser or Claude, with no sign-in.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
-<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
@@ -211,7 +211,7 @@
    "@type": "WebApplication",
    "@id": "https://icp-intelligence.gtmhelix.com/tools/icp-gap-analysis/#app",
    "name": "ICP Gap Analysis (ICP Intelligence)",
-   "description": "Analyze gaps between current customer base and ideal ICP",
+   "description": "Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors",
    "url": "https://icp-intelligence.gtmhelix.com/tools/icp-gap-analysis/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
@@ -280,11 +280,14 @@
 
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run ICP Gap Analysis">
-  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Gap Analysis</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_gap_analysis" data-tool="icp_gap_analysis" data-title="ICP Gap Analysis"><p class="hx-help">You need: Current customers, Ideal ICP. You can add: Your current numbers, Your target numbers.</p>
+  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Gap Analysis</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_gap_analysis" data-tool="icp_gap_analysis" data-title="ICP Gap Analysis"><p class="hx-help">You need: Current customers, Ideal ICP. You can add: Your current numbers, Your target numbers, Product category, Company, Business model.</p>
 <div class="hx-field"><label for="f-current_customers">Current customers <span class="hx-req" aria-hidden="true">*</span></label><textarea id="f-current_customers" name="current_customers" rows="3" maxlength="6000" data-kind="string" required aria-required="true" aria-describedby="f-current_customers-help"></textarea><p class="hx-help" id="f-current_customers-help">Description of your current customer base</p></div>
 <div class="hx-field"><label for="f-ideal_icp">Ideal ICP <span class="hx-req" aria-hidden="true">*</span></label><textarea id="f-ideal_icp" name="ideal_icp" rows="3" maxlength="6000" data-kind="string" required aria-required="true" aria-describedby="f-ideal_icp-help"></textarea><p class="hx-help" id="f-ideal_icp-help">Description of your ideal customer profile</p></div>
 <div class="hx-field"><label for="f-current_metrics-avg_acv">Current average ACV in dollars <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-avg_acv" name="current_metrics.avg_acv" type="number" step="any" inputmode="decimal" min="0" data-kind="number" aria-describedby="f-current_metrics-avg_acv-help"><p class="hx-help" id="f-current_metrics-avg_acv-help">Any of five numbers.</p></div><div class="hx-field"><label for="f-current_metrics-avg_sales_cycle">Current sales cycle in days <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-avg_sales_cycle" name="current_metrics.avg_sales_cycle" type="number" step="any" inputmode="decimal" min="0" data-kind="number"></div><div class="hx-field"><label for="f-current_metrics-win_rate">Current win rate in percent <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-win_rate" name="current_metrics.win_rate" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-current_metrics-churn_rate">Current churn rate in percent <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-churn_rate" name="current_metrics.churn_rate" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-current_metrics-nps">Current NPS <span class="hx-opt">(optional)</span></label><input id="f-current_metrics-nps" name="current_metrics.nps" type="number" step="any" inputmode="decimal" data-kind="number"></div>
 <div class="hx-field"><label for="f-target_metrics-avg_acv">Target average ACV in dollars <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-avg_acv" name="target_metrics.avg_acv" type="number" step="any" inputmode="decimal" min="0" data-kind="number" aria-describedby="f-target_metrics-avg_acv-help"><p class="hx-help" id="f-target_metrics-avg_acv-help">The same five numbers, as your targets.</p></div><div class="hx-field"><label for="f-target_metrics-avg_sales_cycle">Target sales cycle in days <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-avg_sales_cycle" name="target_metrics.avg_sales_cycle" type="number" step="any" inputmode="decimal" min="0" data-kind="number"></div><div class="hx-field"><label for="f-target_metrics-win_rate">Target win rate in percent <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-win_rate" name="target_metrics.win_rate" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-target_metrics-churn_rate">Target churn rate in percent <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-churn_rate" name="target_metrics.churn_rate" type="number" step="any" inputmode="decimal" data-kind="number"></div><div class="hx-field"><label for="f-target_metrics-nps">Target NPS <span class="hx-opt">(optional)</span></label><input id="f-target_metrics-nps" name="target_metrics.nps" type="number" step="any" inputmode="decimal" data-kind="number"></div>
+<div class="hx-field"><label for="f-product_category">Product category <span class="hx-opt">(optional)</span></label><textarea id="f-product_category" name="product_category" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-product_category-help"></textarea><p class="hx-help" id="f-product_category-help">Optional: what you sell, used for sector notes</p></div>
+<div class="hx-field"><label for="f-company">Company <span class="hx-opt">(optional)</span></label><input id="f-company" name="company" type="text" maxlength="6000" data-kind="string" aria-describedby="f-company-help"><p class="hx-help" id="f-company-help">Optional: your company or product name, so the answer can name it</p></div>
+<div class="hx-field"><label for="f-business_model">Business model <span class="hx-opt">(optional)</span></label><select id="f-business_model" name="business_model" data-kind="string" aria-describedby="f-business_model-help"><option value="">Not specified</option><option value="saas">SaaS</option><option value="services">Services</option><option value="connectivity">Connectivity</option><option value="transactions">Transactions</option><option value="marketplace">Marketplace</option><option value="hardware_software">Hardware software</option><option value="investment">Investment</option></select><p class="hx-help" id="f-business_model-help">Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-icp_gap_analysis">Leave this empty</label><input id="hp-icp_gap_analysis" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run ICP Gap Analysis</button>
@@ -314,7 +317,7 @@
 
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
-  <p class="hx-prose">From version 1.2.16 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
+  <p class="hx-prose">From version 1.2.17 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
   <article class="hxr hxr-example" aria-labelledby="ex-t">
     <header class="hxr-head">
       <p class="hxr-tag">ICP Intelligence report</p>
@@ -324,10 +327,20 @@
     <div class="hxr-actions"><button type="button" class="hx-btn hx-btn-ghost" data-print>Print or save as PDF</button></div>
     <details class="hx-run"><summary>Show the full result</summary><div class="hxr-body hx-result-body hx-output"><h4 class="hxr-h2">ICP Gap Analysis</h4>
 <h5 class="hxr-h3">Profile Comparison</h5>
+<ul>
+<li><strong>Company</strong>: not given (add the company input to name your company or product in this answer)</li>
+</ul>
+<p><em>Sector: not clear from your inputs (name the industry or what you sell for sector notes). Business model: not clear from your inputs; set Business model (saas, services, connectivity, transactions, marketplace, Hardware software, investment) for advice that fits it.</em></p>
 <h6 class="hxr-h4">Current Customer Base</h6>
-<p>Small companies under 200 employees, founder-run finance</p>
+<blockquote>Small companies under 200 employees, founder-run finance</blockquote>
 <h6 class="hxr-h4">Ideal Customer Profile (Target)</h6>
-<p>Mid-size companies with a finance controller and an ERP</p>
+<blockquote>Mid-size companies with a finance controller and an ERP</blockquote>
+<h6 class="hxr-h4">What differs</h6>
+<ul>
+<li><strong>In your ideal profile, not in your current base</strong>: "Mid-size companies"; "finance controller"; "ERP"</li>
+<li><strong>In your current base, not in your ideal profile</strong>: "Small companies under 200 employees"; "founder-run finance"</li>
+<li><strong>What to check first</strong>: how many of your current customers already match "Mid-size companies", "finance controller" and "ERP", and whether they show better metrics than the rest.</li>
+</ul>
 <hr>
 <h5 class="hxr-h3">Metric Gaps</h5>
 <div class="hx-table"><table><thead><tr><th>Metric</th><th>Current</th><th>Target</th><th>Gap</th><th>Priority</th></tr></thead><tbody><tr><td><strong>Avg ACV</strong></td><td>$6,000</td><td>$24,000</td><td>+300% needed</td><td>High</td></tr><tr><td><strong>Sales Cycle</strong></td><td>30 days</td><td>60 days</td><td>target is 100% above today, no reduction needed</td><td>Low</td></tr><tr><td><strong>Win Rate</strong></td><td>25%</td><td>30%</td><td>+20% needed</td><td>Low</td></tr><tr><td><strong>Churn Rate</strong></td><td>18%</td><td>8%</td><td>-56% needed</td><td>High</td></tr><tr><td><strong>NPS</strong></td><td>28</td><td>45</td><td>+17 points needed</td><td>High</td></tr></tbody></table></div>
@@ -341,13 +354,13 @@
 <li>Targeting companies without budget</li>
 <li>Not selling to decision-makers</li>
 <li>Discounting too aggressively</li>
-<li>Missing enterprise features</li>
+<li>Missing what larger customers need (features, service levels or coverage)</li>
 </ul>
 <p><strong>Actions</strong>:</p>
 <ul>
 <li>Tighten company size filter in ICP</li>
 <li>Train on value-based selling</li>
-<li>Add pricing tiers for enterprise</li>
+<li>Review your pricing and packaging for larger customers</li>
 <li>Build reference customers in target segment</li>
 </ul>
 <h6 class="hxr-h4">Sales Cycle Gap (target is 100% above today, no reduction needed)</h6>

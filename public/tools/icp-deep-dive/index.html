@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Find the patterns your best customers share as a list or in your own words. Free in a browser or Claude, with no sign-in.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
-<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
@@ -211,7 +211,7 @@
    "@type": "WebApplication",
    "@id": "https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/#app",
    "name": "ICP Deep Dive (ICP Intelligence)",
-   "description": "Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior",
+   "description": "Analyze customer data to detect ICP patterns (industry, size, deal size, sales cycle, tech stack, triggers, champion roles). Ties are named as ties, the budget is the ACV range seen in your customers, and sector notes are added when your inputs name one of the supported sectors",
    "url": "https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/",
    "applicationCategory": "BusinessApplication",
    "browserRequirements": "Any modern browser; works without JavaScript",
@@ -280,10 +280,12 @@
 
 <div class="hx-body">
 <section class="hx-section hx-run-sec" id="run" aria-label="Run ICP Deep Dive">
-  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Deep Dive</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_deep_dive" data-tool="icp_deep_dive" data-title="ICP Deep Dive"><p class="hx-help">Every field is optional. You can add: Your best customers, Customer descriptions, Product category.</p>
+  <div class="win hx-form-win"><div class="win-bar"><span class="t">Run ICP Deep Dive</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><form class="hx-form" method="post" action="/api/tools/icp_deep_dive" data-tool="icp_deep_dive" data-title="ICP Deep Dive"><p class="hx-help">Every field is optional. You can add: Your best customers, Customer descriptions, Product category, Company, Business model.</p>
 <div class="hx-field"><label for="f-customers">Your best customers, one per line: name, industry, size, ACV, champion title <span class="hx-opt">(optional)</span></label><textarea id="f-customers" name="customers" rows="4" data-kind="rows" data-rows="{&quot;sep&quot;: &quot;,&quot;, &quot;cols&quot;: [[&quot;name&quot;, &quot;s&quot;, &quot;name&quot;], [&quot;industry&quot;, &quot;s&quot;, &quot;industry&quot;], [&quot;size&quot;, &quot;s&quot;, &quot;size&quot;], [&quot;acv&quot;, &quot;n&quot;, &quot;ACV&quot;], [&quot;champion_title&quot;, &quot;s&quot;, &quot;champion title&quot;], [&quot;sales_cycle_days&quot;, &quot;n&quot;, &quot;sales cycle days&quot;], [&quot;buying_trigger&quot;, &quot;s&quot;, &quot;buying trigger&quot;]], &quot;rest&quot;: &quot;tech_stack&quot;, &quot;min&quot;: 5, &quot;need&quot;: &quot;at least 5 values: name, industry, size, ACV, champion title&quot;}" aria-describedby="f-customers-help"></textarea><p class="hx-help" id="f-customers-help">At least 5 values per line, separated by commas; ACV is a number in dollars. After them you can add the sales cycle in days, the buying trigger and then each tool in their tech stack. Leave it empty if you describe your customers in words below. For example: Example Manufacturing Co, Manufacturing, 300 to 3,000 employees, 24000, Finance Controller</p></div>
 <div class="hx-field"><label for="f-customer_descriptions">Customer descriptions <span class="hx-opt">(optional)</span></label><textarea id="f-customer_descriptions" name="customer_descriptions" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-customer_descriptions-help f-customer_descriptions-limit"></textarea><p class="hx-help" id="f-customer_descriptions-help">Alternative: Describe your best customers in text format</p><p class="hx-help" id="f-customer_descriptions-limit">Up to 6,000 characters in this form. For a longer document, use ICP Intelligence in Claude, which takes up to 100,000.</p></div>
 <div class="hx-field"><label for="f-product_category">Product category <span class="hx-opt">(optional)</span></label><textarea id="f-product_category" name="product_category" rows="3" maxlength="6000" data-kind="string" aria-describedby="f-product_category-help"></textarea><p class="hx-help" id="f-product_category-help">What type of product you sell</p></div>
+<div class="hx-field"><label for="f-company">Company <span class="hx-opt">(optional)</span></label><input id="f-company" name="company" type="text" maxlength="6000" data-kind="string" aria-describedby="f-company-help"><p class="hx-help" id="f-company-help">Optional: your company or product name, so the answer can name it</p></div>
+<div class="hx-field"><label for="f-business_model">Business model <span class="hx-opt">(optional)</span></label><select id="f-business_model" name="business_model" data-kind="string" aria-describedby="f-business_model-help"><option value="">Not specified</option><option value="saas">SaaS</option><option value="services">Services</option><option value="connectivity">Connectivity</option><option value="transactions">Transactions</option><option value="marketplace">Marketplace</option><option value="hardware_software">Hardware software</option><option value="investment">Investment</option></select><p class="hx-help" id="f-business_model-help">Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out</p></div>
     <div class="hx-hp" aria-hidden="true"><label for="hp-icp_deep_dive">Leave this empty</label><input id="hp-icp_deep_dive" name="leave_this_empty" type="text" tabindex="-1" autocomplete="off"></div>
     <div class="hx-actions">
       <button type="submit" class="hx-btn">Run ICP Deep Dive</button>
@@ -313,7 +315,7 @@
 
 <section class="hx-section" aria-labelledby="ex-h">
   <h2 id="ex-h">Example answer</h2>
-  <p class="hx-prose">From version 1.2.16 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
+  <p class="hx-prose">From version 1.2.17 of this tool, with the inputs behind <em>Fill in an example</em>. Your own inputs give a different result.</p>
   <article class="hxr hxr-example" aria-labelledby="ex-t">
     <header class="hxr-head">
       <p class="hxr-tag">ICP Intelligence report</p>
@@ -322,23 +324,30 @@
     </header>
     <div class="hxr-actions"><button type="button" class="hx-btn hx-btn-ghost" data-print>Print or save as PDF</button></div>
     <details class="hx-run"><summary>Show the full result</summary><div class="hxr-body hx-result-body hx-output"><h4 class="hxr-h2">ICP Pattern Analysis (from Description)</h4>
+<ul>
+<li><strong>Company</strong>: not given (add the company input to name your company or product in this answer)</li>
+<li><strong>Product category</strong>: spend management software</li>
+</ul>
+<p><em>Sector: read from your inputs as fintech. Business model: software subscription (read from your inputs; set Business model to change it).</em></p>
 <h5 class="hxr-h3">Input Analyzed</h5>
-<pre><code>Mid-size manufacturers with 300 to 3,000 employees and large field sales teams; the finance controller buys and the pain is a slow month-end close. Also IT services firms with heavy travel spend, and distributors with many branches.</code></pre>
+<blockquote>Mid-size manufacturers with 300 to 3,000 employees and large field sales teams; the finance controller buys and the pain is a slow month-end close. Also IT services firms with heavy travel spend, and distributors with many branches.</blockquote>
 <hr>
 <h5 class="hxr-h3">Detected Patterns</h5>
 <h6 class="hxr-h4">Likely Company Size</h6>
-<p><strong>Mixed sizes</strong></p>
-<h6 class="hxr-h4">Likely Industry</h6>
-<p><strong>Fintech/Finance</strong></p>
+<p><strong>300 to 3,000 employees</strong> (as you typed it)</p>
+<h6 class="hxr-h4">Likely Sector</h6>
+<p><strong>fintech</strong></p>
 <ul>
-<li>Tailor messaging to industry-specific pain points</li>
-<li>Research industry-specific compliance/requirements</li>
+<li>Buyer roles this sector usually involves: Chief Financial Officer, Finance Controller, Head of Accounts Payable, Head of Treasury, Internal Audit Lead, Compliance Officer, Head of IT (your text names: Finance Controller)</li>
+<li>Metrics to ask about: days to close the books, reconciliation effort, policy breach rate, approval cycle time</li>
 </ul>
 <h6 class="hxr-h4">Likely Stage</h6>
-<p><strong>Mixed stages</strong></p>
+<p><strong>not stated in your text</strong></p>
+<h6 class="hxr-h4">Sector notes: fintech</h6>
 <ul>
-<li>Match your pricing to their typical budget capacity</li>
-<li>Adjust value messaging to their growth priorities</li>
+<li><strong>Who usually decides:</strong> The CFO signs; the Finance Controller or the head of the affected finance team champions; internal audit and compliance review controls; IT checks ERP integration and security; HR joins when employees are affected.</li>
+<li><strong>What this sector measures:</strong> days to close the books, reconciliation effort, policy breach rate, approval cycle time, audit findings, cost per transaction, payment success rate.</li>
+<li><strong>A proof point that lands:</strong> Close time or reconciliation effort before and after for one entity, signed off by the finance controller.</li>
 </ul>
 <hr>
 <h5 class="hxr-h3">Recommendations</h5>
@@ -347,14 +356,14 @@
 <pre><code>{
   "customers": [
     {
-      "name": "Customer A",
-      "industry": "SaaS",
-      "size": "100-500 employees",
-      "acv": 50000,
-      "sales_cycle_days": 90,
-      "tech_stack": ["Salesforce", "Slack", "AWS"],
-      "buying_trigger": "New VP Sales hired",
-      "champion_title": "VP Sales"
+      "name": "Example Manufacturing Co",
+      "industry": "Manufacturing",
+      "size": "300-1000 employees",
+      "acv": 24000,
+      "sales_cycle_days": 60,
+      "tech_stack": ["SAP"],
+      "buying_trigger": "Audit finding",
+      "champion_title": "Finance Controller"
     }
   ]
 }</code></pre>
