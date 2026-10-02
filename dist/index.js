@@ -2336,7 +2336,7 @@ ${topPains[0] ? `- **Pain messaging**: "${topPains[0][0]}"` : ''}
 ${topValue[0] ? `- **Value messaging**: "${topValue[0][0]}"` : ''}
 
 ### Discovery Questions to Add
-${topPains.slice(0, 3).map((p, i) => `${i + 1}. "You mentioned ${q(lowerCommonWords(p[0]))}. How does your team handle that today, and what does it cost you?"`).join('\n') || '- Add pain points to the notes for discovery questions'}
+${topPains.slice(0, 3).map((p, i) => `${i + 1}. "You mentioned '${lowerCommonWords(p[0]).trim().replace(/[.]$/, '')}'. How does your team handle that today, and what does it cost you?"`).join('\n') || '- Add pain points to the notes for discovery questions'}
 ${v ? `\n### Sector questions (${v.name})\n${v.discovery.slice(0, 3).map((x, i) => `${i + 1}. "${x}"`).join('\n')}\n` : ''}
 ---
 
