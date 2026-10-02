@@ -172,7 +172,7 @@
    "about": {
     "@id": "https://icp-intelligence.gtmhelix.com/#app"
    },
-   "dateModified": "2026-10-01",
+   "dateModified": "2026-10-02",
    "inLanguage": "en",
    "primaryImageOfPage": "https://icp-intelligence.gtmhelix.com/og.png"
   },
@@ -220,13 +220,13 @@
     <div class="crop"><span class="cm tl" aria-hidden="true"></span><span class="cm tr" aria-hidden="true"></span><span class="cm bl" aria-hidden="true"></span><span class="cm br" aria-hidden="true"></span><h1 id="h1">ICP Intelligence docs</h1></div>
     <div class="hx-hero-text"><div class="hx10-split-text">
       <p class="sub">The MCP address, the REST API behind the web forms, and every field of all 9 tools.</p>
-      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-10-01">1 October 2026</time></p>
+      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-10-02">2 October 2026</time></p>
     </div></div>
   </div>
 </section>
 
 <div class="hx-body">
-<section class="hx-section" aria-labelledby="try-h"><h2 id="try-h">Try these prompts</h2><div class="hx-panel"><ol><li>Use ICP Intelligence to do a deep dive on these customers for our clinic scheduling software: mid-size clinic groups with 5 to 20 locations, dental chains with 10+ clinics, physiotherapy franchises.</li><li>Calculate TAM, SAM and SOM with ICP Intelligence: 12,000 potential companies, average contract value $8,000, 25% fit our ICP, year-one share target 1%.</li><li>Map the buyer group for clinic scheduling software with ICP Intelligence. Deal size $15,000 ACV, target company size 200 to 1,000 employees, typical champion Operations Director.</li></ol></div></section>
+<section class="hx-section" aria-labelledby="try-h"><h2 id="try-h">Try these prompts</h2><div class="hx-panel"><ol><li>Use ICP Intelligence to do a deep dive on these customers for our spend management software: mid-size manufacturers with 300 to 3,000 employees and large field sales teams, IT services firms with heavy travel spend, distributors with many branches.</li><li>Calculate TAM, SAM and SOM with ICP Intelligence: 9,000 potential companies, average contract value $24,000, 25% fit our ICP, year-one share target 1%.</li><li>Map the buyer group for spend management software with ICP Intelligence. Deal size $24,000 ACV, target company size 300 to 3,000 employees, typical champion Finance Controller.</li></ol></div></section>
 <section class="hx-section" aria-labelledby="mcp-h">
   <h2 id="mcp-h">MCP server</h2>
   <ul class="hx-prose">
@@ -243,7 +243,7 @@
   <p class="hx-prose">Send <code>POST https://icp-intelligence.gtmhelix.com/api/tools/&lt;tool name&gt;</code> with a JSON body <code>{"input": {...}}</code>. The answer is JSON: <code>{"ok": true, "tool": "...", "title": "...", "text": "..."}</code>, where <code>text</code> is the same Markdown the MCP tool returns. The endpoint calls the same server code as the MCP address.</p>
   <div class="win "><div class="win-bar"><span class="t">Terminal</span><span class="wb" aria-hidden="true"><i></i><i></i></span></div><div class="win-body"><pre class="hx-code-block hx11-in-win">curl -s -X POST https://icp-intelligence.gtmhelix.com/api/tools/icp_deep_dive \
   -H "Content-Type: application/json" \
-  -d '{&quot;input&quot;: {&quot;customer_descriptions&quot;: &quot;Mid-market healthcare clinic groups with 5 to 20 locations, Series A funded; the operations director buys and the pain is no-shows. Also healthcare dental chains with 10+ clinics and physiotherapy franchises.&quot;, &quot;product_category&quot;: &quot;clinic scheduling software&quot;}}'</pre></div></div>
+  -d '{&quot;input&quot;: {&quot;customer_descriptions&quot;: &quot;Mid-size manufacturers with 300 to 3,000 employees and large field sales teams; the finance controller buys and the pain is a slow month-end close. Also IT services firms with heavy travel spend, and distributors with many branches.&quot;, &quot;product_category&quot;: &quot;spend management software&quot;}}'</pre></div></div>
   <ul class="hx-prose">
     <li>Errors: 400 with <code>errors</code> (missing or invalid fields), 404 for an unknown tool, 405 for methods other than POST, 413 above 32,000 bytes, 422 when the tool itself refuses the input (<code>ok</code> is false and <code>error</code> holds the tool's message), 429 when the rate limit is reached, 500 if the tool fails.</li>
     <li>Limits: 30 requests per minute per IP address; the whole request up to 32,000 bytes; top-level text fields up to 6,000 characters and top-level lists up to 50 items.</li>
@@ -299,7 +299,7 @@
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>scoring_criteria</code></td><td>list of objects</td><td>no</td><td></td><td>Criteria for scoring with importance levels</td></tr>
 <tr><td><code>success_correlation</code></td><td>string</td><td>no</td><td></td><td>What correlates with success? (e.g., &quot;deals with VP Sales champion close 2x faster&quot;)</td></tr>
-<tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>What you sell, as a product category, for example clinic scheduling software.</td></tr>
+<tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>What you sell, as a product category, for example spend management software.</td></tr>
   </tbody></table></div>
 </section>
 <section class="hx-section" id="buyer-group-analyzer" aria-labelledby="d-buyer-group-analyzer">
