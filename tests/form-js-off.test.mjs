@@ -31,10 +31,10 @@ const jsonPost = async (tool, input) => {
 };
 
 const CASES = [
-  ["account_prioritization", "account-prioritization", "accounts", "Clinic Group A, 80, 60, 40, soon\nDental Chain B, 55, 70, 20, now\n\nPhysio Network C, 30, 20, 10, later"],
+  ["account_prioritization", "account-prioritization", "accounts", "Example Manufacturing Co, 80, 60, 40, soon\nExample IT Services Co, 55, 70, 20, now\n\nExample Logistics Co, 30, 20, 10, later"],
   ["icp_scoring_model", "icp-scoring-model", "scoring_criteria", "Number of locations, critical, 5 or more, 2 to 4, 1\nBudget owner, important, COO, Practice manager"],
-  ["icp_interview_synthesizer", "icp-interview-synthesizer", "interview_notes", "Clinic Group A | Operations Director | no-shows; phone rescheduling | new location | fewer no-shows | We lost a chair a day to no-shows\nDental Chain B | COO | double bookings | audit | calmer front desk | The diary finally makes sense"],
-  ["icp_deep_dive", "icp-deep-dive", "customers", "Clinic Group A, Healthcare, 5 to 20 locations, 12000, Operations Director, 45, new location, Google Calendar, Stripe\nDental Chain B, Dental, 20 plus, 18000, COO"],
+  ["icp_interview_synthesizer", "icp-interview-synthesizer", "interview_notes", "Example Manufacturing Co | Finance Controller | slow month-end close; manual reconciliation | new CFO hire | close 5 days faster | We spent a week a month matching card spends\nExample IT Services Co | Head of Accounts Payable | late expense claims | audit finding | fewer policy breaches | Receipts finally arrive on time"],
+  ["icp_deep_dive", "icp-deep-dive", "customers", "Example Manufacturing Co, Manufacturing, 300 to 1000 employees, 12000, Finance Controller, 45, new CFO hire, Google Calendar, Stripe\nExample IT Services Co, IT services, 1000 plus, 18000, COO"],
 ];
 
 for (const [tool, page, field, text] of CASES) {
@@ -51,22 +51,22 @@ for (const [tool, page, field, text] of CASES) {
 }
 
 test("D39: a JSON value in the box still works as today", async () => {
-  const off = await formPost("account_prioritization", { accounts: '[{"name":"Clinic Group A","fit_score":80,"intent_signals":60,"relationship":40,"timing":"soon"}]' });
-  const on = await jsonPost("account_prioritization", { accounts: [{ name: "Clinic Group A", fit_score: 80, intent_signals: 60, relationship: 40, timing: "soon" }] });
+  const off = await formPost("account_prioritization", { accounts: '[{"name":"Example Manufacturing Co","fit_score":80,"intent_signals":60,"relationship":40,"timing":"soon"}]' });
+  const on = await jsonPost("account_prioritization", { accounts: [{ name: "Example Manufacturing Co", fit_score: 80, intent_signals: 60, relationship: 40, timing: "soon" }] });
   assert.equal(off.status, 200);
   assert.equal(off.text, on.body.text);
 });
 
 test("D39: a wrong line gets the browser's own message", async () => {
   const problems = [];
-  browserRows("Clinic Group A, 80, 60", specOf("account-prioritization", "accounts"), problems);
-  const off = await formPost("account_prioritization", { accounts: "Clinic Group A, 80, 60" });
+  browserRows("Example Manufacturing Co, 80, 60", specOf("account-prioritization", "accounts"), problems);
+  const off = await formPost("account_prioritization", { accounts: "Example Manufacturing Co, 80, 60" });
   assert.equal(off.status, 400);
   for (const p of problems) assert.ok(off.html.includes(p.replace(/&/g, "&amp;")), p);
 });
 
 test("D39: the weight boxes fill prioritization_weights with JavaScript off, as the browser does", async () => {
-  const text = "Clinic Group A, 80, 60, 40, soon\nDental Chain B, 55, 70, 20, now";
+  const text = "Example Manufacturing Co, 80, 60, 40, soon\nExample IT Services Co, 55, 70, 20, now";
   const list = browserRows(text, specOf("account-prioritization", "accounts"), []);
   const on = await jsonPost("account_prioritization", { accounts: list, prioritization_weights: { fit: 50, intent: 20, relationship: 20, timing: 10 } });
   const off = await formPost("account_prioritization", { accounts: text, "prioritization_weights.fit": "50", "prioritization_weights.intent": "20", "prioritization_weights.relationship": "20", "prioritization_weights.timing": "10" });

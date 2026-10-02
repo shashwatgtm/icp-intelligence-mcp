@@ -36,10 +36,10 @@ test("account_prioritization: a score over 100 is refused in plain words", async
 });
 
 test("icp_gap_analysis: a rate over 100 is refused; a metric with no gap says so instead of listing causes", async () => {
-  const bad = await call("icp_gap_analysis", { current_customers: "Clinics", ideal_icp: "Clinic groups", current_metrics: { win_rate: 1000 } });
+  const bad = await call("icp_gap_analysis", { current_customers: "Small manufacturers", ideal_icp: "Mid-size manufacturers", current_metrics: { win_rate: 1000 } });
   assert.equal(bad.isError, true);
   assert.match(bad.text, /current_metrics\.win_rate must be from 0 to 100/);
-  const r = await call("icp_gap_analysis", { current_customers: "Clinics", ideal_icp: "Clinic groups",
+  const r = await call("icp_gap_analysis", { current_customers: "Small manufacturers", ideal_icp: "Mid-size manufacturers",
     current_metrics: { avg_acv: 20000, avg_sales_cycle: 40, win_rate: 20, churn_rate: 10, nps: 30 },
     target_metrics: { avg_acv: 30000, avg_sales_cycle: 45, win_rate: 20, churn_rate: 8, nps: 40 } });
   const cycle = r.text.split("### Sales Cycle Gap")[1].split("### Win Rate Gap")[0];

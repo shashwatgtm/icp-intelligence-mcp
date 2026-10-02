@@ -1,9 +1,9 @@
-# ICP Intelligence MCP v1.2.16
+# ICP Intelligence MCP v1.2.17
 **Deep ICP Analysis with Pattern Detection**: 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
 
 ## Use it hosted (no install)
 
-Add `https://icp-intelligence.gtmhelix.com/mcp` to Claude or ChatGPT as a custom connector. It needs no sign-in and always runs the newest version (1.2.16). The same tools run as a free web app with a form per tool at https://icp-intelligence.gtmhelix.com/, and the setup steps are at https://icp-intelligence.gtmhelix.com/connect/.
+Add `https://icp-intelligence.gtmhelix.com/mcp` to Claude or ChatGPT as a custom connector. It needs no sign-in and always runs the newest version (1.2.17). The same tools run as a free web app with a form per tool at https://icp-intelligence.gtmhelix.com/, and the setup steps are at https://icp-intelligence.gtmhelix.com/connect/.
 
 The npm package below is an older version (1.0.0 on npm on 27 September 2026) until the next npm release. Use it only if you need a local stdio server.
 
@@ -38,19 +38,19 @@ Add to your `claude_desktop_config.json`:
 
 ## Tools and inputs
 
-Generated on 27 September 2026 from the server's own tool list, and checked again on 1 October 2026 against `tools/list` of icp-intelligence-mcp 1.2.16 (the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
+Generated on 27 September 2026 from the server's own tool list, and regenerated on 2 October 2026 from `tools/list` of icp-intelligence-mcp 1.2.17 (the same code as the hosted MCP address), so every tool name, title, description and input below is exactly what the server accepts. Every tool is read-only.
 
 | # | Tool | Title | What it does |
 |---|---|---|---|
-| 1 | `icp_deep_dive` | ICP Deep Dive | Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior |
-| 2 | `icp_scoring_model` | ICP Scoring Model | Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights |
-| 3 | `buyer_group_analyzer` | Buyer Group Analyzer | Map buyer group dynamics, influence relationships, and decision-making process |
-| 4 | `tam_sam_som_calculator` | TAM SAM SOM Calculator | Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source) |
-| 5 | `lookalike_signal_generator` | Lookalike Signal Generator | Generate platform-specific targeting criteria and search queries (generates criteria, not data) |
-| 6 | `account_prioritization` | Account Prioritization | Rank and prioritize accounts using multi-dimensional scoring |
-| 7 | `icp_gap_analysis` | ICP Gap Analysis | Analyze gaps between current customer base and ideal ICP |
-| 8 | `icp_evolution_tracker` | ICP Evolution Tracker | Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text |
-| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed. |
+| 1 | `icp_deep_dive` | ICP Deep Dive | Analyze customer data to detect ICP patterns (industry, size, deal size, sales cycle, tech stack, triggers, champion roles). Ties are named as ties, the budget is the ACV range seen in your customers, and sector notes are added when your inputs name one of the supported sectors |
+| 2 | `icp_scoring_model` | ICP Scoring Model | Create a lead qualification scoring template: criteria with example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust. Your success pattern is matched to your criteria; it does not set the weights. Sector notes are added when your inputs name one of the supported sectors |
+| 3 | `buyer_group_analyzer` | Buyer Group Analyzer | Map the buyer group for a deal: the champion you name, your known stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role's concern and message prompts, an influence map and discovery questions. Sector roles and questions are added when your inputs name one of the supported sectors |
+| 4 | `tam_sam_som_calculator` | TAM SAM SOM Calculator | Calculate TAM/SAM/SOM bottom-up from your company count, ACV, ICP match rate and Year 1 share (calculation framework, not a data source). Sector notes are added when your inputs name one of the supported sectors |
+| 5 | `lookalike_signal_generator` | Lookalike Signal Generator | Generate platform-specific targeting criteria and search queries from your firmographics, technographics, champion titles and buying triggers (generates criteria, not data). Each trigger gets its own signal; search keywords come from what you sell and the sector; platforms limits the sections |
+| 6 | `account_prioritization` | Account Prioritization | Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points |
+| 7 | `icp_gap_analysis` | ICP Gap Analysis | Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors |
+| 8 | `icp_evolution_tracker` | ICP Evolution Tracker | Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP and states a candidate change for each (an addition to test, a disqualifier to test, an implication to check), with a review checklist. It does not compute win rates; check each candidate against your CRM |
+| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analysed. |
 
 ### Inputs of each tool
 
@@ -61,6 +61,8 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `customers` | No | array of object | List of customer objects with available attributes |
 | `customer_descriptions` | No | string | Alternative: Describe your best customers in text format |
 | `product_category` | No | string | What type of product you sell |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
+| `business_model` | No | one of: `saas`, `services`, `connectivity`, `transactions`, `marketplace`, `hardware_software`, `investment` | Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out |
 
 #### 2. ICP Scoring Model (`icp_scoring_model`)
 
@@ -69,6 +71,7 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `scoring_criteria` | No | array of object | Criteria for scoring with importance levels |
 | `success_correlation` | No | string | What correlates with success? (e.g., "deals with VP Sales champion close 2x faster") |
 | `product_category` | No | string |  |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 3. Buyer Group Analyzer (`buyer_group_analyzer`)
 
@@ -79,6 +82,8 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `target_company_size` | No | string | Company size (e.g., "500-1000 employees") |
 | `known_stakeholders` | No | array of string | Roles you know are involved |
 | `typical_champion` | No | string | Your typical champion role |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
+| `business_model` | No | one of: `saas`, `services`, `connectivity`, `transactions`, `marketplace`, `hardware_software`, `investment` | Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out |
 
 #### 4. TAM SAM SOM Calculator (`tam_sam_som_calculator`)
 
@@ -90,6 +95,7 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `year1_market_share_target` | No | number (0 or more) | Realistic Year 1 market share percentage (typically 1-5%) |
 | `data_sources` | No | string | Where you got your numbers (for documentation) |
 | `segment_name` | No | string | Name of the market segment |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 5. Lookalike Signal Generator (`lookalike_signal_generator`)
 
@@ -99,7 +105,9 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `icp_firmographics` | No | object | Firmographic criteria |
 | `icp_technographics` | No | array of string | Technologies your ICP typically uses |
 | `buying_triggers` | No | array of string | Events that trigger buying |
-| `platforms` | No | array of string | Accepted but not used yet: the output always includes every platform section (linkedin, google_ads, 6sense, zoominfo) |
+| `platforms` | No | array of string | Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included |
+| `product_category` | No | string | Optional: what you sell (for example "spend management software"), used for search keywords and sector notes |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 6. Account Prioritization (`account_prioritization`)
 
@@ -107,6 +115,7 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 |---|---|---|---|
 | `accounts` | No | array of object | List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing |
 | `prioritization_weights` | No | object | Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100 |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 7. ICP Gap Analysis (`icp_gap_analysis`)
 
@@ -116,6 +125,9 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `ideal_icp` | Yes | string | Description of your ideal customer profile |
 | `current_metrics` | No | object | Current performance metrics |
 | `target_metrics` | No | object | Target performance metrics |
+| `product_category` | No | string | Optional: what you sell, used for sector notes |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
+| `business_model` | No | one of: `saas`, `services`, `connectivity`, `transactions`, `marketplace`, `hardware_software`, `investment` | Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out |
 
 #### 8. ICP Evolution Tracker (`icp_evolution_tracker`)
 
@@ -125,7 +137,9 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `recent_wins` | No | string | Description of recent successful customers |
 | `recent_losses` | No | string | Description of recent lost deals |
 | `market_changes` | No | string | Recent market or competitive changes |
-| `time_period` | No | string | Time period for analysis (e.g., "Q4 2024") |
+| `time_period` | No | string | Time period for analysis (e.g., "Q3 2026") |
+| `product_category` | No | string | Optional: what you sell, used for sector notes |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 9. ICP Interview Synthesizer (`icp_interview_synthesizer`)
 
@@ -134,6 +148,8 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `interview_notes` | No | array of object | Structured interview notes |
 | `raw_transcripts` | No | string | Alternative: Paste raw interview transcripts or notes |
 | `analysis_focus` | No | string | Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all) |
+| `product_category` | No | string | Optional: what you sell, used for sector notes |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 ## Who Is This For?
 

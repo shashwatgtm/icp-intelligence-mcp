@@ -72,17 +72,17 @@ test("D45: year1_market_share_target 0 is used as 0 (SOM $0, 0 customers), omitt
   }
 });
 
-const ACC = (over) => ({ name: "Clinic Group A", fit_score: 80, intent_signals: 60, relationship: 40, timing: "soon", ...over });
+const ACC = (over) => ({ name: "Example Manufacturing Co", fit_score: 80, intent_signals: 60, relationship: 40, timing: "soon", ...over });
 
 test("D45: account scores given as 0 are used as 0, not 50 (default); omitted and null keep the default", async () => {
   const z = await call("account_prioritization", { accounts: [ACC({ fit_score: 0, intent_signals: 0, relationship: 0 })] });
-  assert.match(z.text, /\| 1 \| \*\*Clinic Group A\*\* \| 0 \| 0 \| 0 \| soon \| \*\*11\*\* \| D \|/);
+  assert.match(z.text, /\| 1 \| \*\*Example Manufacturing Co\*\* \| 0 \| 0 \| 0 \| soon \(70 pts\) \| \*\*11\*\* \| D \|/);
   for (const v of [undefined, null]) {
     const r = await call("account_prioritization", { accounts: [ACC({ fit_score: v })] });
-    assert.match(r.text, /\| \*\*Clinic Group A\*\* \| 50 \(default\) \| 60 \|/, String(v));
+    assert.match(r.text, /\| \*\*Example Manufacturing Co\*\* \| 50 \(default\) \| 60 \|/, String(v));
   }
   const o = await call("account_prioritization", { accounts: [ACC({})] });
-  assert.match(o.text, /\| \*\*Clinic Group A\*\* \| 80 \| 60 \| 40 \| soon \| \*\*67\*\* \| B \|/);
+  assert.match(o.text, /\| \*\*Example Manufacturing Co\*\* \| 80 \| 60 \| 40 \| soon \(70 pts\) \| \*\*67\*\* \| B \|/);
 });
 
 test("D45: a weight given as 0 is used as 0 and the D41 tiers follow the new sum W", async () => {
@@ -104,7 +104,7 @@ test("D45: all four weights 0 are refused in plain words", async () => {
 });
 
 test("D45: icp_gap_analysis rates given as 0 are used as 0 (standing check; already true in run 15)", async () => {
-  const r = await call("icp_gap_analysis", { current_customers: "Clinic groups with 5 to 20 locations", ideal_icp: "Clinic groups with 20 or more locations",
+  const r = await call("icp_gap_analysis", { current_customers: "Mid-size manufacturers with 300 to 1000 employees", ideal_icp: "Mid-size manufacturers with 1000 or more employees",
     current_metrics: { win_rate: 0, churn_rate: 0, nps: 0 }, target_metrics: { win_rate: 30, churn_rate: 8, nps: 50 } });
   assert.match(r.text, /\| \*\*Win Rate\*\* \| 0% \| 30% \|/);
   assert.match(r.text, /\| \*\*Churn Rate\*\* \| 0% \| 8% \|/);

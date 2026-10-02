@@ -6,6 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import { VERTICALS, SECTOR_MODEL, detectVertical, detectModel, MODEL_NAME, BUSINESS_MODELS, type Vertical, type BusinessModel } from './verticals.ts';
 
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -25,7 +26,7 @@ function withSoftware(phrase: string, word: string): string {
   return p.toLowerCase() === word.toLowerCase() || p.toLowerCase().endsWith(` ${word.toLowerCase()}`) ? p : `${p} ${word}`;
 }
 // Text only (run 9): common words that may open an input phrase. Mid-sentence, only these are lowered
-// ("Fewer no-shows" becomes "fewer no-shows"). Any other capitalised word is kept as typed, because it may be a
+// ("Fewer delays" becomes "fewer delays"). Any other capitalised word is kept as typed, because it may be a
 // name or an acronym ("Salesforce data you can trust", "Microsoft Teams approvals", "AI deal scoring", "CRM hygiene").
 const COMMON_WORDS = new Set((
   'a an the this that these those our your their my its his her we you they it me us them all any each every ' +
@@ -70,8 +71,8 @@ const COMMON_WORDS = new Set((
   'cost costs price prices pricing budget budgets value roi time times hours days weeks months minutes setup ' +
   'set-up implementation integration integrations security compliance privacy risk risks errors error mistakes ' +
   'issues issue problems problem pain pains gaps gap delays delay bottlenecks friction complexity visibility ' +
-  'control access approvals approval handoffs handoff meetings meeting appointments appointment bookings ' +
-  'booking reminders reminder no-shows cancellations patients patient staff employees employee managers manager ' +
+  'control access approvals approval handoffs handoff meetings meeting bookings ' +
+  'booking reminders reminder cancellations staff employees employee managers manager ' +
   'leaders leader executives reps rep agents agent partners partner vendors vendor suppliers supplier companies ' +
   'company businesses business organisations organizations enterprises enterprise startups startup founders ' +
   'founder owners owner operations operators finance hr legal procurement engineering developers developer ' +
@@ -102,7 +103,7 @@ const COMMON_WORDS = new Set((
   'lost won '
 ).split(/\s+/).filter(Boolean));
 // A word counts as common when it is in the list, or ends in -ing or -ed ("Automated", "Missing"). A hyphenated
-// word counts by its first part ("Two-way", "No-shows").
+// word counts by its first part ("Two-way", "Low-code").
 function isCommonWord(word: string): boolean {
   const head = word.split('-')[0].replace(/[^A-Za-z']+$/, '');
   if (!/^[A-Z][a-z']*$/.test(head) || head === 'I' || /[A-Z]/.test(word.slice(1))) return false;
@@ -114,9 +115,9 @@ function isCommonWord(word: string): boolean {
 const KNOWN_NAMES = new Set((
   'Salesforce Microsoft Slack HubSpot LinkedIn Google Gmail Outlook Excel Zoom Zendesk Jira Notion Shopify Stripe ' +
   'Marketo Pardot Gong Intercom Freshworks Oracle SAP Workday ServiceNow Snowflake Tableau Asana Trello Dropbox ' +
-  'Apple Amazon AWS Azure Facebook Instagram WhatsApp YouTube Acme ExampleCo Sam ' +
-  // Run 11: the company and competitor names in the test inputs and the page examples.
-  'Clausewise Bengaluru Clari Northwind ClinicFlow Metricly'
+  'Apple Amazon AWS Azure Facebook Instagram WhatsApp YouTube Acme Sam ' +
+  // Run 11: the company and competitor names in the test inputs and the page examples (run 19: the old example names removed).
+  'Bengaluru Clari Northwind Metricly Spendrill Cloudmoat Lanehop Branchwire Answerloop Shelfwalk'
 ).split(/\s+/).filter(Boolean));
 function bareWord(word: string): string {
   return word.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, '');
@@ -144,10 +145,10 @@ function lowerJobTitle(phrase: string): string {
 }
 // Run 10: the first word of an input phrase keeps its capital only when it is a known name, has an inner capital or is
 // all capitals (HubSpot, AI, CRM), holds a digit (B2B, Q4), or starts a name of two words: the next word is capitalised
-// too (New York, Clinic Group A, Competitor A) and is not a known name on its own ("Native Salesforce" is not a name).
+// too (New York, Example Manufacturing Co, Competitor A) and is not a known name on its own ("Native Salesforce" is not a name).
 // Run 11: a one-letter word keeps its capital (I, X), and a common first word never makes the next word a name ("For
-// Clausewise contract review" becomes "for Clausewise contract review"), unless the next word is a one-letter label after
-// a noun (Competitor A) or the phrase opens with three capitalised words (Example Clinic Group).
+// Spendrill expense review" becomes "for Spendrill expense review"), unless the next word is a one-letter label after
+// a noun (Competitor A) or the phrase opens with three capitalised words (Example Logistics Co).
 function keepsFirstCapital(word: string, next: string, third = ''): boolean {
   const w = bareWord(word);
   if (!/^[A-Z]/.test(w) || (w.length === 1 && !(w === 'A' && next)) || isKnownName(w)) return true; // the article A is not a one-letter name
@@ -250,6 +251,108 @@ function influenceMap(g: { economic: { role: string }; champion: { role: string 
 const EXAMPLES = 'Example figures: replace with your own.';
 const SUGGESTED = 'Suggested timings, lengths and counts: adjust them to your own.';
 
+// ============================================================================
+// Run 19 (owner decision D80): shared helpers for the 8 problems of the real-world test.
+// Sector knowledge comes only from src/verticals.ts (rule B82: no statistic, market size or named-company fact).
+// ============================================================================
+// Text typed by the user, quoted when it is placed inside one of the tool's own sentences, so a clause never breaks the grammar.
+function q(s: string): string {
+  return `"${String(s).trim().replace(/^"|"$/g, '').replace(/[.]$/, '')}"`;
+}
+// Backlog B15-L1: a long free text is shown once, cut at a word boundary, with its full length named.
+function shortText(s: string, max = 300): string {
+  const t = String(s).replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max).replace(/\s+\S*$/, '');
+  return `${cut} ... (first ${cut.length} of ${t.length.toLocaleString('en-US')} characters)`;
+}
+// Backlog B15-L5h: "1 interview", "2 interviews".
+function plural(n: number, word: string, many = `${word}s`): string {
+  return `${n.toLocaleString('en-US')} ${n === 1 ? word : many}`;
+}
+// A list in plain English: "a", "a and b", "a, b and c".
+function andList(items: string[]): string {
+  return items.length <= 1 ? (items[0] || '') : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+// The optional company input (rule B81: the answer names the company, or says plainly that it was not given).
+const COMPANY_INPUT = { type: 'string', description: 'Optional: your company or product name, so the answer can name it' };
+const MODEL_INPUT = {
+  type: 'string',
+  enum: ['saas', 'services', 'connectivity', 'transactions', 'marketplace', 'hardware_software', 'investment'],
+  description: 'Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out'
+};
+function companyLine(company: unknown): string {
+  return typeof company === 'string' && company.trim()
+    ? `**Company**: ${company.trim()}`
+    : '**Company**: not given (add the company input to name your company or product in this answer)';
+}
+// The sector of the seller, read first from what the seller sells (product or category texts), then from every input.
+// Order: (1) the shared rule of src/verticals.ts on the product texts (2 or more different sector words); (2) on the product
+// texts, a sector that is the only one with any sector word there ("spend management software" is fintech, "cloud security
+// monitoring" is cybersecurity); (3) the shared rule on every input. A customer's industry never outranks what the seller sells.
+function sellerSector(productTexts: unknown[], otherTexts: unknown[]): Vertical | null {
+  const pt = productTexts.filter((x) => typeof x === 'string' && x.trim()) as string[];
+  const v1 = detectVertical(...pt);
+  if (v1) return v1;
+  if (pt.length) {
+    const hits = VERTICALS.filter((v) => new RegExp(v.match.source, 'i').test(pt.join(' \n ')));
+    if (hits.length === 1) return hits[0];
+  }
+  return detectVertical(...pt, ...otherTexts);
+}
+// The sector and the business model (src/verticals.ts), with one line saying how they were read. The model is read only from
+// what the seller sells (a customer described as "IT services firms" does not make the seller a services business).
+function readContext(explicitModel: unknown, productTexts: unknown[], otherTexts: unknown[] = []): { v: Vertical | null; model: BusinessModel | null; line: string } {
+  const v = sellerSector(productTexts, otherTexts);
+  let m = detectModel(explicitModel, ...productTexts);
+  if (m.how === 'unknown' || m.how === 'sector') m = v ? { model: SECTOR_MODEL[v.id], how: 'sector' } : { model: null, how: 'unknown' };
+  const sector = v ? `read from your inputs as ${v.name}` : 'not clear from your inputs (name the industry or what you sell for sector notes)';
+  const model = m.model ? `${MODEL_NAME[m.model]} (${m.how === 'input' ? 'from business_model' : m.how === 'sector' ? 'the usual model in this sector, assumed; set business_model to change it' : 'read from your inputs; set business_model to change it'})` : `not clear from your inputs; set business_model (${BUSINESS_MODELS.join(', ')}) for advice that fits it`;
+  return { v, model: m.model, line: `*Sector: ${sector}. Business model: ${model}.*` };
+}
+// The sector only, for tools whose advice does not depend on the business model.
+function sectorLine(v: Vertical | null): string {
+  return v ? `*Sector: read from your inputs as ${v.name}.*` : '*Sector: not clear from your inputs (name the industry or what you sell for sector notes).*';
+}
+// Sector notes: the buying committee, what the sector measures, its usual objections and a proof point (no figures, rule B82).
+function sectorNotes(v: Vertical | null, what: Array<'committee' | 'roles' | 'metrics' | 'objections' | 'vocabulary' | 'proof'> = ['committee', 'metrics', 'proof']): string {
+  if (!v) return '';
+  const out = [`### Sector notes: ${v.name}`];
+  for (const w of what) {
+    if (w === 'committee') out.push(`- **Who usually decides:** ${v.committee}`);
+    if (w === 'roles') out.push(`- **Roles that usually buy and use it:** ${v.buyerRoles.join(', ')}.`);
+    if (w === 'metrics') out.push(`- **What this sector measures:** ${v.metrics.join(', ')}.`);
+    if (w === 'objections') out.push(`- **Objections this sector often raises:** ${v.objections.map((o) => o.objection.toLowerCase()).join('; ')}.`);
+    if (w === 'vocabulary') out.push(`- **Words this sector's buyers use:** ${v.vocabulary.join(', ')}.`);
+    if (w === 'proof') out.push(`- **A proof point that lands:** ${v.proofShape}`);
+  }
+  return out.join('\n');
+}
+// The answer pattern for one objection typed by the user: the sector's pattern when it matches, else a pattern by kind.
+function answerFor(text: string, v: Vertical | null): string {
+  const t = text.toLowerCase();
+  if (v) {
+    for (const o of v.objections) {
+      const keys = o.objection.toLowerCase().split(/\W+/).filter((w) => w.length > 2 && !['our', 'the', 'and', 'are', 'not', 'too', 'for', 'already', 'have', 'has', 'does', 'this', 'will', 'than', 'with', 'from', 'your', 'ourselves', 'we', 'can', 'use', 'new', 'own'].includes(w));
+      if (keys.filter((k) => t.includes(k)).length >= Math.min(2, keys.length)) return o.response;
+    }
+  }
+  if (/price|cost|budget|expensive|cheaper|discount|margin/.test(t)) return 'Agree the cost of the problem in the buyer\'s own numbers first, then compare the price with it.';
+  if (/already have|already has|already does|already use|existing|incumbent|current (?:vendor|tool|system|provider|operator)|in-house|built/.test(t)) return 'Ask what the current setup does not do today and what that costs; position alongside it where you can, and replace only where the buyer sees the gap.';
+  if (/adopt|use a new|will not use|won't use|resist|change|training/.test(t)) return 'Agree a small pilot with the people who will use it, and decide up front how adoption is measured.';
+  if (/integrat|migrat|cut-?over|disrupt|setup|set-up|implementation|rollout/.test(t)) return 'Name the systems and people involved, and offer a staged plan with a rollback point for each stage.';
+  if (/security|privacy|compliance|audit|regulat|legal|risk|wrong|accura/.test(t)) return 'Bring the evidence before it is asked for (controls, review steps, test results on the buyer\'s own data) and map each concern to it.';
+  return 'Ask what would need to be true for this not to block the decision, and answer with evidence from a similar customer.';
+}
+// An item typed as a pain point that reads as an objection (a sentence in the buyer's own voice: "we already have a TMS").
+function isObjection(text: string): boolean {
+  return /^(?:we|we're|our|i|they|it|ai will|this will|that will)\b/i.test(text.trim()) || /\b(already (?:have|has|does|use)|will not|won't|too (?:expensive|costly|risky|slow)|not (?:sure|convinced))\b/i.test(text);
+}
+// Employee ranges typed in a text ("300 to 3,000 employees", "200-500 employees").
+function sizesIn(text: string): string[] {
+  return [...new Set((String(text).match(/\b\d[\d,]*\s*(?:to|-|–)\s*\d[\d,]*\s+employees\b|\b(?:under|over|more than|fewer than)\s+\d[\d,]*\s+employees\b|\b\d[\d,]*\+\s+employees\b/gi) || []).map((x) => x.trim()))];
+}
+
 
 // =============================================================================
 // TOOL DEFINITIONS
@@ -260,7 +363,7 @@ const tools = {
   // Tool 1: ICP Deep Dive - Pattern Detection from Customer Data
   // ---------------------------------------------------------------------------
   icp_deep_dive: {
-    description: 'Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior',
+    description: 'Analyze customer data to detect ICP patterns (industry, size, deal size, sales cycle, tech stack, triggers, champion roles). Ties are named as ties, the budget is the ACV range seen in your customers, and sector notes are added when your inputs name one of the supported sectors',
     inputSchema: {
       type: 'object',
       properties: {
@@ -288,7 +391,9 @@ const tools = {
         product_category: {
           type: 'string',
           description: 'What type of product you sell'
-        }
+        },
+        company: COMPANY_INPUT,
+        business_model: MODEL_INPUT
       }
     },
     execute: (args: {
@@ -304,86 +409,75 @@ const tools = {
       }>;
       customer_descriptions?: string;
       product_category?: string;
+      company?: string;
+      business_model?: string;
     }) => {
-      const category = args.product_category || 'B2B SaaS';
+      // Run 19 D80: no preset category; what is not given is said plainly.
+      const category = args.product_category ? args.product_category.trim() : 'not given (add product_category)';
+      const ctx = readContext(args.business_model, [args.product_category, args.company], [args.customer_descriptions,
+        ...(args.customers || []).flatMap(c => [c.industry, c.buying_trigger, c.champion_title, ...(c.tech_stack || [])])]);
+      const notes = sectorNotes(ctx.v, ['committee', 'metrics', 'proof']);
+      // Run 19 D80 (problem 5): a value that leads only on a tie is named as a tie, never as "primary".
+      const lead = (rows: [string, number][]) => (rows.length > 1 && rows[0][1] === rows[1][1] ? null : rows[0] || null);
+      const tied = (rows: [string, number][]) => rows.filter(r => r[1] === rows[0][1]).map(r => r[0]);
       
       // If structured data provided, analyze patterns
       if (args.customers && args.customers.length > 0) {
         const customers = args.customers;
-        
-        // Industry analysis
-        const industries = customers.map(c => c.industry).filter(Boolean);
-        const industryCount: Record<string, number> = {};
-        industries.forEach(i => { industryCount[i!] = (industryCount[i!] || 0) + 1; });
-        const topIndustries = Object.entries(industryCount)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 3);
-        
-        // Size analysis
-        const sizes = customers.map(c => c.size).filter(Boolean);
-        const sizeCount: Record<string, number> = {};
-        sizes.forEach(s => { sizeCount[s!] = (sizeCount[s!] || 0) + 1; });
-        const topSizes = Object.entries(sizeCount)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 3);
-        
-        // ACV analysis
+        const count = <K extends string>(vals: (K | undefined)[]) => { const c: Record<string, number> = {}; vals.filter(Boolean).forEach(v => { c[v!] = (c[v!] || 0) + 1; }); return Object.entries(c).sort((a, b) => b[1] - a[1]); };
+        const topIndustries = count(customers.map(c => c.industry)).slice(0, 3);
+        const topSizes = count(customers.map(c => c.size)).slice(0, 3);
         const acvs = customers.map(c => c.acv).filter(Boolean) as number[];
         const avgACV = acvs.length > 0 ? acvs.reduce((a, b) => a + b, 0) / acvs.length : 0;
         const minACV = acvs.length > 0 ? Math.min(...acvs) : 0;
         const maxACV = acvs.length > 0 ? Math.max(...acvs) : 0;
-        
-        // Sales cycle analysis
         const cycles = customers.map(c => c.sales_cycle_days).filter(Boolean) as number[];
         const avgCycle = cycles.length > 0 ? Math.round(cycles.reduce((a, b) => a + b, 0) / cycles.length) : 0;
-        
-        // Tech stack analysis
-        const allTech = customers.flatMap(c => c.tech_stack || []);
-        const techCount: Record<string, number> = {};
-        allTech.forEach(t => { techCount[t] = (techCount[t] || 0) + 1; });
-        const topTech = Object.entries(techCount)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 5);
-        
-        // Champion analysis
-        const champions = customers.map(c => c.champion_title).filter(Boolean);
-        const championCount: Record<string, number> = {};
-        champions.forEach(c => { championCount[c!] = (championCount[c!] || 0) + 1; });
-        const topChampions = Object.entries(championCount)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 3);
-        
-        // Trigger analysis
-        const triggers = customers.map(c => c.buying_trigger).filter(Boolean);
-        const triggerCount: Record<string, number> = {};
-        triggers.forEach(t => { triggerCount[t!] = (triggerCount[t!] || 0) + 1; });
-        const topTriggers = Object.entries(triggerCount)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 3);
+        const topTech = count(customers.flatMap(c => c.tech_stack || [])).slice(0, 5);
+        const topChampions = count(customers.map(c => c.champion_title)).slice(0, 3);
+        const topTriggers = count(customers.map(c => c.buying_trigger)).slice(0, 3);
+        const n = customers.length;
+        const pctOf = (k: number) => Math.round(k / n * 100);
+        const dist = (rows: [string, number][], unit: string) => rows.map(([v, k]) => `- **${v}**: ${plural(k, unit)} (${pctOf(k)}%)`).join('\n');
+        const leadOr = (rows: [string, number][], label: string, found: (v: string) => string) => {
+          if (rows.length === 0) return 'none yet, add this data';
+          const l = lead(rows);
+          return l ? found(l[0]) : `no single leading ${label}: ${andList(tied(rows))} appear equally often, so add more customers before you choose one`;
+        };
+        const indL = lead(topIndustries), sizeL = lead(topSizes), techL = lead(topTech), champL = lead(topChampions), trigL = lead(topTriggers);
+        const saasModel = ctx.model === 'saas' || ctx.model === null;
+        const gaps = [topIndustries.length === 0 ? 'Note: **Industry data missing**. Add industry field to customer records' : '',
+          topSizes.length === 0 ? 'Note: **Size data missing**. Add employee count/revenue tier' : '',
+          acvs.length === 0 ? 'Note: **ACV missing**. Add the annual contract value of each customer' : '',
+          cycles.length === 0 ? 'Note: **Sales cycle missing**. Add the days from first meeting to signature' : '',
+          topTech.length === 0 ? 'Note: **Tech stack missing**. Track technologies customers use' : '',
+          topChampions.length === 0 ? 'Note: **Champion data missing**. Record buyer titles on deals' : '',
+          topTriggers.length === 0 ? 'Note: **Trigger data missing**. Ask "Why now?" in discovery' : ''].filter(Boolean);
 
         return `# ICP Pattern Analysis
 
 ## Data Analyzed
-- **Customers analyzed**: ${customers.length}
+- ${companyLine(args.company)}
+- **Customers analyzed**: ${n}${customers.some(c => c.name) ? ` (${andList(customers.map(c => c.name).filter(Boolean) as string[])})` : ''}
 - **Product category**: ${category}
+
+${ctx.line}
 
 ---
 
 ## Detected Patterns
 
 ### Industry Distribution
-${topIndustries.length > 0 ? topIndustries.map(([ind, count]) => `- **${ind}**: ${count} customers (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No industry data provided'}
+${topIndustries.length > 0 ? dist(topIndustries, 'customer') : '- No industry data provided'}
 
-**Pattern**: ${topIndustries.length === 0 ? 'none yet, add this data' : topIndustries[0][1] > customers.length * 0.5 ? 
-  `Strong concentration in ${topIndustries[0][0]} (${Math.round(topIndustries[0][1]/customers.length*100)}%)` : 
-  'Diverse industry mix, consider vertical specialization'}
+**Pattern**: ${topIndustries.length === 0 ? 'none yet, add this data' : topIndustries[0][1] > n * 0.5 ? 
+  `Strong concentration in ${topIndustries[0][0]} (${pctOf(topIndustries[0][1])}%)` : 
+  `Mixed industries (${andList(topIndustries.map(r => r[0]))}): compare their deal size and cycle before you specialise`}
 
 ### Company Size Distribution
-${topSizes.length > 0 ? topSizes.map(([size, count]) => `- **${size}**: ${count} customers (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No size data provided'}
+${topSizes.length > 0 ? dist(topSizes, 'customer') : '- No size data provided'}
 
-**Pattern**: ${topSizes.length > 0 ? 
-  `Primary segment: ${topSizes[0][0]} companies` : 
-  'none yet, add this data'}
+**Pattern**: ${leadOr(topSizes, 'size', v => `Primary segment: ${v} companies`)}
 
 ### Deal Economics
 | Metric | Value |
@@ -394,54 +488,43 @@ ${topSizes.length > 0 ? topSizes.map(([size, count]) => `- **${size}**: ${count}
 
 **Pattern**: ${acvs.length === 0 ? 'none yet, add this data' : avgACV > 50000 ? 'Enterprise deal profile: expect complex buying process' : 
               avgACV > 15000 ? 'Mid-market deal profile: balance speed and value' : 
-              'SMB/PLG deal profile: optimize for volume'}
+              saasModel ? 'SMB/PLG deal profile: optimize for volume' : 'Smaller deal profile: keep the sales process short and repeatable'}
 
 ### Technology Stack Signals
-${topTech.length > 0 ? topTech.map(([tech, count]) => `- **${tech}**: ${count} customers (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No tech stack data provided'}
+${topTech.length > 0 ? dist(topTech, 'customer') : '- No tech stack data provided'}
 
-**Pattern**: ${topTech.length > 0 ? 
-  `Use "${topTech[0][0]}" as primary technographic filter` : 
-  'none yet, add this data'}
+**Pattern**: ${leadOr(topTech, 'technology', v => `Use "${v}" as primary technographic filter`)}
 
 ### Champion Roles
-${topChampions.length > 0 ? topChampions.map(([role, count]) => `- **${role}**: ${count} deals (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No champion data provided'}
+${topChampions.length > 0 ? dist(topChampions, 'deal') : '- No champion data provided'}
 
-**Pattern**: ${topChampions.length > 0 ? 
-  `Primary champion: ${topChampions[0][0]}; lead with their pain points` : 
-  'none yet, add this data'}
+**Pattern**: ${leadOr(topChampions, 'champion role', v => `Primary champion: ${v}; lead with their pain points`)}
 
 ### Buying Triggers
-${topTriggers.length > 0 ? topTriggers.map(([trigger, count]) => `- **${trigger}**: ${count} deals (${Math.round(count/customers.length*100)}%)`).join('\n') : '- No trigger data provided'}
+${topTriggers.length > 0 ? dist(topTriggers, 'deal') : '- No trigger data provided'}
 
-**Pattern**: ${topTriggers.length > 0 ? 
-  `Top trigger: "${topTriggers[0][0]}"; use in outbound messaging` : 
-  'none yet, add this data'}
+**Pattern**: ${leadOr(topTriggers, 'trigger', v => `Top trigger: ${q(v)}; use in outbound messaging`)}
 
 ---
 
 ## Synthesized ICP
 
-Based on pattern analysis:
+Based on pattern analysis (a value is named only where it leads; a tie lists every tied value):
 
 **Ideal Customer Profile**:
-${[topIndustries[0] ? `- **Industry**: ${topIndustries[0][0]}${topIndustries[1] ? ` or ${topIndustries[1][0]}` : ''}` : '',
-  topSizes[0] ? `- **Size**: ${topSizes[0][0]}` : '',
-  `- **Budget**: ${acvs.length > 0 ? `$${Math.round(avgACV * 0.8).toLocaleString('en-US')} to $${Math.round(avgACV * 1.2).toLocaleString('en-US')} ACV capacity ${EXAMPLE}` : 'not supplied'}`,
-  topTech[0] ? `- **Tech Stack**: Uses ${topTech[0][0]}${topTech[1] ? ` + ${topTech[1][0]}` : ''}` : '',
-  topTriggers[0] ? `- **Buying Trigger**: ${topTriggers[0][0]}` : '',
-  topChampions[0] ? `- **Champion**: ${topChampions[0][0]}` : '',
-  `- **Sales Cycle**: ~${avgCycle || 60} days expected${avgCycle ? '' : ` ${EXAMPLE}`}`].filter(Boolean).join('\n')}
-${(() => { const miss = [topIndustries[0] ? '' : 'industry', topSizes[0] ? '' : 'size', topTech[0] ? '' : 'tech stack', topTriggers[0] ? '' : 'trigger', topChampions[0] ? '' : 'champion'].filter(Boolean); return miss.length ? `\nAdd ${miss.length > 1 ? miss.slice(0, -1).join(', ') + ' and ' + miss[miss.length - 1] : miss[0]} to fill this profile.` : ''; })()}
+${[topIndustries[0] ? `- **Industry**: ${indL ? `${indL[0]}${topIndustries[1] && !(topIndustries[0][1] > n * 0.5) ? ` or ${topIndustries[1][0]}` : ''}` : andList(tied(topIndustries))}` : '',
+  topSizes[0] ? `- **Size**: ${sizeL ? sizeL[0] : `${andList(tied(topSizes))} (tied)`}` : '',
+  `- **Budget**: ${acvs.length > 0 ? `$${minACV.toLocaleString('en-US')} to $${maxACV.toLocaleString('en-US')} ACV seen in your customers (average $${Math.round(avgACV).toLocaleString('en-US')})` : 'not supplied'}`,
+  topTech[0] ? `- **Tech Stack**: ${techL ? `Uses ${topTech[0][0]}${topTech[1] ? ` + ${topTech[1][0]}` : ''}` : `${andList(tied(topTech))} (tied)`}` : '',
+  topTriggers[0] ? `- **Buying Trigger**: ${trigL ? trigL[0] : `${andList(tied(topTriggers))} (tied)`}` : '',
+  topChampions[0] ? `- **Champion**: ${champL ? champL[0] : `${andList(tied(topChampions))} (tied)`}` : '',
+  `- **Sales Cycle**: ${avgCycle ? `~${avgCycle} days (average of your deals)` : 'not supplied'}`].filter(Boolean).join('\n')}
 
----
+${notes ? `${notes}\n\n` : ''}---
 
 ## Data Gaps to Fill
 
-${topIndustries.length === 0 ? 'Note: **Industry data missing**. Add industry field to customer records\n' : ''}
-${topSizes.length === 0 ? 'Note: **Size data missing**. Add employee count/revenue tier\n' : ''}
-${topTech.length === 0 ? 'Note: **Tech stack missing**. Track technologies customers use\n' : ''}
-${topChampions.length === 0 ? 'Note: **Champion data missing**. Record buyer titles on deals\n' : ''}
-${topTriggers.length === 0 ? 'Note: **Trigger data missing**. Ask "Why now?" in discovery\n' : ''}
+${gaps.length ? gaps.join('\n') : 'None: every field this analysis reads was supplied for at least one customer.'}
 
 **Next Step**: Use \`icp_scoring_model\` to create a qualification scorecard
 `;
@@ -449,53 +532,45 @@ ${topTriggers.length === 0 ? 'Note: **Trigger data missing**. Ask "Why now?" in 
       
       // If text description provided, extract patterns
       if (args.customer_descriptions) {
-        const desc = args.customer_descriptions.toLowerCase();
-        
-        // Detect patterns from text
-        const patterns = {
-          size: desc.includes('enterprise') ? 'Enterprise (1000+)' :
-                desc.includes('mid-market') || desc.includes('mid market') ? 'Mid-market (100-1000)' :
+        const text = args.customer_descriptions;
+        const desc = text.toLowerCase();
+        // Run 19 D80: sizes are the employee ranges typed; the size words are read only when no range is typed.
+        const typedSizes = sizesIn(text);
+        const sizeWord = desc.includes('enterprise') ? 'Enterprise (1000+)' :
+                desc.includes('mid-market') || desc.includes('mid market') || desc.includes('mid-size') || desc.includes('midsize') ? 'Mid-market (100-1000)' :
                 desc.includes('smb') || desc.includes('small') ? 'SMB (10-100)' :
-                desc.includes('startup') ? 'Startup/Early-stage' : 'Mixed sizes',
-          industry: desc.includes('saas') ? 'SaaS/Software' :
-                   desc.includes('fintech') || desc.includes('finance') ? 'Fintech/Finance' :
-                   desc.includes('healthcare') || desc.includes('health') ? 'Healthcare' :
-                   desc.includes('ecommerce') || desc.includes('retail') ? 'E-commerce/Retail' : 'Mixed industries',
-          stage: desc.includes('series a') || desc.includes('series b') ? 'Series A-B' :
-                desc.includes('series c') || desc.includes('series d') ? 'Series C+' :
-                desc.includes('public') || desc.includes('enterprise') ? 'Public/Enterprise' : 'Mixed stages'
-        };
-        
-        // Run 12 (R12-21): the stage the user typed, when there is one, instead of a range
-        const stageTyped = [...new Set((args.customer_descriptions.match(/\bseries [a-d]\b/gi) || []).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', ');
+                desc.includes('startup') ? 'Startup/Early-stage' : 'Mixed sizes';
+        const size = typedSizes.length ? andList(typedSizes) : sizeWord;
+        const stageTyped = [...new Set((text.match(/\bseries [a-d]\b/gi) || []).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', ');
+        const stage = stageTyped || (desc.includes('public') ? 'Public companies' : 'not stated in your text');
+        const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => desc.includes(r.toLowerCase()));
         return `# ICP Pattern Analysis (from Description)
 
+- ${companyLine(args.company)}
+- **Product category**: ${category}
+
+${ctx.line}
+
 ## Input Analyzed
-\`\`\`
-${args.customer_descriptions}
-\`\`\`
+> ${shortText(text, 600)}
 
 ---
 
 ## Detected Patterns
 
 ### Likely Company Size
-**${patterns.size}**${/\d/.test(patterns.size) ? ` ${EXAMPLE}` : ''}
-${patterns.size === 'Enterprise (1000+)' ? `- Expect 6-12 month sales cycles, multi-stakeholder buying ${EXAMPLE}` : ''}
-${patterns.size === 'Mid-market (100-1000)' ? `- Expect 3-6 month sales cycles, departmental buying ${EXAMPLE}` : ''}
-${patterns.size === 'SMB (10-100)' ? `- Expect 1-3 month sales cycles, founder/exec buying ${EXAMPLE}` : ''}
+**${size}**${!typedSizes.length && /\d/.test(size) ? ` ${EXAMPLE}` : ''}${typedSizes.length ? ' (as you typed it)' : ''}
+${!typedSizes.length && sizeWord === 'Enterprise (1000+)' ? `- Expect 6-12 month sales cycles, multi-stakeholder buying ${EXAMPLE}` : ''}${!typedSizes.length && sizeWord === 'Mid-market (100-1000)' ? `- Expect 3-6 month sales cycles, departmental buying ${EXAMPLE}` : ''}${!typedSizes.length && sizeWord === 'SMB (10-100)' ? `- Expect 1-3 month sales cycles, founder/exec buying ${EXAMPLE}` : ''}
 
-### Likely Industry
-**${patterns.industry}**
-- Tailor messaging to industry-specific pain points
-- Research industry-specific compliance/requirements
+### Likely Sector
+**${ctx.v ? ctx.v.name : 'not clear from your text'}**
+${ctx.v ? `- Buyer roles this sector usually involves: ${ctx.v.buyerRoles.join(', ')}${roles.length ? ` (your text names: ${andList(roles)})` : ''}
+- Metrics to ask about: ${ctx.v.metrics.slice(0, 4).join(', ')}` : '- Name the industry or what you sell, for sector notes'}
 
 ### Likely Stage
-**${stageTyped || patterns.stage}**
-- Match your pricing to their typical budget capacity
-- Adjust value messaging to their growth priorities
+**${stage}**
 
----
+${notes ? `${notes}\n\n` : ''}---
 
 ## Recommendations
 
@@ -506,14 +581,14 @@ ${EXAMPLES}
 {
   "customers": [
     {
-      "name": "Customer A",
-      "industry": "SaaS",
-      "size": "100-500 employees",
-      "acv": 50000,
-      "sales_cycle_days": 90,
-      "tech_stack": ["Salesforce", "Slack", "AWS"],
-      "buying_trigger": "New VP Sales hired",
-      "champion_title": "VP Sales"
+      "name": "Example Manufacturing Co",
+      "industry": "Manufacturing",
+      "size": "300-1000 employees",
+      "acv": 24000,
+      "sales_cycle_days": 60,
+      "tech_stack": ["SAP"],
+      "buying_trigger": "Audit finding",
+      "champion_title": "Finance Controller"
     }
   ]
 }
@@ -525,6 +600,8 @@ ${EXAMPLES}
       
       return `# ICP Deep Dive
 
+- ${companyLine(args.company)}
+
 Please provide customer data in one of these formats (the values shown are examples):
 
 **Option 1: Structured Data**
@@ -533,14 +610,14 @@ ${EXAMPLES}
 {
   "customers": [
     {
-      "name": "Customer A",
-      "industry": "SaaS",
-      "size": "100-500 employees",
-      "acv": 50000,
-      "sales_cycle_days": 90,
-      "tech_stack": ["Salesforce", "Slack"],
-      "buying_trigger": "New VP Sales hired",
-      "champion_title": "VP Sales"
+      "name": "Example Manufacturing Co",
+      "industry": "Manufacturing",
+      "size": "300-1000 employees",
+      "acv": 24000,
+      "sales_cycle_days": 60,
+      "tech_stack": ["SAP"],
+      "buying_trigger": "Audit finding",
+      "champion_title": "Finance Controller"
     }
   ]
 }
@@ -550,7 +627,7 @@ ${EXAMPLES}
 ${EXAMPLES}
 \`\`\`json
 {
-  "customer_descriptions": "Our best customers are Series B SaaS companies with 50-200 employees. They typically use Salesforce and have a VP of Sales who becomes our champion."
+  "customer_descriptions": "Our best customers are mid-size manufacturers with 300 to 3,000 employees. They run SAP and the finance controller becomes our champion."
 }
 \`\`\`
 
@@ -563,7 +640,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
   // Tool 2: ICP Scoring Model - Auto-Weighted Qualification
   // ---------------------------------------------------------------------------
   icp_scoring_model: {
-    description: 'Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights',
+    description: 'Create a lead qualification scoring template: criteria with example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust. Your success pattern is matched to your criteria; it does not set the weights. Sector notes are added when your inputs name one of the supported sectors',
     inputSchema: {
       type: 'object',
       properties: {
@@ -585,10 +662,12 @@ This tool will analyze patterns across your customers to identify your ideal pro
         },
         product_category: {
           type: 'string'
-        }
+        },
+        company: COMPANY_INPUT
       }
     },
     execute: (args: {
+      company?: string;
       scoring_criteria?: Array<{
         criterion?: string;
         importance?: string;
@@ -597,8 +676,9 @@ This tool will analyze patterns across your customers to identify your ideal pro
       success_correlation?: string;
       product_category?: string;
     }) => {
-      const category = args.product_category || 'B2B Solution';
+      const category = args.product_category ? args.product_category.trim() : 'your product (product_category not given)';
       const correlations = args.success_correlation || '';
+      const ctx = readContext(undefined, [args.product_category, args.company], [correlations, ...(args.scoring_criteria || []).flatMap(c => [c.criterion, ...(c.values || [])])]);
       
       // Default scoring model if no criteria provided
       const defaultCriteria = [
@@ -622,6 +702,20 @@ This tool will analyze patterns across your customers to identify your ideal pro
             values: c.values || ['High fit', 'Medium fit', 'Low fit']
           }))
         : defaultCriteria;
+      // Run 19 D80 (problem 5): example points for each value the user listed. The first value scores the full weight, the last
+      // scores 0, the ones between in even steps (rounded); a single value scores the full weight, or 0 when it does not apply.
+      // The weights and the bands are unchanged. The default criteria already carry their own points.
+      const userGiven = !!(args.scoring_criteria && args.scoring_criteria.length > 0);
+      const withPoints = (c: { weight: number; values: string[] }) => !userGiven ? c.values
+        : c.values.length === 1 ? [`${c.values[0]} (${c.weight} pts; 0 if not)`]
+        : c.values.map((v, i) => `${v} (${Math.round(c.weight * (c.values.length - 1 - i) / (c.values.length - 1))} pts)`);
+      // Run 19 D80 (problem 3): the success pattern is matched against the criteria given, by their words.
+      const corrWords = new Set(correlations.toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length > 2 && !['the', 'and', 'with', 'who', 'most', 'more', 'deals', 'customers', 'close', 'faster', 'renew', 'than', 'that', 'have', 'has', 'are', 'for'].includes(w)));
+      const matched = criteria.filter(c => [c.criterion, ...c.values].join(' ').toLowerCase().split(/[^a-z0-9]+/).some(w => w.length > 2 && corrWords.has(w)));
+      const corrLine = !correlations ? '' : matched.length
+        ? `This pattern is already a criterion: ${andList(matched.map(c => `**${c.criterion}**`))}. If it holds in your closed deals, make ${matched.length === 1 ? 'it' : 'them'} critical.`
+        : 'This pattern is not yet one of your criteria: add it as a criterion if it holds in your closed deals.';
+      const notes = sectorNotes(ctx.v, ['roles', 'metrics']);
 
       // D30: the qualification tiers are bands of the maximum score (sum of criteria weights),
       // not fixed points, so they stay correct when the weights are not the 100-point default.
@@ -636,7 +730,11 @@ This tool will analyze patterns across your customers to identify your ideal pro
       return `# ICP Scoring Model
 
 ## Scoring Framework for ${category}
-${correlations ? `\n**Success Correlation Noted**: ${correlations}\nConsider adding this as a criterion of your own.\n` : ''}
+
+- ${companyLine(args.company)}
+
+${sectorLine(ctx.v)}
+${correlations ? `\n**Success Correlation Noted**: ${q(shortText(correlations))}\n${corrLine}\n` : ''}
 
 ---
 
@@ -659,8 +757,8 @@ ${EXAMPLES} Every point value and band below is an example.
 
 | Criterion | Weight | Scoring Values |
 |-----------|--------|----------------|
-${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.length ? c.values.join(' / ') : '[no values supplied: add the values you score]'} |`).join('\n')}
-
+${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.length ? withPoints(c).join(' / ') : '[no values supplied: add the values you score]'} |`).join('\n')}
+${userGiven ? '\nPoints per value: the first value you listed scores the full weight, the last scores 0, and the values between score even steps. They are examples to adjust.\n' : ''}
 **Maximum Score**: ${maxScore} points ${EXAMPLE}
 
 ---
@@ -685,7 +783,7 @@ The bands are 80%, 60% and 40% of your maximum score of ${maxScore} points.
 
 ${criteria.map(c => `
 **${c.criterion}** (Max: ${c.weight} pts)
-${c.values.length ? c.values.map((v, i) => `[ ] ${v}`).join('\n') : '[ ] [no values supplied: add the values you score]'}
+${c.values.length ? withPoints(c).map((v) => `[ ] ${v}`).join('\n') : '[ ] [no values supplied: add the values you score]'}
 Score: ___ / ${c.weight}
 `).join('\n')}
 
@@ -731,7 +829,7 @@ Add these fields to your CRM to improve scoring over time:
 | Trigger Event | Text | Identify timing signals |
 | Competitor | Picklist | Track displacement success |
 
-**Next Step**: Use \`buyer_group_analyzer\` to map decision-making dynamics
+${notes ? `${notes}\n\n` : ''}**Next Step**: Use \`buyer_group_analyzer\` to map decision-making dynamics
 
 ${SUGGESTED}
 `;
@@ -742,7 +840,7 @@ ${SUGGESTED}
   // Tool 3: Buyer Group Analyzer - Decision Dynamics Mapping
   // ---------------------------------------------------------------------------
   buyer_group_analyzer: {
-    description: 'Map buyer group dynamics, influence relationships, and decision-making process',
+    description: 'Map the buyer group for a deal: the champion you name, your known stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role\'s concern and message prompts, an influence map and discovery questions. Sector roles and questions are added when your inputs name one of the supported sectors',
     inputSchema: {
       type: 'object',
       properties: {
@@ -766,7 +864,9 @@ ${SUGGESTED}
         typical_champion: {
           type: 'string',
           description: 'Your typical champion role'
-        }
+        },
+        company: COMPANY_INPUT,
+        business_model: MODEL_INPUT
       },
       required: ['product_category']
     },
@@ -776,11 +876,16 @@ ${SUGGESTED}
       product_category: string;
       known_stakeholders?: string[];
       typical_champion?: string;
+      company?: string;
+      business_model?: string;
     }) => {
-      const dealSize = args.deal_size || '$30K-50K';
-      const companySize = args.target_company_size || '200-500 employees';
-      const champion = args.typical_champion || 'Department Head';
+      // Run 19 D80: no default deal size, company size or champion in place of an input that was not given (rule B81).
+      const dealSize = args.deal_size ? args.deal_size.trim() : 'not given (add deal_size)';
+      const companySize = args.target_company_size ? args.target_company_size.trim() : 'not given (add target_company_size)';
       const categoryLower = args.product_category.toLowerCase();
+      const stakeholders = (args.known_stakeholders || []).map(x => String(x).trim()).filter(Boolean);
+      const ctx = readContext(args.business_model, [args.product_category, args.company], [args.typical_champion, ...stakeholders]);
+      const v = ctx.v;
       
       // Generate buying group based on category
       let buyingGroup = {
@@ -799,7 +904,7 @@ ${SUGGESTED}
           economic: { role: 'CRO/CEO', concern: 'Revenue growth, sales efficiency', message: '[Only if true and provable: Drive 20%+ revenue improvement with measurable ROI]' },
           technical: { role: 'Sales Ops/RevOps', concern: 'CRM integration, data quality', message: '[Only if true and provable: Seamless Salesforce sync, no data cleanup]' },
           user: { role: 'Sales Reps', concern: 'Ease of use, time savings', message: '[Only if true and provable: Spend time selling, not on admin work]' },
-          blocker: { role: 'IT Security', concern: 'Data security, compliance', mitigation: '[Your certifications, for example SOC 2], [Only if true and provable: SSO supported, data encryption]' }
+          blocker: { role: 'IT Security', concern: 'Data security, compliance', mitigation: '[Fill in: the certifications you hold, for example SOC 2], [Only if true and provable: SSO supported, data encryption]' }
         };
       } else if (categoryLower.includes('marketing') || categoryLower.includes('demand')) {
         buyingGroup = {
@@ -810,33 +915,64 @@ ${SUGGESTED}
           blocker: { role: 'Finance', concern: 'Budget justification', mitigation: '[Only if true and provable: Clear ROI calculator, flexible pricing]' }
         };
       } else if (categoryLower.includes('security') || categoryLower.includes('compliance')) {
+        // Run 19 (B82): the preset no longer quotes an average breach cost (a benchmark figure without a source).
         buyingGroup = {
           champion: { role: 'CISO/Security Director', concern: 'Risk reduction, compliance', message: '[Only if true and provable: Reduce attack surface by 80%]' },
-          economic: { role: 'CIO/CFO', concern: 'Risk vs cost, insurance impact', message: '[Only if true and provable: Avoid $5M average breach cost]' },
+          economic: { role: 'CIO/CFO', concern: 'Risk vs cost, insurance impact', message: '[Only if true and provable: Lower breach risk, shown against the buyer\'s own risk register]' },
           technical: { role: 'Security Engineers', concern: 'Technical depth, alert quality', message: '[Only if true and provable: Fewer false positives, actionable alerts]' },
           user: { role: 'SOC Team', concern: 'Alert fatigue, efficiency', message: '[Only if true and provable: Cut investigation time by 60%]' },
           blocker: { role: 'Procurement', concern: 'Vendor consolidation', mitigation: '[Only if true and provable: Replaces 3+ point solutions]' }
         };
       } else {
+        // Run 12 (R12-21) and run 19 (D80): no preset for this category, so the lines that would read as findings are prompts
+        // to fill in; where the sector is read, the prompt names what that sector measures (src/verticals.ts).
+        const sectorRole = (re: RegExp, fallback: string) => (v && v.buyerRoles.find(r => re.test(r))) || fallback;
         buyingGroup = {
-          // Run 12 (R12-21): no preset for this category, so the lines that would read as findings are prompts to fill in
-          champion: { role: champion, concern: '[Their main concern, for example no-shows]', message: '[Your answer to that concern, in one line]' },
-          economic: { role: 'C-Level Sponsor', concern: 'ROI, strategic fit', message: '[The business impact you can prove]' },
-          technical: { role: 'IT/Tech Lead', concern: 'Integration, maintenance', message: '[How setup and upkeep work with your product]' },
-          user: { role: 'End Users', concern: 'Ease of use, daily workflow', message: '[What changes in their working day]' },
-          blocker: { role: 'Legal/Procurement', concern: 'Risk, compliance', mitigation: '[Your standard terms and compliance answer]' }
+          champion: { role: 'not given (add typical_champion)', concern: v ? `Ask them; in ${v.name} this role is usually measured on ${andList(v.metrics.slice(0, 3))}` : '[Their main concern: ask them in discovery]', message: '[Fill in: your answer to that concern, in one line]' },
+          economic: { role: v ? v.buyerRoles[0] : 'C-Level Sponsor', concern: 'ROI, strategic fit', message: '[Fill in: the business impact you can prove]' },
+          technical: { role: sectorRole(/\bIT\b|Technology|Architect|Engineering|Data|Infrastructure|Platform/, 'IT/Tech Lead'), concern: 'Integration, maintenance', message: '[Fill in: how setup and upkeep work with your product]' },
+          user: { role: 'End Users', concern: 'Ease of use, daily workflow', message: '[Fill in: what changes in their working day]' },
+          blocker: { role: sectorRole(/Procurement|Audit|Compliance|Risk|Legal/, 'Legal/Procurement'), concern: 'Risk, compliance', mitigation: '[Fill in: your standard terms and compliance answer]' }
         };
       }
+      // Run 19 D80 (problem 3): the champion is the role the user typed, and each known stakeholder is placed in the map by
+      // its title: budget owners as economic buyer, technology and security roles as technical evaluator, procurement, legal,
+      // audit, compliance and risk as reviewers, everyone else as users.
+      if (args.typical_champion && args.typical_champion.trim()) buyingGroup.champion.role = args.typical_champion.trim();
+      const kindOf = (t: string): 'economic' | 'technical' | 'blocker' | 'user' => {
+        if (v && v.id === 'cybersecurity' && /\bCISO\b|chief information security/i.test(t)) return 'economic';
+        if (/procurement|legal|compliance|audit|\brisk\b|vendor management|purchasing/i.test(t)) return 'blocker';
+        if (/\b(CFO|CEO|COO|CIO|CRO|CMO|MD)\b|chief (?:financial|executive|operating|information officer|revenue|marketing)|managing director|president|founder|business unit head|national sales head/i.test(t) && !/chief information security/i.test(t)) return 'economic';
+        if (/\b(IT|CTO|CISO|QA)\b|chief technology|chief information security|engineer|architect|devops|platform|security|infrastructure|network|data|technical|developer/i.test(t)) return 'technical';
+        return 'user';
+      };
+      const others = stakeholders.filter(x => x.toLowerCase() !== buyingGroup.champion.role.toLowerCase());
+      const placed: Record<string, string[]> = { economic: [], technical: [], blocker: [], user: [] };
+      for (const x of others) placed[kindOf(x)].push(x);
+      if (placed.economic[0]) buyingGroup.economic.role = placed.economic[0];
+      if (placed.technical[0]) buyingGroup.technical.role = placed.technical[0];
+      if (placed.blocker[0]) buyingGroup.blocker.role = placed.blocker[0];
+      if (placed.user[0]) buyingGroup.user.role = placed.user[0];
+      const extra = (['economic', 'technical', 'blocker', 'user'] as const).flatMap(k => placed[k].slice(1).map(x => `${x} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`));
+      const technicalSteps = ctx.model === 'connectivity' ? ['Offer a site survey and a small set of pilot sites', 'Share the network design and the cut-over plan', 'Offer a technical session with your network team', 'Answer the security questionnaire before it is asked']
+        : ctx.model === 'services' ? ['Share the transition plan and the team model', 'Agree the SLA and the reports up front', 'Offer a session with the delivery lead', 'Answer the security questionnaire before it is asked']
+        : ctx.model === 'saas' ? ['Provide sandbox/POC access', 'Share integration documentation', 'Offer technical deep-dive call', 'Address security questionnaire proactively']
+        : ['Offer a pilot on their own data or sites', 'Share integration or setup documentation', 'Offer a technical session', 'Answer the security questionnaire before it is asked'];
       // Labels only: a preset message that carries a figure is an example, not a fact about the user's product.
       const exIfFigure = (text: string) => /\d/.test(text.replace(/SOC 2/g, '')) ? ` ${EXAMPLE}` : '';
 
       return `# Buyer Group Analysis
 
 ## Deal Context
+- ${companyLine(args.company)}
 - **Product**: ${args.product_category}
-- **Deal Size**: ${dealSize}${args.deal_size ? '' : ` ${EXAMPLE}`}
-- **Target Company**: ${companySize}${args.target_company_size ? '' : ` ${EXAMPLE}`}
-- **Known Stakeholders**: ${args.known_stakeholders?.join(', ') || 'Not specified'}
+- **Deal Size**: ${dealSize}
+- **Target Company**: ${companySize}
+- **Known Stakeholders**: ${stakeholders.length ? stakeholders.join(', ') : 'Not specified'}
+
+${ctx.line}
+
+The deal size and company size are shown for context: the roles below come from your champion, your stakeholders${v ? ' and the sector' : ''}, not from the deal size.
 
 ---
 
@@ -870,10 +1006,7 @@ ${SUGGESTED}
 **Your Message**: "${buyingGroup.technical.message}"${exIfFigure(buyingGroup.technical.message)}
 
 **Technical Strategy**:
-- Provide sandbox/POC access
-- Share integration documentation
-- Offer technical deep-dive call
-- Address security questionnaire proactively
+${technicalSteps.map(x => `- ${x}`).join('\n')}
 
 ### End User (Day-to-Day User)
 **Role**: ${buyingGroup.user.role}
@@ -904,7 +1037,8 @@ ${SUGGESTED}
 \`\`\`
 ${influenceMap(buyingGroup)}
 \`\`\`
-
+${extra.length ? `\n**Also in the group (your input)**: ${extra.join('; ')}.\n` : ''}
+${v ? `${sectorNotes(v, ['committee', 'objections', 'proof'])}\n` : ''}
 ---
 
 ## Multi-Threading Checklist
@@ -945,7 +1079,7 @@ Track your coverage of the buying group:
 2. "What's the most frustrating part of your day?"
 3. "What would make you actually use a new tool?"
 
-**Next Step**: Use \`tam_sam_som_calculator\` to size your market
+${v ? `### Sector questions (${v.name})\n${v.discovery.map((x, i) => `${i + 1}. "${x}"`).join('\n')}\n\n` : ''}**Next Step**: Use \`tam_sam_som_calculator\` to size your market
 
 ${SUGGESTED}
 `;
@@ -956,7 +1090,7 @@ ${SUGGESTED}
   // Tool 4: TAM/SAM/SOM Calculator - Bottom-Up Market Sizing
   // ---------------------------------------------------------------------------
   tam_sam_som_calculator: {
-    description: 'Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source)',
+    description: 'Calculate TAM/SAM/SOM bottom-up from your company count, ACV, ICP match rate and Year 1 share (calculation framework, not a data source). Sector notes are added when your inputs name one of the supported sectors',
     inputSchema: {
       type: 'object',
       properties: {
@@ -987,7 +1121,8 @@ ${SUGGESTED}
         segment_name: {
           type: 'string',
           description: 'Name of the market segment'
-        }
+        },
+        company: COMPANY_INPUT
       },
       required: ['total_potential_companies', 'average_contract_value']
     },
@@ -998,7 +1133,9 @@ ${SUGGESTED}
       year1_market_share_target?: number;
       data_sources?: string;
       segment_name?: string;
+      company?: string;
     }) => {
+      const ctx = readContext(undefined, [args.company], [args.segment_name, args.data_sources]);
       const totalCompanies = args.total_potential_companies;
       const acv = args.average_contract_value;
       // Run 16 D45: a typed 0 is used as 0; only an omitted or null value takes the preset.
@@ -1019,14 +1156,17 @@ ${SUGGESTED}
       const formatCurrency = (num: number) => {
         // Run 15 R15-32 (D38): separators, and never an exponent however large the figure
         if (num >= 1000000000) return `$${(num / 1000000000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
-        if (num >= 1000000) return `$${(num / 1000000).toFixed(1)}M`;
+        // Run 19 (backlog B16-17, display only): a figure that rounds up to 1000 of a unit moves to the next unit
+        // ($999,950 prints $1.0M, not $1000K; $999,999,000 prints $1.00B, not $1000.0M).
+        if (num >= 1000000) return (num / 1000000).toFixed(1) === '1000.0' ? `$${(num / 1000000000).toFixed(2)}B` : `$${(num / 1000000).toFixed(1)}M`;
         // Run 16 D47: one decimal when the figure is not a whole thousand ($2,400 as $2.4K; $2,000 stays $2K).
-        if (num >= 1000) return `$${(num / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+        if (num >= 1000) return (num / 1000).toFixed(1) === '1000.0' ? '$1.0M' : `$${(num / 1000).toFixed(1).replace(/\.0$/, '')}K`;
         // Run 16 N2 (D50): money under $1 prints 2 decimals; a positive amount that rounds to $0.00 says so.
         if (num > 0 && num < 1) return num.toFixed(2) === '0.00' ? 'under $0.01' : `$${num.toFixed(2)}`;
         // D38 (run 15): display only. A raw float (6 or more decimal places, or an exponent) prints with 2 decimals.
         const text = String(num);
-        if (/e/i.test(text) || (text.split('.')[1] || '').length >= 6) return `$${num.toFixed(2)}`;
+        // Run 19 (backlog B16-17, display only): an amount under 1,000 that is not whole prints 2 decimals ($64.80, not $64.8).
+        if (/e/i.test(text) || !Number.isInteger(num)) return `$${num.toFixed(2)}`;
         return `$${num}`;
       };
       // D38 (run 15): a count that rounds to 0 from a positive value says so. The count itself is unchanged.
@@ -1043,6 +1183,10 @@ ${SUGGESTED}
       return `# TAM/SAM/SOM Analysis
 
 ## Market: ${segment}
+
+- ${companyLine(args.company)}
+
+${sectorLine(ctx.v)}
 
 ---
 
@@ -1117,7 +1261,7 @@ ${somEx ? `Values computed with a preset rate you did not supply are examples.\n
 - **Revenue Goal**: ${formatCurrency(som)}${somEx}
 - **Deals Needed**: ${countText(targetDeals, som / acv, '~')} closed customers${somEx}
 - **Monthly Target**: ${countText(Math.ceil(targetDeals / 12), som / acv, '~')} deals/month${somEx}
-- **Pipeline Required**: ${formatCurrency(som * 3)} (at 33% win rate) ${EXAMPLE}
+- **Pipeline Required**: ${formatCurrency(som * 3)} (SOM × 3, a 1 in 3 win rate) ${EXAMPLE}
 
 ### Growth Path
 Later years assume your market share doubles each year.
@@ -1133,9 +1277,9 @@ Later years assume your market share doubles each year.
 
 ### Key Assumptions
 1. **Company count accuracy**: Validate with LinkedIn Sales Navigator, industry reports
-2. **ACV assumption**: Based on current pricing, may increase with enterprise deals
+2. **ACV**: $${acv.toLocaleString('en-US')}, your input; check it against your last closed deals in this segment
 3. **ICP match rate**: ${icpGiven ? 'Your estimate' : 'Not supplied, so a preset example is used'}; refine with actual data
-4. **Market share**: ${sharePct(marketSharePercent)}${shareEx} is ${marketSharePercent <= 0.03 ? 'conservative' : marketSharePercent <= 0.05 ? 'moderate' : 'aggressive'} for Year 1
+4. **Market share**: ${sharePct(marketSharePercent)}${shareEx} of SAM in Year 1 means ${countText(targetDeals, som / acv, '~')} new customers; check that number against the deals your team closed last year
 
 ### Data Validation Checklist
 - [ ] Cross-reference company count with 2+ sources
@@ -1158,7 +1302,7 @@ Later years assume your market share doubles each year.
 > 
 > *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
 
-**Next Step**: Use \`lookalike_signal_generator\` to create targeting criteria
+${ctx.v ? `${sectorNotes(ctx.v, ['committee', 'metrics'])}\n- **Counting companies in this sector:** count only companies where the roles above exist and the problem is measured (${andList(ctx.v.metrics.slice(0, 2))}).\n\n` : ''}**Next Step**: Use \`lookalike_signal_generator\` to create targeting criteria
 `;
     }
   },
@@ -1167,7 +1311,7 @@ Later years assume your market share doubles each year.
   // Tool 5: Lookalike Signal Generator - Platform-Specific Targeting Criteria
   // ---------------------------------------------------------------------------
   lookalike_signal_generator: {
-    description: 'Generate platform-specific targeting criteria and search queries (generates criteria, not data)',
+    description: 'Generate platform-specific targeting criteria and search queries from your firmographics, technographics, champion titles and buying triggers (generates criteria, not data). Each trigger gets its own signal; search keywords come from what you sell and the sector; platforms limits the sections',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1199,8 +1343,13 @@ Later years assume your market share doubles each year.
         platforms: {
           type: 'array',
           items: { type: 'string' },
-          description: 'Accepted but not used yet: the output always includes every platform section (linkedin, google_ads, 6sense, zoominfo)'
-        }
+          description: 'Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included'
+        },
+        product_category: {
+          type: 'string',
+          description: 'Optional: what you sell (for example "spend management software"), used for search keywords and sector notes'
+        },
+        company: COMPANY_INPUT
       },
       required: ['champion_titles']
     },
@@ -1215,6 +1364,8 @@ Later years assume your market share doubles each year.
       champion_titles: string[];
       buying_triggers?: string[];
       platforms?: string[];
+      product_category?: string;
+      company?: string;
     }) => {
       // Run 15 R15-32: an empty list is treated like a list left out (it printed blank lines such as 'Technologies: ')
       const ne = <T>(a?: T[]) => (Array.isArray(a) && a.length ? a : undefined);
@@ -1228,27 +1379,36 @@ Later years assume your market share doubles each year.
       const tech = args.icp_technographics || ['Salesforce', 'HubSpot'];
       const titles = args.champion_titles;
       const triggers = args.buying_triggers || ['New leadership hire', 'Funding round', 'Expansion'];
-      const platforms = args.platforms || ['linkedin', 'google_ads', '6sense'];
+      const stages = firmographics.funding_stages;
+      const product = args.product_category ? args.product_category.trim() : '';
+      const ctx = readContext(undefined, [args.product_category, args.company], [...(firmographics.industries || []), ...titles, ...(args.buying_triggers || []), ...(args.icp_technographics || [])]);
+      const v = ctx.v;
+      // Run 19: the platforms input now selects the sections (it was accepted but not used).
+      const wanted = (args.platforms || []).map(p => p.toLowerCase().replace(/[^a-z0-9]/g, ''));
+      const show = (key: string) => !wanted.length || wanted.some(w => w.includes(key) || key.includes(w));
       // Labels only: fields the input did not supply are filled with example values; the default company
       // sizes are example figures, so a code block that shows them gets an example label line above it.
       const notSupplied = (given: unknown) => given ? '' : ' (not supplied: example values)';
       const sizesEx = firmographics.company_sizes ? '' : ` ${EXAMPLE}`;
       const sizesBlock = firmographics.company_sizes ? '' : `${EXAMPLES}\n`;
       const anyExample = !firmographics.industries || !firmographics.company_sizes || !firmographics.locations || !args.icp_technographics || !args.buying_triggers;
-
-      return `# Lookalike Signal & Targeting Criteria
-
-## ICP Summary
-- **Industries**: ${industries.join(', ')}${notSupplied(firmographics.industries)}
-- **Company Sizes**: ${sizes.join(', ')}${sizesEx}
-- **Locations**: ${locations.join(', ')}${notSupplied(firmographics.locations)}
-- **Technologies**: ${tech.join(', ')}${notSupplied(args.icp_technographics)}
-- **Champion Titles**: ${titles.join(', ')}
-- **Buying Triggers**: ${triggers.join(', ')}${notSupplied(args.buying_triggers)}
-
----
-
-## LinkedIn Sales Navigator
+      // Run 19 D80 (problem 8, backlog B15-L4): search keywords come from what the user sells and the sector's own words, never
+      // from an invented ad category ("Software > Software") or a phrase such as "retailers software".
+      const keywords = [...new Set([...(product ? [product] : []), ...(v ? v.vocabulary.slice(0, 4).map(w => `${w} ${product ? 'software' : 'tool'}`.replace(/ software software$/, ' software')) : []),
+        ...tech.map(t => `${t.toLowerCase()} integration`)])];
+      // Run 19 D80 (problem 3): every trigger typed gets its own signal, chosen by its words.
+      const signalFor = (t: string): [string, string, string] => {
+        const x = t.toLowerCase();
+        if (/hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/.test(x)) return [`A new ${titles[0] || 'leader'} or a related leader joined in the last 90 days`, 'New leaders review tools and processes early', 'LinkedIn alerts, ZoomInfo job changes'];
+        if (/fund|series|raise|raised|investment|ipo|listing/.test(x)) return [`Funding or listing news${stages ? ` at the stages you target (${stages.join(', ')})` : ''}`, 'New budget is allocated for scaling', 'Crunchbase alerts, news alerts, LinkedIn'];
+        if (/audit|compliance|regulat|breach|incident|finding/.test(x)) return ['Audit findings, regulatory notices or incidents made public, and hiring for audit, risk or compliance roles', 'A finding sets a deadline and a budget owner', 'News alerts, annual reports and filings, job posts'];
+        if (/migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/.test(x)) return ['Job posts and announcements that mention the new system or the migration', 'A system change reopens the processes around it', 'Job posting alerts, technographic change data, news alerts'];
+        if (/expan|new office|new market|branch|site|hiring|grow/.test(x)) return ['New offices, markets, branches or a hiring surge', 'Existing processes strain as the company grows', 'Job posting velocity, news alerts'];
+        if (/miss|target|loss|cost|margin|delay|outage|churn/.test(x)) return ['Results, statements or job posts that mention the problem', 'A missed target creates urgency and an owner', 'Earnings and news alerts, leadership posts on LinkedIn'];
+        return ['News, job posts or posts by your champion titles that mention it', 'Your team named this as a reason to buy', 'News alerts and job posting alerts on the exact words'];
+      };
+      const sections: string[] = [];
+      if (show('linkedin')) sections.push(`## LinkedIn Sales Navigator
 
 ### Search Query (Copy & Paste Ready)
 
@@ -1277,37 +1437,21 @@ Geography: ${locations.join(' OR ')}
 1. Create search with criteria above
 2. Save search with alert enabled
 3. Check weekly for new matches
-4. Export to outreach sequences
-
----
-
-## Google Ads Targeting
+4. Export to outreach sequences`);
+      if (show('googleads')) sections.push(`## Google Ads Targeting
 
 ### Custom Intent Audiences
-**Keywords to target** (people searching for solutions):
+**Keywords to target** (people searching for what you sell):
 \`\`\`
-${tech.map(t => `"${t.toLowerCase()} integration"`).join('\n')}
-${tech.map(t => `"${t.toLowerCase()} alternative"`).join('\n')}
-"${withSoftware(industries[0]?.toLowerCase() || 'b2b', 'software')}"
+${keywords.map(k => `"${k}"`).join('\n')}
 \`\`\`
-
+${product ? '' : 'Add product_category (what you sell) for search keywords about your product: this tool does not guess it.\n'}
 ### Custom Audience: Website Visitors
-Target visitors to competitor sites:
-\`\`\`
-competitor1.com
-competitor2.com
-g2.com/products/[competitor]
-\`\`\`
+Target visitors to the sites of the competitors your buyers compare you with (add their addresses).
 
 ### In-Market Audiences
-\`\`\`
-Business Services > Business Technology
-Software > ${withSoftware(industries[0] || 'Enterprise', 'Software')}
-\`\`\`
-
----
-
-## 6sense / Intent Data Platforms
+${v ? `Pick the in-market category Google Ads offers that is closest to ${v.name} buyers (search the category list for: ${v.vocabulary.slice(0, 3).join(', ')}). This tool does not invent a category name.` : 'Pick the in-market category Google Ads offers that is closest to what you sell. This tool does not invent a category name.'}`);
+      if (show('6sense')) sections.push(`## 6sense / Intent Data Platforms
 
 ### Account Fit Criteria
 ${sizesBlock}\`\`\`json
@@ -1325,18 +1469,14 @@ ${sizesBlock}\`\`\`json
 
 ### Intent Topic Keywords
 \`\`\`
-${tech.join('\n')}
-${industries.map(i => `${i} solutions`).join('\n')}
+${[...(product ? [product] : []), ...(v ? v.vocabulary.slice(0, 5) : []), ...tech].join('\n')}
 \`\`\`
 
 ### Buying Stage Indicators
 - **Awareness**: Researching generic topics
 - **Consideration**: Comparing specific vendors
-- **Decision**: Pricing pages, demo requests
-
----
-
-## ZoomInfo / Apollo Filters
+- **Decision**: Pricing pages, demo requests`);
+      if (show('zoominfo') || show('apollo')) sections.push(`## ZoomInfo / Apollo Filters
 
 ### Contact Search Criteria
 ${sizesBlock}\`\`\`
@@ -1349,30 +1489,40 @@ Technologies: ${tech.join(', ')}
 
 ### Intent Signals to Layer
 - Job changes in target titles (last 90 days)
-- Funding events (Series A-C)
-- Technology adoption changes
-- Hiring for related roles
+${stages ? `- Funding or listing news at your stages: ${stages.join(', ')}\n` : ''}- Technology adoption changes
+- Hiring for related roles`);
+
+      return `# Lookalike Signal & Targeting Criteria
+
+- ${companyLine(args.company)}
+- **What you sell**: ${product || 'not given (add product_category for search keywords)'}
+
+${sectorLine(v)}
+
+## ICP Summary
+- **Industries**: ${industries.join(', ')}${notSupplied(firmographics.industries)}
+- **Company Sizes**: ${sizes.join(', ')}${sizesEx}
+- **Locations**: ${locations.join(', ')}${notSupplied(firmographics.locations)}
+- **Funding Stages**: ${stages ? stages.join(', ') : 'not supplied'}
+- **Technologies**: ${tech.join(', ')}${notSupplied(args.icp_technographics)}
+- **Champion Titles**: ${titles.join(', ')}
+- **Buying Triggers**: ${triggers.join(', ')}${notSupplied(args.buying_triggers)}
+${v ? `- **Other roles in a ${v.name} buying group** (not in your input): ${v.buyerRoles.filter(r => !titles.some(t => t.toLowerCase() === r.toLowerCase())).join(', ')}\n` : ''}
+${wanted.length ? `Sections shown: the platforms you asked for (${args.platforms!.join(', ')}).\n` : ''}
+---
+
+${sections.join('\n\n---\n\n')}
 
 ---
 
 ## Buying Trigger Signals
 
-### Trigger: ${cap(triggers[0] || 'New Leadership Hire')}
-**Signal**: New ${titles[0] || 'VP'} joined in last 90 days
-**Why it matters**: New leaders seek quick wins, open to new tools
-**How to track**: LinkedIn alerts, ZoomInfo job changes
+${triggers.map(t => { const [signal, why, how] = signalFor(t); return `### Trigger: ${cap(t)}
+**Signal**: ${signal}
+**Why it matters**: ${why}
+**How to track**: ${how}`; }).join('\n\n')}
 
-### Trigger: ${cap(triggers[1] || 'Funding Round')}
-**Signal**: Series A-C announcement
-**Why it matters**: Budget allocated for scaling
-**How to track**: Crunchbase alerts, TechCrunch, LinkedIn
-
-### Trigger: ${cap(triggers[2] || 'Expansion')}
-**Signal**: ${triggers[2] ? `${cap(triggers[2])} announced` : 'New office, new market, hiring surge'}
-**Why it matters**: Existing processes breaking at scale
-**How to track**: Job posting velocity, news alerts
-
----
+${v ? `${sectorNotes(v, ['metrics', 'proof'])}\n\n` : ''}---
 
 ## Implementation Checklist
 
@@ -1428,7 +1578,7 @@ ${SUGGESTED}
   // Tool 6: Account Prioritization - Multi-Dimensional Ranking
   // ---------------------------------------------------------------------------
   account_prioritization: {
-    description: 'Rank and prioritize accounts using multi-dimensional scoring',
+    description: 'Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1455,7 +1605,8 @@ ${SUGGESTED}
             timing: { type: 'number' }
           },
           description: 'Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100'
-        }
+        },
+        company: COMPANY_INPUT
       }
     },
     execute: (args: {
@@ -1472,6 +1623,7 @@ ${SUGGESTED}
         relationship?: number;
         timing?: number;
       };
+      company?: string;
     }) => {
       // Default weights
       const weights = {
@@ -1535,7 +1687,25 @@ ${SUGGESTED}
         // Sort by total score
         scoredAccounts.sort((a, b) => b.totalScore - a.totalScore);
 
+        // Run 19 D80 (problem 5): the reason names the factor that adds the most points, with its arithmetic (the score and tier
+        // are unchanged). The old labels stay as the opening words where they applied; "Balanced scoring" is gone.
+        const reasonFor = (a: typeof scoredAccounts[number]) => {
+          const parts = [
+            { k: 'fit', v: a.fit, w: weights.fit, txt: `fit ${a.fit}` },
+            { k: 'intent', v: a.intent, w: weights.intent, txt: `intent ${a.intent}` },
+            { k: 'relationship', v: a.relationship, w: weights.relationship, txt: `relationship ${a.relationship}` },
+            { k: 'timing', v: a.timingScore, w: weights.timing, txt: `timing ${a.timing} (${a.timingScore} pts)` },
+          ].map(x => ({ ...x, pts: x.v * x.w / 100 })).filter(x => x.w > 0).sort((x, y) => y.pts - x.pts);
+          const label = weights.fit > 0 && a.fit >= 80 ? 'Strong ICP fit' : weights.intent > 0 && a.intent >= 80 ? 'High buying intent' : weights.relationship > 0 && a.relationship >= 80 ? 'Strong relationship' : '';
+          const top = parts[0];
+          const num = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
+          const why = top ? `the most points come from ${top.txt.replace(/^(\w+) (\d+)$/, '$1 $2')} × ${top.w}% = ${num(top.pts)} points of ${a.totalScore}` : 'no factor carries weight';
+          return label ? `${label} (${why})` : why.charAt(0).toUpperCase() + why.slice(1);
+        };
+
         return `# Account Prioritization Results
+
+- ${companyLine(args.company)}
 
 ## Scoring Weights
 ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default weights.\n` : ''}| Factor | Weight | Rationale |
@@ -1549,10 +1719,10 @@ ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default wei
 
 ## Prioritized Account List
 
-Your scores are shown as given; ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'}. (default) marks a value your input did not supply, so the tool used its default.
+Your scores are shown as given; ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'} (now 100, soon 70, later 40, unknown 50 points). (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
 |------|---------|-----|--------|--------------|--------|-----------|------|
-${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit}${a.defaults.fit ? ' (default)' : ''} | ${a.intent}${a.defaults.intent ? ' (default)' : ''} | ${a.relationship}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
+${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit}${a.defaults.fit ? ' (default)' : ''} | ${a.intent}${a.defaults.intent ? ' (default)' : ''} | ${a.relationship}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
 
 ---
 
@@ -1590,7 +1760,7 @@ ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.tota
 
 ${scoredAccounts.slice(0, 5).map((a, i) => `
 ### ${i + 1}. ${a.name} (Tier ${a.tier})
-- **Why prioritized**: ${weights.fit > 0 && a.fit >= 80 ? 'Strong ICP fit' : weights.intent > 0 && a.intent >= 80 ? 'High buying intent' : weights.relationship > 0 && a.relationship >= 80 ? 'Strong relationship' : 'Balanced scoring'}
+- **Why prioritized**: ${reasonFor(a)}
 - **Gap to address**: ${a.fit < 60 ? 'Validate fit' : a.intent < 60 ? 'Generate engagement' : a.relationship < 60 ? 'Build relationships' : 'Verify timing'}
 - **Recommended action**: ${a.tier === 'A' ? 'Personal outreach from AE' : a.tier === 'B' ? 'SDR sequence + warm intro' : 'Marketing nurture'}
 `).join('')}
@@ -1603,6 +1773,8 @@ ${SUGGESTED}
 
       // If no accounts, provide the framework
       return `# Account Prioritization Framework
+
+- ${companyLine(args.company)}
 
 Provide your accounts to get prioritized ranking.
 
@@ -1636,14 +1808,14 @@ ${EXAMPLES}
 {
   "accounts": [
     {
-      "name": "Acme Corp",
+      "name": "Example Manufacturing Co",
       "fit_score": 85,
       "intent_signals": 70,
       "relationship": 60,
       "timing": "now"
     },
     {
-      "name": "Beta Inc",
+      "name": "Example IT Services Co",
       "fit_score": 75,
       "intent_signals": 90,
       "relationship": 40,
@@ -1681,7 +1853,7 @@ ${SUGGESTED}
   // Tool 7: ICP Gap Analysis - Current vs Ideal
   // ---------------------------------------------------------------------------
   icp_gap_analysis: {
-    description: 'Analyze gaps between current customer base and ideal ICP',
+    description: 'Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1714,7 +1886,13 @@ ${SUGGESTED}
             nps: { type: 'number' }
           },
           description: 'Target performance metrics'
-        }
+        },
+        product_category: {
+          type: 'string',
+          description: 'Optional: what you sell, used for sector notes'
+        },
+        company: COMPANY_INPUT,
+        business_model: MODEL_INPUT
       },
       required: ['current_customers', 'ideal_icp']
     },
@@ -1735,7 +1913,24 @@ ${SUGGESTED}
         churn_rate?: number;
         nps?: number;
       };
+      product_category?: string;
+      company?: string;
+      business_model?: string;
     }) => {
+      const ctx = readContext(args.business_model, [args.product_category, args.company], [args.ideal_icp, args.current_customers]);
+      // Run 19 D80 (problem 3): the two profiles are compared phrase by phrase: a phrase of one profile whose main words
+      // do not appear in the other is a difference.
+      const phrases = (t: string) => String(t).split(/,|;|\.|\bwith\b|\band\b|\bwho\b|\bthat\b|\bwhere\b/i).map(x => x.trim().replace(/^(?:a|an|the|mostly|some|many)\s+/i, '')).filter(x => x.length > 1);
+      const words = (t: string) => String(t).toLowerCase().split(/[^a-z0-9+-]+/).filter(w => w.length > 2 && !['companies', 'company', 'customers', 'firms', 'businesses', 'the', 'and', 'with', 'for', 'our', 'their', 'have', 'has'].includes(w));
+      const notIn = (from: string, other: string) => { const o = new Set(words(other)); return phrases(from).filter(ph => words(ph).some(w => !o.has(w))); };
+      const idealOnly = notIn(args.ideal_icp, args.current_customers);
+      const currentOnly = notIn(args.current_customers, args.ideal_icp);
+      const idealSizes = sizesIn(args.ideal_icp);
+      const pricingAction = ctx.model === 'services' ? 'Add a scope or service tier for larger clients (more services, locations or hours)'
+        : ctx.model === 'connectivity' ? 'Price multi-site contracts so larger customers can add sites and links in one agreement'
+        : ctx.model === 'investment' ? 'Offer mandate terms that fit larger allocators (reporting, fee structure)'
+        : ctx.model === 'transactions' || ctx.model === 'marketplace' ? 'Offer volume terms for larger customers in return for committed volume'
+        : ctx.model === 'saas' ? 'Add pricing tiers for enterprise' : 'Review your pricing and packaging for larger customers';
       const current = args.current_metrics || {};
       const target = args.target_metrics || {};
       
@@ -1797,12 +1992,20 @@ ${SUGGESTED}
 
 ## Profile Comparison
 
+- ${companyLine(args.company)}
+
+${ctx.line}
+
 ### Current Customer Base
-${args.current_customers}
+> ${shortText(args.current_customers)}
 
 ### Ideal Customer Profile (Target)
-${args.ideal_icp}
+> ${shortText(args.ideal_icp)}
 
+### What differs
+- **In your ideal profile, not in your current base**: ${idealOnly.length ? idealOnly.map(x => q(shortText(x, 120))).join('; ') : 'nothing new: the ideal profile uses the same words as your current base, so describe it more precisely'}
+- **In your current base, not in your ideal profile**: ${currentOnly.length ? currentOnly.map(x => q(shortText(x, 120))).join('; ') : 'nothing: every part of your current base appears in the ideal profile'}
+${idealOnly.length ? `- **What to check first**: how many of your current customers already match ${andList(idealOnly.slice(0, 3).map(x => q(shortText(x, 80))))}, and whether they show better metrics than the rest.\n` : ''}
 ---
 
 ## Metric Gaps
@@ -1825,12 +2028,12 @@ ${noGap(given.acv, gaps.acv) ? NO_GAP : `${behind(gaps.acv) ? '**Current**: Aver
 - Targeting companies without budget
 - Not selling to decision-makers
 - Discounting too aggressively
-- Missing enterprise features
+- Missing what larger customers need (features, service levels or coverage)
 
 **Actions**:
 - Tighten company size filter in ICP
 - Train on value-based selling
-- Add pricing tiers for enterprise
+- ${pricingAction}
 - Build reference customers in target segment`}
 
 ### Sales Cycle Gap (${downGap(gaps.cycle, 'reduction ')})${gapEx(given.cycle)}
@@ -1881,7 +2084,7 @@ Based on gap analysis, tighten your ICP on:
 The company size and budget thresholds below are presets tied to the target ACV${given.acv[1] ? '' : ', which you did not supply'}.
 
 ### Must-Have Criteria (Add These)
-1. **Minimum company size**: ${metrics.target.acv > 50000 ? '500+' : metrics.target.acv > 25000 ? '200+' : '50+'} employees ${EXAMPLE}
+1. **Minimum company size**: ${idealSizes.length ? `${andList(idealSizes)} (from your ideal profile)` : `${metrics.target.acv > 50000 ? '500+' : metrics.target.acv > 25000 ? '200+' : '50+'} employees ${EXAMPLE}`}
 2. **Budget confirmation**: Must have ${metrics.target.acv > 50000 ? 'confirmed budget or strategic priority' : 'allocated budget'}
 3. **Champion access**: ${metrics.target.cycle < 60 ? 'Direct access to decision maker' : 'Clear path to decision maker'}
 4. **Use case fit**: ${metrics.current.churn > 10 ? 'Primary use case (not secondary/experimental)' : 'Defined use case'}
@@ -1920,7 +2123,7 @@ The company size and budget thresholds below are presets tied to the target ACV$
 - [ ] Review first month of ICP-qualified leads
 - [ ] Adjust based on initial data
 
-**Next Step**: Use \`icp_evolution_tracker\` to monitor ICP changes over time
+${ctx.v ? `${sectorNotes(ctx.v, ['committee', 'metrics', 'proof'])}\n\n` : ''}**Next Step**: Use \`icp_evolution_tracker\` to monitor ICP changes over time
 
 ${SUGGESTED}
 `;
@@ -1931,7 +2134,7 @@ ${SUGGESTED}
   // Tool 8: ICP Evolution Tracker - Dynamic ICP Monitoring
   // ---------------------------------------------------------------------------
   icp_evolution_tracker: {
-    description: 'Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text',
+    description: 'Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP and states a candidate change for each (an addition to test, a disqualifier to test, an implication to check), with a review checklist. It does not compute win rates; check each candidate against your CRM',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1953,8 +2156,13 @@ ${SUGGESTED}
         },
         time_period: {
           type: 'string',
-          description: 'Time period for analysis (e.g., "Q4 2024")'
-        }
+          description: 'Time period for analysis (e.g., "Q3 2026")'
+        },
+        product_category: {
+          type: 'string',
+          description: 'Optional: what you sell, used for sector notes'
+        },
+        company: COMPANY_INPUT
       },
       required: ['current_icp']
     },
@@ -1964,15 +2172,40 @@ ${SUGGESTED}
       recent_losses?: string;
       market_changes?: string;
       time_period?: string;
+      product_category?: string;
+      company?: string;
     }) => {
       const period = args.time_period || 'Recent Quarter';
-      
+      const ctx = readContext(undefined, [args.product_category, args.company], [args.current_icp, args.recent_wins, args.recent_losses, args.market_changes]);
+      const v = ctx.v;
+      // Run 19 D80 (problem 3): each win, loss and market change is read against the current ICP and gives one candidate
+      // change, quoted in the user's words. A candidate is a hypothesis to check in the CRM, never a finding.
+      const icpWords = new Set(args.current_icp.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3));
+      const isNew = (t: string) => t.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3 && !['with', 'where', 'that', 'they', 'them', 'from', 'more', 'most', 'deals', 'deal', 'customers', 'customer', 'buyers', 'buyer', 'wanted', 'wanting', 'lost', 'won'].includes(w)).some(w => !icpWords.has(w));
+      const items = (t?: string) => (t || '').split(/\n|;/).map(x => x.trim().replace(/^[-*•]\s*/, '')).filter(Boolean);
+      const wins = items(args.recent_wins), losses = items(args.recent_losses), changes = items(args.market_changes);
+      const lossKind = (t: string) => /price|cheaper|cost|budget|expensive|free/i.test(t) ? 'lost on price: check whether these buyers had the budget your ICP assumes'
+        : /bundle|one vendor|single vendor|suite|all-in-one|erp-only|together/i.test(t) ? 'lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP'
+        : /competitor|incumbent|already/i.test(t) ? 'lost to an existing or competing tool: check what made the switch too hard'
+        : /timing|priority|later|freeze/i.test(t) ? 'lost on timing: check for a trigger before you qualify'
+        : 'check whether these buyers should have been qualified out earlier';
+      const winLines = wins.map(w => isNew(w)
+        ? `- **Candidate addition**: ${q(shortText(w, 200))}: this is not in your current ICP; test adding it if these deals closed faster or larger than your average`
+        : `- **Confirms your ICP**: ${q(shortText(w, 200))}: it matches your current ICP, so keep it`);
+      const lossLines = losses.map(l => `- **Candidate disqualifier**: ${q(shortText(l, 200))}: ${lossKind(l)}`);
+      const changeLines = changes.map(c => `- **Implication to check**: ${q(shortText(c, 200))}: check which segments of your ICP this moves toward you or away from you, and update the qualifying questions`);
+      const firstChange = wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew)!, 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : 'No change suggested yet';
+
       return `# ICP Evolution Analysis
 
-This is a review checklist: it lays your notes next to what to check. It does not analyze the text.
+- ${companyLine(args.company)}
+
+${sectorLine(v)}
+
+This review reads your notes against your current ICP and states candidate changes. Each candidate is a hypothesis: check it against your CRM before you change the ICP.
 
 ## Current ICP
-${args.current_icp}
+> ${shortText(args.current_icp)}
 
 ## Analysis Period: ${period}
 
@@ -1981,37 +2214,18 @@ ${args.current_icp}
 ## Win/Loss Pattern Analysis
 
 ### Recent Wins
-${args.recent_wins || '*No win data provided*'}
-
-**Pattern Detection**:
-${args.recent_wins ? `- Check these wins for emerging ICP characteristics
-- Look for: Common company sizes, industries, buying triggers, champion roles
-- Consider: What made these deals successful? New segment emerging?` : 
-'- Provide recent win descriptions to identify patterns'}
+${wins.length ? winLines.join('\n') : '- No win data provided: add recent_wins to find possible additions'}
 
 ### Recent Losses
-${args.recent_losses || '*No loss data provided*'}
-
-**Pattern Detection**:
-${args.recent_losses ? `- Check these losses for the ICP refinements they suggest
-- Look for: Common rejection reasons, competitor wins, deal killers
-- Consider: Should these have been disqualified earlier?` :
-'- Provide recent loss descriptions to identify anti-patterns'}
+${losses.length ? lossLines.join('\n') : '- No loss data provided: add recent_losses to find possible disqualifiers'}
 
 ---
 
 ## Market Change Impact
 
-### Market Changes Identified
-${args.market_changes || '*No market changes provided*'}
+${changes.length ? changeLines.join('\n') : '- No market changes provided: add market_changes to assess the impact on your ICP'}
 
-**ICP Implications**:
-${args.market_changes ? `- Check how these market changes affect your ideal customer
-- Consider: New buyer behaviors, budget shifts, competitive landscape
-- Evaluate: Should ICP expand or contract based on changes?` :
-'- Provide market changes to assess ICP impact'}
-
----
+${v ? `${sectorNotes(v, ['committee', 'metrics'])}\n\n` : ''}---
 
 ## ICP Evolution Framework
 
@@ -2044,33 +2258,13 @@ ${args.market_changes ? `- Check how these market changes affect your ideal cust
 
 ---
 
-## Recommended ICP Updates
-
-### Potential Additions (Based on Wins)
-${args.recent_wins ? `
-1. **New segment signal**: Look for patterns in recent wins
-2. **Technology indicators**: New tools correlating with success
-3. **Buying triggers**: Events that led to purchase
-4. **Champion profiles**: Roles that drove deals` :
-'- Analyze recent wins to identify additions'}
-
-### Potential Removals (Based on Losses/Churn)
-${args.recent_losses ? `
-1. **Disqualification signals**: Common patterns in losses
-2. **False positive indicators**: Looked good, didn't convert
-3. **Churn predictors**: Early warning signs
-4. **Resource drains**: High effort, low outcome segments` :
-'- Analyze recent losses to identify removals'}
-
----
-
 ## ICP Evolution Tracking Template
 
 | Quarter | ICP Change | Rationale | Impact |
 |---------|-----------|-----------|--------|
-| ${period} | [Your ICP change] | [Why, from this review] | [What to measure next quarter] |
-| [Next quarter] | [Your ICP change] | [Why] | [Result] |
-| [Quarter after] | [Your ICP change] | [Why] | [Result] |
+| ${period} | ${firstChange} | From this review: ${wins.length ? plural(wins.length, 'win') : 'no wins'}, ${losses.length ? plural(losses.length, 'loss', 'losses') : 'no losses'}, ${changes.length ? plural(changes.length, 'market change') : 'no market changes'} | Win rate and cycle of the deals that match it, next quarter |
+| Next quarter | (to fill in) | (to fill in) | (to fill in) |
+| Quarter after | (to fill in) | (to fill in) | (to fill in) |
 
 ### Metrics to Track
 - **Win rate by ICP fit score**: Should improve if ICP is right
@@ -2103,7 +2297,7 @@ ${EXAMPLES}
   // Tool 9: ICP Interview Synthesizer - Pattern Extraction from Interviews
   // ---------------------------------------------------------------------------
   icp_interview_synthesizer: {
-    description: 'Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed.',
+    description: 'Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analysed.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -2129,7 +2323,12 @@ ${EXAMPLES}
         analysis_focus: {
           type: 'string',
           description: 'Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)'
-        }
+        },
+        product_category: {
+          type: 'string',
+          description: 'Optional: what you sell, used for sector notes'
+        },
+        company: COMPANY_INPUT
       }
     },
     execute: (args: {
@@ -2143,14 +2342,20 @@ ${EXAMPLES}
       }>;
       raw_transcripts?: string;
       analysis_focus?: string;
+      product_category?: string;
+      company?: string;
     }) => {
-      const focus = args.analysis_focus || 'all';
+      const ctx = readContext(undefined, [args.product_category, args.company], [args.raw_transcripts, ...(args.interview_notes || []).flatMap(i => [i.role, ...(i.pain_points || []), ...(i.buying_triggers || []), ...(i.value_realized || []), ...(i.key_quotes || [])])]);
+      const v = ctx.v;
+      const tieNote = (rows: [string, number][], label: string) => rows.length > 1 && rows[0][1] === rows[1][1] ? `\nNo single leading ${label}: ${andList(rows.filter(r => r[1] === rows[0][1]).map(r => r[0]))} appear equally often.\n` : '';
       
       if (args.interview_notes && args.interview_notes.length > 0) {
         const interviews = args.interview_notes;
         
-        // Aggregate pain points
-        const allPains = interviews.flatMap(i => i.pain_points || []);
+        // Run 19 D80 (problem 2): an item typed as a pain point that reads as an objection in the buyer's own voice ("our ERP
+        // already does this") is listed with the objections, never turned into a discovery question.
+        const allObjections = [...new Set(interviews.flatMap(i => (i.pain_points || []).filter(isObjection)))];
+        const allPains = interviews.flatMap(i => (i.pain_points || []).filter(p => !isObjection(p)));
         const painCount: Record<string, number> = {};
         allPains.forEach(p => { painCount[p] = (painCount[p] || 0) + 1; });
         const topPains = Object.entries(painCount).sort((a, b) => b[1] - a[1]).slice(0, 5);
@@ -2179,8 +2384,12 @@ ${EXAMPLES}
         return `# Customer Interview Synthesis
 
 ## Interviews Analyzed
-**Count**: ${interviews.length} interviews
+- ${companyLine(args.company)}
+
+**Count**: ${plural(interviews.length, 'interview')}
 **Roles Represented**: ${[...new Set(roles)].join(', ') || 'Not specified'}
+
+${sectorLine(v)}
 
 ---
 
@@ -2192,7 +2401,7 @@ ${topPains.length > 0 ? topPains.map(([pain, count], i) =>
 ).join('\n') : '- No pain points captured'}
 
 **ICP Implication**: Target customers experiencing these pain points
-
+${allObjections.length ? `\n### Objections heard\n${allObjections.map(o => `- ${q(o)}: ${answerFor(o, v)}`).join('\n')}\n` : ''}
 ### Top Buying Triggers
 ${topTriggers.length > 0 ? topTriggers.map(([trigger, count], i) => 
   `${i + 1}. **${trigger}**: ${count}x (${Math.round(count/interviews.length*100)}%)`
@@ -2211,7 +2420,7 @@ ${topValue.length > 0 ? topValue.map(([value, count], i) =>
 ${topRoles.length > 0 ? topRoles.map(([role, count], i) => 
   `${i + 1}. **${role}**: ${count}x (${Math.round(count/interviews.length*100)}%)`
 ).join('\n') : '- No roles captured'}
-
+${tieNote(topRoles, 'role')}
 **ICP Implication**: Focus outreach on these titles
 
 ---
@@ -2232,7 +2441,7 @@ ${allQuotes.slice(0, 5).map((q, i) => `
 Based on patterns, your ideal customer:
 ${topPains[0] ? `- Experiences: "${topPains[0][0]}"` : ''}
 ${topTriggers[0] ? `- Is triggered by: ${topTriggers[0][0]}` : ''}
-${topRoles[0] ? `- Champion is: ${topRoles[0][0]}` : ''}
+${topRoles[0] ? (topRoles[1] && topRoles[1][1] === topRoles[0][1] ? `- Champion is one of: ${andList(topRoles.filter(r => r[1] === topRoles[0][1]).map(r => r[0]))} (no single leading role yet)` : `- Champion is: ${topRoles[0][0]}`) : ''}
 ${topValue[0] ? `- Seeks outcome: ${topValue[0][0]}` : ''}
 
 ### Messaging Updates
@@ -2242,9 +2451,9 @@ ${topValue[0] ? `- **Value messaging**: "${topValue[0][0]}"` : ''}
 
 ### Discovery Questions to Add
 ${topPains.slice(0, 3).map((p, i) => 
-  `${i + 1}. "How are you currently handling ${lowerCommonWords(p[0])}?"`
-).join('\n')}
-
+  `${i + 1}. "You mentioned ${q(lowerCommonWords(p[0]))}. How does your team handle that today, and what does it cost you?"`
+).join('\n') || '- Add pain points to the notes for discovery questions'}
+${v ? `\n### Sector questions (${v.name})\n${v.discovery.slice(0, 3).map((x, i) => `${i + 1}. "${x}"`).join('\n')}\n` : ''}
 ---
 
 ## Interview Template for Next Round
@@ -2265,10 +2474,12 @@ Based on gaps in this analysis, ask about:
       if (args.raw_transcripts) {
         return `Your notes are below. This tool analyses structured notes only.
 
+- ${companyLine(args.company)}
+
+${sectorLine(v)}
+
 ## Your Notes
-\`\`\`
-${args.raw_transcripts.substring(0, 500)}${args.raw_transcripts.length > 500 ? '...' : ''}
-\`\`\`
+> ${shortText(args.raw_transcripts, 500)}
 
 ---
 
@@ -2281,24 +2492,24 @@ ${EXAMPLES}
 {
   "interview_notes": [
     {
-      "customer": "Acme Corp",
-      "role": "VP Sales",
+      "customer": "Example Manufacturing Co",
+      "role": "Finance Controller",
       "key_quotes": [
-        "We were spending 20 hours a week on manual data entry",
-        "The old system just couldn't scale with us"
+        "We spent the first week of every month matching card spends by hand",
+        "The old process could not keep up with our branches"
       ],
       "pain_points": [
-        "Manual data entry",
-        "Scalability issues",
-        "Poor reporting"
+        "Slow month-end close",
+        "Manual reconciliation",
+        "Late expense claims"
       ],
       "buying_triggers": [
-        "New VP joined",
-        "Missed quarterly target"
+        "New CFO hire",
+        "Audit finding"
       ],
       "value_realized": [
-        "Saved 15 hours/week",
-        "Real-time visibility"
+        "Close 5 days faster",
+        "Fewer policy breaches"
       ]
     }
   ]
@@ -2336,6 +2547,8 @@ Re-run with structured data for full analysis.
       }
 
       return `# ICP Interview Synthesizer
+
+- ${companyLine(args.company)}
 
 Provide interview data in one of these formats:
 
@@ -2386,7 +2599,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // =============================================================================
 
 export const SERVER_NAME = 'icp-intelligence-mcp';
-export const SERVER_VERSION = '1.2.16';
+export const SERVER_VERSION = '1.2.17';
 
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES: Record<string, string> = {
