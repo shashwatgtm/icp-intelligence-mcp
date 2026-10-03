@@ -38,10 +38,19 @@ export declare const AI_SUPPORT_PROFILE: SectorNotes;
 /** The notes for a seller that manages money (investment strategies, funds, portfolios) for allocators, whatever sector it was read in:
  * they replace the sector's notes, so an AI native investment manager never gets support-automation or corporate-finance notes. */
 export declare const INVESTMENT_PROFILE: SectorNotes;
+/** SaaS, billing and revenue operations: used when the seller sells billing, subscription billing, invoicing, revenue recognition,
+ * usage-based pricing, dunning, proration or monetization (and is not a spend-management or payments seller), and the buyer persona is
+ * not an engineering, product, IT or security leader. It replaces the plain SaaS notes (activation, expansion) and keeps the buyer out
+ * of the finance block of the spend-management profile (accounts payable, card spends, claims, policy breaches). */
+export declare const BILLING_PROFILE: SectorNotes;
 /** What an AI native seller's product is for, read from the seller's own words only: 'support' when they name support, tickets, a
  * help desk, a contact centre or a service desk; 'investment' when the seller manages money (the investment business model);
  * else 'other'. Investment comes first. Accepts the same inputs as detectVertical. */
 export declare function aiUseCase(...args: unknown[]): 'support' | 'investment' | 'other';
+/** True when the seller's own words sell billing, subscription billing, invoicing, revenue recognition, usage-based pricing, dunning,
+ * proration or monetization (not a spend-management, accounts payable or payments seller) and the job titles given, if any, are not
+ * only engineering, product, IT or security titles. Accepts the same inputs as detectVertical. */
+export declare function isBillingSeller(...args: unknown[]): boolean;
 /** The sector notes that fit the business model: a seller that manages money (model 'investment') gets INVESTMENT_PROFILE in place of
  * the sector's roles, committee, objections, metrics, proof shape, discovery questions and vocabulary (the name says so); an AI native
  * seller of support automation gets the support notes. Every other case returns the vertical unchanged. Safe to call twice. */

@@ -351,9 +351,9 @@
       "id": "r2-ai-invest-2",
       "round": 2,
       "text": "AI-driven investment strategies for asset allocators, investment managers and banks",
-      "sector": "fintech",
+      "sector": "ai-native",
       "model": "investment",
-      "note": "run 20 round 2 (fresh judges, set T): investment strategies is a money manager's word: fintech, not the buyer's banks by accident, and model investment (item 1)"
+      "note": "run 20 round 2 (fresh judges, set T): investment strategies is a money manager's word: fintech, not the buyer's banks by accident, and model investment (item 1) | changed in round 2c by the coordinator: AI words plus investment strategies for allocators read AI native with model investment (E8)"
     },
     {
       "id": "r2-ai-other-1",
@@ -482,6 +482,182 @@
       "sector": "saas",
       "model": "saas",
       "note": "run 20 round 2 (fresh judges, set T): item 4"
+    },
+    {
+      "id": "r2b-bill-1",
+      "round": 2,
+      "text": "Subscription billing and invoicing platform for SaaS companies",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): invoicing no longer pulls a billing seller into fintech"
+    },
+    {
+      "id": "r2b-bill-2",
+      "round": 2,
+      "text": "Billing, invoicing and revenue recognition software for finance teams",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): billing and revenue operations sold to finance"
+    },
+    {
+      "id": "r2b-bill-3",
+      "round": 2,
+      "text": "Usage-based pricing and monetization platform for software companies",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): pricing and monetization words name SaaS"
+    },
+    {
+      "id": "r2b-bill-4",
+      "round": 2,
+      "text": "Dunning and invoicing for subscription businesses",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): dunning and invoicing"
+    },
+    {
+      "id": "r2b-spend-1",
+      "round": 2,
+      "text": "Spend management platform with corporate cards, expense claims and invoice approvals for finance teams",
+      "sector": "fintech",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): a spend management seller keeps the finance reading"
+    },
+    {
+      "id": "r2b-spend-2",
+      "round": 2,
+      "text": "Accounts payable automation and invoice processing for mid-size companies",
+      "sector": "fintech",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): accounts payable is the finance block"
+    },
+    {
+      "id": "r2b-spend-3",
+      "round": 2,
+      "text": "Reimbursements and travel expense app for companies",
+      "sector": "fintech",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): expense and reimbursements stay fintech"
+    },
+    {
+      "id": "r2b-it-1",
+      "round": 2,
+      "text": "SaaS management platform that tracks licences and renewals for IT leaders",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): a SaaS product bought by IT leaders is plain SaaS"
+    },
+    {
+      "id": "r2b-it-2",
+      "round": 2,
+      "text": "IT asset management software for IT leaders",
+      "sector": null,
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): IT asset management is not asset management in the money sense: the sector must not be fintech and the model must not be investment (the word software alone names no sector)"
+    },
+    {
+      "id": "r2c-label-1",
+      "round": 2,
+      "text": "GenAI business services delivered on a digital platform",
+      "sector": "ites",
+      "model": "services",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): marketing label plus services words: the trade decides, and the sector's usual model is services"
+    },
+    {
+      "id": "r2c-label-2",
+      "round": 2,
+      "text": "AI-native security platform that finds misconfigurations in cloud accounts",
+      "sector": "cybersecurity",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): marketing label plus a security platform"
+    },
+    {
+      "id": "r2c-label-3",
+      "round": 2,
+      "text": "GenAI testing cloud that runs web and mobile app tests on real devices and browsers",
+      "sector": "software",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): marketing label plus a testing cloud"
+    },
+    {
+      "id": "r2c-label-4",
+      "round": 2,
+      "text": "AI-native sales force automation for FMCG distributors",
+      "sector": "vertical-saas",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): marketing label plus sales force automation"
+    },
+    {
+      "id": "r2c-label-5",
+      "round": 2,
+      "text": "AI-native payments platform for online merchants",
+      "sector": "fintech",
+      "model": "transactions",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): marketing label plus payments"
+    },
+    {
+      "id": "r2c-label-6",
+      "round": 2,
+      "text": "GenAI billing and revenue recognition platform for SaaS companies",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): marketing label plus billing"
+    },
+    {
+      "id": "r2c-label-7",
+      "round": 2,
+      "text": "AI agents that triage security alerts for SOC teams",
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2c: AI agents are the product (a noun), not a label: stays AI native even beside security words"
+    },
+    {
+      "id": "r2c-stay-1",
+      "round": 2,
+      "text": "AI agents that resolve customer support tickets",
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): support automation stays AI native"
+    },
+    {
+      "id": "r2c-stay-2",
+      "round": 2,
+      "text": "AI agents that handle contact centre calls",
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): support automation (contact centre) stays AI native, not ITeS"
+    },
+    {
+      "id": "r2c-stay-3",
+      "round": 2,
+      "text": "AI platform that scans cloud accounts for risk",
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): an AI platform is not a marketing label: stays AI native"
+    },
+    {
+      "id": "r2c-inv-1",
+      "round": 2,
+      "text": "Investment strategies for asset allocators powered by AI",
+      "sector": "ai-native",
+      "model": "investment",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): the seller's own AI words plus investment strategies for allocators: AI native with model investment (E8)"
+    },
+    {
+      "id": "r2c-inv-2",
+      "round": 2,
+      "text": "AI-native investment strategies and portfolio construction for asset allocators",
+      "sector": "ai-native",
+      "model": "investment",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): AI native with model investment"
+    },
+    {
+      "id": "r2c-inv-3",
+      "round": 2,
+      "text": "Systematic investment strategies for pension funds and allocators",
+      "sector": "fintech",
+      "model": "investment",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): no AI words: fintech with model investment"
     }
   ],
   "toolcalls": [
@@ -971,6 +1147,193 @@
       "sector": "saas",
       "model": "saas",
       "note": "run 20 round 2 (fresh judges, set T): item 4: the seller's billing words decide, not the buyer's payments industry"
+    },
+    {
+      "id": "r2b-tc-1",
+      "round": 2,
+      "seller": [
+        "Subscription billing and invoicing platform"
+      ],
+      "buyer": [
+        "SaaS companies"
+      ],
+      "role": [
+        "CFO",
+        "Revenue Operations Lead"
+      ],
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): billing seller bought by finance"
+    },
+    {
+      "id": "r2b-tc-2",
+      "round": 2,
+      "seller": [
+        "Usage-based pricing and monetization platform"
+      ],
+      "buyer": [
+        "Software companies"
+      ],
+      "role": [
+        "VP Finance"
+      ],
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): pricing and monetization"
+    },
+    {
+      "id": "r2b-tc-3",
+      "round": 2,
+      "seller": [
+        "Spend management platform with corporate cards and expense claims"
+      ],
+      "buyer": [
+        "Mid-size companies"
+      ],
+      "role": [
+        "CFO"
+      ],
+      "sector": "fintech",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): spend management keeps the finance block"
+    },
+    {
+      "id": "r2b-tc-4",
+      "round": 2,
+      "seller": [
+        "IT asset management software"
+      ],
+      "buyer": [
+        "Enterprises"
+      ],
+      "role": [
+        "GM IT",
+        "CIO"
+      ],
+      "sector": null,
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): bought by IT leaders, no fintech"
+    },
+    {
+      "id": "r2b-tc-5",
+      "round": 2,
+      "seller": [
+        "SaaS management platform that tracks licences and renewals"
+      ],
+      "buyer": [
+        "IT leaders"
+      ],
+      "role": [
+        "GM IT",
+        "CIO"
+      ],
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): bought by IT leaders"
+    },
+    {
+      "id": "r2b-tc-6",
+      "round": 2,
+      "seller": [
+        "Billing platform"
+      ],
+      "buyer": [
+        "Companies"
+      ],
+      "role": [
+        "CTO"
+      ],
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2b (fresh judges, rounds 1 and 2): billing seller, engineering persona"
+    },
+    {
+      "id": "r2c-tc-1",
+      "round": 2,
+      "seller": [
+        "AI-native security platform"
+      ],
+      "buyer": [
+        "Banks"
+      ],
+      "role": [
+        "CISO"
+      ],
+      "sector": "cybersecurity",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): label plus security"
+    },
+    {
+      "id": "r2c-tc-2",
+      "round": 2,
+      "seller": [
+        "GenAI business services"
+      ],
+      "buyer": [
+        "Banks",
+        "Telecom operators"
+      ],
+      "sector": "ites",
+      "model": "services",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): label plus business services"
+    },
+    {
+      "id": "r2c-tc-3",
+      "round": 2,
+      "seller": [
+        "GenAI testing cloud"
+      ],
+      "buyer": [
+        "Developers"
+      ],
+      "role": [
+        "VP Engineering"
+      ],
+      "sector": "software",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): label plus testing cloud"
+    },
+    {
+      "id": "r2c-tc-4",
+      "round": 2,
+      "seller": [
+        "AI-native sales force automation"
+      ],
+      "buyer": [
+        "FMCG companies"
+      ],
+      "sector": "vertical-saas",
+      "model": "saas",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): label plus sales force automation"
+    },
+    {
+      "id": "r2c-tc-5",
+      "round": 2,
+      "seller": [
+        "Investment strategies powered by AI"
+      ],
+      "buyer": [
+        "Asset allocators"
+      ],
+      "role": [
+        "Chief Investment Officer"
+      ],
+      "sector": "ai-native",
+      "model": "investment",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): AI words plus investment strategies"
+    },
+    {
+      "id": "r2c-tc-6",
+      "round": 2,
+      "seller": [
+        "AI-native payments platform"
+      ],
+      "buyer": [
+        "Merchants"
+      ],
+      "sector": "fintech",
+      "model": "transactions",
+      "note": "run 20 round 2c (reader guards moved from Revenue readContext): label plus payments"
     }
   ]
 }

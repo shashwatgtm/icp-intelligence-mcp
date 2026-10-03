@@ -135,12 +135,39 @@ test("lookalike: the company name stripped from the product leaves no empty brac
   assert.match(s.text, /Current job title: "Developer Advocate" OR "CIO"/);
   assert.match(s.text, /\*\*Industries\*\*: Telecom, media and technology; Banks/);
 });
-test("lookalike: no 'keywords after the first one' sentence when there are none; a billing buyer is not given SaaS measures as search words", async () => {
-  const r = await call("lookalike_signal_generator", { company: "Pathwise", product_category: "recurring billing and revenue infrastructure", champion_titles: ["CFO"] });
+test("lookalike: a billing seller gets the billing profile's words as keywords, never SaaS measures or expense words", async () => {
+  const r = await call("lookalike_signal_generator", { company: "Pathwise", product_category: "recurring billing and revenue infrastructure", champion_titles: ["CFO", "Revenue Operations Lead"] });
   ok(r);
-  assert.doesNotMatch(r.text, /The keywords after the first one/);
-  assert.doesNotMatch(r.text, /activation|time to value|net revenue retention/);
+  assert.match(r.text, /Sector: read from your inputs as SaaS, billing and revenue operations/);
+  assert.match(r.text, /### Sector notes: SaaS, billing and revenue operations/);
+  assert.doesNotMatch(r.text, /activation|time to value|net revenue retention|accounts payable|card spend|policy breach/i);
 });
+test("a billing platform sold to a CFO and a Head of Product gets billing roles, measures and questions in every tool", async () => {
+  const product_category = "billing and monetization (recurring billing and revenue infrastructure) from Pathwise";
+  const rec = (industry, champion_title) => ({ name: industry, industry, acv: 60000, sales_cycle_days: 75, champion_title });
+  const BAD = /activation rate|time to value|card spend|policy breach|accounts payable|approval cycle|close the books/i;
+  const runs = [
+    ["icp_deep_dive", { customers: [rec("Media", "Head of Product"), rec("Gaming", "CFO")], product_category, company: "Pathwise" }],
+    ["icp_scoring_model", { product_category, company: "Pathwise", scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Media", "Gaming"] }] }],
+    ["buyer_group_analyzer", { product_category, company: "Pathwise", typical_champion: "Head of Product", known_stakeholders: ["CFO", "Finance", "Engineering"] }],
+    ["tam_sam_som_calculator", { product_category, company: "Pathwise", total_potential_companies: 10000, average_contract_value: 60000 }],
+    ["icp_interview_synthesizer", { product_category, company: "Pathwise", interview_notes: [{ customer: "Media", role: "CFO", pain_points: ["billing leakage"] }] }],
+    ["icp_evolution_tracker", { product_category, company: "Pathwise", current_icp: "Pathwise: subscription businesses; segments: Media, Gaming; buyer: CFO; champion: Head of Product" }],
+    ["lookalike_signal_generator", { product_category, company: "Pathwise", champion_titles: ["CFO", "Head of Product"] }],
+  ];
+  for (const [tool, args] of runs) {
+    const r = await call(tool, args);
+    ok(r);
+    assert.doesNotMatch(r.text, BAD, tool);
+    assert.match(r.text, /billing|invoice|revenue recognition|Revenue Operations|failed payments/i, tool);
+  }
+});
+test("the shared file's neutral objections: no 'national operator' or 'offshore-only' wording is printed", async () => {
+  const a = await call("buyer_group_analyzer", { product_category: "managed SD-WAN for branch offices", known_stakeholders: ["CIO"] });
+  const b = await call("icp_evolution_tracker", { product_category: "managed SD-WAN for branch offices", current_icp: "enterprises; segments: Banks" });
+  for (const r of [a, b]) assert.doesNotMatch(r.text, /national operator|offshore-only|higher than/i);
+});
+
 
 // ---- (7) interview ----
 test("interview: a partner quote is a quote, not the outcome buyers seek; the source in front of a quote becomes its attribution; the question is not built from the product", async () => {

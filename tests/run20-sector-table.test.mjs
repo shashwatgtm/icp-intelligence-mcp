@@ -196,3 +196,108 @@ test("connectivity words beside security words read telecom unless the seller is
   assert.equal(detectVertical("SIEM and managed network").id, "cybersecurity", "a specialist security product word keeps it cybersecurity");
   assert.equal(detectModel(undefined, "Security platform with SD-WAN and zero trust").model, "saas");
 });
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// Run 20 round 2b (fresh judges): objections are worded as what the BUYER says, never assuming the seller's size; a SaaS seller
+// of billing and revenue operations gets its own notes, not the finance block of the spend-management profile.
+// ---------------------------------------------------------------------------------------------------------------------------
+const { BILLING_PROFILE, isBillingSeller } = mod;
+const CHALLENGER = /national operator|offshore-only|incumbent|higher than|cheaper than us|than the (?:big|large|national)|challenger|underdog|start-?up|small(?:er)? (?:vendor|firm|player)/i;
+
+test("every objection is worded as what the buyer says, never assuming the seller is a challenger or a large operator", () => {
+  const all = [...VERTICALS, { id: "investment", name: "investment", ...INVESTMENT_PROFILE }, { id: "billing", name: "billing", ...BILLING_PROFILE }, { id: "ai-support", name: "ai support", ...AI_SUPPORT_PROFILE }];
+  for (const v of all) for (const o of v.objections) {
+    assert.doesNotMatch(o.objection, CHALLENGER, `${v.id}: ${o.objection}`);
+    assert.doesNotMatch(o.response, CHALLENGER, `${v.id}: ${o.response}`);
+  }
+  const tel = VERTICALS.find((v) => v.id === "telecom").objections.map((o) => o.objection);
+  assert.ok(tel.includes("Price per site compared with the operator we use today"), tel.join("; "));
+  const ites = VERTICALS.find((v) => v.id === "ites").objections.map((o) => o.objection);
+  assert.ok(ites.includes("The offshore alternative is cheaper"), ites.join("; "));
+});
+
+test("billing seller bought by finance: its own roles, measures, objections and proof shape, none of the spend-management block", () => {
+  const input = { seller: ["Subscription billing and invoicing platform"], buyer: ["SaaS companies"], role: ["CFO", "Revenue Operations Lead"] };
+  assert.equal(isBillingSeller(input), true);
+  const v = detectVertical(input);
+  assert.equal(v.id, "saas");
+  assert.match(v.name, /billing/i);
+  for (const r of [/Chief Financial Officer/, /VP Finance/, /Revenue Operations/, /Billing|Finance Operations/, /Engineering/]) assert.match(v.buyerRoles.join("; "), r);
+  const metrics = v.metrics.join("; ");
+  for (const w of [/invoice accuracy/i, /failed payments recovered/i, /revenue recognition errors/i, /days to close/i, /new pricing model/i, /billing disputes|disputes/i]) assert.match(metrics, w, String(w));
+  const objections = v.objections.map((o) => o.objection).join("; ");
+  for (const w of [/homegrown billing/i, /live subscriptions/i, /ERP|CRM/, /revenue recognition|audit trail/i]) assert.match(objections, w, String(w));
+  assert.match(v.proofShape, /live subscriptions/i);
+  assert.match(v.proofShape, /pricing change/i);
+  assert.match(v.proofShape, /without engineering/i);
+  assert.doesNotMatch(flat(v), /accounts payable|policy breach|card spend|claims|close the books|reimburs|approval cycle/i);
+  assert.doesNotMatch(flat(v), /\d/, "no figure (B82)");
+  assert.equal(profileFor(v, "saas", input), v);
+  // the same through plain text and the other billing words
+  for (const t of ["Dunning and proration engine for subscription businesses", "Usage-based pricing and monetization platform", "Billing, invoicing and revenue recognition software"]) assert.match(detectVertical(t).name, /billing/i, t);
+  // the investment notes still come first
+  assert.match(profileFor(v, "investment", input).name, /investment management/);
+});
+
+test("a spend-management seller keeps the finance block; a billing seller bought by engineering keeps the plain SaaS notes", () => {
+  for (const t of ["Spend management platform with corporate cards, expense claims and invoice approvals", "Accounts payable automation and invoice processing", "Reimbursements and travel expense app"]) {
+    const v = detectVertical({ seller: [t], role: ["CFO"] });
+    assert.equal(v.id, "fintech", t);
+    assert.equal(isBillingSeller({ seller: [t], role: ["CFO"] }), false, t);
+    assert.match(flat(v), /accounts payable|close the books|reconcil/i);
+  }
+  assert.equal(isBillingSeller({ seller: ["Payment processing and billing for merchants"] }), false, "moves money");
+  const eng = detectVertical({ seller: ["Billing platform"], role: ["CTO"] });
+  assert.equal(eng, VERTICALS.find((v) => v.id === "saas"));
+  assert.equal(isBillingSeller({ seller: ["Billing platform"], role: ["CTO"] }), false);
+  assert.equal(detectVertical("Cloud security platform for banks").id, "cybersecurity");
+});
+
+test("a SaaS product bought by IT leaders stays plain SaaS, and IT asset management is not money management", () => {
+  const v = detectVertical({ seller: ["SaaS management platform that tracks licences and renewals"], buyer: ["IT leaders"], role: ["GM IT", "CIO"] });
+  assert.equal(v, VERTICALS.find((x) => x.id === "saas"));
+  for (const t of ["IT asset management software", "IT asset management for enterprises", "Digital asset management for marketing teams"]) {
+    assert.notEqual(detectVertical(t)?.id, "fintech", t);
+    assert.notEqual(detectModel(undefined, t).model, "investment", t);
+  }
+  assert.equal(detectVertical("Asset management firm for pension funds")?.id, "fintech");
+  assert.equal(detectModel(undefined, "Asset management firm for pension funds").model, "investment");
+});
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// Run 20 round 2c: the two guards that lived in Revenue's readContext now live in the shared reader.
+// (1) "AI-native", "GenAI", "AI agents" and similar are a way of building; when they are the only AI words and the seller's text
+//     also names a trade, the trade decides. (2) The sector's usual business model is that of the sector finally chosen.
+// ---------------------------------------------------------------------------------------------------------------------------
+test("a marketing AI label beside a trade word: the trade decides the sector, and the usual model follows the new sector", () => {
+  const cases = [["GenAI business services", "ites", "services"], ["AI-native security platform", "cybersecurity", "saas"], ["GenAI testing cloud", "software", "saas"],
+    ["AI-native sales force automation", "vertical-saas", "saas"], ["AI-native payments platform", "fintech", "transactions"], ["AI-native billing", "saas", "saas"], ["AI-first freight forwarding", "logistics-tech", "saas"]];
+  for (const [t, sector, model] of cases) {
+    assert.equal(detectVertical(t)?.id, sector, t);
+    assert.equal(detectModel(undefined, t).model, model, t);
+    const x = mod.explainSector(t);
+    assert.equal(x.source, "seller");
+    assert.ok(!x.strong.every((w) => /^(?:ai|ai[- ]native|ai[- ]first|genai)$/.test(w)), `the words that decided it name the trade: ${JSON.stringify(x.strong)}`);
+  }
+  // the usual model of the final sector, not of AI native: nothing in the text names a model
+  assert.deepEqual(detectModel(undefined, "AI-native outsourcing"), { model: "services", how: "read" });
+  assert.equal(detectModel(undefined, { seller: ["our solution"], buyer: [] }).model, null);
+  assert.deepEqual(detectModel(undefined, "GenAI back-office"), { model: "services", how: "sector" });
+  // ITeS sold on a platform is still services unless the seller says subscription, SaaS, per seat or licence
+  assert.equal(detectModel(undefined, "GenAI business services delivered on a digital platform").model, "services");
+  assert.equal(detectModel(undefined, "GenAI business services sold as a SaaS subscription").model, "saas");
+});
+
+test("AI words that are not only a label, support automation, and AI native investment sellers stay AI native", () => {
+  for (const t of ["AI platform that scans cloud accounts for risk", "AI models that rank leads", "AI agents that resolve customer support tickets", "AI agents that handle contact centre calls", "AI-native contract review", "AI-native platform"]) assert.equal(detectVertical(t)?.id, "ai-native", t);
+  assert.equal(detectVertical("AI agents that triage security alerts")?.id, "ai-native", "AI agents are the product, not a label");
+  for (const t of ["Investment strategies for asset allocators powered by AI", "AI-driven investment strategies for asset allocators", "AI-native investment strategies company"]) {
+    assert.equal(detectVertical(t)?.id, "ai-native", t);
+    assert.equal(detectModel(undefined, t).model, "investment", t);
+    assert.equal(aiUseCase(t), "investment", t);
+  }
+  assert.equal(detectVertical("Wealth management firm that manages client portfolios and charges a fee on assets under management").id, "fintech");
+  assert.equal(detectVertical("Systematic investment strategies for pension funds").id, "fintech");
+  // buyer words alone never turn an AI label into a trade
+  assert.equal(detectVertical({ seller: ["AI-native platform"], buyer: ["Banks"] })?.id, "ai-native");
+});

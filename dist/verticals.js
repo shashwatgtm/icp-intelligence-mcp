@@ -17,8 +17,9 @@
 // support, tickets, a help desk, a contact centre or a service desk (aiUseCase). A seller that manages money gets
 // INVESTMENT_PROFILE through profileFor(vertical, model, ...texts), whatever sector it was read in.
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SAAS_ONLY = exports.MODEL_TRADES = exports.SECTOR_MODEL = exports.MODEL_NAME = exports.BUSINESS_MODELS = exports.INVESTMENT_PROFILE = exports.AI_SUPPORT_PROFILE = exports.VERTICALS = void 0;
+exports.SAAS_ONLY = exports.MODEL_TRADES = exports.SECTOR_MODEL = exports.MODEL_NAME = exports.BUSINESS_MODELS = exports.BILLING_PROFILE = exports.INVESTMENT_PROFILE = exports.AI_SUPPORT_PROFILE = exports.VERTICALS = void 0;
 exports.aiUseCase = aiUseCase;
+exports.isBillingSeller = isBillingSeller;
 exports.profileFor = profileFor;
 exports.explainSector = explainSector;
 exports.detectVertical = detectVertical;
@@ -50,7 +51,7 @@ exports.VERTICALS = [
     },
     {
         id: 'fintech', name: 'fintech',
-        match: /\b(fintech|spend management|expense (?:modules?|management|claims?|reports?|polic(?:y|ies)|approvals?|tools?)|month-end|close the books|reimburse\w*|payments?|payouts?|corporate cards?|prepaid cards?|card issuing|lending|lenders?|loans?|banking|banks?|neobanks?|treasury|reconcil\w*|payroll|invoic\w*|accounts (?:payable|receivable)|wealth|asset (?:managers?|management|allocators?)|assets under management|portfolio (?:analytics|management|risk|monitoring|construction)|investment (?:management|banking|research|advisory|managers?|strateg\w*)|mutual funds?|hedge funds?|family offices?|insur\w*|nbfc|kyc|aml|fraud|upi|remittances?|bnpl|buy now pay later|stock (?:broking|brokerage|trading)|trading platform)\b/i,
+        match: /\b(fintech|spend management|expense (?:modules?|management|claims?|reports?|polic(?:y|ies)|approvals?|tools?)|month-end|close the books|reimburse\w*|payments?|payouts?|corporate cards?|prepaid cards?|card issuing|lending|lenders?|loans?|banking|banks?|neobanks?|treasury|reconcil\w*|payroll|invoic\w*|accounts (?:payable|receivable)|wealth|(?<!\bit )(?<!digital )(?<!software )(?<!infrastructure )(?<!network )(?<!cloud )(?<!media )(?<!brand )(?<!enterprise )asset (?:managers?|management|allocators?)|assets under management|portfolio (?:analytics|management|risk|monitoring|construction)|investment (?:management|banking|research|advisory|managers?|strateg\w*)|mutual funds?|hedge funds?|family offices?|insur\w*|nbfc|kyc|aml|fraud|upi|remittances?|bnpl|buy now pay later|stock (?:broking|brokerage|trading)|trading platform)\b/i,
         weak: /\b(credit|funds?|erp|expenses?|invest\w*|portfolios?|financ\w*|ledgers?|audit\w*|tax(?:es)?)\b/i,
         vocabulary: ['reconciliation', 'month-end close', 'policy controls', 'audit trail', 'accounts payable', 'ERP posting', 'compliance review', 'approval workflow', 'data residency'],
         buyerRoles: ['Chief Financial Officer', 'Finance Controller', 'Head of Accounts Payable', 'Head of Treasury', 'Internal Audit Lead', 'Compliance Officer', 'Head of IT'],
@@ -129,8 +130,8 @@ exports.VERTICALS = [
         buyerRoles: ['Chief Information Officer', 'VP IT Operations', 'Head of Procurement', 'Vendor Management Lead', 'Chief Financial Officer', 'Business Unit Head'],
         committee: 'The CIO or business unit head signs; the IT operations or service owner champions; procurement and vendor management run the commercial process; finance checks rates; security checks access and compliance.',
         objections: [
-            { objection: 'Transition risk from the incumbent', response: 'Show a staged transition plan with knowledge transfer, a parallel run and exit criteria for each stage.' },
-            { objection: 'Your rates are higher than an offshore-only firm', response: 'Compare the total cost of the outcome (SLA attainment, rework, management time), not the hourly rate.' },
+            { objection: 'Transition risk from the current provider', response: 'Show a staged transition plan with knowledge transfer, a parallel run and exit criteria for each stage.' },
+            { objection: 'The offshore alternative is cheaper', response: 'Compare the total cost of the outcome (SLA attainment, rework, management time), not the hourly rate.' },
             { objection: 'Attrition and key people', response: 'Name the team model, the backup for key roles and how knowledge is documented.' },
             { objection: 'Lock-in', response: 'Offer clear exit terms and documentation the client owns.' },
         ],
@@ -153,9 +154,9 @@ exports.VERTICALS = [
         buyerRoles: ['Chief Information Officer', 'Head of IT Infrastructure', 'Network Manager', 'CISO', 'Head of Procurement', 'Chief Financial Officer'],
         committee: 'The CIO signs; the network or infrastructure head champions; the CISO reviews the security overlay; procurement compares rate cards; finance checks the cost per site.',
         objections: [
-            { objection: 'Price per site is higher than the national operator', response: 'Compare the total cost per site, including outages, repair time and the IT team\'s time spent managing links.' },
+            { objection: 'Price per site compared with the operator we use today', response: 'Compare the total cost per site, including outages, repair time and the IT team\'s time spent managing links.' },
             { objection: 'Migration risk across many sites', response: 'Propose a wave plan by region with fallback links and a rollback rule for each wave.' },
-            { objection: 'We have a long relationship with our current operator', response: 'Start with the sites where service is worst and let the results make the case.' },
+            { objection: 'We have a long relationship with our current operator', response: 'Agree which sites to compare first and which service measures decide, so the results rather than the relationship make the case.' },
             { objection: 'Security overlay', response: 'Show how the network and the security controls are managed together and who responds to an incident.' },
         ],
         salesMotion: 'Account-based enterprise sales, often an RFP or rate-card comparison, with a site survey and pilot sites before the rollout.',
@@ -195,7 +196,7 @@ exports.VERTICALS = [
     },
     {
         id: 'software', name: 'software',
-        match: /\b(developers?|api (?:testing|tests?|platform|management|gateway|monitoring|design|development)|devops|devsecops|dev tools|ci\/cd|ci pipelines?|observability|databases?|open[- ]source|engineering teams?|qa|test(?:ing|s)? (?:platform|automation|tools?)|test automation|software testing|unit tests?|source code|version control|git|kubernetes|microservices|sdlc|feature flags?|low-code|infrastructure as code|apm|backend)\b/i,
+        match: /\b(developers?|api (?:testing|tests?|platform|management|gateway|monitoring|design|development)|devops|devsecops|dev tools|ci\/cd|ci pipelines?|observability|databases?|open[- ]source|engineering teams?|qa|test(?:ing|s)? (?:platform|automation|tools?)|test automation|software testing|(?:testing|test|device|browser) clouds?|cloud testing|cross-browser|browser testing|unit tests?|source code|version control|git|kubernetes|microservices|sdlc|feature flags?|low-code|infrastructure as code|apm|backend)\b/i,
         weak: /\b(apis?|sdks?|code|release|releases|deploy\w*|testing|tests?|debug\w*|logging)\b/i,
         vocabulary: ['CI pipeline', 'developer experience', 'test coverage', 'release frequency', 'API', 'SDK', 'technical debt', 'open-source alternative', 'mean time to recovery'],
         buyerRoles: ['VP Engineering', 'Chief Technology Officer', 'Head of QA', 'Platform Engineering Lead', 'Engineering Manager', 'Security Lead'],
@@ -219,7 +220,7 @@ exports.VERTICALS = [
     },
     {
         id: 'saas', name: 'SaaS',
-        match: /\b(saas|software as a service|subscriptions?|b2b software|crm|billing|dunning|prorat\w*|revenue recognition|product analytics|product-led|plg|customer success|revenue operations|revops|sales enablement|marketing automation|churn|net revenue retention)\b/i,
+        match: /\b(saas|software as a service|subscriptions?|b2b software|crm|billing|invoicing|dunning|prorat\w*|revenue recognition|moneti[sz]\w*|usage-based (?:pricing|billing)|metered billing|pricing and packaging|quote-to-cash|product analytics|product-led|plg|customer success|revenue operations|revops|sales enablement|marketing automation|churn|net revenue retention)\b/i,
         weak: /\b(software|platform)\b/i,
         vocabulary: ['activation', 'time to value', 'net revenue retention', 'renewal', 'expansion', 'onboarding', 'usage', 'churn', 'customer success'],
         buyerRoles: ['VP Product', 'Head of Growth', 'Chief Revenue Officer', 'Head of Customer Success', 'Chief Financial Officer'],
@@ -329,8 +330,21 @@ const SECURITY_GENERIC = /^(?:security|firewalls?|zero trust|sase|cyber\w*|(?:cl
 const SERVICES_WORDS = /\b(?:business (?:process )?(?:services|management|outsourcing)|bpo|bpm|bpaas|kpo|managed (?:it |network |cloud )?services?|customer experience (?:management |services|outsourcing)|outsourc\w*|contact cent(?:re|er)s?|call cent(?:re|er)s?|back[- ]office|digital operations|shared services)\b/i;
 const PRODUCT_WORDS = /\b(?:software|saas|platforms?|apps?|apis?|tools?|subscriptions?|copilots?|assistants?|automat\w*|engines?)\b/i;
 const PEOPLE_WORDS = /\b(?:people|humans?|staff|fte|analysts|specialists|experts|teams?)\b/i;
+// Only labels count as marketing; "AI agents", "copilot" and "AI assistant" name the product itself.
+const AI_MARKETING = /^(?:ai|ai[- ]native|ai[- ]first|agentic|genai|gen ai|generative ai)$/;
 const AI_LABELS = /^(?:ai|ai[- ]native|ai[- ]first|ai (?:company|startup)|ai workforce)$/;
+// (c) A seller of billing, invoicing, revenue recognition, dunning or usage-based pricing is SaaS, not fintech, unless it also moves
+//     money (payment processing, payouts, lending, cards) or is a spend-management / accounts payable tool.
+const BILLING_WORDS = /\b(?:billing|invoicing|subscription management|revenue recognition|usage-based (?:pricing|billing)|metered|dunning|prorat\w*|moneti[sz]\w*|pricing and packaging|quote-to-cash)\b/i;
+const SPEND_WORDS = /\b(?:expenses?|spend|reimburs\w*|corporate cards?|prepaid cards?|card issuing|accounts payable|payables|bill pay|procurement|travel|payroll|purchase orders?|vendor payments?|supplier payments?)\b/i;
+const MONEY_MOVES = /\b(?:payment (?:gateways?|processing|processors?)|payments? (?:apis?|infrastructure|rails|orchestration)|payouts?|lending|loans?|banking|remittances?|kyc|neobanks?|merchant acquiring)\b/i;
+const billingText = (t) => BILLING_WORDS.test(t) && !SPEND_WORDS.test(t) && !MONEY_MOVES.test(t);
 function adjust(text, best, all) {
+    if (best.v.id === 'fintech' && billingText(text)) {
+        const saas = all.find((x) => x.v.id === 'saas');
+        if (saas)
+            return saas;
+    }
     if (best.v.id === 'cybersecurity') {
         const tel = all.find((x) => x.v.id === 'telecom');
         const connectivity = scan(CONNECTIVITY_WORDS, text);
@@ -344,6 +358,16 @@ function adjust(text, best, all) {
         const ites = all.find((x) => x.v.id === 'ites');
         if (ites && SERVICES_WORDS.test(text) && !PRODUCT_WORDS.test(text) && (best.strong.every((w) => AI_LABELS.test(w)) || PEOPLE_WORDS.test(text)))
             return ites;
+        // (d) "AI-native", "GenAI", "AI agents" and the like say how a product is built, not what it sells. When they are the only AI
+        //     words and the seller's text also names a trade of its own (a security platform, a testing cloud, business services, billing,
+        //     sales force automation, payments), the trade decides. Support automation stays AI native, and so does a seller that manages
+        //     money (investment strategies): that is the AI native investment case.
+        if (best.strong.every((w) => AI_MARKETING.test(w)) && !SUPPORT_WORDS.test(text)) {
+            const money = modelFromSeller(text) === 'investment';
+            const trades = all.filter((x) => x.v.id !== 'ai-native' && (x.v.id !== 'saas' || BILLING_WORDS.test(text)) && !(x.v.id === 'fintech' && money));
+            if (trades.length)
+                return trades.sort((a, b) => b.score - a.score || a.first - b.first || ORDER.indexOf(a.v.id) - ORDER.indexOf(b.v.id))[0];
+        }
     }
     return best;
 }
@@ -392,7 +416,35 @@ exports.INVESTMENT_PROFILE = {
     salesMotion: 'A long, committee-led process: manager research, due diligence and a small first allocation before a larger mandate.',
     vocabulary: ['mandate', 'allocation', 'benchmark', 'tracking error', 'drawdown', 'investment committee', 'due diligence', 'explainability', 'reporting'],
 };
+/** SaaS, billing and revenue operations: used when the seller sells billing, subscription billing, invoicing, revenue recognition,
+ * usage-based pricing, dunning, proration or monetization (and is not a spend-management or payments seller), and the buyer persona is
+ * not an engineering, product, IT or security leader. It replaces the plain SaaS notes (activation, expansion) and keeps the buyer out
+ * of the finance block of the spend-management profile (accounts payable, card spends, claims, policy breaches). */
+exports.BILLING_PROFILE = {
+    vocabulary: ['invoice run', 'dunning', 'proration', 'usage-based pricing', 'plan and add-on', 'revenue recognition', 'audit trail', 'billing dispute', 'pricing change'],
+    buyerRoles: ['Chief Financial Officer', 'VP Finance', 'Revenue Operations Lead', 'Billing or Finance Operations Manager', 'Head of Engineering (for the integration)', 'Finance Controller'],
+    committee: 'The CFO or VP Finance signs; the revenue operations lead or the billing manager champions it; finance operations use it every month-end; engineering checks the integration with the product, ERP and CRM; the controller and the auditors review revenue recognition and the audit trail.',
+    objections: [
+        { objection: 'Our homegrown billing works', response: 'Count what it costs to keep running: the engineering time behind each pricing change, the invoices fixed by hand and the disputes, using the buyer\'s own last quarter.' },
+        { objection: 'Migration risk for live subscriptions', response: 'Plan the move in waves, run old and new side by side on a part of the live subscriptions, and agree that invoices must match before each wave is switched.' },
+        { objection: 'It must work with our ERP and CRM', response: 'Name the systems it must post to and read from, the few fields that move each way, and who on the buyer side owns each connection.' },
+        { objection: 'Revenue recognition and the audit trail', response: 'Show how each invoice, credit and change is traced to the schedule the auditor reads, and let the controller test it on real contracts before signing.' },
+    ],
+    salesMotion: 'Finance-led, with engineering in the evaluation; a pilot on part of the live subscriptions or a new pricing launch before the full move.',
+    metrics: ['billing errors and disputes', 'invoice accuracy', 'failed payments recovered', 'revenue recognition errors', 'days to close the month', 'time to launch a new pricing model'],
+    proofShape: 'A migration of live subscriptions where invoices matched before and after, or a pricing change launched without engineering time, with the dates and the finance owner who signed it off.',
+    discovery: [
+        'How are customers billed today (plans, usage, add-ons), and who changes a price or a plan?',
+        'How long does a new pricing model take to launch, and how much engineering time does it need?',
+        'Which invoice errors, failed payments and disputes does the team fix by hand each month?',
+        'How is revenue recognised today, and what does the auditor ask to see?',
+        'Which systems must billing work with: ERP, CRM, payments, tax, the data warehouse?',
+    ],
+};
+const AI_ANY = /\b(?:ai|a\.i\.|ai[- ](?:native|first|powered|led|driven|based|enabled)|genai|gen ai|generative ai|llms?|artificial intelligence|agentic)\b/i;
 const AI_NATIVE = exports.VERTICALS.find((v) => v.id === 'ai-native');
+const SAAS_BASE = exports.VERTICALS.find((v) => v.id === 'saas');
+const BILLING_SAAS = { ...SAAS_BASE, ...exports.BILLING_PROFILE, name: 'SaaS, billing and revenue operations' };
 const AI_SUPPORT = { ...AI_NATIVE, ...exports.AI_SUPPORT_PROFILE };
 // The seller's own words, whole (not cut at "for ..."): "Voice AI for contact centres" names the contact centre.
 function sellerWhole(args) {
@@ -408,7 +460,26 @@ function aiUseCase(...args) {
         return 'investment';
     return SUPPORT_WORDS.test(sellerWhole(args)) ? 'support' : 'other';
 }
-function forUseCase(v, args) { return v === AI_NATIVE && aiUseCase(...args) === 'support' ? AI_SUPPORT : v; }
+function forUseCase(v, args) {
+    if (v === AI_NATIVE && aiUseCase(...args) === 'support')
+        return AI_SUPPORT;
+    if (v === SAAS_BASE && isBillingSeller(...args))
+        return BILLING_SAAS;
+    return v;
+}
+const ENGINEERING_PERSONA = /\b(?:cto|chief technology|engineering|developers?|product|growth|marketing|sales|cio|it|information technology|security|ciso)\b/i;
+const FINANCE_PERSONA = /\b(?:cfo|chief financial|finance|financial|revenue operations|revops|billing|controller|accounting|accounts|fp&a|treasury)\b/i;
+/** True when the seller's own words sell billing, subscription billing, invoicing, revenue recognition, usage-based pricing, dunning,
+ * proration or monetization (not a spend-management, accounts payable or payments seller) and the job titles given, if any, are not
+ * only engineering, product, IT or security titles. Accepts the same inputs as detectVertical. */
+function isBillingSeller(...args) {
+    const t = sellerWhole(args);
+    if (!billingText(t))
+        return false;
+    const input = args.length === 1 && isReaderInput(args[0]) ? args[0] : {};
+    const role = texts(input.role).join(' \n ');
+    return !(role && ENGINEERING_PERSONA.test(role) && !FINANCE_PERSONA.test(role));
+}
 /** The sector notes that fit the business model: a seller that manages money (model 'investment') gets INVESTMENT_PROFILE in place of
  * the sector's roles, committee, objections, metrics, proof shape, discovery questions and vocabulary (the name says so); an AI native
  * seller of support automation gets the support notes. Every other case returns the vertical unchanged. Safe to call twice. */
@@ -423,6 +494,13 @@ function profileFor(v, model, ...args) {
 function explainSector(...args) {
     const { seller, buyer, context, role } = sides(args);
     const s = pick(seller);
+    // A seller that manages money (investment strategies, portfolios for allocators) and uses AI words of its own, anywhere in its
+    // description, is AI native with the investment model, not fintech (the model is read in detectModel).
+    if (s && s.v.id === 'fintech' && modelFromSeller(seller) === 'investment') {
+        const ai = scan(AI_ANY, sellerWhole(args));
+        if (ai.length)
+            return { vertical: AI_NATIVE, source: 'seller', strong: ai, weak: s.weak };
+    }
     if (s)
         return { vertical: forUseCase(s.v, args), source: 'seller', strong: s.strong, weak: s.weak };
     const c = pick(context, 2);
@@ -455,9 +533,9 @@ const DEVICE = '(?:devices?|sensors?|terminals?|scanners?|trackers?|readers?|cam
 const MODEL_MATCH = [
     // the seller manages money: it runs funds or portfolios, or is an asset or wealth manager. Software for asset managers is not this.
     { model: 'investment', re: /\b(?:investment strateg\w*|systematic strateg\w*|hedge funds?|mutual funds?|venture (?:fund|capital)|private equity|family offices?|aum|assets under management|(?:manages?|managing|runs|invests?|investing|allocates?)\b[^.;,]{0,40}\b(?:funds?|portfolios?|client money|capital|wealth|investments?))\b/i, not: /\b(?:software|saas)\b/i },
-    { model: 'investment', re: /\b(?:asset|wealth|fund|portfolio|investment) (?:management|managers?|advisory|advisors?)\b/i, not: /\b(?:software|saas|platform|apps?|apis?|analytics|tools?|dashboards?|systems?)\b/i },
+    { model: 'investment', re: /(?<!\bit )(?<!digital )(?<!software )(?<!infrastructure )(?<!network )(?<!cloud )(?<!media )(?<!brand )(?<!enterprise )\b(?:asset|wealth|fund|portfolio|investment) (?:management|managers?|advisory|advisors?)\b/i, not: /\b(?:software|saas|platform|apps?|apis?|analytics|tools?|dashboards?|systems?)\b/i },
     { model: 'connectivity', re: /\b(?:sd-?wan|mpls|leased lines?|connectivity|bandwidth|per site|per link|5g|business internet|internet access|broadband|isps?|voip|sip trunk\w*|managed network|wi-?fi|colocation|mobile network|(?:telecom\w*|network|mobile|wireless|fib(?:re|er)) (?:operator|provider|carrier|services?))\b/i, not: /\b(?:software|saas|subscriptions?|analytics|dashboards?|tools?|(?:cyber)?security (?:platform|software|vendor|company|product|tool)s?)\b/i },
-    { model: 'services', re: /\b(?:managed (?:(?:it|network|cloud|security) )?services?|managed (?:detection|security)|mdr|service desk|help ?desk|outsourc\w*|bpo|bpm|kpo|consulting|consultancy|per fte|per ticket|staff augmentation|it staffing|systems? integrators?|it services|statements? of work|contact cent(?:re|er)s?|call cent(?:re|er)s?|application maintenance|business (?:process )?services?|customer experience services?|cx services|dedicated (?:\w+ ){0,2}teams?)\b/i, not: /\b(?:software|saas|subscriptions?|platform|apps?|apis?|analytics|dashboards?|tools?)\b/i },
+    { model: 'services', re: /\b(?:managed (?:(?:it|network|cloud|security) )?services?|managed (?:detection|security)|mdr|service desk|help ?desk|outsourc\w*|bpo|bpm|kpo|consulting|consultancy|per fte|per ticket|staff augmentation|it staffing|systems? integrators?|it services|statements? of work|contact cent(?:re|er)s?|call cent(?:re|er)s?|application maintenance|business (?:process )?services?|customer experience services?|cx services|dedicated (?:\w+ ){0,2}teams?)\b/i, not: /\b(?:software|saas|subscriptions?|platform|apps?|apis?|analytics|dashboards?|tools?|ai agents?|agents that|agentic|copilots?|ai assistants?|ai models?|llms?)\b/i },
     { model: 'marketplace', re: /\b(?:marketplace|take rate|gmv|two-sided|takes? an? (?:commission|cut|percentage))\b/i, not: /\b(?:software|saas|analytics|tools?)\b/i },
     // payments sellers are paid per transaction or by volume
     { model: 'transactions', re: /(?:\b(?:per[- ]transaction|transaction fees?|payments? (?:apis?|gateways?|processing|processors?|platforms?|infrastructure|orchestration|rails|acquiring|providers?|companies|stack)|payouts?|checkout|interchange|remittances?|merchant acquiring|card issuing|upi)\b|(?:^|\n)\s*payments?\b)/i, not: /\b(?:software|saas|subscriptions?|analytics|dashboards?|tools?|reconcil\w*|security|fraud|risk|compliance|expense\w*|spend|travel|invoic\w*|billing|payroll)\b/i },
@@ -482,6 +560,11 @@ function detectModel(explicit, ...args) {
         return { model: explicit, how: 'input' };
     const { seller } = sides(args); // the seller's words only: what the buyer's side says about its own money is not the seller's model
     const read = modelFromSeller(seller);
+    // The usual model is that of the sector finally chosen (after the AI label is set aside). A services firm that mentions a platform,
+    // an app or software ("Sonata Software", "business services on a digital platform") sells services unless its own words say
+    // subscription, SaaS, per seat, per user or licence.
+    if (read === 'saas' && !/\b(?:saas|subscriptions?|per seat|per user|licen[cs]es?)\b/i.test(seller) && detectVertical(...args)?.id === 'ites')
+        return { model: 'services', how: 'sector' };
     if (read)
         return { model: read, how: 'read' };
     const v = detectVertical(...args);

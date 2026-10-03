@@ -365,7 +365,8 @@ function agreedRoles(titles, corroborate = []) {
 // billing platform is bought by finance), so the sector file's own roles and yardsticks (resolution rate, activation) are not the
 // buyer's. The buyer's function is read from the titles and texts the user typed: finance titles use the finance measures of the
 // fintech entry, security titles those of the cybersecurity entry. Nothing is added when no function is named.
-const isHorizontal = (v) => !!v && v.id === 'saas';
+// plain SaaS is sold into any function; the billing and revenue operations profile (shared file) is a real buyer profile
+const isHorizontal = (v) => !!v && v.id === 'saas' && !/billing/i.test(v.name);
 function buyerFunction(...texts) {
     const t = texts.flat().filter((x) => typeof x === 'string').join(' \n ');
     if (/\b(?:CFO|finance|financial|controller|treasur\w*|portfolio|investment|asset|wealth|accounts payable|billing)\b/i.test(t))
@@ -404,7 +405,7 @@ function sectorNotes(v, what = ['committee', 'metrics', 'proof'], label = '') {
     const out = [`### Sector notes: ${label || v.name}`];
     // AI native is a way of building, not a trade: the sector file's yardsticks and words (resolution rate, evaluation set) come from
     // support automation and are not assumed for an AI product sold to another function (an investment desk, for example).
-    const generic = v.id === 'saas' && !label;
+    const generic = isHorizontal(v) && !label;
     for (const w of what) {
         if (generic && (w === 'metrics' || w === 'roles' || w === 'vocabulary' || w === 'proof'))
             continue;
@@ -1071,7 +1072,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
                     : 'This pattern is not yet one of your criteria: add it as a criterion if it holds in your closed deals.';
             };
             const notes = sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'objections'], args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
-            const fitSide = buyerSide(ctx.v && ctx.v.id !== 'saas' ? ctx.v : null, args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
+            const fitSide = buyerSide(ctx.v && !isHorizontal(ctx.v) ? ctx.v : null, args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
             // Run 20 round 1: the tier actions and answer times follow the business model (a services or connectivity sale does not run on
             // a 24 hour demo). They stay examples; the bands and the points are unchanged.
             const TIERS = {
@@ -1290,7 +1291,7 @@ ${SUGGESTED}
             // AI native and SaaS sell into any function (an AI product can serve a contact centre or an investment desk), so their usual roles
             // and yardsticks are not assumed for a seat the user did not name.
             const horizontal = isHorizontal(v);
-            const seat = v ? (/, investment management$/.test(v.name) ? { economic: 'Chief Investment Officer', champion: 'Head of Manager Research', technical: 'Head of Risk', user: 'Portfolio Manager', blocker: 'Compliance Officer' } : SEATS[v.id]) : undefined;
+            const seat = v ? (/billing/i.test(v.name) ? { economic: 'Chief Financial Officer', champion: 'Revenue Operations Lead', technical: 'Head of Engineering', user: 'Billing or Finance Operations Manager', blocker: 'Finance Controller' } : /, investment management$/.test(v.name) ? { economic: 'Chief Investment Officer', champion: 'Head of Manager Research', technical: 'Head of Risk', user: 'Portfolio Manager', blocker: 'Compliance Officer' } : SEATS[v.id]) : undefined;
             const pick = (k, fallback) => (horizontal || !seat ? fallback : seat[k]);
             const objTech = objectionFor(/integrat|tms|erp|dms|siem|migrat|scripts|systems|overlay|sync|fit our/i);
             const objUser = objectionFor(/use|app|adopt|alert|log into|another tool/i);
@@ -1765,7 +1766,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
             const suffix = ctx.model === 'services' ? 'services' : ctx.model === 'connectivity' ? 'provider' : ctx.model === 'investment' ? 'manager' : ctx.model === 'transactions' ? 'platform' : ctx.model === 'marketplace' ? 'marketplace' : ctx.model === 'hardware_software' ? 'solution' : 'software';
             // Run 19 D80 (problem 8, backlog B15-L4): search keywords come from what the user sells and the sector's own words, never
             // from an invented ad category ("Software > Software") or a phrase such as "retailers software".
-            const vocabOk = !!v && v.id !== 'saas' && v.id !== 'software';
+            const vocabOk = !!v && !isHorizontal(v) && v.id !== 'software';
             // Words of the sector that name a measure or a practice, not a thing people search for ("uptime provider" is not a search).
             const MEASURE_WORD = /^(?:uptime|sla|delivery sla|latency|accuracy|usage|churn|renewal|expansion|onboarding|activation|governance|transition|steady state|exposure|alert fatigue|automation rate|inference cost|cost per delivery|time to value|net revenue retention|hallucination|data privacy|data residency|policy controls|audit trail|compliance review|approval workflow|ticket backlog|knowledge transfer|service credits|technical debt|test coverage|release frequency|developer experience|reconciliation|month-end close|pilot|case review|accuracy on your own data|cost per case|explainability|guardrails|human in the loop|evaluation set|resolution rate|mean time to \w+|first-attempt delivery|proof of delivery|statement of work|risk register|compliance audit|customer success|misconfiguration|branch sites|site survey|last-mile link|network operations centre)$/i;
             // A software seller's keywords come from the nouns of its own product text ("API platform", "API lifecycle management"), not from the
@@ -2131,7 +2132,7 @@ ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.tota
 
 ## Next Actions by Account
 
-${sv ? `How deals run in ${sv.name}: ${sv.salesMotion}\n${sv.id === 'saas' ? '' : `Roles to reach in these accounts: ${andList(sv.buyerRoles)}.\nWords their buyers use: ${sv.vocabulary.join(', ')}.\nA proof point that lands: ${sv.proofShape}\n`}` : ''}${scoredAccounts.slice(0, 5).map((a, i) => `
+${sv ? `How deals run in ${sv.name}: ${sv.salesMotion}\n${isHorizontal(sv) ? '' : `Roles to reach in these accounts: ${andList(sv.buyerRoles)}.\nWords their buyers use: ${sv.vocabulary.join(', ')}.\nA proof point that lands: ${sv.proofShape}\n`}` : ''}${scoredAccounts.slice(0, 5).map((a, i) => `
 ### ${i + 1}. ${a.name} (Tier ${a.tier})
 - **Why prioritized**: ${reasonFor(a)}
 - **Gap to address**: ${weakestOf(a)[0] === 'fit' ? 'Validate fit' : weakestOf(a)[0] === 'intent' ? 'Generate engagement' : weakestOf(a)[0] === 'relationship' ? 'Build relationships' : 'Verify timing'}
