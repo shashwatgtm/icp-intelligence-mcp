@@ -304,14 +304,14 @@ exports.SUBTYPES = [
     },
     {
         id: 'last-mile', vertical: 'logistics-tech', name: 'last mile delivery',
-        match: /\b(?:last\W?mile|delivery management (?:software|platform|system)|delivery (?:tracking|orchestration|routing) (?:software|platform|app)|route (?:optimi[sz]ation|planning) (?:software|platform|tool)|courier (?:software|management|dispatch)|dispatch (?:software|platform)|proof of delivery|driver app|same day delivery|hyperlocal delivery)\b/i,
+        match: /\b(?:last\W?mile|delivery management (?:software|platform|system)|delivery (?:tracking|orchestration|routing) (?:software|platform|app)|route (?:optimi[sz]ation|planning) (?:software|platform|tool)|courier (?:software|management|dispatch)|dispatch (?:software|platform)|proof of delivery|driver app|same day delivery|hyperlocal delivery|route (?:planning|optimi[sz]ation)|dispatch(?:ing)?|delivery (?:fleets?|operations|drivers?))\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['dispatch', 'fleet', 'last mile', 'route plan', 'first attempt delivery', 'proof of delivery', 'third party logistics provider', 'cost per delivery', 'delivery SLA', 'delivery window'],
             buyerRoles: ['Chief Operating Officer', 'Head of Supply Chain', 'Head of Last Mile Operations', 'Fleet Manager', 'Transport Manager', 'Head of IT'],
             committee: 'The COO or Head of Supply Chain signs; the Head of Logistics or Last Mile Operations champions; fleet and dispatch managers use it daily; IT checks the fit with the transport, warehouse and order systems; finance checks the cost per delivery case.',
             objections: [
-                { objection: 'We already have a transport management system', response: 'Ask which daily decisions it does not make today (re planning when orders change, address cleaning, driver allocation) and position the product as working with it, not replacing it.' },
+                { objection: 'We already have a TMS', response: 'Ask which daily decisions it does not make today (re planning when orders change, address cleaning, driver allocation) and position the product as working with it, not replacing it.' },
                 { objection: 'Drivers will not use a new app', response: 'Offer a pilot at one hub with an offline first driver app and agree how adoption is measured before the pilot starts.' },
                 { objection: 'Integration effort', response: 'Name the systems involved (transport, warehouse, ERP, order management) and the few data fields needed, and agree who on the buyer side owns each.' },
                 { objection: 'Our margins are too thin for this', response: 'Tie the price to cost per delivery and failed deliveries measured in the buyer\'s own data, not to a general claim.' },

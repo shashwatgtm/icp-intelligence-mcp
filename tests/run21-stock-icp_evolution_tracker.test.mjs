@@ -50,6 +50,6 @@ test("every objection and measure of the sector file is still listed, once, what
 
 test("no wins, losses or changes typed: the sector file's own order stands", async () => {
   const n = await call({ ...LASTMILE, recent_wins: "", recent_losses: "", market_changes: "" });
-  assert.match(reasons(n), /^we already have a transport management system; drivers will not use a new app/i, reasons(n));
+  assert.match(reasons(n), /^we already have a TMS; drivers will not use a new app/i, reasons(n));
   assert.match(measures(n), /What this sector measures:\*\* cost per delivery, first attempt delivery rate/, measures(n));
 });
