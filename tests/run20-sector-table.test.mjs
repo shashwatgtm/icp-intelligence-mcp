@@ -96,3 +96,103 @@ test("an explicit business model still wins, and the sector's usual model is the
   assert.equal(detectModel(undefined, "Cybersecurity company").how, "sector");
   assert.deepEqual(detectModel(undefined, "hello"), { model: null, how: "unknown" });
 });
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// Run 20 round 2 (fresh judges, set T): the AI native entry is neutral about what the AI does; support-automation words live in a
+// support sub-case; a seller that manages money gets the investment notes, never the support or corporate-finance ones.
+// ---------------------------------------------------------------------------------------------------------------------------
+const { VERTICALS, aiUseCase, profileFor, INVESTMENT_PROFILE, AI_SUPPORT_PROFILE } = mod;
+const SUPPORT_WORDS = /resolution|handling time|escalation|evaluation set|ticket|junior|contact cent|help ?desk|service desk|customer satisfaction|automation rate|support/i;
+const FINANCE_WORDS = /close the books|reconcil|month-end|policy breach|accounts payable|ERP|ledger|payment success|treasury/i;
+const flat = (v) => JSON.stringify({ n: v.vocabulary, r: v.buyerRoles, c: v.committee, o: v.objections, s: v.salesMotion, m: v.metrics, p: v.proofShape, d: v.discovery });
+
+test("the AI native entry is neutral: no support-automation words, the neutral measures, roles and proof shape", () => {
+  const ai = VERTICALS.find((v) => v.id === "ai-native");
+  assert.doesNotMatch(flat(ai), SUPPORT_WORDS);
+  const text = flat(ai);
+  for (const w of [/accuracy/i, /cost per case/i, /person has to step in|step in/i, /time to a working pilot/i, /own data/i, /explain/i, /vendor/i, /where .*data|data .*(?:goes|leave|stored)/i, /existing systems|integrat|fit/i]) assert.match(text, w, String(w));
+  assert.ok(ai.buyerRoles.some((r) => /Data and AI|Technology/i.test(r)), "a technical owner");
+  assert.ok(ai.buyerRoles.some((r) => /Risk|Compliance|Security|CISO/i.test(r)), "a risk or compliance reviewer");
+  assert.ok(ai.buyerRoles.some((r) => /owner|process|function/i.test(r)), "the owner of the problem");
+  assert.doesNotMatch(text, /\d/, "no figure in the AI native notes (B82)");
+});
+
+test("aiUseCase: support only when the seller's own text names support, tickets, help desk, contact centre or service desk", () => {
+  assert.equal(aiUseCase("AI agents that resolve customer support tickets for online retailers"), "support");
+  assert.equal(aiUseCase("Voice AI for contact centres"), "support");
+  assert.equal(aiUseCase({ seller: ["AI help desk assistant"], buyer: ["Retailers"] }), "support");
+  assert.equal(aiUseCase({ seller: ["AI agent for IT service desk requests"] }), "support");
+  assert.equal(aiUseCase("AI-native investment strategies company for asset allocators, investment managers and banks"), "investment");
+  assert.equal(aiUseCase({ seller: ["An AI-native investment strategies company"], buyer: ["Asset allocators"] }), "investment");
+  assert.equal(aiUseCase("AI agents that review contracts for legal teams"), "other");
+  assert.equal(aiUseCase("LLM gateway with support for many models"), "other");
+  assert.equal(aiUseCase({ seller: ["AI platform for sales forecasts"], buyer: ["Teams that handle support tickets"] }), "other", "buyer words do not make it support");
+  assert.equal(aiUseCase("hello"), "other");
+});
+
+test("detectVertical gives the support notes only to an AI native seller that sells support automation", () => {
+  const sup = detectVertical("AI agents that resolve customer support tickets for online retailers");
+  assert.equal(sup.id, "ai-native");
+  assert.match(flat(sup), /resolution rate/i);
+  assert.match(flat(sup), /escalation rate/i);
+  assert.equal(sup.metrics, AI_SUPPORT_PROFILE.metrics);
+  for (const t of ["AI agents that review contracts and flag risky clauses for legal teams", "AI platform that forecasts demand and suggests prices for retailers", "AI-native investment strategies company for asset allocators, investment managers and banks"]) {
+    const v = detectVertical(t);
+    assert.equal(v.id === "ai-native" || v.id === "fintech", true, t);
+    assert.doesNotMatch(flat(v), SUPPORT_WORDS, t);
+  }
+  assert.equal(detectVertical({ seller: ["AI agents for underwriting decisions"], buyer: ["Insurers"] }).metrics.some((m) => /handling time/.test(m)), false);
+  // other sectors are not changed by the sub-case
+  assert.equal(detectVertical("Cloud security platform for banks").id, "cybersecurity");
+});
+
+test("an investment-management seller gets investment roles and measures, never the support or corporate-finance notes", () => {
+  for (const input of [
+    "AI-native investment strategies company for asset allocators, investment managers and banks",
+    { seller: ["An AI-native investment strategies company"], buyer: ["Asset allocators", "Investment managers", "Banks"], role: ["Chief Investment Officer"] },
+    "Wealth management firm that manages client portfolios and charges a fee on assets under management",
+  ]) {
+    const m = detectModel(undefined, input).model;
+    assert.equal(m, "investment");
+    const v = profileFor(detectVertical(input), m, input);
+    for (const r of [/Chief Investment Officer/, /Manager Research/, /Investment Committee/, /Consultant/, /Risk/, /Compliance/]) assert.match(v.buyerRoles.join("; "), r);
+    assert.match(v.metrics.join("; "), /benchmark|drawdown|tracking error/i);
+    assert.doesNotMatch(flat(v), SUPPORT_WORDS);
+    assert.doesNotMatch(flat(v), FINANCE_WORDS);
+    assert.match(v.name, /investment management/);
+    assert.equal(profileFor(v, m, input).name, v.name, "applying it twice changes nothing");
+  }
+  assert.equal(INVESTMENT_PROFILE.buyerRoles.some((r) => /Chief Investment Officer/.test(r)), true);
+  assert.doesNotMatch(JSON.stringify(INVESTMENT_PROFILE), /\d/, "no figure (B82)");
+});
+
+test("profileFor leaves every other sector and model alone", () => {
+  for (const v of VERTICALS) assert.equal(profileFor(v, "saas", "x"), v, v.id);
+  const sup = detectVertical("AI agents that resolve support tickets");
+  assert.equal(profileFor(VERTICALS.find((v) => v.id === "ai-native"), "saas", "AI agents that resolve support tickets"), sup);
+  assert.equal(profileFor(null, "investment", "x"), null);
+  const sec = detectVertical("Cloud security platform for banks");
+  assert.equal(profileFor(sec, "saas", "Cloud security platform for banks"), sec);
+});
+
+test("services words beat the AI-native label, but AI agents or an AI platform stay AI native", () => {
+  assert.equal(detectVertical("AI-native business services").id, "ites");
+  assert.equal(detectVertical("AI-native managed services for IT operations").id, "ites");
+  assert.equal(detectVertical("AI agents that run on an AI platform").id, "ai-native");
+  assert.equal(detectVertical("AI platform").id, "ai-native");
+  assert.equal(detectVertical("AI agents for BPO companies").id, "ai-native");
+  assert.equal(detectModel(undefined, "AI-native business services").model, "services");
+  assert.equal(detectModel(undefined, "AI platform for business teams").model, "saas");
+});
+
+test("connectivity words beside security words read telecom unless the seller is a security vendor; security operations for telecom stays cybersecurity", () => {
+  assert.equal(detectVertical("Global network and security services provider").id, "telecom");
+  assert.equal(detectVertical("Connectivity and managed security services").id, "telecom");
+  assert.equal(detectVertical("Managed SD-WAN with built-in firewall").id, "telecom");
+  assert.equal(detectVertical("Security operations platform for telecom operators").id, "cybersecurity");
+  assert.equal(detectVertical("Cybersecurity vendor with SD-WAN").id, "cybersecurity");
+  assert.equal(detectVertical("Network detection and response security platform").id, "cybersecurity");
+  assert.equal(detectVertical("Cloud security posture management").id, "cybersecurity");
+  assert.equal(detectVertical("SIEM and managed network").id, "cybersecurity", "a specialist security product word keeps it cybersecurity");
+  assert.equal(detectModel(undefined, "Security platform with SD-WAN and zero trust").model, "saas");
+});

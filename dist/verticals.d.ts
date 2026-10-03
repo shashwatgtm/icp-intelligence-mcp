@@ -32,6 +32,20 @@ export interface ReaderInput {
     role?: unknown[];
     buyer?: unknown[];
 }
+export type SectorNotes = Pick<Vertical, 'vocabulary' | 'buyerRoles' | 'committee' | 'objections' | 'salesMotion' | 'metrics' | 'proofShape' | 'discovery'>;
+/** AI native, support automation: used only when the seller's own text names support, tickets, a help desk, a contact centre or a service desk. */
+export declare const AI_SUPPORT_PROFILE: SectorNotes;
+/** The notes for a seller that manages money (investment strategies, funds, portfolios) for allocators, whatever sector it was read in:
+ * they replace the sector's notes, so an AI native investment manager never gets support-automation or corporate-finance notes. */
+export declare const INVESTMENT_PROFILE: SectorNotes;
+/** What an AI native seller's product is for, read from the seller's own words only: 'support' when they name support, tickets, a
+ * help desk, a contact centre or a service desk; 'investment' when the seller manages money (the investment business model);
+ * else 'other'. Investment comes first. Accepts the same inputs as detectVertical. */
+export declare function aiUseCase(...args: unknown[]): 'support' | 'investment' | 'other';
+/** The sector notes that fit the business model: a seller that manages money (model 'investment') gets INVESTMENT_PROFILE in place of
+ * the sector's roles, committee, objections, metrics, proof shape, discovery questions and vocabulary (the name says so); an AI native
+ * seller of support automation gets the support notes. Every other case returns the vertical unchanged. Safe to call twice. */
+export declare function profileFor(v: Vertical | null, model: BusinessModel | null | undefined, ...args: unknown[]): Vertical | null;
 /** The sector read, with the words that decided it and where they came from ('seller' or 'buyer'). */
 export declare function explainSector(...args: unknown[]): {
     vertical: Vertical | null;
@@ -48,8 +62,6 @@ export type BusinessModel = 'saas' | 'services' | 'connectivity' | 'transactions
 export declare const BUSINESS_MODELS: BusinessModel[];
 export declare const MODEL_NAME: Record<BusinessModel, string>;
 export declare const SECTOR_MODEL: Record<VerticalId, BusinessModel>;
-/** The business model: the explicit input when given, else read from the SELLER's words, else the sector's usual model, else
- * null. Give plain texts or { seller: [...], buyer: [...] } as for detectVertical. */
 export declare function detectModel(explicit: unknown, ...args: unknown[]): {
     model: BusinessModel | null;
     how: 'input' | 'read' | 'sector' | 'unknown';

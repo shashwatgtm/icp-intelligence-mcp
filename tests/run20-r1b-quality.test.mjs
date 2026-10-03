@@ -135,7 +135,7 @@ test("buyer_group_analyzer: an unclear product says what input would fill each s
   const r = await call("buyer_group_analyzer", { product_category: "our thing" });
   clean(r, "buyer group");
   assert.match(r.text, /add typical_champion/);
-  assert.match(r.text, /add the title to known_stakeholders/);
+  assert.match(r.text, /not named in your stakeholders \(ask your champion who holds the budget\)/);
   assert.doesNotMatch(r.text, /Only if true and provable|Fill in:/);
 });
 
@@ -148,7 +148,7 @@ test("icp_scoring_model: the tier actions follow the business model (no 24 hour 
   const cn = await call("icp_scoring_model", { product_category: "managed SD-WAN for branch offices", scoring_criteria: [{ criterion: "Branches", importance: "critical", values: ["200 or more", "50 to 199"] }] });
   assert.match(cn.text, /Site survey booked within a week/);
   const sa = await call("icp_scoring_model", { product_category: "spend management software", scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Banks", "Retail"] }] });
-  assert.match(sa.text, /Demo within 24 hours/);
+  assert.match(sa.text, /First meeting within 2 working days/);   // round 2: a read SaaS model no longer gets the 24 hour demo; the framework default (no model read) keeps it
   assert.match(sa.text, /☐/);
   assert.doesNotMatch(sa.text.split("## Qualification Scorecard Template")[1].split("## Implementation Guide")[0], /\[ \]/); // the scorecard uses a check box sign
 });
@@ -156,13 +156,13 @@ test("icp_scoring_model: a long value is shown whole once; the proof is sorted a
   const long = "legacy WAN is like a single congested highway prone to jams, slowdowns and disconnections, with enterprises juggling multiple providers and slow cloud access at remote offices and branches";
   const r = await call("icp_scoring_model", { product_category: "managed SD-WAN for branch offices", company: "Branchwire",
     success_correlation: "A leading bank achieved 99.5% uptime across 2000 branches (page claim); Panasonic consolidated its network under one partner (customer quote)",
-    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Banking", "Manufacturing"] }, { criterion: "Problem", importance: "important", values: [long] }] });
+    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Banks", "Manufacturing"] }, { criterion: "Problem", importance: "important", values: [long] }] });
   clean(r, "scoring");
   assert.match(r.text, /\(full wording below\)/);
   assert.equal(r.text.split(long).length - 1, 1, "the long value is printed in full once");
   assert.match(r.text, /a page claim or recognition, not a closed-deal result/);
   assert.match(r.text, /a customer statement/);
-  assert.match(r.text, /Segment, "Banking": mentioned in "A leading bank achieved 99\.5% uptime across 2000 branches \(page claim\)"/);
+  assert.match(r.text, /Segment, "Banks": named in "A leading bank achieved 99\.5% uptime across 2000 branches \(page claim\)"/);
   assert.match(r.text, /list each criterion's values from best fit to worst fit/);
 });
 
@@ -333,5 +333,5 @@ test("buyer_group_analyzer: AI native and SaaS products do not get the sector's 
   const r = await call("buyer_group_analyzer", { product_category: "AI platform that forecasts portfolio risk for asset managers", typical_champion: "Portfolio Manager", known_stakeholders: ["CIO"] });
   clean(r, "buyer group");
   assert.doesNotMatch(r.text, /resolution rate|Head of Customer Experience/);
-  assert.match(r.text, /add the title to known_stakeholders/);
+  assert.doesNotMatch(r.text, /add the title to known_stakeholders/);
 });

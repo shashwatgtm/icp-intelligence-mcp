@@ -338,6 +338,150 @@
       "sector": "logistics-tech",
       "model": "hardware_software",
       "note": "the seller sells scanners, so hardware plus software"
+    },
+    {
+      "id": "r2-ai-invest-1",
+      "round": 2,
+      "text": "AI-native investment strategies company for asset allocators, investment managers and banks",
+      "sector": "ai-native",
+      "model": "investment",
+      "note": "run 20 round 2 (fresh judges, set T): an AI native seller that manages money: sector AI native, model investment (item 1)"
+    },
+    {
+      "id": "r2-ai-invest-2",
+      "round": 2,
+      "text": "AI-driven investment strategies for asset allocators, investment managers and banks",
+      "sector": "fintech",
+      "model": "investment",
+      "note": "run 20 round 2 (fresh judges, set T): investment strategies is a money manager's word: fintech, not the buyer's banks by accident, and model investment (item 1)"
+    },
+    {
+      "id": "r2-ai-other-1",
+      "round": 2,
+      "text": "AI agents that review contracts and flag risky clauses for legal teams",
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): AI native selling something other than support (item 1)"
+    },
+    {
+      "id": "r2-ai-other-2",
+      "round": 2,
+      "text": "AI platform that forecasts demand and suggests prices for retailers",
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): AI platform for another function (item 1)"
+    },
+    {
+      "id": "r2-ai-other-3",
+      "round": 2,
+      "text": "AI platform that automates back-office reconciliation work for finance teams",
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): an AI platform, even if it names back-office work, stays AI native when no services words say people deliver it (item 3)"
+    },
+    {
+      "id": "r2-net-sec-1",
+      "round": 2,
+      "text": "Global network, connectivity, managed network, cloud and security services sold together to enterprises",
+      "sector": "telecom",
+      "model": "connectivity",
+      "note": "run 20 round 2 (fresh judges, set T): network and security services from one provider read telecom (item 2)"
+    },
+    {
+      "id": "r2-net-sec-2",
+      "round": 2,
+      "text": "Network and security services: SD-WAN, managed firewall and secure connectivity for enterprises",
+      "sector": "telecom",
+      "model": "connectivity",
+      "note": "run 20 round 2 (fresh judges, set T): connectivity words beside security words, seller does not call itself a security vendor (item 2)"
+    },
+    {
+      "id": "r2-net-sec-3",
+      "round": 2,
+      "text": "Managed network, bandwidth and security services from one carrier for banks",
+      "sector": "telecom",
+      "model": "connectivity",
+      "note": "run 20 round 2 (fresh judges, set T): carrier, bandwidth and security services (item 2)"
+    },
+    {
+      "id": "r2-net-sec-4",
+      "round": 2,
+      "text": "Security platform with SD-WAN and zero trust for distributed enterprises",
+      "sector": "cybersecurity",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): the seller calls itself a security platform first, so the connectivity words do not make it telecom (item 2)"
+    },
+    {
+      "id": "r2-ites-ai-1",
+      "round": 2,
+      "text": "AI-native business services",
+      "sector": "ites",
+      "model": "services",
+      "note": "run 20 round 2 (fresh judges, set T): services words beat the AI-native label (item 3)"
+    },
+    {
+      "id": "r2-ites-ai-2",
+      "round": 2,
+      "text": "AI-native business process and customer experience services that use AI",
+      "sector": "ites",
+      "model": "services",
+      "note": "run 20 round 2 (fresh judges, set T): a service delivered by people with AI (item 3)"
+    },
+    {
+      "id": "r2-ites-ai-3",
+      "round": 2,
+      "text": "Business process outsourcing and customer experience services run by teams that use AI",
+      "sector": "ites",
+      "model": "services",
+      "note": "run 20 round 2 (fresh judges, set T): people-delivered services with AI (item 3)"
+    },
+    {
+      "id": "r2-bill-1",
+      "round": 2,
+      "text": "Subscription billing and revenue recognition platform for SaaS companies",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): billing software is SaaS, not fintech (item 4)"
+    },
+    {
+      "id": "r2-bill-2",
+      "round": 2,
+      "text": "Billing platform with dunning, proration and chargeback handling for subscription businesses",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): billing, dunning and proration for subscriptions is SaaS (item 4)"
+    },
+    {
+      "id": "r2-pay-1",
+      "round": 2,
+      "text": "Payments gateway for online merchants",
+      "sector": "fintech",
+      "model": "transactions",
+      "note": "run 20 round 2 (fresh judges, set T): a seller that moves money is fintech, per transaction (item 4)"
+    },
+    {
+      "id": "r2-pay-2",
+      "round": 2,
+      "text": "Checkout and payouts for online marketplaces, with a fee on each payment",
+      "sector": "fintech",
+      "model": "transactions",
+      "note": "run 20 round 2 (fresh judges, set T): moves money (item 4)"
+    },
+    {
+      "id": "r2-bill-3",
+      "round": 2,
+      "text": "Dunning and proration engine for subscription businesses",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): the billing words name the sector from the seller's own text (item 4)"
+    },
+    {
+      "id": "r2-bill-4",
+      "round": 2,
+      "text": "Revenue recognition software for finance teams at SaaS companies",
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): item 4"
     }
   ],
   "toolcalls": [
@@ -647,6 +791,186 @@
       "sector": "cybersecurity",
       "model": "saas",
       "note": "one unmistakable job title is enough and comes before the industry"
+    },
+    {
+      "id": "r2-tc-1",
+      "round": 2,
+      "seller": [
+        "An AI-native investment strategies company"
+      ],
+      "buyer": [
+        "Asset allocators",
+        "Investment managers",
+        "Banks"
+      ],
+      "role": [
+        "Chief Investment Officer",
+        "Head of manager research"
+      ],
+      "sector": "ai-native",
+      "model": "investment",
+      "note": "run 20 round 2 (fresh judges, set T): the investment case in tool-call form (item 1)"
+    },
+    {
+      "id": "r2-tc-2",
+      "round": 2,
+      "seller": [
+        "Global network, connectivity and managed network with cloud and security services"
+      ],
+      "buyer": [
+        "Large enterprises"
+      ],
+      "role": [
+        "CIO",
+        "CISO"
+      ],
+      "sector": "telecom",
+      "model": "connectivity",
+      "note": "run 20 round 2 (fresh judges, set T): item 2"
+    },
+    {
+      "id": "r2-tc-3",
+      "round": 2,
+      "seller": [
+        "Network and security services: SD-WAN, managed firewall, secure connectivity"
+      ],
+      "buyer": [
+        "Retail chains"
+      ],
+      "role": [
+        "CISO",
+        "Head of IT Infrastructure"
+      ],
+      "sector": "telecom",
+      "model": "connectivity",
+      "note": "run 20 round 2 (fresh judges, set T): item 2"
+    },
+    {
+      "id": "r2-tc-4",
+      "round": 2,
+      "seller": [
+        "Security platform with SD-WAN and zero trust"
+      ],
+      "buyer": [
+        "Distributed enterprises"
+      ],
+      "role": [
+        "CISO"
+      ],
+      "sector": "cybersecurity",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): item 2: the seller calls itself a security platform"
+    },
+    {
+      "id": "r2-tc-5",
+      "round": 2,
+      "seller": [
+        "AI-native business services"
+      ],
+      "buyer": [
+        "Banks",
+        "Telecom operators"
+      ],
+      "context": [
+        "Contact centre and back-office work done by teams with AI"
+      ],
+      "sector": "ites",
+      "model": "services",
+      "note": "run 20 round 2 (fresh judges, set T): item 3"
+    },
+    {
+      "id": "r2-tc-6",
+      "round": 2,
+      "seller": [
+        "AI-native business process and customer experience services that use AI"
+      ],
+      "buyer": [
+        "Insurance and retail companies"
+      ],
+      "sector": "ites",
+      "model": "services",
+      "note": "run 20 round 2 (fresh judges, set T): item 3"
+    },
+    {
+      "id": "r2-tc-7",
+      "round": 2,
+      "seller": [
+        "Subscription billing and revenue recognition platform"
+      ],
+      "buyer": [
+        "SaaS companies"
+      ],
+      "role": [
+        "CFO",
+        "VP Finance"
+      ],
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): item 4"
+    },
+    {
+      "id": "r2-tc-8",
+      "round": 2,
+      "seller": [
+        "Payments gateway"
+      ],
+      "buyer": [
+        "Online merchants"
+      ],
+      "role": [
+        "Head of Payments"
+      ],
+      "sector": "fintech",
+      "model": "transactions",
+      "note": "run 20 round 2 (fresh judges, set T): item 4"
+    },
+    {
+      "id": "r2-tc-9",
+      "round": 2,
+      "seller": [
+        "AI agents for underwriting decisions"
+      ],
+      "buyer": [
+        "Insurers"
+      ],
+      "role": [
+        "Head of Underwriting"
+      ],
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): item 1: AI native for another function"
+    },
+    {
+      "id": "r2-tc-10",
+      "round": 2,
+      "seller": [
+        "AI agents that answer support tickets"
+      ],
+      "buyer": [
+        "Online retailers"
+      ],
+      "role": [
+        "Head of Customer Support"
+      ],
+      "sector": "ai-native",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): item 1: the support sub-case is still AI native"
+    },
+    {
+      "id": "r2-tc-11",
+      "round": 2,
+      "seller": [
+        "Dunning, proration and revenue recognition for subscription billing"
+      ],
+      "buyer": [
+        "Banks and payment companies"
+      ],
+      "role": [
+        "CFO"
+      ],
+      "sector": "saas",
+      "model": "saas",
+      "note": "run 20 round 2 (fresh judges, set T): item 4: the seller's billing words decide, not the buyer's payments industry"
     }
   ]
 }
