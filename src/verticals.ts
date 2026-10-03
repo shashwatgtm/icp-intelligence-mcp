@@ -299,7 +299,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'freight-marketplace', vertical: 'logistics-tech', name: 'freight marketplaces',
-    match: /\b(?:freight marketplace|trucking marketplace|transport marketplace|logistics marketplace|load boards?|freight exchange|freight brokerage|digital freight brokerage|freight matching|truck booking (?:platform|app)|freight booking (?:platform|app)|spot freight)\b/i,
+    match: /\b(?:freight marketplace|trucking marketplace|transport marketplace|logistics marketplace|load boards?|freight exchange|freight brokerage|digital freight brokerage|freight matching|truck booking (?:platform|app)|freight booking (?:platform|app)|spot freight|online freight|freight (?:rate|quote) (?:platform|comparison)|freight rates|shipping marketplace)\b/i,
     model: 'marketplace',
     notes: {
       vocabulary: ['load', 'capacity', 'lane', 'shipper', 'carrier network', 'rate quote', 'spot and contract rates', 'booking', 'payment terms', 'empty return'],
@@ -402,7 +402,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'payments-banking', vertical: 'fintech', name: 'payments and banking APIs',
-    match: /\b(?:payment gateway|payment processing|payments? (?:platform|infrastructure)|payment service provider|payment orchestration|card issuing|card processing|banking as a service|bank account (?:data|api|linking|access|verification)|open banking|core banking|remittance (?:service|platform)|merchant acquiring|(?:connects?|links?) (?:\w+ ){1,3}(?:to )?(?:\w+'?s? )?bank accounts?)\b/i,
+    match: /\b(?:payment gateway|payment processing|payments? (?:platform|infrastructure)|payment service provider|payment orchestration|card issuing|card processing|banking as a service|bank account (?:data|api|linking|access|verification)|open banking|core banking|remittance (?:service|platform)|merchant acquiring|(?:connects?|links?) (?:\w+ ){1,3}(?:to )?(?:\w+'?s? )?bank accounts?|financial (?:data )?(?:network|apis?)|payments? apis?|payment links?|card programs?|upi)\b/i,
     model: 'transactions',
     notes: {
       vocabulary: ['payment success rate', 'settlement', 'chargeback', 'authorisation', 'tokenisation', 'sponsor bank', 'sandbox', 'webhook', 'uptime', 'payout'],
@@ -428,7 +428,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'lending', vertical: 'fintech', name: 'lending and credit data',
-    match: /\b(?:lending (?:platform|software|as a service)|digital lending|loan origination|loan management (?:system|software)|loan servicing|credit scoring|credit decisioning|credit (?:bureau|risk) data|alternative credit data|consumer lending|buy now pay later|bnpl|credit data)\b/i,
+    match: /\b(?:lending (?:platform|software|as a service)|digital lending|loan origination|loan management (?:system|software)|loan servicing|credit scoring|credit decisioning|credit (?:bureau|risk) data|alternative credit data|consumer lending|buy now pay later|bnpl|credit data|bank statement (?:analysis|analyzer|analytics)|income verification|financial (?:data|document) (?:analytics|analysis)|credit underwriting|account aggregator|loan underwriting|credit risk)\b/i,
     notes: {
       vocabulary: ['origination', 'underwriting', 'credit decision', 'bureau data', 'delinquency', 'collections', 'loan book', 'disbursal', 'risk model', 'regulatory reporting'],
       buyerRoles: ['Chief Risk Officer', 'Head of Credit', 'Head of Lending Operations', 'Chief Product Officer', 'Head of Collections', 'Head of Compliance', 'Head of IT'],
@@ -555,7 +555,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'crm-marketing', vertical: 'saas', name: 'CRM and marketing',
-    match: /\b(?:crm (?:software|platform|system|tool)s?|customer relationship management|sales crm|marketing automation|email marketing (?:platform|software|tool)|sales engagement|lead management|sales pipeline (?:software|tool)|customer data platform|campaign management|revenue intelligence)\b/i,
+    match: /\b(?:crm (?:software|platform|system|tool)s?|customer relationship management|sales crm|marketing automation|email marketing (?:platform|software|tool)|sales engagement|lead management|sales pipeline (?:software|tool)|customer data platform|campaign management|revenue intelligence|customer engagement(?: platform| software| suite)?|lifecycle marketing|retention marketing|mobile marketing|push notifications?|omnichannel engagement|marketing cloud)\b/i,
     model: 'saas',
     notes: {
       vocabulary: ['pipeline', 'lead', 'contact', 'campaign', 'lead scoring', 'sales stage', 'forecast', 'attribution', 'nurture', 'handoff from marketing to sales'],
@@ -659,7 +659,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'property-management', vertical: 'vertical-saas', name: 'property management',
-    match: /\b(?:property management (?:software|system|platform|app)|lease management (?:software|system)|tenant (?:portal|screening|management)|rent collection (?:software|platform)|rental management (?:software|system)|landlord software|real estate management software|leasing software|hoa management|homeowner association management|residential property management|property operations software|rent roll software)\b/i,
+    match: /\b(?:property management (?:software|system|platform|app)|lease management (?:software|system)|tenant (?:portal|screening|management)|rent collection (?:software|platform)|rental management (?:software|system)|landlord software|real estate management software|leasing software|hoa management|homeowner association management|residential property management|property operations software|rent roll software|property management|property managers?|rental propert(?:y|ies)|real estate (?:operators?|portfolios?))\b/i,
     model: 'saas',
     notes: {
       vocabulary: ['rent roll', 'lease', 'tenant portal', 'owner statement', 'maintenance request', 'move in and move out', 'vacancy', 'rent collection', 'unit turnover', 'trust account', 'inspection'],
@@ -685,7 +685,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'field-services', vertical: 'vertical-saas', name: 'field and home services',
-    match: /\b(?:field service(?: management| software| app| platform)?|home services? (?:software|platform|management)|service business software|job management software|service management software|technician (?:scheduling|dispatch|app|software)|work order (?:software|management)|hvac software|plumbing software|electrician software|pest control software|cleaning business software|landscaping software|service scheduling software)\b/i,
+    match: /\b(?:field service(?: management| software| app| platform)?|home services? (?:software|platform|management)|service business software|job management software|service management software|technician (?:scheduling|dispatch|app|software)|work order (?:software|management)|hvac software|plumbing software|electrician software|pest control software|cleaning business software|landscaping software|service scheduling software|(?:home|commercial|residential)(?: and (?:home|commercial|residential))? services? (?:businesses|companies|contractors|software|platform)|service (?:trades|contractors)|trades businesses|service technicians|hvac|plumbing)\b/i,
     model: 'saas',
     notes: {
       vocabulary: ['work order', 'job scheduling', 'technician', 'service agreement', 'quote and estimate', 'on site payment', 'job photos', 'first time fix', 'parts on the van', 'recurring maintenance'],
@@ -737,7 +737,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'industry-hr-payroll', vertical: 'vertical-saas', name: 'HR and payroll built for one industry',
-    match: /\b(?:payroll software|hr and payroll|hr software|hr platform|hris|human resources? (?:software|information system)|workforce management (?:software|platform)|time and attendance|shift scheduling|employee scheduling|timekeeping|staff scheduling|labou?r management|payroll and compliance)\b/i,
+    match: /\b(?:payroll software|hr and payroll|hr software|hr platform|hris|human resources? (?:software|information system)|workforce management (?:software|platform)|time and attendance|shift scheduling|employee scheduling|timekeeping|staff scheduling|labou?r management|payroll and compliance|hrms|payroll (?:platform|suite|system|solution)s?|hr (?:and|&) payroll|human capital management|hcm (?:software|platform)|employee management software)\b/i,
     model: 'saas',
     notes: {
       vocabulary: ['shift scheduling', 'time and attendance', 'pay rules', 'union and wage rules', 'overtime', 'labour compliance', 'pay run', 'timesheet', 'onboarding paperwork', 'tip or incentive pay'],
@@ -971,7 +971,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'cpaas-messaging', vertical: 'telecom', name: 'CPaaS and messaging',
-    match: /\b(?:messaging (?:platform|api|service)|business (?:texts?|messaging)|text messaging (?:platform|api|service)|sms (?:gateway|api|platform|service)|bulk sms|cpaas|communications platform as a service|voice api|one time passwords?|otp (?:delivery|messages?|service)|whatsapp (?:business )?(?:messaging|api)|rcs messaging)\b/i,
+    match: /\b(?:messaging (?:platform|api|service)|business (?:texts?|messaging)|text messaging (?:platform|api|service)|sms (?:gateway|api|platform|service)|bulk sms|cpaas|communications platform as a service|voice api|one time passwords?|otp (?:delivery|messages?|service)|whatsapp (?:business )?(?:messaging|api)|rcs messaging|sms|rcs|whatsapp business|a2p|messaging apis?|business messaging|omnichannel messaging|communications apis?|voice and messaging)\b/i,
     model: 'transactions',
     notes: {
       vocabulary: ['delivery rate', 'sender registration', 'message routing', 'one time password', 'two way messaging', 'opt in and opt out', 'throughput', 'fraud filtering', 'artificial traffic', 'delivery report'],
@@ -1048,7 +1048,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'developer-platform', vertical: 'software', name: 'developer platforms and DevOps',
-    match: /\b(?:developer platforms?|devops platforms?|devsecops platforms?|source control|source code (?:management|hosting)|code hosting|git hosting|ci.cd (?:platform|tools?|pipelines?)|ci pipelines?|continuous (?:integration|delivery|deployment)|internal developer platforms?|package registry|release automation)\b/i,
+    match: /\b(?:developer platforms?|devops platforms?|devsecops platforms?|source control|source code (?:management|hosting)|code hosting|git hosting|ci.cd (?:platform|tools?|pipelines?)|ci pipelines?|continuous (?:integration|delivery|deployment)|internal developer platforms?|package registry|release automation|devsecops|devops|source code|software delivery)\b/i,
     model: 'saas',
     notes: {
       vocabulary: ['pull request', 'code review', 'pipeline', 'repository', 'build minutes', 'self hosted runner', 'branch protection', 'secrets scanning', 'audit log', 'single sign on', 'toolchain sprawl'],
@@ -1540,6 +1540,12 @@ function categoryPick(seller: string): Candidate | null {
   const v = VERTICALS.find((x) => x.id === hits[0].st.vertical)!;
   return { v, strong: [hits[0].word], weak: [], score: 1, first: hits[0].index };
 }
+/** Free text about the deal: a category noun counts only when every category noun found names the same vertical. */
+function categoryPickUnique(text: string): Candidate | null {
+  const hits = categoryHits(text);
+  if (!hits.length || hits.some((h) => h.st.vertical !== hits[0].st.vertical)) return null;
+  return categoryPick(text);
+}
 /** The one sub-type of this vertical the seller's words name, or null when none or more than one of them match. */
 function subtypeFor(v: Vertical, args: unknown[]): SubType | null {
   if (v.subtype) return SUBTYPES.find((x) => x.id === v.subtype) ?? null;
@@ -1619,7 +1625,7 @@ export function explainSector(...args: unknown[]): { vertical: Vertical | null; 
     if (ai.length) return { vertical: AI_NATIVE, source: 'seller', strong: ai, weak: s.weak };
   }
   if (s) return { vertical: forUseCase(s.v, args), source: 'seller', strong: s.strong, weak: s.weak };
-  const c = pick(context, 2);
+  const c = categoryPickUnique(context) ?? pick(context, 2);
   if (c) return { vertical: forUseCase(c.v, args), source: 'context', strong: c.strong, weak: c.weak };
   const r = pick(role);
   if (r) return { vertical: forUseCase(r.v, args), source: 'role', strong: r.strong, weak: r.weak };
