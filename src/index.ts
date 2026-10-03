@@ -482,7 +482,7 @@ function sizeWordsIn(text: string): string[] {
 }
 // Job titles named in a text (as typed). A capitalised phrase with a title word, or an acronym such as CFO or CISO.
 const TITLE_ACRONYM = /(?<![-\w])(?:CEO|CFO|CIO|CTO|CISO|COO|CMO|CRO|CCO|CPO|CDO|VP|SVP|EVP|MD|GM)(?![-\w])/;
-const TITLE_PHRASE = /\b(?:Chief [A-Z][A-Za-z]+(?: [A-Z][A-Za-z]+){0,2}|(?:Head|Director|VP|Vice President|Manager|Lead) of [A-Z][A-Za-z-]+(?: [A-Za-z-]+){0,3}|(?:[A-Z][A-Za-z.-]+ ){0,3}(?:Manager|Director|Controller|Officer|Analyst|Engineer|Architect|Head|Lead|Owner|Founder)s?)\b/g;
+const TITLE_PHRASE = /\b(?:Chief [A-Z][A-Za-z]+(?: [A-Z][A-Za-z]+){0,2}|(?:Head|Director|VP|Vice President|Manager|Lead) of [A-Z][A-Za-z-]+(?: (?:[A-Z][A-Za-z-]*|and|of|&)){0,3}|(?:[A-Z][A-Za-z.-]+ ){0,3}(?:Manager|Director|Controller|Officer|Analyst|Engineer|Architect|Head|Lead|Owner|Founder)s?)\b/g;
 function rolesIn(text: string): string[] {
   const t = String(text);
   const out: string[] = [];
@@ -579,7 +579,7 @@ function parseProfile(text: string): Profile {
     if (sizeWordsIn(it).length || sizesIn(it).length) {
       // "Mid-size banks" is a size (mid-size) and a segment (banks); "midsize to large businesses" and "under 200 employees" are only a size.
       const short = it.split(/\s+/).length <= 6;
-      const rem = !short ? '' : it.replace(SIZE_WORD, ' ').replace(/\b(?:in particular|including|such as|especially|particularly|companies|company|businesses|business|firms|enterprises|organi[sz]ations|customers|with|to|under|over|more than|fewer than|employees|\d[\d,]*(?:\s*(?:to|-)\s*\d[\d,]*)?\+?)\b/gi, ' ').replace(/[\s,-]+/g, ' ').trim();
+      const rem = !short ? '' : it.replace(SIZE_WORD, ' ').replace(/\b(?:in particular|including|such as|especially|particularly|companies|company|businesses|business|firms|enterprises|organi[sz]ations|customers|with|to|from|all|sizes|of|under|over|more than|fewer than|employees|\d[\d,]*(?:\s*(?:to|-)\s*\d[\d,]*)?\+?)\b/gi, ' ').replace(/[\s,-]+/g, ' ').trim();
       sizes.push(rem.length >= 3 ? (sizeWordsIn(it).join(', ') || it) : short ? it : (sizeWordsIn(it).join(', ') || it));
       if (rem.length >= 3) segments.push(rem);
       else if (!short) rest.push(it);
