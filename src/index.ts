@@ -2594,6 +2594,9 @@ ${SUGGESTED}
       const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, args.recent_wins, args.recent_losses, args.market_changes], role: agreedRoles(prof0.roles, [args.current_icp]), buyer: [args.current_icp] });
       const v = ctx.v;
       const prof = prof0;
+      // Words from the sentence around a list ("from small firms to national builders", "plus owners") are not segments, and a role that is only the first words of another role is the same role.
+      const segs = prof.segments.map((sg) => sg.replace(/;\s*(?:from|plus|including|such as)\b.*$/i, '').trim()).filter((sg) => sg.trim().length > 3 && !/^(?:from|plus|including|and|or|with|such as|e\.g\.)\b/i.test(sg.trim()));
+      const roles = prof.roles.filter((r, _i, all) => !all.some((o) => o !== r && o.length > r.length && o.toLowerCase().startsWith(r.toLowerCase() + ' ')));
       const profSizes = [...prof.sizes, ...sizesIn(args.current_icp).filter(e => !prof.sizes.some(b => b.toLowerCase().includes(e.toLowerCase())))];
       // Run 19 D80 (problem 3): each win, loss and market change is read against the current ICP and gives one candidate
       // change, quoted in the user's words. A candidate is a hypothesis to check in the CRM, never a finding.
@@ -2611,15 +2614,15 @@ ${SUGGESTED}
         : `- **Confirms your ICP**: ${q(shortText(w, 200))}: it matches your current ICP, so keep it`);
       const lossLines = losses.map(l => `- **Candidate disqualifier**: ${q(shortText(l, 200))}: ${lossKind(l)}`);
       const changeLines = changes.map(c => `- **Implication to check**: ${q(shortText(c, 200))}: check which segments of your ICP this moves toward you or away from you, and update the qualifying questions`);
-      const firstChange = wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew)!, 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : prof.segments.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
+      const firstChange = wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew)!, 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
       // Run 20 round 1 (quality): with or without wins and losses, your current ICP is read in parts and each part gets a test to run in
       // your CRM; the sector adds the roles and loss reasons to look for. Nothing is invented: every part is your own words.
       const partLines: string[] = [];
-      prof.segments.slice(0, 6).forEach((sg, i) => {
+      segs.slice(0, 6).forEach((sg, i) => {
         const sub = /\(([^()]+)\)/.exec(sg);
         const base = sg.replace(/\s*\([^()]*\)/, '').trim();
         const parts = sub ? sub[1].split(/[;,]\s*/).filter(Boolean) : [];
-        const role = prof.roles[0];
+        const role = roles[0];
         const lines = [
           `list every deal you won or lost with ${base} in it this period and compare its win rate with your other segments`,
           `compare the ACV and sales cycle of ${base} with the other segments${role ? `, and check whether ${role} is the one who signs there` : ''}`,
@@ -2628,7 +2631,7 @@ ${SUGGESTED}
         partLines.push(`- **Segment ${sg}**: ${lines[i % 3]}${parts.length ? `; then split it by the parts you named (${andList(parts)}) to see which one drives the result` : ''}. Keep, grow or drop it on that evidence.`);
       });
       if (profSizes.length) partLines.push(`- **Size (${andList(profSizes.map(x => clauseHead(x, 60)))})**: list the smallest and the largest customer you won this period; if they sit outside this size, the ICP is already wider (or narrower) than you wrote it.`);
-      for (const r of prof.roles.slice(0, 3)) partLines.push(`- **Role ${r}**: do deals that involve ${r} close faster or larger than deals that do not? If not, the role in your ICP is a label, not a fit signal.`);
+      for (const r of roles.slice(0, 3)) partLines.push(`- **Role ${r}**: do deals that involve ${r} close faster or larger than deals that do not? If not, the role in your ICP is a label, not a fit signal.`);
       for (const pr of prof.problems.slice(0, 2)) partLines.push(`- **Problem ${q(clauseHead(pr, 100))}**: in how many of your wins was this the stated reason to buy, and in how many losses was it absent?`);
       // The sector's loss reasons and measures, led by the ones your own losses, wins and market changes point to (the same items, in your order of relevance).
       const vRanked: Vertical | null = v ? {
@@ -2674,66 +2677,20 @@ ${changes.length ? changeLines.join('\n') : '- No market changes provided: add m
 ${partLines.length ? `${partLines.join('\n')}\n` : 'Your current ICP text did not split into segments, size, buyer role or problem. Write it in those parts (for example "mid-size banks, 500 to 2,000 employees, CFO as buyer, who face manual reconciliation") to get a test for each part.\n'}${roleAdds.length ? `\n**Roles usual in ${sideName} that your ICP does not name**: ${andList(roleAdds)}. Check whether they sign or evaluate in the deals you won or lost; if they do, the ICP should name them.\n` : ''}${vRanked ? `\n**Loss reasons to tag in your CRM** (the objections ${vRanked.name} buyers raise): ${vRanked.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Count each over the period you are reviewing; a reason that rises is a change to your ICP or your qualification.\n` : ''}
 ${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.roles, args.current_icp, args.product_category)}\n\n` : ''}---
 
-## ICP Evolution Framework
+## Draft ICP for ${period}
 
-### Quarterly Review Checklist
+*Built only from your own words. It is a hypothesis: check each line against your CRM before you adopt it.*
 
-**Data to Collect**:
-- [ ] Win/loss ratio by segment
-- [ ] ACV trends by customer type
-- [ ] Sales cycle changes
-- [ ] Churn patterns by ICP match score
-- [ ] NPS by customer segment
+- **Your ICP as written**: ${q(shortText(args.current_icp, 700))}
+- **Segments to keep until the data says otherwise**: ${segs.length ? andList(segs.slice(0, 6)) : 'your ICP text did not split into segments (see above)'}${profSizes.length ? `; size: ${andList(profSizes.map(x => clauseHead(x, 60)))}` : ''}.
+${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
+- **Qualify out on trial**: ${losses.length ? andList(losses.slice(0, 3).map(l => q(shortText(l, 140)))) + ' (' + andList([...new Set(losses.slice(0, 3).map(l => lossKind(l).split(':')[0]))]) + ')' : 'nothing yet, because no losses were given'}.
+- **First change to test**: ${firstChange}.
+- **Check against the market**: ${changes.length ? andList(changes.slice(0, 3).map(c => q(shortText(c, 140)))) + ': which of your segments does it move toward you or away from you?' : 'no market change was given.'}
 
-**Questions to Answer**:
-1. Are our best customers changing profile?
-2. Are we winning more in new segments?
-3. Are we losing deals we should have qualified out?
-4. Are churned customers following a pattern?
-5. Has the competitive landscape shifted?
+## What to pull from your CRM for ${period}
 
-### ICP Evolution Decision Matrix
-
-| Signal | Expand ICP | Contract ICP | No Change |
-|--------|-----------|--------------|-----------|
-| Winning in new segments | Yes | No | No |
-| Losing in core segment | No | Yes | No |
-| Stable win rates | No | No | Yes |
-| New competitor threat | No | Yes | No |
-| Market expansion | Yes | No | No |
-| High churn segment | No | Yes | No |
-
----
-
-## ICP Evolution Tracking Template
-
-| Quarter | ICP Change | Rationale | Impact |
-|---------|-----------|-----------|--------|
-| ${period} | ${firstChange} | From this review: ${wins.length ? plural(wins.length, 'win') : 'no wins'}, ${losses.length ? plural(losses.length, 'loss', 'losses') : 'no losses'}, ${changes.length ? plural(changes.length, 'market change') : 'no market changes'} | Win rate and cycle of the deals that match it, next quarter |
-| Next quarter | (to fill in) | (to fill in) | (to fill in) |
-| Quarter after | (to fill in) | (to fill in) | (to fill in) |
-
-### Metrics to Track
-- **Win rate by ICP fit score**: Should improve if ICP is right
-- **Sales cycle by ICP fit**: Best-fit should close faster
-- **ACV by ICP fit**: Best-fit should pay more
-- **Churn by ICP fit**: Best-fit should retain better
-- **NPS by ICP fit**: Best-fit should be happier
-
----
-
-## ICP Change Triggers
-
-Automatically review ICP when:
-
-${EXAMPLES}
-| Trigger | Threshold | Action |
-|---------|-----------|--------|
-| Win rate drops | >10% decline | Review ICP breadth |
-| Sales cycle increases | >20% longer | Tighten qualification |
-| Churn spikes | >5% increase | Analyze churned segment |
-| New segment wins | >20% of deals | Consider ICP expansion |
-| Competitor win increase | >15% of losses | Review positioning |
+For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the deals you won and lost, the ACV and the sales cycle, and the churn and renewals. ${roles.length ? `For ${andList(roles.slice(0, 3))}: the deals where they were involved against the deals where they were not.` : ''} Put the answers next to the draft above and change a line only where the numbers say so.
 
 **Next Step**: Use \`icp_interview_synthesizer\` to extract patterns from customer interviews
 `;
