@@ -251,7 +251,7 @@ test("icp_evolution_tracker: with no wins or losses, the current ICP is read par
   assert.match(r.text, /## Your Current ICP, Part by Part/);
   assert.match(r.text, /\*\*Segment Banking\*\*: compare its win rate, ACV, sales cycle and churn/);
   assert.match(r.text, /\*\*Segment Automotive\*\*/);
-  assert.match(r.text, /\*\*Role CIO\*\*: do deals where CIO is involved close faster or larger/);
+  assert.match(r.text, /\*\*Role CIO\*\*: do deals that involve CIO close faster or larger/);
   assert.match(r.text, /Roles usual in telecom that your ICP does not name/);
   assert.match(r.text, /Loss reasons to tag in your CRM/);
   assert.match(r.text, /Compare win rate, ACV and cycle across Banking, Manufacturing and Automotive/);
@@ -296,7 +296,7 @@ test("icp_interview_synthesizer: separate interviews are counted as k of n; quot
 test("icp_interview_synthesizer: with no product the template line names the top pain, not a bracket", async () => {
   const r = await call("icp_interview_synthesizer", { interview_notes: [{ customer: "Lanehop", role: "COO", pain_points: ["late deliveries, with angry customers"] }] });
   clean(r, "interview");
-  assert.match(r.text, /biggest challenge you face with late deliveries, with angry customers\?/);
+  assert.match(r.text, /biggest challenge you face in this area today\?"[^\n]*late deliveries, with angry customers/);
 });
 
 // ---- no SaaS-only words for a connectivity or services business, in any tool ----

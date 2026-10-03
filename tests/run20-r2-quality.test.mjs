@@ -152,7 +152,7 @@ test("interview: a partner quote is a quote, not the outcome buyers seek; the so
   assert.doesNotMatch(r.text, /Seeks outcome: Microsoft/);
   assert.match(r.text, /> "the tool cut a 60 day cycle to 10 days"\s*\n> \(Customer at Sula Vineyards CFO|> \(Customer at Sula Vineyards CFO|Sula Vineyards CFO/);
   assert.match(r.text, /Microsoft's CVP thanks Pathwise/);
-  assert.match(r.text, /biggest challenge you face with slow modernization of legacy systems\?/);
+  assert.match(r.text, /biggest challenge you face in this area today\?"[^\n]*slow modernization of legacy systems/);
   assert.doesNotMatch(r.text, /challenge you face with IT services/);
   assert.doesNotMatch(r.text, / \.\.\.\?/);
 });

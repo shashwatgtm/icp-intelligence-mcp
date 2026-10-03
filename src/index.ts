@@ -293,7 +293,7 @@ function shortKeepLabel(text: string, max = 400): string {
   if (t.length <= max) return t;
   const label = sentences(t).filter((x) => /\bhypothetical\b/i.test(x));
   const head = shortText(sentences(t).filter((x) => !/\bhypothetical\b/i.test(x)).join('. '), max);
-  return label.length ? `${head} ${label.join('. ')}.` : head;
+  return label.length ? `${head}${/[.)]$/.test(head) ? '' : '.'} ${label.join('. ')}.` : head;
 }
 // Backlog B15-L5h: "1 interview", "2 interviews".
 function plural(n: number, word: string, many = `${word}s`): string {
@@ -1249,7 +1249,7 @@ ${SUGGESTED}
       const horizontal = isHorizontal(v);
       const seat = v ? (/, investment management$/.test(v.name) ? { economic: 'Chief Investment Officer', champion: 'Head of Manager Research', technical: 'Head of Risk', user: 'Portfolio Manager', blocker: 'Compliance Officer' } : SEATS[v.id]) : undefined;
       const pick = (k: 'economic' | 'champion' | 'technical' | 'user' | 'blocker', fallback: string) => (horizontal || !seat ? fallback : seat[k]);
-      const objTech = objectionFor(/integrat|tms|erp|dms|siem|migrat|scripts|systems|overlay|sync/i);
+      const objTech = objectionFor(/integrat|tms|erp|dms|siem|migrat|scripts|systems|overlay|sync|fit our/i);
       const objUser = objectionFor(/use|app|adopt|alert|log into|another tool/i);
       const objBlock = objectionFor(/security|privacy|compliance|regulat|lock-in|transition|proof before|review/i);
       const objEcon = objectionFor(/price|margin|cost|rates|budget|grows|per-user/i);
@@ -2538,7 +2538,7 @@ ${SUGGESTED}
       const partLines: string[] = [];
       for (const sg of prof.segments.slice(0, 6)) partLines.push(`- **Segment ${sg}**: compare its win rate, ACV, sales cycle and churn with your other segments over the same period; keep, grow or drop it on that evidence.`);
       if (profSizes.length) partLines.push(`- **Size (${andList(profSizes.map(x => clauseHead(x, 60)))})**: list the smallest and the largest customer you won this period; if they sit outside this size, the ICP is already wider (or narrower) than you wrote it.`);
-      for (const r of prof.roles.slice(0, 3)) partLines.push(`- **Role ${r}**: do deals where ${r} is involved close faster or larger than deals where they are not? If not, the role in your ICP is a label, not a fit signal.`);
+      for (const r of prof.roles.slice(0, 3)) partLines.push(`- **Role ${r}**: do deals that involve ${r} close faster or larger than deals that do not? If not, the role in your ICP is a label, not a fit signal.`);
       for (const pr of prof.problems.slice(0, 2)) partLines.push(`- **Problem ${q(clauseHead(pr, 100))}**: in how many of your wins was this the stated reason to buy, and in how many losses was it absent?`);
       const { bv: sideV, name: sideName } = buyerSide(v, prof.roles, args.current_icp, args.product_category);
       const roleAdds = sideV ? sideV.buyerRoles.filter(r => ![...prof.roles].some(n => sameRole(n, r))).slice(0, 4) : [];
@@ -2841,9 +2841,9 @@ ${side.bv ? `\n### Sector questions (${side.name})\n${side.bv.discovery.slice(0,
 
 Based on gaps in this analysis, ask about:
 
-1. **Pain Exploration**: ${area ? `"What is the biggest challenge you face with ${area}?"` : '"What is the biggest challenge you face in this area today?"'}
+1. **Pain Exploration**: "What is the biggest challenge you face in this area today?"${area ? ` (the top pain in your notes, to probe: ${q(area)})` : ''}
 2. **Trigger Events**: "What made you start looking for a solution?"${topTriggers.length ? '' : ' (no triggers in your notes yet)'}
-3. **Value Measurement**: "How do you measure success?"${side.bv ? ` In ${side.name === side.bv.name ? side.name : side.name}, buyers usually measure ${andList(side.bv.metrics.slice(0, 3))}.` : ''}
+3. **Value Measurement**: "How do you measure success?"${side.bv ? ` ${/buyers$/.test(side.name) ? `${side.name.charAt(0).toUpperCase()}${side.name.slice(1)} usually measure` : `In ${side.name}, buyers usually measure`} ${andList(side.bv.metrics.slice(0, 3))}.` : ''}
 4. **Buying Process**: "Who else was involved in the decision?"
 5. **Alternatives Considered**: "What else did you evaluate?"
 
