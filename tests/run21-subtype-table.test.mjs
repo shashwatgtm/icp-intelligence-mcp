@@ -105,3 +105,10 @@ test("no figure, dash or named company in the sub-type text (B82)", () => {
   assert.doesNotMatch(all, /\d/);
   assert.doesNotMatch(all, /[–—]/);
 });
+
+test("a bare AI in the seller's words is not a category: the deal text or the job titles name the sector, but 'Voice AI for contact centres' stays AI native", () => {
+  assert.equal(detectVertical({ seller: ["Data and analytics using AI"], context: ["Lenders and banks need faster credit decisions, with loans and bank statements checked automatically"] }).id, "fintech");
+  assert.equal(detectVertical({ seller: ["Data and analytics using AI"], role: ["CISO"] }).id, "cybersecurity");
+  assert.equal(detectVertical("Voice AI for contact centres").id, "ai-native");
+  assert.equal(detectVertical({ seller: ["Data and analytics using AI"], buyer: ["Banks"] }).id, "ai-native", "the buyer's industry alone does not override an AI seller");
+});

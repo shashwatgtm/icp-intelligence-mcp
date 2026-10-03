@@ -1617,7 +1617,12 @@ export function explainSector(...args: unknown[]): { vertical: Vertical | null; 
   const { seller, buyer, context, role } = sides(args);
   // The product category noun decides when it comes BEFORE the first strong word of a different sector ("customer service software with AI agents"); otherwise the usual reading stands.
   const pk = pick(seller), cat = categoryPick(seller);
-  const s = cat && (!pk || (cat.v.id !== pk.v.id && (cat.first <= pk.first || pk.strong.every((w) => BUZZ.test(w))))) ? cat : pk;
+  let s = cat && (!pk || (cat.v.id !== pk.v.id && (cat.first <= pk.first || pk.strong.every((w) => BUZZ.test(w))))) ? cat : pk;
+  // A bare "AI" in the seller's words says how it is built, not what it sells: when the deal text or the job titles name another sector, that sector is read instead.
+  if (s && s.v.id === 'ai-native' && s.strong.every((w) => w === 'ai')) {
+    const alt = pick(context, 2) ?? pick(role);
+    if (alt && alt.v.id !== 'ai-native') s = null;
+  }
   // A seller that manages money (investment strategies, portfolios for allocators) and uses AI words of its own, anywhere in its
   // description, is AI native with the investment model, not fintech (the model is read in detectModel).
   if (s && s.v.id === 'fintech' && modelFromSeller(seller) === 'investment') {
