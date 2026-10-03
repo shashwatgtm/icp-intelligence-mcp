@@ -54,3 +54,8 @@ test("the telecom vocabulary spells SD-WAN with a hyphen", () => {
   assert.ok(t.notes.vocabulary.includes("SD-WAN"));
   assert.ok(!t.notes.vocabulary.includes("SD WAN"));
 });
+
+test("an enterprise network, cloud and security provider is a connectivity business, not a software subscription", () => {
+  const m = detectModel(undefined, { seller: ["global digital ecosystem enabler: enterprise network, cloud, security, interactions and IoT services"] });
+  assert.equal(m.model, "connectivity");
+});

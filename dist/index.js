@@ -609,6 +609,12 @@ function parseProfile(text) {
     const claims = [];
     for (let it of items) {
         it = restoreText(it.replace(/\u0001/g, ';').replace(/\u0002/g, ','));
+        // "operations leaders at large enterprises in banking and financial services, communications": the industry after "in" starts the list of segments
+        const tailM = it.match(/^(.{20,}?)\s+(?:in|across)\s+([A-Za-z][A-Za-z&' -]{2,50})$/i);
+        if (tailM && it.split(/\s+/).length > 6 && !/\d/.test(tailM[2]) && tailM[2].split(/\s+/).length <= 5 && !/^(?:the|a|an|particular|general|addition|case|total|this|that)\b/i.test(tailM[2])) {
+            segments.push(tailM[2].trim());
+            it = tailM[1];
+        }
         if (rolesIn(it).length && it.split(/\s+/).length <= 5)
             continue; // a role is reported under roles
         if (/\(page claim\)|^(?:the )?(?:about |home |product )?page\b|\bthe (?:about |home )?page\b|\btrusted partner\b|^the world's/i.test(it)) {
