@@ -327,8 +327,8 @@
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>total_potential_companies</code></td><td>number (0 or more)</td><td>yes</td><td></td><td>Estimated total companies that could buy (from LinkedIn, industry reports)</td></tr>
 <tr><td><code>average_contract_value</code></td><td>number (more than 0)</td><td>yes</td><td></td><td>Your average ACV in dollars</td></tr>
-<tr><td><code>icp_percentage</code></td><td>number (0 or more)</td><td>no</td><td></td><td>Percentage that match your ICP (1-100)</td></tr>
-<tr><td><code>year1_market_share_target</code></td><td>number (0 or more)</td><td>no</td><td></td><td>Realistic Year 1 market share percentage (typically 1-5%)</td></tr>
+<tr><td><code>icp_percentage</code></td><td>number (0 to 100)</td><td>no</td><td></td><td>Percentage of those companies that match your ICP, from 0 to 100. Left out, 30 is used and marked as an example</td></tr>
+<tr><td><code>year1_market_share_target</code></td><td>number (0 to 100)</td><td>no</td><td></td><td>Realistic Year 1 market share percentage, from 0 to 100 (typically 1-5%). Left out, 3 is used and marked as an example</td></tr>
 <tr><td><code>data_sources</code></td><td>string</td><td>no</td><td></td><td>Where you got your numbers (for documentation)</td></tr>
 <tr><td><code>segment_name</code></td><td>string</td><td>no</td><td></td><td>Name of the market segment</td></tr>
 <tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
@@ -353,7 +353,7 @@
   <p><code>account_prioritization</code></p>
   <p class="hx-prose">Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points. <a href="/tools/account-prioritization/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
-<tr><td><code>accounts</code></td><td>list of objects</td><td>no</td><td></td><td>List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing</td></tr>
+<tr><td><code>accounts</code></td><td>list of objects</td><td>no</td><td></td><td>List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)</td></tr>
 <tr><td><code>prioritization_weights</code></td><td>object</td><td>no</td><td></td><td>Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100</td></tr>
 <tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>
@@ -381,7 +381,7 @@
 <tr><td><code>recent_wins</code></td><td>string</td><td>no</td><td></td><td>Description of recent successful customers</td></tr>
 <tr><td><code>recent_losses</code></td><td>string</td><td>no</td><td></td><td>Description of recent lost deals</td></tr>
 <tr><td><code>market_changes</code></td><td>string</td><td>no</td><td></td><td>Recent market or competitive changes</td></tr>
-<tr><td><code>time_period</code></td><td>string</td><td>no</td><td></td><td>Time period for analysis (e.g., &quot;Q3 2026&quot;)</td></tr>
+<tr><td><code>time_period</code></td><td>string</td><td>no</td><td></td><td>Time period you are reviewing, in your own words (for example &quot;last quarter&quot;)</td></tr>
 <tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell, used for sector notes</td></tr>
 <tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>
@@ -389,10 +389,10 @@
 <section class="hx-section" id="icp-interview-synthesizer" aria-labelledby="d-icp-interview-synthesizer">
   <h3 id="d-icp-interview-synthesizer">ICP Interview Synthesizer</h3>
   <p><code>icp_interview_synthesizer</code></p>
-  <p class="hx-prose">Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analysed. <a href="/tools/icp-interview-synthesizer/">Open the form</a>.</p>
+  <p class="hx-prose">Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analyzed. <a href="/tools/icp-interview-synthesizer/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>interview_notes</code></td><td>list of objects</td><td>no</td><td></td><td>Structured interview notes</td></tr>
-<tr><td><code>raw_transcripts</code></td><td>string</td><td>no</td><td></td><td>Alternative: Paste raw interview transcripts or notes</td></tr>
+<tr><td><code>raw_transcripts</code></td><td>string</td><td>no</td><td></td><td>Alternative: paste interview notes or transcripts. This tool does not analyze pasted text: it shows up to 500 characters back with a template to structure them as interview_notes, which it does analyze</td></tr>
 <tr><td><code>analysis_focus</code></td><td>string</td><td>no</td><td></td><td>Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)</td></tr>
 <tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell, used for sector notes</td></tr>
 <tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>

@@ -15,9 +15,26 @@ const verticals_ts_1 = require("./verticals.js");
 // Text only: add a word such as "software" after a phrase unless the phrase already ends with it (no "software software").
 // Run 17 D56 (backlog items 8 and 15): a market share under 0.05% prints as given (0.03%, not 0.0%);
 // every share of 0.05% or more prints as before, with one decimal.
+// Run 20 round 1: every percentage a tool prints is a clean figure, one decimal at most and no float noise. The one exception is
+// the run 17 D56 rule: a share under 0.05% would print as 0.0%, so it prints with two decimals (0.03%), or "under 0.01%".
 function sharePct(fraction) {
-    const v = fraction * 100;
-    return v > 0 && v < 0.05 ? `${Number(v.toPrecision(2))}%` : `${v.toFixed(1)}%`;
+    const v = Number((fraction * 100).toPrecision(12));
+    if (v > 0 && v < 0.05) {
+        const r = Math.round(v * 100) / 100;
+        return r >= 0.01 ? `${r}%` : 'under 0.01%';
+    }
+    return `${v.toFixed(1)}%`;
+}
+// A percentage typed by the user and printed back: one decimal at most, no trailing ".0" (20 stays 20, 23.456789 prints 23.5).
+function cleanNum1(n) {
+    return (Math.round(n * 10) / 10 + 0).toLocaleString('en-US', { maximumFractionDigits: 1 });
+}
+function cleanPct(n) {
+    return `${cleanNum1(n)}%`;
+}
+// A plain number printed back (a sum of weights): float noise removed, two decimals at most.
+function cleanNum(n) {
+    return (Math.round(n * 100) / 100 + 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
 }
 function withSoftware(phrase, word) {
     const p = phrase.trim();
@@ -475,7 +492,7 @@ ${topIndustries.length > 0 ? dist(topIndustries, 'customer') : '- No industry da
 
 **Pattern**: ${topIndustries.length === 0 ? 'none yet, add this data' : topIndustries[0][1] > n * 0.5 ?
                     `Strong concentration in ${topIndustries[0][0]} (${pctOf(topIndustries[0][1])}%)` :
-                    `Mixed industries (${andList(topIndustries.map(r => r[0]))}): compare their deal size and cycle before you specialise`}
+                    `Mixed industries (${andList(topIndustries.map(r => r[0]))}): compare their deal size and cycle before you specialize`}
 
 ### Company Size Distribution
 ${topSizes.length > 0 ? dist(topSizes, 'customer') : '- No size data provided'}
@@ -1094,12 +1111,14 @@ ${SUGGESTED}
                 icp_percentage: {
                     type: 'number',
                     minimum: 0,
-                    description: 'Percentage that match your ICP (1-100)'
+                    maximum: 100,
+                    description: 'Percentage of those companies that match your ICP, from 0 to 100. Left out, 30 is used and marked as an example'
                 },
                 year1_market_share_target: {
                     type: 'number',
                     minimum: 0,
-                    description: 'Realistic Year 1 market share percentage (typically 1-5%)'
+                    maximum: 100,
+                    description: 'Realistic Year 1 market share percentage, from 0 to 100 (typically 1-5%). Left out, 3 is used and marked as an example'
                 },
                 data_sources: {
                     type: 'string',
@@ -1175,7 +1194,7 @@ ${sectorLine(ctx.v)}
 |-------|-------|--------|
 | Total Potential Companies | ${totalCompanies.toLocaleString('en-US')} | ${sources} |
 | Average Contract Value | $${acv.toLocaleString('en-US')} | Your input |
-| ICP Match Rate | ${(icpPercent * 100).toFixed(0)}%${icpEx} | ${icpGiven ? 'Your input' : 'Not supplied'} |
+| ICP Match Rate | ${cleanPct(icpPercent * 100)}${icpEx} | ${icpGiven ? 'Your input' : 'Not supplied'} |
 | Year 1 Market Share Target | ${sharePct(marketSharePercent)}${shareEx} | ${shareGiven ? 'Your input' : 'Not supplied'} |
 
 ---
@@ -1196,7 +1215,7 @@ TAM = ${totalCompanies.toLocaleString('en-US')} × $${acv.toLocaleString('en-US'
 ### SAM (Serviceable Addressable Market)
 \`\`\`
 SAM = TAM × ICP Match Rate
-SAM = ${formatCurrency(tam)} × ${(icpPercent * 100).toFixed(0)}%${icpEx}
+SAM = ${formatCurrency(tam)} × ${cleanPct(icpPercent * 100)}${icpEx}
 \`\`\`
 ### **SAM = ${formatCurrency(sam)}**${icpEx}
 
@@ -1564,13 +1583,13 @@ ${SUGGESTED}
                         type: 'object',
                         properties: {
                             name: { type: 'string' },
-                            fit_score: { type: 'number', minimum: 0, description: '1-100' },
-                            intent_signals: { type: 'number', minimum: 0, description: '1-100 or 0 if unknown' },
-                            relationship: { type: 'number', minimum: 0, description: '1-100 based on existing connections' },
-                            timing: { type: 'string', description: 'now/soon/later/unknown' }
+                            fit_score: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100. Left out, 50 is used' },
+                            intent_signals: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100 (0 scores zero). Left out, 50 is used' },
+                            relationship: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100, based on existing connections. Left out, 50 is used' },
+                            timing: { type: 'string', description: 'now, soon, later or unknown (now 100 points, soon 70, later 40; unknown, left out or any other word 50)' }
                         }
                     },
-                    description: 'List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing'
+                    description: 'List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)'
                 },
                 prioritization_weights: {
                     type: 'object',
@@ -1611,7 +1630,7 @@ ${SUGGESTED}
                 };
                 // D41 (run 15): the tier cut-offs are 80%, 60% and 40% of the highest possible score W, the sum of the four weights
                 // (ceil in integer-safe form; with the default weights W = 100 they are 80, 60 and 40, as before).
-                const W = weights.fit + weights.intent + weights.relationship + weights.timing;
+                const W = Number((weights.fit + weights.intent + weights.relationship + weights.timing).toPrecision(12)); // run 20: 33.3 + 33.3 + 33.3 + 0.1 is 100, not 99.99999999999999
                 const cut = (p) => Math.ceil((W * p) / 100);
                 const tierA = cut(80), tierB = cut(60), tierC = cut(40);
                 const scoredAccounts = args.accounts.map(account => {
@@ -1643,15 +1662,15 @@ ${SUGGESTED}
                 // are unchanged). The old labels stay as the opening words where they applied; "Balanced scoring" is gone.
                 const reasonFor = (a) => {
                     const parts = [
-                        { k: 'fit', v: a.fit, w: weights.fit, txt: `fit ${a.fit}` },
-                        { k: 'intent', v: a.intent, w: weights.intent, txt: `intent ${a.intent}` },
-                        { k: 'relationship', v: a.relationship, w: weights.relationship, txt: `relationship ${a.relationship}` },
+                        { k: 'fit', v: a.fit, w: weights.fit, txt: `fit ${cleanNum1(a.fit)}` },
+                        { k: 'intent', v: a.intent, w: weights.intent, txt: `intent ${cleanNum1(a.intent)}` },
+                        { k: 'relationship', v: a.relationship, w: weights.relationship, txt: `relationship ${cleanNum1(a.relationship)}` },
                         { k: 'timing', v: a.timingScore, w: weights.timing, txt: `timing ${a.timing} (${a.timingScore} pts)` },
                     ].map(x => ({ ...x, pts: x.v * x.w / 100 })).filter(x => x.w > 0).sort((x, y) => y.pts - x.pts);
                     const label = weights.fit > 0 && a.fit >= 80 ? 'Strong ICP fit' : weights.intent > 0 && a.intent >= 80 ? 'High buying intent' : weights.relationship > 0 && a.relationship >= 80 ? 'Strong relationship' : '';
                     const top = parts[0];
-                    const num = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
-                    const why = top ? `the most points come from ${top.txt.replace(/^(\w+) (\d+)$/, '$1 $2')} × ${top.w}% = ${num(top.pts)} points of ${a.totalScore}` : 'no factor carries weight';
+                    const num = cleanNum1;
+                    const why = top ? `the most points come from ${top.txt.replace(/^(\w+) (\d+)$/, '$1 $2')} × ${cleanPct(top.w)} = ${num(top.pts)} points of ${a.totalScore}` : 'no factor carries weight';
                     return label ? `${label} (${why})` : why.charAt(0).toUpperCase() + why.slice(1);
                 };
                 return `# Account Prioritization Results
@@ -1661,25 +1680,25 @@ ${SUGGESTED}
 ## Scoring Weights
 ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default weights.\n` : ''}| Factor | Weight | Rationale |
 |--------|--------|-----------|
-| **Fit** | ${weights.fit}%${wEx(givenWeights.fit)} | How well they match ICP |
-| **Intent** | ${weights.intent}%${wEx(givenWeights.intent)} | Buying signals detected |
-| **Relationship** | ${weights.relationship}%${wEx(givenWeights.relationship)} | Existing connections |
-| **Timing** | ${weights.timing}%${wEx(givenWeights.timing)} | Urgency/readiness |
+| **Fit** | ${cleanPct(weights.fit)}${wEx(givenWeights.fit)} | How well they match ICP |
+| **Intent** | ${cleanPct(weights.intent)}${wEx(givenWeights.intent)} | Buying signals detected |
+| **Relationship** | ${cleanPct(weights.relationship)}${wEx(givenWeights.relationship)} | Existing connections |
+| **Timing** | ${cleanPct(weights.timing)}${wEx(givenWeights.timing)} | Urgency/readiness |
 
 ---
 
 ## Prioritized Account List
 
-Your scores are shown as given; ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'} (now 100, soon 70, later 40, unknown 50 points). (default) marks a value your input did not supply, so the tool used its default.
+Your scores are shown as given (to one decimal at most); ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'} (now 100, soon 70, later 40, unknown 50 points). (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
 |------|---------|-----|--------|--------------|--------|-----------|------|
-${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${a.fit}${a.defaults.fit ? ' (default)' : ''} | ${a.intent}${a.defaults.intent ? ' (default)' : ''} | ${a.relationship}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
+${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${cleanNum1(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${cleanNum1(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${cleanNum1(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
 
 ---
 
 ## Tier Breakdown
 
-The tiers are 80%, 60% and 40% of the highest possible score, ${W} points, the sum of your weights.
+The tiers are 80%, 60% and 40% of the highest possible score, ${cleanNum(W)} points, the sum of your weights.
 
 ${EXAMPLES}
 ### Tier A (Score ${tierA}+): Immediate Action
@@ -1939,8 +1958,8 @@ ${noneGiven ? `${EXAMPLES} You did not supply current or target metrics, so ever
 |--------|---------|--------|-----|----------|
 | **Avg ACV** | $${metrics.current.acv.toLocaleString('en-US')}${cellEx(given.acv[0])} | $${metrics.target.acv.toLocaleString('en-US')}${cellEx(given.acv[1])} | ${upGap(gaps.acv, '')} | ${pri(sev(gaps.acv, 50, 25))} |
 | **Sales Cycle** | ${metrics.current.cycle} days${cellEx(given.cycle[0])} | ${metrics.target.cycle} days${cellEx(given.cycle[1])} | ${downGap(gaps.cycle, '')} | ${pri(sev(gaps.cycle, 30, 15))} |
-| **Win Rate** | ${metrics.current.winRate}%${cellEx(given.winRate[0])} | ${metrics.target.winRate}%${cellEx(given.winRate[1])} | ${upGap(gaps.winRate, '')} | ${pri(sev(gaps.winRate, 40, 20))} |
-| **Churn Rate** | ${metrics.current.churn}%${cellEx(given.churn[0])} | ${metrics.target.churn}%${cellEx(given.churn[1])} | ${downGap(gaps.churn, '')} | ${pri(sev(gaps.churn, 40, 20))} |
+| **Win Rate** | ${cleanPct(metrics.current.winRate)}${cellEx(given.winRate[0])} | ${cleanPct(metrics.target.winRate)}${cellEx(given.winRate[1])} | ${upGap(gaps.winRate, '')} | ${pri(sev(gaps.winRate, 40, 20))} |
+| **Churn Rate** | ${cleanPct(metrics.current.churn)}${cellEx(given.churn[0])} | ${cleanPct(metrics.target.churn)}${cellEx(given.churn[1])} | ${downGap(gaps.churn, '')} | ${pri(sev(gaps.churn, 40, 20))} |
 | **NPS** | ${metrics.current.nps}${cellEx(given.nps[0])} | ${metrics.target.nps}${cellEx(given.nps[1])} | ${npsGap} | ${pri(sev(gaps.nps, 50, 25))} |
 
 ---
@@ -2080,7 +2099,7 @@ ${SUGGESTED}
                 },
                 time_period: {
                     type: 'string',
-                    description: 'Time period for analysis (e.g., "Q3 2026")'
+                    description: 'Time period you are reviewing, in your own words (for example "last quarter")'
                 },
                 product_category: {
                     type: 'string',
@@ -2211,7 +2230,7 @@ ${EXAMPLES}
     // Tool 9: ICP Interview Synthesizer - Pattern Extraction from Interviews
     // ---------------------------------------------------------------------------
     icp_interview_synthesizer: {
-        description: 'Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analysed.',
+        description: 'Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analyzed.',
         inputSchema: {
             type: 'object',
             properties: {
@@ -2232,7 +2251,7 @@ ${EXAMPLES}
                 },
                 raw_transcripts: {
                     type: 'string',
-                    description: 'Alternative: Paste raw interview transcripts or notes'
+                    description: 'Alternative: paste interview notes or transcripts. This tool does not analyze pasted text: it shows up to 500 characters back with a template to structure them as interview_notes, which it does analyze'
                 },
                 analysis_focus: {
                     type: 'string',
@@ -2355,7 +2374,7 @@ Based on gaps in this analysis, ask about:
             }
             // If raw transcripts provided
             if (args.raw_transcripts) {
-                return `Your notes are below. This tool analyses structured notes only.
+                return `Your notes are below. This tool analyzes structured notes only.
 
 - ${companyLine(args.company)}
 
@@ -2583,11 +2602,7 @@ function checkRequiredInputs(name, args) {
     // Run 15 R15-32 (edge-case matrix): a percentage cannot pass 100, a 1-100 score cannot pass 100, and NPS runs from -100 to 100.
     const num = (v) => (typeof v === "number" && Number.isFinite(v) ? v : null);
     if (name === "tam_sam_som_calculator") {
-        for (const k of ["icp_percentage", "year1_market_share_target"]) {
-            const v = num(args?.[k]);
-            if (v !== null && v > 100)
-                problems.push(`${k} must be 100 or less (it is a percentage)`);
-        }
+        // Run 20: the limit of 100 is now in the input schema (maximum), so checkValue above names it once.
     }
     // Run 16 D45: a weight given as 0 is used as 0, so four weights of 0 leave nothing to score with.
     if (name === "account_prioritization") {
@@ -2595,15 +2610,7 @@ function checkRequiredInputs(name, args) {
         if (["fit", "intent", "relationship", "timing"].every((k) => w[k] === 0))
             problems.push("at least one weight must be more than 0");
     }
-    if (name === "account_prioritization" && Array.isArray(args?.accounts)) {
-        args.accounts.forEach((a, i) => {
-            for (const k of ["fit_score", "intent_signals", "relationship"]) {
-                const v = num(a && a[k]);
-                if (v !== null && v > 100)
-                    problems.push(`accounts[${i}].${k} must be 100 or less (scores run from 0 to 100)`);
-            }
-        });
-    }
+    // Run 20: the limit of 100 for the three scores is now in the input schema (maximum), so checkValue above names it once.
     if (name === "icp_gap_analysis") {
         for (const side of ["current_metrics", "target_metrics"]) {
             const m = (args?.[side] || {});

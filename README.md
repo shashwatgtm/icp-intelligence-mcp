@@ -50,7 +50,7 @@ Generated on 27 September 2026 from the server's own tool list, and regenerated 
 | 6 | `account_prioritization` | Account Prioritization | Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points |
 | 7 | `icp_gap_analysis` | ICP Gap Analysis | Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors |
 | 8 | `icp_evolution_tracker` | ICP Evolution Tracker | Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP and states a candidate change for each (an addition to test, a disqualifier to test, an implication to check), with a review checklist. It does not compute win rates; check each candidate against your CRM |
-| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analysed. |
+| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analyzed. |
 
 ### Inputs of each tool
 
@@ -91,8 +91,8 @@ Generated on 27 September 2026 from the server's own tool list, and regenerated 
 |---|---|---|---|
 | `total_potential_companies` | Yes | number (0 or more) | Estimated total companies that could buy (from LinkedIn, industry reports) |
 | `average_contract_value` | Yes | number (more than 0) | Your average ACV in dollars |
-| `icp_percentage` | No | number (0 or more) | Percentage that match your ICP (1-100) |
-| `year1_market_share_target` | No | number (0 or more) | Realistic Year 1 market share percentage (typically 1-5%) |
+| `icp_percentage` | No | number (0 to 100) | Percentage of those companies that match your ICP, from 0 to 100. Left out, 30 is used and marked as an example |
+| `year1_market_share_target` | No | number (0 to 100) | Realistic Year 1 market share percentage, from 0 to 100 (typically 1-5%). Left out, 3 is used and marked as an example |
 | `data_sources` | No | string | Where you got your numbers (for documentation) |
 | `segment_name` | No | string | Name of the market segment |
 | `company` | No | string | Optional: your company or product name, so the answer can name it |
@@ -113,7 +113,7 @@ Generated on 27 September 2026 from the server's own tool list, and regenerated 
 
 | Input | Required | Type | Description |
 |---|---|---|---|
-| `accounts` | No | array of object | List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing |
+| `accounts` | No | array of object | List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown) |
 | `prioritization_weights` | No | object | Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100 |
 | `company` | No | string | Optional: your company or product name, so the answer can name it |
 
@@ -137,7 +137,7 @@ Generated on 27 September 2026 from the server's own tool list, and regenerated 
 | `recent_wins` | No | string | Description of recent successful customers |
 | `recent_losses` | No | string | Description of recent lost deals |
 | `market_changes` | No | string | Recent market or competitive changes |
-| `time_period` | No | string | Time period for analysis (e.g., "Q3 2026") |
+| `time_period` | No | string | Time period you are reviewing, in your own words (for example "last quarter") |
 | `product_category` | No | string | Optional: what you sell, used for sector notes |
 | `company` | No | string | Optional: your company or product name, so the answer can name it |
 
@@ -146,7 +146,7 @@ Generated on 27 September 2026 from the server's own tool list, and regenerated 
 | Input | Required | Type | Description |
 |---|---|---|---|
 | `interview_notes` | No | array of object | Structured interview notes |
-| `raw_transcripts` | No | string | Alternative: Paste raw interview transcripts or notes |
+| `raw_transcripts` | No | string | Alternative: paste interview notes or transcripts. This tool does not analyze pasted text: it shows up to 500 characters back with a template to structure them as interview_notes, which it does analyze |
 | `analysis_focus` | No | string | Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all) |
 | `product_category` | No | string | Optional: what you sell, used for sector notes |
 | `company` | No | string | Optional: your company or product name, so the answer can name it |
