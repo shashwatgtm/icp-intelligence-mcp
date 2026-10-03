@@ -16,8 +16,20 @@ export interface Vertical {
     metrics: string[];
     proofShape: string;
     discovery: string[];
+    subtype?: string;
+}
+/** A kind of company inside a vertical (run 21b). `match` holds category nouns (what the product IS), never buzzwords such as AI, API, platform,
+ * security or fraud. The notes replace the vertical's neutral base notes only when the seller's own words clearly name this one sub-type. */
+export interface SubType {
+    id: string;
+    vertical: VerticalId;
+    name: string;
+    match: RegExp;
+    model?: BusinessModel;
+    notes: SectorNotes;
 }
 export declare const VERTICALS: Vertical[];
+export declare const SUBTYPES: SubType[];
 /** What the reader looks at, in this order, each only when the earlier ones name no sector:
  *  - `seller`: the seller's own words (what it sells, its category, its product description, its value points);
  *  - `context`: free text about the deal (pain points, blockers, objections, notes, competitors), which tells what the product

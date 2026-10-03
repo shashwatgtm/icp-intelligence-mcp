@@ -383,6 +383,16 @@ function sideNotes(v: Vertical | null, what: Array<'committee' | 'roles' | 'metr
   const fn = bv ? sectorNotes(bv, what.filter((w) => w === 'roles' || w === 'metrics' || w === 'vocabulary'), name) : '';
   return [base, fn].filter(Boolean).join('\n\n');
 }
+// Run 21b: the measures and objections of a sector, ordered by the user's own words. An item that shares a word with the primary text (the wins, losses
+// and market changes the user typed) comes first, and one that shares a word with the secondary text next; the rest keep the sector's order, so nothing is
+// dropped and nothing is added. No match: the sector's order stands.
+const MEASURE_STOP = new Set(['provider', 'providers', 'system', 'systems', 'software', 'tool', 'tools', 'vendor', 'solution', 'rate', 'time', 'share', 'effort', 'cost', 'number', 'count', 'average', 'total', 'already', 'have', 'will', 'their', 'than', 'does', 'this', 'that', 'with', 'from', 'your', 'for', 'and', 'the', 'per', 'our', 'not']);
+const measureStems = (t: string): Set<string> => new Set((t.toLowerCase().match(/[a-z]{4,}/g) || []).filter((w) => !MEASURE_STOP.has(w)).map((w) => w.replace(/s$/, '').slice(0, 4)));
+function rankByUserWords<T>(items: T[], text: (x: T) => string, primary: string, secondary: string): T[] {
+  const p = measureStems(primary), d = measureStems(secondary);
+  const score = (x: T) => [...measureStems(text(x))].reduce((n, w) => n + (p.has(w) ? 2 : 0) + (d.has(w) ? 1 : 0), 0);
+  return items.map((x, i) => ({ x, i, s: score(x) })).sort((a, b) => b.s - a.s || a.i - b.i).map((r) => r.x);
+}
 // The sector only, for tools whose advice does not depend on the business model.
 function sectorLine(v: Vertical | null, via = ''): string {
   return v ? `*Sector: read from your inputs as ${v.name}${via}.*` : '*Sector: not clear from what you sell (describe your product, for example in product_category, for sector notes).*';
@@ -2608,6 +2618,12 @@ ${SUGGESTED}
       if (profSizes.length) partLines.push(`- **Size (${andList(profSizes.map(x => clauseHead(x, 60)))})**: list the smallest and the largest customer you won this period; if they sit outside this size, the ICP is already wider (or narrower) than you wrote it.`);
       for (const r of prof.roles.slice(0, 3)) partLines.push(`- **Role ${r}**: do deals that involve ${r} close faster or larger than deals that do not? If not, the role in your ICP is a label, not a fit signal.`);
       for (const pr of prof.problems.slice(0, 2)) partLines.push(`- **Problem ${q(clauseHead(pr, 100))}**: in how many of your wins was this the stated reason to buy, and in how many losses was it absent?`);
+      // The sector's loss reasons and measures, led by the ones your own losses, wins and market changes point to (the same items, in your order of relevance).
+      const vRanked: Vertical | null = v ? {
+        ...v,
+        objections: rankByUserWords(v.objections, (o) => o.objection, `${args.recent_losses || ''}\n${args.market_changes || ''}`, `${args.recent_wins || ''}\n${args.current_icp}`),
+        metrics: rankByUserWords(v.metrics, (m) => m, `${args.recent_wins || ''}\n${args.recent_losses || ''}\n${args.market_changes || ''}\n${prof.problems.join('\n')}`, `${args.product_category || ''}\n${args.current_icp}`),
+      } : null;
       const { bv: sideV, name: sideName } = buyerSide(v, prof.roles, args.current_icp, args.product_category);
       const roleAdds = sideV ? sideV.buyerRoles.filter(r => ![...prof.roles].some(n => sameRole(aliasRole(n, sideV), r))).slice(0, 4) : [];
 
@@ -2643,8 +2659,8 @@ ${changes.length ? changeLines.join('\n') : '- No market changes provided: add m
 
 ## Your Current ICP, Part by Part
 
-${partLines.length ? `${partLines.join('\n')}\n` : 'Your current ICP text did not split into segments, size, buyer role or problem. Write it in those parts (for example "mid-size banks, 500 to 2,000 employees, CFO as buyer, who face manual reconciliation") to get a test for each part.\n'}${roleAdds.length ? `\n**Roles usual in ${sideName} that your ICP does not name**: ${andList(roleAdds)}. Check whether they sign or evaluate in the deals you won or lost; if they do, the ICP should name them.\n` : ''}${v ? `\n**Loss reasons to tag in your CRM** (the objections ${v.name} buyers raise): ${v.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Count each over the period you are reviewing; a reason that rises is a change to your ICP or your qualification.\n` : ''}
-${v ? `${sideNotes(v, ['committee', 'metrics', 'vocabulary'], prof.roles, args.current_icp, args.product_category)}\n\n` : ''}---
+${partLines.length ? `${partLines.join('\n')}\n` : 'Your current ICP text did not split into segments, size, buyer role or problem. Write it in those parts (for example "mid-size banks, 500 to 2,000 employees, CFO as buyer, who face manual reconciliation") to get a test for each part.\n'}${roleAdds.length ? `\n**Roles usual in ${sideName} that your ICP does not name**: ${andList(roleAdds)}. Check whether they sign or evaluate in the deals you won or lost; if they do, the ICP should name them.\n` : ''}${vRanked ? `\n**Loss reasons to tag in your CRM** (the objections ${vRanked.name} buyers raise): ${vRanked.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Count each over the period you are reviewing; a reason that rises is a change to your ICP or your qualification.\n` : ''}
+${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.roles, args.current_icp, args.product_category)}\n\n` : ''}---
 
 ## ICP Evolution Framework
 

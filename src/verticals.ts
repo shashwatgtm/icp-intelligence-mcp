@@ -1583,7 +1583,7 @@ export function aiUseCase(...args: unknown[]): 'support' | 'investment' | 'other
   return SUPPORT_WORDS.test(sellerWhole(args)) ? 'support' : 'other';
 }
 function forUseCase(v: Vertical, args: unknown[]): Vertical {
-  if (v.subtype) return v;
+  if (v.subtype || v === AI_SUPPORT || v === BILLING_SAAS || /, investment management$/.test(v.name)) return v;   // already a profile or a sub-type: never layer another on top
   if (v === AI_NATIVE && aiUseCase(...args) === 'support') return AI_SUPPORT;
   if (v === SAAS_BASE && isBillingSeller(...args)) return BILLING_SAAS;
   const st = subtypeFor(v, args);
