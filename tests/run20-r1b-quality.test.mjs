@@ -251,7 +251,7 @@ test("icp_evolution_tracker: with no wins or losses, the current ICP is read par
   assert.match(r.text, /## Your Current ICP, Part by Part/);
   assert.match(r.text, /\*\*Segment Banking\*\*: compare its win rate, ACV, sales cycle and churn/);
   assert.match(r.text, /\*\*Segment Automotive\*\*/);
-  assert.match(r.text, /\*\*Buyer or champion CIO\*\*: do deals with CIO as champion close faster or larger/);
+  assert.match(r.text, /\*\*Role CIO\*\*: do deals where CIO is involved close faster or larger/);
   assert.match(r.text, /Roles usual in telecom that your ICP does not name/);
   assert.match(r.text, /Loss reasons to tag in your CRM/);
   assert.match(r.text, /Compare win rate, ACV and cycle across Banking, Manufacturing and Automotive/);
@@ -265,7 +265,7 @@ const page = (i) => ({ customer: `Retail ${i} (customer of Lanehop)`, role: "Chi
 test("icp_interview_synthesizer: buyer questions, claims and quotes are sorted; repeated notes are named; no ?? and no 3x (100%)", async () => {
   const r = await call("icp_interview_synthesizer", { interview_notes: [page(1), page(2), page(3)], product_category: "last-mile delivery orchestration software" });
   clean(r, "interview");
-  assert.match(r.text, /all 3 interview notes carry the same pain points, questions and value statements/);
+  assert.match(r.text, /All 3 interview notes carry the same pain points, questions and value statements/);
   assert.doesNotMatch(r.text, /3x \(100%\)|mentioned \d+x/);
   assert.match(r.text, /### Questions Buyers Asked \(not counted as pain points\)/);
   assert.match(r.text, /"Does Lanehop integrate with our TMS\?" \(in all 3 interviews\): Answer with the named systems/);
@@ -297,4 +297,41 @@ test("icp_interview_synthesizer: with no product the template line names the top
   const r = await call("icp_interview_synthesizer", { interview_notes: [{ customer: "Lanehop", role: "COO", pain_points: ["late deliveries, with angry customers"] }] });
   clean(r, "interview");
   assert.match(r.text, /biggest challenge you face with late deliveries, with angry customers\?/);
+});
+
+// ---- no SaaS-only words for a connectivity or services business, in any tool ----
+const SAAS_ONLY = /\b(MRR|free trial|freemium|self-serve sign-?up|per seat|seats?|aha moment)\b/i;
+test("no SaaS-only term (seat, trial, MRR) in any tool answer for a connectivity or a services business", async () => {
+  for (const product_category of ["managed SD-WAN and business internet for companies with many branches", "IT services and managed service desk"]) {
+    const cust = [{ name: "Lanehop", industry: "Banks", acv: 90000, sales_cycle_days: 120, champion_title: "Head of IT Infrastructure", buying_trigger: "a contract that ends" }];
+    const runs = [
+      ["icp_deep_dive", { customers: cust, product_category }],
+      ["icp_scoring_model", { product_category, scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Banks", "Retail"] }] }],
+      ["buyer_group_analyzer", { product_category, known_stakeholders: ["CIO", "Head of Procurement"] }],
+      ["buyer_group_analyzer", { product_category }],
+      ["tam_sam_som_calculator", { total_potential_companies: 800, average_contract_value: 90000 }],
+      ["lookalike_signal_generator", { champion_titles: ["Head of IT Infrastructure"], product_category }],
+      ["account_prioritization", { accounts: [{ name: "Lanehop", fit_score: 80, intent_signals: 70, relationship: 50, timing: "now" }] }],
+      ["icp_gap_analysis", { product_category, current_customers: "Banks", ideal_icp: "Large banks with 500 to 2,000 employees" }],
+      ["icp_evolution_tracker", { product_category, current_icp: "Banks; buyer: CIO" }],
+      ["icp_interview_synthesizer", { product_category, interview_notes: [{ customer: "Lanehop", role: "CIO", pain_points: ["slow repairs"] }] }],
+    ];
+    for (const [tool, args] of runs) {
+      const r = await call(tool, args);
+      clean(r, `${tool} / ${product_category}`);
+      assert.doesNotMatch(r.text, SAAS_ONLY, `${tool} / ${product_category}`);
+    }
+  }
+});
+test("buyer_group_analyzer: a seat none of the stakeholders fills shows the sector's usual role and says so", async () => {
+  const r = await call("buyer_group_analyzer", { product_category: "managed SD-WAN for branch offices", typical_champion: "Network Manager", known_stakeholders: ["CIO"] });
+  clean(r, "buyer group");
+  assert.match(r.text, /### Technical Evaluator[^\n]*\n\*\*Role\*\*: CISO \(usual in telecom; none of your stakeholders fits this role\)/);
+  assert.match(r.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: CIO\n/);
+});
+test("buyer_group_analyzer: AI native and SaaS products do not get the sector's usual roles or yardsticks for a function the user did not name", async () => {
+  const r = await call("buyer_group_analyzer", { product_category: "AI platform that forecasts portfolio risk for asset managers", typical_champion: "Portfolio Manager", known_stakeholders: ["CIO"] });
+  clean(r, "buyer group");
+  assert.doesNotMatch(r.text, /resolution rate|Head of Customer Experience/);
+  assert.match(r.text, /add the title to known_stakeholders/);
 });
