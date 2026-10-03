@@ -1298,10 +1298,22 @@ ${SUGGESTED}
                 software: { economic: 'VP Engineering', champion: 'Platform Engineering Lead', technical: 'Engineering Manager', user: 'Developers', blocker: 'Security Lead' },
                 saas: { economic: 'Chief Financial Officer', champion: 'Head of Growth', technical: 'IT and security review', user: 'End users of the function', blocker: 'Finance (cost and renewal terms)' },
             };
+            // Run 21b: the roles above were written for ONE kind of company per vertical (SEAT_KIND). They are used only when the sector read names that kind
+            // (v.subtype); every other company of the vertical gets the neutral roles below. The other verticals are unchanged.
+            const SEAT_KIND = { 'logistics-tech': 'last-mile', fintech: 'spend-expense', 'vertical-saas': 'fmcg-retail-execution', telecom: 'operators-connectivity', cybersecurity: 'cloud-security', software: 'developer-platform' };
+            const SEATS_GENERIC = {
+                'logistics-tech': { economic: 'Chief Operating Officer', champion: 'Head of Logistics Operations', technical: 'Head of IT', user: 'Operations Manager', blocker: 'Finance (checks the cost of the change)' },
+                fintech: { economic: 'Chief Financial Officer', champion: 'Business owner of the process the product changes', technical: 'Head of IT', user: 'The team that uses it every day', blocker: 'Risk and Compliance Lead' },
+                'vertical-saas': { economic: 'Managing Director or business owner', champion: 'Head of Operations', technical: 'Head of IT', user: 'The team that uses it every day', blocker: 'Finance (checks the cost and the contract terms)' },
+                telecom: { economic: 'Chief Information Officer', champion: 'Head of IT', technical: 'CISO', user: 'The team that runs the service every day', blocker: 'Head of Procurement' },
+                cybersecurity: { economic: 'CISO', champion: 'Security Lead', technical: 'Security Architect', user: 'The security team that uses it every day', blocker: 'Head of Risk and Compliance' },
+                software: { economic: 'VP Engineering', champion: 'Engineering Lead', technical: 'Engineering Manager', user: 'The engineers who use it every day', blocker: 'Security Lead' },
+            };
+            const sectorSeats = (vv) => (SEAT_KIND[vv.id] && vv.subtype !== SEAT_KIND[vv.id] ? SEATS_GENERIC[vv.id] : undefined) ?? SEATS[vv.id];
             // AI native and SaaS sell into any function (an AI product can serve a contact centre or an investment desk), so their usual roles
             // and yardsticks are not assumed for a seat the user did not name.
             const horizontal = isHorizontal(v);
-            const seat = v ? (/billing/i.test(v.name) ? { economic: 'Chief Financial Officer', champion: 'Revenue Operations Lead', technical: 'Head of Engineering', user: 'Billing or Finance Operations Manager', blocker: 'Finance Controller' } : /, investment management$/.test(v.name) ? { economic: 'Chief Investment Officer', champion: 'Head of Manager Research', technical: 'Head of Risk', user: 'Portfolio Manager', blocker: 'Compliance Officer' } : SEATS[v.id]) : undefined;
+            const seat = v ? (/billing/i.test(v.name) ? { economic: 'Chief Financial Officer', champion: 'Revenue Operations Lead', technical: 'Head of Engineering', user: 'Billing or Finance Operations Manager', blocker: 'Finance Controller' } : /, investment management$/.test(v.name) ? { economic: 'Chief Investment Officer', champion: 'Head of Manager Research', technical: 'Head of Risk', user: 'Portfolio Manager', blocker: 'Compliance Officer' } : sectorSeats(v)) : undefined;
             const pick = (k, fallback) => (horizontal || !seat ? fallback : seat[k]);
             const objTech = objectionFor(/integrat|tms|erp|dms|siem|migrat|scripts|systems|overlay|sync|fit our/i);
             const objUser = objectionFor(/use|app|adopt|alert|log into|another tool/i);
