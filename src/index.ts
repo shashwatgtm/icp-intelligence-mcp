@@ -370,6 +370,7 @@ const functionName = (fv: Vertical) => (fv.id === 'fintech' ? 'finance buyers' :
 // The sector whose roles, measures and words describe the buyer: the read sector, or for a horizontal product the buyer's function.
 function buyerSide(v: Vertical | null, ...texts: unknown[]): { bv: Vertical | null; name: string } {
   if (v && !isHorizontal(v)) return { bv: v, name: v.name };
+  if (isHorizontal(v)) return { bv: null, name: '' };   // a SaaS seller's buyer is not read as finance or security from a title: the sector file's own profile is used
   const fv = buyerFunction(...texts);
   return fv ? { bv: fv, name: functionName(fv) } : { bv: null, name: '' };
 }
@@ -401,7 +402,7 @@ function sectorNotes(v: Vertical | null, what: Array<'committee' | 'roles' | 'me
     if (w === 'vocabulary') out.push(`- **Words this sector's buyers use:** ${v.vocabulary.join(', ')}.`);
     if (w === 'proof') out.push(`- **A proof point that lands:** ${v.proofShape}`);
   }
-  return out.join('\n');
+  return out.length > 1 ? out.join('\n') : '';
 }
 // The answer pattern for one objection typed by the user: the sector's pattern when it matches, else a pattern by kind.
 function answerFor(text: string, v: Vertical | null): string {
@@ -438,8 +439,10 @@ function sizesIn(text: string): string[] {
 function clauseHead(text: string, max = 90): string {
   const t = String(text).replace(/\s+/g, ' ').trim();
   if (t.length <= max) return t;
-  const m = /^(.{20,}?)(?:, |; |: | \(| - )/.exec(t);
-  if (m && m[1].length <= max) return m[1];
+  // a bracket belongs to the item it follows: hide the marks inside it before looking for a clause end
+  const hidden = t.replace(/\(([^()]*)\)/g, (_m, inner: string) => `(${inner.replace(/[;,:]/g, '\u0001')})`);
+  const m = /^(.{20,}?)(?:, |; |: | \(| - )/.exec(hidden);
+  if (m && m[1].length <= max) return t.slice(0, m[1].length);
   return `${t.slice(0, max).replace(/\s+\S*$/, '')} ...`;
 }
 // Round 2: text is split only at real ends. Marks that are not an end are hidden (same length, so positions stay) before a split and
@@ -499,13 +502,17 @@ function sigWords(t: string): string[] {
 // Is the criterion value found in the statement? Every main word of a short value must appear as a whole word, and a short value of
 // two or more main words must appear in the same order, next to each other (so "financial services" is not found in "financial
 // data"). A long value (a sentence) needs at least half of its main words, and three or more.
+const GROUP_VALUE = /^(?:the |all |our |your )?(?:managers|employees|staff|users|teams?|reps|sales reps|developers|engineers|distributors|customers|people|everyone|(?:\w+ )?teams|finance|hr|it)$/i;
 function sharesWord(a: string, b: string): boolean {
-  const wb = sigWords(b);
-  const wa = [...new Set(sigWords(a))];
-  if (!wa.length) return false;
-  if (a.trim().split(/\s+/).length > 6) { const hit = wa.filter((x) => wb.includes(x)).length; return hit >= 3 && hit >= wa.length / 2; }
-  // a short value: its words (all of them, "services" too) must appear whole and next to each other, in order
-  const tok = (t: string) => String(t).toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length >= 3 && !['and', 'the', 'for', 'with', 'of'].includes(w)).map(stem);
+  if (a.trim().split(/\s+/).length > 6) {
+    const wb = sigWords(b), wa = [...new Set(sigWords(a))];
+    const hit = wa.filter((x) => wb.includes(x)).length;
+    return wa.length > 0 && hit >= 3 && hit >= wa.length / 2;
+  }
+  // a short value: its words must appear whole and next to each other, in order; a group word ("managers") only as written, so it is
+  // never found inside a single title ("Sr. Sales Automation Manager")
+  const group = GROUP_VALUE.test(a.trim());
+  const tok = (t: string) => String(t).toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length >= 2 && !['and', 'the', 'for', 'with', 'of', 'in', 'at', 'on'].includes(w)).map((w) => (group ? w : stem(w)));
   const ta = tok(a), tb = tok(b);
   if (!ta.length) return false;
   for (let i = 0; i + ta.length <= tb.length; i++) if (ta.every((w, j) => tb[i + j] === w)) return true;
@@ -553,7 +560,7 @@ function parseProfile(text: string): Profile {
   for (let it of items) {
     it = restoreText(it.replace(/\u0001/g, ';').replace(/\u0002/g, ','));
     if (rolesIn(it).length && it.split(/\s+/).length <= 5) continue;   // a role is reported under roles
-    if (/^(?:the )?(?:about |home |product )?page\b|\bthe (?:about |home )?page\b|\btrusted partner\b|^the world's/i.test(it)) { claims.push(it); continue; }   // a statement from a page, not a qualifier
+    if (/\(page claim\)|^(?:the )?(?:about |home |product )?page\b|\bthe (?:about |home )?page\b|\btrusted partner\b|^the world's/i.test(it)) { claims.push(it); continue; }   // a statement from a page, not a qualifier
     if (sizeWordsIn(it).length || sizesIn(it).length) {
       // "Mid-size banks" is a size (mid-size) and a segment (banks); "midsize to large businesses" and "under 200 employees" are only a size.
       const short = it.split(/\s+/).length <= 6;
@@ -568,24 +575,33 @@ function parseProfile(text: string): Profile {
   }
   const roles = [...new Set([...asBuyer, ...labelled.flatMap((x) => x.split(/,| and (?=[A-Z])/)).map((x) => x.trim()).filter(Boolean), ...rolesIn(restoreText(whole))])];
   const dedupe = (a: string[]) => a.filter((x, i) => a.findIndex((y) => norm(y) === norm(x)) === i);
-  return { segments: dedupe(segments), sizes: dedupe(sizes), roles: roles.filter((r, i) => roles.findIndex((x) => x.toLowerCase() === r.toLowerCase()) === i), problems, rest: dedupe(rest), claims: dedupe(claims) };
+  // a later segment whose words are all inside an earlier one (or the other way round) says the same thing: "investment managers and banks" next to "Investment banks"
+  const dedupeSeg = (a: string[]) => dedupe(a).filter((x, i, all) => !all.some((y, j) => j < i && (() => { const tx = norm(x).split(' '), ty = norm(y).split(' '); const [sm, bg] = tx.length <= ty.length ? [tx, ty] : [ty, tx]; return sm.every((w) => bg.includes(w)); })()));
+  return { segments: dedupeSeg(segments), sizes: dedupe(sizes), roles: roles.filter((r, i) => roles.findIndex((x) => x.toLowerCase() === r.toLowerCase()) === i), problems, rest: dedupe(rest), claims: dedupe(claims) };
 }
 // A name compared loosely: case, "and", "&" and "/" do not matter ("FMCG/CPG" is "FMCG and CPG"), nor the order of the words or a plural.
 const norm = (x: string) => x.toLowerCase().replace(/\([^)]*\)/g, ' ').replace(/[&\/]/g, ' ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\b(?:and|the|of|other|industry|industries)\b/g, ' ').replace(/\b(\w{4,})s\b/g, '$1').split(/\s+/).filter(Boolean).sort().join(' ');
-function overlap(a: string[], b: string[]): { both: string[]; onlyA: string[]; onlyB: string[] } {
+const LINK_STOP = new Set(['services', 'service', 'companies', 'company', 'business', 'businesses', 'enterprise', 'enterprises', 'teams', 'team', 'global', 'leading', 'world', 'consumer', 'brands', 'brand', 'national', 'international', 'industry']);
+function overlap(a: string[], b: string[]): { both: string[]; onlyA: string[]; onlyB: string[]; related: Array<[string, string]> } {
   const same = (x: string, y: string) => {
     const tx = norm(x).split(' '), ty = norm(y).split(' ');
     if (!tx[0] || !ty[0]) return false;
     const small = tx.length <= ty.length ? tx : ty, big = tx.length <= ty.length ? ty : tx;
     return small.every((w) => big.includes(w));
   };
-  return { both: a.filter((x) => b.some((y) => same(x, y))), onlyA: a.filter((x) => !b.some((y) => same(x, y))), onlyB: b.filter((x) => !a.some((y) => same(x, y))) };
+  // related: no full match, but a main word in common ("B2B SaaS and software" and "SaaS and consumer subscription businesses")
+  const link = (x: string, y: string) => { const ty = norm(y).split(' '); return norm(x).split(' ').some((w) => w.length >= 3 && !LINK_STOP.has(w) && ty.includes(w)); };
+  const related: Array<[string, string]> = [];
+  const rel = (x: string, list: string[], swap: boolean) => { const y = list.find((z) => link(x, z)); if (y) { related.push(swap ? [y, x] : [x, y]); return true; } return false; };
+  const onlyA = a.filter((x) => !b.some((y) => same(x, y)) && !rel(x, b, false));
+  const onlyB = b.filter((y) => !a.some((x) => same(x, y)) && !(a.some((x) => link(x, y))));
+  return { both: a.filter((x) => b.some((y) => same(x, y))), onlyA, onlyB, related };
 }
 // Do two job titles name the same role? Acronyms are spelled out, then the main words are compared (first 5 letters).
 const ROLE_ACRONYM: Record<string, string> = { cfo: 'chief financial officer', cio: 'chief information officer', cto: 'chief technology officer', coo: 'chief operating officer', cmo: 'chief marketing officer', cro: 'chief revenue officer', ciso: 'chief information security officer', ceo: 'chief executive officer', md: 'managing director', cco: 'chief commercial officer' };
 function roleStems(r: string): string[] {
   const t = r.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).map((w) => ROLE_ACRONYM[w] || w).join(' ').split(/\s+/);
-  const stop = new Set(['head', 'of', 'chief', 'officer', 'director', 'vp', 'vice', 'president', 'manager', 'lead', 'senior', 'sr', 'the', 'and', 'for', 'general', 'gm']);
+  const stop = new Set(['head', 'of', 'chief', 'officer', 'director', 'vp', 'vice', 'president', 'manager', 'lead', 'leader', 'leaders', 'team', 'teams', 'committee', 'committees', 'senior', 'sr', 'the', 'and', 'for', 'general', 'gm']);
   return [...new Set(t.filter((w) => w.length > 2 && !stop.has(w)).map((w) => w.slice(0, 5)))];
 }
 function roleMatch(a: string, b: string): number {
@@ -595,7 +611,17 @@ function roleMatch(a: string, b: string): number {
   if (canon.has(ex(a)) && canon.has(ex(b))) return ex(a) === ex(b) ? 1 : 0;
   const x = roleStems(a), y = roleStems(b);
   if (!x.length || !y.length) return 0;
-  return x.filter((w) => y.includes(w)).length / Math.max(x.length, y.length);
+  const shared = x.filter((w) => y.includes(w)).length;
+  const strict = shared / Math.max(x.length, y.length);
+  // "platform leader" is the "Platform Engineering Lead": the shorter title's words are all in the longer one and both end in the same head noun
+  const head = (r: string) => (/^head of\b/i.test(r.trim()) ? 'head' : (r.trim().toLowerCase().split(/\s+/).pop() || '').replace(/^(leader|leads|leaders)$/, 'lead').replace(/s$/, ''));
+  const heads = new Set(['lead', 'manager', 'director', 'head', 'officer', 'engineer', 'analyst', 'architect']);
+  if (!canon.has(ex(a)) && !canon.has(ex(b)) && shared === Math.min(x.length, y.length) && heads.has(head(a)) && head(a) === head(b)) return Math.max(strict, 0.6);
+  return strict;
+}
+// In investment management a CIO is the Chief Investment Officer.
+function aliasRole(r: string, v: Vertical | null): string {
+  return v && /investment management$/.test(v.name) && /^\s*CIO\s*$/i.test(r) ? 'Chief Investment Officer' : r;
 }
 function sameRole(a: string, b: string): boolean {
   return roleMatch(a, b) > 0.5;
@@ -743,10 +769,10 @@ const tools = {
           const champs = topChampions.map(r => r[0]);
           const out: string[] = [];
           for (const c of champs.slice(0, 3)) {
-            const m = bestRole(c, sector.buyerRoles);
+            const m = bestRole(aliasRole(c, sector), sector.buyerRoles);
             out.push(m ? `- **Champion ${c}**: matches a role that ${sideName} deals usually involve (${m}).` : `- **Champion ${c}**: not among the roles listed for ${sideName} (${sector.buyerRoles.slice(0, 4).join(', ')}); check who signs the contract in your deals.`);
           }
-          const missing = sector.buyerRoles.filter(r => !champs.some(c => sameRole(c, r))).slice(0, 4);
+          const missing = sector.buyerRoles.filter(r => !champs.some(c => sameRole(aliasRole(c, sector), r))).slice(0, 4);
           if (missing.length) out.push(`- **Roles your records do not name**: ${andList(missing)}. Add the people in these roles to the next records to see who signs and who evaluates.`);
           out.push(`- **What to compare across your customers**: ${andList(sector.metrics.slice(0, 3))}. Records that share an industry but differ on these show where the best fit is.`);
           return `### What ${sideName} add${/buyers$/.test(sideName) ? '' : 's'}\n${out.join('\n')}\n\n`;
@@ -1008,9 +1034,13 @@ This tool will analyze patterns across your customers to identify your ideal pro
       // Run 19 D80 (problem 3): the success pattern is matched against the criteria given, by their words.
       const corrWords = new Set(correlations.toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length > 2 && !['the', 'and', 'with', 'who', 'most', 'more', 'deals', 'customers', 'close', 'faster', 'renew', 'than', 'that', 'have', 'has', 'are', 'for'].includes(w)));
       const matched = criteria.filter(c => [c.criterion, ...c.values].join(' ').toLowerCase().split(/[^a-z0-9]+/).some(w => w.length > 2 && corrWords.has(w)));
-      const corrLine = !correlations ? '' : matched.length
-        ? `This pattern is already a criterion: ${andList(matched.map(c => `**${c.criterion}**`))}. If it holds in your closed deals, make ${matched.length === 1 ? 'it' : 'them'} critical.`
-        : 'This pattern is not yet one of your criteria: add it as a criterion if it holds in your closed deals.';
+      // A criterion counts as named by the pattern when its name uses the pattern's words, or the evidence names one of its values
+      // (so the line can never say "already a criterion" for a criterion whose every value is "not found").
+      const nameMatched = (c: { criterion: string }) => matched.some(m => m.criterion === c.criterion) && c.criterion.toLowerCase().split(/[^a-z0-9]+/).some(w => w.length > 2 && corrWords.has(w));
+      const namedBy = () => criteria.filter(c => nameMatched(c) || proofHits.some(h => h.criterion === c.criterion));
+      const corrLine = () => { const m = namedBy(); return !correlations ? '' : m.length
+        ? `This pattern is already a criterion: ${andList(m.map(c => `**${c.criterion}**`))}. If it holds in your closed deals, make ${m.length === 1 ? 'it' : 'them'} critical.`
+        : 'This pattern is not yet one of your criteria: add it as a criterion if it holds in your closed deals.'; };
       const notes = sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'objections'], args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
       const fitSide = buyerSide(ctx.v && ctx.v.id !== 'saas' ? ctx.v : null, args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
       // Run 20 round 1: the tier actions and answer times follow the business model (a services or connectivity sale does not run on
@@ -1033,8 +1063,8 @@ This tool will analyze patterns across your customers to identify your ideal pro
         return items.length ? [{ criterion: c.criterion, value: val, item: items[0] }] : [];
       })) : [];
       const hitKeys = new Set(proofHits.map(h => `${h.criterion}|${h.value}`));
-      const notFound = proofItems.length ? criteria.flatMap(c => c.values.filter(val => !hitKeys.has(`${c.criterion}|${val}`)).map(val => ({ criterion: c.criterion, value: val }))).filter(x => x.value.length <= 80) : [];
-      const proofKind = (t: string) => /page claim|case study|story title|ebook|home page|award|recogni|leader|gartner|forrester|named|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
+      const notFound = proofItems.length ? criteria.flatMap(c => c.values.filter(val => !hitKeys.has(`${c.criterion}|${val}`) && !nameMatched(c)).map(val => ({ criterion: c.criterion, value: val }))).filter(x => x.value.length <= 80) : [];
+      const proofKind = (t: string) => /\((?:customer|partner|analyst|client) quote\)|customer words/i.test(t) ? 'a customer statement' : /page claim|case study|story title|ebook|home page|award|recogni|leader|gartner|forrester|named|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
       const longValues = criteria.flatMap(c => c.values.filter(v2 => v2.length > 130).map(v2 => ({ criterion: c.criterion, value: v2 })));
       const cellValue = (v2: string) => (v2.length > 130 ? `${clauseHead(v2, 100)} (full wording below)` : v2);
 
@@ -1055,7 +1085,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
 - ${companyLine(args.company)}
 
 ${sectorLine(ctx.v, ctx.via)}
-${correlations ? `\n**Success Correlation Noted**: ${proofItems.length > 1 ? `${proofItems.length} statements, listed in full under "Evidence in Your Success Pattern" below` : q(shortText(correlations))}\n${corrLine}\n` : ''}
+${correlations ? `\n**Success Correlation Noted**: ${proofItems.length > 1 ? `${proofItems.length} statements, listed in full under "Evidence in Your Success Pattern" below` : q(shortText(correlations))}\n${corrLine()}\n` : ''}
 
 ---
 
@@ -1257,7 +1287,7 @@ ${SUGGESTED}
       const hm3 = hv.bv ? andList(hv.bv.metrics.slice(0, 3)) : '';
       const qv = horizontal ? hv.bv : v;
       const buyingGroup: { champion: Seat; economic: Seat; technical: Seat; user: Seat; blocker: Seat } = v && seat ? {
-        champion: { role: pick('champion', 'not given (add typical_champion)'), concern: horizontal ? (hv.bv ? `In ${hv.name} the usual measures are ${hm3}; ask which of them they are held to` : 'Ask them in discovery what they are measured on today') : `Owns ${m3} day to day, so the pain is theirs`, message: horizontal ? (hv.bv ? `Show the effect on ${hv.bv.metrics[0]} or another measure they already track, with the kind of proof ${hv.name} trust (${lower1(stripEnd(hv.bv.proofShape))}).` : `Show the effect on one number they already track, with the kind of proof this kind of product needs (${lower1(stripEnd(v.proofShape))}).`) : `Lead with ${v.metrics[0]}: show the effect on their own numbers, with the kind of proof this sector trusts (${lower1(stripEnd(v.proofShape))}).`, label: 'Message angle' },
+        champion: { role: pick('champion', 'not given (add typical_champion)'), concern: horizontal ? (hv.bv ? `In ${hv.name} the usual measures are ${hm3}; ask which of them they are held to` : 'Ask them in discovery what they are measured on today') : `Owns ${m3} day to day, so the pain is theirs`, message: horizontal ? (hv.bv ? `Show the effect on ${hv.bv.metrics[0]} or another measure they already track, with the kind of proof ${hv.name} trust (${lower1(stripEnd(hv.bv.proofShape))}).` : 'Show the effect on one number they already track, with proof from a customer like them.') : `Lead with ${v.metrics[0]}: show the effect on their own numbers, with the kind of proof this sector trusts (${lower1(stripEnd(v.proofShape))}).`, label: 'Message angle' },
         economic: { role: pick('economic', 'not named in your stakeholders (ask your champion who holds the budget)'), concern: (horizontal ? (hv.bv ? `Whether ${andList(hv.bv.metrics.slice(0, 2))} move enough to justify the spend and the risk of change` : 'Return on the spend and the risk of change') : `Whether ${m2} move enough to justify the spend and the risk of change`) + (objEcon ? `. Likely objection: ${lowerCommonWords(objEcon.objection)}` : ''), message: (horizontal ? (hv.bv ? `Tie the spend to ${hv.bv.metrics[0]} and to the risk of staying as they are, and bring proof from a buyer like them.` : 'Tie the spend to one business result and to the cost of staying as they are, with proof from a buyer like them.') : `Tie the spend to ${v.metrics[0]} and to the risk of staying as they are, and bring proof from a buyer like them.`) + (objEcon ? ` If it comes up: ${objEcon.response}` : ''), label: 'Message angle' },
         technical: { role: pick('technical', 'not named in your stakeholders (ask your champion who evaluates it technically)'), concern: objTech ? `Likely objection: ${lowerCommonWords(objTech.objection)}` : ctx.model === 'services' ? 'Access, security and how the transition is run' : ctx.model === 'connectivity' ? 'Network design and the risk of the cut-over' : 'Integration and upkeep', message: objTech ? objTech.response : ctx.model === 'services' ? 'Show the transition plan, the access model and who from your team works on their systems.' : ctx.model === 'connectivity' ? 'Share the network design and a wave plan with a fallback link and a rollback rule for each wave.' : 'Name the systems involved and who on each side owns the integration.', label: 'How to answer' },
         user: { role: pick('user', 'not named in your stakeholders (ask who uses it every day)'), concern: objUser ? `Likely objection: ${lowerCommonWords(objUser.objection)}` : ctx.model === 'services' ? 'How the service works for them every day' : 'Ease of use in the daily workflow', message: objUser ? objUser.response : ctx.model === 'services' ? 'Show the service through their eyes: who they call, how fast they get an answer and what is reported to their leadership.' : 'Show the daily workflow through their eyes and agree a small pilot with the people who will use it.', label: 'How to answer' },
@@ -1279,6 +1309,7 @@ ${SUGGESTED}
         if (/procurement|legal|compliance|audit|\brisk\b|vendor management|purchasing/i.test(t)) return 'blocker';
         if (!(v && v.id === 'cybersecurity') && /\bCISO\b|security|privacy/i.test(t) && !/\b(CTO|engineer|architect|devops)\b/i.test(t)) return 'blocker';   // outside a security product the security lead reviews
         if (/\b(CFO|CEO|COO|CIO|CRO|CMO|MD|VP|SVP|EVP)\b|vice president|chief (?:financial|executive|operating|information officer|revenue|marketing)|managing director|president|founder|business unit head|national sales head/i.test(t) && !/chief information security/i.test(t)) return 'economic';
+        if (/\bchief\b[^,]*\bofficer\b/i.test(t) && !/technolog|security/i.test(t)) return 'economic';   // any other chief officer (commercial, risk ...) holds budget or sign-off, he is not a day-to-day user
         if (/\b(IT|CTO|CISO|QA)\b|chief technology|chief information security|engineer|architect|devops|platform|security|infrastructure|network|data|technical/i.test(t)) return 'technical';
         return 'user';
       };
@@ -1295,9 +1326,15 @@ ${SUGGESTED}
           buyingGroup[k].role = placed[k][0];
         }
       }
+      const OPEN_ROLE = { economic: 'not named in your stakeholders (ask your champion who holds the budget)', technical: 'not named in your stakeholders (ask your champion who evaluates it technically)', user: 'not named in your stakeholders (ask who uses it every day)', blocker: 'not named in your stakeholders (ask who reviews it: procurement, legal, security or audit)' };
       // A seat none of the typed stakeholders fits shows the sector's usual role and says so.
       for (const k of ['economic', 'technical', 'blocker', 'user'] as const) {
-        if (!placed[k][0] && seat && !horizontal) buyingGroup[k].role += ` (usual in ${v!.name}; none of your stakeholders fits this role)`;
+        if (!placed[k][0] && seat && !horizontal) {
+          // a person cannot hold two roles: when the sector's usual role is one of the people already named (the champion, or "risk teams"
+          // placed elsewhere), the role stays open instead
+          const taken = [typedChampion, ...stakeholders].some(x => x && sameRole(aliasRole(x, v), seat[k]));
+          buyingGroup[k].role = taken ? OPEN_ROLE[k] : buyingGroup[k].role + ` (usual in ${v!.name}; none of your stakeholders fits this role)`;
+        }
       }
       if (typedChampion && seat && !horizontal && !sameRole(typedChampion, seat.champion) && !stakeholders.some(x => sameRole(x, seat.champion))) sectorDefaults.push(`${seat.champion} (champion)`);
       const extra = (['economic', 'technical', 'blocker', 'user'] as const).flatMap(k => placed[k].slice(1).map(x => `${x} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`));
@@ -1702,7 +1739,9 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
       // Run 20 round 1 (quality): nothing is filled in for an input that was not given. The old defaults (United States, 51-200
       // employees, Salesforce and HubSpot, Series A to C, "New leadership hire / Funding round / Expansion") belonged to a US startup
       // software seller and were wrong for every other business; a field not given is now left out of the searches and named as missing.
-      const industries = firmographics.industries;
+      // Filters need clean terms: "Asset allocators (pensions, insurers)" becomes the terms "Asset allocators", "pensions", "insurers"; the summary keeps the text as typed.
+      const industriesTyped = firmographics.industries;
+      const industries = industriesTyped ? [...new Set(industriesTyped.flatMap(i => { const m = /^(.*?)\s*\(([^()]*)\)\s*$/.exec(i.trim()); return m ? [m[1].trim(), ...m[2].split(/[;,]\s*/).map(x => x.trim())] : [i.trim()]; }).filter(Boolean))] : undefined;
       const sizes = firmographics.company_sizes;
       const locations = firmographics.locations;
       const tech = args.icp_technographics;
@@ -1735,7 +1774,8 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
       const productPhrases = productWords(args.product_category, args.company).split(/[(),;]|\band\b/i).map(x => x.trim().replace(/^(?:a|an|the|for)\s+/i, '')).filter(x => /^[\w/+.-]+(?: [\w/+.-]+){1,3}$/.test(x) && !/\b(?:from|that|which|described)\b/i.test(x));
       const keywordWords = v && v.id === 'software' ? [] : vocabOk && ctx.model !== 'investment' ? v!.vocabulary.filter(w => !MEASURE_WORD.test(w)).slice(0, 4) : [];
       const searchProduct = clauseHead(productWords(args.product_category, args.company), 80);
-      const keywords = [...new Set([...(searchProduct && !(v && v.id === 'software' && productPhrases.length) ? [searchProduct] : []), ...(v && v.id === 'software' ? productPhrases.slice(0, 3) : []), ...keywordWords.map(w => (new RegExp(`${suffix}s?$`, 'i').test(w) || /\bservices?$/i.test(w) && suffix === 'services' ? w : `${w} ${suffix}`)),
+      const phraseFirst = !!(v && v.id === 'software') || / \.\.\.$/.test(searchProduct) || /\(/.test(searchProduct) || searchProduct.split(' ').length > 8;
+      const keywords = [...new Set([...(searchProduct && !(phraseFirst && productPhrases.length) ? [searchProduct.replace(/ \.\.\.$/, '')] : []), ...(phraseFirst || keywordWords.length === 0 ? productPhrases.slice(0, 3) : []), ...keywordWords.map(w => (new RegExp(`${suffix}s?$`, 'i').test(w) || /\bservices?$/i.test(w) && suffix === 'services' ? w : `${w} ${suffix}`)),
         ...(tech || []).map(t => `${t.toLowerCase()} integration`)])];
       // Run 19 D80 (problem 3): every trigger typed gets its own signal, chosen by its words.
       const signalFor = (t: string): [string, string, string] => {
@@ -1798,7 +1838,7 @@ ${JSON.stringify({ firmographics: { ...(industries ? { industry: industries } : 
 
 ### Intent Topic Keywords
 \`\`\`
-${[...new Set([...(searchProduct ? [searchProduct] : []), ...(v && v.id === 'software' ? productPhrases.slice(0, 3) : []), ...(vocabOk ? v!.vocabulary.slice(0, 5) : []), ...(tech || [])])].join('\n') || 'Add product_category for intent topics'}
+${[...new Set([...(searchProduct && !(phraseFirst && productPhrases.length) ? [searchProduct.replace(/ \.\.\.$/, '')] : []), ...(phraseFirst || keywordWords.length === 0 ? productPhrases.slice(0, 3) : []), ...(vocabOk ? v!.vocabulary.slice(0, 5) : []), ...(tech || [])])].join('\n') || 'Add product_category for intent topics'}
 \`\`\`
 
 ### Buying Stage Indicators
@@ -1824,14 +1864,14 @@ ${stages ? `- Funding or listing news at your stages: ${stages.join(', ')}\n` : 
 ${sectorLine(v, ctx.via)}
 
 ## ICP Summary
-- **Industries**: ${industries ? industries.join(industries.some(i => i.includes(',')) ? '; ' : ', ') : 'not supplied (add icp_firmographics.industries)'}
+- **Industries**: ${industriesTyped ? industriesTyped.join(industriesTyped.some(i => i.includes(',')) ? '; ' : ', ') : 'not supplied (add icp_firmographics.industries)'}
 - **Company Sizes**: ${sizes ? sizes.join(', ') : 'not supplied (add icp_firmographics.company_sizes, for example employee ranges of your best customers)'}
 - **Locations**: ${locations ? locations.join(', ') : 'not supplied (add icp_firmographics.locations)'}
 - **Funding Stages**: ${stages ? stages.join(', ') : 'not supplied'}
 - **Technologies**: ${tech ? tech.join(', ') : `not supplied (add icp_technographics: the systems your buyers run that your product connects to${sysList ? `; in ${v!.name} these are usually ${sysList}` : ''})`}
 - **Champion Titles**: ${titles.join(', ')}${groups.length ? ` (groups, not titles: ${groups.join(', ')})` : ''}
 - **Buying Triggers**: ${triggers ? triggers.join('; ') : 'not supplied (add buying_triggers: the events that make a buyer start looking)'}
-${v && !isHorizontal(v) ? `- **Other roles in ${/^[aeiou]/i.test(v.name) ? 'an' : 'a'} ${v.name} buying group** (not in your input): ${v.buyerRoles.filter(r => !titles.some(t => sameRole(t, r))).join(', ')}\n` : ''}
+${v && !isHorizontal(v) ? `- **Other roles in ${/^[aeiou]/i.test(v.name) ? 'an' : 'a'} ${v.name} buying group** (not in your input): ${v.buyerRoles.filter(r => !titles.some(t => sameRole(aliasRole(t, v), r))).join(', ')}\n` : ''}
 ${wanted.length ? `Sections shown: the platforms you asked for (${args.platforms!.join(', ')}).\n` : ''}
 ---
 
@@ -2290,18 +2330,18 @@ ${SUGGESTED}
         if (d.c.length && !d.i.length) return `Your ideal profile does not state ${d.noun}, so your current base cannot be checked against it. Add what you want.`;
         if (!d.c.length && d.i.length) return `Your current base does not state ${d.noun}. Look it up for your current customers (CRM) and compare it with the ideal profile.`;
         const ov = overlap(d.c, d.i);
-        if (!ov.onlyA.length && !ov.onlyB.length) return `Same in both: no gap on ${d.name}.`;
-        return `${ov.both.length ? `In both: ${ov.both.map(x => clauseHead(x, 40)).join('; ')}. ` : 'Nothing in common. '}${ov.onlyA.length ? `Only in the current base: ${ov.onlyA.map(x => clauseHead(x, 40)).join('; ')}. ` : ''}${ov.onlyB.length ? `Only in the ideal profile: ${ov.onlyB.map(x => clauseHead(x, 40)).join('; ')}.` : ''}`.trim();
+        if (!ov.onlyA.length && !ov.onlyB.length && !ov.related.length) return `Same in both: no gap on ${d.name}.`;
+        return `${ov.both.length ? `In both: ${ov.both.map(x => clauseHead(x, 70)).join('; ')}. ` : ov.related.length ? '' : 'Nothing in common. '}${ov.related.length ? `Related wording: ${ov.related.map(([x, y]) => `${clauseHead(x, 60)} (current) and ${clauseHead(y, 60)} (ideal)`).join('; ')}. ` : ''}${ov.onlyA.length ? `Only in the current base: ${ov.onlyA.map(x => clauseHead(x, 70)).join('; ')}. ` : ''}${ov.onlyB.length ? `Only in the ideal profile: ${ov.onlyB.map(x => clauseHead(x, 70)).join('; ')}.` : ''}`.trim();
       };
       const segOverlap = overlap(cur.segments, idl.segments);
       // A segment of the current base is called outside the ideal profile only when the ideal profile is a list of segments that shares at least
       // one with the base and is not open ended ("and other industries"); otherwise the two lists are not comparable.
-      const comparable = idl.segments.length > 0 && segOverlap.both.length > 0 && !/\b(?:other|all|any) (?:industries|sectors|segments|verticals)\b/i.test(args.ideal_icp);
+      const comparable = idl.segments.length > 0 && (segOverlap.both.length + segOverlap.related.length) > 0 && !/\b(?:other|all|any) (?:industries|sectors|segments|verticals)\b/i.test(args.ideal_icp);
       const currentOnlySegments = comparable ? segOverlap.onlyA : [];
       const idealOnlySegments = cur.segments.length ? segOverlap.onlyB : idl.segments;
       const { bv: sectorV, name: sideName } = buyerSide(ctx.v, idl.roles, cur.roles, args.product_category);
-      const idealRoleChecks = sectorV ? idl.roles.map(r => { const m = bestRole(r, sectorV.buyerRoles); return m ? `${r} matches a role usual in ${sideName} (${m})` : `${r} is not among the roles listed for ${sideName} (${sectorV.buyerRoles.slice(0, 4).join(', ')}); check who signs in your won deals`; }) : [];
-      const namedRoles = [...cur.roles, ...idl.roles];
+      const idealRoleChecks = sectorV ? idl.roles.map(r => { const m = bestRole(aliasRole(r, sectorV), sectorV.buyerRoles); return m ? `${r} matches a role usual in ${sideName} (${m})` : `${r} is not among the roles listed for ${sideName} (${sectorV.buyerRoles.slice(0, 4).join(', ')}); check who signs in your won deals`; }) : [];
+      const namedRoles = [...cur.roles, ...idl.roles].map(r => aliasRole(r, sectorV));
       const roleGaps = sectorV ? sectorV.buyerRoles.filter(r => !namedRoles.some(n => sameRole(n, r))).slice(0, 4) : [];
       const idealSizes = sizesIn(args.ideal_icp);
       const pricingAction = ctx.model === 'services' ? 'Add a scope or service tier for larger clients (more services, locations or hours)'
@@ -2552,12 +2592,23 @@ ${SUGGESTED}
       // Run 20 round 1 (quality): with or without wins and losses, your current ICP is read in parts and each part gets a test to run in
       // your CRM; the sector adds the roles and loss reasons to look for. Nothing is invented: every part is your own words.
       const partLines: string[] = [];
-      for (const sg of prof.segments.slice(0, 6)) partLines.push(`- **Segment ${sg}**: compare its win rate, ACV, sales cycle and churn with your other segments over the same period; keep, grow or drop it on that evidence.`);
+      prof.segments.slice(0, 6).forEach((sg, i) => {
+        const sub = /\(([^()]+)\)/.exec(sg);
+        const base = sg.replace(/\s*\([^()]*\)/, '').trim();
+        const parts = sub ? sub[1].split(/[;,]\s*/).filter(Boolean) : [];
+        const role = prof.roles[0];
+        const lines = [
+          `list every deal you won or lost with ${base} in it this period and compare its win rate with your other segments`,
+          `compare the ACV and sales cycle of ${base} with the other segments${role ? `, and check whether ${role} is the one who signs there` : ''}`,
+          `check whether churn and renewals in ${base} differ from the rest, and whether the same loss reasons recur there`,
+        ];
+        partLines.push(`- **Segment ${sg}**: ${lines[i % 3]}${parts.length ? `; then split it by the parts you named (${andList(parts)}) to see which one drives the result` : ''}. Keep, grow or drop it on that evidence.`);
+      });
       if (profSizes.length) partLines.push(`- **Size (${andList(profSizes.map(x => clauseHead(x, 60)))})**: list the smallest and the largest customer you won this period; if they sit outside this size, the ICP is already wider (or narrower) than you wrote it.`);
       for (const r of prof.roles.slice(0, 3)) partLines.push(`- **Role ${r}**: do deals that involve ${r} close faster or larger than deals that do not? If not, the role in your ICP is a label, not a fit signal.`);
       for (const pr of prof.problems.slice(0, 2)) partLines.push(`- **Problem ${q(clauseHead(pr, 100))}**: in how many of your wins was this the stated reason to buy, and in how many losses was it absent?`);
       const { bv: sideV, name: sideName } = buyerSide(v, prof.roles, args.current_icp, args.product_category);
-      const roleAdds = sideV ? sideV.buyerRoles.filter(r => ![...prof.roles].some(n => sameRole(n, r))).slice(0, 4) : [];
+      const roleAdds = sideV ? sideV.buyerRoles.filter(r => ![...prof.roles].some(n => sameRole(aliasRole(n, sideV), r))).slice(0, 4) : [];
 
 
       return `# ICP Evolution Analysis
@@ -2762,8 +2813,11 @@ ${EXAMPLES}
         // "Sula Vineyards CFO on the home page: the tool reduced ..." is a quote with its source in front: the source becomes the attribution.
         const fromValue = quoteValues.map(([t]) => {
           const u = unquote(t);
-          const m = /^(.{3,70}?)\s+on the (?:home |about |customer |product )?page:\s*(.+)$/i.exec(u) || /^((?:[A-Z][\w.'&-]*\s*){1,5}?(?:CFO|CEO|CIO|CTO|COO|CISO|CVP|VP|Director|Head|Manager)(?:,? [A-Z][\w ]{0,30})?):\s*(.+)$/.exec(u);
-          return m ? { quote: m[2].trim(), customer: m[1].trim(), role: undefined as string | undefined, from: 'value_realized' } : { quote: u, customer: undefined as string | undefined, role: undefined as string | undefined, from: 'value_realized' };
+          // the input's own label says who spoke: "(partner quote)" is a partner, "(customer quote)" a customer
+          const who = (/\((partner|analyst|client|customer) quote\)/i.exec(t)?.[1] || 'customer').toLowerCase();
+          const whoLabel = who === 'customer' || who === 'client' ? 'Customer' : who.charAt(0).toUpperCase() + who.slice(1);
+          const m = /^(.{3,70}?)\s+on the (?:home |about |customer |product )?page:\s*(.+)$/i.exec(u) || /^((?:[A-Z][\w.'&-]*\s*){1,5}?(?:CFO|CEO|CIO|CTO|COO|CISO|CVP|VP|Director|Head|Manager)(?:,? [A-Z][\w ]{0,30})?):\s*(.+)$/.exec(u) || /^((?:[A-Za-z][\w.'&-]*\s+){0,2}(?:CFO|CEO|CIO|CTO|COO|CISO|CVP|VP|Director|Head|Manager)\b[^:]{0,45}):\s*(.+)$/.exec(u);
+          return m ? { quote: m[2].trim(), customer: m[1].trim(), role: whoLabel, from: 'value_realized' } : { quote: u, customer: undefined as string | undefined, role: whoLabel, from: 'value_realized' };
         });
         const allQuotes = [...typedQuotes, ...fromValue];
         const painHead = topPains[0] ? clauseHead(topPains[0][0], 90) : '';
@@ -2833,7 +2887,7 @@ ${tieNote(topRoles, 'role')}
 ${allQuotes.length ? allQuotes.slice(0, 5).map((qt, i) => `
 ### Quote ${i + 1}
 > "${qt.quote}"
-> (${qt.role || 'Customer'}${qt.customer ? ` at ${qt.customer}` : ''}${qt.from ? `; written in ${qt.from}, marked as a customer quote` : ''})
+> (${qt.role || 'Customer'}${qt.customer ? (qt.from ? `: ${qt.customer}` : ` at ${qt.customer}`) : ''}${qt.from ? `; written in ${qt.from}, marked as a customer quote` : ''})
 `).join('\n') : 'No key_quotes were given and none of your statements is marked as a customer quote, so none are shown. Quotes are never written for you: add key_quotes, word for word, from your interviews.'}
 
 ---

@@ -249,7 +249,7 @@ test("icp_evolution_tracker: with no wins or losses, the current ICP is read par
     current_icp: "Branchwire: multi-location enterprises; segments: Banking, Manufacturing, Automotive; buyer: CIO" });
   clean(r, "evolution");
   assert.match(r.text, /## Your Current ICP, Part by Part/);
-  assert.match(r.text, /\*\*Segment Banking\*\*: compare its win rate, ACV, sales cycle and churn/);
+  assert.match(r.text, /\*\*Segment Banking\*\*: list every deal you won or lost with Banking in it/);
   assert.match(r.text, /\*\*Segment Automotive\*\*/);
   assert.match(r.text, /\*\*Role CIO\*\*: do deals that involve CIO close faster or larger/);
   assert.match(r.text, /Roles usual in telecom that your ICP does not name/);

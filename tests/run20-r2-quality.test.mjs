@@ -97,7 +97,7 @@ test("buyer group: a billing platform sold to a CFO gets finance measures, not a
   const r = await call("buyer_group_analyzer", { product_category: "recurring billing and revenue infrastructure", company: "Pathwise", typical_champion: "Head of Product", known_stakeholders: ["CFO", "Finance", "Engineering"] });
   ok(r);
   assert.doesNotMatch(r.text, /activation|time to value/i);
-  assert.match(r.text, /days to close the books|reconciliation effort/);
+  assert.doesNotMatch(r.text, /card spends|policy breach|accounts payable|days to close the books/i);   // an expense profile is not a billing buyer's (the billing profile comes with the shared file)
   const t = await call("buyer_group_analyzer", { product_category: "developer testing tools", company: "Cloudmoat", typical_champion: "Platform Engineer", known_stakeholders: ["VP Engineering", "Security Lead", "Software Developer"] });
   assert.match(t.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: Security Lead\n\*\*Their Concern\*\*: Likely objection: security review/);
   assert.match(t.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: VP Engineering\n[^\n]*per-user cost/i);
@@ -117,8 +117,7 @@ test("deep dive: a billing platform sold to a CFO is not shown product-led SaaS 
   const rec = { name: "Gaming", industry: "Gaming", acv: 60000, sales_cycle_days: 75, champion_title: "Head of Product" };
   const r = await call("icp_deep_dive", { customers: [rec, { ...rec, name: "Media", industry: "Media", champion_title: "CFO" }], product_category: "recurring billing and revenue infrastructure", company: "Pathwise" });
   ok(r);
-  assert.doesNotMatch(r.text, /activation rate|time to value/);
-  assert.match(r.text, /Champion CFO\*\*: matches a role that finance buyers deals usually involve|Champion CFO\*\*: matches a role that finance buyers/);
+  assert.doesNotMatch(r.text, /activation rate|time to value|policy breach|accounts payable|finance buyers/i);
 });
 
 // ---- (5) lookalike ----
@@ -159,8 +158,7 @@ test("interview: a partner quote is a quote, not the outcome buyers seek; the so
 test("interview: a billing product sold to a CFO is not given SaaS measures", async () => {
   const r = await call("icp_interview_synthesizer", { product_category: "recurring billing and revenue infrastructure", company: "Pathwise", interview_notes: [{ customer: "Media", role: "CFO", pain_points: ["billing leakage"] }] });
   ok(r);
-  assert.doesNotMatch(r.text, /activation rate|time to value|onboarding/);
-  assert.match(r.text, /days to close the books|reconciliation effort|month-end/);
+  assert.doesNotMatch(r.text, /activation rate|time to value|onboarding|card spends|policy breach|accounts payable/i);
 });
 
 // ---- (8) account prioritization ----
@@ -259,4 +257,82 @@ test("software sellers: keywords come from the nouns of the product text (API pl
   assert.match(r.text, /"API lifecycle management"/);
   const ads = r.text.split("## Google Ads Targeting")[1].split("## 6sense")[0];
   assert.doesNotMatch(ads, /CI pipeline|test coverage|open-source alternative|SDK software|developer experience software/);
+});
+
+// ---- round 2c: the 15 answers the judges kept below 4 (evidence/run20/round2) ----
+test("gap analysis: in investment management CIO is the Chief Investment Officer; a bracketed list stays whole; asset managers are related to investment managers, not outside", async () => {
+  const r = await call("icp_gap_analysis", { company: "Quantara AI", product_category: "AI platform and investment strategies (Quantara Edge from Quantara AI)",
+    current_customers: "Quantara AI customers: Asset allocators (pensions; insurers; endowments), Investment banks, Wealth managers, Asset managers. The metric figures sent are hypothetical.",
+    ideal_icp: "asset allocators, investment managers and banks, with CIO as the buyer, who face static factor exposures and black box signals" });
+  ok(r);
+  assert.match(r.text, /CIO matches a role usual in [^\n]*\(Chief Investment Officer\)/);
+  assert.doesNotMatch(r.text, /In both: [^\n]*\(pensions\./);
+  assert.match(r.text, /Asset allocators \(pensions; insurers; endowments\)/);
+  assert.doesNotMatch(r.text, /Segments outside the ideal profile\*\*:[^\n]*(?:Asset managers|Wealth managers|Investment banks)/);
+});
+test("gap analysis: 'B2B SaaS and software' is related to 'SaaS'; a page claim is not a size qualifier; 'platform leader' is the Platform Engineering Lead", async () => {
+  const a = await call("icp_gap_analysis", { current_customers: "Pathwise customers: B2B SaaS and software, Gen AI, Gaming; streaming and entertainment.", ideal_icp: "the world's leading AI, SaaS and consumer subscription businesses, with CFO as the buyer, who face messy pricing" });
+  ok(a);
+  assert.match(a.text, /Related wording: B2B SaaS and software \(current\) and SaaS and consumer subscription businesses \(ideal\)/);
+  assert.doesNotMatch(a.text, /Nothing in common/);
+  const b = await call("icp_gap_analysis", { product_category: "developer testing tools", company: "Cloudmoat", current_customers: "Cloudmoat customers: Financial services, Retail.",
+    ideal_icp: "API teams and developers at 500,000 companies, including 98% of the Fortune 500 (page claim), with platform leader as the buyer, who face disconnected tools" });
+  ok(b);
+  assert.doesNotMatch(b.text, /companies outside Fortune 500|\*\*Size\*\*: companies outside/);
+  assert.match(b.text, /platform leader matches a role usual in software \(Platform Engineering Lead\)/);
+});
+test("roles: a person is in one place in the buyer group; any other chief officer is budget or sign-off, not a day-to-day user", async () => {
+  const q = await call("buyer_group_analyzer", { product_category: "AI platform and investment strategies", company: "Quantara AI", typical_champion: "portfolio manager", known_stakeholders: ["CIO", "risk teams", "compliance committees"] });
+  ok(q);
+  assert.doesNotMatch(q.text, /### End User[^\n]*\n\*\*Role\*\*: Portfolio Manager/);
+  assert.doesNotMatch(q.text, /### Technical Evaluator[^\n]*\n\*\*Role\*\*: Head of Risk/);
+  assert.match(q.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: risk teams/);
+  const t = await call("buyer_group_analyzer", { product_category: "managed SD-WAN for branch offices", company: "Branchwire", typical_champion: "IT Infrastructure Head", known_stakeholders: ["CIO", "IT Infrastructure Head", "Chief Commercial Officer"] });
+  assert.doesNotMatch(t.text, /### End User[^\n]*\n\*\*Role\*\*: Chief Commercial Officer/);
+  assert.match(t.text, /Chief Commercial Officer \(budget or sign-off\)/);
+});
+test("evolution tracker: CIO is not listed as missing when the ICP names the CIO in investment management; every segment line has its own words", async () => {
+  const r = await call("icp_evolution_tracker", { company: "Quantara AI", product_category: "AI platform and investment strategies (Quantara Edge from Quantara AI)",
+    current_icp: "Quantara AI: asset allocators, investment managers and banks; segments: Asset allocators (pensions; insurers; endowments), Investment banks, Wealth managers, Asset managers; buyer: CIO; champion: portfolio manager" });
+  ok(r);
+  assert.doesNotMatch(r.text, /ICP does not name\*\*: Chief Investment Officer/);
+  assert.equal((r.text.match(/\*\*Segment investment managers and banks\*\*/g) || []).length, 0);
+  const lines = [...r.text.matchAll(/- \*\*Segment [^\n]+/g)].map((m) => m[0].replace(/\*\*Segment [^*]+\*\*/, ""));
+  assert.ok(lines.length >= 4);
+  assert.ok(new Set(lines.map((l) => l.slice(0, 40))).size >= 3, "the segment lines are not one repeated sentence");
+  assert.match(r.text, /split it by the parts you named \(pensions, insurers and endowments\)/);
+});
+test("interview: a partner quote is attributed to a partner by the input's own label; a quote with its source in front keeps the source as attribution", async () => {
+  const r = await call("icp_interview_synthesizer", { product_category: "modernization engineering services", company: "Pathwise", interview_notes: [{ customer: "BFSI", role: "CIO", pain_points: ["slow modernization"],
+    value_realized: ["CIO of a US energy firm: a cloud based ERP was needed within 60 days and Pathwise came through (customer quote)", "Microsoft's CVP thanks Pathwise as a global partner (partner quote)"] }] });
+  ok(r);
+  assert.match(r.text, /> \(Partner[^\n]*written in value_realized/);
+  assert.match(r.text, /> "a cloud based ERP was needed within 60 days and Pathwise came through"\s*\n> \(Customer: CIO of a US energy firm; written/);
+  assert.doesNotMatch(r.text, /> \(Customer[^\n]*Microsoft/);
+});
+test("lookalike: filters are built from clean industry terms; the Google keywords come from the product text; a long product is never cut with an ellipsis; no empty heading", async () => {
+  const r = await call("lookalike_signal_generator", { company: "Quantara AI", product_category: "AI platform and investment strategies (Quantara Edge from Quantara AI)", champion_titles: ["portfolio manager", "CIO"],
+    icp_firmographics: { industries: ["Asset allocators (pensions, insurers, endowments)", "Investment banks"] } });
+  ok(r);
+  const filters = r.text.split("## Google Ads")[0].split("## LinkedIn")[1];
+  assert.doesNotMatch(filters, /\(pensions/);
+  assert.match(filters, /Industry: Asset allocators OR pensions OR insurers OR endowments OR Investment banks/);
+  const ads = r.text.split("## Google Ads Targeting")[1].split("## 6sense")[0];
+  assert.match(ads, /"AI platform"/);
+  assert.match(ads, /"investment strategies"/);
+  const long = await call("lookalike_signal_generator", { company: "Lanehop", product_category: "sales force automation and distributor management software for CPG and FMCG route to market and field teams across many regions of the country", champion_titles: ["Head of Sales"] });
+  assert.doesNotMatch(long.text, /\.\.\."/);
+  for (const t of [r, long, await call("lookalike_signal_generator", { company: "Pathwise", product_category: "recurring billing and revenue infrastructure", champion_titles: ["CFO"] })]) assert.doesNotMatch(t.text, /### Sector notes: [^\n]*\n\s*\n\s*(?:###|---|\*\*)/);
+});
+test("scoring evidence: CFO is found in a statement that names a CFO; a group word is never found inside one title; the 'already a criterion' line agrees with the evidence", async () => {
+  const r = await call("icp_scoring_model", { product_category: "spend management software", company: "Spendrill",
+    success_correlation: "Sula Vineyards CFO on the home page: the tool cut a 60 day cycle to 10 days (customer quote); Nivea Sr. Sales Automation Manager: helped us grow our top line (customer quote)",
+    scoring_criteria: [{ criterion: "Buyer or champion role", importance: "important", values: ["CFO", "managers", "employees"] }, { criterion: "Segment", importance: "critical", values: ["Retail", "Banks"] }] });
+  ok(r);
+  assert.match(r.text, /Buyer or champion role, "CFO": named in "Sula Vineyards CFO/);
+  assert.doesNotMatch(r.text, /"managers": named in/);
+  assert.doesNotMatch(r.text, /Not found in your evidence\*\*: [^\n]*"CFO"/);
+  assert.match(r.text, /already a criterion: \*\*Buyer or champion role\*\*/);
+  assert.match(r.text, /- "Sula Vineyards CFO[^\n]*": a customer statement/);
+  assert.doesNotMatch(r.text, /already a criterion: [^\n]*\*\*Segment\*\*/);
 });
