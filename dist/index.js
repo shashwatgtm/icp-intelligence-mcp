@@ -1458,12 +1458,17 @@ ${SUGGESTED}
                     type: 'string',
                     description: 'Name of the market segment'
                 },
+                product_category: {
+                    type: 'string',
+                    description: 'Optional: what you sell (for example "spend management software"), used for sector notes. The arithmetic does not use it'
+                },
                 company: COMPANY_INPUT
             },
             required: ['total_potential_companies', 'average_contract_value']
         },
         execute: (args) => {
-            const ctx = readContext(undefined, { seller: [], context: [args.company, args.data_sources], buyer: [args.segment_name] });
+            const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, args.data_sources], buyer: [args.segment_name] });
+            const sideM = buyerSide(ctx.v, args.product_category, args.segment_name).bv?.metrics || ctx.v?.metrics || [];
             const totalCompanies = args.total_potential_companies;
             const acv = args.average_contract_value;
             // Run 16 D45: a typed 0 is used as 0; only an omitted or null value takes the preset.
@@ -1516,7 +1521,7 @@ ${SUGGESTED}
 
 - ${companyLine(args.company)}
 
-${ctx.v ? `*Sector: read from your inputs as ${ctx.v.name}.*` : '*Sector notes: none. This calculator takes a market segment, not a product; give product_category to the other ICP tools for notes that fit what you sell.*'}
+${ctx.v ? (args.product_category ? ctx.line : `*Sector: read from your inputs as ${ctx.v.name}.*`) : '*Sector notes: none. This calculator takes a market segment, not a product; give product_category to the other ICP tools for notes that fit what you sell.*'}
 
 ---
 
@@ -1632,7 +1637,7 @@ Later years assume your market share doubles each year.
 > 
 > *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
 
-${ctx.v ? `${sectorNotes(ctx.v, ['committee', 'metrics', 'vocabulary'])}\n- **Counting companies in this sector:** count only companies where the roles above exist and the problem is measured (${andList(ctx.v.metrics.slice(0, 2))}).\n\n` : ''}**Next Step**: Use \`lookalike_signal_generator\` to create targeting criteria
+${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'proof'], args.product_category, args.segment_name)}\n- **Counting companies in this sector:** count only companies where the roles above exist and the problem is measured (${andList(sideM.slice(0, 2))}).\n\n` : ''}**Next Step**: Use \`lookalike_signal_generator\` to create targeting criteria
 `;
         }
     },
@@ -1720,9 +1725,12 @@ ${ctx.v ? `${sectorNotes(ctx.v, ['committee', 'metrics', 'vocabulary'])}\n- **Co
             const vocabOk = !!v && v.id !== 'saas' && v.id !== 'software';
             // Words of the sector that name a measure or a practice, not a thing people search for ("uptime provider" is not a search).
             const MEASURE_WORD = /^(?:uptime|sla|delivery sla|latency|accuracy|usage|churn|renewal|expansion|onboarding|activation|governance|transition|steady state|exposure|alert fatigue|automation rate|inference cost|cost per delivery|time to value|net revenue retention|hallucination|data privacy|data residency|policy controls|audit trail|compliance review|approval workflow|ticket backlog|knowledge transfer|service credits|technical debt|test coverage|release frequency|developer experience|reconciliation|month-end close|pilot|case review|accuracy on your own data|cost per case|explainability|guardrails|human in the loop|evaluation set|resolution rate|mean time to \w+|first-attempt delivery|proof of delivery|statement of work|risk register|compliance audit|customer success|misconfiguration|branch sites|site survey|last-mile link|network operations centre)$/i;
-            const keywordWords = vocabOk && ctx.model !== 'investment' ? v.vocabulary.filter(w => !MEASURE_WORD.test(w)).slice(0, 4) : [];
+            // A software seller's keywords come from the nouns of its own product text ("API platform", "API lifecycle management"), not from the
+            // sector's CI and testing words; a SaaS seller's own measures are not search words either.
+            const productPhrases = productWords(args.product_category, args.company).split(/[(),;]|\band\b/i).map(x => x.trim().replace(/^(?:a|an|the|for)\s+/i, '')).filter(x => /^[\w/+.-]+(?: [\w/+.-]+){1,3}$/.test(x) && !/\b(?:from|that|which|described)\b/i.test(x));
+            const keywordWords = v && v.id === 'software' ? [] : vocabOk && ctx.model !== 'investment' ? v.vocabulary.filter(w => !MEASURE_WORD.test(w)).slice(0, 4) : [];
             const searchProduct = clauseHead(productWords(args.product_category, args.company), 80);
-            const keywords = [...new Set([...(searchProduct ? [searchProduct] : []), ...keywordWords.map(w => (new RegExp(`${suffix}s?$`, 'i').test(w) || /\bservices?$/i.test(w) && suffix === 'services' ? w : `${w} ${suffix}`)),
+            const keywords = [...new Set([...(searchProduct && !(v && v.id === 'software' && productPhrases.length) ? [searchProduct] : []), ...(v && v.id === 'software' ? productPhrases.slice(0, 3) : []), ...keywordWords.map(w => (new RegExp(`${suffix}s?$`, 'i').test(w) || /\bservices?$/i.test(w) && suffix === 'services' ? w : `${w} ${suffix}`)),
                     ...(tech || []).map(t => `${t.toLowerCase()} integration`)])];
             // Run 19 D80 (problem 3): every trigger typed gets its own signal, chosen by its words.
             const signalFor = (t) => {
@@ -1794,7 +1802,7 @@ ${JSON.stringify({ firmographics: { ...(industries ? { industry: industries } : 
 
 ### Intent Topic Keywords
 \`\`\`
-${[...(product ? [product] : []), ...(vocabOk ? v.vocabulary.slice(0, 5) : []), ...(tech || [])].join('\n') || 'Add product_category for intent topics'}
+${[...new Set([...(searchProduct ? [searchProduct] : []), ...(v && v.id === 'software' ? productPhrases.slice(0, 3) : []), ...(vocabOk ? v.vocabulary.slice(0, 5) : []), ...(tech || [])])].join('\n') || 'Add product_category for intent topics'}
 \`\`\`
 
 ### Buying Stage Indicators
@@ -1928,10 +1936,15 @@ ${SUGGESTED}
                     },
                     description: 'Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100'
                 },
+                product_category: {
+                    type: 'string',
+                    description: 'Optional: what you sell (for example "spend management software"), used for sector notes. The arithmetic does not use it'
+                },
                 company: COMPANY_INPUT
             }
         },
         execute: (args) => {
+            const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company] });
             // Default weights
             const weights = {
                 // Run 16 D45: a weight given as 0 is used as 0; only an omitted or null weight takes its default.
@@ -2018,10 +2031,11 @@ ${SUGGESTED}
                                     : a.timing.toLowerCase() === 'later' ? 'timing is later, so agree a date to revisit rather than push for a decision' : a.timing.toLowerCase() === 'now' ? 'timing is now, so ask for the next two meeting dates' : 'the scores are strong, so verify the timing with the budget owner';
                     return `${base}; ${focus}`;
                 };
+                const sv = ctx.v;
                 return `# Account Prioritization Results
 
 - ${companyLine(args.company)}
-
+${args.product_category ? `\n${ctx.line}\n` : ''}
 ## Scoring Weights
 ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default weights.\n` : ''}| Factor | Weight | Rationale |
 |--------|--------|-----------|
@@ -2073,7 +2087,7 @@ ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.tota
 
 ## Next Actions by Account
 
-${scoredAccounts.slice(0, 5).map((a, i) => `
+${sv ? `How deals run in ${sv.name}: ${sv.salesMotion}\n${sv.id === 'saas' ? '' : `Roles to reach in these accounts: ${andList(sv.buyerRoles)}.\nWords their buyers use: ${sv.vocabulary.join(', ')}.\nA proof point that lands: ${sv.proofShape}\n`}` : ''}${scoredAccounts.slice(0, 5).map((a, i) => `
 ### ${i + 1}. ${a.name} (Tier ${a.tier})
 - **Why prioritized**: ${reasonFor(a)}
 - **Gap to address**: ${weakestOf(a)[0] === 'fit' ? 'Validate fit' : weakestOf(a)[0] === 'intent' ? 'Generate engagement' : weakestOf(a)[0] === 'relationship' ? 'Build relationships' : 'Verify timing'}

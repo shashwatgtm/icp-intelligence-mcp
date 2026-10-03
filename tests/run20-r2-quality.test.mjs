@@ -204,3 +204,59 @@ test("a support automation seller still gets the support notes (the neutral AI n
   ok(r);
   assert.match(r.text, /resolution|handling time|ticket/i);
 });
+
+// ---- round 2b: product_category in the TAM calculator and in account prioritization (D80: arithmetic, scores and tiers unchanged) ----
+const listTools = async () => { const r = await handler(new Request("https://x.gtmhelix.com/mcp", { method: "POST", headers: { "content-type": "application/json", accept: "application/json, text/event-stream" }, body: JSON.stringify({ jsonrpc: "2.0", id: nextId++, method: "tools/list", params: {} }) })); return Object.fromEntries((await r.json()).result.tools.map((t) => [t.name, t])); };
+test("tools/list: tam_sam_som_calculator and account_prioritization declare an optional product_category (and company); README and docs say so", async () => {
+  const t = await listTools();
+  for (const n of ["tam_sam_som_calculator", "account_prioritization"]) {
+    assert.equal(t[n].inputSchema.properties.product_category.type, "string", n);
+    assert.ok(!(t[n].inputSchema.required || []).includes("product_category"), n);
+    assert.equal(t[n].inputSchema.properties.company.type, "string", n);
+  }
+  const { readFileSync } = await import("node:fs");
+  const readme = readFileSync(new URL("../README.md", import.meta.url), "utf8");
+  const docs = readFileSync(new URL("../public/docs/index.html", import.meta.url), "utf8");
+  const section = (txt, a, b) => txt.slice(txt.indexOf(a), txt.indexOf(b));
+  assert.match(section(readme, "#### 4. TAM", "#### 5."), /`product_category`/);
+  assert.match(section(readme, "#### 6. Account", "#### 7."), /`product_category`/);
+  assert.equal((docs.match(/<code>product_category<\/code>/g) || []).length, 9);
+  for (const p of ["tam-sam-som-calculator", "account-prioritization"]) assert.match(readFileSync(new URL(`../public/tools/${p}/index.html`, import.meta.url), "utf8"), /name="product_category"/);
+});
+test("tam_sam_som_calculator with product_category: sector notes from what you sell; every number identical to the call without it", async () => {
+  const base = { total_potential_companies: 800, average_contract_value: 90000, icp_percentage: 25, year1_market_share_target: 2, segment_name: "Banks" };
+  const a = await call("tam_sam_som_calculator", base);
+  const b = await call("tam_sam_som_calculator", { ...base, product_category: "managed SD-WAN and business internet for companies with many branches", company: "Branchwire" });
+  ok(b);
+  assert.match(b.text, /Sector: read from your inputs as telecom/);
+  assert.match(b.text, /### Sector notes: telecom/);
+  assert.match(b.text, /Chief Information Officer|Head of IT Infrastructure/);
+  assert.match(b.text, /annual value per customer contract/);
+  const nums = (t) => (t.match(/\$[\d.,]+[KMB]?|\b\d[\d,]*(?:\.\d+)?%?/g) || []).filter((x) => /[$%]/.test(x) || x.length > 3);
+  const core = (t) => t.slice(t.indexOf("## Input Data"), t.indexOf("## Assumptions")).replace(/ARR|annual value per customer contract/g, "");
+  assert.equal(core(a.text), core(b.text));
+  assert.match(a.text, /Sector notes: none/);
+  assert.doesNotMatch(b.text, /Sector notes: none/);
+  void nums;
+});
+test("account_prioritization with product_category: sector content added; scores, ranks and tiers identical to the call without it", async () => {
+  const accounts = [{ name: "A", fit_score: 85, intent_signals: 40, relationship: 60, timing: "now" }, { name: "B", fit_score: 70, intent_signals: 75, relationship: 30, timing: "soon" }, { name: "C", fit_score: 60, intent_signals: 20, relationship: 10, timing: "later" }];
+  const a = await call("account_prioritization", { accounts });
+  const b = await call("account_prioritization", { accounts, product_category: "IT services and managed service desk", company: "Pathwise" });
+  ok(b);
+  const table = (t) => t.slice(t.indexOf("## Prioritized Account List"), t.indexOf("## Tier Breakdown"));
+  assert.equal(table(a.text), table(b.text));
+  assert.match(b.text, /Sector: read from your inputs as ITeS/);
+  assert.match(b.text, /RFP-led or relationship-led/);
+  assert.match(b.text, /Chief Information Officer/);
+  assert.match(b.text, /transition|SLA/);
+  assert.doesNotMatch(a.text, /Sector: read/);
+});
+test("software sellers: keywords come from the nouns of the product text (API platform, API lifecycle management), not CI or testing words", async () => {
+  const r = await call("lookalike_signal_generator", { company: "Cloudmoat", product_category: "API platform (API lifecycle management) from Cloudmoat", champion_titles: ["Platform Engineer", "Developer Advocate"] });
+  ok(r);
+  assert.match(r.text, /"API platform"/);
+  assert.match(r.text, /"API lifecycle management"/);
+  const ads = r.text.split("## Google Ads Targeting")[1].split("## 6sense")[0];
+  assert.doesNotMatch(ads, /CI pipeline|test coverage|open-source alternative|SDK software|developer experience software/);
+});

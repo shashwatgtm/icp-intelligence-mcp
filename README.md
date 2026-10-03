@@ -95,6 +95,7 @@ Generated on 27 September 2026 from the server's own tool list, and regenerated 
 | `year1_market_share_target` | No | number (0 to 100) | Realistic Year 1 market share percentage, from 0 to 100 (typically 1-5%). Left out, 3 is used and marked as an example |
 | `data_sources` | No | string | Where you got your numbers (for documentation) |
 | `segment_name` | No | string | Name of the market segment |
+| `product_category` | No | string | Optional: what you sell (for example "spend management software"), used for sector notes. The arithmetic does not use it |
 | `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 5. Lookalike Signal Generator (`lookalike_signal_generator`)
@@ -115,6 +116,7 @@ Generated on 27 September 2026 from the server's own tool list, and regenerated 
 |---|---|---|---|
 | `accounts` | No | array of object | List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown) |
 | `prioritization_weights` | No | object | Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100 |
+| `product_category` | No | string | Optional: what you sell (for example "spend management software"), used for sector notes. The arithmetic does not use it |
 | `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 7. ICP Gap Analysis (`icp_gap_analysis`)

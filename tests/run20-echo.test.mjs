@@ -55,13 +55,13 @@ const FULL = {
     deal_size: "$50K-100K", target_company_size: "500-1000 employees", product_category: "spend management software",
     known_stakeholders: ["Chief Financial Officer", "Head of IT", "Procurement Lead"], typical_champion: "Finance Controller", company: "Spendrill",
   },
-  tam_sam_som_calculator: { total_potential_companies: 12000, average_contract_value: 8000, icp_percentage: 30, year1_market_share_target: 3, data_sources: "Industry directory", segment_name: "Mid-size manufacturers", company: "Spendrill" },
+  tam_sam_som_calculator: { total_potential_companies: 12000, average_contract_value: 8000, icp_percentage: 30, year1_market_share_target: 3, data_sources: "Industry directory", segment_name: "Mid-size manufacturers", product_category: "spend management software", company: "Spendrill" },
   lookalike_signal_generator: {
     icp_firmographics: { industries: ["Manufacturing"], company_sizes: ["201-500"], locations: ["India"], funding_stages: ["Series B"] },
     icp_technographics: ["SAP"], champion_titles: ["Finance Controller"], buying_triggers: ["Audit finding"], platforms: ["linkedin"],
     product_category: "spend management software", company: "Spendrill",
   },
-  account_prioritization: { accounts: [{ name: "Lanehop", fit_score: 85, intent_signals: 70, relationship: 60, timing: "now" }, { name: "Branchwire", fit_score: 40, intent_signals: 30, relationship: 20, timing: "later" }], company: "Spendrill" },
+  account_prioritization: { accounts: [{ name: "Lanehop", fit_score: 85, intent_signals: 70, relationship: 60, timing: "now" }, { name: "Branchwire", fit_score: 40, intent_signals: 30, relationship: 20, timing: "later" }], product_category: "spend management software", company: "Spendrill" },
   icp_gap_analysis: {
     current_customers: "Mid-size manufacturers with 300 to 1,000 employees", ideal_icp: "Distributors with 1,000 to 3,000 employees and many branches",
     product_category: "spend management software", company: "Spendrill",
