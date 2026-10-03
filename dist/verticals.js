@@ -196,7 +196,7 @@ exports.VERTICALS = [
     },
     {
         id: 'software', name: 'software',
-        match: /\b(developers?|api (?:testing|tests?|platform|management|gateway|monitoring|design|development)|devops|devsecops|dev tools|ci\/cd|ci pipelines?|observability|databases?|open[- ]source|engineering teams?|qa|test(?:ing|s)? (?:platform|automation|tools?)|test automation|software testing|(?:testing|test|device|browser) clouds?|cloud testing|cross-browser|browser testing|unit tests?|source code|version control|git|kubernetes|microservices|sdlc|feature flags?|low-code|infrastructure as code|apm|backend)\b/i,
+        match: /\b(developers?|api (?:testing|tests?|platform|management|gateway|monitoring|design|development)|devops|devsecops|dev tools|ci\/cd|ci pipelines?|software (?:development|delivery) lifecycle|sdlc|merge requests?|observability|databases?|open[- ]source|engineering teams?|qa|test(?:ing|s)? (?:platform|automation|tools?)|test automation|software testing|(?:testing|test|device|browser) clouds?|cloud testing|cross-browser|browser testing|unit tests?|source code|version control|git|kubernetes|microservices|sdlc|feature flags?|low-code|infrastructure as code|apm|backend)\b/i,
         weak: /\b(apis?|sdks?|code|release|releases|deploy\w*|testing|tests?|debug\w*|logging)\b/i,
         vocabulary: ['developer experience', 'pipeline', 'release frequency', 'technical debt', 'open source alternative', 'integration', 'mean time to recovery', 'seats', 'self serve trial'],
         buyerRoles: ['VP Engineering', 'Chief Technology Officer', 'Platform Engineering Lead', 'Engineering Manager', 'Head of DevOps', 'Security Lead'],
@@ -252,7 +252,7 @@ exports.VERTICALS = [
 exports.SUBTYPES = [
     {
         id: 'freight-visibility', vertical: 'logistics-tech', name: 'freight visibility',
-        match: /\b(?:freight visibility|shipment visibility|shipment tracking|supply chain visibility|transportation visibility|cargo tracking|container tracking|track and trace|control tower (?:software|platform)|logistics control tower|load tracking|eta prediction|shipment monitoring)\b/i,
+        match: /\b(?:freight visibility|(?:shipment|inventory|transportation|supply chain|freight|order)(?: and (?:shipment|inventory|freight|order))? visibility|real.?time visibility|predictive etas?|order level tracking|shipment visibility|shipment tracking|supply chain visibility|transportation visibility|cargo tracking|container tracking|track and trace|control tower (?:software|platform)|logistics control tower|load tracking|eta prediction|shipment monitoring)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['shipment tracking', 'ETA', 'milestone', 'exception alert', 'control tower', 'carrier integration', 'dwell time', 'detention and demurrage', 'port and terminal events', 'tracking link'],
@@ -355,7 +355,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'transport-management', vertical: 'logistics-tech', name: 'transport and fleet management',
-        match: /\b(?:transport(?:ation)? management (?:system|software)|fleet management(?: software| system| platform)?|vehicle telematics|fleet telematics|fleet tracking|freight audit|carrier management|load planning|freight forwarding software|tms)\b/i,
+        match: /\b(?:transport(?:ation)? management (?:system|software)|transportation management|fleet management(?: software| system| platform)?|vehicle telematics|fleet telematics|fleet tracking|freight audit|carrier management|load planning|freight forwarding software|tms)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['load planning', 'carrier selection', 'freight cost', 'tender', 'telematics', 'fleet utilisation', 'freight audit', 'rate management', 'empty miles', 'transport management system'],
@@ -381,7 +381,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'payments-banking', vertical: 'fintech', name: 'payments and banking APIs',
-        match: /\b(?:payment gateway|payment processing|payments? (?:platform|infrastructure)|payment service provider|payment orchestration|card issuing|card processing|banking as a service|bank account (?:data|api|linking|access|verification)|open banking|core banking|remittance (?:service|platform)|merchant acquiring|(?:connects?|links?) (?:\w+ ){1,3}(?:to )?(?:\w+'?s? )?bank accounts?|financial (?:data )?(?:network|apis?)|payments? apis?|payment links?|card programs?|upi)\b/i,
+        match: /\b(?:payment gateway|payment processing|payments and banking (?:platform|stack|infrastructure)|banking platform|payments? (?:platform|infrastructure)|payment service provider|payment orchestration|card issuing|card processing|banking as a service|bank account (?:data|api|linking|access|verification)|open banking|core banking|remittance (?:service|platform)|merchant acquiring|(?:connects?|links?) (?:\w+ ){1,3}(?:to )?(?:\w+'?s? )?bank accounts?|financial (?:data )?(?:network|apis?)|payments? apis?|payment links?|card programs?|upi)\b/i,
         model: 'transactions',
         notes: {
             vocabulary: ['payment success rate', 'settlement', 'chargeback', 'authorisation', 'tokenisation', 'sponsor bank', 'sandbox', 'webhook', 'uptime', 'payout'],
@@ -508,7 +508,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'customer-service', vertical: 'saas', name: 'customer service software',
-        match: /\b(?:customer (?:service|support) (?:software|platform|tool|system|automation)|help ?desk(?: software| platform| tool)?|ticketing (?:system|software|platform|tool)|help cent(?:er|re)|support ticketing|shared inbox|live chat software|service desk software|customer support suite)\b/i,
+        match: /\b(?:customer (?:service|support) (?:software|platform|tool|system|automation)|help ?desk(?: software| platform| tool)?|ticketing(?: system| software| platform| tool)?|help cent(?:er|re)|support ticketing|shared inbox|live chat(?: software)?|service desk software|customer support suite)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['ticket', 'first response time', 'resolution time', 'help center', 'macro', 'shared inbox', 'knowledge base', 'deflection', 'customer satisfaction', 'handoff to a person'],
@@ -534,7 +534,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'crm-marketing', vertical: 'saas', name: 'CRM and marketing',
-        match: /\b(?:crm (?:software|platform|system|tool)s?|customer relationship management|sales crm|marketing automation|email marketing (?:platform|software|tool)|sales engagement|lead management|sales pipeline (?:software|tool)|customer data platform|campaign management|revenue intelligence|customer engagement(?: platform| software| suite)?|lifecycle marketing|retention marketing|mobile marketing|push notifications?|omnichannel engagement|marketing cloud)\b/i,
+        match: /\b(?:crm (?:software|platform|system|tool|suite)s?|crm for|is (?:a )?crm|customer relationship management|sales crm|marketing automation|email marketing (?:platform|software|tool)|sales engagement|lead management|sales pipeline (?:software|tool)|customer data platform|campaign management|revenue intelligence|customer engagement (?:platform|software|suite)|lifecycle marketing|retention marketing|mobile marketing|push notifications?|omnichannel engagement|marketing cloud)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['pipeline', 'lead', 'contact', 'campaign', 'lead scoring', 'sales stage', 'forecast', 'attribution', 'nurture', 'handoff from marketing to sales'],
@@ -612,7 +612,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'construction', vertical: 'vertical-saas', name: 'construction management',
-        match: /\b(?:construction (?:management|project management|software|technology|estimating|bidding|accounting|scheduling|document management|erp|platform)|contractor (?:management|software)|general contractor software|builder (?:management )?software|jobsite (?:management|software)|job site management|site management software|bim (?:software|platform|collaboration)|takeoff software|estimating software|rfi and submittal management|preconstruction software)\b/i,
+        match: /\b(?:change orders|rfis? and submittals|submittals|lien waivers?|(?:real.?time )?costing and budgets|construction (?:management|project management|software|technology|estimating|bidding|accounting|scheduling|document management|erp|platform)|contractor (?:management|software)|general contractor software|builder (?:management )?software|jobsite (?:management|software)|job site management|site management software|bim (?:software|platform|collaboration)|takeoff software|estimating software|rfi and submittal management|preconstruction software)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['job cost', 'change order', 'RFI', 'submittal', 'bid and estimate', 'takeoff', 'pay application', 'retainage', 'subcontractor', 'daily log', 'punch list'],
@@ -716,7 +716,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'industry-hr-payroll', vertical: 'vertical-saas', name: 'HR and payroll built for one industry',
-        match: /\b(?:payroll software|hr and payroll|hr software|hr platform|hris|human resources? (?:software|information system)|workforce management (?:software|platform)|time and attendance|shift scheduling|employee scheduling|timekeeping|staff scheduling|labou?r management|payroll and compliance|hrms|payroll (?:platform|suite|system|solution)s?|hr (?:and|&) payroll|human capital management|hcm (?:software|platform)|employee management software)\b/i,
+        match: /\b(?:payroll software|hr and payroll|hr software|hr platform|hris|human resources? (?:software|information system)|workforce management (?:software|platform)|time and attendance|shift scheduling|employee scheduling|timekeeping|staff scheduling|labou?r management|payroll and compliance|payroll (?:and|with) (?:[a-z-]+ ){1,3}(?:software|platform|app|system)|hrms|payroll (?:platform|suite|system|solution)s?|hr (?:and|&) payroll|human capital management|hcm (?:software|platform)|employee management software)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['shift scheduling', 'time and attendance', 'pay rules', 'union and wage rules', 'overtime', 'labour compliance', 'pay run', 'timesheet', 'onboarding paperwork', 'tip or incentive pay'],
@@ -872,7 +872,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'digital-engineering', vertical: 'ites', name: 'digital engineering and product engineering',
-        match: /\b(?:digital engineering|product engineering|software engineering services|software development services|custom software development|application modernisation|application modernization|mobile app development|product development services|outsourced (?:software|product) development|cloud native engineering|embedded engineering|engineering as a service|quality engineering services|r&d services)\b/i,
+        match: /\b(?:digital engineering|product engineering|software engineering services|software development services|custom software development|application modernisation|application modernization|moderni[sz]ation and management of applications|application (?:discovery|migration|transformation)|code transformation|mobile app development|product development services|outsourced (?:software|product) development|cloud native engineering|embedded engineering|engineering as a service|quality engineering services|r&d services)\b/i,
         model: 'services',
         notes: {
             vocabulary: ['product roadmap', 'engineering team', 'sprint', 'dedicated team', 'modernisation', 'cloud native', 'quality engineering', 'release cadence', 'technical debt', 'fixed scope', 'time and materials', 'code ownership'],
@@ -927,7 +927,7 @@ exports.SUBTYPES = [
         match: /\b(?:enterprise connectivity|managed connectivity|managed network(?: services?)?|network services?|internet leased lines?|leased lines?|business internet|broadband (?:services?|provider)|sd.wan|mpls (?:network|links?|services?)|mobile network operator|network operator|connectivity (?:provider|services?)|wan services?)\b/i,
         model: 'connectivity',
         notes: {
-            vocabulary: ['SD WAN', 'MPLS', 'internet leased line', 'uptime', 'SLA', 'latency', 'branch sites', 'last mile link', 'network operations centre', 'site survey'],
+            vocabulary: ['SD-WAN', 'MPLS', 'internet leased line', 'uptime', 'SLA', 'latency', 'branch sites', 'last mile link', 'network operations centre', 'site survey'],
             buyerRoles: ['Chief Information Officer', 'Head of IT Infrastructure', 'Network Manager', 'CISO', 'Head of Procurement', 'Chief Financial Officer'],
             committee: 'The CIO signs; the network or infrastructure head champions; the CISO reviews the security overlay; procurement compares rate cards; finance checks the cost per site.',
             objections: [
@@ -950,7 +950,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'cpaas-messaging', vertical: 'telecom', name: 'CPaaS and messaging',
-        match: /\b(?:messaging (?:platform|api|service)|business (?:texts?|messaging)|text messaging (?:platform|api|service)|sms (?:gateway|api|platform|service)|bulk sms|cpaas|communications platform as a service|voice api|one time passwords?|otp (?:delivery|messages?|service)|whatsapp (?:business )?(?:messaging|api)|rcs messaging|whatsapp business|a2p|business messaging|omnichannel messaging|communications apis?|voice and messaging)\b/i,
+        match: /\b(?:messaging (?:platform|api|service)|business (?:texts?|messaging)|text messaging (?:platform|api|service)|sms (?:gateway|api|platform|service)|bulk sms|sms (?:messages?|traffic|channels?)|messages? over sms|(?:over|via|through) sms|cpaas|communications platform as a service|voice api|one time passwords?|otp (?:delivery|messages?|service)|whatsapp (?:business )?(?:messaging|api)|rcs messaging|whatsapp business|a2p|business messaging|omnichannel messaging|communications apis?|voice and messaging)\b/i,
         model: 'transactions',
         notes: {
             vocabulary: ['delivery rate', 'sender registration', 'message routing', 'one time password', 'two way messaging', 'opt in and opt out', 'throughput', 'fraud filtering', 'artificial traffic', 'delivery report'],
@@ -1079,7 +1079,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'testing', vertical: 'software', name: 'testing and QA tools',
-        match: /\b(?:software testing|test automation|testing (?:platforms?|tools?|cloud)|qa (?:tools?|automation|platform)|api testing|browser testing|cross.browser testing|device clouds?|test management|mobile (?:app )?testing|load testing|regression testing|visual testing)\b/i,
+        match: /\b(?:software testing|test automation|test(?:ing)? (?:platforms?|tools?|cloud)|qa (?:tools?|automation|platform)|api testing|browser testing|cross.browser testing|device clouds?|test management|mobile (?:app )?testing|load testing|regression testing|visual testing)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['test suite', 'test coverage', 'flaky tests', 'regression', 'CI pipeline', 'device and browser coverage', 'release frequency', 'API', 'SDK', 'open source alternative'],
@@ -1147,7 +1147,7 @@ exports.SUBTYPES = [
             metrics: ['mean time to detect', 'mean time to respond', 'critical exposures open', 'alerts per analyst', 'audit findings', 'time to prepare an audit', 'asset coverage'],
             proofShape: 'Exposures found and closed during the proof of value, with the time it took to fix them.',
             discovery: [
-                'Which assets, clouds or environments are in scope, and which are you least sure about?',
+                'Which assets, systems or environments are in scope, and which are you least sure about?',
                 'How many alerts does the team handle in a week, and how are they ranked today?',
                 'What did the last audit or incident show?',
                 'Which tools must this work with (SIEM, ticketing, cloud accounts)?',
@@ -1157,7 +1157,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'identity-security', vertical: 'cybersecurity', name: 'identity and access',
-        match: /\b(?:identity and access management|identity (?:security|governance|provider|management)|access management|privileged access (?:management|security)|single sign.on|multi.factor (?:authentication|login)|passwordless (?:login|authentication)|customer identity|iam|ciam)\b/i,
+        match: /\b(?:identity and access management|identity (?:security|governance|provider|management)|access management|privileged access (?:management|security)|single sign.on|multi.factor (?:authentication|login)|passwordless (?:login|authentication)|customer identity|identity (?:attacks?|silos|fabric|threats?)|ai agent identit(?:y|ies)|iam|ciam)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['single sign on', 'multi factor authentication', 'least privilege', 'privileged access', 'joiner mover leaver', 'access review', 'directory', 'service accounts', 'passwordless', 'session'],
@@ -1291,6 +1291,25 @@ const ORDER = ['vertical-saas', 'logistics-tech', 'telecom', 'cybersecurity', 'i
 // Words that start the buyer part inside one text ("... platform for banks", "... sold to telecom operators", "customers are banks").
 // Everything before the first of them is the seller's part; the rest is the buyer's part.
 const BUYER_MARK = /\b(?:for|serving|serves|sold to|sells? to|selling to|used by|aimed at|targeting|targeted at|built for|designed for|(?:whose|its|our|their)\s+(?:customers?|clients?|users?)\s+(?:are|include|such as)|(?:customers?|clients?)\s+(?:are|include|such as)|popular with|adopted by|deployed (?:at|by))\b/i;
+// "for" followed by an activity ("a platform for testing websites", "software for managing fleets") says what the product does, not who buys it:
+// it is not a buyer marker, so the product words after it stay with the seller. A word such as "growing" ("for growing teams") still marks a buyer.
+const GERUND_BUYER = /^(?:growing|scaling|emerging|leading|existing|aspiring|fast|rising|struggling|working|living|banking|operating)$/i;
+function buyerMark(t) {
+    const g = new RegExp(BUYER_MARK.source, 'gi');
+    let m;
+    while ((m = g.exec(t))) {
+        if (/^for$/i.test(m[0])) {
+            const next = /^\s+([a-z]+)/i.exec(t.slice(m.index + m[0].length))?.[1] ?? '';
+            if (/^[a-z]{3,}ing$/i.test(next) && !GERUND_BUYER.test(next))
+                continue;
+            // "a platform for DevSecOps: planning, source code management, CI/CD": a short phrase and a colon, then a list of what the product has
+            if (/^\s+(?:[\w&\/-]+\s+){0,3}[\w&\/-]+\s*:/.test(t.slice(m.index + m[0].length)))
+                continue;
+        }
+        return m;
+    }
+    return null;
+}
 function isReaderInput(x) {
     return !!x && typeof x === 'object' && !Array.isArray(x) && ['seller', 'buyer', 'context', 'role'].some((k) => k in x);
 }
@@ -1303,7 +1322,7 @@ function sides(args) {
     const seller = [];
     const buyer = texts(input.buyer);
     for (const t of texts(input.seller)) {
-        const m = BUYER_MARK.exec(t);
+        const m = buyerMark(t);
         if (m && /[a-z]{2}/i.test(t.slice(0, m.index))) {
             seller.push(t.slice(0, m.index));
             buyer.push(t.slice(m.index));
@@ -1311,7 +1330,18 @@ function sides(args) {
         else
             seller.push(t);
     }
-    return { seller: seller.join(' \n '), buyer: buyer.join(' \n '), context: texts(input.context).join(' \n '), role: texts(input.role).join(' \n ') };
+    // A job title ends where the company or industry of the person begins ("Head of Testing at a bank", "IT infrastructure heads at banks, retail chains"): the industry is the buyer's, not a clue to what the seller sells.
+    const role = [];
+    for (const t of texts(input.role)) {
+        const m = /\s+(?:at|in|from|across)\s+(?!charge\b)/i.exec(t);
+        if (m && /[a-z]{2}/i.test(t.slice(0, m.index))) {
+            role.push(t.slice(0, m.index));
+            buyer.push(t.slice(m.index));
+        }
+        else
+            role.push(t);
+    }
+    return { seller: seller.join(' \n '), buyer: buyer.join(' \n '), context: texts(input.context).join(' \n '), role: role.join(' \n ') };
 }
 /** The distinct words a pattern finds. Matches may overlap ("AI agents that" gives "ai agents" and "agents that"). */
 function scan(re, text) {
@@ -1337,7 +1367,7 @@ function candidates(text, minWords) {
         if (strong.length + weak.length < minWords)
             continue; // free text: a strong word needs a second sector word beside it
         // AI native is a way of building, not a trade: its own words (AI agents, LLM, generative AI) outweigh the trade words beside them.
-        const score = strong.length + Math.min(weak.length, 3) * 0.25 + (id === 'ai-native' && strong.some((w) => w !== 'ai') ? 1 : 0);
+        const score = strong.length + Math.min(weak.length, 3) * 0.25 + (id === 'ai-native' && strong.some((w) => !BUZZ.test(w)) ? 1 : 0);
         const first = Math.min(...strong.map((w) => text.toLowerCase().indexOf(w)).filter((i) => i >= 0), text.length);
         out.push({ v, strong, weak, score, first });
     }
@@ -1380,7 +1410,9 @@ const AI_LABELS = /^(?:ai|ai[- ]native|ai[- ]first|ai (?:company|startup)|ai wor
 const BILLING_WORDS = /\b(?:billing|invoicing|subscription management|revenue recognition|usage-based (?:pricing|billing)|metered|dunning|prorat\w*|moneti[sz]\w*|pricing and packaging|quote-to-cash)\b/i;
 const SPEND_WORDS = /\b(?:expenses?|spend|reimburs\w*|corporate cards?|prepaid cards?|card issuing|accounts payable|payables|bill pay|procurement|travel|payroll|purchase orders?|vendor payments?|supplier payments?)\b/i;
 const MONEY_MOVES = /\b(?:payment (?:gateways?|processing|processors?)|payments? (?:apis?|infrastructure|rails|orchestration)|payouts?|lending|loans?|banking|remittances?|kyc|neobanks?|merchant acquiring)\b/i;
-const billingText = (t) => BILLING_WORDS.test(t) && !SPEND_WORDS.test(t) && !MONEY_MOVES.test(t);
+// "acts in the help desk and billing system" names a system the product works with, not billing as the product.
+const BILLING_AS_INTEGRATION = /\b(?:and|or|in|into|from|with|to|across)\s+(?:the\s+|your\s+|a\s+|their\s+)?billing (?:systems?|tools?|software|platforms?)\b/gi;
+const billingText = (t) => BILLING_WORDS.test(t.replace(BILLING_AS_INTEGRATION, ' ')) && !SPEND_WORDS.test(t) && !MONEY_MOVES.test(t);
 function adjust(text, best, all) {
     if (best.v.id === 'fintech' && billingText(text)) {
         const saas = all.find((x) => x.v.id === 'saas');
@@ -1487,25 +1519,40 @@ exports.BILLING_PROFILE = {
 // reading, the product category noun wins even if the buzzword comes first ("an API platform that connects apps to bank accounts").
 const BUZZ = /^(?:ai|ai agents?|agents? that|agentic|copilots?|ai assistants?|llms?|genai|gen ai|generative ai|ai[- ]native|ai[- ]first|ai platform|api|apis|api platform|platform|security|fraud|phishing|data security|cloud|automation|iam)$/;
 /** The category nouns found in the seller's own words, earliest first. */
-function categoryHits(seller) {
+// HR and payroll software is a kind of vertical SaaS only when it is built for one named industry (shift workers, restaurants, construction crews ...);
+// "payroll and compliance for small businesses" is general HR software, so it names SaaS and no kind.
+const INDUSTRY_WORD = /\b(?:restaurants?|hospitality|hotels?|retail(?:ers)?|stores?|construction|contractors?|manufactur\w*|factor(?:y|ies)|staffing|temp(?:orary)? (?:workers?|staff)|shift (?:workers?|staff)|hourly (?:workers?|staff)|frontline|deskless|blue.?collar|farms?|agricultur\w*|warehouses?|logistics|drivers?|fleets?|salons?|gyms?|fitness|schools?|education|nonprofits?|cleaning|franchises?|bars?|cafes?|food service|trades?)\b/i;
+const GENERIC_PAYROLL = { id: 'hr-payroll-general', vertical: 'saas', name: 'HR and payroll', match: /$^/, notes: {} };
+function categoryHits(seller, whole = seller) {
     const out = [];
-    for (const st of exports.SUBTYPES) {
+    for (let st of exports.SUBTYPES) {
         const m = new RegExp(st.match.source, st.match.flags.replace('g', '')).exec(seller);
-        if (m)
-            out.push({ st, word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index });
+        if (!m)
+            continue;
+        if (st.id === 'industry-hr-payroll' && !INDUSTRY_WORD.test(whole))
+            st = GENERIC_PAYROLL;
+        out.push({ st, word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index, end: m.index + m[0].length });
     }
     return out.sort((a, b) => a.index - b.index);
 }
 /** The product category comes first: the earliest category noun in the seller's words names the sector, before any buzzword
  * ("customer service software with AI agents" is SaaS; "an API platform that connects apps to bank accounts" is fintech). */
-function categoryPick(seller) {
-    const hits = categoryHits(seller);
+function categoryPick(seller, whole = seller) {
+    const hits = categoryHits(seller, whole);
     if (!hits.length)
         return null;
     if (hits.length > 1 && hits[1].index === hits[0].index && hits[1].st.vertical !== hits[0].st.vertical)
         return null; // the same words name two kinds of company: leave it to the usual reading
-    const v = exports.VERTICALS.find((x) => x.id === hits[0].st.vertical);
-    return { v, strong: [hits[0].word], weak: [], score: 1, first: hits[0].index };
+    // "AI agents" or "copilot" named first in a list of features and then a product category of another vertical ("AI agents, Copilot, ticketing with routing, a knowledge base"):
+    // the buzzword says how the product is built, so the later category noun names the sector. "AI agents that handle contact centre calls" is not a list: the agents are the product.
+    let h0 = hits[0];
+    if (BUZZ.test(h0.word) && /^\s*(?:,|;|&|and\b)/.test(seller.slice(h0.end))) {
+        const other = hits.find((h) => h.st.vertical !== h0.st.vertical && !BUZZ.test(h.word));
+        if (other)
+            h0 = other;
+    }
+    const v = exports.VERTICALS.find((x) => x.id === h0.st.vertical);
+    return { v, strong: [h0.word], weak: [], score: 1, first: h0.index };
 }
 /** Free text about the deal: a category noun counts only when every category noun found names the same vertical. */
 function categoryPickUnique(text) {
@@ -1519,11 +1566,18 @@ function subtypeFor(v, args) {
     if (v.subtype)
         return exports.SUBTYPES.find((x) => x.id === v.subtype) ?? null;
     const sd = sides(args);
+    const whole = [sellerWhole(args), sd.buyer, sd.context, sd.role].join(' \n ');
     // the seller's own words first; when they name no sub-type of this vertical, the job titles and the free text about the deal may (a head of
     // last-mile operations, an expense module the buyer already has); the buyer's industry never does
     for (const text of [sd.seller, [sd.role, sd.context].join(' \n ')]) {
-        const hits = categoryHits(text).filter((h) => h.st.vertical === v.id);
+        const hits = categoryHits(text, whole).filter((h) => h.st.vertical === v.id && h.st !== GENERIC_PAYROLL);
         const ids = new Set(hits.map((h) => h.st.id));
+        // A loose descriptive word ("testing in the DevOps cycle") is not enough when the deal text names another kind of the same vertical.
+        if (ids.size === 1 && text === sd.seller && hits.every((h) => /^(?:devops|devsecops|source code)$/.test(h.word))) {
+            const other = categoryHits([sd.role, sd.context].join(' \n '), whole).filter((h) => h.st.vertical === v.id && h.st !== GENERIC_PAYROLL && h.st.id !== hits[0].st.id);
+            if (other.length)
+                return null;
+        }
         if (ids.size === 1)
             return hits[0].st;
         if (ids.size > 1)
@@ -1588,7 +1642,7 @@ function profileFor(v, model, ...args) {
 function explainSector(...args) {
     const { seller, buyer, context, role } = sides(args);
     // The product category noun decides when it comes BEFORE the first strong word of a different sector ("customer service software with AI agents"); otherwise the usual reading stands.
-    const pk = pick(seller), cat = categoryPick(seller);
+    const pk = pick(seller), cat = categoryPick(seller, [sellerWhole(args), buyer].join(' \n '));
     let s = cat && (!pk || (cat.v.id !== pk.v.id && (cat.first <= pk.first || pk.strong.every((w) => BUZZ.test(w))))) ? cat : pk;
     // A bare "AI" in the seller's words says how it is built, not what it sells: when the deal text or the job titles name another sector, that sector is read instead.
     if (s && s.v.id === 'ai-native' && s.strong.every((w) => w === 'ai')) {
@@ -1611,7 +1665,10 @@ function explainSector(...args) {
     const r = pick(role);
     if (r)
         return { vertical: forUseCase(r.v, args), source: 'role', strong: r.strong, weak: r.weak };
-    const b = pick(buyer);
+    // The last words (the part of a text after "for", "serving" and the like) may still hold the product ("a platform for route to market: sales force automation, a distributor
+    // management system, and AI agents such as ..."): the category noun is read first here too, before a buzzword.
+    const bp = pick(buyer), bc = categoryPick(buyer);
+    const b = bc && (!bp || (bc.v.id !== bp.v.id && (bc.first <= bp.first || bp.strong.every((w) => BUZZ.test(w))))) ? bc : bp;
     if (b)
         return { vertical: forUseCase(b.v, args), source: 'buyer', strong: b.strong, weak: b.weak };
     return { vertical: null, source: null, strong: [], weak: [] };
