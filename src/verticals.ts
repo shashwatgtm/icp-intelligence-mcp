@@ -324,6 +324,32 @@ export const SUBTYPES: SubType[] = [
     },
   },
   {
+    id: 'seller-shipping', vertical: 'logistics-tech', name: 'shipping for online sellers',
+    match: /\b(?:shipping aggregators?|courier aggregators?|multi.?courier|courier partners?|e-?commerce (?:shipping|enablement)|shipping (?:solutions?|platforms?|software|tools?) for (?:small |online |indian )?(?:sellers|merchants|d2c|e-?commerce|online (?:stores?|retailers?|businesses)|small (?:businesses|brands))|(?:sellers|merchants|d2c brands|online (?:stores?|retailers?)) (?:to )?(?:manage|ship|send) (?:their )?(?:shipping|orders|shipments|parcels))\b/i,
+    model: 'transactions',
+    notes: {
+      vocabulary: ['courier partner', 'pin code serviceability', 'cash on delivery', 'return to origin', 'non delivery report', 'weight discrepancy', 'pickup', 'shipping label', 'store and marketplace channels', 'remittance'],
+      buyerRoles: ['Founder or Owner', 'Operations or Fulfilment Manager', 'Head of E-commerce', 'Finance or Accounts Lead', 'Customer Support Lead'],
+      committee: 'In a small online business the founder or owner decides and the operations or e-commerce lead runs shipping day to day; finance checks charges and cash on delivery remittances. There is rarely a formal committee: a trial on live orders decides.',
+      objections: [
+        { objection: 'Our courier already gives us a rate', response: 'Compare the delivered cost of the last few weeks of orders, including returns to origin and weight charges, not the rate card alone.' },
+        { objection: 'Changing shipping tools in a busy season', response: 'Start with one channel or a few orders a day next to the current courier, and move volume over as it proves itself.' },
+        { objection: 'Cash on delivery money arrives late or does not match', response: 'Show the remittance timeline and how a mismatch is reported and settled.' },
+        { objection: 'Surprise weight and return charges', response: 'Explain how weight is declared and checked, and how a disputed charge is raised.' },
+      ],
+      salesMotion: 'Self serve start with a trial on live orders, a short onboarding call for larger sellers, then expansion through more channels, warehouses and services.',
+      metrics: ['delivered cost per order', 'return to origin rate', 'non delivery report resolution', 'delivery time by pin code', 'cash on delivery remittance time', 'pickup success rate', 'weight discrepancy rate'],
+      proofShape: 'A seller\'s own orders over a few weeks: delivered cost per order, return rate and delivery time by pin code, compared with its previous way of shipping.',
+      discovery: [
+        'Which couriers and channels do you ship with today, and how do you choose one for an order?',
+        'What share of orders come back or fail delivery, and what do you do about them?',
+        'How long does cash on delivery money take to reach you, and how do you check it?',
+        'Where do weight or charge disputes come up, and who handles them?',
+        'Which stores or marketplaces must orders flow in from?',
+      ],
+    },
+  },
+  {
     id: 'last-mile', vertical: 'logistics-tech', name: 'last mile delivery',
     match: /\b(?:last\W?mile|delivery management (?:software|platform|system)|delivery (?:tracking|orchestration|routing) (?:software|platform|app)|route (?:optimi[sz]ation|planning) (?:software|platform|tool)|courier (?:software|management|dispatch)|dispatch (?:software|platform)|proof of delivery|driver app|same day delivery|hyperlocal delivery|delivery (?:fleets?|drivers?))\b/i,
     model: 'saas',

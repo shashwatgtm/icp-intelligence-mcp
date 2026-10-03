@@ -679,6 +679,20 @@
    "sector": "software",
    "subtype": "observability",
    "model": "saas"
+  },
+  {
+   "text": "A shipping aggregator for online sellers with several courier partners, cash on delivery and return handling",
+   "sector": "logistics-tech",
+   "subtype": "seller-shipping",
+   "model": "transactions",
+   "id": "st-ss1"
+  },
+  {
+   "text": "An ecommerce enablement platform that helps sellers manage shipping, orders and fulfilment from one dashboard",
+   "sector": "logistics-tech",
+   "subtype": "seller-shipping",
+   "model": "transactions",
+   "id": "st-ss2"
   }
  ]
 }
