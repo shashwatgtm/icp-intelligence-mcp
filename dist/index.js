@@ -6,6 +6,7 @@ exports.createServer = createServer;
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
+const echo_safe_ts_1 = require("./echo-safe.js");
 const verticals_ts_1 = require("./verticals.js");
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -2651,7 +2652,9 @@ function createServer() {
             };
         }
         try {
-            const result = tool.execute(request.params.arguments);
+            // Run 20 echo safeguard (D086): the single place where a tools/call reaches a tool. The same createServer() serves the hosted
+            // path (netlify/functions/mcp.mjs) and stdio, so every text the user typed is made safe once, here, before any tool repeats it.
+            const result = tool.execute((0, echo_safe_ts_1.neutraliseDeep)(request.params.arguments));
             return {
                 content: [{ type: 'text', text: result }]
             };

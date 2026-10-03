@@ -6,6 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import { neutraliseDeep } from './echo-safe.ts';
 import { VERTICALS, SECTOR_MODEL, detectVertical, detectModel, MODEL_NAME, BUSINESS_MODELS, type Vertical, type BusinessModel } from './verticals.ts';
 
 // =============================================================================
@@ -2769,7 +2770,9 @@ export function createServer(): Server {
     }
   
     try {
-      const result = tool.execute(request.params.arguments as any);
+      // Run 20 echo safeguard (D086): the single place where a tools/call reaches a tool. The same createServer() serves the hosted
+      // path (netlify/functions/mcp.mjs) and stdio, so every text the user typed is made safe once, here, before any tool repeats it.
+      const result = tool.execute(neutraliseDeep(request.params.arguments) as any);
       return {
         content: [{ type: 'text', text: result }]
       };
