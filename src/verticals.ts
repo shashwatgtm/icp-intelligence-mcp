@@ -1456,11 +1456,12 @@ const SPEND_WORDS = /\b(?:expenses?|spend|reimburs\w*|corporate cards?|prepaid c
 const MONEY_MOVES = /\b(?:payment (?:gateways?|processing|processors?)|payments? (?:apis?|infrastructure|rails|orchestration)|payouts?|lending|loans?|banking|remittances?|kyc|neobanks?|merchant acquiring)\b/i;
 // "acts in the help desk and billing system" names a system the product works with, not billing as the product.
 const BILLING_AS_INTEGRATION = /\b(?:and|or|in|into|from|with|to|across)\s+(?:the\s+|your\s+|a\s+|their\s+)?billing (?:systems?|tools?|software|platforms?)\b/gi;
-// run 21c round 5: in a long text (a whole plan or document) one billing word is incidental ("streamline billing and payment"); two different billing terms are needed
-const billingText = (t: string) => {
-  const clean = t.replace(BILLING_AS_INTEGRATION, ' ');
-  if (!BILLING_WORDS.test(clean) || SPEND_WORDS.test(t) || MONEY_MOVES.test(t)) return false;
+const billingText = (t: string) => BILLING_WORDS.test(t.replace(BILLING_AS_INTEGRATION, ' ')) && !SPEND_WORDS.test(t) && !MONEY_MOVES.test(t);
+// run 21c round 5: in a long text (a whole plan or document) one billing word is incidental ("streamline billing and payment"); two different billing terms are needed for the billing profile
+const billingProfileText = (t: string) => {
+  if (!billingText(t)) return false;
   if (t.length <= 600) return true;
+  const clean = t.replace(BILLING_AS_INTEGRATION, ' ');
   const kinds = new Set((clean.match(new RegExp(BILLING_WORDS.source, 'gi')) || []).map((w) => w.toLowerCase().replace(/[^a-z]/g, '').slice(0, 6)));
   return kinds.size >= 2;
 };
@@ -1668,7 +1669,7 @@ const FINANCE_PERSONA = /\b(?:cfo|chief financial|finance|financial|revenue oper
  * only engineering, product, IT or security titles. Accepts the same inputs as detectVertical. */
 export function isBillingSeller(...args: unknown[]): boolean {
   const t = sellerWhole(args);
-  if (!billingText(t)) return false;
+  if (!billingProfileText(t)) return false;
   const input: ReaderInput = args.length === 1 && isReaderInput(args[0]) ? (args[0] as ReaderInput) : {};
   const role = texts(input.role).join(' \n ');
   return !(role && ENGINEERING_PERSONA.test(role) && !FINANCE_PERSONA.test(role));
