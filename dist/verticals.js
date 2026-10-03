@@ -75,7 +75,7 @@ exports.VERTICALS = [
     },
     {
         id: 'vertical-saas', name: 'vertical SaaS',
-        match: /\b(fmcg|cpg|consumer goods|consumer brands?|retail execution|field sales|field reps?|general trade|sales force automation|sfa|dms|distribution management|distributor management|beat plans?|beat planning|secondary sales|route-to-market|kirana|order capture|trade promotions?|trade schemes?|vertical saas)\b/i,
+        match: /\b(fmcg|cpg|consumer goods|consumer brands?|retail execution|field sales|field reps?|general trade|sales force automation|sfa|dms|distribution management|distributor management|beat plans?|beat planning|secondary sales|route-to-market|route to market|kirana|order capture|trade promotions?|trade schemes?|vertical saas)\b/i,
         weak: /\b(distributors?|outlets?|retailers?)\b/i,
         vocabulary: ['workflow', 'field and office', 'mobile app', 'adoption', 'data migration', 'integration', 'onboarding', 'reporting', 'compliance', 'rollout'],
         buyerRoles: ['Owner or Managing Director', 'Head of Operations', 'Head of Finance', 'Department head who uses it daily', 'Head of IT', 'Implementation Lead'],

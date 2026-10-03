@@ -59,3 +59,7 @@ test("an enterprise network, cloud and security provider is a connectivity busin
   const m = detectModel(undefined, { seller: ["global digital ecosystem enabler: enterprise network, cloud, security, interactions and IoT services"] });
   assert.equal(m.model, "connectivity");
 });
+
+test("a retail intelligence platform for route to market reads as vertical SaaS even though the text is cut at 'for'", () => {
+  assert.equal(read({ seller: ["retail intelligence platform for route to market (RTM) from the vendor"] }).id, "vertical-saas");
+});
