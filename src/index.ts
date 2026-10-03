@@ -972,7 +972,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
 - ${companyLine(args.company)}
 
 ${sectorLine(ctx.v, ctx.via)}
-${correlations ? `\n**Success Correlation Noted**: ${q(shortText(correlations))}\n${corrLine}\n` : ''}
+${correlations ? `\n**Success Correlation Noted**: ${proofItems.length > 1 ? `${proofItems.length} statements, listed in full under "Evidence in Your Success Pattern" below` : q(shortText(correlations))}\n${corrLine}\n` : ''}
 
 ---
 
@@ -1634,7 +1634,11 @@ ${ctx.v ? `${sectorNotes(ctx.v, ['committee', 'metrics', 'vocabulary'])}\n- **Co
       // Run 19 D80 (problem 8, backlog B15-L4): search keywords come from what the user sells and the sector's own words, never
       // from an invented ad category ("Software > Software") or a phrase such as "retailers software".
       const vocabOk = !!v && v.id !== 'ai-native';
-      const keywords = [...new Set([...(product ? [product] : []), ...(vocabOk ? v!.vocabulary.slice(0, 4).map(w => `${w} ${suffix}`) : []),
+      // Words of the sector that name a measure or a practice, not a thing people search for ("uptime provider" is not a search).
+      const MEASURE_WORD = /^(?:uptime|sla|delivery sla|latency|accuracy|usage|churn|renewal|expansion|onboarding|activation|governance|transition|steady state|exposure|alert fatigue|automation rate|inference cost|cost per delivery|time to value|net revenue retention|hallucination|data privacy|data residency|policy controls|audit trail|compliance review|approval workflow|ticket backlog|knowledge transfer|service credits|technical debt|test coverage|release frequency|developer experience|reconciliation|month-end close|guardrails|human in the loop|evaluation set|resolution rate|mean time to \w+|first-attempt delivery|proof of delivery|statement of work|risk register|compliance audit|customer success|misconfiguration|branch sites|site survey|last-mile link|network operations centre)$/i;
+      const keywordWords = vocabOk ? v!.vocabulary.filter(w => !MEASURE_WORD.test(w)).slice(0, 4) : [];
+      const searchProduct = productWords(args.product_category, args.company);
+      const keywords = [...new Set([...(searchProduct ? [searchProduct] : []), ...keywordWords.map(w => `${w} ${suffix}`),
         ...(tech || []).map(t => `${t.toLowerCase()} integration`)])];
       // Run 19 D80 (problem 3): every trigger typed gets its own signal, chosen by its words.
       const signalFor = (t: string): [string, string, string] => {
