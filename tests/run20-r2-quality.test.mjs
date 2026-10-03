@@ -100,7 +100,7 @@ test("buyer group: a billing platform sold to a CFO gets finance measures, not a
   assert.doesNotMatch(r.text, /card spends|policy breach|accounts payable|days to close the books/i);   // an expense profile is not a billing buyer's (the billing profile comes with the shared file)
   const t = await call("buyer_group_analyzer", { product_category: "developer testing tools", company: "Cloudmoat", typical_champion: "Platform Engineer", known_stakeholders: ["VP Engineering", "Security Lead", "Software Developer"] });
   assert.match(t.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: Security Lead\n\*\*Their Concern\*\*: Likely objection: security review/);
-  assert.match(t.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: VP Engineering\n[^\n]*per-user cost/i);
+  assert.match(t.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: VP Engineering\n[^\n]*per[- ]user cost/i);
 });
 
 // ---- (4) deep dive ----
@@ -111,7 +111,7 @@ test("deep dive: the hypothetical label is never cut from the description and th
   ok(r);
   assert.match(r.text, /hypothetical test figures/);
   assert.match(r.text, /Average ACV \| \$30,000 \(hypothetical, as your description says\)/);
-  assert.match(r.text, /In fintech, deals usually run like this:/);
+  assert.match(r.text, /In fintech, spend and expense, deals usually run like this:/);
 });
 test("deep dive: a billing platform sold to a CFO is not shown product-led SaaS measures; Finance Controller is not the CFO", async () => {
   const rec = { name: "Gaming", industry: "Gaming", acv: 60000, sales_cycle_days: 75, champion_title: "Head of Product" };
@@ -272,7 +272,7 @@ test("account_prioritization with product_category: sector content added; scores
   const table = (t) => t.slice(t.indexOf("## Prioritized Account List"), t.indexOf("## Tier Breakdown"));
   assert.equal(table(a.text), table(b.text));
   assert.match(b.text, /Sector: read from your inputs as ITeS/);
-  assert.match(b.text, /RFP-led or relationship-led/);
+  assert.match(b.text, /RFP[- ]led or relationship[- ]led/);
   assert.match(b.text, /Chief Information Officer/);
   assert.match(b.text, /transition|SLA/);
   assert.doesNotMatch(a.text, /Sector: read/);
@@ -306,7 +306,7 @@ test("gap analysis: 'B2B SaaS and software' is related to 'SaaS'; a page claim i
     ideal_icp: "API teams and developers at 500,000 companies, including 98% of the Fortune 500 (page claim), with platform leader as the buyer, who face disconnected tools" });
   ok(b);
   assert.doesNotMatch(b.text, /companies outside Fortune 500|\*\*Size\*\*: companies outside/);
-  assert.match(b.text, /platform leader matches a role usual in software \(Platform Engineering Lead\)/);
+  assert.match(b.text, /platform leader matches a role usual in software, testing and QA tools \(Platform Engineering Lead\)/);
 });
 test("roles: a person is in one place in the buyer group; any other chief officer is budget or sign-off, not a day-to-day user", async () => {
   const q = await call("buyer_group_analyzer", { product_category: "AI platform and investment strategies", company: "Quantara AI", typical_champion: "portfolio manager", known_stakeholders: ["CIO", "risk teams", "compliance committees"] });

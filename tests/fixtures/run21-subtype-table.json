@@ -1,0 +1,684 @@
+{
+ "about": "Run 21b step 1: plain-word seller descriptions, two per sub-type (written before the code) plus plain-word versions of the run 21a misses. No company names. Rows with id starting m21a are the 21a misses.",
+ "rows": [
+  {
+   "text": "A freight visibility platform that tracks shipments in real time across carriers",
+   "sector": "logistics-tech",
+   "subtype": "freight-visibility",
+   "model": "saas",
+   "id": "st-1"
+  },
+  {
+   "text": "Shipment tracking software that predicts arrival times and alerts teams to delays across ocean and road carriers",
+   "sector": "logistics-tech",
+   "subtype": "freight-visibility",
+   "model": "saas",
+   "id": "st-2"
+  },
+  {
+   "text": "An online freight marketplace where shippers book capacity and the seller takes a commission",
+   "sector": "logistics-tech",
+   "subtype": "freight-marketplace",
+   "model": "marketplace",
+   "id": "st-3"
+  },
+  {
+   "text": "A digital freight brokerage that matches shippers with truck owners and earns a fee on each load booked",
+   "sector": "logistics-tech",
+   "subtype": "freight-marketplace",
+   "model": "marketplace",
+   "id": "st-4"
+  },
+  {
+   "text": "Delivery management software that plans routes, dispatches drivers and sends tracking links to customers",
+   "sector": "logistics-tech",
+   "subtype": "last-mile",
+   "model": "saas",
+   "id": "st-5"
+  },
+  {
+   "text": "A last mile delivery app with route optimisation and proof of delivery for couriers and retail stores",
+   "sector": "logistics-tech",
+   "subtype": "last-mile",
+   "model": "saas",
+   "id": "st-6"
+  },
+  {
+   "text": "Warehouse management software that guides picking, packing and stock counts for distribution centres",
+   "sector": "logistics-tech",
+   "subtype": "warehousing",
+   "model": "saas",
+   "id": "st-7"
+  },
+  {
+   "text": "An ecommerce fulfilment service that stores, packs and ships orders for online brands",
+   "sector": "logistics-tech",
+   "subtype": "warehousing",
+   "model": null,
+   "id": "st-8"
+  },
+  {
+   "text": "A transport management system that plans loads, selects carriers and audits freight bills",
+   "sector": "logistics-tech",
+   "subtype": "transport-management",
+   "model": "saas",
+   "id": "st-9"
+  },
+  {
+   "text": "Fleet management software with vehicle telematics, driver behaviour reports and maintenance scheduling",
+   "sector": "logistics-tech",
+   "subtype": "transport-management",
+   "model": "saas",
+   "id": "st-10"
+  },
+  {
+   "text": "An API platform that connects apps to users' bank accounts for payments and account data",
+   "sector": "fintech",
+   "subtype": "payments-banking",
+   "model": "transactions",
+   "id": "st-11"
+  },
+  {
+   "text": "A card processing platform for banks that issue cards",
+   "sector": "fintech",
+   "subtype": "payments-banking",
+   "model": "transactions",
+   "id": "st-12"
+  },
+  {
+   "text": "A digital lending platform that scores borrowers with alternative credit data and manages loans",
+   "sector": "fintech",
+   "subtype": "lending",
+   "model": null,
+   "id": "st-13"
+  },
+  {
+   "text": "Loan origination software for lenders that automates applications, credit decisions and collections",
+   "sector": "fintech",
+   "subtype": "lending",
+   "model": "saas",
+   "id": "st-14"
+  },
+  {
+   "text": "A wealth management software platform for advisers to build model portfolios, rebalance and report to clients",
+   "sector": "fintech",
+   "subtype": "wealth-investment",
+   "model": "saas",
+   "id": "st-15"
+  },
+  {
+   "text": "An investment manager that runs systematic strategies for institutional investors and charges a management fee",
+   "sector": "fintech",
+   "subtype": "wealth-investment",
+   "model": "investment",
+   "id": "st-16"
+  },
+  {
+   "text": "A spend management platform with corporate cards, expense claims and approval workflows for finance teams",
+   "sector": "fintech",
+   "subtype": "spend-expense",
+   "model": "saas",
+   "id": "st-17"
+  },
+  {
+   "text": "Accounts payable automation software that captures supplier invoices, routes approvals and posts to the ledger",
+   "sector": "fintech",
+   "subtype": "spend-expense",
+   "model": "saas",
+   "id": "st-18"
+  },
+  {
+   "text": "An insurtech that sells embedded insurance cover through partner apps and online stores",
+   "sector": "fintech",
+   "subtype": "insurance",
+   "model": null,
+   "id": "st-19"
+  },
+  {
+   "text": "Policy administration and claims software for insurers that runs quotes, renewals and claim settlement",
+   "sector": "fintech",
+   "subtype": "insurance",
+   "model": "saas",
+   "id": "st-20"
+  },
+  {
+   "text": "Customer service software with AI agents, ticketing and a help center",
+   "sector": "saas",
+   "subtype": "customer-service",
+   "model": "saas",
+   "id": "st-21"
+  },
+  {
+   "text": "Help desk software with ticketing for support teams with a shared inbox and a self service knowledge base",
+   "sector": "saas",
+   "subtype": "customer-service",
+   "model": "saas",
+   "id": "st-22"
+  },
+  {
+   "text": "A CRM system that tracks contacts, deals and the sales pipeline for small sales teams",
+   "sector": "saas",
+   "subtype": "crm-marketing",
+   "model": "saas",
+   "id": "st-23"
+  },
+  {
+   "text": "Marketing automation software that runs email campaigns, landing pages and lead scoring",
+   "sector": "saas",
+   "subtype": "crm-marketing",
+   "model": "saas",
+   "id": "st-24"
+  },
+  {
+   "text": "A work management platform where teams plan projects, track tasks and share files",
+   "sector": "saas",
+   "subtype": "collaboration",
+   "model": "saas",
+   "id": "st-25"
+  },
+  {
+   "text": "Project management software with boards, timelines and team chat",
+   "sector": "saas",
+   "subtype": "collaboration",
+   "model": "saas",
+   "id": "st-26"
+  },
+  {
+   "text": "Subscription billing software that handles plans, usage based pricing, invoices and failed payment retries",
+   "sector": "saas",
+   "subtype": "billing-revenue",
+   "model": "saas",
+   "id": "st-27"
+  },
+  {
+   "text": "A revenue recognition and quote to cash platform that keeps contracts, invoices and the audit trail in step",
+   "sector": "saas",
+   "subtype": "billing-revenue",
+   "model": "saas",
+   "id": "st-28"
+  },
+  {
+   "text": "A product analytics platform that shows how users move through an app and where they drop off",
+   "sector": "saas",
+   "subtype": "product-growth",
+   "model": "saas",
+   "id": "st-29"
+  },
+  {
+   "text": "A customer success platform that scores account health and flags renewal risk",
+   "sector": "saas",
+   "subtype": "product-growth",
+   "model": "saas",
+   "id": "st-30"
+  },
+  {
+   "text": "Construction management software for general contractors that handles budgets, change orders, RFIs and subcontractor billing on active projects",
+   "sector": "vertical-saas",
+   "subtype": "construction",
+   "model": "saas",
+   "id": "st-31"
+  },
+  {
+   "text": "A construction project management platform that tracks drawings, daily site logs and subcontractor payments, sold to builders and contractors",
+   "sector": "vertical-saas",
+   "subtype": "construction",
+   "model": "saas",
+   "id": "st-32"
+  },
+  {
+   "text": "Property management software that handles leasing, rent collection, owner statements and maintenance requests for residential landlords and property managers",
+   "sector": "vertical-saas",
+   "subtype": "property-management",
+   "model": "saas",
+   "id": "st-33"
+  },
+  {
+   "text": "A tenant portal and lease management system where renters pay online and report problems, built for portfolios of rental homes",
+   "sector": "vertical-saas",
+   "subtype": "property-management",
+   "model": "saas",
+   "id": "st-34"
+  },
+  {
+   "text": "Home services software that schedules technicians, sends quotes and takes payment on site, for plumbing, heating and electrical businesses",
+   "sector": "vertical-saas",
+   "subtype": "field-services",
+   "model": "saas",
+   "id": "st-35"
+  },
+  {
+   "text": "A field service management app for technicians who run service jobs, with work orders, photos, parts on the van and invoicing from the phone",
+   "sector": "vertical-saas",
+   "subtype": "field-services",
+   "model": "saas",
+   "id": "st-36"
+  },
+  {
+   "text": "Retail execution software that lets field reps capture orders, follow beat plans and see schemes at each outlet, sold to consumer goods companies",
+   "sector": "vertical-saas",
+   "subtype": "fmcg-retail-execution",
+   "model": "saas",
+   "id": "st-37"
+  },
+  {
+   "text": "A distributor management system that tracks secondary sales, stock and claims between a manufacturer and its distributors",
+   "sector": "vertical-saas",
+   "subtype": "fmcg-retail-execution",
+   "model": "saas",
+   "id": "st-38"
+  },
+  {
+   "text": "HR and payroll software built for restaurant groups, with shift scheduling, tip pooling and labour compliance for hourly staff",
+   "sector": "vertical-saas",
+   "subtype": "industry-hr-payroll",
+   "model": "saas",
+   "id": "st-39"
+  },
+  {
+   "text": "Time and attendance and workforce management software for staffing agencies, with timesheets, overtime rules and pay runs for temporary workers",
+   "sector": "vertical-saas",
+   "subtype": "industry-hr-payroll",
+   "model": "saas",
+   "id": "st-40"
+  },
+  {
+   "text": "AI agents that take over repetitive back office tasks such as data entry and report preparation, with a person approving each action",
+   "sector": "ai-native",
+   "subtype": "agents-copilots",
+   "model": "saas",
+   "id": "st-41"
+  },
+  {
+   "text": "An AI copilot for finance teams that drafts analyses, answers questions about the books and prepares routine reports",
+   "sector": "ai-native",
+   "subtype": "agents-copilots",
+   "model": "saas",
+   "id": "st-42"
+  },
+  {
+   "text": "A speech recognition and text to speech model provider with an API that developers use to build voice products in many languages",
+   "sector": "ai-native",
+   "subtype": "voice-language-models",
+   "model": "saas",
+   "id": "st-43"
+  },
+  {
+   "text": "A foundation model company that trains large language models and sells access to them through an API for builders",
+   "sector": "ai-native",
+   "subtype": "voice-language-models",
+   "model": "saas",
+   "id": "st-44"
+  },
+  {
+   "text": "An enterprise search assistant that finds answers across company apps, documents and chat, respecting each person's access rights",
+   "sector": "ai-native",
+   "subtype": "enterprise-search",
+   "model": "saas",
+   "id": "st-45"
+  },
+  {
+   "text": "A workplace search tool that connects to company knowledge bases and gives employees cited answers to their questions",
+   "sector": "ai-native",
+   "subtype": "enterprise-search",
+   "model": "saas",
+   "id": "st-46"
+  },
+  {
+   "text": "An IT services provider that builds and runs application portfolios, covering application maintenance, infrastructure management and a managed service desk for large enterprises",
+   "sector": "ites",
+   "subtype": "it-services",
+   "model": "services",
+   "id": "st-47"
+  },
+  {
+   "text": "A systems integrator that runs ERP implementation and cloud migration projects, then keeps the systems running under a managed services contract",
+   "sector": "ites",
+   "subtype": "it-services",
+   "model": "services",
+   "id": "st-48"
+  },
+  {
+   "text": "A BPO that runs customer support for consumer brands, with chat, email and voice teams working to shared service levels",
+   "sector": "ites",
+   "subtype": "bpo-cx",
+   "model": "services",
+   "id": "st-49"
+  },
+  {
+   "text": "A contact centre operator that handles inbound calls, chat and email, plus back office processing, on a per seat or per contact price",
+   "sector": "ites",
+   "subtype": "bpo-cx",
+   "model": "services",
+   "id": "st-50"
+  },
+  {
+   "text": "A digital engineering firm that builds and modernises software products with dedicated teams for software companies and enterprises",
+   "sector": "ites",
+   "subtype": "digital-engineering",
+   "model": "services",
+   "id": "st-51"
+  },
+  {
+   "text": "Custom software development and mobile app development services delivered by dedicated squads on fixed scope or time and materials contracts",
+   "sector": "ites",
+   "subtype": "digital-engineering",
+   "model": "services",
+   "id": "st-52"
+  },
+  {
+   "text": "A data and analytics services firm that builds data pipelines, dashboards and predictive models for enterprise clients",
+   "sector": "ites",
+   "subtype": "data-services",
+   "model": "services",
+   "id": "st-53"
+  },
+  {
+   "text": "Data annotation and labelling services that prepare images, text and audio for teams training machine learning models",
+   "sector": "ites",
+   "subtype": "data-services",
+   "model": "services",
+   "id": "st-54"
+  },
+  {
+   "text": "An operator selling managed network services and internet leased lines to companies with many branch sites, with uptime guarantees",
+   "sector": "telecom",
+   "subtype": "operators-connectivity",
+   "model": "connectivity",
+   "id": "st-55"
+  },
+  {
+   "text": "We provide enterprise connectivity with SD WAN and business internet so retail chains can keep every store online",
+   "sector": "telecom",
+   "subtype": "operators-connectivity",
+   "model": "connectivity",
+   "id": "st-56"
+  },
+  {
+   "text": "A messaging platform for sending business texts and one time passwords, with fraud filtering, paid per message",
+   "sector": "telecom",
+   "subtype": "cpaas-messaging",
+   "model": "transactions",
+   "id": "st-57"
+  },
+  {
+   "text": "An SMS gateway and voice API that lets apps send alerts and reminders to customers in many countries, billed by volume",
+   "sector": "telecom",
+   "subtype": "cpaas-messaging",
+   "model": "transactions",
+   "id": "st-58"
+  },
+  {
+   "text": "Roaming clearing and settlement services that help mobile operators reconcile partner charges and catch revenue leakage",
+   "sector": "telecom",
+   "subtype": "telecom-software",
+   "model": null,
+   "id": "st-59"
+  },
+  {
+   "text": "Billing support systems and a signalling firewall that mobile operators use to bill partners and block abuse on their networks",
+   "sector": "telecom",
+   "subtype": "telecom-software",
+   "model": null,
+   "id": "st-60"
+  },
+  {
+   "text": "A cloud phone system with SIP trunking and softphones that replaces desk phones across offices",
+   "sector": "telecom",
+   "subtype": "business-voice-ucaas",
+   "model": null,
+   "id": "st-61"
+  },
+  {
+   "text": "Unified communications software that brings calls, meetings and call routing together for company teams, priced per user",
+   "sector": "telecom",
+   "subtype": "business-voice-ucaas",
+   "model": "saas",
+   "id": "st-62"
+  },
+  {
+   "text": "A developer platform for source control, CI and security scanning in one place",
+   "sector": "software",
+   "subtype": "developer-platform",
+   "model": "saas",
+   "id": "st-63"
+  },
+  {
+   "text": "A DevOps platform with git hosting, continuous integration and release automation for engineering teams",
+   "sector": "software",
+   "subtype": "developer-platform",
+   "model": "saas",
+   "id": "st-64"
+  },
+  {
+   "text": "An error and performance monitoring tool that shows developers what broke in production and why",
+   "sector": "software",
+   "subtype": "observability",
+   "model": "saas",
+   "id": "st-65"
+  },
+  {
+   "text": "An observability platform that collects logs, metrics and traces from services so engineers can find the cause of incidents",
+   "sector": "software",
+   "subtype": "observability",
+   "model": "saas",
+   "id": "st-66"
+  },
+  {
+   "text": "A testing platform that runs automated tests for web and mobile apps across many browsers and real devices",
+   "sector": "software",
+   "subtype": "testing",
+   "model": "saas",
+   "id": "st-67"
+  },
+  {
+   "text": "API testing and test automation tools that let QA teams catch regressions before every release",
+   "sector": "software",
+   "subtype": "testing",
+   "model": "saas",
+   "id": "st-68"
+  },
+  {
+   "text": "A container platform that gives developers the same local and cloud development environments on every laptop",
+   "sector": "software",
+   "subtype": "dev-tools",
+   "model": "saas",
+   "id": "st-69"
+  },
+  {
+   "text": "Developer environments in the cloud, ready in minutes, so new hires can start work on day one",
+   "sector": "software",
+   "subtype": "dev-tools",
+   "model": "saas",
+   "id": "st-70"
+  },
+  {
+   "text": "Cloud security that finds misconfigurations and risky access across cloud accounts and ranks them by real exposure",
+   "sector": "cybersecurity",
+   "subtype": "cloud-security",
+   "model": "saas",
+   "id": "st-71"
+  },
+  {
+   "text": "A cloud workload protection and container security product that watches running workloads for threats",
+   "sector": "cybersecurity",
+   "subtype": "cloud-security",
+   "model": "saas",
+   "id": "st-72"
+  },
+  {
+   "text": "An identity and access management product with single sign on and multi factor login for company applications",
+   "sector": "cybersecurity",
+   "subtype": "identity-security",
+   "model": "saas",
+   "id": "st-73"
+  },
+  {
+   "text": "Privileged access management that controls and records admin access to servers and databases",
+   "sector": "cybersecurity",
+   "subtype": "identity-security",
+   "model": "saas",
+   "id": "st-74"
+  },
+  {
+   "text": "An email security product that stops phishing and fake invoice emails before they reach inboxes",
+   "sector": "cybersecurity",
+   "subtype": "email-security",
+   "model": "saas",
+   "id": "st-75"
+  },
+  {
+   "text": "Business email compromise protection and phishing simulation for staff mailboxes, with one click reporting",
+   "sector": "cybersecurity",
+   "subtype": "email-security",
+   "model": "saas",
+   "id": "st-76"
+  },
+  {
+   "text": "Application security testing that scans source code and open source dependencies and suggests fixes inside developer workflows",
+   "sector": "cybersecurity",
+   "subtype": "appsec",
+   "model": "saas",
+   "id": "st-77"
+  },
+  {
+   "text": "An API security and secrets scanning tool that finds exposed keys and weak endpoints before release",
+   "sector": "cybersecurity",
+   "subtype": "appsec",
+   "model": "saas",
+   "id": "st-78"
+  },
+  {
+   "text": "A managed detection and response service where analysts watch alerts around the clock and act on threats for customers",
+   "sector": "cybersecurity",
+   "subtype": "soc-services",
+   "model": "services",
+   "id": "st-79"
+  },
+  {
+   "text": "A security operations centre run for customers as a monthly service, with incident response included",
+   "sector": "cybersecurity",
+   "subtype": "soc-services",
+   "model": "services",
+   "id": "st-80"
+  },
+  {
+   "text": "Endpoint protection software that detects and blocks malware and ransomware on laptops and servers",
+   "sector": "cybersecurity",
+   "subtype": "endpoint-network",
+   "model": null,
+   "id": "st-81"
+  },
+  {
+   "text": "A next generation firewall and zero trust network access service for branch offices and remote workers",
+   "sector": "cybersecurity",
+   "subtype": "endpoint-network",
+   "model": null,
+   "id": "st-82"
+  },
+  {
+   "id": "m21a-tanla",
+   "text": "A messaging platform for sending business texts and one time passwords, with fraud filtering and data security, paid per message",
+   "sector": "telecom",
+   "subtype": "cpaas-messaging",
+   "model": "transactions"
+  },
+  {
+   "id": "m21a-zendesk",
+   "text": "Customer service software with AI agents, ticketing and a help center",
+   "sector": "saas",
+   "subtype": "customer-service",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-plaid",
+   "text": "API platform that connects apps to users' bank accounts for payments",
+   "sector": "fintech",
+   "subtype": "payments-banking",
+   "model": "transactions"
+  },
+  {
+   "id": "m21a-project44",
+   "text": "Freight visibility platform that tracks shipments in real time across carriers and predicts arrival times",
+   "sector": "logistics-tech",
+   "subtype": "freight-visibility",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-freight-market",
+   "text": "Online freight marketplace and software where shippers compare rates and book capacity from carriers, with the platform taking a share of each booking",
+   "sector": "logistics-tech",
+   "subtype": "freight-marketplace",
+   "model": "marketplace"
+  },
+  {
+   "id": "m21a-procore",
+   "text": "Construction management software for general contractors",
+   "sector": "vertical-saas",
+   "subtype": "construction",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-property",
+   "text": "Property management software for landlords and managers that handles leasing, rent collection and maintenance requests",
+   "sector": "vertical-saas",
+   "subtype": "property-management",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-field",
+   "text": "Field service software that schedules and dispatches technicians and sends invoices after each job",
+   "sector": "vertical-saas",
+   "subtype": "field-services",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-hexaware",
+   "text": "IT services provider that builds, modernizes and runs application portfolios, with managed services and delivery teams",
+   "sector": "ites",
+   "subtype": "it-services",
+   "model": "services"
+  },
+  {
+   "id": "m21a-gitlab",
+   "text": "Developer platform for source control, CI/CD and security scanning in one application",
+   "sector": "software",
+   "subtype": "developer-platform",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-glean",
+   "text": "Enterprise search assistant that finds answers across a company's apps and documents",
+   "sector": "ai-native",
+   "subtype": "enterprise-search",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-okta",
+   "text": "Identity and access management that secures every sign in with single sign-on and multi-factor authentication",
+   "sector": "cybersecurity",
+   "subtype": "identity-security",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-card",
+   "text": "Card issuing and processing platform for banks and fintechs that issue their own cards",
+   "sector": "fintech",
+   "subtype": "payments-banking",
+   "model": "transactions"
+  },
+  {
+   "id": "m21a-email",
+   "text": "Email security product that stops phishing and account takeover by learning normal behaviour",
+   "sector": "cybersecurity",
+   "subtype": "email-security",
+   "model": "saas"
+  },
+  {
+   "id": "m21a-observ",
+   "text": "Error and performance monitoring for application developers, priced by event volume with plan tiers",
+   "sector": "software",
+   "subtype": "observability",
+   "model": "saas"
+  }
+ ]
+}

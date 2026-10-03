@@ -205,14 +205,15 @@ const { BILLING_PROFILE, isBillingSeller } = mod;
 const CHALLENGER = /national operator|offshore-only|incumbent|higher than|cheaper than us|than the (?:big|large|national)|challenger|underdog|start-?up|small(?:er)? (?:vendor|firm|player)/i;
 
 test("every objection is worded as what the buyer says, never assuming the seller is a challenger or a large operator", () => {
-  const all = [...VERTICALS, { id: "investment", name: "investment", ...INVESTMENT_PROFILE }, { id: "billing", name: "billing", ...BILLING_PROFILE }, { id: "ai-support", name: "ai support", ...AI_SUPPORT_PROFILE }];
+  const all = [...VERTICALS, ...mod.SUBTYPES.map((t) => ({ id: t.id, name: t.name, ...t.notes })), { id: "investment", name: "investment", ...INVESTMENT_PROFILE }, { id: "billing", name: "billing", ...BILLING_PROFILE }, { id: "ai-support", name: "ai support", ...AI_SUPPORT_PROFILE }];
   for (const v of all) for (const o of v.objections) {
     assert.doesNotMatch(o.objection, CHALLENGER, `${v.id}: ${o.objection}`);
     assert.doesNotMatch(o.response, CHALLENGER, `${v.id}: ${o.response}`);
   }
-  const tel = VERTICALS.find((v) => v.id === "telecom").objections.map((o) => o.objection);
+  // run 21b: the stock objections moved from the vertical's entry into its sub-types
+  const tel = detectVertical("Managed SD-WAN and leased lines for enterprise branches").objections.map((o) => o.objection);
   assert.ok(tel.includes("Price per site compared with the operator we use today"), tel.join("; "));
-  const ites = VERTICALS.find((v) => v.id === "ites").objections.map((o) => o.objection);
+  const ites = detectVertical("IT services provider that builds and runs application portfolios").objections.map((o) => o.objection);
   assert.ok(ites.includes("The offshore alternative is cheaper"), ites.join("; "));
 });
 

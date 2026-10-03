@@ -89,8 +89,8 @@ test("icp_deep_dive: the description is used (size words as typed, nothing inven
     customer_descriptions: "Spendrill sells expense software to midsize to large businesses." });
   clean(r, "deep dive");
   assert.match(r.text, /your description says midsize and large|midsize, large/);
-  assert.match(r.text, /Champion CFO\*\*: matches a role that fintech deals usually involve \(Chief Financial Officer\)/);
-  assert.match(r.text, /Champion Head of Treasury\*\*: matches a role that fintech deals usually involve \(Head of Treasury\)/);
+  assert.match(r.text, /Champion CFO\*\*: matches a role that fintech, spend and expense deals usually involve \(Chief Financial Officer\)/);
+  assert.match(r.text, /Champion Head of Treasury\*\*: matches a role that fintech, spend and expense deals usually involve \(Head of Treasury\)/);
   assert.match(r.text, /Roles your records do not name/);
   assert.doesNotMatch(r.text, /1000\+|100-1000/); // no invented size ranges
 });
@@ -128,7 +128,7 @@ test("buyer_group_analyzer: the champion and stakeholders typed are used, the se
 test("buyer_group_analyzer: a champion you did not name is shown as the sector's usual one, and says so", async () => {
   const r = await call("buyer_group_analyzer", { product_category: "managed SD-WAN for branch offices", known_stakeholders: ["CIO"] });
   clean(r, "buyer group");
-  assert.match(r.text, /Role\*\*: Head of IT Infrastructure \(the usual one in telecom; you named none\)/);
+  assert.match(r.text, /Role\*\*: Head of IT Infrastructure \(the usual one in telecom, operators and enterprise connectivity; you named none\)/);
   assert.match(r.text, /You did not name a champion/);
 });
 test("buyer_group_analyzer: an unclear product says what input would fill each seat, with no bracket", async () => {
@@ -193,7 +193,7 @@ test("lookalike_signal_generator: search words fit how the seller sells (a conne
   const r = await call("lookalike_signal_generator", { champion_titles: ["Head of IT Infrastructure"], product_category: "managed SD-WAN for branch offices", company: "Branchwire",
     buying_triggers: ["Contract with the current operator ends in the next year", "New branches opened"], icp_firmographics: { company_sizes: ["500-2000 employees"], locations: ["India"] } });
   clean(r, "lookalike");
-  assert.match(r.text, /"SD-WAN provider"/);
+  assert.match(r.text, /"SD[- ]WAN provider"/);   // run 21: the shared file writes the sector word without a dash
   assert.doesNotMatch(r.text, /SD-WAN software|MPLS software/);
   assert.match(r.text, /### Trigger: Contract with the current operator ends in the next year/);
   assert.match(r.text, /Company headcount: 500-2000 employees/);
@@ -252,7 +252,7 @@ test("icp_evolution_tracker: with no wins or losses, the current ICP is read par
   assert.match(r.text, /\*\*Segment Banking\*\*: list every deal you won or lost with Banking in it/);
   assert.match(r.text, /\*\*Segment Automotive\*\*/);
   assert.match(r.text, /\*\*Role CIO\*\*: do deals that involve CIO close faster or larger/);
-  assert.match(r.text, /Roles usual in telecom that your ICP does not name/);
+  assert.match(r.text, /Roles usual in telecom, operators and enterprise connectivity that your ICP does not name/);
   assert.match(r.text, /Loss reasons to tag in your CRM/);
   assert.match(r.text, /Compare win rate, ACV and cycle across Banking, Manufacturing and Automotive/);
 });
@@ -326,7 +326,7 @@ test("no SaaS-only term (seat, trial, MRR) in any tool answer for a connectivity
 test("buyer_group_analyzer: a seat none of the stakeholders fills shows the sector's usual role and says so", async () => {
   const r = await call("buyer_group_analyzer", { product_category: "managed SD-WAN for branch offices", typical_champion: "Network Manager", known_stakeholders: ["CIO"] });
   clean(r, "buyer group");
-  assert.match(r.text, /### Technical Evaluator[^\n]*\n\*\*Role\*\*: CISO \(usual in telecom; none of your stakeholders fits this role\)/);
+  assert.match(r.text, /### Technical Evaluator[^\n]*\n\*\*Role\*\*: CISO \(usual in telecom, operators and enterprise connectivity; none of your stakeholders fits this role\)/);
   assert.match(r.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: CIO\n/);
 });
 test("buyer_group_analyzer: AI native and SaaS products do not get the sector's usual roles or yardsticks for a function the user did not name", async () => {
