@@ -47,7 +47,7 @@ export interface SubType { id: string; vertical: VerticalId; name: string; match
 export const VERTICALS: Vertical[] = [
   {
     id: 'logistics-tech', name: 'logistics tech',
-    match: /\b(logistics?|(?:first|mid|last)[- ]mile|[34]pls?|fleets?|dispatch\w*|routing|route (?:planning|optimi[sz]ation|optimi[sz]er)|freight|shipping|shipments?|couriers?|(?<!software )supply chain|(?<!data )(?<!cloud )warehous\w*\b(?!-native)|fulfil\w*|transportation|trucking|truckers?|trucks?|truckload|haulage|tms|wms|telematics|cold chain|proof of delivery|delivery (?:management|tracking|orchestration|software|app)|load boards?|freight forwarders?)\b/i,
+    match: /\b(logistics?|(?:first|mid|last)[- ]mile|[34]pls?|fleets?|dispatch\w*|route (?:planning|optimi[sz]ation|optimi[sz]er)|freight|shipping|shipments?|couriers?|(?<!software )supply chain|(?<!data )(?<!cloud )warehous\w*\b(?!-native)|fulfil\w*|transportation|trucking|truckers?|trucks?|truckload|haulage|tms|wms|telematics|cold chain|proof of delivery|delivery (?:management|tracking|orchestration|software|app)|load boards?|freight forwarders?)\b/i,
     weak: /\b(routes?|deliver(?:y|ies)|carriers?|transport|drivers?|vehicles?)\b/i,
     vocabulary: ['shipment', 'carrier', 'consignment', 'lead time', 'exception', 'service level', 'proof of delivery', 'third party logistics provider', 'transport management system', 'warehouse management system'],
     buyerRoles: ['Chief Operating Officer', 'Head of Supply Chain', 'Head of Logistics', 'Transport or Operations Manager', 'Head of IT', 'Chief Financial Officer'],
@@ -325,7 +325,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'last-mile', vertical: 'logistics-tech', name: 'last mile delivery',
-    match: /\b(?:last\W?mile|delivery management (?:software|platform|system)|delivery (?:tracking|orchestration|routing) (?:software|platform|app)|route (?:optimi[sz]ation|planning) (?:software|platform|tool)|courier (?:software|management|dispatch)|dispatch (?:software|platform)|proof of delivery|driver app|same day delivery|hyperlocal delivery|route (?:planning|optimi[sz]ation)|dispatch(?:ing)?|delivery (?:fleets?|operations|drivers?))\b/i,
+    match: /\b(?:last\W?mile|delivery management (?:software|platform|system)|delivery (?:tracking|orchestration|routing) (?:software|platform|app)|route (?:optimi[sz]ation|planning) (?:software|platform|tool)|courier (?:software|management|dispatch)|dispatch (?:software|platform)|proof of delivery|driver app|same day delivery|hyperlocal delivery|delivery (?:fleets?|drivers?))\b/i,
     model: 'saas',
     notes: {
       vocabulary: ['dispatch', 'fleet', 'last mile', 'route plan', 'first attempt delivery', 'proof of delivery', 'third party logistics provider', 'cost per delivery', 'delivery SLA', 'delivery window'],
@@ -971,7 +971,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'cpaas-messaging', vertical: 'telecom', name: 'CPaaS and messaging',
-    match: /\b(?:messaging (?:platform|api|service)|business (?:texts?|messaging)|text messaging (?:platform|api|service)|sms (?:gateway|api|platform|service)|bulk sms|cpaas|communications platform as a service|voice api|one time passwords?|otp (?:delivery|messages?|service)|whatsapp (?:business )?(?:messaging|api)|rcs messaging|sms|rcs|whatsapp business|a2p|messaging apis?|business messaging|omnichannel messaging|communications apis?|voice and messaging)\b/i,
+    match: /\b(?:messaging (?:platform|api|service)|business (?:texts?|messaging)|text messaging (?:platform|api|service)|sms (?:gateway|api|platform|service)|bulk sms|cpaas|communications platform as a service|voice api|one time passwords?|otp (?:delivery|messages?|service)|whatsapp (?:business )?(?:messaging|api)|rcs messaging|whatsapp business|a2p|business messaging|omnichannel messaging|communications apis?|voice and messaging)\b/i,
     model: 'transactions',
     notes: {
       vocabulary: ['delivery rate', 'sender registration', 'message routing', 'one time password', 'two way messaging', 'opt in and opt out', 'throughput', 'fraud filtering', 'artificial traffic', 'delivery report'],
@@ -1646,7 +1646,7 @@ export type BusinessModel = 'saas' | 'services' | 'connectivity' | 'transactions
 export const BUSINESS_MODELS: BusinessModel[] = ['saas', 'services', 'connectivity', 'transactions', 'marketplace', 'hardware_software', 'investment'];
 export const MODEL_NAME: Record<BusinessModel, string> = {
   saas: 'software subscription', services: 'services (people-delivered, per FTE, per ticket or fixed price)', connectivity: 'connectivity (per site, per link or bandwidth, on a term contract)',
-  transactions: 'per-transaction (payments or volume based)', marketplace: 'marketplace (a take rate on transactions)', hardware_software: 'hardware plus software',
+  transactions: 'per-transaction (volume based)', marketplace: 'marketplace (a take rate on transactions)', hardware_software: 'hardware plus software',
   investment: 'investment management (fees on assets or performance)',
 };
 
