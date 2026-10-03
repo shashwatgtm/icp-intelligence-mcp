@@ -227,7 +227,9 @@ test("icp_gap_analysis: compares the two profiles, pricing advice fits the model
   const r = await call("icp_gap_analysis", args);
   common(r, SPENDRILL);
   assert.match(r.text, /\| \*\*Avg ACV\*\* \| \$6,000 \| \$24,000 \| \+300% needed \|/);
-  assert.match(r.text, /In your ideal profile, not in your current base\*\*: [^\n]*finance controller/i);
+  // run 20 round 1: the profiles are compared part by part in a table (who they are, size, buyer role, problem)
+  assert.match(r.text, /\| \*\*Buyer or champion role\*\* \| not stated \| finance controller \|/i);
+  assert.match(r.text, /\| \*\*Company size\*\* \| Small companies under 200 employees \| Mid-size companies \|/);
   assert.match(r.text, /reconciliation|month-end close|audit trail/i);
   const s = await call("icp_gap_analysis", { ...args, company: "Example IT Services Co", product_category: "managed service desk", business_model: "services",
     current_customers: "Small IT teams buying a few hours of support", ideal_icp: "Mid-size companies outsourcing their service desk" });

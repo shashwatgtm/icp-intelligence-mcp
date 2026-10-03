@@ -152,8 +152,8 @@ test("icp_interview_synthesizer: 3 of 7 interviews (42.857...) prints 43%", asyn
   ];
   const r = await call("icp_interview_synthesizer", { interview_notes, product_category: "spend management software" });
   clean(r);
-  assert.match(r.text, /mentioned 4x \(57% of interviews\)/);
-  assert.match(r.text, /\*\*Finance Controller\*\*: 3x \(43%\)/);
+  assert.match(r.text, /in 4 of 7 interviews \(57%\)/);   // run 20 round 1: "in k of n interviews" replaces "mentioned kx (p% of interviews)"
+  assert.match(r.text, /\*\*Finance Controller\*\*: in 3 of 7 interviews \(43%\)/);
 });
 
 // ---- Ledger A17-O24: the hints in tools/list ----
