@@ -1456,7 +1456,14 @@ const SPEND_WORDS = /\b(?:expenses?|spend|reimburs\w*|corporate cards?|prepaid c
 const MONEY_MOVES = /\b(?:payment (?:gateways?|processing|processors?)|payments? (?:apis?|infrastructure|rails|orchestration)|payouts?|lending|loans?|banking|remittances?|kyc|neobanks?|merchant acquiring)\b/i;
 // "acts in the help desk and billing system" names a system the product works with, not billing as the product.
 const BILLING_AS_INTEGRATION = /\b(?:and|or|in|into|from|with|to|across)\s+(?:the\s+|your\s+|a\s+|their\s+)?billing (?:systems?|tools?|software|platforms?)\b/gi;
-const billingText = (t: string) => BILLING_WORDS.test(t.replace(BILLING_AS_INTEGRATION, ' ')) && !SPEND_WORDS.test(t) && !MONEY_MOVES.test(t);
+// run 21c round 5: in a long text (a whole plan or document) one billing word is incidental ("streamline billing and payment"); two different billing terms are needed
+const billingText = (t: string) => {
+  const clean = t.replace(BILLING_AS_INTEGRATION, ' ');
+  if (!BILLING_WORDS.test(clean) || SPEND_WORDS.test(t) || MONEY_MOVES.test(t)) return false;
+  if (t.length <= 600) return true;
+  const kinds = new Set((clean.match(new RegExp(BILLING_WORDS.source, 'gi')) || []).map((w) => w.toLowerCase().replace(/[^a-z]/g, '').slice(0, 6)));
+  return kinds.size >= 2;
+};
 function adjust(text: string, best: Candidate, all: Candidate[]): Candidate {
   if (best.v.id === 'fintech' && billingText(text)) {
     const saas = all.find((x) => x.v.id === 'saas');
