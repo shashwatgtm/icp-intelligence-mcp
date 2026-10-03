@@ -2521,7 +2521,7 @@ ${SUGGESTED}
     // Tool 8: ICP Evolution Tracker - Dynamic ICP Monitoring
     // ---------------------------------------------------------------------------
     icp_evolution_tracker: {
-        description: 'Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP and states a candidate change for each (an addition to test, a disqualifier to test, an implication to check), with a review checklist. It does not compute win rates; check each candidate against your CRM',
+        description: 'Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP, states a candidate change for each (an addition to test, a disqualifier to test, an implication to check) and writes a draft of the updated ICP, with the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM',
         inputSchema: {
             type: 'object',
             properties: {
