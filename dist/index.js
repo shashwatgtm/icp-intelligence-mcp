@@ -585,7 +585,8 @@ function parseProfile(text) {
     const whole = sentences(String(text).replace(/\s+/g, ' ').trim()).filter((x) => !/\bhypothetical\b/i.test(x)).join('. ');
     let t = protectText(whole).replace(/^[A-Z][\w&.\- ]{0,40}:\s+/, '');
     const problems = [];
-    const pm = /\b(?:who|that|which)\s+(?:are\s+)?(?:face|facing|faces|struggle|struggling|struggles|suffer|suffering|suffers|have|need|lose|lack)\b\s*(?:with |from )?(.*)$/i.exec(t);
+    // a clause that says what the buyers face or struggle with is the problem; "that need to secure ..." or "that have ..." only describes them, so it is the fallback
+    const pm = /\b(?:who|that|which)\s+(?:are\s+)?(?:face|facing|faces|struggle|struggling|struggles|suffer|suffering|suffers)\b\s*(?:with |from )?(.*)$/i.exec(t) ?? /\b(?:who|that|which)\s+(?:are\s+)?(?:have|need|lose|lack)\b\s*(?:with |from )?(.*)$/i.exec(t);
     if (pm) {
         problems.push(restoreText(pm[1]).replace(/\.$/, '').trim());
         t = t.slice(0, pm.index).trim().replace(/[,;]\s*$/, '');

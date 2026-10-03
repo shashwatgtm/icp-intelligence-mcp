@@ -21,3 +21,16 @@ test("the first industry after 'in' in the ideal profile is a segment (banks are
   assert.doesNotMatch(dq.split("\n").slice(0, 4).join("\n"), /Segments outside the ideal profile\*\*: banking and financial services/i);
   assert.match(t, /Segments\*\*: banking and financial services/i);
 });
+
+test("an ideal profile 'organizations that need to secure X, ... who face Y' takes Y as the problem, not everything after the first 'that need'", async () => {
+  const t = await call("icp_gap_analysis", {
+    company: "Plain Works", product_category: "identity security",
+    current_customers: "Customers: financial services, public sector, retail",
+    ideal_icp: "organizations that need to secure workforce and customer identities, with the CISO as the buyer, who face identity attacks that go unseen while access is left unmanaged",
+    current_metrics: { avg_acv: 150000, churn_rate: 12 },
+  });
+  const m = t.match(/\*\*Problem\*\*: "([^"]+)"/);
+  assert.ok(m, "no problem line");
+  assert.doesNotMatch(m[1], /need to secure workforce/);
+  assert.match(m[1], /identity attacks that go unseen/);
+});
