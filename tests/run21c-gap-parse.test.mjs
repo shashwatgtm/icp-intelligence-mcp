@@ -16,8 +16,8 @@ test("an ideal profile with a size range and a buyer clause gives no stray segme
     current_customers: "Plain Co customers: Retail, Food distribution, Parcel carriers",
     ideal_icp: "dispatch teams and fleet leaders at businesses of all sizes, from startups to large enterprises, with Vice President of Operations as the buyer, who face late deliveries and manual planning",
   });
-  const table = out.split("\n").filter((l) => /^\| \*\*/.test(l)).join("\n");   // the quoted input above the table keeps the user's own words
-  assert.doesNotMatch(table, /\| from \||ideal profile: from\b/);
-  assert.doesNotMatch(table, /Vice President of Operations as the/);
-  assert.match(table, /Vice President of Operations/);
+  // run 22: the answer no longer pastes the inputs, so the whole answer is checked
+  assert.doesNotMatch(out, /\| from \||ideal profile: from\b|segments?\*\*: from\b/i);
+  assert.doesNotMatch(out, /Vice President of Operations as the (?!buyer)/);
+  assert.match(out, /Vice President of Operations/);
 });

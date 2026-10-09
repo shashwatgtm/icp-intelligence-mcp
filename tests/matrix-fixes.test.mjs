@@ -42,14 +42,13 @@ test("icp_gap_analysis: a rate over 100 is refused; a metric with no gap says so
   const r = await call("icp_gap_analysis", { current_customers: "Small manufacturers", ideal_icp: "Mid-size manufacturers",
     current_metrics: { avg_acv: 20000, avg_sales_cycle: 40, win_rate: 20, churn_rate: 10, nps: 30 },
     target_metrics: { avg_acv: 30000, avg_sales_cycle: 45, win_rate: 20, churn_rate: 8, nps: 40 } });
-  const cycle = r.text.split("### Sales Cycle Gap")[1].split("### Win Rate Gap")[0];
-  assert.match(cycle, /No gap: you are at or better than your target on this metric, so there is nothing to fix here\./);
-  assert.doesNotMatch(cycle, /Common causes to check/);
-  const win = r.text.split("### Win Rate Gap")[1].split("### Churn Gap")[0];
-  assert.match(win, /^ \(target met, no change needed\)/);
+  // run 22 rewrite: a metric with no gap is named once as having none, and has no section of causes
+  assert.match(r.text, /No gap on sales cycle and win rate: you are at or better than your target there, so there is nothing to fix on them\./);
+  assert.match(r.text, /\| \*\*Win Rate\*\* \| 20% \| 20% \| target met, no change needed \|/);
+  const causes = r.text.split("## Causes to check")[1].split("## Recommended")[0];
+  assert.doesNotMatch(causes, /### Sales Cycle|### Win Rate/);
   assert.doesNotMatch(r.text, /-0%/);
-  const acv = r.text.split("### ACV Gap")[1].split("### Sales Cycle Gap")[0];
-  assert.match(acv, /Common causes to check/);
+  assert.match(causes, /### Avg ACV/);
 });
 
 test("icp_scoring_model: a criterion with no values says so", async () => {

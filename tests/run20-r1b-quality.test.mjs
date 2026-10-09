@@ -163,7 +163,9 @@ test("icp_scoring_model: a long value is shown whole once; the proof is sorted a
   assert.match(r.text, /a page claim or recognition, not a closed-deal result/);
   assert.match(r.text, /a customer statement/);
   assert.match(r.text, /Segment, "Banks": named in "A leading bank achieved 99\.5% uptime across 2000 branches \(page claim\)"/);
-  assert.match(r.text, /list each criterion's values from best fit to worst fit/);
+  // run 22: the points are explained for the kind of list given; named targets score the full weight each
+  assert.match(r.text, /you listed the customers or roles you want, so every value you listed scores the full weight/);
+  assert.match(r.text, /Banks \(25 pts\) \/ Manufacturing \(25 pts\) \/ Anything not listed above \(0 pts\)/);
 });
 
 // ---- tam_sam_som_calculator ----
@@ -221,16 +223,16 @@ test("icp_gap_analysis: the current base and the ideal profile are compared part
     ideal_icp: "Mid-size banks, Insurance, with CFO as the buyer, who face manual reconciliation and late month-end close",
     current_metrics: { avg_acv: 30000, avg_sales_cycle: 90 } });
   clean(r, "gap");
-  assert.match(r.text, /\| \*\*Industries or segments\*\* \| Fintech; Insurance; Retail \| banks; Insurance \|/);
-  assert.match(r.text, /In both: Insurance/);
-  assert.match(r.text, /Only in the current base: Fintech; Retail/);
-  assert.match(r.text, /\| \*\*Buyer or champion role\*\* \| not stated \| CFO \|/);
-  assert.match(r.text, /\| \*\*Problem or trigger\*\* \| not stated \| manual reconciliation and late month-end close \|/);
-  assert.match(r.text, /In your current base but not named in the ideal profile\*\*: Fintech and Retail/);
+  // run 22 rewrite: the same parts are compared in sentences, each against the whole other text
+  assert.match(r.text, /\*\*Named in both\*\*: Insurance/);
+  assert.match(r.text, /\*\*Named in your ideal profile but not in your current base\*\*: Mid-size banks/);
+  assert.match(r.text, /Your ideal profile names CFO as the buyer, and your current base does not say who bought/);
+  assert.match(r.text, /manual reconciliation and late month-end close/);
+  assert.match(r.text, /In your current base but not named in your ideal profile\*\*: Fintech and Retail/);
   // no invented numbers
   assert.doesNotMatch(r.text, /20%|\$40,000|\$50,000|Example figure/);
-  assert.match(r.text, /Not compared \(add both a current and a target value\): Avg ACV, Sales Cycle, Win Rate, Churn Rate, NPS|You gave no metric with both/);
-  assert.doesNotMatch(r.text, /## Gap Root Cause Analysis/);
+  assert.match(r.text, /\| \*\*Avg ACV\*\* \| \$30,000 \| not supplied \| needs both a current and a target value \| Not rated \|/);
+  assert.doesNotMatch(r.text, /## Gap Root Cause Analysis|## Causes to check/);
 });
 test("icp_gap_analysis: a metric with both values keeps its gap exactly as before; one with a missing side is not compared", async () => {
   const r = await call("icp_gap_analysis", { current_customers: "mid-size banks", ideal_icp: "large banks",
@@ -239,8 +241,8 @@ test("icp_gap_analysis: a metric with both values keeps its gap exactly as befor
   assert.match(r.text, /\| \*\*Avg ACV\*\* \| \$24,000 \| \$36,000 \| \+50% needed \| Medium \|/);
   assert.match(r.text, /\| \*\*Sales Cycle\*\* \| 90 days \| 60 days \| -33% needed \| High \|/);
   assert.match(r.text, /\| \*\*Win Rate\*\* \| 20% \| not supplied \| needs both a current and a target value \| Not rated \|/);
-  assert.match(r.text, /### ACV Gap \(\+50% needed\)/);
-  assert.doesNotMatch(r.text, /### Win Rate Gap/);
+  assert.match(r.text, /### Avg ACV \(\+50% needed\)/);
+  assert.doesNotMatch(r.text, /### Win Rate/);
 });
 
 // ---- icp_evolution_tracker ----

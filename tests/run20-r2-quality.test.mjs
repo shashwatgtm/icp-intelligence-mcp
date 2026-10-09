@@ -26,7 +26,8 @@ test("gap analysis: 500,000 and 1,000 are never split; 'in particular' and 'incl
   assert.doesNotMatch(r.text, /(?<!,)\b000 (?:and|companies)|500 and 000|\b500;|\*\*Segments\*\*: [^\n]*\b500\b/);
   assert.match(r.text, /500,000 companies/);
   assert.doesNotMatch(r.text, /Segments outside the ideal profile/);
-  assert.match(r.text, /Retail; POS and eCommerce/);
+  assert.match(r.text, /Retail, POS and eCommerce/);   // run 22: one segment, not split at its semicolon
+  assert.match(r.text, /Statements from a page, kept apart[^\n]*Fortune 500/);
 });
 test("gap analysis: 'in particular' is an elaboration of the size, 'more than 1,000' stays whole", async () => {
   const r = await call("icp_gap_analysis", { current_customers: "Branchwire customers: Banking and financial services, Manufacturing, Automotive. The metric figures sent are hypothetical.",
@@ -40,12 +41,12 @@ test("gap analysis: 'in particular' is an elaboration of the size, 'more than 1,
 test("gap analysis: FMCG/CPG is FMCG and CPG; GM-IT is one role; a profile with no shared segment is not compared for disqualifiers", async () => {
   const a = await call("icp_gap_analysis", { current_customers: "Lanehop customers: Retail, FMCG and CPG, 3PL.", ideal_icp: "Retail, FMCG/CPG and other industries" });
   ok(a);
-  assert.match(a.text, /In both: Retail; FMCG and CPG/);
-  assert.doesNotMatch(a.text, /Segments outside the ideal profile/);
+  assert.match(a.text, /Named in both\*\*: Retail, and FMCG and CPG/);
+  assert.doesNotMatch(a.text, /Segments outside the ideal profile|not named in your ideal profile\*\*: 3PL/);   // the ideal profile is open ended ("and other industries")
   const b = await call("icp_gap_analysis", { current_customers: "Lanehop customers: FMCG and CPG, Cosmetics, Consumer durables.",
     ideal_icp: "national and international CPG and FMCG brands; sales and distribution teams, with GM-IT as the buyer, who face missed visits and manual work" });
   ok(b);
-  assert.match(b.text, /\| \*\*Buyer or champion role\*\* \| not stated \| GM-IT \|/);
+  assert.match(b.text, /Your ideal profile names GM-IT as the buyer/);
   assert.doesNotMatch(b.text, /GM-IT and GM|\bGM\b(?!-)/);
   assert.doesNotMatch(b.text, /Segments outside the ideal profile/);
   assert.match(b.text, /missed visits and manual work/);
@@ -292,21 +293,22 @@ test("gap analysis: in investment management CIO is the Chief Investment Officer
     current_customers: "Quantara AI customers: Asset allocators (pensions; insurers; endowments), Investment banks, Wealth managers, Asset managers. The metric figures sent are hypothetical.",
     ideal_icp: "asset allocators, investment managers and banks, with CIO as the buyer, who face static factor exposures and black box signals" });
   ok(r);
-  assert.match(r.text, /CIO matches a role usual in [^\n]*\(Chief Investment Officer\)/);
+  assert.match(r.text, /CIO is one of the roles usual in [^\n]*\(Chief Investment Officer\)/);
   assert.doesNotMatch(r.text, /In both: [^\n]*\(pensions\./);
   assert.match(r.text, /Asset allocators \(pensions; insurers; endowments\)/);
-  assert.doesNotMatch(r.text, /Segments outside the ideal profile\*\*:[^\n]*(?:Asset managers|Wealth managers|Investment banks)/);
+  assert.doesNotMatch(r.text, /not named in your ideal profile\*\*:[^\n]*(?:Asset managers|Wealth managers|Investment banks)/);
+  assert.doesNotMatch(r.text, /Segments outside the ideal profile/);
 });
 test("gap analysis: 'B2B SaaS and software' is related to 'SaaS'; a page claim is not a size qualifier; 'platform leader' is the Platform Engineering Lead", async () => {
   const a = await call("icp_gap_analysis", { current_customers: "Pathwise customers: B2B SaaS and software, Gen AI, Gaming; streaming and entertainment.", ideal_icp: "the world's leading AI, SaaS and consumer subscription businesses, with CFO as the buyer, who face messy pricing" });
   ok(a);
-  assert.match(a.text, /Related wording: B2B SaaS and software \(current\) and SaaS and consumer subscription businesses \(ideal\)/);
-  assert.doesNotMatch(a.text, /Nothing in common/);
+  assert.match(a.text, /Named in both\*\*: [^\n]*B2B SaaS and software/);   // run 22: "B2B SaaS and software" is recognised as SaaS
+  assert.doesNotMatch(a.text, /Nothing in common|not named in your ideal profile\*\*: [^\n]*B2B SaaS/);
   const b = await call("icp_gap_analysis", { product_category: "developer testing tools", company: "Cloudmoat", current_customers: "Cloudmoat customers: Financial services, Retail.",
     ideal_icp: "API teams and developers at 500,000 companies, including 98% of the Fortune 500 (page claim), with platform leader as the buyer, who face disconnected tools" });
   ok(b);
   assert.doesNotMatch(b.text, /companies outside Fortune 500|\*\*Size\*\*: companies outside/);
-  assert.match(b.text, /platform leader matches a role usual in software, testing and QA tools \(Platform Engineering Lead\)/);
+  assert.match(b.text, /Platform leader is one of the roles usual in software, testing and QA tools \(Platform Engineering Lead\)/);
 });
 test("roles: a person is in one place in the buyer group; any other chief officer is budget or sign-off, not a day-to-day user", async () => {
   const q = await call("buyer_group_analyzer", { product_category: "AI platform and investment strategies", company: "Quantara AI", typical_champion: "portfolio manager", known_stakeholders: ["CIO", "risk teams", "compliance committees"] });

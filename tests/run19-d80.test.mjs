@@ -115,7 +115,8 @@ test("unit: points per value: first value full weight, last 0, even steps; one v
     { criterion: "Cloud accounts", importance: "nice_to_have", values: ["AWS", "Azure", "Google Cloud", "None"] },
     { criterion: "Audit due", importance: "critical", values: ["Yes"] }] });
   common(r, "Cloudmoat");
-  assert.match(r.text, /AWS \(10 pts\) \/ Azure \(7 pts\) \/ Google Cloud \(3 pts\) \/ None \(0 pts\)/);
+  // run 22: a list of named targets scores the full weight for each name (the old even steps gave the last name listed 0); a closing "None" scores 0
+  assert.match(r.text, /AWS \(10 pts\) \/ Azure \(10 pts\) \/ Google Cloud \(10 pts\) \/ None \(0 pts\)/);
   assert.match(r.text, /Yes \(25 pts; 0 if not\)/);
   assert.match(r.text, /\*\*Maximum Score\*\*: 35 points/); // weights unchanged
 });
@@ -228,8 +229,9 @@ test("icp_gap_analysis: compares the two profiles, pricing advice fits the model
   common(r, SPENDRILL);
   assert.match(r.text, /\| \*\*Avg ACV\*\* \| \$6,000 \| \$24,000 \| \+300% needed \|/);
   // run 20 round 1: the profiles are compared part by part in a table (who they are, size, buyer role, problem)
-  assert.match(r.text, /\| \*\*Buyer or champion role\*\* \| not stated \| finance controller \|/i);
-  assert.match(r.text, /\| \*\*Company size\*\* \| Small companies under 200 employees \| Mid-size companies \|/);
+  // run 22 rewrite: the profiles are read in parts and compared in sentences (buyer, size), not in a table of pasted pieces
+  assert.match(r.text, /Your ideal profile mentions finance controller, and your current base does not say who bought/i);
+  assert.match(r.text, /Your ideal profile says Mid-size; your current base says under 200 employees and Small/);
   assert.match(r.text, /reconciliation|month-end close|audit trail/i);
   const s = await call("icp_gap_analysis", { ...args, company: "Example IT Services Co", product_category: "managed service desk", business_model: "services",
     current_customers: "Small IT teams buying a few hours of support", ideal_icp: "Mid-size companies outsourcing their service desk" });
