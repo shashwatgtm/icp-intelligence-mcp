@@ -145,7 +145,7 @@ test("round 2: a value is named in a statement by another word for the same kind
     success_correlation: "A global spirits company cut late shipments by half (customer quote); a growers cooperative tracks loads in real time (page claim)",
     scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Chemical", "Food and beverage"] }] });
   assert.match(out, /Segment, "Food and beverage": named in/);
-  assert.doesNotMatch(out, /Not found in your evidence\*\*:[^\n]*"Food and beverage"/);
+  assert.doesNotMatch(out, /No statement names these yet[^\n]*:[^\n]*"Food and beverage"/);
 });
 
 test("round 2: fit signals for a voice and messaging seller include a voice question; equal points are said plainly; an unrecognised sector is said plainly", async () => {
@@ -164,6 +164,28 @@ test("round 2: awareness training is not given the email gateway notes in the sc
   const out = await call({ company: "Brightwave", product_category: "human risk management (security behavior change and security awareness training) from Brightwave",
     scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Banks", "Telecom"] }] });
   assert.doesNotMatch(out, /secure email gateway|false positives will block real mail|changing mail flow is risky/i);
+});
+
+
+// ---- round 3 ----
+test("round 3: a value is attributed to a statement only by a word it shares or an alias; the matching words are shown; nothing is called absent", async () => {
+  const out = await call({ company: "Brightwave", product_category: "payments API platform from Brightwave",
+    success_correlation: "Brightwave and a card network launched Click to Pay for eCommerce (page claim); a global spirits company cut late shipments (customer quote)",
+    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["fintechs", "Food and beverage", "marketplaces"] }] });
+  assert.doesNotMatch(out, /Segment, \u0022fintechs\u0022: named in|Segment, "fintechs": named in/);
+  assert.match(out, /Segment, "Food and beverage": named in [^\n]*\(matching word: spirits\)/);
+  assert.match(out, /No statement names these yet\*\* \(that does not mean they are absent[^\n]*"fintechs"/);
+  assert.doesNotMatch(out, /Not found in your evidence/);
+});
+
+test("round 3: 'already a criterion' needs a distinctive word or a matching value; a role value is not matched to an award", async () => {
+  const out = await call({ company: "Brightwave", product_category: "services for application modernization from Brightwave",
+    success_correlation: "Named a Leader in Application Modernization Services (analyst recognition); a Client Champion award for delivery (award)",
+    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Manufacturing"] }, { criterion: "Buyer or champion role", importance: "important", values: ["technology leaders"] }] });
+  assert.doesNotMatch(out, /already a criterion/);
+  assert.match(out, /"technology leaders" \(Buyer or champion role\)/);
+  const head = await call({ company: "Brightwave", success_correlation: "Acme Bank: scaled voice agents across collections (customer story headline)", scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Banks"] }] });
+  assert.match(head, /customer story headline\)": a page claim or recognition/);
 });
 
 const POOL_DIR = process.env.HELIX_POOL_DIR;
