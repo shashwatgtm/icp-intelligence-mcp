@@ -134,6 +134,12 @@ const ROWS = [
     { seller: ["cloud security for manufacturers: posture management and threat detection"] }, "cybersecurity", null],
   ["expense management for hotels and restaurants stays fintech",
     { seller: ["expense management for hotels and restaurants"] }, "fintech", null],
+  ["offshore development centre for fintech and insurance companies",
+    { seller: ["an offshore development centre for fintech and insurance companies"], buyer: ["fintech", "insurance"] }, "ites", "services"],
+  ["human annotators for model builders",
+    { seller: ["AI training data and human annotators for model builders and autonomous driving teams"], buyer: ["AI labs"] }, "ites", "services"],
+  ["AI-powered managed detection and response with bank customers",
+    { seller: ["AI-powered managed detection and response with a 24x7 security operations centre"], buyer: ["banks", "payments companies"] }, "cybersecurity", "services"],
   // ---- the same words, but the product IS payments, stock or something else: no change ----
   ["payments platform for restaurants stays fintech",
     { seller: ["Tabpay is a payments platform for restaurants: accept card payments, split bills and pay out to bank accounts"] }, "fintech", null],
