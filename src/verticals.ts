@@ -428,7 +428,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'payments-banking', vertical: 'fintech', name: 'payments and banking APIs',
-    match: /\b(?:payment gateway|payment processing|payments and banking (?:platform|stack|infrastructure)|banking platform|payments? (?:platform|infrastructure)|payment service provider|payment orchestration|card issuing|card processing|banking as a service|bank account (?:data|api|linking|connections?|access|verification)|account (?:and routing number )?verification|ach (?:payments?|transfers?|returns?|debits?)|bank payments?|open banking|core banking|remittance (?:service|platform)|merchant acquiring|(?:connects?|links?) (?:\w+ ){1,3}(?:to )?(?:\w+'?s? )?bank accounts?|financial (?:data )?(?:network|apis?)|payments? apis?|payment links?|card programs?|upi)\b/i,
+    match: /\b(?:payment gateway|payment processing|payments and banking (?:platform|stack|infrastructure)|banking platform|payments? (?:platform|infrastructure)|payment service provider|payment orchestration|card issuing|card processing|banking as a service|bank account (?:data|api|linking|connections?|access|verification)|account (?:and routing number )?verification|ach (?:payments?|transfers?|returns?|debits?)|bank payments?|open banking|remittance (?:service|platform)|merchant acquiring|(?:connects?|links?) (?:\w+ ){1,3}(?:to )?(?:\w+'?s? )?bank accounts?|financial (?:data )?(?:network|apis?)|payments? apis?|payment links?|card programs?|upi)\b/i,
     model: 'transactions',
     notes: {
       vocabulary: ['payment success rate', 'settlement', 'chargeback', 'authorisation', 'tokenisation', 'sponsor bank', 'sandbox', 'webhook', 'uptime', 'payout'],
@@ -449,6 +449,32 @@ export const SUBTYPES: SubType[] = [
         'Which licences, partner banks or regulators matter for the countries you serve?',
         'How do you handle disputes, refunds and reconciliation today?',
         'What would you need to see in a sandbox before you trust it with live money?',
+      ],
+    },
+  },
+  {
+    id: 'core-banking', vertical: 'fintech', name: 'core banking and lending platforms',
+    match: /\b(?:core banking(?: platform| system| software)?|cloud banking platform|digital banking platform|banking core|core ledger|banking ledger|deposits and lending platform)\b/i,
+    model: 'saas',
+    notes: {
+      vocabulary: ['core banking', 'ledger', 'deposits', 'loans', 'product configuration', 'legacy core', 'migration', 'cutover', 'regulatory reporting', 'accounts'],
+      buyerRoles: ['Chief Technology Officer', 'Chief Operating Officer', 'Head of Digital Banking', 'Head of Core Systems', 'Chief Risk Officer', 'Head of Compliance', 'Chief Financial Officer'],
+      committee: 'The CTO or the chief operating officer signs a core change; the head of digital banking or product champions it; core systems and architecture run the migration; risk and compliance check regulatory reporting and data location; finance checks the ledger and reporting.',
+      objections: [
+        { objection: 'Replacing a core is too risky', response: 'Offer a staged path: run new products or a new brand on the platform first, keep the legacy core for existing accounts and agree a rollback plan.' },
+        { objection: 'Our regulator must approve changes', response: 'Name the regulator\'s concerns (reporting, data location, outsourcing), involve compliance early and show how audit trails and reports are produced.' },
+        { objection: 'Integration with our existing systems', response: 'List the systems that must connect (payments, cards, channels, data warehouse) and agree owners and interfaces before a pilot.' },
+        { objection: 'We built our own core', response: 'Compare the cost and time of changing a product in the current core with configuring it on the platform, using the bank\'s own list of recent changes.' },
+      ],
+      salesMotion: 'Long enterprise sale to a board or technology committee, often a proof of concept on one product or a new brand before any migration; the regulator and procurement are involved early.',
+      metrics: ['time to launch a new product', 'cost of a change request', 'cost to serve per account', 'cutover incidents', 'system availability', 'reporting turnaround', 'accounts migrated'],
+      proofShape: 'Time to launch one product on the platform against the current core, with the product, the team and the steps counted stated, plus a migration plan from a comparable bank.',
+      discovery: [
+        'Which products and channels run on your current core, and what does a change take?',
+        'What is the plan for the legacy core: replace it, wrap it or run alongside it?',
+        'Which regulator rules shape reporting and data location for you?',
+        'Which systems must connect to the new core?',
+        'Who must approve a core change: the board, technology, risk or the regulator?',
       ],
     },
   },
@@ -1151,6 +1177,32 @@ export const SUBTYPES: SubType[] = [
     },
   },
   {
+    id: 'data-infrastructure', vertical: 'software', name: 'managed data infrastructure',
+    match: /\b(?:managed (?:open source )?(?:data(?:base)?s?|streaming)(?: infrastructure| services?| platform)?|data infrastructure|database as a service|managed (?:kafka|postgres(?:ql)?|mysql|redis|clickhouse|opensearch|cassandra)|open source data (?:platform|infrastructure))\b/i,
+    model: 'saas',
+    notes: {
+      vocabulary: ['managed service', 'uptime', 'failover', 'backups', 'scaling', 'upgrades', 'multi cloud', 'migration', 'lock in', 'operations hours'],
+      buyerRoles: ['VP Engineering', 'Head of Platform', 'Head of Data', 'CTO', 'Head of Infrastructure', 'Head of Security', 'Chief Financial Officer'],
+      committee: 'The VP Engineering or the CTO signs; the head of platform or data champions it; developers and data engineers use it every day; security checks access, encryption and compliance; finance checks that spend is predictable.',
+      objections: [
+        { objection: 'We can run it ourselves', response: 'Compare the operations hours, on call load and incidents of running it in house with the managed price, using the team\'s own numbers.' },
+        { objection: 'We worry about lock in', response: 'Explain that the engines are open source, how data and configuration can be exported and what a move out would involve.' },
+        { objection: 'The cost is hard to predict', response: 'Show how the bill is built (size, region, usage), give a worked estimate from the buyer\'s own workload and agree spend alerts.' },
+        { objection: 'Migration is risky', response: 'Offer a staged migration with a replica running alongside, a tested rollback and a named engineer on each side.' },
+      ],
+      salesMotion: 'Developer led adoption on a trial or credits, then a platform or engineering lead signs a committed plan; security and finance join for the larger contract.',
+      metrics: ['uptime', 'incidents per month', 'operations hours saved', 'time to provision a service', 'cost predictability', 'migration time', 'recovery time'],
+      proofShape: 'Operations hours or incidents for a service before and after moving it to the managed platform, with the service, its size and the period stated.',
+      discovery: [
+        'Which data services do you run today, and who is on call for them?',
+        'What did the last outage or failed upgrade cost you?',
+        'Which clouds and regions must the data stay in?',
+        'How is spend on data services tracked and approved today?',
+        'Who decides: engineering, platform, security or finance?',
+      ],
+    },
+  },
+  {
     id: 'observability', vertical: 'software', name: 'observability and application monitoring',
     match: /\b(?:error (?:monitoring|tracking)|crash reporting|performance monitoring|application monitoring|application performance monitoring|infrastructure monitoring|observability (?:platform|tools?|software|stack)|log management|distributed tracing|apm)\b/i,
     model: 'saas',
@@ -1355,6 +1407,32 @@ export const SUBTYPES: SubType[] = [
         'What do developers say about the scanners they use now?',
         'How long is the backlog, and how is it ranked?',
         'What evidence do auditors or customers ask you for about your code?',
+      ],
+    },
+  },
+  {
+    id: 'mobile-appsec', vertical: 'cybersecurity', name: 'mobile application security',
+    match: /\b(?:mobile (?:app(?:lication)?s? )?security(?: testing| platform| scanning| analysis)?|mobile app(?:lication)? (?:pen(?:etration)? ?test\w*|vulnerabilit\w+|binar\w+|scan\w*)|apk and ipa|runtime app(?:lication)? protection|app shielding)\b/i,
+    model: 'saas',
+    notes: {
+      vocabulary: ['mobile app', 'app binary', 'release', 'finding', 'false positive', 'penetration test', 'static and dynamic testing', 'compliance evidence', 'remediation', 'store submission'],
+      buyerRoles: ['CISO', 'Head of Application Security', 'Head of Mobile Engineering', 'Head of Product Security', 'Head of Compliance', 'Head of Digital Products'],
+      committee: 'The CISO or the head of application security signs; the mobile or product security lead champions it; mobile engineering decides how findings enter the release process; compliance asks for audit evidence; IT and legal check how uploaded app files are handled.',
+      objections: [
+        { objection: 'We already run penetration tests', response: 'Show what scanning every release finds between the yearly tests and how the findings reach developers, and position it beside the tester rather than instead of the tester.' },
+        { objection: 'It will slow our release', response: 'Show where the scan sits in the pipeline, how long it takes and which findings block a release, and start with reporting only.' },
+        { objection: 'Too many false positives', response: 'Agree how findings are triaged and measure the share confirmed as real in a trial on one app.' },
+        { objection: 'Our app files are sensitive', response: 'Explain how uploaded files are handled, stored and deleted and where the scan runs, and involve security and legal early.' },
+      ],
+      salesMotion: 'Security led, often after an audit finding, a customer demand or a store policy change; a trial on one or two apps, then a rollout across the app portfolio with mobile engineering on board.',
+      metrics: ['findings per release', 'share of findings confirmed as real', 'time to fix a finding', 'scan time per release', 'apps covered', 'audit findings closed', 'release delay caused by security'],
+      proofShape: 'Findings per app before and after scanning each release, with the number of apps, the releases covered and the share confirmed as real stated.',
+      discovery: [
+        'How many mobile apps do you release, and how often?',
+        'How are they tested for security today, and by whom?',
+        'What happened the last time a vulnerability was found after a release?',
+        'Which audits or customers ask for evidence of mobile app security?',
+        'Who must agree to add a scan to the release process: security, mobile engineering or compliance?',
       ],
     },
   },
@@ -1676,6 +1754,8 @@ interface CategoryHit { st: SubType; word: string; index: number; end: number; }
 // HR and payroll software is a kind of vertical SaaS only when it is built for one named industry (shift workers, restaurants, construction crews ...);
 // "payroll and compliance for small businesses" is general HR software, so it names SaaS and no kind.
 const INDUSTRY_WORD = /\b(?:restaurants?|hospitality|hotels?|retail(?:ers)?|stores?|construction|contractors?|manufactur\w*|factor(?:y|ies)|staffing|temp(?:orary)? (?:workers?|staff)|shift (?:workers?|staff)|hourly (?:workers?|staff)|frontline|deskless|blue.?collar|farms?|agricultur\w*|warehouses?|logistics|drivers?|fleets?|salons?|gyms?|fitness|schools?|education|nonprofits?|cleaning|franchises?|bars?|cafes?|food service|trades?)\b/i;
+const CORE_BANKING_WORDS = /\b(?:core banking|banking core|core ledger|banking ledger|deposits and lending)\b/i;
+const MOBILE_APP_SECURITY = /\b(?:mobile (?:app(?:lication)?s? )?security|mobile app(?:lication)? (?:pen(?:etration)? ?test\w*|vulnerabilit\w+|binar\w+|scan\w*)|apk and ipa|app binar(?:y|ies))\b/i;
 const HOTEL_WORDS = /\b(?:hotels?|hostels?|hospitality|resorts?|housekeeping|front desk|guests?|reservations?)\b/i;
 const LEASE_WORDS = /\b(?:tenants?|leases?|landlords?|rent roll|rent collection|rental propert\w+)\b/i;
 const GENERIC_PAYROLL: SubType = { id: 'hr-payroll-general', vertical: 'saas', name: 'HR and payroll', match: /$^/, notes: {} as SectorNotes };
@@ -1686,6 +1766,10 @@ function categoryHits(seller: string, whole: string = seller): CategoryHit[] {
     if (!m) continue;
     if (st.id === 'industry-hr-payroll' && !INDUSTRY_WORD.test(whole)) st = GENERIC_PAYROLL;
     // Run 22: a "property management system" next to hotel words is a hotel system (front desk, housekeeping), not rent and leases: it is read as the hotel kind.
+    // Run 22: an application security word next to mobile app security words (app binaries, APK and IPA) names the mobile kind, not the developer pipeline kind.
+    // Run 22: "banking platform" next to core banking words (core banking, banking ledger, deposits and lending) names the core banking kind, not payments and banking APIs.
+    if (st.id === 'payments-banking' && /\bbanking platform\b/i.test(m[0]) && CORE_BANKING_WORDS.test(whole)) st = SUBTYPES.find((x) => x.id === 'core-banking') ?? st;
+    if (st.id === 'appsec' && MOBILE_APP_SECURITY.test(whole)) st = SUBTYPES.find((x) => x.id === 'mobile-appsec') ?? st;
     if (st.id === 'property-management' && HOTEL_WORDS.test(whole) && !LEASE_WORDS.test(whole)) st = SUBTYPES.find((x) => x.id === 'hotel-lodging') ?? st;
     out.push({ st, word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index, end: m.index + m[0].length });
   }

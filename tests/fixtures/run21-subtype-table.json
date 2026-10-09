@@ -735,6 +735,48 @@
    "sector": "cybersecurity",
    "subtype": "awareness-training",
    "model": "saas"
+  },
+  {
+   "id": "st-r22-ma1",
+   "text": "A mobile application security testing service that scans Android and iOS app binaries before each release and reports findings with fix guidance",
+   "sector": "cybersecurity",
+   "subtype": "mobile-appsec",
+   "model": "saas"
+  },
+  {
+   "id": "st-r22-ma2",
+   "text": "Automated mobile app security scanning with compliance evidence for banks that publish customer apps",
+   "sector": "cybersecurity",
+   "subtype": "mobile-appsec",
+   "model": "saas"
+  },
+  {
+   "id": "st-r22-cb1",
+   "text": "A core banking platform for banks and lenders that runs deposits, loans and accounts on one ledger",
+   "sector": "fintech",
+   "subtype": "core-banking",
+   "model": "saas"
+  },
+  {
+   "id": "st-r22-cb2",
+   "text": "A cloud banking platform with product configuration for digital banks, including a core ledger",
+   "sector": "fintech",
+   "subtype": "core-banking",
+   "model": "saas"
+  },
+  {
+   "id": "st-r22-di1",
+   "text": "Managed open source data infrastructure: hosted Kafka, PostgreSQL and ClickHouse with backups, upgrades and failover",
+   "sector": "software",
+   "subtype": "data-infrastructure",
+   "model": "saas"
+  },
+  {
+   "id": "st-r22-di2",
+   "text": "A database as a service for engineering teams with automatic scaling and point in time recovery",
+   "sector": "software",
+   "subtype": "data-infrastructure",
+   "model": "saas"
   }
  ]
 }
