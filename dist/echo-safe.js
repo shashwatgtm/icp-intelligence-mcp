@@ -171,8 +171,9 @@ const URL_QUERY = /\b((?:https?:\/\/|www\.)[^\s<>"'“”()[\]{}?#]{1,1500})[?#]
 // ---- instruction text ----
 const INSTRUCTION_PARTS = [
     // run 20 patterns
-    String.raw `\b(?:ignore|disregard|forget|override|bypass|discard|overrule|neglect)\b[^.\n]{0,40}\b(?:previous|prior|above|earlier|preceding|all|any|your|these|those|system|safety|original)\b[^.\n]{0,30}\b(?:instructions?|directions?|guidelines?|prompts?|guardrails?|restrictions?|programming|directives?)\b`,
-    String.raw `\b(?:reveal|print|show|leak|output|display|expose|dump|repeat|disclose)\b[^.\n]{0,40}\b(?:system prompt|system message|hidden prompt|initial prompt|api keys?|secrets?|passwords?|credentials?|access tokens?|private keys?|environment variables?)\b`,
+    String.raw `\b(?:ignore|disregard|forget|override|discard|overrule)\b[^.\n]{0,40}\b(?:previous|prior|above|earlier|preceding|all|any|your|these|those|system|safety|original)\b[^.\n]{0,30}\b(?:instructions?|directions?|guidelines?|prompts?|guardrails?|restrictions?|programming|directives?)\b`,
+    String.raw `\b(?:reveal|print|show|leak)\b[^.\n]{0,40}\b(?:system prompt|api keys?|secrets?|passwords?)\b`,
+    String.raw `\b(?:reveal|print|show|leak|output|display|expose|dump|repeat|disclose|tell me)\b[^.\n]{0,40}\b(?:system prompt|system message|hidden prompt|initial prompt|your instructions|your prompt)\b`,
     String.raw `<\|im_(?:start|end)\|>`,
     String.raw `\bSYSTEM\s*:`,
     // role markers at the start of a line, and prompt delimiters
@@ -191,16 +192,17 @@ const INSTRUCTION_PARTS = [
     // role switch
     String.raw `\byou\s+are\s+now\b[^.\n]{0,40}\b(?:mode|admin|administrator|developer|dan|unrestricted|jailbroken|root|god|unfiltered)\b`,
     String.raw `\bfrom\s+now\s+on\b[^.\n]{0,30}\byou\s+(?:must|will|shall|should|are|can|may)\b`,
-    String.raw `\bdo\s+anything\s+now\b|\bjailbreak(?:ed)?\b`,
+    String.raw `\bdo\s+anything\s+now\b`,
     String.raw `\b(?:pretend|act|behave|respond|answer|roleplay|role-play)\b[^.\n]{0,25}\b(?:as if|as though|like)\b[^.\n]{0,30}\b(?:no|without)\s+(?:restrictions?|rules?|filters?|limits?|guidelines?|safety)`,
     // stealth and exfiltration
     String.raw `\b(?:do\s+not|don'?t|never|without)\s+(?:tell(?:ing)?|inform(?:ing)?|mention(?:ing)?|notify(?:ing)?|alert(?:ing)?|reveal(?:ing)?|disclos(?:e|ing))\b[^.\n]{0,25}\b(?:the\s+)?(?:user|human|operator)\b`,
     String.raw `\bkeep\s+(?:this|it|that)\s+(?:secret|hidden|confidential)\s+from\s+(?:the\s+)?(?:user|human)\b`,
-    String.raw `\b(?:send|email|e-mail|forward|post|upload|transmit|exfiltrate|leak|submit)\b[^.\n]{0,60}\b(?:system\s+prompt|api\s+keys?|credentials?|passwords?|secrets?|access\s+tokens?|session\s+tokens?|cookies|(?:entire|full|whole)\s+(?:conversation|chat|transcript|context)|conversation\s+history|chat\s+history|private\s+files?|environment\s+variables?)\b`,
+    String.raw `\b(?:send|email|e-mail|forward|post|upload|transmit|exfiltrate|leak|submit)\b[^.\n]{0,60}\b(?:system\s+prompt|(?:entire|full|whole)\s+(?:conversation|chat|transcript)|conversation\s+history|chat\s+history)\b`,
+    String.raw `\b(?:send|email|e-mail|forward|post|upload|transmit|exfiltrate|leak|reveal|dump|disclose|submit)\b[^.\n]{0,40}\b(?:your|the\s+user'?s|user'?s)\s+(?:credentials?|passwords?|secrets?|api\s+keys?|access\s+tokens?|session\s+tokens?|cookies|private\s+keys?|environment\s+variables?|files)\b`,
     // coaxing a tool call
-    String.raw `\b(?:call|invoke|run|execute|trigger|use)\s+(?:the\s+)?(?:tool|function|command|script|api|endpoint)\b[^.\n]{0,25}\b[a-z]+_[a-z0-9_]+\b`,
+    String.raw `\b(?:call|invoke|run|execute|trigger|use)\s+(?:the\s+)?tool\b[^.\n]{0,25}\b[a-z]+_[a-z0-9_]+\b`,
     String.raw `\b(?:delete|drop|wipe|erase|destroy)_(?:all|everything|data|database|users?|records?)\b`,
-    String.raw `\b(?:call|invoke|run|execute)\s+(?:the\s+)?[a-z]+_[a-z0-9_]+\s*\(`,
+    String.raw `\b(?:call|invoke|run|execute)\s+(?:the\s+)?(?:function\s+|command\s+)?[a-z]+_[a-z0-9_]+\s*\(`,
     // other languages
     String.raw `\bignor(?:ez|er|e|ons)\b[^.\n]{0,40}\b(?:instructions?|consignes?|directives?)\b`,
     String.raw `\bignorier(?:e|en|t|st)?\b[^.\n]{0,40}\b(?:anweisungen|instruktionen|vorgaben|befehle|regeln)\b`,
