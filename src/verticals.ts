@@ -304,7 +304,7 @@ export const SUBTYPES: SubType[] = [
     notes: {
       vocabulary: ['load', 'capacity', 'lane', 'shipper', 'carrier network', 'rate quote', 'spot and contract rates', 'booking', 'payment terms', 'empty return'],
       buyerRoles: ['Head of Logistics', 'Transport Procurement Manager', 'Chief Operating Officer', 'Fleet or Carrier Owner', 'Dispatcher', 'Head of Finance', 'Head of IT'],
-      committee: 'On the shipper side the Head of Logistics or procurement signs and transport planners book loads; on the carrier side the owner or dispatcher decides; finance checks payment terms and invoices; IT checks the links to order and transport systems.',
+      committee: 'The shipper\'s Head of Logistics or transport procurement lead signs; the transport planning lead champions it and books loads; carrier owners and dispatchers use it daily and decide whether to stay on the platform; finance checks payment terms and invoices; IT checks the links to order and transport systems.',
       objections: [
         { objection: 'We have our own carriers and rate contracts', response: 'Position the marketplace for the loads the contracts do not cover (peaks, new lanes, empty runs) and compare on those loads using the buyer\'s recent bookings.' },
         { objection: 'Quality and reliability of carriers on the platform', response: 'Show how carriers are verified, rated and tracked, and let the buyer set rules on who may take its loads.' },
