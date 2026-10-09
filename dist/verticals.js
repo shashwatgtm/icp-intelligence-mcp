@@ -1762,12 +1762,12 @@ function tradeDomain(whole) {
     return best;
 }
 function tradeSoftware(whole) {
-    const m = [TRADE_FIRST.exec(whole), TRADE_FOR.exec(whole)].filter((x) => !!x).sort((a, b) => a.index - b.index)[0];
+    const m = [whole.match(TRADE_FIRST), whole.match(TRADE_FOR)].filter((x) => !!x).sort((a, b) => (a.index ?? 0) - (b.index ?? 0))[0];
     if (!m)
         return null;
     if (categoryHits(whole).some((h) => h.st.vertical !== 'vertical-saas' && h.st.vertical !== 'saas'))
         return null;
-    return { word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index };
+    return { word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index ?? 0 };
 }
 function firstIn(whole, words) {
     const low = whole.toLowerCase();

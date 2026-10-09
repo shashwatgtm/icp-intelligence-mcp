@@ -1762,10 +1762,10 @@ function tradeDomain(whole: string): { word: string; index: number; n: number } 
   return best;
 }
 function tradeSoftware(whole: string): { word: string; index: number } | null {
-  const m = [TRADE_FIRST.exec(whole), TRADE_FOR.exec(whole)].filter((x): x is RegExpExecArray => !!x).sort((a, b) => a.index - b.index)[0];
+  const m = [whole.match(TRADE_FIRST), whole.match(TRADE_FOR)].filter((x): x is RegExpMatchArray => !!x).sort((a, b) => (a.index ?? 0) - (b.index ?? 0))[0];
   if (!m) return null;
   if (categoryHits(whole).some((h) => h.st.vertical !== 'vertical-saas' && h.st.vertical !== 'saas')) return null;
-  return { word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index };
+  return { word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index ?? 0 };
 }
 function firstIn(whole: string, words: string[]): number {
   const low = whole.toLowerCase();
