@@ -7,7 +7,8 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { neutraliseDeep } from './echo-safe.ts';
-import { VERTICALS, explainSector, detectModel, profileFor, MODEL_NAME, BUSINESS_MODELS, type Vertical, type BusinessModel } from './verticals.ts';
+import { gapAnalysis, pointsFor, splitStatements } from './rw-icp.ts';
+import { SAAS_ONLY, VERTICALS, explainSector, detectModel, profileFor, MODEL_NAME, BUSINESS_MODELS, type Vertical, type BusinessModel } from './verticals.ts';
 
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -502,7 +503,8 @@ function isTitleItem(item: string): boolean {
 }
 // A list typed in one field: items joined with "; " or new lines, and sentences ending in ". " before a capital. Never cut inside a number.
 function sentencesOrItems(text: string): string[] {
-  return String(text || '').split(/;\s+|\n+/).flatMap((x) => sentences(x)).map((x) => x.trim()).filter(Boolean);
+  // Run 22: quote and bracket aware (src/rw-icp.ts), so a customer quote with a semicolon inside it is one statement
+  return splitStatements(text);
 }
 const GENERIC_WORDS = new Set(['and', 'the', 'for', 'with', 'from', 'that', 'this', 'services', 'service', 'solutions', 'solution', 'business', 'businesses', 'company', 'companies', 'customers', 'customer', 'platform', 'global', 'leading', 'large', 'small', 'size', 'sized', 'technology', 'digital', 'systems', 'system', 'industry', 'industries', 'across', 'more', 'than', 'years', 'page', 'claim', 'case', 'study', 'title', 'home', 'quote', 'words']);
 // Whole words only, lightly stemmed ("banks" and "banking" are "bank"; "portfolios" is "portfolio" but not "portfolio manager").
@@ -1039,13 +1041,30 @@ This tool will analyze patterns across your customers to identify your ideal pro
             values: c.values || ['High fit', 'Medium fit', 'Low fit']
           }))
         : defaultCriteria;
-      // Run 19 D80 (problem 5): example points for each value the user listed. The first value scores the full weight, the last
-      // scores 0, the ones between in even steps (rounded); a single value scores the full weight, or 0 when it does not apply.
-      // The weights and the bands are unchanged. The default criteria already carry their own points.
+      // Run 22 rewrite (clear error fixed, listed in the report): the example points no longer follow the order the user typed a list of NAMED
+      // targets in (that gave the last segment or role listed 0 points). Weights and tier bands are unchanged. A list that is ordered by nature
+      // (ranges, yes or no, timelines) keeps the preset steps: the first value scores the full weight, the last 0, even steps between. A list of
+      // named targets scores the full weight for each name, and a closing "none" or "other" scores 0. A single value scores the full weight, or 0
+      // when it does not apply. The default criteria already carry their own points.
       const userGiven = !!(args.scoring_criteria && args.scoring_criteria.length > 0);
-      const withPoints = (c: { weight: number; values: string[] }) => !userGiven ? c.values
-        : c.values.length === 1 ? [`${c.values[0]} (${c.weight} pts; 0 if not)`]
-        : c.values.map((v, i) => `${v} (${Math.round(c.weight * (c.values.length - 1 - i) / (c.values.length - 1))} pts)`);
+      const kindOf = (c: { criterion: string; weight: number; values: string[] }) => pointsFor(c.criterion, c.values, c.weight, userGiven);
+      // a long value is not repeated in a table cell: the cell names it, and its full wording is printed once below
+      const LONG_VALUE = 90;
+      const valueLabel = (c: { criterion: string; values: string[] }, v2: string) => {
+        if (v2.length <= LONG_VALUE) return v2;
+        const longOnes = c.values.filter(x => x.length > LONG_VALUE);
+        return `the ${c.criterion} statement${longOnes.length > 1 ? ` ${longOnes.indexOf(v2) + 1}` : ''} (full wording below)`;
+      };
+      const plainLabel = (c: { criterion: string; values: string[] }, v2: string) => valueLabel(c, v2).replace(/ \(full wording below\)$/, '');
+      const withPoints = (c: { criterion: string; weight: number; values: string[] }) => {
+        if (!userGiven) return c.values;
+        const pf = kindOf(c);
+        const labels = c.values.map(v2 => valueLabel(c, v2));
+        const inFull = (l: string) => l.endsWith('(full wording below)');
+        if (pf.kind === 'single') return [inFull(labels[0]) ? `${labels[0]}: ${c.weight} pts if it applies, 0 if not` : `${labels[0]} (${c.weight} pts; 0 if not)`];
+        const out = labels.map((l, i) => (inFull(l) ? `${l}: ${pf.points[i]} pts` : `${l} (${pf.points[i]} pts)`));
+        return pf.kind === 'named' && !pf.closing ? [...out, 'Anything not listed above (0 pts)'] : out;
+      };
       // Run 19 D80 (problem 3): the success pattern is matched against the criteria given, by their words.
       const corrWords = new Set(correlations.toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length > 2 && !['the', 'and', 'with', 'who', 'most', 'more', 'deals', 'customers', 'close', 'faster', 'renew', 'than', 'that', 'have', 'has', 'are', 'for'].includes(w)));
       const matched = criteria.filter(c => [c.criterion, ...c.values].join(' ').toLowerCase().split(/[^a-z0-9]+/).some(w => w.length > 2 && corrWords.has(w)));
@@ -1057,7 +1076,8 @@ This tool will analyze patterns across your customers to identify your ideal pro
         ? `This pattern is already a criterion: ${andList(m.map(c => `**${c.criterion}**`))}. If it holds in your closed deals, make ${m.length === 1 ? 'it' : 'them'} critical.`
         : 'This pattern is not yet one of your criteria: add it as a criterion if it holds in your closed deals.'; };
       const notes = sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'objections'], args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
-      const fitSide = buyerSide(ctx.v && !isHorizontal(ctx.v) ? ctx.v : null, args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
+      // Run 22: fit signals come only from the sector read from what the seller sells; a sector guessed from a buyer word (a bank as customer) is not applied
+      const fitSide: { bv: Vertical | null; name: string } = ctx.v && !isHorizontal(ctx.v) ? { bv: ctx.v, name: ctx.v.name } : { bv: null, name: '' };
       // Run 20 round 1: the tier actions and answer times follow the business model (a services or connectivity sale does not run on
       // a 24 hour demo). They stay examples; the bands and the points are unchanged.
       const TIERS: Record<string, [string, string, string, string, string, string, string, string]> = {
@@ -1080,8 +1100,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
       const hitKeys = new Set(proofHits.map(h => `${h.criterion}|${h.value}`));
       const notFound = proofItems.length ? criteria.flatMap(c => c.values.filter(val => !hitKeys.has(`${c.criterion}|${val}`) && !nameMatched(c)).map(val => ({ criterion: c.criterion, value: val }))).filter(x => x.value.length <= 80) : [];
       const proofKind = (t: string) => /\((?:customer|partner|analyst|client) quote\)|customer words/i.test(t) ? 'a customer statement' : /page claim|case study|story title|ebook|home page|award|recogni|leader|gartner|forrester|named|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
-      const longValues = criteria.flatMap(c => c.values.filter(v2 => v2.length > 130).map(v2 => ({ criterion: c.criterion, value: v2 })));
-      const cellValue = (v2: string) => (v2.length > 130 ? `${clauseHead(v2, 100)} (full wording below)` : v2);
+      const longValues = criteria.flatMap(c => c.values.filter(v2 => v2.length > LONG_VALUE).map(v2 => ({ criterion: c.criterion, value: v2 })));
 
       // D30: the qualification tiers are bands of the maximum score (sum of criteria weights),
       // not fixed points, so they stay correct when the weights are not the 100-point default.
@@ -1092,6 +1111,23 @@ This tool will analyze patterns across your customers to identify your ideal pro
       const tierBHi = tierALo - 1;
       const tierCHi = tierBLo - 1;
       const tierDHi = tierCLo - 1;
+
+      // Run 22 rewrite: how the example points were given, said once and only for the kinds of list that were given.
+      const gradedNames = userGiven ? criteria.filter(c => kindOf(c).kind === 'graded').map(c => c.criterion) : [];
+      const namedNames = userGiven ? criteria.filter(c => kindOf(c).kind === 'named').map(c => c.criterion) : [];
+      const singleNames = userGiven ? criteria.filter(c => kindOf(c).kind === 'single').map(c => c.criterion) : [];
+      const pointsExplained = userGiven ? [
+        namedNames.length ? `For ${andList(namedNames)}, you listed the customers or roles you want, so every value you listed scores the full weight and a prospect that matches none of them scores 0. These points do not rank your targets against each other: if your closed deals show that one scores better, lower the others.` : '',
+        gradedNames.length ? `For ${andList(gradedNames)}, the values run in an order (a range, yes or no, a timeline), so the first value you listed scores the full weight, the last scores 0, and the values between score even steps; list each of these criteria's values from best fit to worst fit.` : '',
+        singleNames.length ? `${andList(singleNames)} ${singleNames.length === 1 ? 'has' : 'have'} one value, which scores its full weight when it applies and 0 when it does not.` : '',
+      ].filter(Boolean).join(' ') : '';
+      const noValues = userGiven ? criteria.filter(c => !(args.scoring_criteria || []).find(x => (x.criterion || '') === c.criterion)?.values?.length).map(c => c.criterion) : [];
+      const askFor: string[] = [];
+      if (!userGiven) askFor.push('scoring_criteria, each with an importance and the values you score (it would change the whole model: the criteria, weights and points above are an example, not yours)');
+      if (noValues.length) askFor.push(`the values you score for ${andList(noValues)} (it would change the scorecard, which is empty for ${noValues.length === 1 ? 'it' : 'them'})`);
+      if (!correlations.trim()) askFor.push('success_correlation, what your best customers have in common (it would change which values the evidence says to score highest)');
+      if (!(args.product_category && args.product_category.trim())) askFor.push('product_category, what you sell (it would change the sector notes, the fit signals and the wording of the tier actions)');
+      if (!(typeof args.company === 'string' && args.company.trim())) askFor.push('company (it would put your company name on the model)');
 
       return `# ICP Scoring Model
 
@@ -1123,8 +1159,8 @@ ${EXAMPLES} Every point value and band below is an example.
 
 | Criterion | Weight | Scoring Values |
 |-----------|--------|----------------|
-${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.length ? withPoints({ ...c, values: c.values.map(cellValue) }).join(' / ') : 'no values supplied: add the values you score'} |`).join('\n')}
-${userGiven ? '\nPoints per value: the first value you listed scores the full weight, the last scores 0, and the values between score even steps, so list each criterion\'s values from best fit to worst fit. They are examples to adjust.\n' : ''}${longValues.length ? `\n**Full wording of the long values**:\n${longValues.map(x => `- ${x.criterion}: ${x.value}`).join('\n')}\n` : ''}
+${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.length ? withPoints(c).join(' / ') : 'no values supplied: add the values you score'} |`).join('\n')}
+${pointsExplained ? `\n${pointsExplained} All of these points are examples to adjust.\n` : ''}${longValues.length ? `\n**Full wording of the long values**:\n${longValues.map(x => `- ${x.criterion}: ${x.value}`).join('\n')}\n` : ''}
 **Maximum Score**: ${maxScore} points ${EXAMPLE}
 
 ---
@@ -1149,7 +1185,7 @@ The bands are 80%, 60% and 40% of your maximum score of ${maxScore} points.${ctx
 
 ${criteria.map(c => `
 **${c.criterion}** (Max: ${c.weight} pts)
-${c.values.length ? withPoints({ ...c, values: c.values.map(cellValue) }).map((v) => `☐ ${v}`).join('\n') : '☐ no values supplied: add the values you score'}
+${c.values.length ? withPoints(c).map((v) => `☐ ${v}`).join('\n') : '☐ no values supplied: add the values you score'}
 Score: ___ / ${c.weight}
 `).join('\n')}
 
@@ -1163,8 +1199,8 @@ Score: ___ / ${c.weight}
 ${proofItems.length ? `## Evidence in Your Success Pattern
 
 Each statement you gave, and what it can do for the model:
-${proofItems.map(it => `- ${q(shortText(it, 300))}: ${proofKind(it)}`).join('\n')}
-${proofHits.length ? `\n**Where your evidence names a value you score** (consider giving it the top points, then check it against your closed deals):\n${proofHits.slice(0, 6).map(h => `- ${h.criterion}, ${q(clauseHead(h.value, 80))}: named in ${q(shortText(h.item, 160))}`).join('\n')}\n` : '\nNone of your criterion values is named in these statements, so the evidence does not yet tell you which value to score highest.\n'}${notFound.length ? `\n**Not found in your evidence**: ${notFound.slice(0, 8).map(x => `${q(clauseHead(x.value, 60))} (${x.criterion})`).join('; ')}.\n` : ''}
+${proofItems.map(it => `- ${q(shortText(it, 600))}: ${proofKind(it)}`).join('\n')}
+${proofHits.length ? `\n**Where your evidence names a value you score** (consider giving it the top points, then check it against your closed deals):\n${proofHits.slice(0, 6).map(h => { const c = criteria.find(x => x.criterion === h.criterion); return `- ${h.criterion}, ${q(c ? plainLabel(c, h.value) : h.value)}: named in ${q(shortText(h.item, 400))}`; }).join('\n')}\n` : '\nNone of your criterion values is named in these statements, so the evidence does not yet tell you which value to score highest.\n'}${notFound.length ? `\n**Not found in your evidence**: ${notFound.slice(0, 8).map(x => `${q(x.value)} (${x.criterion})`).join('; ')}.\n` : ''}
 Use page claims and recognition as messaging, not as scoring evidence: score only what you can see in your closed-won and closed-lost deals.
 
 ---
@@ -1179,10 +1215,10 @@ ${fitSide.bv.discovery.slice(0, 4).map((x, i) => `${i + 1}. ${x}`).join('\n')}
 ` : ''}## Implementation Guide
 
 ### In your CRM
-1. Create custom field for each criterion
-2. Create formula field for total score
-3. Create automation rules for tier assignment
-4. Create dashboard to track score distribution
+1. Create one field for each of your ${criteria.length === 1 ? 'criterion' : `${criteria.length} criteria`}: ${andList(criteria.map(c => c.criterion))}
+2. Create a formula field that adds the points (maximum ${maxScore})
+3. Create automation rules that set the tier from the bands above
+4. Create a dashboard of how many accounts sit in each tier
 
 ### Score Validation Process
 - **Weekly**: Review closed-won deals for scoring accuracy
@@ -1190,11 +1226,7 @@ ${fitSide.bv.discovery.slice(0, 4).map((x, i) => `${i + 1}. ${x}`).join('\n')}
 - **Quarterly**: Full model review with sales leadership
 
 ### Red Flags (review before you qualify)
-Even high scores should be reviewed if:
-- [ ] No clear problem/need identified
-- [ ] Competitor locked in with multi-year contract
-- [ ] Decision maker not accessible
-- [ ] Budget cycle misaligned by >6 months ${EXAMPLE}${ctx.v ? `\n\nObjections that are red flags in ${ctx.v.name}: ${ctx.v.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Check for them before an account scores high.` : ''}
+Even a high score should be reviewed if there is no clear problem or need, a competitor is locked in with a multi-year contract, the decision maker is not accessible, or the budget cycle is more than 6 months away ${EXAMPLE}.${ctx.v ? `\n\nObjections that are red flags in ${ctx.v.name}: ${ctx.v.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Check for them before an account scores high.` : ''}
 
 ---
 
@@ -1210,7 +1242,7 @@ Add these fields to your CRM to improve scoring over time:
 | Trigger Event | Text | Identify timing signals |
 | Competitor | Picklist | Track displacement success |
 
-${notes ? `${notes}\n\n` : ''}**Next Step**: Use \`buyer_group_analyzer\` to map decision-making dynamics
+${notes ? `${notes}\n\n` : ''}${askFor.length ? `To sharpen this, give:\n${askFor.map(x => `- ${x}`).join('\n')}\n\n` : ''}**Next Step**: Use \`buyer_group_analyzer\` to map decision-making dynamics
 
 ${SUGGESTED}
 `;
@@ -2334,43 +2366,13 @@ ${SUGGESTED}
       company?: string;
       business_model?: string;
     }) => {
+      // Run 22 rewrite: the two profiles are read in parts by src/rw-icp.ts and compared against each other's whole text. The sector is
+      // read exactly as before (the old parser still feeds the sector reader, so the sector line does not change).
       const ctx0 = { cur: parseProfile(args.current_customers), idl: parseProfile(args.ideal_icp) };
       const ctx = readContext(args.business_model, { seller: [productWords(args.product_category, args.company)], context: [args.company], role: agreedRoles([...ctx0.cur.roles, ...ctx0.idl.roles], [args.ideal_icp, args.current_customers]), buyer: [args.ideal_icp, args.current_customers] });
-      // Run 20 round 1 (quality): the two profiles are read in parts (who they are, size, buyer role, problem) and compared part by part.
-      // Every part is the user's own words; a part only one profile states is named as a question to check, never filled in.
-      const cur = ctx0.cur;
-      const idl = ctx0.idl;
-      const addSizes = (base: string[], extra: string[]) => [...base, ...extra.filter(e => !base.some(b => b.toLowerCase().includes(e.toLowerCase())))];
-      const curSizes = addSizes(cur.sizes, sizesIn(args.current_customers));
-      const idlSizes = addSizes(idl.sizes, sizesIn(args.ideal_icp));
-      const dims: Array<{ name: string; label: string; noun: string; c: string[]; i: string[] }> = [
-        { name: 'segments', label: 'Industries or segments', noun: 'industries or segments', c: cur.segments, i: idl.segments },
-        { name: 'size', label: 'Company size', noun: 'company size', c: curSizes, i: idlSizes },
-        { name: 'buyer role', label: 'Buyer or champion role', noun: 'a buyer or champion role', c: cur.roles, i: idl.roles },
-        { name: 'problem', label: 'Problem or trigger', noun: 'the problem or trigger', c: cur.problems, i: idl.problems },
-        { name: 'description', label: 'Other description', noun: 'this description', c: cur.rest, i: idl.rest },
-      ].filter(d => d.c.length || d.i.length);
-      const cell = (a: string[]) => (a.length ? a.map(x => clauseHead(x, 90)).join('; ') : 'not stated');
-      const reading = (d: { name: string; noun: string; c: string[]; i: string[] }) => {
-        if (d.name === 'description' && !d.c.length) return 'Only the ideal profile mentions this. Check how many of your current customers have it.';
-        if (d.name === 'description' && !d.i.length) return 'Only the current base mentions this. Check whether it still belongs in the ideal profile.';
-        if (d.c.length && !d.i.length) return `Your ideal profile does not state ${d.noun}, so your current base cannot be checked against it. Add what you want.`;
-        if (!d.c.length && d.i.length) return `Your current base does not state ${d.noun}. Look it up for your current customers (CRM) and compare it with the ideal profile.`;
-        const ov = overlap(d.c, d.i);
-        if (!ov.onlyA.length && !ov.onlyB.length && !ov.related.length) return `Same in both: no gap on ${d.name}.`;
-        return `${ov.both.length ? `In both: ${ov.both.map(x => clauseHead(x, 70)).join('; ')}. ` : ov.related.length ? '' : 'Nothing in common. '}${ov.related.length ? `Related wording: ${ov.related.map(([x, y]) => `${clauseHead(x, 60)} (current) and ${clauseHead(y, 60)} (ideal)`).join('; ')}. ` : ''}${ov.onlyA.length ? `Only in the current base: ${ov.onlyA.map(x => clauseHead(x, 70)).join('; ')}. ` : ''}${ov.onlyB.length ? `Only in the ideal profile: ${ov.onlyB.map(x => clauseHead(x, 70)).join('; ')}.` : ''}`.trim();
-      };
-      const segOverlap = overlap(cur.segments, idl.segments);
-      // A segment of the current base is called outside the ideal profile only when the ideal profile is a list of segments that shares at least
-      // one with the base and is not open ended ("and other industries"); otherwise the two lists are not comparable.
-      const comparable = idl.segments.length > 0 && (segOverlap.both.length + segOverlap.related.length) > 0 && !/\b(?:other|all|any) (?:industries|sectors|segments|verticals)\b/i.test(args.ideal_icp);
-      const currentOnlySegments = comparable ? segOverlap.onlyA : [];
-      const idealOnlySegments = cur.segments.length ? segOverlap.onlyB : idl.segments;
-      const { bv: sectorV, name: sideName } = buyerSide(ctx.v, idl.roles, cur.roles, args.product_category);
-      const idealRoleChecks = sectorV ? idl.roles.map(r => { const m = bestRole(aliasRole(r, sectorV), sectorV.buyerRoles); return m ? `${r} matches a role usual in ${sideName} (${m})` : `${r} is not among the roles listed for ${sideName} (${sectorV.buyerRoles.slice(0, 4).join(', ')}); check who signs in your won deals`; }) : [];
-      const namedRoles = [...cur.roles, ...idl.roles].map(r => aliasRole(r, sectorV));
-      const roleGaps = sectorV ? sectorV.buyerRoles.filter(r => !namedRoles.some(n => sameRole(n, r))).slice(0, 4) : [];
-      const idealSizes = sizesIn(args.ideal_icp);
+      // The role check and the plan use the sector read from what the seller sells; a sector guessed from a buyer title alone is not applied.
+      const sectorV = ctx.v && !isHorizontal(ctx.v) ? ctx.v : null;
+      const sideName = sectorV ? sectorV.name : '';
       const pricingAction = ctx.model === 'services' ? 'Add a scope or service tier for larger clients (more services, locations or hours)'
         : ctx.model === 'connectivity' ? 'Price multi-site contracts so larger customers can add sites and links in one agreement'
         : ctx.model === 'investment' ? 'Offer mandate terms that fit larger allocators (reporting, fee structure)'
@@ -2381,6 +2383,7 @@ ${SUGGESTED}
 
       // Run 20 round 1: a metric is compared only when you gave both its current and its target value. The old code filled the missing
       // side with preset figures (a 20% win rate, a 15% churn, a $50,000 target ACV) and rated gaps on them; those were invented numbers.
+      // Run 22: the arithmetic below is unchanged.
       const pairs = {
         acv: [current.avg_acv, target.avg_acv], cycle: [current.avg_sales_cycle, target.avg_sales_cycle],
         winRate: [current.win_rate, target.win_rate], churn: [current.churn_rate, target.churn_rate], nps: [current.nps, target.nps],
@@ -2405,146 +2408,59 @@ ${SUGGESTED}
       const upGap = (g: string, word: string) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) === 0 ? 'target met, no change needed' : parseFloat(g) >= 0 ? `+${g}% ${word}needed` : `already above target, no ${word || 'increase '}needed`);
       const downGap = (g: string, word: string) => (g === 'n/a' ? `no percentage: today's value is 0` : parseFloat(g) === 0 ? 'target met, no change needed' : parseFloat(g) >= 0 ? (word ? `${g}% ${word}needed` : `-${g}% needed`) : `target is ${-parseFloat(g)}% above today, no ${word || 'reduction '}needed`);
       const behind = (g: string) => g !== 'n/a' && parseFloat(g) > 0;
-      // With both values given and no gap, there is nothing to fix on that metric
-      const noGap = (k: string) => has2(k) && gaps[k] !== 'n/a' && parseFloat(gaps[k]) <= 0;
-      const NO_GAP = 'No gap: you are at or better than your target on this metric, so there is nothing to fix here.\n';
       const anyMetric = Object.keys(pairs).some(k => pairs[k][0] != null || pairs[k][1] != null);
       const money = (n: number) => `$${n.toLocaleString('en-US')}`;
       const fmtV = (k: string, n: number | undefined) => n == null ? 'not supplied' : k === 'acv' ? money(n) : k === 'cycle' ? `${n} days` : k === 'nps' ? String(n) : cleanPct(n);
       const metricRow = (k: string, label: string, gapText: string, priority: string) => `| **${label}** | ${fmtV(k, pairs[k][0])} | ${fmtV(k, pairs[k][1])} | ${has2(k) ? gapText : 'needs both a current and a target value'} | ${has2(k) ? priority : 'Not rated'} |`;
-      const notCompared = [['acv', 'Avg ACV'], ['cycle', 'Sales Cycle'], ['winRate', 'Win Rate'], ['churn', 'Churn Rate'], ['nps', 'NPS']].filter(([k]) => !has2(k)).map(([, l]) => l);
-      const section = (k: string, title: string, gapText: string, body: string) => has2(k) ? `### ${title} (${gapText})\n${noGap(k) ? NO_GAP : body}\n` : '';
+      const rowSpec: Array<[string, string, string, string, boolean]> = [
+        ['acv', 'Avg ACV', upGap(gaps.acv, ''), sev(gaps.acv, 50, 25), behind(gaps.acv)],
+        ['cycle', 'Sales Cycle', downGap(gaps.cycle, ''), sev(gaps.cycle, 30, 15), behind(gaps.cycle)],
+        ['winRate', 'Win Rate', upGap(gaps.winRate, ''), sev(gaps.winRate, 40, 20), behind(gaps.winRate)],
+        ['churn', 'Churn Rate', downGap(gaps.churn, ''), sev(gaps.churn, 40, 20), behind(gaps.churn)],
+        ['nps', 'NPS', npsGap, sev(gaps.nps, 50, 25), npsPoints > 0],
+      ];
+      // only the metrics the user gave on at least one side get a row
+      const shown = rowSpec.filter(([k]) => pairs[k][0] != null || pairs[k][1] != null);
+      const metricTable = `| Metric | Current | Target | Gap | Priority |\n|--------|---------|--------|-----|----------|\n${shown.map(([k, label, gapText, priority]) => metricRow(k, label, gapText, priority)).join('\n')}`;
+      const metricRows = rowSpec.map(([k, label, gapText, priority, isBehind]) => ({ key: k, label, cur: fmtV(k, pairs[k][0]), tar: fmtV(k, pairs[k][1]), gap: gapText, priority, both: has2(k), behind: has2(k) && isBehind, met: has2(k) && !isBehind }));
+      const labelOf = (k: string) => rowSpec.find(r => r[0] === k)?.[1] || k;
+      const onlyOneSide = Object.keys(pairs).filter(k => (pairs[k][0] != null) !== (pairs[k][1] != null)).map(labelOf);
+      const notGivenAtAll = Object.keys(pairs).filter(k => pairs[k][0] == null && pairs[k][1] == null).map(labelOf);
+      const acvOnly = sectorV;
+      // the shared sector line, without its requests for inputs (the missing inputs are named once, at the end of the answer)
+      const contextLine = ctx.line.replace(/ \(describe your product, for example in product_category, for sector notes\)/, '').replace(/; set business_model \([^)]*\) for advice that fits it/, '').replace(/; set business_model to change it/g, '').replace(/, so describe what you sell for notes that fit it/, '');
       const targetAcv = pairs.acv[1];
+      const sectorNotesText = ctx.v ? sideNotes(ctx.v, ['committee', 'metrics', 'vocabulary', 'proof'], ctx0.idl.roles, ctx0.cur.roles, args.product_category) : '';
 
-      return `# ICP Gap Analysis
-
-## Profile Comparison
-
-- ${companyLine(args.company)}
-
-${ctx.line}
-
-### Current Customer Base
-> ${shortText(args.current_customers)}
-
-### Ideal Customer Profile (Target)
-> ${shortText(args.ideal_icp)}
-
-### What differs
-${dims.length ? `| Part | Current base | Ideal profile | Reading |
-|------|--------------|---------------|---------|
-${dims.map(d => `| **${d.label}** | ${cell(d.c)} | ${cell(d.i)} | ${reading(d)} |`).join('\n')}
-` : 'Neither text could be split into parts (industries, size, buyer role, problem). Describe each profile with those four parts, for example "mid-size banks, 500 to 2,000 employees, with the CFO as buyer, who face manual reconciliation".\n'}
-${currentOnlySegments.length ? `- **In your current base but not named in the ideal profile**: ${andList(currentOnlySegments.map(x => clauseHead(x, 60)))}. Check their win rate, ACV and churn before you decide to keep selling to them or to qualify them out.\n` : ''}${idealOnlySegments.length ? `- **Named in the ideal profile but not listed in your current base**: ${andList(idealOnlySegments.map(x => clauseHead(x, 60)))}. Check whether you have won, lost or never pursued deals there.\n` : ''}${idealRoleChecks.length ? `- **Buyer role check (${sideName})**: ${idealRoleChecks.join('; ')}.\n` : ''}${roleGaps.length ? `- **Roles usual in ${sideName} that neither profile names**: ${andList(roleGaps)}. Add the ones that sign or evaluate in your deals.\n` : ''}
----
-
-## Metric Gaps
-
-${anyMetric ? `${Object.keys(pairs).some(has2) ? '' : 'You gave no metric with both a current and a target value, so no gap can be computed. The values you gave are shown; add the missing side to see the gap.\n\n'}| Metric | Current | Target | Gap | Priority |
-|--------|---------|--------|-----|----------|
-${[metricRow('acv', 'Avg ACV', upGap(gaps.acv, ''), sev(gaps.acv, 50, 25)), metricRow('cycle', 'Sales Cycle', downGap(gaps.cycle, ''), sev(gaps.cycle, 30, 15)), metricRow('winRate', 'Win Rate', upGap(gaps.winRate, ''), sev(gaps.winRate, 40, 20)), metricRow('churn', 'Churn Rate', downGap(gaps.churn, ''), sev(gaps.churn, 40, 20)), metricRow('nps', 'NPS', npsGap, sev(gaps.nps, 50, 25))].join('\n')}
-
-${notCompared.length ? `Not compared (add both a current and a target value): ${notCompared.join(', ')}. This tool does not fill in preset figures for them.` : ''}` : `You supplied no metrics, so there is no metric gap to show. Add current_metrics and target_metrics (avg_acv, avg_sales_cycle, win_rate, churn_rate, nps) to compare them. This tool does not fill in preset figures.`}
-
----
-
-${Object.keys(pairs).some(has2) ? `## Gap Root Cause Analysis
-
-${section('acv', 'ACV Gap', upGap(gaps.acv, ''), `${behind(gaps.acv) ? '**Current**: Average deal value below your target\n' : ''}**Common causes to check**:
-- Selling to smaller companies or at lower price points
-- Targeting companies without budget
-- Not selling to decision-makers
-- Discounting too aggressively
-- Missing what larger customers need (features, service levels or coverage)
-
-**Actions**:
-- Tighten company size filter in ICP
-- Train on value-based selling
-- ${pricingAction}
-- Build reference customers in target segment`)}${section('cycle', 'Sales Cycle Gap', downGap(gaps.cycle, 'reduction '), `${behind(gaps.cycle) ? '**Current**: Deals taking too long to close\n' : ''}**Common causes to check**:
-- Unclear value proposition
-- Too many stakeholders involved
-- Missing champion support
-- Competitive displacement complex
-
-**Actions**:
-- Improve demo-to-close process
-- Identify and enable champions earlier
-- Create better competitive positioning
-- Streamline procurement requirements`)}${section('winRate', 'Win Rate Gap', upGap(gaps.winRate, 'improvement '), `${behind(gaps.winRate) ? '**Current**: Losing too many deals\n' : ''}**Common causes to check**:
-- Poor qualification upfront
-- Weak differentiation
-- Losing to status quo
-- Pricing not competitive
-
-**Actions**:
-- Implement stricter qualification (BANT/MEDDPICC)
-- Sharpen competitive battle cards
-- Quantify cost of inaction
-- Review pricing competitiveness`)}${section('churn', 'Churn Gap', downGap(gaps.churn, 'reduction '), `${behind(gaps.churn) ? '**Current**: Customers not staying\n' : ''}**Common causes to check**:
-- Wrong customers being sold
-- Poor onboarding
-- Value not realized
-- Better alternatives emerged
-
-**Actions**:
-- Stricter ICP qualification
-- Improve customer success handoff
-- Track time-to-value metrics
-- Implement early warning system`)}
----
-
-` : ''}## Recommended ICP Refinements
-
-Based on the comparison above, tighten your ICP on these parts. Every line comes from your two texts or your metrics; where they say nothing, the line says what to add.
-
-### Must-Have Criteria (Add These)
-1. **Company size**: ${idealSizes.length ? `${andList(idealSizes)} (from your ideal profile)` : idlSizes.length ? `${andList(idlSizes)} (words from your ideal profile; put a number on it, for example the smallest employee count among your best customers)` : 'not stated in your ideal profile: add the smallest size among your best customers'}
-2. **Buyer or champion**: ${idl.roles.length ? `${andList(idl.roles)} (from your ideal profile)` : 'not stated in your ideal profile: add the role that signs and the role that champions'}
-3. **Problem**: ${idl.problems.length ? `${andList(idl.problems.map(x => q(shortText(x, 300))))} (from your ideal profile): qualify on it in the first call` : 'not stated in your ideal profile: add the problem your best customers had before they bought'}
-4. **Segments**: ${idl.segments.length ? `${andList(idl.segments)} (from your ideal profile)` : 'not named in your ideal profile: add the industries you want more of'}
-${idl.rest.length ? `5. **Other qualifiers in your ideal profile**: ${andList(idl.rest.map(x => q(shortText(x, 160))))}\n` : ''}${idl.claims.length || cur.claims.length ? `\nStatements from a page, kept apart and not used as qualifiers: ${andList([...idl.claims, ...cur.claims].map(x => q(shortText(x, 160))))}.\n` : ''}${targetAcv != null ? `${idl.rest.length ? '6' : '5'}. **Budget**: a deal value near your target ACV of ${money(targetAcv)} (${acvNoun(ctx.model)})\n` : ''}
-### Disqualification Criteria (Add These)
-${(() => { const d = [
-  currentOnlySegments.length ? `**Segments outside the ideal profile**: ${andList(currentOnlySegments.map(x => clauseHead(x, 60)))}, once their win rate, ACV and churn confirm they are weaker` : '',
-  idlSizes.length ? `**Size**: companies outside ${andList(idlSizes)}` : '',
-  idl.roles.length ? `**No path to the buyer**: no access to ${andList(idl.roles)} or an equivalent` : '',
-  idl.problems.length ? `**No sign of the problem**: ${q(shortText(idl.problems[0], 200))} is not present` : '',
-  targetAcv != null ? `**Budget below your target**: a buyer whose budget is well under your target ACV of ${money(targetAcv)}` : ''].filter(Boolean);
-  return d.length ? d.map((x, i) => `${i + 1}. ${x}`).join('\n') : 'Your inputs give no size, buyer role, problem, segment or target ACV to disqualify on. Add them to get disqualifiers built from your own figures.'; })()}
-
----
-
-## 30-Day Action Plan
-
-### Week 1: Qualification
-- [ ] Update ICP documentation with new criteria
-- [ ] Train sales team on updated qualification
-- [ ] Add disqualification fields to CRM
-- [ ] Review current pipeline against new ICP
-
-### Week 2: Targeting
-- [ ] Update lead lists with tighter criteria
-- [ ] Revise outbound messaging for ideal segment
-- [ ] Create content for ideal ICP pain points
-- [ ] Adjust paid targeting parameters
-
-### Week 3: Enablement
-- [ ] Create ideal customer case studies
-- [ ] Update sales deck for target segment
-- [ ] Build ROI calculator for target ACV
-- [ ] Train CSM on ideal customer success metrics
-
-### Week 4: Measurement
-- [ ] Set up ICP fit scoring in CRM
-- [ ] Create dashboard for ICP metrics
-- [ ] Review first month of ICP-qualified leads
-- [ ] Adjust based on initial data
-
-${ctx.v ? `${sideNotes(ctx.v, ['committee', 'metrics', 'vocabulary', 'proof'], idl.roles, cur.roles, args.product_category)}\n\n` : ''}**Next Step**: Use \`icp_evolution_tracker\` to monitor ICP changes over time
-
-${SUGGESTED}
-`;
+      return gapAnalysis(args.current_customers, args.ideal_icp, {
+        company: typeof args.company === 'string' ? args.company.trim() : '',
+        companyLine: typeof args.company === 'string' && args.company.trim() ? `**Company**: ${args.company.trim()}` : '**Company**: not given',
+        contextLine,
+        sectorName: sectorV ? sideName : '',
+        sectorRoles: sectorV ? sectorV.buyerRoles : [],
+        sectorNotes: sectorNotesText,
+        // an objection about seats or a trial is a software subscription objection: the plan leaves it out, because the business model can be read wrongly from the text
+        sectorObjections: acvOnly ? acvOnly.objections.filter(o => !SAAS_ONLY.test(o.objection)).map(o => lowerCommonWords(o.objection)) : [],
+        sectorProof: acvOnly ? acvOnly.proofShape : '',
+        sectorMetrics: acvOnly ? acvOnly.metrics : [],
+        modelKnown: !!ctx.model,
+        pricingAction,
+        acvNoun: acvNoun(ctx.model),
+        money,
+        targetAcv,
+        metricTable,
+        metricRows,
+        anyMetric,
+        anyPair: Object.keys(pairs).some(has2),
+        onlyOneSide,
+        notGivenAtAll,
+        productGiven: !!(args.product_category && args.product_category.trim()),
+        modelGiven: !!args.business_model || (!!ctx.model && !/assumed/.test(ctx.line)),
+        bestRole: (a, list) => bestRole(a, list),
+        aliasRole: (r) => aliasRole(r, sectorV),
+        sameRole: (a, b) => sameRole(a, b),
+        planNote: '',
+      });
     }
   },
 

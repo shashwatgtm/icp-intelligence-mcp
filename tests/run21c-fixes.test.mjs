@@ -29,7 +29,7 @@ test("an ideal profile 'organizations that need to secure X, ... who face Y' tak
     ideal_icp: "organizations that need to secure workforce and customer identities, with the CISO as the buyer, who face identity attacks that go unseen while access is left unmanaged",
     current_metrics: { avg_acv: 150000, churn_rate: 12 },
   });
-  const m = t.match(/\*\*Problem\*\*: "([^"]+)"/);
+  const m = t.match(/### Problem[\s\S]*?\n- \u201c([^\u201d]+)\u201d/);   // run 22: the problem is listed under its own heading
   assert.ok(m, "no problem line");
   assert.doesNotMatch(m[1], /need to secure workforce/);
   assert.match(m[1], /identity attacks that go unseen/);
