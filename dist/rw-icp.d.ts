@@ -1,3 +1,4 @@
+import type { Vertical } from './verticals.ts';
 export declare function listText(items: string[]): string;
 export declare function coverage(item: string, text: string): number;
 export interface ProfileRead {
@@ -69,4 +70,7 @@ export declare function pointsFor(criterion: string, values: string[], weight: n
     closing: boolean;
 };
 export declare function splitStatements(text: string): string[];
+export declare function clearVertical(v: Vertical | null, sellerText: string): Vertical | null;
+export declare function aliasNamed(value: string, statement: string): boolean;
+export declare function fitQuestions(v: Vertical, productText: string): string[];
 //# sourceMappingURL=rw-icp.d.ts.map
