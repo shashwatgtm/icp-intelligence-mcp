@@ -17,12 +17,13 @@
 // support, tickets, a help desk, a contact centre or a service desk (aiUseCase). A seller that manages money gets
 // INVESTMENT_PROFILE through profileFor(vertical, model, ...texts), whatever sector it was read in.
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BUYER_CONTEXTS = exports.SAAS_ONLY = exports.MODEL_TRADES = exports.SECTOR_MODEL = exports.MODEL_NAME = exports.BUSINESS_MODELS = exports.BILLING_PROFILE = exports.INVESTMENT_PROFILE = exports.AI_SUPPORT_PROFILE = exports.SUBTYPES = exports.VERTICALS = void 0;
+exports.BUYER_CONTEXTS = exports.SAAS_ONLY = exports.MODEL_TRADES = exports.SECTOR_MODEL = exports.MODEL_NAME = exports.BUSINESS_MODELS = exports.BUYER_LENS = exports.BILLING_PROFILE = exports.INVESTMENT_PROFILE = exports.AI_SUPPORT_PROFILE = exports.SUBTYPES = exports.VERTICALS = void 0;
 exports.aiUseCase = aiUseCase;
 exports.isBillingSeller = isBillingSeller;
 exports.profileFor = profileFor;
 exports.explainSector = explainSector;
 exports.detectVertical = detectVertical;
+exports.buyerLens = buyerLens;
 exports.detectModel = detectModel;
 exports.buyerContextFor = buyerContextFor;
 exports.VERTICALS = [
@@ -221,7 +222,7 @@ exports.VERTICALS = [
     },
     {
         id: 'saas', name: 'SaaS',
-        match: /\b(saas|software as a service|subscriptions?|b2b software|crm|billing|invoicing|dunning|prorat\w*|revenue recognition|moneti[sz]\w*|usage-based (?:pricing|billing)|metered billing|pricing and packaging|quote-to-cash|product analytics|product-led|plg|customer success|revenue operations|revops|sales enablement|marketing automation|churn|net revenue retention|applicant tracking|recruit(?:ing|ment) (?:platform|software|tools?)|survey (?:platform|tool|software)|form builders?|e-?signatures?|contract management|employee engagement)\b/i,
+        match: /\b(saas|software as a service|subscriptions?|b2b software|crm|billing|invoicing|dunning|prorat\w*|revenue recognition|moneti[sz]\w*|usage-based (?:pricing|billing)|metered billing|pricing and packaging|quote-to-cash|product analytics|product-led|plg|customer success|revenue operations|revops|sales enablement|marketing automation|churn|net revenue retention|applicant tracking|recruit(?:ing|ment) (?:platform|software|tools?)|survey (?:platform|tool|software)|form builders?|e-?signatures?|contract management|employee engagement|locali[sz]ation (?:platforms?|management|software|tools?)|(?:software|app|website|content) locali[sz]ation|translation (?:management|platforms?|software|tools?)|i18n)\b/i,
         weak: /\b(software|platform)\b/i,
         vocabulary: ['onboarding', 'time to value', 'renewal', 'integration', 'admin controls', 'single sign on', 'seats', 'trial', 'usage', 'security review'],
         buyerRoles: ['Head of the function that uses it', 'VP Operations', 'Head of IT', 'Chief Financial Officer', 'Head of Procurement'],
@@ -1262,7 +1263,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'email-security', vertical: 'cybersecurity', name: 'email security',
-        match: /\b(?:email security|e.mail security|secure email gateway|anti.phishing|phishing (?:protection|simulation|defen[cs]e|detection)|business email compromise|email threat protection|email filtering|email encryption|security awareness training)\b/i,
+        match: /\b(?:email security|e.mail security|secure email gateway|anti.phishing|phishing (?:protection|simulation|defen[cs]e|detection)|business email compromise|email threat protection|email filtering|email encryption)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['phishing', 'business email compromise', 'malicious attachment', 'spoofing', 'impersonation', 'quarantine', 'secure email gateway', 'user reporting', 'awareness training', 'mailbox'],
@@ -1283,6 +1284,32 @@ exports.SUBTYPES = [
                 'How do staff report suspicious mail, and who handles those reports?',
                 'Which teams are targeted most (finance, executives, support)?',
                 'How would you judge a trial a success?',
+            ],
+        },
+    },
+    {
+        id: 'awareness-training', vertical: 'cybersecurity', name: 'security awareness and human risk',
+        match: /\b(?:security awareness(?: training| platform| programme| program)?|awareness training|human risk(?: management)?|phishing training|security culture|behaviou?r change (?:training|platform))\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['security awareness', 'human risk', 'user reporting', 'behaviour change', 'repeat clickers', 'adaptive training', 'security champions', 'suspicious message', 'completion', 'employee privacy'],
+            buyerRoles: ['CISO', 'Head of Security Awareness', 'Head of Security Operations', 'Head of HR or Learning and Development', 'Head of Risk and Compliance', 'Head of IT'],
+            committee: 'The CISO or the head of security awareness signs; the awareness or security operations lead champions it; HR or learning and development checks how training reaches staff; IT handles the identity and mail links; legal and employee representatives check what is recorded about each person.',
+            objections: [
+                { objection: 'Our staff already do a yearly course', response: 'Show that a yearly course and steady practice do different jobs, and measure real reports and risky clicks over time rather than course completion.' },
+                { objection: 'Employees will feel watched or tricked', response: 'Explain what is recorded about each person, who sees it and how practice messages are framed, and agree the rules with HR and employee representatives before launch.' },
+                { objection: 'It takes staff away from their work', response: 'Show short sessions tied to real mistakes, the time per person per month, and pilot with one team first.' },
+                { objection: 'Our email security already catches phishing', response: 'Email security and awareness do different jobs: show the messages that still reach staff and how many of them get reported.' },
+            ],
+            salesMotion: 'CISO or security awareness led, often after an incident or an audit finding; a pilot with a few departments, then a company wide rollout with HR and legal involved early.',
+            metrics: ['user report rate', 'repeat risky clicks', 'time to report a suspicious message', 'share of staff who took part in practice', 'reports that were real threats', 'time spent per person', 'analyst time per reported message'],
+            proofShape: 'Report rate and risky click rate for a group before and after a set period, with the length of the period and the size of the group stated.',
+            discovery: [
+                'How do you train staff on phishing and social engineering today, and how often?',
+                'What happened the last time a staff member clicked on something they should not have?',
+                'How do staff report a suspicious message, and who handles those reports?',
+                'Which groups carry the most risk (finance, executives, new joiners, support)?',
+                'How would you judge a pilot a success, and who has to agree?',
             ],
         },
     },
@@ -1858,6 +1885,38 @@ function explainSector(...args) {
  * later groups are used only when the earlier ones name no sector. Broad words alone never name a sector. */
 function detectVertical(...args) {
     return explainSector(...args).vertical;
+}
+exports.BUYER_LENS = [
+    { id: 'financial', name: 'financial services', match: /\b(?:bfsi|banks?|banking|financial services?|lend(?:ing|ers?)|insurers?|insurance|fintech|credit unions?|nbfc|payments? (?:technology|companies|providers?))\b/i,
+        words: ['regulator', 'audit trail', 'customer data', 'access permissions', 'model risk', 'third party review'],
+        checks: ['Where would your customer data sit with a vendor like this, who could see it, and what would your regulator or auditor ask to see?', 'Which of your existing controls and approvals would this have to respect, and who signs them off?', 'If a model or rule decides something about a customer, how is that decision explained and reviewed here?', 'Which employees may see which customer records today, and how would a new tool respect those permissions?'] },
+    { id: 'retail', name: 'retail and e-commerce', match: /\b(?:retail\w*|e-?commerce|d2c|online (?:stores?|sellers?|shops?)|marketplaces? sellers?|merchants?)\b/i,
+        words: ['sale day', 'orders', 'returns', 'checkout', 'channels', 'stock'],
+        checks: ['How does your business cope on a sale day, when order volumes jump, and where does it strain first?', 'Which of your channels (your own site, marketplaces, stores) would this touch first?', 'How do returns and failed orders reach you today?'] },
+    { id: 'consumer-goods', name: 'consumer goods and distribution', match: /\b(?:fmcg|consumer goods|beverages?|food and drink|distributors?|route to market|trade marketing)\b/i,
+        words: ['outlets', 'distributors', 'secondary sales', 'beat plan', 'trade scheme', 'stock out'],
+        checks: ['How do your people work in outlets with a weak signal, and how do the distributor\'s own records fit in?', 'Who in the field would use this every day, and what do they do when it is slow?'] },
+    { id: 'education', name: 'education', match: /\b(?:education|schools?|colleges?|universit\w+|edtech|institutes?|coaching|students?|admissions?)\b/i,
+        words: ['enquiries', 'admissions', 'counsellors', 'applications', 'intake', 'fee reminders'],
+        checks: ['How do enquiries and applications reach your counsellors today, and how soon is each one followed up?', 'Who sees a student\'s record across admissions, fees and communication, and who may change it?'] },
+    { id: 'manufacturing', name: 'manufacturing', match: /\b(?:manufactur\w*|factor(?:y|ies)|plants?|industrial|shop floor)\b/i,
+        words: ['plant', 'shift', 'suppliers', 'work orders', 'downtime', 'quality checks'],
+        checks: ['Which plant systems do you already run, and who keeps the links between them working?', 'What happens on your shop floor when a system is down for an hour?'] },
+    { id: 'automotive', name: 'automotive', match: /\b(?:automotive|automobiles?|auto (?:makers?|parts)|vehicles? makers?|oems?|dealers?hips?)\b/i,
+        words: ['plants', 'suppliers', 'dealers', 'inbound parts', 'line stoppage', 'shipments'],
+        checks: ['Which of your plants, suppliers and dealers would be involved, not just one of them?', 'How do you find out today that a late part will stop a line?'] },
+    { id: 'construction', name: 'construction and infrastructure', match: /\b(?:construction|civil|infrastructure|contractors?|builders?|real estate developers?)\b/i,
+        words: ['job cost', 'change orders', 'subcontractors', 'site', 'pay applications', 'daily logs'],
+        checks: ['How do your people work on a site with a weak signal and many subcontractors?', 'How does the field record reach the job cost and the ledger today, and where is it keyed twice?'] },
+    { id: 'software', name: 'software and technology', match: /\b(?:b2b saas|saas and software|software (?:companies|vendors|teams)|technology companies|tech companies|software)\b/i,
+        words: ['release', 'product teams', 'engineering', 'platform', 'roadmap', 'incidents'],
+        checks: ['Which product or platform teams in your company would use it, and where does it meet your release process?', 'What would your engineers need to see before they trust it?'] },
+];
+/** The buyer's industry as typed ("BFSI", "Education", "SMB online retailers and D2C brands"), or null when it matches none of the entries. */
+function buyerLens(industry) {
+    if (typeof industry !== 'string' || !industry.trim())
+        return null;
+    return exports.BUYER_LENS.find((b) => b.match.test(industry)) || null;
 }
 exports.BUSINESS_MODELS = ['saas', 'services', 'connectivity', 'transactions', 'marketplace', 'hardware_software', 'investment'];
 exports.MODEL_NAME = {

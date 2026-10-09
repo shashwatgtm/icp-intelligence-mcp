@@ -189,7 +189,7 @@ test("an open ended ideal profile does not put the current segments outside it; 
 
 // ---- round 2 (judge faults of the first rewrite) ----
 test("round 2: a list of teams before 'at <companies>' is people, never a segment; 'enterprise software' is not a company size", async () => {
-  const out = await call({ company: "Brightwave", product_category: "continuous localization and translation management platform from Brightwave",
+  const out = await call({ company: "Brightwave", product_category: "an approach to helping teams do their best work together, from Brightwave",
     current_customers: "Brightwave customers: enterprise software, financial services, web and mobile apps. The metric figures sent are hypothetical.",
     ideal_icp: "product, engineering, localization and marketing teams at software companies and global enterprises, with localization manager as the buyer, who face spreadsheets and manual work" });
   assert.doesNotMatch(out, /product and engineering/i, "teams read as a segment");

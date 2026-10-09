@@ -154,7 +154,7 @@ test("round 2: fit signals for a voice and messaging seller include a voice ques
   const fit = voice.slice(voice.indexOf("## Fit Signals"), voice.indexOf("## Implementation Guide"));
   assert.match(fit, /voice|call/i, "no voice question in the fit signals");
   assert.match(voice, /Every value in such a list scores the same, so the model does not rank your targets against each other yet/);
-  const none = await call({ company: "Brightwave", product_category: "continuous localization and translation management platform from Brightwave",
+  const none = await call({ company: "Brightwave", product_category: "an approach to helping teams do their best work together, from Brightwave",
     scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Software", "Banks"] }] });
   assert.match(none, /Sector: the product text you gave names none of the sectors/);
   assert.doesNotMatch(none, /describe your product, for example in product_category/);

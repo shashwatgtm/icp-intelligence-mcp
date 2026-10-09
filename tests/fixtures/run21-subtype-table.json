@@ -721,6 +721,20 @@
    "subtype": "hotel-lodging",
    "model": "saas",
    "id": "st-r22-4"
+  },
+  {
+   "id": "st-r22-aw1",
+   "text": "A human risk platform that automates adaptive phishing training for staff and measures how often they report suspicious messages",
+   "sector": "cybersecurity",
+   "subtype": "awareness-training",
+   "model": "saas"
+  },
+  {
+   "id": "st-r22-aw2",
+   "text": "Security awareness training for employees with short practice sessions and a dashboard of repeat clickers",
+   "sector": "cybersecurity",
+   "subtype": "awareness-training",
+   "model": "saas"
   }
  ]
 }

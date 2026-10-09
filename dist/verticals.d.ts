@@ -79,6 +79,16 @@ export declare function explainSector(...args: unknown[]): {
  * which are free text about the deal, which are job titles and which say who the buyer is. The seller's words come first; the
  * later groups are used only when the earlier ones name no sector. Broad words alone never name a sector. */
 export declare function detectVertical(...args: unknown[]): Vertical | null;
+export interface BuyerLens {
+    id: string;
+    name: string;
+    match: RegExp;
+    words: string[];
+    checks: string[];
+}
+export declare const BUYER_LENS: BuyerLens[];
+/** The buyer's industry as typed ("BFSI", "Education", "SMB online retailers and D2C brands"), or null when it matches none of the entries. */
+export declare function buyerLens(industry: unknown): BuyerLens | null;
 export type BusinessModel = 'saas' | 'services' | 'connectivity' | 'transactions' | 'marketplace' | 'hardware_software' | 'investment';
 export declare const BUSINESS_MODELS: BusinessModel[];
 export declare const MODEL_NAME: Record<BusinessModel, string>;
