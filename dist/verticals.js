@@ -767,7 +767,7 @@ exports.SUBTYPES = [
         },
     },
     {
-        id: 'hotel-hospitality', vertical: 'vertical-saas', name: 'hotels and hospitality operations',
+        id: 'hotel-lodging', vertical: 'vertical-saas', name: 'hotels and lodging operations',
         match: /\b(?:hotel (?:management|operating|software|pms)|hospitality (?:management|software|platform)|operating system (?:built |made |designed )?(?:for|to power) (?:modern |boutique |independent )?(?:hotels|hospitality)|channel managers?|pms)\b/i,
         model: 'saas',
         notes: {
@@ -1641,7 +1641,7 @@ function categoryHits(seller, whole = seller) {
             st = GENERIC_PAYROLL;
         // Run 22: a "property management system" next to hotel words is a hotel system (front desk, housekeeping), not rent and leases: it is read as the hotel kind.
         if (st.id === 'property-management' && HOTEL_WORDS.test(whole) && !LEASE_WORDS.test(whole))
-            st = exports.SUBTYPES.find((x) => x.id === 'hotel-hospitality') ?? st;
+            st = exports.SUBTYPES.find((x) => x.id === 'hotel-lodging') ?? st;
         out.push({ st, word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index, end: m.index + m[0].length });
     }
     return out.sort((a, b) => a.index - b.index);
