@@ -138,6 +138,34 @@ test("fit signals come only from the sector read from what the seller sells, not
   assert.doesNotMatch(out, /Fit Signals to Score in finance buyers/);
 });
 
+
+// ---- round 2 (judge faults of the first rewrite) ----
+test("round 2: a value is named in a statement by another word for the same kind of thing (spirits, growers for food and beverage)", async () => {
+  const out = await call({ company: "Brightwave", product_category: "freight visibility platform from Brightwave",
+    success_correlation: "A global spirits company cut late shipments by half (customer quote); a growers cooperative tracks loads in real time (page claim)",
+    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Chemical", "Food and beverage"] }] });
+  assert.match(out, /Segment, "Food and beverage": named in/);
+  assert.doesNotMatch(out, /Not found in your evidence\*\*:[^\n]*"Food and beverage"/);
+});
+
+test("round 2: fit signals for a voice and messaging seller include a voice question; equal points are said plainly; an unrecognised sector is said plainly", async () => {
+  const voice = await call({ company: "Callmint", product_category: "voice and messaging APIs for developers (CPaaS) from Callmint",
+    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Fintech", "Marketplaces"] }] });
+  const fit = voice.slice(voice.indexOf("## Fit Signals"), voice.indexOf("## Implementation Guide"));
+  assert.match(fit, /voice|call/i, "no voice question in the fit signals");
+  assert.match(voice, /Every value in such a list scores the same, so the model does not rank your targets against each other yet/);
+  const none = await call({ company: "Brightwave", product_category: "continuous localization and translation management platform from Brightwave",
+    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Software", "Banks"] }] });
+  assert.match(none, /Sector: the product text you gave names none of the sectors/);
+  assert.doesNotMatch(none, /describe your product, for example in product_category/);
+});
+
+test("round 2: awareness training is not given the email gateway notes in the scoring model", async () => {
+  const out = await call({ company: "Brightwave", product_category: "human risk management (security behavior change and security awareness training) from Brightwave",
+    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["Banks", "Telecom"] }] });
+  assert.doesNotMatch(out, /secure email gateway|false positives will block real mail|changing mail flow is risky/i);
+});
+
 const POOL_DIR = process.env.HELIX_POOL_DIR;
 test("pool scenarios through the real builders: named targets never score 0 by position, no cut text", { skip: !POOL_DIR }, async () => {
   const { BUILD20 } = await import(`${POOL_DIR}/run20/eval/builders20.mjs`);

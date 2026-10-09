@@ -9,6 +9,7 @@
 // Sector facts come only from src/verticals.ts (rule B82); this file holds cue words (places, size words, aliases), no statistic or company.
 // Hostile or odd text is only ever quoted in the user's own words; it is never followed (the echo safeguard has already run).
 
+import { VERTICALS, SUBTYPES } from './verticals.ts';
 import type { Vertical } from './verticals.ts';
 
 // ---------------------------------------------------------------------------
@@ -55,8 +56,8 @@ const sentenceSplit = (t: string) => protect(t).split(/(?<=[a-z0-9)"'%”])\.\s+
 // ---------------------------------------------------------------------------
 // cue words (no statistic, no company): size words, places, aliases, generic nouns
 // ---------------------------------------------------------------------------
-const SIZE_WORD = /\b(?:mid-?size[d]?|mid-?market|medium(?:-sized)?|large(?:r)?|small(?:er)?|smbs?|msmes?|smes?|startups?|start-ups?|scale-ups?|enterprises?|multi[- ]location|multi[- ]site|solo|boutique|fortune \d+|forbes global \d+|hyper-growth|growth stage|growth-stage)\b/gi;
-const SIZE_ONLY = /\b(?:mid-?size[d]?|mid-?market|medium(?:-sized)?|large(?:r)?|small(?:er)?|smbs?|msmes?|smes?|startups?|start-ups?|scale-ups?|enterprises?|solo|fortune \d+|forbes global \d+|hyper-growth|growth stage|growth-stage)\b/i;
+const SIZE_WORD = /\b(?:mid-?size[d]?|mid-?market|medium(?:-sized)?|large(?:r)?|small(?:er)?|smbs?|msmes?|smes?|startups?|start-ups?|scale-ups?|enterprises?(?!\s+(?:software|solutions?|saas|tools?|platforms?|apps?|applications?|systems?|technology|it|security|sales|data|resource|content|search|storage|mobility|ai|architecture|grade|class|edition|plan|licen[cs]es?))|multi[- ]location|multi[- ]site|solo|boutique|fortune \d+|forbes global \d+|hyper-growth|growth stage|growth-stage)\b/gi;
+const SIZE_ONLY = /\b(?:mid-?size[d]?|mid-?market|medium(?:-sized)?|large(?:r)?|small(?:er)?|smbs?|msmes?|smes?|startups?|start-ups?|scale-ups?|enterprises?(?!\s+(?:software|solutions?|saas|tools?|platforms?|apps?|applications?|systems?|technology|it|security|sales|data|resource|content|search|storage|mobility|ai|architecture|grade|class|edition|plan|licen[cs]es?))|solo|fortune \d+|forbes global \d+|hyper-growth|growth stage|growth-stage)\b/i;
 const EMPLOYEE_RANGE = /\b\d[\d,]*\s*(?:to|-|–)\s*\d[\d,]*\s+(?:employees|sites|branches|locations|stores|outlets|seats|users|properties|parcels|shipments)\b(?:\s+a\s+(?:month|year|day))?|\b(?:under|over|more than|fewer than|up to|at least)\s+\d[\d,]*\s+(?:employees|sites|branches|locations|stores|outlets)\b|\b\d[\d,]*\+\s+(?:employees|sites|branches|locations|stores|outlets)\b/gi;
 const PLACES = ['India', 'China', 'Japan', 'Singapore', 'Indonesia', 'Malaysia', 'Vietnam', 'Thailand', 'Philippines', 'Pakistan', 'Bangladesh', 'Sri Lanka', 'Nepal', 'Australia', 'New Zealand', 'Canada', 'Mexico', 'Brazil', 'Argentina', 'Chile', 'Colombia', 'United States', 'USA', 'US', 'U.S.', 'United Kingdom', 'UK', 'Ireland', 'France', 'Germany', 'Spain', 'Italy', 'Netherlands', 'Belgium', 'Sweden', 'Norway', 'Denmark', 'Finland', 'Poland', 'Switzerland', 'Austria', 'Portugal', 'Turkey', 'Israel', 'Saudi Arabia', 'UAE', 'United Arab Emirates', 'Egypt', 'Nigeria', 'Kenya', 'South Africa', 'Europe', 'EMEA', 'MENA', 'APAC', 'LATAM', 'Latin America', 'North America', 'South Asia', 'Southeast Asia', 'Middle East', 'Africa', 'Asia', 'Asia Pacific', 'the Middle East', 'the Midwest', 'the Nordics', 'Midwest', 'Nordics', 'Gulf', 'the Gulf', 'Northeast', 'Southeast', 'Southwest', 'West Coast', 'East Coast', 'Texas', 'California', 'Ontario', 'Maharashtra', 'Karnataka'];
 const PLACE_RE = new RegExp(`\\b(?:in|across|throughout|within|from)\\s+(?:the\\s+)?(${PLACES.filter((p) => !/^the /.test(p)).sort((a, b) => b.length - a.length).map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'gi');
@@ -70,10 +71,11 @@ const ALIASES: string[][] = [
   ['fintech', 'fintechs', 'paytech', 'payments'],
   ['bfsi', 'insurance', 'insurer', 'insurers', 'insurtech'],
   ['telecom', 'telecoms', 'telecommunication', 'telecommunications', 'telco', 'telcos', 'communications', 'isp', 'isps', 'carrier', 'carriers'],
-  ['software', 'saas', 'tech', 'technology', 'it', 'developer', 'developers'],
+  ['software', 'saas', 'tech', 'technology'],
   ['ecommerce', 'e-commerce', 'ecom', 'online', 'webstore', 'webshop', 'dtc', 'd2c'],
   ['retail', 'retailer', 'retailers', 'store', 'stores', 'shop', 'shops', 'merchant', 'merchants', 'supermarket', 'supermarkets'],
-  ['auto', 'automotive', 'automobile', 'automobiles', 'vehicle', 'vehicles', 'mobility', 'oem', 'oems'],
+  ['auto', 'automotive', 'automobile', 'automobiles', 'vehicle', 'vehicles', 'oem', 'oems'],
+  ['food', 'beverage', 'beverages', 'spirits', 'wine', 'wines', 'drinks', 'brewery', 'distillery', 'grower', 'growers', 'farm', 'farms', 'agricultural', 'agriculture', 'dairy', 'snack', 'snacks', 'cooperative'],
   ['cpg', 'fmcg', 'packaged', 'grocery', 'groceries', 'beverage', 'beverages', 'food'],
   ['education', 'edtech', 'edu', 'learning', 'school', 'schools', 'university', 'universities'],
   ['gaming', 'games', 'game', 'gamer'],
@@ -272,7 +274,7 @@ function readTarget(clause: string, res: ProfileRead, listForm: boolean): void {
   const items: string[] = [];
   let pieces = splitTop(c, /[,]/).map((x) => x.replace(/^and\s+/i, ''));
   // "sales, marketing and customer service teams that manage leads": single words before a team noun belong to the team phrase
-  const teamAt = pieces.findIndex((p, i) => i > 0 && TEAM_END.test(noDot(p.split(/\s+(?:that|who|which)\b/i)[0])) && pieces.slice(0, i).every((q) => q.split(/\s+/).length <= 2));
+  const teamAt = pieces.findIndex((p, i) => i > 0 && TEAM_END.test(noDot(p.split(/\s+(?:that|who|which|at|within)\s/i)[0])) && pieces.slice(0, i).every((q) => q.split(/\s+/).length <= 2));
   if (teamAt > 0) pieces = [pieces.slice(0, teamAt + 1).join(', '), ...pieces.slice(teamAt + 1)];
   pieces.forEach((p, idx) => {
     // the last piece of a short comma list "A, B and C": split the last "and" when both sides are short
@@ -282,7 +284,7 @@ function readTarget(clause: string, res: ProfileRead, listForm: boolean): void {
   const expanded: string[] = [];
   for (const it of items) {
     // "X and large Y" starts a new item
-    const parts = it.split(/\s+and\s+(?=(?:large|small|mid-?size[d]?|enterprise|global|regional|national|local|smb|multi)\b)/i);
+    const parts = it.split(/\s+and\s+(?=(?:large|small|mid-?size[d]?|enterprise|global|regional|national|local|smb|multi|other)\b)/i);
     for (const p of parts) {
       const inc = p.split(/\s+(?:including|such as|especially(?: in)?|in particular|particularly|plus)\s+/i);
       expanded.push(...inc);
@@ -296,11 +298,20 @@ function readTarget(clause: string, res: ProfileRead, listForm: boolean): void {
     // "<who> at <where>"
     const at = /^(.+?)\s+(?:at|within)\s+(.+)$/i.exec(it);
     if (at && TEAM_END.test(noDot(at[1])) ) { addTeam(res, at[1]); readTarget(at[2], res, listForm); continue; }
+    // "other project stakeholders in the construction industry": the industry is the segment, the people are a team
+    const ind = /^(.*?)\s+(?:in|across)\s+the\s+([A-Za-z&' -]{3,40}?)\s+(?:industry|sector|space|market)$/i.exec(it);
+    if (ind && ind[1].split(/\s+/).length <= 8) {
+      res.segments.push(`${ind[2].trim()} industry`);
+      const left = squash(ind[1].replace(/^other\s+/i, ''));
+      if (left && TEAM_END.test(left)) addTeam(res, ind[1]);
+      else if (left && !res.segments.some((x) => x.toLowerCase() === left.toLowerCase())) res.segments.push(ind[1]);
+      continue;
+    }
     // "<org words> in <industry list item>"
     const inn = /^(.*?\b(?:compan(?:y|ies)|enterprises?|businesses|firms|organi[sz]ations|customers|brands|teams|institutions)\b)\s+(?:in|across)\s+([A-Za-z][A-Za-z&'\- ]{2,50})$/i.exec(it);
     if (inn && !/\d/.test(inn[2]) && inn[2].split(/\s+/).length <= 6) {
       for (const sw of inn[1].match(SIZE_WORD) || []) res.sizes.push(sw);
-      res.segments.push(inn[2].trim());
+      if (!/^(?:all |any |other |various |many |different |every )?(?:industr(?:y|ies)|sectors?|markets?|verticals?|segments?)$/i.test(inn[2].trim())) res.segments.push(inn[2].trim());
       continue;
     }
     if (TEAM_END.test(noDot(it.split(/\s+(?:that|who|which)\b/i)[0]).replace(/\s*\([^)]*\)$/, '')) && !/\b(?:founders?|owners?)$/i.test(it) && it.split(/\s+/).length <= 14) { addTeam(res, it); continue; }
@@ -402,22 +413,25 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
   // ---------- segments: each side against the whole text of the other ----------
   const curSeg = cur.segments;
   const idlSeg = idl.segments;
-  const curNamed = curSeg.filter((s) => coverage(s, idlAll) >= 0.5);
-  const curPartly = curSeg.filter((s) => { const c = coverage(s, idlAll); return c > 0 && c < 0.5; });
+  // an ideal profile that names no industry cannot name one of the current industries: nothing is called named, partly named or missing then
+  const curNamed = idlSeg.length ? curSeg.filter((s) => coverage(s, idlAll) >= 0.5) : [];
+  const curPartly = idlSeg.length ? curSeg.filter((s) => { const c = coverage(s, idlAll); return c > 0 && c < 0.5; }) : [];
   const idlNotInBase = idlSeg.filter((s) => coverage(s, curAll) < 0.5);
   const idlSubsNotInBase = idl.subs.filter((x) => coverage(x.sub, curAll) === 0 && !idlSeg.some((s) => coverage(x.sub, s) >= 1 && s !== x.main));
   const idealNamesIndustries = idlSeg.length > 0;
   // when the ideal profile names no industry, no industry of the base can be called missing from it
   const openEndedIdeal = /\b(?:other|all|any) (?:industries|sectors|segments|verticals)\b|\bacross (?:all )?industries\b|\bevery (?:industry|sector)\b/i.test(idlAll);
-  const curMissing = idealNamesIndustries && !openEndedIdeal ? curSeg.filter((s) => coverage(s, idlAll) === 0) : [];
+  const missingList = idealNamesIndustries && !openEndedIdeal ? curSeg.filter((s) => coverage(s, idlAll) === 0) : [];
+  // when no current item shares a word with the ideal profile, the two lists may describe different things (kinds of project against kinds of company)
+  const noSharedWording = missingList.length > 0 && missingList.length === curSeg.length;
+  const curMissing = noSharedWording ? [] : missingList;
   // the ideal profile can be compared by segment only when it names kinds of customer
   const comparable = idealNamesIndustries && curSeg.length > 0 && !openEndedIdeal;
   const openEnded = idealNamesIndustries && !comparable && curSeg.length > 0;
 
   // ---------- roles ----------
   const roleAlt = roleAlternatives(d.sectorRoles);
-  const roleCheck = (r: string) => {
-    if (!d.sectorName || !d.sectorRoles.length) return '';
+  const findRole = (r: string): string | undefined => {
     const alts = r.split(/\s+or\s+/i).map((x) => x.trim()).filter(Boolean);
     let m: string | undefined;
     for (const a of [r, ...alts]) { m = d.bestRole(d.aliasRole(a), roleAlt); if (m) break; }
@@ -426,7 +440,18 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
       const main = (x: string) => x.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter((w) => w.length >= 2 && !ROLE_STOP.has(w));
       const mine = main(r);
       if (mine.length) m = roleAlt.find((a) => { const t = main(a); return mine.every((w) => t.includes(w)) && !/\bchief\b/i.test(a); });
+      else {
+        // a bare title such as "President" is in a longer sector title ("President of the contractor")
+        const raw = (x: string) => x.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter((w) => w && !['of', 'the', 'and', 'or'].includes(w));
+        const mineRaw = raw(r);
+        if (mineRaw.length) m = roleAlt.find((a) => { const t = raw(a); return mineRaw.every((w) => t.includes(w)) && !/\bchief\b/i.test(a); });
+      }
     }
+    return m;
+  };
+  const roleCheck = (r: string) => {
+    if (!d.sectorName || !d.sectorRoles.length) return '';
+    const m = findRole(r);
     if (m) {
       const whole = d.sectorRoles.find((s) => s === m || roleAlternatives([s]).includes(m as string)) || m;
       return whole.toLowerCase() === r.toLowerCase() ? `${r} is one of the roles usual in ${d.sectorName}` : `${r} is one of the roles usual in ${d.sectorName} (${whole})`;
@@ -434,7 +459,7 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
     return `${r} is not one of the roles usually listed for ${d.sectorName} (${d.sectorRoles.slice(0, 4).join(', ')}), so confirm in your won deals that this title signs`;
   };
   const namedRoles = [...cur.roles, ...idl.roles].map((r) => d.aliasRole(r));
-  const roleGaps = d.sectorRoles.filter((r) => !namedRoles.some((n) => roleAlternatives([r]).some((a) => d.sameRole(n, a)))).slice(0, 4);
+  const roleGaps = d.sectorRoles.filter((r) => !namedRoles.some((n) => { const alt = roleAlternatives([r]); const m = findRole(cleanRole(n)); return (!!m && alt.includes(m)) || alt.some((a) => d.sameRole(n, a)); })).slice(0, 4);
 
   const L: string[] = [];
   const push = (...x: string[]) => L.push(...x);
@@ -447,7 +472,8 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
   if (curSeg.length && idealNamesIndustries) {
     const baseText = curSeg.length <= 3 ? `lists ${listText(curSeg.map(cleanSeg))}` : `lists ${curSeg.length} kinds of customer`;
     const newText = listText(groupSubs(idlNotInBase, idlSubsNotInBase));
-    bottom.push(`Your current base ${baseText}. Your ideal profile ${curNamed.length === curSeg.length ? (curSeg.length > 1 ? 'names all of them' : 'names it too') : curNamed.length ? (curNamed.length <= 2 ? `names ${listText(curNamed.map(cleanSeg))}` : `names ${curNamed.length} of them`) : 'names none of them in the same words'}${newText ? `, and also names ${newText}, which your current base does not list` : ''}.`);
+    if (noSharedWording) bottom.push(`Your current base ${baseText}, and your ideal profile uses other words for the customers it wants, so the two lists may describe different things.`);
+    else bottom.push(`Your current base ${baseText}. Your ideal profile ${curNamed.length === curSeg.length ? (curSeg.length > 1 ? 'names all of them' : 'names it too') : curNamed.length ? (curNamed.length <= 2 ? `names ${listText(curNamed.map(cleanSeg))}` : `names ${curNamed.length} of them`) : 'uses other words, so the two lists may describe different things'}${newText ? `, and also names ${newText}, which your current base does not list` : ''}.`);
   } else if (curSeg.length) {
     const how = idl.descr.length ? `; it describes the customers by what they do or need (${listText(idl.descr.map(quote))})` : idl.teams.length ? `; it describes the people you sell to (${listText(idl.teams.map((x) => clip(x)))})` : '';
     bottom.push(`Your current base lists ${listText(curSeg.map(cleanSeg))}. Your ideal profile names no industry${how}, so it does not yet say which of these industries to put first.`);
@@ -468,11 +494,12 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
   const seg: string[] = [];
   if (curNamed.length) seg.push(`- **Named in both**: ${curNamed.length === curSeg.length && curSeg.length > 3 ? `all ${curSeg.length} kinds of customer in your current base` : listText(curNamed.map(cleanSeg))}. ${curNamed.length === 1 ? 'It is' : 'They are'} already inside your ideal profile and the place to look first for proof.`);
   if (curPartly.length) seg.push(`- **Partly named in your ideal profile**: ${listText(curPartly.map(cleanSeg))}. Only some of the words are in your ideal profile, so decide whether it covers them.`);
+  if (noSharedWording) seg.push(`- **No shared wording**: your current base lists ${listText(missingList.map(cleanSeg))}, and your ideal profile names ${listText(idlSeg.map(cleanSeg))}. The two lists may describe different things (for example kinds of project against kinds of company), so look up in your CRM which of your current customers are the kinds your ideal profile names before you compare them.`);
   if (curMissing.length && idealNamesIndustries) {
     seg.push(`- **In your current base but not named in your ideal profile**: ${listText(curMissing.map(cleanSeg))}. ${comparable || openEnded || !idealNamesIndustries ? 'Check their win rate, ACV and churn. If they are weaker than the named segments, keep serving them but stop prospecting there; if they are as strong, add them to your ideal profile.' : 'Check their win rate, ACV and churn before you decide to keep prospecting there.'}`);
   }
   if (idlNotInBase.length || idlSubsNotInBase.length) {
-    seg.push(`- **Named in your ideal profile but not in your current base**: ${listText(groupSubs(idlNotInBase, idlSubsNotInBase))}. Check whether you have won, lost or never pursued deals there.`);
+    if (!noSharedWording) seg.push(`- **Named in your ideal profile but not in your current base**: ${listText(groupSubs(idlNotInBase, idlSubsNotInBase))}. Check whether you have won, lost or never pursued deals there.`);
   }
   if (openEndedIdeal && curSeg.length) seg.push('- **Open ended**: your ideal profile also covers other industries, so no industry in your current base is outside it. Use win rate, ACV and churn by industry to decide where to focus first.');
   if (!idealNamesIndustries && curSeg.length) seg.push(`- **Carried forward**: because your ideal profile names no industry, treat ${listText(curSeg.map(cleanSeg))} as the segments to prove first; they are where you already have customers.`);
@@ -487,7 +514,11 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
   if (idl.outside.length) seg.push(`- **Out of scope, in your words**: ${listText(idl.outside.map(quote))}. Treat these as not for this ICP.`);
   const oth = [...idl.other.map((x) => ({ x, w: 'ideal' })), ...cur.other.map((x) => ({ x, w: 'current' }))];
   if (oth.length) seg.push(`- **Other things you wrote, kept as you wrote them**: ${listText(oth.map((o) => quote(o.x)))}.`);
-  if (idl.claims.length || cur.claims.length) seg.push(`- **Statements from a page, kept apart and not used as qualifiers**: ${listText([...idl.claims, ...cur.claims].map(quote))}. Use them as messaging, not as proof of fit.`);
+  if (idl.claims.length || cur.claims.length) {
+    const all = [...idl.claims, ...cur.claims];
+    const conflict = claimConflicts(all);
+    seg.push(`- **Statements from a page, kept apart and not used as qualifiers**: ${listText(all.map(quote))}. Use them as messaging, not as proof of fit.${conflict.length ? ` These statements give different figures for the same thing (${listText(conflict)}), so do not quote any of those figures until you know which one is current.` : ''}`);
+  }
   if (!seg.length) seg.push('- Neither text could be split into industries, size, buyer or problem. Describe each profile in those four parts to get a comparison.');
   push(...seg, '');
 
@@ -586,6 +617,16 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
   return L.join('\n').replace(/\n{3,}/g, '\n\n') + '\n';
 }
 
+// page statements that give two different numbers for the same kind of thing ("2,000 enterprises" and "2,500 enterprises")
+function claimConflicts(claims: string[]): string[] {
+  const seen = new Map<string, string[]>();
+  for (const c of claims) for (const m of c.matchAll(/(\d[\d,]*)\+?\s+(enterprises|customers|companies|businesses|users|brands|clients|organi[sz]ations|properties|developers|merchants|teams)\b/gi)) {
+    const k = m[2].toLowerCase(); const list = seen.get(k) || [];
+    if (!list.includes(m[1])) list.push(m[1]);
+    seen.set(k, list);
+  }
+  return [...seen].filter(([, nums]) => nums.length > 1).map(([noun, nums]) => `${listText(nums)} ${noun}`);
+}
 // ideal segments missing from the base, with the bracket examples grouped under the segment they were listed in
 function groupSubs(segs: string[], subs: Array<{ main: string; sub: string }>): string[] {
   const out = segs.map(cleanSeg);
@@ -657,8 +698,8 @@ function plan(d: GapDeps, cur: ProfileRead, idl: ProfileRead, curSeg: string[], 
   const prob = idl.problems.length ? (idl.problems.length === 1 ? 'the problem you listed' : 'the problems you listed') : 'the problem you sell against';
   const gaps = d.metricRows.filter((m) => m.both && m.behind).map((m) => LABEL_TEXT[m.key] || m.label);
   const w1 = [`**Week 1, find out what is true.** Pull win rate, ACV and churn for ${curSeg.length ? listText(curSeg.slice(0, 6).map(cleanSeg)) : 'each segment you sell to'}.${curMissing.length ? ` Look first at ${listText(curMissing.map(cleanSeg))}, which your ideal profile does not name.` : ''} From your last won deals, write down the title that signed${idl.roles.length ? ` and compare it with ${buyer}` : ''}, and tag each deal with the problem it solved. Done when each segment has its three numbers and each won deal has a signer and a problem.`];
-  const w2 = [`**Week 2, build the list.** Make a target list for ${segText}${idl.places.length ? ` in ${listText(idl.places.map(placeText))}` : ''}${idlNotInBase.length ? `, with ${listText(idlNotInBase.map(cleanSeg))} as the new ground` : ''}, with a named ${idl.roles.length ? `contact (${buyer})` : 'contact'} for each account. Write one opening message per segment that starts from ${prob}. Done when every account on the list has a contact and a first message.`];
-  const w3: string[] = [`**Week 3, get ready to be asked.** Collect proof for ${segText} from your won deals${d.sectorProof ? `; in your sector a strong proof point is: ${noDot(d.sectorProof)}` : ''}.${d.sectorObjections.length ? ` Write short answers to the objections your buyers raise: ${d.sectorObjections.slice(0, 3).join('; ')}.` : ''} ${d.targetAcv != null ? `Check the price and scope against your target of ${d.money(d.targetAcv)}. ` : ''}${d.metricRows.some((m) => m.key === 'acv' && m.both && m.behind) ? 'Run the pricing step listed under the ACV gap. ' : ''}Done when each segment has one proof point and each objection has an answer.`.trim()];
+  const w2 = [`**Week 2, build the list.** Make a target list for ${segText}${idl.places.length ? ` in ${listText(idl.places.map(placeText))}` : ''}${idlNotInBase.length && idlNotInBase.length < segs.length ? `, with ${listText(idlNotInBase.map(cleanSeg))} as the new ground` : ''}, with a named ${idl.roles.length ? `contact (${buyer})` : 'contact'} for each account. Write one opening message per segment that starts from ${prob}. Done when every account on the list has a contact and a first message.`];
+  const w3: string[] = [`**Week 3, get ready to be asked.** Collect proof for each target segment from your won deals${d.sectorProof ? `; in your sector a strong proof point is: ${noDot(d.sectorProof)}` : ''}.${d.sectorObjections.length ? ` Write short answers to the objections your buyers raise: ${d.sectorObjections.slice(0, 3).join('; ')}.` : ''} ${d.targetAcv != null ? `Check the price and scope against your target of ${d.money(d.targetAcv)}. ` : ''}${d.metricRows.some((m) => m.key === 'acv' && m.both && m.behind) ? 'Run the pricing step listed under the ACV gap. ' : ''}Done when each segment has one proof point${d.sectorObjections.length ? ' and each objection has an answer' : ''}.`.trim()];
   const w4 = [`**Week 4, check and decide.** Re-score the open pipeline against the criteria above${gaps.length ? ` and look again at ${listText(gaps)}` : ''}.${curMissing.length ? ` Decide for ${listText(curMissing.map(cleanSeg))}: keep serving, stop prospecting, or add to the ideal profile.` : ''} Done when you have a one page ICP with the segments you will pursue, the buyer, the problem and the disqualifiers.`];
   return [...w1, '', ...w2, '', ...w3, '', ...w4].join('\n');
 }
@@ -711,4 +752,42 @@ export function splitStatements(text: string): string[] {
   }
   out.push(cur);
   return out.map((x) => squash(restore(x)).replace(/\.$/, '')).filter(Boolean);
+}
+
+// ---------------------------------------------------------------------------
+// run 22 round 2 helpers
+// ---------------------------------------------------------------------------
+// The sector entry to print notes from. A sub-type entry is used only when the user's own product words name what the sub-type is about; the
+// email security sub-type also matches "security awareness training", so a training product that never says mail, phishing or a gateway gets the
+// notes of the vertical itself (no gateway proof points or objections).
+export function clearVertical(v: Vertical | null, sellerText: string): Vertical | null {
+  if (!v || !v.subtype) return v;
+  if (v.subtype === 'email-security' && !/\b(?:e-?mail|mailbox|inbox|phishing|spoof\w*|gateway|BEC)\b/i.test(sellerText)) return VERTICALS.find((x) => x.id === v.id) || v;
+  return v;
+}
+// A value named in a statement by another word for the same kind of thing ("Food and beverage" in a statement about a spirits company).
+// Only an alias counts here; a plain shared word is left to the strict word match of the scoring model.
+export function aliasNamed(value: string, statement: string): boolean {
+  const toks = [...new Set(tokensOf(itemKey(value)))];
+  if (!toks.length) return false;
+  const hay = new Set(tokensOf(statement, false));
+  let viaAlias = 0;
+  for (const t of toks) {
+    if (hay.has(t)) continue;
+    if ([...(ALIAS_OF.get(t) || [])].some((a) => hay.has(a))) { viaAlias++; continue; }
+    return false;
+  }
+  return viaAlias > 0;
+}
+// The discovery questions to print as fit signals: the first four, but when the product text says voice or calls and none of the four is about
+// calls, the first question of the sector that is about calls takes the fourth place.
+export function fitQuestions(v: Vertical, productText: string): string[] {
+  const four = v.discovery.slice(0, 4);
+  if (!/\b(?:voice|calls?|calling|telephony|sip|pstn|dialler|dialer)\b/i.test(productText)) return four;
+  const callQ = /\b(?:voice|calls?|calling|telephony|sip|caller|answer rate|latency)\b/i;
+  if (four.some((q) => callQ.test(q))) return four;
+  // the question may sit further down this sector's list, or in the voice sub-type of the same vertical (shared sector file only)
+  const pool = [...v.discovery.slice(4), ...SUBTYPES.filter((t) => t.vertical === v.id && t.id !== v.subtype).flatMap((t) => t.notes.discovery || [])].filter((q) => callQ.test(q));
+  const extra = pool.find((q) => /\b(?:quality|latency|answer rate|caller)/i.test(q)) || pool[0];
+  return extra ? [...four.slice(0, 3), extra] : four;
 }

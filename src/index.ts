@@ -7,7 +7,7 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { neutraliseDeep } from './echo-safe.ts';
-import { gapAnalysis, pointsFor, splitStatements } from './rw-icp.ts';
+import { gapAnalysis, pointsFor, splitStatements, clearVertical, aliasNamed, fitQuestions } from './rw-icp.ts';
 import { SAAS_ONLY, VERTICALS, explainSector, detectModel, profileFor, MODEL_NAME, BUSINESS_MODELS, type Vertical, type BusinessModel } from './verticals.ts';
 
 // =============================================================================
@@ -1075,9 +1075,11 @@ This tool will analyze patterns across your customers to identify your ideal pro
       const corrLine = () => { const m = namedBy(); return !correlations ? '' : m.length
         ? `This pattern is already a criterion: ${andList(m.map(c => `**${c.criterion}**`))}. If it holds in your closed deals, make ${m.length === 1 ? 'it' : 'them'} critical.`
         : 'This pattern is not yet one of your criteria: add it as a criterion if it holds in your closed deals.'; };
-      const notes = sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'objections'], args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
+      // the notes follow the user's own product words: a training product is not given the email gateway notes of the sub-type it also matches
+      const vv = clearVertical(ctx.v, productWords(args.product_category, args.company));
+      const notes = sideNotes(vv, ['committee', 'roles', 'metrics', 'vocabulary', 'objections'], args.product_category, args.scoring_criteria?.flatMap(c => [c.criterion, ...(c.values || [])]));
       // Run 22: fit signals come only from the sector read from what the seller sells; a sector guessed from a buyer word (a bank as customer) is not applied
-      const fitSide: { bv: Vertical | null; name: string } = ctx.v && !isHorizontal(ctx.v) ? { bv: ctx.v, name: ctx.v.name } : { bv: null, name: '' };
+      const fitSide: { bv: Vertical | null; name: string } = vv && !isHorizontal(vv) ? { bv: vv, name: vv.name } : { bv: null, name: '' };
       // Run 20 round 1: the tier actions and answer times follow the business model (a services or connectivity sale does not run on
       // a 24 hour demo). They stay examples; the bands and the points are unchanged.
       const TIERS: Record<string, [string, string, string, string, string, string, string, string]> = {
@@ -1094,7 +1096,9 @@ This tool will analyze patterns across your customers to identify your ideal pro
       const proofItems = sentencesOrItems(correlations);
       const valueOf = (c: { values: string[] }) => c.values;
       const proofHits = proofItems.length ? criteria.flatMap(c => valueOf(c).flatMap(val => {
-        const items = proofItems.filter(it => sharesWord(val, it));
+        // a plain shared word is the strict match; another word for the same kind of thing (spirits for beverage) also names a value
+        const items = proofItems.filter(it => sharesWord(val, it)) ;
+        if (!items.length) { const alias = proofItems.filter(it => aliasNamed(val, it)); if (alias.length) return [{ criterion: c.criterion, value: val, item: alias[0] }]; }
         return items.length ? [{ criterion: c.criterion, value: val, item: items[0] }] : [];
       })) : [];
       const hitKeys = new Set(proofHits.map(h => `${h.criterion}|${h.value}`));
@@ -1117,7 +1121,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
       const namedNames = userGiven ? criteria.filter(c => kindOf(c).kind === 'named').map(c => c.criterion) : [];
       const singleNames = userGiven ? criteria.filter(c => kindOf(c).kind === 'single').map(c => c.criterion) : [];
       const pointsExplained = userGiven ? [
-        namedNames.length ? `For ${andList(namedNames)}, you listed the customers or roles you want, so every value you listed scores the full weight and a prospect that matches none of them scores 0. These points do not rank your targets against each other: if your closed deals show that one scores better, lower the others.` : '',
+        namedNames.length ? `For ${andList(namedNames)}, you listed the customers or roles you want, so every value you listed scores the full weight and a prospect that matches none of them scores 0. Every value in such a list scores the same, so the model does not rank your targets against each other yet: it tells a prospect inside your list from one outside it. If your closed deals show that one scores better, lower the others.` : '',
         gradedNames.length ? `For ${andList(gradedNames)}, the values run in an order (a range, yes or no, a timeline), so the first value you listed scores the full weight, the last scores 0, and the values between score even steps; list each of these criteria's values from best fit to worst fit.` : '',
         singleNames.length ? `${andList(singleNames)} ${singleNames.length === 1 ? 'has' : 'have'} one value, which scores its full weight when it applies and 0 when it does not.` : '',
       ].filter(Boolean).join(' ') : '';
@@ -1129,13 +1133,18 @@ This tool will analyze patterns across your customers to identify your ideal pro
       if (!(args.product_category && args.product_category.trim())) askFor.push('product_category, what you sell (it would change the sector notes, the fit signals and the wording of the tier actions)');
       if (!(typeof args.company === 'string' && args.company.trim())) askFor.push('company (it would put your company name on the model)');
 
+      // the sector line: said plainly when the product text you gave names no sector this server has notes for
+      const productGiven = !!(args.product_category && args.product_category.trim());
+      const sectorText = vv ? sectorLine(vv, ctx.via) : productGiven
+        ? '*Sector: the product text you gave names none of the sectors this server has notes for, so there are no sector notes, fit signals or objections below. The points, weights and tiers do not depend on it.*'
+        : sectorLine(null).replace(/ \(describe your product, for example in product_category, for sector notes\)/, '');
       return `# ICP Scoring Model
 
 ## Scoring Framework for ${category}
 
 - ${companyLine(args.company)}
 
-${sectorLine(ctx.v, ctx.via)}
+${sectorText}
 ${correlations ? `\n**Success Correlation Noted**: ${proofItems.length > 1 ? `${proofItems.length} statements, listed in full under "Evidence in Your Success Pattern" below` : q(shortText(correlations))}\n${corrLine()}\n` : ''}
 
 ---
@@ -1174,7 +1183,7 @@ ${pointsExplained ? `\n${pointsExplained} All of these points are examples to ad
 | **C: Developing** | ${tierCLo}-${tierCHi} | ${tierRows[4]} | ${tierRows[5]} |
 | **D: Unqualified** | 0-${tierDHi} | ${tierRows[6]} | ${tierRows[7]} |
 
-The bands are 80%, 60% and 40% of your maximum score of ${maxScore} points.${ctx.v && !isHorizontal(ctx.v) ? ` Set the times above to how deals run in ${ctx.v.name}: ${ctx.v.salesMotion}` : ''}
+The bands are 80%, 60% and 40% of your maximum score of ${maxScore} points.${vv && !isHorizontal(vv) ? ` Set the times above to how deals run in ${vv.name}: ${vv.salesMotion}` : ''}
 
 ---
 
@@ -1208,7 +1217,7 @@ Use page claims and recognition as messaging, not as scoring evidence: score onl
 ` : ''}${fitSide.bv ? `## Fit Signals to Score in ${fitSide.name}
 
 Each discovery question below can become a criterion you score before the first call, if the answer is findable (annual report, job posts, website or CRM):
-${fitSide.bv.discovery.slice(0, 4).map((x, i) => `${i + 1}. ${x}`).join('\n')}
+${fitQuestions(fitSide.bv, [args.product_category, args.company, correlations].filter(Boolean).join(' ')).map((x, i) => `${i + 1}. ${x}`).join('\n')}
 
 ---
 
@@ -1226,7 +1235,7 @@ ${fitSide.bv.discovery.slice(0, 4).map((x, i) => `${i + 1}. ${x}`).join('\n')}
 - **Quarterly**: Full model review with sales leadership
 
 ### Red Flags (review before you qualify)
-Even a high score should be reviewed if there is no clear problem or need, a competitor is locked in with a multi-year contract, the decision maker is not accessible, or the budget cycle is more than 6 months away ${EXAMPLE}.${ctx.v ? `\n\nObjections that are red flags in ${ctx.v.name}: ${ctx.v.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Check for them before an account scores high.` : ''}
+Even a high score should be reviewed if there is no clear problem or need, a competitor is locked in with a multi-year contract, the decision maker is not accessible, or the budget cycle is more than 6 months away ${EXAMPLE}.${vv ? `\n\nObjections that are red flags in ${vv.name}: ${vv.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Check for them before an account scores high.` : ''}
 
 ---
 
@@ -2371,7 +2380,8 @@ ${SUGGESTED}
       const ctx0 = { cur: parseProfile(args.current_customers), idl: parseProfile(args.ideal_icp) };
       const ctx = readContext(args.business_model, { seller: [productWords(args.product_category, args.company)], context: [args.company], role: agreedRoles([...ctx0.cur.roles, ...ctx0.idl.roles], [args.ideal_icp, args.current_customers]), buyer: [args.ideal_icp, args.current_customers] });
       // The role check and the plan use the sector read from what the seller sells; a sector guessed from a buyer title alone is not applied.
-      const sectorV = ctx.v && !isHorizontal(ctx.v) ? ctx.v : null;
+      const vv = clearVertical(ctx.v, productWords(args.product_category, args.company));
+      const sectorV = vv && !isHorizontal(vv) ? vv : null;
       const sideName = sectorV ? sectorV.name : '';
       const pricingAction = ctx.model === 'services' ? 'Add a scope or service tier for larger clients (more services, locations or hours)'
         : ctx.model === 'connectivity' ? 'Price multi-site contracts so larger customers can add sites and links in one agreement'
@@ -2428,9 +2438,11 @@ ${SUGGESTED}
       const notGivenAtAll = Object.keys(pairs).filter(k => pairs[k][0] == null && pairs[k][1] == null).map(labelOf);
       const acvOnly = sectorV;
       // the shared sector line, without its requests for inputs (the missing inputs are named once, at the end of the answer)
-      const contextLine = ctx.line.replace(/ \(describe your product, for example in product_category, for sector notes\)/, '').replace(/; set business_model \([^)]*\) for advice that fits it/, '').replace(/; set business_model to change it/g, '').replace(/, so describe what you sell for notes that fit it/, '');
+      const productGivenText = !!(args.product_category && args.product_category.trim());
+      const contextLine0 = ctx.line.replace(ctx.v ? ctx.v.name : '\u0000', vv ? vv.name : '\u0000').replace(/ \(describe your product, for example in product_category, for sector notes\)/, '').replace(/; set business_model \([^)]*\) for advice that fits it/, '').replace(/; set business_model to change it/g, '').replace(/, so describe what you sell for notes that fit it/, '');
+      const contextLine = !ctx.v && productGivenText ? contextLine0.replace('Sector: not clear from what you sell.', 'Sector: the product text you gave names none of the sectors this server has notes for, so there are no sector notes or role checks below.') : contextLine0;
       const targetAcv = pairs.acv[1];
-      const sectorNotesText = ctx.v ? sideNotes(ctx.v, ['committee', 'metrics', 'vocabulary', 'proof'], ctx0.idl.roles, ctx0.cur.roles, args.product_category) : '';
+      const sectorNotesText = vv ? sideNotes(vv, ['committee', 'metrics', 'vocabulary', 'proof'], ctx0.idl.roles, ctx0.cur.roles, args.product_category) : '';
 
       return gapAnalysis(args.current_customers, args.ideal_icp, {
         company: typeof args.company === 'string' ? args.company.trim() : '',

@@ -186,6 +186,55 @@ test("an open ended ideal profile does not put the current segments outside it; 
   assert.match(out, /also covers other industries/);
 });
 
+
+// ---- round 2 (judge faults of the first rewrite) ----
+test("round 2: a list of teams before 'at <companies>' is people, never a segment; 'enterprise software' is not a company size", async () => {
+  const out = await call({ company: "Brightwave", product_category: "continuous localization and translation management platform from Brightwave",
+    current_customers: "Brightwave customers: enterprise software, financial services, web and mobile apps. The metric figures sent are hypothetical.",
+    ideal_icp: "product, engineering, localization and marketing teams at software companies and global enterprises, with localization manager as the buyer, who face spreadsheets and manual work" });
+  assert.doesNotMatch(out, /product and engineering/i, "teams read as a segment");
+  assert.doesNotMatch(out, /new ground/i);
+  assert.match(out, /product, engineering, localization and marketing teams/);
+  assert.doesNotMatch(out, /your current base says enterprise\b/i, "enterprise software read as a size");
+  assert.match(out, /names none of the sectors|not recognised|no sector notes/i, "an unrecognised sector is said plainly");
+  assert.doesNotMatch(out, /each objection has an answer|objections your buyers raise/, "the plan refers to objections that were never listed");
+});
+
+test("round 2: an ideal profile that names no industry never says an industry is named in both", async () => {
+  const out = await call({ company: "Brightwave", product_category: "security awareness and behaviour change platform from Brightwave",
+    current_customers: "Brightwave customers: manufacturing, banks, SaaS, telecom",
+    ideal_icp: "security and IT teams that want to reduce employee cyber risk, from growth stage companies to large enterprises, with CISO as the buyer" });
+  assert.doesNotMatch(out, /Named in both|Partly named/);
+  assert.match(out, /Carried forward/);
+});
+
+test("round 2: a bare title is found inside a longer sector title; no role is called unusual while the list holds it; roles are not doubled", async () => {
+  const out = await call({ company: "Buildloop", product_category: "construction management software for general contractors from Buildloop",
+    current_customers: "Buildloop customers: Civil and infrastructure, Commercial, Data centers, Residential",
+    ideal_icp: "owners, general contractors, specialty contractors and other project stakeholders in the construction industry, with President and CFO as the buyer" });
+  assert.doesNotMatch(out, /President is not one of the roles/);
+  assert.doesNotMatch(out, /President and CFO and CFO|CFO and CFO/);
+  assert.match(out, /President and CFO/);
+  assert.doesNotMatch(out, /stop prospecting/, "different kinds of list are not compared as if they were the same");
+  assert.match(out, /may describe different things/);
+  assert.ok((out.match(/specialty contractors/g) || []).length <= 3, "the long segment phrase is repeated");
+});
+
+test("round 2: two page statements with different figures for the same thing are flagged", async () => {
+  const out = await call({ company: "Brightwave", current_customers: "Brightwave customers: Banking, Insurance",
+    ideal_icp: "enterprises across industries, including banks and financial services firms; the pages state over 2,000 enterprises (about page) and over 2,500 enterprises (home page) as customers (page claims)" });
+  assert.match(out, /different figures for the same thing \(2,000 and 2,500 enterprises\)/);
+  assert.doesNotMatch(out, /Segments\*\*: industries/, "'industries' read as a segment");
+});
+
+test("round 2: awareness training is not given the email gateway notes; a phishing product keeps them", async () => {
+  const train = await call({ company: "Brightwave", product_category: "human risk management (security behavior change and security awareness training) from Brightwave", current_customers: "Brightwave customers: banks, telecom", ideal_icp: "security teams, with CISO as the buyer, who face low reporting rates" });
+  assert.doesNotMatch(train, /secure email gateway|side by side run on the buyer's own mail|false positives will block real mail/i);
+  assert.doesNotMatch(train, /read from your inputs as cybersecurity, email security/);
+  const mail = await call({ company: "Mailwall", product_category: "email security and phishing protection from Mailwall", current_customers: "Mailwall customers: banks, telecom", ideal_icp: "security teams, with CISO as the buyer, who face phishing" });
+  assert.match(mail, /email security/);
+});
+
 // ---- the pool scenarios through the real builders (private folder; skipped when HELIX_POOL_DIR is not set) ----
 const POOL_DIR = process.env.HELIX_POOL_DIR;
 test("pool scenarios through the real builders: every input used, no wrong claim of a missing segment", { skip: !POOL_DIR }, async () => {
