@@ -325,7 +325,7 @@ export const SUBTYPES: SubType[] = [
   },
   {
     id: 'seller-shipping', vertical: 'logistics-tech', name: 'shipping for online sellers',
-    match: /\b(?:shipping aggregators?|courier aggregators?|multi.?courier|courier partners?|e-?commerce (?:shipping|enablement)|shipping (?:solutions?|platforms?|software|tools?) for (?:small |online |indian )?(?:sellers|merchants|d2c|e-?commerce|online (?:stores?|retailers?|businesses)|small (?:businesses|brands))|(?:sellers|merchants|d2c brands|online (?:stores?|retailers?)) (?:to )?(?:manage|ship|send) (?:their )?(?:shipping|orders|shipments|parcels))\b/i,
+    match: /\b(?:shipping aggregators?|courier aggregators?|multi.?courier|multi.?carrier (?:shipping|parcel|label)s?(?: software| platform| tool)?|(?:buy|print|printing) (?:and print )?(?:discounted )?shipping labels?|courier partners?|e-?commerce (?:shipping|enablement)|shipping (?:solutions?|platforms?|software|tools?) for (?:small |online |indian )?(?:sellers|merchants|d2c|e-?commerce|online (?:stores?|retailers?|businesses)|small (?:businesses|brands))|(?:sellers|merchants|d2c brands|online (?:stores?|retailers?)) (?:to )?(?:manage|ship|send) (?:their )?(?:shipping|orders|shipments|parcels))\b/i,
     model: 'transactions',
     notes: {
       vocabulary: ['courier partner', 'pin code serviceability', 'cash on delivery', 'return to origin', 'non delivery report', 'weight discrepancy', 'pickup', 'shipping label', 'store and marketplace channels', 'remittance'],
