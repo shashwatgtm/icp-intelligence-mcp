@@ -431,8 +431,7 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
 
   // ---------- roles ----------
   const roleAlt = roleAlternatives(d.sectorRoles);
-  const roleCheck = (r: string) => {
-    if (!d.sectorName || !d.sectorRoles.length) return '';
+  const findRole = (r: string): string | undefined => {
     const alts = r.split(/\s+or\s+/i).map((x) => x.trim()).filter(Boolean);
     let m: string | undefined;
     for (const a of [r, ...alts]) { m = d.bestRole(d.aliasRole(a), roleAlt); if (m) break; }
@@ -448,6 +447,11 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
         if (mineRaw.length) m = roleAlt.find((a) => { const t = raw(a); return mineRaw.every((w) => t.includes(w)) && !/\bchief\b/i.test(a); });
       }
     }
+    return m;
+  };
+  const roleCheck = (r: string) => {
+    if (!d.sectorName || !d.sectorRoles.length) return '';
+    const m = findRole(r);
     if (m) {
       const whole = d.sectorRoles.find((s) => s === m || roleAlternatives([s]).includes(m as string)) || m;
       return whole.toLowerCase() === r.toLowerCase() ? `${r} is one of the roles usual in ${d.sectorName}` : `${r} is one of the roles usual in ${d.sectorName} (${whole})`;
@@ -455,7 +459,7 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
     return `${r} is not one of the roles usually listed for ${d.sectorName} (${d.sectorRoles.slice(0, 4).join(', ')}), so confirm in your won deals that this title signs`;
   };
   const namedRoles = [...cur.roles, ...idl.roles].map((r) => d.aliasRole(r));
-  const roleGaps = d.sectorRoles.filter((r) => !namedRoles.some((n) => roleAlternatives([r]).some((a) => d.sameRole(n, a)))).slice(0, 4);
+  const roleGaps = d.sectorRoles.filter((r) => !namedRoles.some((n) => { const alt = roleAlternatives([r]); const m = findRole(cleanRole(n)); return (!!m && alt.includes(m)) || alt.some((a) => d.sameRole(n, a)); })).slice(0, 4);
 
   const L: string[] = [];
   const push = (...x: string[]) => L.push(...x);

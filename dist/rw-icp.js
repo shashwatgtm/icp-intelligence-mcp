@@ -513,9 +513,7 @@ function gapAnalysis(curText, idlText, d) {
     const openEnded = idealNamesIndustries && !comparable && curSeg.length > 0;
     // ---------- roles ----------
     const roleAlt = roleAlternatives(d.sectorRoles);
-    const roleCheck = (r) => {
-        if (!d.sectorName || !d.sectorRoles.length)
-            return '';
+    const findRole = (r) => {
         const alts = r.split(/\s+or\s+/i).map((x) => x.trim()).filter(Boolean);
         let m;
         for (const a of [r, ...alts]) {
@@ -537,6 +535,12 @@ function gapAnalysis(curText, idlText, d) {
                     m = roleAlt.find((a) => { const t = raw(a); return mineRaw.every((w) => t.includes(w)) && !/\bchief\b/i.test(a); });
             }
         }
+        return m;
+    };
+    const roleCheck = (r) => {
+        if (!d.sectorName || !d.sectorRoles.length)
+            return '';
+        const m = findRole(r);
         if (m) {
             const whole = d.sectorRoles.find((s) => s === m || roleAlternatives([s]).includes(m)) || m;
             return whole.toLowerCase() === r.toLowerCase() ? `${r} is one of the roles usual in ${d.sectorName}` : `${r} is one of the roles usual in ${d.sectorName} (${whole})`;
@@ -544,7 +548,7 @@ function gapAnalysis(curText, idlText, d) {
         return `${r} is not one of the roles usually listed for ${d.sectorName} (${d.sectorRoles.slice(0, 4).join(', ')}), so confirm in your won deals that this title signs`;
     };
     const namedRoles = [...cur.roles, ...idl.roles].map((r) => d.aliasRole(r));
-    const roleGaps = d.sectorRoles.filter((r) => !namedRoles.some((n) => roleAlternatives([r]).some((a) => d.sameRole(n, a)))).slice(0, 4);
+    const roleGaps = d.sectorRoles.filter((r) => !namedRoles.some((n) => { const alt = roleAlternatives([r]); const m = findRole(cleanRole(n)); return (!!m && alt.includes(m)) || alt.some((a) => d.sameRole(n, a)); })).slice(0, 4);
     const L = [];
     const push = (...x) => L.push(...x);
     push(`# ICP Gap Analysis${d.company ? ` for ${d.company}` : ''}`, '', `- ${d.companyLine}`, '', d.contextLine, '');
