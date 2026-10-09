@@ -27,7 +27,7 @@ exports.detectModel = detectModel;
 exports.VERTICALS = [
     {
         id: 'logistics-tech', name: 'logistics tech',
-        match: /\b(logistics?|(?:first|mid|last)[- ]mile|[34]pls?|fleets?|dispatch\w*|route (?:planning|optimi[sz]ation|optimi[sz]er)|freight|shipping|shipments?|couriers?|(?<!software )supply chain|(?<!data )(?<!cloud )warehous\w*\b(?!-native)|fulfil\w*|transportation|trucking|truckers?|trucks?|truckload|haulage|tms|wms|telematics|cold chain|proof of delivery|delivery (?:management|tracking|orchestration|software|app)|load boards?|freight forwarders?)\b/i,
+        match: /\b(logistics?|(?:first|mid|last)[- ]mile|[34]pls?|fleets?|dispatch\w*|route (?:planning|optimi[sz]ation|optimi[sz]er)|freight|shipping|shipments?|couriers?|(?<!software )supply chain|(?<!data )(?<!cloud )warehous\w*\b(?!-native)|fulfil\w*|transportation|trucking|truckers?|trucks?|truckload|haulage|tms|wms|telematics|cold chain|proof of delivery|delivery (?:management|tracking|orchestration|software|app)|load boards?|freight forwarders?|shipping (?:labels?|rates?)|reverse logistics|returns? (?:management|logistics)|parcels?|delivery (?:promises?|dates?|slots?)|carrier (?:rates?|selection|comparison))\b/i,
         weak: /\b(routes?|deliver(?:y|ies)|carriers?|transport|drivers?|vehicles?)\b/i,
         vocabulary: ['shipment', 'carrier', 'consignment', 'lead time', 'exception', 'service level', 'proof of delivery', 'third party logistics provider', 'transport management system', 'warehouse management system'],
         buyerRoles: ['Chief Operating Officer', 'Head of Supply Chain', 'Head of Logistics', 'Transport or Operations Manager', 'Head of IT', 'Chief Financial Officer'],
@@ -51,7 +51,7 @@ exports.VERTICALS = [
     },
     {
         id: 'fintech', name: 'fintech',
-        match: /\b(fintech|spend management|expense (?:modules?|management|claims?|reports?|polic(?:y|ies)|approvals?|tools?)|month-end|close the books|reimburse\w*|payments?|payouts?|corporate cards?|prepaid cards?|card issuing|lending|lenders?|loans?|banking|banks?|neobanks?|treasury|reconcil\w*|payroll|invoic\w*|accounts (?:payable|receivable)|wealth|(?<!\bit )(?<!digital )(?<!software )(?<!infrastructure )(?<!network )(?<!cloud )(?<!media )(?<!brand )(?<!enterprise )asset (?:managers?|management|allocators?)|assets under management|portfolio (?:analytics|management|risk|monitoring|construction)|investment (?:management|banking|research|advisory|managers?|strateg\w*)|mutual funds?|hedge funds?|family offices?|insur\w*|nbfc|kyc|aml|fraud|upi|remittances?|bnpl|buy now pay later|stock (?:broking|brokerage|trading)|trading platform)\b/i,
+        match: /\b(fintech|spend management|expense (?:modules?|management|claims?|reports?|polic(?:y|ies)|approvals?|tools?)|month-end|close the books|reimburse\w*|payments?|payouts?|corporate cards?|prepaid cards?|card issuing|lending|lenders?|loans?|banking|banks?|neobanks?|treasury|reconcil\w*|payroll|invoic\w*|accounts (?:payable|receivable)|wealth|(?<!\bit )(?<!digital )(?<!software )(?<!infrastructure )(?<!network )(?<!cloud )(?<!media )(?<!brand )(?<!enterprise )asset (?:managers?|management|allocators?)|assets under management|portfolio (?:analytics|management|risk|monitoring|construction)|investment (?:management|banking|research|advisory|managers?|strateg\w*)|mutual funds?|hedge funds?|family offices?|insur\w*|nbfc|kyc|aml|fraud|upi|remittances?|bnpl|buy now pay later|stock (?:broking|brokerage|trading)|trading platform|crypto\w*|stablecoins?)\b/i,
         weak: /\b(credit|funds?|erp|expenses?|invest\w*|portfolios?|financ\w*|ledgers?|audit\w*|tax(?:es)?)\b/i,
         vocabulary: ['regulatory review', 'audit trail', 'uptime', 'integration', 'access controls', 'data residency', 'compliance review', 'sign off', 'service level', 'customer onboarding'],
         buyerRoles: ['Chief Executive Officer', 'Head of Product', 'Chief Technology Officer', 'Chief Risk Officer', 'Head of Compliance', 'Chief Information Security Officer', 'Head of IT'],
@@ -75,7 +75,7 @@ exports.VERTICALS = [
     },
     {
         id: 'vertical-saas', name: 'vertical SaaS',
-        match: /\b(fmcg|cpg|consumer goods|consumer brands?|retail execution|field sales|field reps?|general trade|sales force automation|sfa|dms|distribution management|distributor management|beat plans?|beat planning|secondary sales|route-to-market|route to market|kirana|order capture|trade promotions?|trade schemes?|vertical saas)\b/i,
+        match: /\b(fmcg|cpg|consumer goods|consumer brands?|retail execution|field sales|field reps?|general trade|sales force automation|sfa|dms|distribution management|distributor management|beat plans?|beat planning|secondary sales|route-to-market|route to market|kirana|order capture|trade promotions?|trade schemes?|vertical saas|hotel (?:management|software|pms)|hospitality (?:management|software)|property management system|pms|(?:restaurant|retail|supermarket|hotel|hospitality|distribution) (?:erp|pos)|(?:pos|point of sale) (?:software|system)|school management)\b/i,
         weak: /\b(distributors?|outlets?|retailers?)\b/i,
         vocabulary: ['workflow', 'field and office', 'mobile app', 'adoption', 'data migration', 'integration', 'onboarding', 'reporting', 'compliance', 'rollout'],
         buyerRoles: ['Owner or Managing Director', 'Head of Operations', 'Head of Finance', 'Department head who uses it daily', 'Head of IT', 'Implementation Lead'],
@@ -124,7 +124,7 @@ exports.VERTICALS = [
     },
     {
         id: 'ites', name: 'ITeS',
-        match: /\b(it services|it outsourcing|managed (?:it |network |cloud )?services?|managed service desk|service desk|help ?desk|bpo|bpm|bpaas|kpo|business process (?:management|outsourcing|services)|outsourc\w*|itsm|systems? integrators?|systems? integration|digital engineering|application (?:development|maintenance|management|support)|infrastructure (?:management|support)|contact cent(?:re|er)s?|call cent(?:re|er)s?|back[- ]office|ites|it-enabled|staff augmentation|it staffing|statements? of work|per fte|global capability cent(?:re|er)s?|shared services|digital operations|business services|customer experience (?:management|services|outsourcing))\b/i,
+        match: /\b(it services|it outsourcing|(?<!fully )(?<!fully-)(?<!self )managed (?:it |network |cloud )?services?|managed service desk|technology services|engineering services|digital transformation (?:services|partners?|compan(?:y|ies)|firms?)|consultanc(?:y|ies)|consulting (?:firms?|compan(?:y|ies)|services|partners?)|software development (?:compan(?:y|ies)|firms?|services|houses?|partners?)|(?:custom|bespoke) software development|dedicated (?:\w+ ){0,2}teams?|financial services operations|finance and accounting (?:services|outsourcing|operations)|data operations (?:services|teams?)|analytics operations|(?:we|our (?:own )?(?:teams?|analysts|agents|experts)) (?:run|operate|handle|manage|deliver)s?\b[^.;:]{0,60}\boperations?|(?:technology|engineering|consulting|data|analytics|operations|business|knowledge) services? (?:compan(?:y|ies)|firms?|providers?)|service desk|help ?desk|bpo|bpm|bpaas|kpo|business process (?:management|outsourcing|services)|outsourc\w*|itsm|systems? integrators?|systems? integration|digital engineering|application (?:development|maintenance|management|support)|infrastructure (?:management|support)|(?<!cloud )contact cent(?:re|er)s?|(?<!cloud )call cent(?:re|er)s?|back[- ]office|ites|it-enabled|staff augmentation|it staffing|statements? of work|per fte|global capability cent(?:re|er)s?|shared services|digital operations|business services|customer experience (?:management|services|outsourcing))\b/i,
         weak: /\b(consulting|consultancy|transition|moderni[sz]ation|offshore|nearshore|per employee|per ticket|slas?|staffing|operations)\b/i,
         vocabulary: ['service levels', 'statement of work', 'transition', 'steady state', 'governance', 'knowledge transfer', 'delivery team', 'change request', 'service credits', 'managed service'],
         buyerRoles: ['Chief Information Officer', 'Chief Operating Officer', 'Head of Procurement', 'Vendor Management Lead', 'Chief Financial Officer', 'Business Unit Head'],
@@ -148,7 +148,7 @@ exports.VERTICALS = [
     },
     {
         id: 'telecom', name: 'telecom',
-        match: /\b(telecom\w*|telcos?|sd-?wan|mpls|leased lines?|connectivity|network services?|managed network|bandwidth|5g|isps?|internet access|business internet|broadband|cpaas|colocation|sip trunk\w*|voip|ucaas|ccaas|unified communications|mvno|mobile network|wi-?fi|wan (?:optimi[sz]ation|services?)|sms (?:gateway|api)|bulk sms|a2p)\b/i,
+        match: /\b(telecom\w*|telcos?|sd-?wan|mpls|leased lines?|connectivity|network services?|managed network|bandwidth|5g|isps?|internet access|business internet|broadband|cpaas|colocation|sip trunk\w*|voip|ucaas|ccaas|unified communications|mvno|mobile network|wi-?fi|wan (?:optimi[sz]ation|services?)|sms (?:gateway|api)|bulk sms|a2p|satellite (?:internet|connectivity|broadband|communications?)|(?:internet service|internet) providers?|fib(?:re|er)(?: optic)? (?:network|internet|broadband)|vsat|telecom towers?)\b/i,
         weak: /\b(operators?|voice|iot|branches|sites?|carriers?|roaming|sim|mobile|links?|data cent(?:re|er)s?)\b/i,
         vocabulary: ['uptime', 'SLA', 'latency', 'service credits', 'coverage', 'interconnect', 'network operations centre', 'regulatory approval', 'capacity'],
         buyerRoles: ['Chief Technology Officer', 'Chief Information Officer', 'Head of IT Infrastructure', 'Network Manager', 'Head of Procurement', 'Chief Financial Officer'],
@@ -172,7 +172,7 @@ exports.VERTICALS = [
     },
     {
         id: 'cybersecurity', name: 'cybersecurity',
-        match: /\b(cyber\w*|infosec|cisos?|soc(?! ?2)|siem|soar|edr|xdr|mdr|cnapp|cspm|cwpp|ciem|sase|zero trust|iam|identity and access management|managed detection|vulnerab\w*|penetration test\w*|pentest\w*|phishing|ransomware|malware|misconfig\w*|attack surface|threat (?:detection|intelligence|hunting)|dark web|dlp|firewalls?|(?:cloud|network|endpoint|application|email|identity|data|api|information|supply chain) security|security (?:operations|posture)|(?<!social )(?<!job )(?<!food )(?<!energy )security)\b/i,
+        match: /\b(cyber\w*|infosec|cisos?|soc(?! ?2)|siem|soar|edr|xdr|mdr|cnapp|cspm|cwpp|ciem|sase|zero trust|iam|identity and access management|managed detection|vulnerab\w*|penetration test\w*|pentest\w*|phishing|ransomware|malware|misconfig\w*|attack surface|threat (?:detection|intelligence|hunting)|dark web|dlp|firewalls?|(?:cloud|network|endpoint|application|email|identity|data|api|information|supply chain) security|security (?:operations|posture)|password managers?|secrets (?:management|vaults?)|bug bounty|grc|deepfakes?|impersonation|account takeover|bot (?:detection|protection|mitigation)|(?<!social )(?<!job )(?<!food )(?<!energy )security)\b/i,
         weak: /\b(posture|exposures?|breach\w*|threats?|encryption|compliance)\b/i,
         vocabulary: ['attack surface', 'exposure', 'alert fatigue', 'mean time to detect', 'mean time to respond', 'least privilege', 'compliance audit', 'risk register', 'threat intelligence'],
         buyerRoles: ['CISO', 'Head of Security Operations', 'Security Architect', 'Chief Information Officer', 'Head of IT', 'Head of Risk and Compliance'],
@@ -196,7 +196,7 @@ exports.VERTICALS = [
     },
     {
         id: 'software', name: 'software',
-        match: /\b(developers?|api (?:testing|tests?|platform|management|gateway|monitoring|design|development)|devops|devsecops|dev tools|ci\/cd|ci pipelines?|software (?:development|delivery) lifecycle|sdlc|merge requests?|observability|databases?|open[- ]source|engineering teams?|qa|test(?:ing|s)? (?:platform|automation|tools?)|test automation|software testing|(?:testing|test|device|browser) clouds?|cloud testing|cross-browser|browser testing|unit tests?|source code|version control|git|kubernetes|microservices|sdlc|feature flags?|low-code|infrastructure as code|apm|backend)\b/i,
+        match: /\b(developers?|api (?:testing|tests?|platform|management|gateway|monitoring|design|development)|devops|devsecops|dev tools|ci\/cd|ci pipelines?|software (?:development|delivery) lifecycle|sdlc|merge requests?|observability|databases?|open[- ]source|engineering teams?|qa|test(?:ing|s)? (?:platform|automation|tools?)|test automation|software testing|(?:testing|test|device|browser) clouds?|cloud testing|cross-browser|browser testing|unit tests?|source code|version control|git|kubernetes|microservices|sdlc|feature flags?|low-code|infrastructure as code|apm|backend|docker|self-hosted runners?|hosted runners?|layer caching|flaky tests?|build minutes|pull requests?|nosql|relational databases?|data streaming|message brokers?|search clusters?|key-value stores?)\b/i,
         weak: /\b(apis?|sdks?|code|release|releases|deploy\w*|testing|tests?|debug\w*|logging)\b/i,
         vocabulary: ['developer experience', 'pipeline', 'release frequency', 'technical debt', 'open source alternative', 'integration', 'mean time to recovery', 'seats', 'self serve trial'],
         buyerRoles: ['VP Engineering', 'Chief Technology Officer', 'Platform Engineering Lead', 'Engineering Manager', 'Head of DevOps', 'Security Lead'],
@@ -220,7 +220,7 @@ exports.VERTICALS = [
     },
     {
         id: 'saas', name: 'SaaS',
-        match: /\b(saas|software as a service|subscriptions?|b2b software|crm|billing|invoicing|dunning|prorat\w*|revenue recognition|moneti[sz]\w*|usage-based (?:pricing|billing)|metered billing|pricing and packaging|quote-to-cash|product analytics|product-led|plg|customer success|revenue operations|revops|sales enablement|marketing automation|churn|net revenue retention)\b/i,
+        match: /\b(saas|software as a service|subscriptions?|b2b software|crm|billing|invoicing|dunning|prorat\w*|revenue recognition|moneti[sz]\w*|usage-based (?:pricing|billing)|metered billing|pricing and packaging|quote-to-cash|product analytics|product-led|plg|customer success|revenue operations|revops|sales enablement|marketing automation|churn|net revenue retention|applicant tracking|recruit(?:ing|ment) (?:platform|software|tools?)|survey (?:platform|tool|software)|form builders?|e-?signatures?|contract management|employee engagement|performance management|nps)\b/i,
         weak: /\b(software|platform)\b/i,
         vocabulary: ['onboarding', 'time to value', 'renewal', 'integration', 'admin controls', 'single sign on', 'seats', 'trial', 'usage', 'security review'],
         buyerRoles: ['Head of the function that uses it', 'VP Operations', 'Head of IT', 'Chief Financial Officer', 'Head of Procurement'],
@@ -767,6 +767,32 @@ exports.SUBTYPES = [
         },
     },
     {
+        id: 'hospitality-retail-ops', vertical: 'vertical-saas', name: 'hotel, restaurant and retail operations',
+        match: /\b(?:hotel (?:management|operating|software|pms)|hospitality (?:management|software|platform)|operating system (?:built |made |designed )?(?:for|to power) (?:modern |boutique |independent )?(?:hotels|hospitality)|(?:restaurant|retail|supermarket|distribution) (?:erp|pos)|(?:restaurant|retail) management (?:software|system|package)|restaurant (?:management|ordering) (?:software|system|platform)|(?:pos|point of sale) (?:software|system)|pms)\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['front desk or till', 'room or stock inventory', 'daily close', 'guest or customer record', 'multi outlet reporting', 'rate or price list', 'channel or online ordering link', 'tax and invoice rules', 'payment reconciliation', 'housekeeping or stock count'],
+            buyerRoles: ['Owner or General Manager', 'Head of Operations', 'Finance or Accounts Head', 'Outlet, Store or Front Desk Manager', 'Revenue or Category Manager', 'IT or Systems Lead'],
+            committee: 'The owner or general manager signs; the head of operations champions it; outlet, store and front desk staff use it all day; finance checks the accounts, tax and payment links; IT checks the other systems it must connect to (accounting, online channels, payment providers).',
+            objections: [
+                { objection: 'We already run a system that works', response: 'Map one real day at one outlet or property, show where staff re-key data or reconcile by hand, and offer to connect to the accounting and payment tools already in place.' },
+                { objection: 'Staff will not learn a new system in the busy season', response: 'Plan the start for a quiet period, train the people who use it all day first, and agree how adoption is measured by outlet.' },
+                { objection: 'It must fit our tax, payment and accounting set up', response: 'Name the tax rules, payment providers and accounting tools involved, and show them working on the buyer\'s own invoices and daily close.' },
+                { objection: 'Moving our rooms, menus or stock data is risky', response: 'Plan the move one outlet or property at a time, check opening balances against the last close, and have the finance head sign it off.' },
+            ],
+            salesMotion: 'Owner or operations led, with a demo on the buyer\'s own rooms, menu or stock list, a pilot at one outlet, store or property, and a staged rollout; payment processing and add-on modules are priced as separate lines.',
+            metrics: ['time to close the day', 'stock or booking accuracy', 'billing or check-in time per guest or customer', 'errors and rework', 'payment reconciliation effort', 'adoption by outlet', 'revenue per outlet or per room'],
+            proofShape: 'One property, outlet or store before and after on closing time, stock or booking accuracy and payment reconciliation, measured by its own staff over a busy and a quiet period.',
+            discovery: [
+                'Which systems run bookings or sales, stock, billing and accounting today, and how do they hand data to each other?',
+                'What does a typical day close involve, and where do staff re-key or reconcile by hand?',
+                'How do payments reach your accounts, and who reconciles them?',
+                'How many outlets, properties or counters need the system, and what differs between them?',
+                'What would make a pilot at one outlet or property a clear success?',
+            ],
+        },
+    },
+    {
         id: 'agents-copilots', vertical: 'ai-native', name: 'AI agents and copilots for a business function',
         match: /\b(?:ai agents?|ai agent platform|ai copilots?|copilots?|ai (?:workers?|coworkers?|teammates?|employees?|sdrs?)|digital (?:workers?|employees?|coworkers?)|autonomous agents?|agentic (?:ai|platform|workflows?|automation)|ai workforce)\b/i,
         model: 'saas',
@@ -872,7 +898,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'bpo-cx', vertical: 'ites', name: 'BPO and customer experience outsourcing',
-        match: /\b(?:bpo|bpm|bpaas|kpo|business process (?:outsourcing|management|services)|contact cent(?:re|er)s?|call cent(?:re|er)s?|customer (?:support|service|care) outsourcing|outsourced (?:customer )?(?:support|service|care)|customer experience (?:outsourcing|services|management)|back office (?:operations|outsourcing|services)|customer support operations|content moderation services|collections (?:outsourcing|services))\b/i,
+        match: /\b(?:bpo|bpm|bpaas|kpo|business process (?:outsourcing|management|services)|(?<!cloud )contact cent(?:re|er)s?|(?<!cloud )call cent(?:re|er)s?|customer (?:support|service|care) outsourcing|outsourced (?:customer )?(?:support|service|care)|customer experience (?:outsourcing|services|management)|back office (?:operations|outsourcing|services)|customer support operations|content moderation services|collections (?:outsourcing|services))\b/i,
         model: 'services',
         notes: {
             vocabulary: ['contact volume', 'average handle time', 'first contact resolution', 'quality score', 'workforce planning', 'schedule adherence', 'omnichannel', 'escalation', 'knowledge base', 'peak season', 'ramp'],
@@ -1183,7 +1209,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'identity-security', vertical: 'cybersecurity', name: 'identity and access',
-        match: /\b(?:identity and access management|identity (?:security|governance|provider|management)|access management|privileged access (?:management|security)|single sign.on|multi.factor (?:authentication|login)|passwordless (?:login|authentication)|customer identity|identity (?:attacks?|silos|fabric|threats?)|ai agent identit(?:y|ies)|iam|ciam)\b/i,
+        match: /\b(?:identity and access management|identity (?:security|governance|provider|management)|access management|privileged access (?:management|security)|(?:single sign.on|sso|multi.factor authentication|mfa|passwordless (?:login|authentication)) (?:provider|solution|platform|service|software|vendor|product)|customer identity|identity (?:attacks?|silos|fabric|threats?)|ai agent identit(?:y|ies)|iam|ciam)\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['single sign on', 'multi factor authentication', 'least privilege', 'privileged access', 'joiner mover leaver', 'access review', 'directory', 'service accounts', 'passwordless', 'session'],
@@ -1425,7 +1451,7 @@ const SECURITY_GENERIC = /^(?:security|firewalls?|zero trust|sase|cyber\w*|(?:cl
 // (b) "AI-native" is a way of building, not a trade. A service delivered by people who use AI (business services, BPO, managed
 //     services, customer experience services, outsourcing) is ITeS. AI agents, an AI platform or an AI product stay AI native, and
 //     so does anything the seller calls software, a platform, an app, a tool or automation.
-const SERVICES_WORDS = /\b(?:business (?:process )?(?:services|management|outsourcing)|bpo|bpm|bpaas|kpo|managed (?:it |network |cloud )?services?|customer experience (?:management |services|outsourcing)|outsourc\w*|contact cent(?:re|er)s?|call cent(?:re|er)s?|back[- ]office|digital operations|shared services)\b/i;
+const SERVICES_WORDS = /\b(?:business (?:process )?(?:services|management|outsourcing)|bpo|bpm|bpaas|kpo|(?<!fully )(?<!fully-)managed (?:it |network |cloud )?services?|technology services|engineering services|digital engineering|digital transformation (?:services|partners?|compan(?:y|ies)|firms?)|financial services operations|customer experience (?:management |services|outsourcing)|outsourc\w*|contact cent(?:re|er)s?|call cent(?:re|er)s?|back[- ]office|digital operations|shared services)\b/i;
 const PRODUCT_WORDS = /\b(?:software|saas|platforms?|apps?|apis?|tools?|subscriptions?|copilots?|assistants?|automat\w*|engines?)\b/i;
 const PEOPLE_WORDS = /\b(?:people|humans?|staff|fte|analysts|specialists|experts|teams?)\b/i;
 // Only labels count as marketing; "AI agents", "copilot" and "AI assistant" name the product itself.
@@ -1449,11 +1475,27 @@ const billingProfileText = (t) => {
     const kinds = new Set((clean.match(new RegExp(BILLING_WORDS.source, 'gi')) || []).map((w) => w.toLowerCase().replace(/[^a-z]/g, '').slice(0, 6)));
     return kinds.size >= 2;
 };
+// Run 22. (e) A services firm is read by its own trade, not by its customers' industries. "technology services", "financial services operations",
+//     business process services and the like, said by the seller about itself, make it ITeS even when banks, payments or lending words fill the
+//     rest of the description. It stays as read when the seller also names a product of its own kind (a payment gateway) or calls itself SaaS.
+const SERVICES_FIRM = /^(?:business (?:process )?(?:services|management|outsourcing)|bpo|bpm|bpaas|kpo|managed (?:it |network |cloud )?services?|it services|it outsourcing|technology services|engineering services|digital engineering|digital transformation \w+|financial services operations|finance and accounting \w+|data operations \w+|analytics operations|(?:we|our) [^.;:]*operations?|outsourc\w*|consultanc(?:y|ies)|consulting (?:firms?|compan(?:y|ies)|services|partners?)|software development \w+|(?:custom|bespoke) software development|dedicated .*teams?|customer experience (?:management|services|outsourcing)|systems? integrat\w+|staff augmentation|it staffing|application (?:development|maintenance|management|support)|[a-z]+ services? (?:compan(?:y|ies)|firms?|providers?))$/;
+const SAAS_CLAIM = /\b(?:saas|subscriptions?|per seat|per user|licen[cs]es?|(?:our|an?|the) (?:software|platform|app)\b|software (?:platform|product|suite|solution|that|to)\b)/i;
 function adjust(text, best, all) {
     if (best.v.id === 'fintech' && billingText(text)) {
         const saas = all.find((x) => x.v.id === 'saas');
         if (saas)
             return saas;
+    }
+    if (best.v.id === 'fintech' || best.v.id === 'logistics-tech' || best.v.id === 'saas') {
+        const ites = all.find((x) => x.v.id === 'ites');
+        if (ites && ites.strong.some((w) => SERVICES_FIRM.test(w)) && !SAAS_CLAIM.test(text) && !categoryHits(text).some((h) => h.st.vertical === best.v.id))
+            return ites;
+    }
+    // "managed service" alone, inside the description of a hosted product (an open source database, a build service), is not an IT services firm.
+    if (best.v.id === 'ites' && best.strong.every((w) => /^managed (?:it |network |cloud )?services?$/.test(w))) {
+        const sw = all.find((x) => x.v.id === 'software');
+        if (sw && PRODUCT_WORDS.test(text))
+            return sw;
     }
     if (best.v.id === 'cybersecurity') {
         const tel = all.find((x) => x.v.id === 'telecom');
@@ -1558,6 +1600,8 @@ const BUZZ = /^(?:ai|ai agents?|agents? that|agentic|copilots?|ai assistants?|ll
 // HR and payroll software is a kind of vertical SaaS only when it is built for one named industry (shift workers, restaurants, construction crews ...);
 // "payroll and compliance for small businesses" is general HR software, so it names SaaS and no kind.
 const INDUSTRY_WORD = /\b(?:restaurants?|hospitality|hotels?|retail(?:ers)?|stores?|construction|contractors?|manufactur\w*|factor(?:y|ies)|staffing|temp(?:orary)? (?:workers?|staff)|shift (?:workers?|staff)|hourly (?:workers?|staff)|frontline|deskless|blue.?collar|farms?|agricultur\w*|warehouses?|logistics|drivers?|fleets?|salons?|gyms?|fitness|schools?|education|nonprofits?|cleaning|franchises?|bars?|cafes?|food service|trades?)\b/i;
+const HOTEL_WORDS = /\b(?:hotels?|hostels?|hospitality|resorts?|housekeeping|front desk|guests?|reservations?)\b/i;
+const LEASE_WORDS = /\b(?:tenants?|leases?|landlords?|rent roll|rent collection|rental propert\w+)\b/i;
 const GENERIC_PAYROLL = { id: 'hr-payroll-general', vertical: 'saas', name: 'HR and payroll', match: /$^/, notes: {} };
 function categoryHits(seller, whole = seller) {
     const out = [];
@@ -1567,6 +1611,9 @@ function categoryHits(seller, whole = seller) {
             continue;
         if (st.id === 'industry-hr-payroll' && !INDUSTRY_WORD.test(whole))
             st = GENERIC_PAYROLL;
+        // Run 22: a "property management system" next to hotel words is a hotel system (front desk, housekeeping), not rent and leases: it is read as the hotel, restaurant and retail kind.
+        if (st.id === 'property-management' && HOTEL_WORDS.test(whole) && !LEASE_WORDS.test(whole))
+            st = exports.SUBTYPES.find((x) => x.id === 'hospitality-retail-ops') ?? st;
         out.push({ st, word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index, end: m.index + m[0].length });
     }
     return out.sort((a, b) => a.index - b.index);
@@ -1674,12 +1721,73 @@ function profileFor(v, model, ...args) {
         return /, investment management$/.test(v.name) ? v : { ...v, ...exports.INVESTMENT_PROFILE, name: `${v.name}, investment management` };
     return forUseCase(v, args);
 }
+// ---------------------------------------------------------------------------------------------------------------------------
+// Run 22: software built for ONE named trade. "the operating system for modern hotels", "ERP and POS for retail, restaurants and
+// distribution", "school management software" are vertical SaaS even when payments, billing, invoicing or stock words stand inside the
+// description: those are modules of the product, not what it is. It applies when the trade-software phrase comes before the first word
+// of the sector otherwise read (fintech, logistics tech, SaaS), and never when the seller's words also name a product category of
+// another vertical ("a payments platform for restaurants" stays fintech, "warehouse software for retailers" stays logistics tech).
+// ---------------------------------------------------------------------------------------------------------------------------
+const TRADE = '(?:hotels?|hoteliers?|hospitality|hostels?|resorts?|restaurants?|restaurateurs?|cafes?|caterers?|bakeries|retail(?:ers)?(?! (?:investors?|banking|banks?|lending|customers?|clients?|traders?|payments?|credit|users?|shoppers?|consumers?))|retail chains?|supermarkets?|grocers?|groceries|wholesalers?|distributors?|dealerships?|salons?|spas|gyms?|fitness (?:studios?|clubs?)|schools?|colleges?|universities|farms?|farmers|manufacturers?|factories|landlords|law firms|nonprofits?|charities|churches|travel agen(?:ts|cies)|car dealers?|accountants?|accounting firms?|bookkeepers?|real estate (?:agents?|agencies|brokers?)|estate agents?|letting agents?|event (?:venues?|organi[sz]ers?)|venues|childcare|daycare|nurser(?:y|ies)|tour operators?|car rental (?:companies|agencies)|rental companies|(?:yoga|dance|pilates|fitness|photo|tattoo|martial arts) studios?|tutors?|coaching (?:centres|centers|institutes?)|cinemas?|theatres?|barbershops?|florists?)';
+const TRADE_SYSTEM = '(?:erp|pos|pms|crm|software|system|platform|suite|package|app|solution|operating system|point of sale|management|booking|ticketing|scheduling|engine)s?';
+const TRADE_FIRST = new RegExp(`\\b${TRADE}(?: (?:and|or|&) ${TRADE})?(?: [\\w-]+){0,2} ${TRADE_SYSTEM}\\b`, 'i');
+const TRADE_FOR = new RegExp(`\\b${TRADE_SYSTEM}(?: [\\w-]+){0,3} (?:made |built |designed )?(?:for|to power|to run|serving)(?: [\\w-]+){0,2} ${TRADE}\\b`, 'i');
+const TRADE_OVERRIDES = new Set(['fintech', 'logistics-tech', 'saas']);
+// A description in pieces (a product line, a pain, a capability) may never say "software for hotels" in one phrase, but it talks the trade's own
+// language. Three or more different words of one trade's everyday vocabulary, more than the words of the sector otherwise read, make it that trade's software.
+const TRADE_DOMAIN = [
+    /\b(?:hotels?|hoteliers?|hostels?|guests?|housekeeping|front desk|overbookings?|occupancy|revpar|check-?ins?|room (?:rates?|inventory|types?)|reservations?|pms|channel managers?)\b/gi,
+    /\b(?:restaurants?|menus?|kitchens?|dine-?in|takeaway|table (?:booking|service|management)|waiters?|food cost|cashiers?|tills?)\b/gi,
+    /\b(?:supermarkets?|grocers?|billing counters?|skus?|planograms?|stock-?outs?|cashiers?|retail(?:ers)?|wholesalers?|distributors?|outlets?)\b/gi,
+    /\b(?:students?|teachers?|classrooms?|timetables?|attendance|admissions|curriculum|parents?|fee (?:collection|reminders?))\b/gi,
+];
+function tradeDomain(whole) {
+    let best = null;
+    for (const re of TRADE_DOMAIN) {
+        const found = new Map();
+        for (const m of whole.matchAll(re)) {
+            const w = m[0].toLowerCase().trim();
+            if (!found.has(w))
+                found.set(w, m.index ?? 0);
+        }
+        if (found.size >= 3 && (!best || found.size > best.n))
+            best = { word: [...found.keys()].slice(0, 3).join(', '), index: Math.min(...found.values()), n: found.size };
+    }
+    if (!best)
+        return null;
+    if (categoryHits(whole).some((h) => h.st.vertical !== 'vertical-saas' && h.st.vertical !== 'saas'))
+        return null;
+    return best;
+}
+function tradeSoftware(whole) {
+    const m = [TRADE_FIRST.exec(whole), TRADE_FOR.exec(whole)].filter((x) => !!x).sort((a, b) => a.index - b.index)[0];
+    if (!m)
+        return null;
+    if (categoryHits(whole).some((h) => h.st.vertical !== 'vertical-saas' && h.st.vertical !== 'saas'))
+        return null;
+    return { word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index };
+}
+function firstIn(whole, words) {
+    const low = whole.toLowerCase();
+    const at = words.map((w) => low.indexOf(w.toLowerCase())).filter((i) => i >= 0);
+    return at.length ? Math.min(...at) : Infinity;
+}
 /** The sector read, with the words that decided it and where they came from ('seller' or 'buyer'). */
 function explainSector(...args) {
     const { seller, buyer, context, role } = sides(args);
     // The product category noun decides when it comes BEFORE the first strong word of a different sector ("customer service software with AI agents"); otherwise the usual reading stands.
     const pk = pick(seller), cat = categoryPick(seller, [sellerWhole(args), buyer].join(' \n '));
     let s = cat && (!pk || (cat.v.id !== pk.v.id && (cat.first <= pk.first || pk.strong.every((w) => BUZZ.test(w))))) ? cat : pk;
+    // Run 22: software built for one named trade (hotels, retail, restaurants ...) is vertical SaaS, whatever its payment or stock modules are called.
+    const trade = tradeSoftware(sellerWhole(args));
+    if (trade && (!s || (TRADE_OVERRIDES.has(s.v.id) && trade.index <= firstIn(sellerWhole(args), s.strong)))) {
+        s = { v: exports.VERTICALS.find((x) => x.id === 'vertical-saas'), strong: [trade.word], weak: [], score: 1, first: trade.index };
+    }
+    else if (!trade && (!s || TRADE_OVERRIDES.has(s.v.id))) {
+        const dom = tradeDomain(sellerWhole(args));
+        if (dom && (!s || dom.n > s.strong.length))
+            s = { v: exports.VERTICALS.find((x) => x.id === 'vertical-saas'), strong: [dom.word], weak: [], score: dom.n, first: dom.index };
+    }
     // A bare "AI" in the seller's words says how it is built, not what it sells: when the deal text or the job titles name another sector, that sector is read instead.
     if (s && s.v.id === 'ai-native' && s.strong.every((w) => w === 'ai')) {
         const alt = pick(context, 2) ?? pick(role);
@@ -1729,13 +1837,19 @@ const MODEL_MATCH = [
     // the seller manages money: it runs funds or portfolios, or is an asset or wealth manager. Software for asset managers is not this.
     { model: 'investment', re: /\b(?:investment strateg\w*|systematic strateg\w*|hedge funds?|mutual funds?|venture (?:fund|capital)|private equity|family offices?|aum|assets under management|(?:manages?|managing|runs|invests?|investing|allocates?)\b[^.;,]{0,40}\b(?:funds?|(?<!application )(?<!product )(?<!service )portfolios?|client money|capital|wealth|investments?))\b/i, not: /\b(?:software|saas)\b/i },
     { model: 'investment', re: /(?<!\bit )(?<!digital )(?<!software )(?<!infrastructure )(?<!network )(?<!cloud )(?<!media )(?<!brand )(?<!enterprise )\b(?:asset|wealth|fund|portfolio|investment) (?:management|managers?|advisory|advisors?)\b/i, not: /\b(?:software|saas|platform|apps?|apis?|analytics|tools?|dashboards?|systems?)\b/i },
-    { model: 'connectivity', re: /\b(?:enterprise networks?|global networks?|private networks?|sd-?wan|mpls|leased lines?|connectivity|bandwidth|per site|per link|5g|business internet|internet access|broadband|isps?|voip|sip trunk\w*|managed network|wi-?fi|colocation|mobile network|(?:telecom\w*|network|mobile|wireless|fib(?:re|er)) (?:operator|provider|carrier|services?))\b/i, not: /\b(?:software|saas|subscriptions?|analytics|dashboards?|tools?|(?:cyber)?security (?:platform|software|vendor|company|product|tool)s?)\b/i },
-    { model: 'services', re: /\b(?:managed (?:(?:it|network|cloud|security) )?services?|managed (?:detection|security)|mdr|service desk|help ?desk|outsourc\w*|bpo|bpm|kpo|consulting|consultancy|per fte|per ticket|staff augmentation|it staffing|systems? integrators?|it services|statements? of work|contact cent(?:re|er)s?|call cent(?:re|er)s?|application maintenance|business (?:process )?services?|customer experience services?|cx services|dedicated (?:\w+ ){0,2}teams?)\b/i, not: /\b(?:software|saas|subscriptions?|platform|apps?|apis?|analytics|dashboards?|tools?|ai agents?|agents that|agentic|copilots?|ai assistants?|ai models?|llms?)\b/i },
+    // Run 22: a forwarder, a third party logistics provider or a customs broker sells services; the platform it runs is a tool for the customer.
+    // "freight forwarding software" (a tool sold to forwarders) is not matched here and stays a subscription.
+    { model: 'services', re: /\b(?:(?<!\b(?:with|for|to|and|or|of|by|between|from|among|including) )freight forwarders?|freight forwarding (?:platform|compan(?:y|ies)|firm|business|provider)|forwarding services|third[- ]party logistics|3pl (?:provider|compan(?:y|ies)|firm)|customs (?:brokers?|brokerage|clearance)|moves? freight|trucking compan(?:y|ies)|haulage compan(?:y|ies)|courier compan(?:y|ies)|delivery compan(?:y|ies)|logistics compan(?:y|ies))\b/i, not: /\b(?:software|saas|subscriptions?|per seat|per user|marketplace)\b/i },
+    // Run 22: a SIM or eSIM seller sells connectivity (data used, per SIM), even when it names a platform, tools or a software SIM beside it.
+    { model: 'connectivity', re: /\b(?:iot sims?|iot connectivity|esims?|soft ?sims?|global sims?|roaming sims?|sim cards?|(?:physical|software)(?: based)? sims?|data (?:each|per) sim|cellular iot|pay as you go data)\b/i, not: /\b(?:saas|per seat|per user|device management software)\b/i },
+    { model: 'connectivity', re: /\b(?:enterprise networks?|global networks?|private networks?|sd-?wan|mpls|leased lines?|connectivity|bandwidth|per site|per link|5g|business internet|internet access|broadband|isps?|voip|sip trunk\w*|managed network|wi-?fi|colocation|mobile network|satellite (?:internet|connectivity|broadband)|(?:internet service|internet) providers?|(?:telecom\w*|network|mobile|wireless|fib(?:re|er)) (?:operator|provider|carrier|services?))\b/i, not: /\b(?:software|saas|subscriptions?|analytics|dashboards?|tools?|(?:cyber)?security (?:platform|software|vendor|company|product|tool)s?)\b/i },
+    { model: 'services', re: /\b(?:(?<!fully )(?<!fully-)managed (?:(?:it|network|cloud|security) )?services?|managed (?:detection|security)|mdr|service desk|help ?desk|outsourc\w*|bpo|bpm|kpo|consulting|consultancy|per fte|per ticket|staff augmentation|it staffing|systems? integrators?|it services|statements? of work|contact cent(?:re|er)s?|call cent(?:re|er)s?|application maintenance|business (?:process )?services?|customer experience services?|cx services|dedicated (?:\w+ ){0,2}teams?)\b/i, not: /\b(?:software|saas|subscriptions?|platform|apps?|apis?|analytics|dashboards?|tools?|ai agents?|agents that|agentic|copilots?|ai assistants?|ai models?|llms?)\b/i },
     { model: 'marketplace', re: /\b(?:marketplace|take rate|gmv|two-sided|takes? an? (?:commission|cut|percentage))\b/i, not: /\b(?:software|saas|analytics|tools?)\b/i },
     // payments sellers are paid per transaction or by volume
-    { model: 'transactions', re: /(?:\b(?:per[- ]transaction|transaction fees?|payments? (?:apis?|gateways?|processing|processors?|platforms?|infrastructure|orchestration|rails|acquiring|providers?|companies|stack)|payouts?|checkout|interchange|remittances?|merchant acquiring|card issuing|upi)\b|(?:^|\n)\s*payments?\b)/i, not: /\b(?:software|saas|subscriptions?|analytics|dashboards?|tools?|reconcil\w*|security|fraud|risk|compliance|expense\w*|spend|travel|invoic\w*|billing|payroll)\b/i },
+    { model: 'transactions', re: /(?:\b(?:per[- ]transaction|transaction fees?|payments? (?:apis?|gateways?|processing|processors?|platforms?|infrastructure|orchestration|rails|acquiring|providers?|companies|stack)|payouts?|(?:hosted|payments?|online|one[- ]click) checkout|interchange|remittances?|merchant acquiring|card issuing|upi)\b|(?:^|\n)\s*payments?\b)/i, not: /\b(?:software|saas|subscriptions?|analytics|dashboards?|tools?|reconcil\w*|security|fraud|risk|compliance|expense\w*|spend|travel|invoic\w*|billing|payroll)\b/i },
     // hardware only when the seller makes, sells or ships devices, or names devices it sells; "test on real devices" is not that
-    { model: 'hardware_software', re: new RegExp(`\\b(?:hardware|(?:sells?|makes?|makers? of|manufactur\\w*|ships?|produces?)\\b[^.;]{0,40}\\b${DEVICE}\\b|${DEVICE}\\b[^.;]{0,20}(?:\\bplus\\b|\\bwith\\b|\\+)[^.;]{0,20}\\b(?:software|apps?|dashboard)\\b|(?:smart|iot|connected|handheld|rugged|gps|pos|wearable|embedded) (?:\\w+ )?${DEVICE})\\b`, 'i') },
+    // the adjective form ("smart sensors", "iot devices") says the seller makes them, unless a word of software follows ("IoT device management software" is a subscription)
+    { model: 'hardware_software', re: new RegExp(`\\b(?:hardware|(?:sells?|makes?|makers? of|manufactur\\w*|ships?|produces?)\\b[^.;]{0,40}\\b${DEVICE}\\b|${DEVICE}\\b[^.;]{0,20}(?:\\bplus\\b|\\bwith\\b|\\+)[^.;]{0,20}\\b(?:software|apps?|dashboard)\\b|(?:smart|iot|connected|handheld|rugged|gps|pos|wearable|embedded) (?:\\w+ )?${DEVICE}(?! (?:management|monitoring|analytics|security|software|platform|cloud|data|dashboards?)\\b))\\b`, 'i') },
     { model: 'saas', re: /\b(?:saas|subscriptions?|software|platform|apps?|per seat|per user|licen[cs]es?|cloud|apis?|sdks?|tools?|analytics)\b/i },
 ];
 // The model most companies in a sector use, assumed only when the text names none (the answer says it was assumed).

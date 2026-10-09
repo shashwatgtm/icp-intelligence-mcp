@@ -693,6 +693,27 @@
    "subtype": "seller-shipping",
    "model": "transactions",
    "id": "st-ss2"
+  },
+  {
+   "text": "A property management system and point of sale for independent hotels, with front desk, housekeeping and built in card payments",
+   "sector": "vertical-saas",
+   "subtype": "hospitality-retail-ops",
+   "model": "saas",
+   "id": "st-r22-1"
+  },
+  {
+   "text": "Restaurant POS and kitchen management software with online ordering, table payments, stock counts and staff rotas",
+   "sector": "vertical-saas",
+   "subtype": "hospitality-retail-ops",
+   "model": "saas",
+   "id": "st-r22-2"
+  },
+  {
+   "text": "ERP and POS software for retail stores and wholesale distributors with billing, stock, purchase and accounting",
+   "sector": "vertical-saas",
+   "subtype": "hospitality-retail-ops",
+   "model": "saas",
+   "id": "st-r22-3"
   }
  ]
 }
