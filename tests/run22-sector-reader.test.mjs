@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 
 let mod;
 try { mod = await import(new URL("../src/verticals.ts", import.meta.url)); } catch { mod = await import(new URL("../netlify/lib/verticals.js", import.meta.url)); }
-const { detectVertical, detectModel, explainSector } = mod;
+const { detectVertical, detectModel, explainSector, SUBTYPES } = mod;
 const sector = (input) => { const v = detectVertical(input); return v ? v.id : null; };
 const model = (input) => detectModel(undefined, input).model;
 
@@ -238,4 +238,29 @@ test("a vertical SaaS reading names no clinic, pharmacy or healthcare word", () 
   const v = detectVertical({ seller: ["Innkeep is a cloud operating system made for independent hotels and hostels with built in card payments"] });
   const text = JSON.stringify(v);
   assert.doesNotMatch(text, /\b(?:clinics?|pharmac\w+|patients?|healthcare|hospitals?)\b/i);
+});
+
+test("a hotel system and a retail ERP are vertical SaaS of different kinds with different notes", () => {
+  const h = detectVertical({ seller: ["Innkeep is a cloud operating system made for independent hotels and hostels: bookings, front desk, housekeeping, restaurant tills and built in card payments"] });
+  const r = detectVertical({ seller: ["Omnichannel ERP for retail, restaurants and distribution (retail ERP, restaurant ERP and distribution ERP, with cloud POS)"] });
+  assert.equal(h.id, "vertical-saas"); assert.equal(r.id, "vertical-saas");
+  assert.equal(h.subtype, "hotel-hospitality");
+  assert.equal(r.subtype, "retail-restaurant-ops", "the buyer marker cuts the first phrase; the whole seller text is read for the kind");
+  assert.notEqual(JSON.stringify(h.metrics), JSON.stringify(r.metrics));
+  assert.match(JSON.stringify(h.buyerRoles), /Revenue Manager|Front Office/);
+  assert.doesNotMatch(JSON.stringify(r.buyerRoles), /Revenue Manager|Front Office/);
+});
+
+test("a property management system next to hotel words is the hotel kind, and next to leases and tenants stays property management", () => {
+  assert.equal(detectVertical({ seller: ["a property management system for hotels with a channel manager and housekeeping"] }).subtype, "hotel-hospitality");
+  assert.equal(detectVertical({ seller: ["property management software for landlords: leases, tenants, rent collection and owner statements"] }).subtype, "property-management");
+});
+
+test("every committee sentence of a vertical SaaS kind names who signs in the shape the tools parse (one clause ending in 'signs')", () => {
+  for (const t of SUBTYPES) {
+    if (t.vertical !== "vertical-saas") continue;
+    const clauses = t.notes.committee.replace(/\.\s*$/, "").split(/;\s*/);
+    assert.ok(clauses.some((c) => /^(.*?)\s+(?:signs?|decides?)$/i.test(c)), `${t.id}: no clause ends in "signs": ${t.notes.committee}`);
+    assert.ok(clauses.some((c) => /\bchampions?\b/i.test(c)), `${t.id}: no champion clause`);
+  }
 });

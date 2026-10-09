@@ -697,23 +697,30 @@
   {
    "text": "A property management system and point of sale for independent hotels, with front desk, housekeeping and built in card payments",
    "sector": "vertical-saas",
-   "subtype": "hospitality-retail-ops",
+   "subtype": "hotel-hospitality",
    "model": "saas",
    "id": "st-r22-1"
   },
   {
    "text": "Restaurant POS and kitchen management software with online ordering, table payments, stock counts and staff rotas",
    "sector": "vertical-saas",
-   "subtype": "hospitality-retail-ops",
+   "subtype": "retail-restaurant-ops",
    "model": "saas",
    "id": "st-r22-2"
   },
   {
    "text": "ERP and POS software for retail stores and wholesale distributors with billing, stock, purchase and accounting",
    "sector": "vertical-saas",
-   "subtype": "hospitality-retail-ops",
+   "subtype": "retail-restaurant-ops",
    "model": "saas",
    "id": "st-r22-3"
+  },
+  {
+   "text": "A cloud PMS with a channel manager for boutique hotels and hostels, with housekeeping and guest messaging",
+   "sector": "vertical-saas",
+   "subtype": "hotel-hospitality",
+   "model": "saas",
+   "id": "st-r22-4"
   }
  ]
 }

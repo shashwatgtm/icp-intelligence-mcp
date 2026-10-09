@@ -767,28 +767,54 @@ exports.SUBTYPES = [
         },
     },
     {
-        id: 'hospitality-retail-ops', vertical: 'vertical-saas', name: 'hotel, restaurant and retail operations',
-        match: /\b(?:hotel (?:management|operating|software|pms)|hospitality (?:management|software|platform)|operating system (?:built |made |designed )?(?:for|to power) (?:modern |boutique |independent )?(?:hotels|hospitality)|(?:restaurant|retail|supermarket|distribution) (?:erp|pos)|(?:restaurant|retail) management (?:software|system|package)|restaurant (?:management|ordering) (?:software|system|platform)|(?:pos|point of sale) (?:software|system)|pms)\b/i,
+        id: 'hotel-hospitality', vertical: 'vertical-saas', name: 'hotels and hospitality operations',
+        match: /\b(?:hotel (?:management|operating|software|pms)|hospitality (?:management|software|platform)|operating system (?:built |made |designed )?(?:for|to power) (?:modern |boutique |independent )?(?:hotels|hospitality)|channel managers?|pms)\b/i,
         model: 'saas',
         notes: {
-            vocabulary: ['front desk or till', 'room or stock inventory', 'daily close', 'guest or customer record', 'multi outlet reporting', 'rate or price list', 'channel or online ordering link', 'tax and invoice rules', 'payment reconciliation', 'housekeeping or stock count'],
-            buyerRoles: ['Owner or General Manager', 'Head of Operations', 'Finance or Accounts Head', 'Outlet, Store or Front Desk Manager', 'Revenue or Category Manager', 'IT or Systems Lead'],
-            committee: 'The owner or general manager signs; the head of operations champions it; outlet, store and front desk staff use it all day; finance checks the accounts, tax and payment links; IT checks the other systems it must connect to (accounting, online channels, payment providers).',
+            vocabulary: ['front desk', 'room inventory', 'rate plan', 'channel manager', 'housekeeping', 'night audit', 'guest record', 'folio and payments', 'group and event booking', 'property reporting'],
+            buyerRoles: ['General Manager or Owner', 'Revenue Manager', 'Front Office Manager', 'Director of Finance', 'Food and Beverage Manager', 'IT Manager'],
+            committee: 'The owner or general manager signs; the revenue manager or front office manager champions it; front desk, housekeeping and food and beverage staff use it all day; finance checks the night audit, tax and payment reconciliation; IT checks the channel, payment and accounting links.',
             objections: [
-                { objection: 'We already run a system that works', response: 'Map one real day at one outlet or property, show where staff re-key data or reconcile by hand, and offer to connect to the accounting and payment tools already in place.' },
-                { objection: 'Staff will not learn a new system in the busy season', response: 'Plan the start for a quiet period, train the people who use it all day first, and agree how adoption is measured by outlet.' },
-                { objection: 'It must fit our tax, payment and accounting set up', response: 'Name the tax rules, payment providers and accounting tools involved, and show them working on the buyer\'s own invoices and daily close.' },
-                { objection: 'Moving our rooms, menus or stock data is risky', response: 'Plan the move one outlet or property at a time, check opening balances against the last close, and have the finance head sign it off.' },
+                { objection: 'We already have a property system that works', response: 'Map one real day at the front desk and the night audit, show where staff re-key or reconcile by hand, and offer to keep the channel and accounting links that already work.' },
+                { objection: 'Staff will not learn a new system in the busy season', response: 'Start in a quiet period, train front desk and housekeeping first, and agree how adoption is measured by department.' },
+                { objection: 'Our channels, payments and accounting must keep working', response: 'Name the channel managers, payment providers and accounting tools involved and show each working on the buyer\'s own rate plans and guest folios.' },
+                { objection: 'Moving our reservations and rates is risky', response: 'Move one property at a time, check future reservations and balances against the old system before the switch, and have the finance lead sign it off.' },
             ],
-            salesMotion: 'Owner or operations led, with a demo on the buyer\'s own rooms, menu or stock list, a pilot at one outlet, store or property, and a staged rollout; payment processing and add-on modules are priced as separate lines.',
-            metrics: ['time to close the day', 'stock or booking accuracy', 'billing or check-in time per guest or customer', 'errors and rework', 'payment reconciliation effort', 'adoption by outlet', 'revenue per outlet or per room'],
-            proofShape: 'One property, outlet or store before and after on closing time, stock or booking accuracy and payment reconciliation, measured by its own staff over a busy and a quiet period.',
+            salesMotion: 'Owner or general manager led, with a demo on the buyer\'s own rooms, rates and channels, a pilot at one property and a staged rollout across the group; payment processing and add on modules are priced as separate lines.',
+            metrics: ['night audit time', 'direct booking share', 'check in time per guest', 'overbookings and rate errors', 'payment reconciliation effort', 'revenue per available room', 'adoption by department'],
+            proofShape: 'One property before and after on night audit time, rate and overbooking errors and payment reconciliation, measured by its own staff across a busy and a quiet period.',
             discovery: [
-                'Which systems run bookings or sales, stock, billing and accounting today, and how do they hand data to each other?',
-                'What does a typical day close involve, and where do staff re-key or reconcile by hand?',
-                'How do payments reach your accounts, and who reconciles them?',
-                'How many outlets, properties or counters need the system, and what differs between them?',
-                'What would make a pilot at one outlet or property a clear success?',
+                'Which systems run reservations, rates, housekeeping, point of sale and accounting today, and how do they hand data to each other?',
+                'What does the night audit involve, and where do staff re-key or reconcile by hand?',
+                'How do card payments reach your accounts, and who reconciles them?',
+                'Which channels and booking sources feed the property, and how do rates and availability reach them?',
+                'What would make a pilot at one property a clear success?',
+            ],
+        },
+    },
+    {
+        id: 'retail-restaurant-ops', vertical: 'vertical-saas', name: 'retail, restaurant and distribution operations',
+        match: /\b(?:(?:restaurant|retail|supermarket|distribution) (?:erp|pos)|(?:restaurant|retail) management (?:software|system|package)|restaurant (?:management|ordering) (?:software|system|platform)|(?:pos|point of sale) (?:software|system))\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['billing counter', 'item and stock count', 'purchase order', 'supplier invoice', 'stock transfer between outlets', 'loyalty and offers', 'kitchen order', 'day end close', 'tax invoice', 'multi outlet reporting'],
+            buyerRoles: ['Business Owner', 'Head of Operations or Outlet Manager', 'Accounts or Finance Head', 'Purchase or Category Manager', 'Billing Counter Lead', 'IT or Systems Lead'],
+            committee: 'The owner signs; the operations head or outlet manager champions it; billing counter, store and kitchen staff use it all day; the accounts head checks tax invoices and the accounting link; purchase managers use the stock and supplier parts; IT checks the payment, online ordering and accounting links.',
+            objections: [
+                { objection: 'We already run billing software that works', response: 'Map one real day at one counter, show where staff re-key bills or count stock by hand, and offer to keep the accounting and payment tools already in place.' },
+                { objection: 'Counter staff will not learn a new screen at peak hours', response: 'Start at one outlet in a quiet week, train the counter staff first, and agree how speed at the counter is measured.' },
+                { objection: 'Stock and accounts must tie out', response: 'Show stock, purchase and sales posting to the accounts on the buyer\'s own items, and have the accounts head test a day close before signing.' },
+                { objection: 'Moving our items, prices and opening stock is risky', response: 'Move one outlet at a time, load the item list and opening stock from the old system, and check the first day end close against the old one.' },
+            ],
+            salesMotion: 'Owner led with a short cycle, a demo on the buyer\'s own item list and prices, a pilot at one outlet or counter and a staged rollout; add on modules and online ordering are priced as separate lines.',
+            metrics: ['billing time per customer', 'stock accuracy', 'stockouts and wastage', 'day end close time', 'purchase and supplier invoice errors', 'adoption by outlet', 'repeat customers through loyalty'],
+            proofShape: 'One outlet before and after on billing time, stock accuracy and day end close, measured by its own staff over a full week of trading.',
+            discovery: [
+                'Which tools run billing, stock, purchase and accounting today, and how does data move between them?',
+                'How long does a bill take at the counter at peak hours, and what slows it?',
+                'How do you count stock and find mismatches today?',
+                'How many outlets or counters are there, and what differs between them?',
+                'What would make a pilot at one outlet a clear success?',
             ],
         },
     },
@@ -1613,9 +1639,9 @@ function categoryHits(seller, whole = seller) {
             continue;
         if (st.id === 'industry-hr-payroll' && !INDUSTRY_WORD.test(whole))
             st = GENERIC_PAYROLL;
-        // Run 22: a "property management system" next to hotel words is a hotel system (front desk, housekeeping), not rent and leases: it is read as the hotel, restaurant and retail kind.
+        // Run 22: a "property management system" next to hotel words is a hotel system (front desk, housekeeping), not rent and leases: it is read as the hotel kind.
         if (st.id === 'property-management' && HOTEL_WORDS.test(whole) && !LEASE_WORDS.test(whole))
-            st = exports.SUBTYPES.find((x) => x.id === 'hospitality-retail-ops') ?? st;
+            st = exports.SUBTYPES.find((x) => x.id === 'hotel-hospitality') ?? st;
         out.push({ st, word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index, end: m.index + m[0].length });
     }
     return out.sort((a, b) => a.index - b.index);
@@ -1654,7 +1680,8 @@ function subtypeFor(v, args) {
     const whole = [sellerWhole(args), sd.buyer, sd.context, sd.role].join(' \n ');
     // the seller's own words first; when they name no sub-type of this vertical, the job titles and the free text about the deal may (a head of
     // last-mile operations, an expense module the buyer already has); the buyer's industry never does
-    for (const text of [sd.seller, [sd.role, sd.context].join(' \n ')]) {
+    // Run 22: a vertical SaaS seller names its trade in a phrase the buyer marker may have cut ("ERP and POS software for retail ..."): the whole seller text is read too, after the cut one.
+    for (const text of [sd.seller, ...(v.id === 'vertical-saas' ? [sellerWhole(args)] : []), [sd.role, sd.context].join(' \n ')]) {
         const hits = categoryHits(text, whole).filter((h) => h.st.vertical === v.id && h.st !== GENERIC_PAYROLL);
         const ids = new Set(hits.map((h) => h.st.id));
         // A loose descriptive word ("testing in the DevOps cycle") is not enough when the deal text names another kind of the same vertical.
