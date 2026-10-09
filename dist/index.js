@@ -1102,7 +1102,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const matched = criteria.filter(c => [c.criterion, ...c.values].join(' ').toLowerCase().split(/[^a-z0-9]+/).some(w => w.length > 2 && corrWords.has(w)));
             // A criterion counts as named by the pattern when its name uses the pattern's words, or the evidence names one of its values
             // (so the line can never say "already a criterion" for a criterion whose every value is "not found").
-            const nameMatched = (c) => matched.some(m => m.criterion === c.criterion) && c.criterion.toLowerCase().split(/[^a-z0-9]+/).some(w => w.length > 2 && corrWords.has(w));
+            const nameMatched = (c) => matched.some(m => m.criterion === c.criterion) && c.criterion.toLowerCase().split(/[^a-z0-9]+/).some(w => w.length > 2 && corrWords.has(w) && !rw_icp_ts_1.GENERIC_CRITERION_WORDS.has(w));
             const namedBy = () => criteria.filter(c => nameMatched(c) || proofHits.some(h => h.criterion === c.criterion));
             const corrLine = () => {
                 const m = namedBy();
@@ -1133,7 +1133,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const proofHits = proofItems.length ? criteria.flatMap(c => valueOf(c).flatMap(val => {
                 // a plain shared word is the strict match; another word for the same kind of thing (spirits for beverage) also names a value
                 const items = proofItems.filter(it => sharesWord(val, it));
-                if (!items.length) {
+                if (!items.length && !/\b(?:leaders?|managers?|heads?|directors?|officers?|teams?|developers?|engineers?|owners?|founders?|analysts?|roles?)\b/i.test(val)) {
                     const alias = proofItems.filter(it => (0, rw_icp_ts_1.aliasNamed)(val, it));
                     if (alias.length)
                         return [{ criterion: c.criterion, value: val, item: alias[0] }];
@@ -1142,7 +1142,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
             })) : [];
             const hitKeys = new Set(proofHits.map(h => `${h.criterion}|${h.value}`));
             const notFound = proofItems.length ? criteria.flatMap(c => c.values.filter(val => !hitKeys.has(`${c.criterion}|${val}`) && !nameMatched(c)).map(val => ({ criterion: c.criterion, value: val }))).filter(x => x.value.length <= 80) : [];
-            const proofKind = (t) => /\((?:customer|partner|analyst|client) quote\)|customer words/i.test(t) ? 'a customer statement' : /page claim|case study|story title|ebook|home page|award|recogni|leader|gartner|forrester|named|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
+            const proofKind = (t) => /\((?:customer|partner|analyst|client) quote\)|customer words/i.test(t) ? 'a customer statement' : /page claim|case study|story title|story headline|headline|ebook|home page|award|recogni|leader|gartner|forrester|named|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
             const longValues = criteria.flatMap(c => c.values.filter(v2 => v2.length > LONG_VALUE).map(v2 => ({ criterion: c.criterion, value: v2 })));
             // D30: the qualification tiers are bands of the maximum score (sum of criteria weights),
             // not fixed points, so they stay correct when the weights are not the 100-point default.
@@ -1250,7 +1250,7 @@ ${proofItems.length ? `## Evidence in Your Success Pattern
 
 Each statement you gave, and what it can do for the model:
 ${proofItems.map(it => `- ${q(shortText(it, 600))}: ${proofKind(it)}`).join('\n')}
-${proofHits.length ? `\n**Where your evidence names a value you score** (consider giving it the top points, then check it against your closed deals):\n${proofHits.slice(0, 6).map(h => { const c = criteria.find(x => x.criterion === h.criterion); return `- ${h.criterion}, ${q(c ? plainLabel(c, h.value) : h.value)}: named in ${q(shortText(h.item, 400))}`; }).join('\n')}\n` : '\nNone of your criterion values is named in these statements, so the evidence does not yet tell you which value to score highest.\n'}${notFound.length ? `\n**Not found in your evidence**: ${notFound.slice(0, 8).map(x => `${q(x.value)} (${x.criterion})`).join('; ')}.\n` : ''}
+${proofHits.length ? `\n**Where your evidence names a value you score** (consider giving it the top points, then check it against your closed deals):\n${proofHits.slice(0, 6).map(h => { const c = criteria.find(x => x.criterion === h.criterion); return `- ${h.criterion}, ${q(c ? plainLabel(c, h.value) : h.value)}: named in ${q(shortText(h.item, 400))}${(() => { const w = (0, rw_icp_ts_1.matchWords)(h.value, h.item); return w.length ? ` (matching word${w.length > 1 ? 's' : ''}: ${w.join(', ')})` : ''; })()}`; }).join('\n')}\n` : '\nNone of your criterion values is named in these statements, so the evidence does not yet tell you which value to score highest.\n'}${notFound.length ? `\n**No statement names these yet** (that does not mean they are absent; check them against your closed deals): ${notFound.slice(0, 8).map(x => `${q(x.value)} (${x.criterion})`).join('; ')}.\n` : ''}
 Use page claims and recognition as messaging, not as scoring evidence: score only what you can see in your closed-won and closed-lost deals.
 
 ---
@@ -2425,7 +2425,7 @@ ${SUGGESTED}
                 sectorRoles: sectorV ? sectorV.buyerRoles : [],
                 sectorNotes: sectorNotesText,
                 // an objection about seats or a trial is a software subscription objection: the plan leaves it out, because the business model can be read wrongly from the text
-                sectorObjections: acvOnly ? acvOnly.objections.filter(o => !verticals_ts_1.SAAS_ONLY.test(o.objection)).map(o => lowerCommonWords(o.objection)) : [],
+                sectorObjections: vv ? vv.objections.filter(o => !verticals_ts_1.SAAS_ONLY.test(o.objection)).map(o => lowerCommonWords(o.objection)) : [],
                 sectorProof: acvOnly ? acvOnly.proofShape : '',
                 sectorMetrics: acvOnly ? acvOnly.metrics : [],
                 modelKnown: !!ctx.model,

@@ -10,6 +10,7 @@
 // Sector facts come only from src/verticals.ts (rule B82); this file holds cue words (places, size words, aliases), no statistic or company.
 // Hostile or odd text is only ever quoted in the user's own words; it is never followed (the echo safeguard has already run).
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.GENERIC_CRITERION_WORDS = void 0;
 exports.listText = listText;
 exports.coverage = coverage;
 exports.readProfile = readProfile;
@@ -20,6 +21,7 @@ exports.splitStatements = splitStatements;
 exports.clearVertical = clearVertical;
 exports.aliasNamed = aliasNamed;
 exports.fitQuestions = fitQuestions;
+exports.matchWords = matchWords;
 const verticals_ts_1 = require("./verticals.js");
 // ---------------------------------------------------------------------------
 // small text helpers
@@ -84,10 +86,11 @@ const STOP = new Set(['and', 'the', 'for', 'with', 'from', 'that', 'this', 'of',
 // alias groups: words that mean the same customer type in practice (a word in a group is found when any word of the group is in the text)
 const ALIASES = [
     ['bfsi', 'bank', 'banking', 'banks', 'financial', 'finance', 'lending', 'lender', 'lenders', 'nbfc', 'neobank', 'neobanks', 'credit'],
-    ['fintech', 'fintechs', 'paytech', 'payments'],
+    ['fintech', 'fintechs', 'paytech'],
     ['bfsi', 'insurance', 'insurer', 'insurers', 'insurtech'],
     ['telecom', 'telecoms', 'telecommunication', 'telecommunications', 'telco', 'telcos', 'communications', 'isp', 'isps', 'carrier', 'carriers'],
     ['software', 'saas', 'tech', 'technology'],
+    ['software', 'saas', 'app', 'apps', 'application', 'applications', 'web', 'website', 'websites', 'mobile'],
     ['ecommerce', 'e-commerce', 'ecom', 'online', 'webstore', 'webshop', 'dtc', 'd2c'],
     ['retail', 'retailer', 'retailers', 'store', 'stores', 'shop', 'shops', 'merchant', 'merchants', 'supermarket', 'supermarkets'],
     ['auto', 'automotive', 'automobile', 'automobiles', 'vehicle', 'vehicles', 'oem', 'oems'],
@@ -163,7 +166,7 @@ function splitRoles(text) {
 }
 const TITLE_RE = /\b(?:chief|head|director|vp|svp|evp|vice president|president|manager|controller|treasurer|analyst|engineer|architect|officer|lead|owner|founder|coordinator|specialist|administrator|advocate|developer|designer|scientist|partner|principal|gm|ceo|cfo|cio|cto|ciso|coo|cmo|cro|cco|cpo|cdo|md)\b/i;
 function readProfile(raw) {
-    const res = { segments: [], subs: [], teams: [], sizes: [], allSizes: false, places: [], roles: [], roleNotes: [], roleSource: 'none', problems: [], claims: [], descr: [], outside: [], other: [], hypothetical: false };
+    const res = { segments: [], subs: [], teams: [], sizes: [], segSizes: [], allSizes: false, places: [], roles: [], roleNotes: [], roleSource: 'none', problems: [], claims: [], descr: [], outside: [], other: [], hypothetical: false };
     let text = squash(raw);
     // the echo safeguard may have put the whole text in curly quotes: the words are the user's own, so the quotes are taken off before reading
     if (/^[“"][\s\S]*[”"]$/.test(text))
@@ -290,6 +293,7 @@ function finish(res) {
     const dedupe = (a) => a.filter((x, i) => a.findIndex((y) => y.toLowerCase() === x.toLowerCase()) === i);
     res.segments = dedupe(res.segments);
     res.teams = dedupe(res.teams);
+    res.segSizes = dedupe(res.segSizes);
     res.sizes = res.sizes.filter((x, i, a) => a.findIndex((y) => y.toLowerCase().replace(/s$/, '') === x.toLowerCase().replace(/s$/, '')) === i);
     res.places = dedupe(res.places);
     res.roles = dedupe(res.roles);
@@ -366,6 +370,16 @@ function readTarget(clause, res, listForm) {
             expanded.push(...inc);
         }
     }
+    // a size word inside one of several segments belongs to that segment; it is a size for every account only when it is the one thing described
+    const segSize = (words, seg) => {
+        const found = words.filter((w) => SIZE_ONLY.test(w));
+        if (!found.length)
+            return;
+        if (expanded.length > 1)
+            res.segSizes.push(seg);
+        else
+            res.sizes.push(...found);
+    };
     for (let it of expanded) {
         it = squash(restore(it)).replace(/^(?:and|plus|also|mostly|mainly|some|many|like|including|such as)\s+/i, '').replace(/[.\s]+$/, '');
         it = it.replace(/^(?:the\s+)?(?:world'?s|worlds)\s+(?:leading|largest|top|biggest)\s+/i, '').replace(/^trusted by\s+/i, '').replace(/^(?:in particular|particularly|especially(?: in)?)\s+/i, '');
@@ -387,8 +401,11 @@ function readTarget(clause, res, listForm) {
         if (ind && ind[1].split(/\s+/).length <= 8) {
             res.segments.push(`${ind[2].trim()} industry`);
             const left = squash(ind[1].replace(/^other\s+/i, ''));
+            const two = left.split(/\s+and\s+/i);
             if (left && TEAM_END.test(left))
                 addTeam(res, ind[1]);
+            else if (two.length === 2 && two.every((x) => x.split(/\s+/).length <= 3))
+                res.segments.push(...two);
             else if (left && !res.segments.some((x) => x.toLowerCase() === left.toLowerCase()))
                 res.segments.push(ind[1]);
             continue;
@@ -445,9 +462,7 @@ function readTarget(clause, res, listForm) {
             const subs = br[2].split(/,\s*|\s+and\s+/).map((x) => squash(x)).filter(Boolean);
             res.segments.push(br[1]);
             subs.forEach((s) => res.subs.push({ main: br[1], sub: s }));
-            for (const s of sw)
-                if (SIZE_ONLY.test(s))
-                    res.sizes.push(s);
+            segSize(sw, br[1]);
             continue;
         }
         const cleaned = it.replace(/\u0001/g, ',');
@@ -457,9 +472,7 @@ function readTarget(clause, res, listForm) {
             continue;
         }
         res.segments.push(cleaned.replace(/^the\s+/i, ''));
-        for (const s of sw)
-            if (SIZE_ONLY.test(s))
-                res.sizes.push(s);
+        segSize(sw, cleaned.replace(/^the\s+/i, ''));
     }
 }
 function addTeam(res, t) { const x = noDot(squash(t)); if (x)
@@ -590,9 +603,9 @@ function gapAnalysis(curText, idlText, d) {
     if (curPartly.length)
         seg.push(`- **Partly named in your ideal profile**: ${listText(curPartly.map(cleanSeg))}. Only some of the words are in your ideal profile, so decide whether it covers them.`);
     if (noSharedWording)
-        seg.push(`- **No shared wording**: your current base lists ${listText(missingList.map(cleanSeg))}, and your ideal profile names ${listText(idlSeg.map(cleanSeg))}. The two lists may describe different things (for example kinds of project against kinds of company), so look up in your CRM which of your current customers are the kinds your ideal profile names before you compare them.`);
+        seg.push(`- **No shared wording**: your current base lists ${listText(missingList.map(cleanSeg))}, and your ideal profile names ${segPhrase(idlSeg)}. The two lists may describe different things (for example kinds of project against kinds of company), so look up in your CRM which of your current customers are the kinds your ideal profile names before you compare them.`);
     if (curMissing.length && idealNamesIndustries) {
-        seg.push(`- **In your current base but not named in your ideal profile**: ${listText(curMissing.map(cleanSeg))}. ${comparable || openEnded || !idealNamesIndustries ? 'Check their win rate, ACV and churn. If they are weaker than the named segments, keep serving them but stop prospecting there; if they are as strong, add them to your ideal profile.' : 'Check their win rate, ACV and churn before you decide to keep prospecting there.'}`);
+        seg.push(`- **In your current base but not named in your ideal profile**: ${listText(curMissing.map(cleanSeg))}. ${comparable || openEnded || !idealNamesIndustries ? 'Your ideal profile may simply describe them in other words, so check their win rate, ACV and churn against the named segments before you decide: keep prospecting there and add them to your ideal profile if they are as strong, or keep serving them without prospecting if they are weaker.' : 'Check their win rate, ACV and churn before you decide to keep prospecting there.'}`);
     }
     if (idlNotInBase.length || idlSubsNotInBase.length) {
         if (!noSharedWording)
@@ -681,7 +694,7 @@ function gapAnalysis(curText, idlText, d) {
     // ---------- refinements ----------
     push('---', '', '## Recommended ICP Refinements', '', 'Every line below comes from your two texts or your figures.', '', '### Must-Have Criteria (Add These)');
     const must = [];
-    must.push(`**Segments**: ${idealNamesIndustries ? listText(idlSeg.map(cleanSeg)) + ' (from your ideal profile)' : curSeg.length ? `${listText(curSeg.map(cleanSeg))} (carried forward from your current base, because your ideal profile names none)` : 'not named in either text'}`);
+    must.push(`**Segments**: ${idealNamesIndustries ? segPhrase(idlSeg) + ' (from your ideal profile)' : curSeg.length ? `${listText(curSeg.map(cleanSeg))} (carried forward from your current base, because your ideal profile names none)` : 'not named in either text'}`);
     must.push(`**Company size**: ${sizeCriterion(cur, idl)}`);
     must.push(`**Buyer or champion**: ${idl.roles.length ? `${listText(idl.roles.map(cleanRole))} (from your ideal profile)` : 'not named in your ideal profile'}`);
     must.push(`**Problem**: ${idl.problems.length ? `the problem${idl.problems.length > 1 ? 's' : ''} listed above, confirmed in the first call` : 'not named in your ideal profile'}`);
@@ -702,7 +715,7 @@ function gapAnalysis(curText, idlText, d) {
     if (idl.places.length)
         dq.push(`**Place**: prospects outside ${listText(idl.places.map(placeText))}`);
     if (idl.roles.length)
-        dq.push(`**No path to the buyer**: no access to ${listText(idl.roles.map(cleanRole))} or an equivalent after the first two meetings`);
+        dq.push(`**No path to a decision maker**: after the first two meetings you have not reached the person who decides, whether or not that person holds the title ${listText(idl.roles.map(cleanRole))}; a company without that title is not out, because it may be the one with the problem`);
     if (idl.problems.length)
         dq.push(`**No sign of the problem**: ${idl.problems.length === 1 ? 'the problem listed above does not show up' : `none of the ${idl.problems.length} problems listed above shows up`} in discovery`);
     if (d.targetAcv != null)
@@ -778,26 +791,44 @@ const num = (g) => { const m = /(-?\d+(?:\.\d+)?)/.exec(g); return m ? parseFloa
 // a segment as typed, with the semicolon of a list restored to a comma and a leading size word kept
 const cleanSeg = (s) => squash(s).replace(/\u0001/g, ',').split(/(\([^)]*\))/).map((part) => (part.startsWith('(') ? part : part.replace(/;\s*/g, ', '))).join('').replace(/\s*\([^)]*\)$/, (m) => (m.length <= 60 ? m : ''));
 const cleanRole = (r) => squash(r).replace(/\s*\([^)]*\)\s*$/, '');
+// segments for a sentence: "construction industry" is where the other segments work, so it follows them ("owners and general contractors, in the construction industry")
+function segPhrase(segs) {
+    const clean = segs.map(cleanSeg);
+    const ind = clean.filter((x) => /\bindustry$/i.test(x));
+    const rest = clean.filter((x) => !/\bindustry$/i.test(x));
+    if (!ind.length || !rest.length)
+        return listText(clean);
+    return `${listText(rest)}, in the ${ind.map((x) => x.replace(/^the\s+/i, '')).join(' and the ')}`;
+}
 const clip = (x) => (x.length > 120 ? `${x.slice(0, 120).replace(/\s+\S*$/, '')}` : x);
 function sizeText(cur, idl) {
-    if (idl.allSizes)
-        return `Your ideal profile covers businesses of all sizes (${listText(idl.sizes.filter((s) => !SIZE_ONLY.test(s) || /\bfrom\b|\ball\b|every|any/i.test(s)).map(quote) || [])}), so size does not separate a good fit from a poor one. Use the buyer, the problem and the segment to qualify instead.${cur.sizes.length ? ` Your current base mentions ${listText(cur.sizes)}.` : ''}`.replace('(), so', ', so').replace(/\(\)/, '');
-    if (idl.sizes.length && cur.sizes.length) {
-        const sk = (x) => x.toLowerCase().replace(/[^a-z0-9 ]+/g, '').replace(/s$/, '').trim();
-        const same = idl.sizes.filter((s) => cur.sizes.some((c) => sk(c) === sk(s)));
-        return `Your ideal profile says ${listText(idl.sizes)}; your current base says ${listText(cur.sizes)}.${same.length ? ` Both use ${listText(same.map(quote))}.` : ' They do not use the same size words, so compare them in your CRM by employee count.'}`;
+    const out = [];
+    const sk = (x) => x.toLowerCase().replace(/[^a-z0-9 ]+/g, '').replace(/s$/, '').trim();
+    if (idl.allSizes) {
+        const phrase = idl.sizes.filter((s) => !SIZE_ONLY.test(s) || /\bfrom\b|\ball\b|every|any/i.test(s)).map(quote);
+        out.push(`Your ideal profile covers businesses of all sizes${phrase.length ? ` (${listText(phrase)})` : ''}, so size does not separate a good fit from a poor one. Use the buyer, the problem and the segment to qualify instead.${cur.sizes.length ? ` Your current base mentions ${listText(cur.sizes)}.` : ''}`);
     }
-    if (idl.sizes.length)
-        return `Your ideal profile says ${listText(idl.sizes)}; your current base does not say how large its customers are, so compare them in your CRM.`;
-    if (cur.sizes.length)
-        return `Your current base says ${listText(cur.sizes)}; your ideal profile states no size.`;
-    return 'Neither profile states a company size.';
+    else if (idl.sizes.length && cur.sizes.length) {
+        const same = idl.sizes.filter((s) => cur.sizes.some((c) => sk(c) === sk(s)));
+        out.push(`Your ideal profile says ${listText(idl.sizes)}; your current base says ${listText(cur.sizes)}.${same.length ? ` Both use ${listText(same.map(quote))}.` : ' They do not use the same size words, so compare them in your CRM by employee count.'}`);
+    }
+    else if (idl.sizes.length)
+        out.push(`Your ideal profile says ${listText(idl.sizes)}; your current base does not say how large its customers are, so compare them in your CRM.`);
+    else if (cur.sizes.length)
+        out.push(`Your current base says ${listText(cur.sizes)}; your ideal profile states no size.`);
+    if (idl.segSizes.length)
+        out.push(`In your ideal profile a size word sits inside ${listText(idl.segSizes.map(quote))}, so it belongs to ${idl.segSizes.length === 1 ? 'that segment' : 'those segments'} and not to every account.`);
+    if (cur.segSizes.length)
+        out.push(`In your current base a size word sits inside ${listText(cur.segSizes.map(quote))}.`);
+    return out.length ? out.join(' ') : 'Neither profile states a company size.';
 }
 function sizeCriterion(cur, idl) {
     if (idl.allSizes)
         return 'all sizes are accepted, so do not qualify on size';
     if (idl.sizes.length)
         return `${listText(idl.sizes)} (from your ideal profile)`;
+    if (idl.segSizes.length)
+        return `not one size for every segment: the size word in ${listText(idl.segSizes.map(quote))} applies to that segment only`;
     return 'not stated in your ideal profile';
 }
 function causeText(d, cur, idl, curNamed, curMissing) {
@@ -839,12 +870,12 @@ function causeText(d, cur, idl, curNamed, curMissing) {
 }
 function plan(d, cur, idl, curSeg, curNamed, curMissing, idlNotInBase, idealNamesIndustries) {
     const segs = idealNamesIndustries ? idl.segments : curSeg;
-    const segText = segs.length ? listText(segs.slice(0, 6).map(cleanSeg)) : 'your target segments';
+    const segText = segs.length ? segPhrase(segs.slice(0, 6)) : 'your target segments';
     const buyer = idl.roles.length ? listText(idl.roles.map(cleanRole)) : 'the buyer';
     const prob = idl.problems.length ? (idl.problems.length === 1 ? 'the problem you listed' : 'the problems you listed') : 'the problem you sell against';
     const gaps = d.metricRows.filter((m) => m.both && m.behind).map((m) => LABEL_TEXT[m.key] || m.label);
     const w1 = [`**Week 1, find out what is true.** Pull win rate, ACV and churn for ${curSeg.length ? listText(curSeg.slice(0, 6).map(cleanSeg)) : 'each segment you sell to'}.${curMissing.length ? ` Look first at ${listText(curMissing.map(cleanSeg))}, which your ideal profile does not name.` : ''} From your last won deals, write down the title that signed${idl.roles.length ? ` and compare it with ${buyer}` : ''}, and tag each deal with the problem it solved. Done when each segment has its three numbers and each won deal has a signer and a problem.`];
-    const w2 = [`**Week 2, build the list.** Make a target list for ${segText}${idl.places.length ? ` in ${listText(idl.places.map(placeText))}` : ''}${idlNotInBase.length && idlNotInBase.length < segs.length ? `, with ${listText(idlNotInBase.map(cleanSeg))} as the new ground` : ''}, with a named ${idl.roles.length ? `contact (${buyer})` : 'contact'} for each account. Write one opening message per segment that starts from ${prob}. Done when every account on the list has a contact and a first message.`];
+    const w2 = [`**Week 2, build the list.** Make a target list for ${segText}${idl.places.length ? ` in ${listText(idl.places.map(placeText))}` : ''}${idlNotInBase.length && idlNotInBase.length < segs.length ? ` (${listText(idlNotInBase.map(cleanSeg))} ${idlNotInBase.length === 1 ? 'is' : 'are'} new ground for you)` : ''}, with a named ${idl.roles.length ? `contact (${buyer})` : 'contact'} for each account. Write one opening message per segment that starts from ${prob}. Done when every account on the list has a contact and a first message.`];
     const w3 = [`**Week 3, get ready to be asked.** Collect proof for each target segment from your won deals${d.sectorProof ? `; in your sector a strong proof point is: ${noDot(d.sectorProof)}` : ''}.${d.sectorObjections.length ? ` Write short answers to the objections your buyers raise: ${d.sectorObjections.slice(0, 3).join('; ')}.` : ''} ${d.targetAcv != null ? `Check the price and scope against your target of ${d.money(d.targetAcv)}. ` : ''}${d.metricRows.some((m) => m.key === 'acv' && m.both && m.behind) ? 'Run the pricing step listed under the ACV gap. ' : ''}Done when each segment has one proof point${d.sectorObjections.length ? ' and each objection has an answer' : ''}.`.trim()];
     const w4 = [`**Week 4, check and decide.** Re-score the open pipeline against the criteria above${gaps.length ? ` and look again at ${listText(gaps)}` : ''}.${curMissing.length ? ` Decide for ${listText(curMissing.map(cleanSeg))}: keep serving, stop prospecting, or add to the ideal profile.` : ''} Done when you have a one page ICP with the segments you will pursue, the buyer, the problem and the disqualifiers.`];
     return [...w1, '', ...w2, '', ...w3, '', ...w4].join('\n');
@@ -968,4 +999,21 @@ function fitQuestions(v, productText) {
     const extra = pool.find((q) => /\b(?:quality|latency|answer rate|caller)/i.test(q)) || pool[0];
     return extra ? [...four.slice(0, 3), extra] : four;
 }
+// The words of the statement that name the value (shown next to a "named in" line, so the user can see why a value was linked to a statement).
+function matchWords(value, statement) {
+    const own = (x) => String(x).toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length >= 2);
+    const stmtWords = [...new Set(own(statement))];
+    const out = [];
+    for (const w of own(value)) {
+        const sw = stemOf(w);
+        if (STOP_STEMS.has(sw) || sw.length < 2)
+            continue;
+        const alias = ALIAS_OF.get(sw);
+        const hit = stmtWords.find((x) => { const sx = stemOf(x); return sx === sw || !!alias?.has(sx); });
+        if (hit && !out.includes(hit))
+            out.push(hit);
+    }
+    return out.slice(0, 4);
+}
+exports.GENERIC_CRITERION_WORDS = new Set(['segment', 'segments', 'buyer', 'champion', 'role', 'roles', 'criterion', 'problem', 'fit', 'category', 'type', 'customer', 'customers']);
 //# sourceMappingURL=rw-icp.js.map

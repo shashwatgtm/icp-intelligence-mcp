@@ -235,6 +235,33 @@ test("round 2: awareness training is not given the email gateway notes; a phishi
   assert.match(mail, /email security/);
 });
 
+
+// ---- round 3 ----
+test("round 3: a size word inside one segment is not a company size for every segment", async () => {
+  const out = await call({ company: "Lanehop", product_category: "courier aggregation and shipping software for online sellers from Lanehop",
+    current_customers: "Lanehop customers: SMB online retailers, Social sellers, Large omnichannel brands",
+    ideal_icp: "online retailers, social sellers and large online and offline brands in India, with Founder as the buyer, who face delivery delays" });
+  assert.doesNotMatch(out, /Company size\*\*: large/i);
+  assert.match(out, /Company size\*\*: not one size for every segment/);
+  assert.match(out, /size word sits inside \u201clarge online and offline brands\u201d/);
+  const one = await call({ company: "Corvane", current_customers: "Corvane clients: Manufacturing", ideal_icp: "mid-size manufacturers, with CFO as the buyer" });
+  assert.match(one, /Company size\*\*: mid-size/i, "one described group keeps its size word as the size");
+});
+
+test("round 3: the buyer disqualifier does not remove the companies the problem describes", async () => {
+  const out = await call({ company: "Brightwave", current_customers: "Brightwave customers: Software companies",
+    ideal_icp: "software companies, with localization manager as the buyer, who face spreadsheets and one person managing everything" });
+  assert.doesNotMatch(out, /no access to localization manager/i);
+  assert.match(out, /whether or not that person holds the title localization manager/);
+});
+
+test("round 3: an industry is where the other segments work, not a segment beside them", async () => {
+  const out = await call({ company: "Buildloop", product_category: "construction management software from Buildloop", current_customers: "Buildloop customers: Commercial, Residential",
+    ideal_icp: "owners, general contractors and specialty contractors in the construction industry, with President as the buyer" });
+  assert.match(out, /owners, general contractors and specialty contractors, in the construction industry/);
+  assert.doesNotMatch(out, /specialty contractors and construction industry/);
+});
+
 // ---- the pool scenarios through the real builders (private folder; skipped when HELIX_POOL_DIR is not set) ----
 const POOL_DIR = process.env.HELIX_POOL_DIR;
 test("pool scenarios through the real builders: every input used, no wrong claim of a missing segment", { skip: !POOL_DIR }, async () => {

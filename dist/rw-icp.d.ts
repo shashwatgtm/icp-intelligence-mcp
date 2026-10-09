@@ -9,6 +9,7 @@ export interface ProfileRead {
     }>;
     teams: string[];
     sizes: string[];
+    segSizes: string[];
     allSizes: boolean;
     places: string[];
     roles: string[];
@@ -73,4 +74,6 @@ export declare function splitStatements(text: string): string[];
 export declare function clearVertical(v: Vertical | null, sellerText: string): Vertical | null;
 export declare function aliasNamed(value: string, statement: string): boolean;
 export declare function fitQuestions(v: Vertical, productText: string): string[];
+export declare function matchWords(value: string, statement: string): string[];
+export declare const GENERIC_CRITERION_WORDS: Set<string>;
 //# sourceMappingURL=rw-icp.d.ts.map

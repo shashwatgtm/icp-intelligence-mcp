@@ -80,7 +80,7 @@ test("scoring model: 'Sr.' does not cut a statement in two; a value is 'named in
   assert.doesNotMatch(r.text, /"Nivea Sr"/);
   assert.doesNotMatch(r.text, /"portfolio manager": named in/);
   assert.doesNotMatch(r.text, /"Financial services": named in/);
-  assert.match(r.text, /Not found in your evidence\*\*: [^\n]*"portfolio manager"/);
+  assert.match(r.text, /No statement names these yet[^\n]*: [^\n]*"portfolio manager"/);
 });
 
 // ---- (3) buyer group ----
@@ -360,7 +360,7 @@ test("scoring evidence: CFO is found in a statement that names a CFO; a group wo
   ok(r);
   assert.match(r.text, /Buyer or champion role, "CFO": named in "Sula Vineyards CFO/);
   assert.doesNotMatch(r.text, /"managers": named in/);
-  assert.doesNotMatch(r.text, /Not found in your evidence\*\*: [^\n]*"CFO"/);
+  assert.doesNotMatch(r.text, /No statement names these yet[^\n]*: [^\n]*"CFO"/);
   assert.match(r.text, /already a criterion: \*\*Buyer or champion role\*\*/);
   assert.match(r.text, /- "Sula Vineyards CFO[^\n]*": a customer statement/);
   assert.doesNotMatch(r.text, /already a criterion: [^\n]*\*\*Segment\*\*/);
