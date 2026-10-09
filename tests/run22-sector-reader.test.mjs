@@ -277,7 +277,7 @@ test("a hotel system and a retail ERP are vertical SaaS of different kinds with 
   const h = detectVertical({ seller: ["Innkeep is a cloud operating system made for independent hotels and hostels: bookings, front desk, housekeeping, restaurant tills and built in card payments"] });
   const r = detectVertical({ seller: ["Omnichannel ERP for retail, restaurants and distribution (retail ERP, restaurant ERP and distribution ERP, with cloud POS)"] });
   assert.equal(h.id, "vertical-saas"); assert.equal(r.id, "vertical-saas");
-  assert.equal(h.subtype, "hotel-hospitality");
+  assert.equal(h.subtype, "hotel-lodging");
   assert.equal(r.subtype, "retail-restaurant-ops", "the buyer marker cuts the first phrase; the whole seller text is read for the kind");
   assert.notEqual(JSON.stringify(h.metrics), JSON.stringify(r.metrics));
   assert.match(JSON.stringify(h.buyerRoles), /Revenue Manager|Front Office/);
@@ -285,7 +285,7 @@ test("a hotel system and a retail ERP are vertical SaaS of different kinds with 
 });
 
 test("a property management system next to hotel words is the hotel kind, and next to leases and tenants stays property management", () => {
-  assert.equal(detectVertical({ seller: ["a property management system for hotels with a channel manager and housekeeping"] }).subtype, "hotel-hospitality");
+  assert.equal(detectVertical({ seller: ["a property management system for hotels with a channel manager and housekeeping"] }).subtype, "hotel-lodging");
   assert.equal(detectVertical({ seller: ["property management software for landlords: leases, tenants, rent collection and owner statements"] }).subtype, "property-management");
 });
 
@@ -296,4 +296,10 @@ test("every committee sentence of a vertical SaaS kind names who signs in the sh
     assert.ok(clauses.some((c) => /^(.*?)\s+(?:signs?|decides?)$/i.test(c)), `${t.id}: no clause ends in "signs": ${t.notes.committee}`);
     assert.ok(clauses.some((c) => /\bchampions?\b/i.test(c)), `${t.id}: no champion clause`);
   }
+});
+
+test("no sector name or note text holds a clinic, pharmacy, patient, hospital or medical word (not even inside another word)", () => {
+  const { VERTICALS } = mod;
+  const all = JSON.stringify(SUBTYPES.map((t) => [t.name, t.notes])) + JSON.stringify(VERTICALS.map((v) => [v.name, v.vocabulary, v.buyerRoles, v.committee, v.objections, v.salesMotion, v.metrics, v.proofShape, v.discovery]));
+  assert.doesNotMatch(all, /clinic|pharmac|patient|hospital|medical/i);
 });

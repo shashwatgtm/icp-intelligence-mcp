@@ -697,7 +697,7 @@
   {
    "text": "A property management system and point of sale for independent hotels, with front desk, housekeeping and built in card payments",
    "sector": "vertical-saas",
-   "subtype": "hotel-hospitality",
+   "subtype": "hotel-lodging",
    "model": "saas",
    "id": "st-r22-1"
   },
@@ -718,7 +718,7 @@
   {
    "text": "A cloud PMS with a channel manager for boutique hotels and hostels, with housekeeping and guest messaging",
    "sector": "vertical-saas",
-   "subtype": "hotel-hospitality",
+   "subtype": "hotel-lodging",
    "model": "saas",
    "id": "st-r22-4"
   }
