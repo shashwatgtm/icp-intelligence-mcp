@@ -438,7 +438,7 @@ exports.SUBTYPES = [
         match: /\b(?:core banking(?: platform| system| software)?|cloud banking platform|digital banking platform|banking core|core ledger|banking ledger|deposits and lending platform)\b/i,
         model: 'saas',
         notes: {
-            vocabulary: ['core banking', 'ledger', 'deposits', 'loans', 'product configuration', 'legacy core', 'migration', 'cutover', 'regulatory reporting', 'accounts'],
+            vocabulary: ['ledger', 'deposits', 'loans', 'product configuration', 'legacy core', 'migration', 'cutover', 'regulatory reporting', 'accounts'],
             buyerRoles: ['Chief Technology Officer', 'Chief Operating Officer', 'Head of Digital Banking', 'Head of Core Systems', 'Chief Risk Officer', 'Head of Compliance', 'Chief Financial Officer'],
             committee: 'The CTO or the chief operating officer signs a core change; the head of digital banking or product champions it; core systems and architecture run the migration; risk and compliance check regulatory reporting and data location; finance checks the ledger and reporting.',
             objections: [
