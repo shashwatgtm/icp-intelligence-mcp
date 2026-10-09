@@ -1757,10 +1757,15 @@ function profileFor(v, model, ...args) {
 // of the sector otherwise read (fintech, logistics tech, SaaS), and never when the seller's words also name a product category of
 // another vertical ("a payments platform for restaurants" stays fintech, "warehouse software for retailers" stays logistics tech).
 // ---------------------------------------------------------------------------------------------------------------------------
-const TRADE = '(?:hotels?|hoteliers?|hospitality|hostels?|resorts?|restaurants?|restaurateurs?|cafes?|caterers?|bakeries|retail(?:ers)?(?! (?:investors?|banking|banks?|lending|customers?|clients?|traders?|payments?|credit|users?|shoppers?|consumers?))|retail chains?|supermarkets?|grocers?|groceries|wholesalers?|distributors?|dealerships?|salons?|spas|gyms?|fitness (?:studios?|clubs?)|schools?|colleges?|universities|farms?|farmers|manufacturers?|factories|landlords|law firms|nonprofits?|charities|churches|travel agen(?:ts|cies)|car dealers?|accountants?|accounting firms?|bookkeepers?|real estate (?:agents?|agencies|brokers?)|estate agents?|letting agents?|event (?:venues?|organi[sz]ers?)|venues|childcare|daycare|nurser(?:y|ies)|tour operators?|car rental (?:companies|agencies)|rental companies|(?:yoga|dance|pilates|fitness|photo|tattoo|martial arts) studios?|tutors?|coaching (?:centres|centers|institutes?)|cinemas?|theatres?|barbershops?|florists?)';
-const TRADE_SYSTEM = '(?:erp|pos|pms|crm|software|system|platform|suite|package|app|solution|operating system|point of sale|management|booking|ticketing|scheduling|engine)s?';
-const TRADE_FIRST = new RegExp(`\\b${TRADE}(?: (?:and|or|&) ${TRADE})?(?: [\\w-]+){0,2} ${TRADE_SYSTEM}\\b`, 'i');
-const TRADE_FOR = new RegExp(`\\b${TRADE_SYSTEM}(?: [\\w-]+){0,3} (?:made |built |designed )?(?:for|to power|to run|serving)(?: [\\w-]+){0,2} ${TRADE}\\b`, 'i');
+const TRADE = '(?:hotels?|hoteliers?|hospitality|hostels?|resorts?|restaurants?|restaurateurs?|cafes?|caterers?|bakeries|retail(?:ers)?(?! (?:investors?|banking|banks?|lending|customers?|clients?|traders?|payments?|credit|users?|shoppers?|consumers?))|retail chains?|supermarkets?|grocers?|groceries|wholesalers?|distributors?|dealerships?|salons?|spas|gyms?|fitness (?:studios?|clubs?)|schools?|colleges?|universities|farms?|farmers|manufacturers?|factories|landlords|law firms|nonprofits?|charities|churches|travel agen(?:ts|cies)|car dealers?|car wash(?:es)?|agricultur(?:e|al)|accountants?|accounting firms?|tax professionals|cpas|bookkeepers?|real estate (?:agents?|agencies|brokers?)|estate agents?|letting agents?|event (?:venues?|organi[sz]ers?)|venues|childcare|daycare|nurser(?:y|ies)|tour operators?|car rental (?:companies|agencies)|rental companies|(?:yoga|dance|pilates|fitness|photo|tattoo|martial arts) studios?|tutors?|coaching (?:centres|centers|institutes?)|cinemas?|theatres?|barbershops?|florists?)';
+// Business-type nouns that name WHO the software is for whatever the trade before them ("independent auto repair shops", "textile mills", "growers").
+// Nouns that name a function, a size or another vertical's customers (teams, enterprises, operators, centres, banks, merchants) are not here.
+const TRADE_HEAD = '(?:(?:book|work)?shops?|stores?|mills?|factor(?:y|ies)|plants|farms?|ranches|growers|airlines?|clubs?|associations?|schools?|colleges?|universities|dealerships?|dealers|wholesalers?|distributors?|manufacturers?|exporters|importers|venues?|parks|resorts?|hotels?|restaurants?|cafes?|salons?|gyms?|churches|church|municipalit(?:y|ies)|local governments?|nonprofits?|charities|cinemas?|theatres?|installers|contractors|bakeries|garages|wineries|breweries|laundries)';
+// A phrase that names a finance, online-selling, security, telecom or software customer is another vertical's business, not a trade of vertical SaaS.
+const NOT_A_TRADE = /\b(?:online|e-?commerce|d2c|marketplace|banks?|banking|investment|insurance|insurers?|financial|lend\w*|credit|wealth|asset|funds?|payments?|brokerage|securities|trading|fintech|security|cyber\w*|telecom\w*|logistics|freight|shipping|software|saas|developers?)\b/i;
+const TRADE_SYSTEM = '(?:erp|pos|pms|crm|lms|software|system|platform|suite|package|app|solution|operating system|point of sale|management|booking|ticketing|scheduling|engine)s?';
+const TRADE_FIRST = new RegExp(`\\b(?<t>(?:${TRADE}|(?:[\\w-]+ ){0,2}${TRADE_HEAD})(?: (?:and|or|&) (?:${TRADE}|${TRADE_HEAD}))?)(?: [\\w-]+){0,4} ${TRADE_SYSTEM}\\b`, 'i');
+const TRADE_FOR = new RegExp(`\\b${TRADE_SYSTEM}(?: [\\w-]+){0,3} (?:made |built |designed )?(?:for|to power|to run|serving)(?<t>(?: [\\w-]+){0,3} (?:${TRADE}|${TRADE_HEAD}))\\b`, 'i');
 const TRADE_OVERRIDES = new Set(['fintech', 'logistics-tech', 'saas']);
 // A description in pieces (a product line, a pain, a capability) may never say "software for hotels" in one phrase, but it talks the trade's own
 // language. Three or more different words of one trade's everyday vocabulary, more than the words of the sector otherwise read, make it that trade's software.
@@ -1789,7 +1794,7 @@ function tradeDomain(whole) {
     return best;
 }
 function tradeSoftware(whole) {
-    const m = [whole.match(TRADE_FIRST), whole.match(TRADE_FOR)].filter((x) => !!x).sort((a, b) => (a.index ?? 0) - (b.index ?? 0))[0];
+    const m = [whole.match(TRADE_FIRST), whole.match(TRADE_FOR)].filter((x) => !!x && !NOT_A_TRADE.test(x.groups?.t ?? '')).sort((a, b) => (a.index ?? 0) - (b.index ?? 0))[0];
     if (!m)
         return null;
     if (categoryHits(whole).some((h) => h.st.vertical !== 'vertical-saas' && h.st.vertical !== 'saas'))
