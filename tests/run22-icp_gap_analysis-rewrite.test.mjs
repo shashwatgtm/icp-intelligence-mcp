@@ -262,6 +262,41 @@ test("round 3: an industry is where the other segments work, not a segment besid
   assert.doesNotMatch(out, /specialty contractors and construction industry/);
 });
 
+
+// ---- round 4: a kind covered only through an alias group is not "named" ----
+test("round 4: a kind matched only through an alias group is shown as covered by the user's words, on its own line, with those words", async () => {
+  const out = await call({ company: "Brightwave", product_category: "continuous localization and translation management platform from Brightwave",
+    current_customers: "Brightwave customers: enterprise software, financial services, web and mobile apps, marketing content and customer support",
+    ideal_icp: "product, engineering, localization and marketing teams at software companies and global enterprises, with localization manager as the buyer, who face spreadsheets and manual work" });
+  const named = out.split("\n").find((l) => l.startsWith("- **Named in both**")) || "";
+  assert.match(named, /enterprise software/);
+  assert.doesNotMatch(named, /web and mobile apps/, "an alias-only match is called named");
+  assert.match(out, /- \*\*Covered by your words, not named outright\*\*: web and mobile apps \(covered by your words \u201csoftware\u201d\)/);
+  const bottom = out.split("\n").find((l) => l.startsWith("Your current base lists")) || "";
+  assert.doesNotMatch(bottom, /names enterprise software, and web and mobile apps|names [^.,]*web and mobile apps/);
+  assert.match(bottom, /its words cover web and mobile apps/);
+  assert.match(out, /\*\*In your current base but neither named nor covered by your ideal profile's words\*\*: financial services, and marketing content and customer support/);
+  assert.doesNotMatch(out, /Look first at financial services/);
+  assert.match(out, /First decide whether financial services, and marketing content and customer support belong to your ideal profile/);
+});
+
+test("round 4: plain word variants are still named outright; a kind named only in the problem text is neither named nor covered", async () => {
+  const a = await call({ company: "Corvane", current_customers: "Corvane customers: Banking, Retailers", ideal_icp: "banks and retail brands, with CFO as the buyer" });
+  assert.match(a, /\*\*Named in both\*\*: Banking and Retailers/);
+  assert.doesNotMatch(a, /Covered by your words/);
+  const b = await call({ company: "Corvane", current_customers: "Corvane customers: software companies, insurers", ideal_icp: "banks, with CFO as the buyer, who face software licence costs" });
+  assert.doesNotMatch(b, /Named in both\*\*: [^\n]*software/);
+  assert.doesNotMatch(b, /Covered by your words[^\n]*software/);
+});
+
+
+test("round 4: two different words that start alike are not the same kind (enterprises and entertainment, public and publishing)", async () => {
+  const out = await call({ company: "Corvane", current_customers: "Corvane customers: Public sector, Media and entertainment, Banking",
+    ideal_icp: "retail chains, enterprises and startups, with CIO as the buyer" });
+  assert.doesNotMatch(out, /Named in both\*\*:[^\n]*(?:Public sector|Media and entertainment)/);
+  assert.doesNotMatch(out, /Covered by your words[^\n]*(?:Public sector|Media and entertainment)/);
+});
+
 // ---- the pool scenarios through the real builders (private folder; skipped when HELIX_POOL_DIR is not set) ----
 const POOL_DIR = process.env.HELIX_POOL_DIR;
 test("pool scenarios through the real builders: every input used, no wrong claim of a missing segment", { skip: !POOL_DIR }, async () => {

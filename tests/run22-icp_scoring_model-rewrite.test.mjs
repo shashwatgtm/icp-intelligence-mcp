@@ -188,6 +188,14 @@ test("round 3: 'already a criterion' needs a distinctive word or a matching valu
   assert.match(head, /customer story headline\)": a page claim or recognition/);
 });
 
+
+test("round 4: a value is not linked to a statement by a word that only starts like one of its words (transport and transparency, government and governance)", async () => {
+  const out = await call({ company: "Brightwave", product_category: "device connectivity platform from Brightwave",
+    success_correlation: "A customer lowered its data usage by half after gaining device transparency (page claim); governance and access unified for 480,000 users (page claim)",
+    scoring_criteria: [{ criterion: "Segment", importance: "critical", values: ["logistics", "Public Sector"] }] });
+  assert.doesNotMatch(out, /Segment, "logistics": named in|Segment, "Public Sector": named in/);
+});
+
 const POOL_DIR = process.env.HELIX_POOL_DIR;
 test("pool scenarios through the real builders: named targets never score 0 by position, no cut text", { skip: !POOL_DIR }, async () => {
   const { BUILD20 } = await import(`${POOL_DIR}/run20/eval/builders20.mjs`);
