@@ -2408,7 +2408,8 @@ ${SUGGESTED}
                 sectorName: sectorV ? sideName : '',
                 sectorRoles: sectorV ? sectorV.buyerRoles : [],
                 sectorNotes: sectorNotesText,
-                sectorObjections: acvOnly ? acvOnly.objections.map(o => lowerCommonWords(o.objection)) : [],
+                // an objection about seats or a trial is a software subscription objection: the plan leaves it out, because the business model can be read wrongly from the text
+                sectorObjections: acvOnly ? acvOnly.objections.filter(o => !verticals_ts_1.SAAS_ONLY.test(o.objection)).map(o => lowerCommonWords(o.objection)) : [],
                 sectorProof: acvOnly ? acvOnly.proofShape : '',
                 sectorMetrics: acvOnly ? acvOnly.metrics : [],
                 modelKnown: !!ctx.model,
