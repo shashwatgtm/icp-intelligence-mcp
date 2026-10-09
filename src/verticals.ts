@@ -1924,3 +1924,99 @@ export const MODEL_TRADES: Record<BusinessModel | 'unknown', string[]> = {
 
 /** Words that only fit a software subscription; tools never print them for another model unless the user typed them. */
 export const SAAS_ONLY = /\b(MRR|free trial|freemium|self-serve sign-?up|per seat|seats?|aha moment)\b/i;
+
+// Run 22 (rule B82: no statistic, market size, benchmark or named company). What the BUYER's industry adds to a deal. The seller's own sector is read
+// above (VERTICALS, SUBTYPES); this is the other side of the table: who reviews a purchase in the buyer's industry, what hurts the buyer there, and
+// how the buyer usually buys. Used by account_plan_builder, mutual_action_plan_generator and roi_business_case_builder to word their advice
+// for the buyer in the deal. Plain statements about how such buyers work; nothing here is a figure.
+export interface BuyerContext {
+  id: string;
+  /** the industry in plain words, for a sentence ("financial services") */
+  name: string;
+  match: RegExp;
+  /** who reviews a purchase, and what they ask for */
+  reviews: string;
+  /** what goes wrong for a buyer in this industry (the losses a risk case can count) */
+  risks: string;
+  /** how the buyer usually buys, and what that means for the plan */
+  buying: string;
+}
+export const BUYER_CONTEXTS: BuyerContext[] = [
+  {
+    id: 'financial', name: 'financial services',
+    match: /\b(?:bfsi|banks?|banking|financial[ _]services?|insurance|insurers?|lenders?|lending|mortgage|nbfc|fintech|asset managers?|wealth|capital markets?|payments? technology)\b/i,
+    reviews: 'Information security, third party risk and compliance review a new vendor before it is signed, and internal audit can ask for evidence later.',
+    risks: 'an audit finding, a question from the regulator, an outage on a regulated service, or a data exposure that has to be reported',
+    buying: 'A vendor risk assessment and a security questionnaire sit in front of the contract, and legal reviews the data processing and outsourcing terms, so these steps start early and run beside the evaluation.',
+  },
+  {
+    id: 'public-sector', name: 'public sector',
+    match: /\b(?:government|public[ _]sector|ministry|municipal\w*|state agency|federal|defen[cs]e|public authority|city council)\b/i,
+    reviews: 'Procurement rules decide how the purchase is made (a tender, a framework or an approved supplier list), and a security authorisation may be needed before the product is used.',
+    risks: 'a challenge to the procurement, an audit of public money, a service outage that citizens notice, or a data exposure',
+    buying: 'Budgets follow a fiscal calendar, a formal evaluation scores each bidder against written criteria, and approvals run through committees, so the dates in the plan are set by the buyer\'s process, not by the seller.',
+  },
+  {
+    id: 'retail', name: 'retail and e-commerce',
+    match: /\b(?:retail\w*|e-?commerce|d2c|online (?:retailers?|sellers?|stores?|brands?)|social sellers?|merchants?|marketplaces?|consumer brands?)\b/i,
+    reviews: 'Operations, finance and the technology lead check the cost per order, the peak season and the link to the store platform.',
+    risks: 'a failed peak season, lost or late orders, returns and chargebacks',
+    buying: 'Owners and small teams often decide quickly and judge by a trial on live orders; larger chains run a formal review that includes IT.',
+  },
+  {
+    id: 'industrial', name: 'manufacturing and industry',
+    match: /\b(?:manufactur\w*|chemicals?|automotive|auto parts|industrial|plants?|factory|factories|steel|aerospace|machinery)\b/i,
+    reviews: 'Plant and supply chain leaders, IT and operational technology security, and finance review a purchase, and any change to live production needs an agreed window.',
+    risks: 'a line stoppage, late supply, a quality escape or an expensive expedite',
+    buying: 'Buyers prefer a pilot at one plant, lane or supplier before a wider rollout, and the budget is approved against a cost case from operations.',
+  },
+  {
+    id: 'education', name: 'education',
+    match: /\b(?:education|schools?|universit\w*|colleges?|edtech|coaching|institutes?|admissions?)\b/i,
+    reviews: 'Admissions or operations leads, the IT head and the finance office review a purchase, and student data protection comes up early.',
+    risks: 'enquiries lost in the admission season, slow follow-up with applicants, or a student data exposure',
+    buying: 'Decisions follow the academic calendar, so a rollout has to be live before the intake it is meant to help.',
+  },
+  {
+    id: 'construction', name: 'construction and infrastructure',
+    match: /\b(?:construction|civil|infrastructure|contractors?|builders?)\b/i,
+    reviews: 'Project controls, the finance lead and IT review a purchase, and the field teams have to be able to use it on site.',
+    risks: 'cost overruns, change orders that are not billed, and payment disputes with subcontractors',
+    buying: 'Buyers prefer a pilot on one live project, and finance judges it on job cost and the flow of payments.',
+  },
+  {
+    id: 'consumer-goods', name: 'consumer goods',
+    match: /\b(?:fmcg|consumer goods|beverages?|foods?|packaged|grocery|condiments?|snacks?|dairy|distributors?|distribution)\b/i,
+    reviews: 'Sales, distribution and IT review a purchase, and field adoption and the link to the ERP and the distributor systems are the usual questions.',
+    risks: 'stock-outs, returns, and trade spend that cannot be tied to sales',
+    buying: 'Buyers prefer a pilot in one region, judged against a comparable region.',
+  },
+  {
+    id: 'telecom-media', name: 'telecom and media',
+    match: /\b(?:telecom\w*|communications?|media|broadcast\w*|operators?|isps?)\b/i,
+    reviews: 'Network, IT, security and finance review a purchase, and any change to a live service needs an agreed window.',
+    risks: 'a service outage, customer churn after a bad experience, or a cost overrun in operations',
+    buying: 'Buyers prefer a staged rollout with a fallback for each stage.',
+  },
+  {
+    id: 'gaming', name: 'games',
+    match: /\b(?:games?|gaming)\b/i,
+    reviews: 'Engineering, live operations and security review a purchase.',
+    risks: 'a problem on release day, fraud or cheating, or an outage during a live event',
+    buying: 'Buyers prefer a trial timed around a release, with a clear way back.',
+  },
+  {
+    id: 'technology', name: 'technology and software',
+    match: /\b(?:software|saas|technology|tech|internet|digital)\b/i,
+    reviews: 'Engineering leads, security and finance review a purchase, and developers usually try a tool before anyone signs.',
+    risks: 'release delays, an incident that reaches customers, or time lost on tools that do not fit the way teams work',
+    buying: 'Engineering teams trial first, security reviews before wider use, and procurement follows once security has signed off.',
+  },
+];
+/** The buyer's industry read from the words that describe the buyer (industry, customer name, the industry before "deal for"); null when none matches. */
+export function buyerContextFor(...texts: unknown[]): BuyerContext | null {
+  const t = texts.filter((x): x is string => typeof x === 'string').join(' ');
+  if (!t.trim()) return null;
+  for (const c of BUYER_CONTEXTS) if (c.match.test(t)) return c;
+  return null;
+}

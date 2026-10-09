@@ -91,4 +91,19 @@ export declare function detectModel(explicit: unknown, ...args: unknown[]): {
 export declare const MODEL_TRADES: Record<BusinessModel | 'unknown', string[]>;
 /** Words that only fit a software subscription; tools never print them for another model unless the user typed them. */
 export declare const SAAS_ONLY: RegExp;
+export interface BuyerContext {
+    id: string;
+    /** the industry in plain words, for a sentence ("financial services") */
+    name: string;
+    match: RegExp;
+    /** who reviews a purchase, and what they ask for */
+    reviews: string;
+    /** what goes wrong for a buyer in this industry (the losses a risk case can count) */
+    risks: string;
+    /** how the buyer usually buys, and what that means for the plan */
+    buying: string;
+}
+export declare const BUYER_CONTEXTS: BuyerContext[];
+/** The buyer's industry read from the words that describe the buyer (industry, customer name, the industry before "deal for"); null when none matches. */
+export declare function buyerContextFor(...texts: unknown[]): BuyerContext | null;
 //# sourceMappingURL=verticals.d.ts.map
