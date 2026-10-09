@@ -199,7 +199,7 @@ test("account prioritization: the 'Gap to address' agrees with the weakest facto
   assert.match(blocks[2], /weakest factor is relationship \(10\)/);
 });
 
-// ---- the sector file of round 2: an investment seller (QuantumStreet AI style) ----
+// ---- the sector file of round 2: an investment seller (AI native investment product style) ----
 test("an investment strategies seller gets investment roles and measures in every tool, never support automation", async () => {
   const product_category = "AI platform and investment strategies (Quantara Edge from Quantara AI)";
   const company = "Quantara AI";

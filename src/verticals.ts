@@ -1763,7 +1763,7 @@ export function detectModel(explicit: unknown, ...args: unknown[]): { model: Bus
   const { seller } = sides(args);   // the seller's words only: what the buyer's side says about its own money is not the seller's model
   const read = modelFromSeller(seller);
   // The usual model is that of the sector finally chosen (after the AI label is set aside). A services firm that mentions a platform,
-  // an app or software ("Sonata Software", "business services on a digital platform") sells services unless its own words say
+  // an app or software ("Brightfield Software", "business services on a digital platform") sells services unless its own words say
   // subscription, SaaS, per seat, per user or licence.
   if (read === 'saas' && !/\b(?:saas|subscriptions?|per seat|per user|licen[cs]es?)\b/i.test(seller) && detectVertical(...args)?.id === 'ites') return { model: 'services', how: 'sector' };
   const v = detectVertical(...args);

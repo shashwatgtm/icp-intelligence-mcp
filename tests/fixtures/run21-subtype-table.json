@@ -597,7 +597,7 @@
    "model": "transactions"
   },
   {
-   "id": "m21a-project44",
+   "id": "m21a-freight-visibility",
    "text": "Freight visibility platform that tracks shipments in real time across carriers and predicts arrival times",
    "sector": "logistics-tech",
    "subtype": "freight-visibility",
