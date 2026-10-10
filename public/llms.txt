@@ -8,6 +8,7 @@
 - Docs (MCP and REST, every field): https://icp-intelligence.gtmhelix.com/docs/
 - FAQ: https://icp-intelligence.gtmhelix.com/faq/
 - Privacy policy: https://icp-intelligence.gtmhelix.com/privacy/
+- Terms of use: https://icp-intelligence.gtmhelix.com/terms/
 - Local npm package: @shashwatgtmalpha/icp-intelligence-mcp
 - Source code: https://github.com/shashwatgtm/icp-intelligence-mcp
 - Built by: Shashwat Ghosh, Helix GTM Consulting (https://www.gtmexpert.com)
