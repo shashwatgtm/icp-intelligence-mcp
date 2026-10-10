@@ -2466,6 +2466,7 @@ ${SUGGESTED}
         anyPair: Object.keys(pairs).some(has2),
         onlyOneSide,
         notGivenAtAll,
+        productText: (() => { const t = productWords(args.product_category, args.company).replace(/\s+/g, ' ').trim(); return t.length > 0 && t.length <= 140 ? t : ''; })(),
         productGiven: !!(args.product_category && args.product_category.trim()),
         modelGiven: !!args.business_model || (!!ctx.model && !/assumed/.test(ctx.line)),
         bestRole: (a, list) => bestRole(a, list),
