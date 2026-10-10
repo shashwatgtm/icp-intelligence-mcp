@@ -844,7 +844,7 @@ export const SUBTYPES: SubType[] = [
     match: /\b(?:(?:restaurant|retail|supermarket|distribution) (?:erp|pos)|(?:restaurant|retail) management (?:software|system|package)|restaurant (?:management|ordering) (?:software|system|platform)|(?:pos|point of sale) (?:software|system))\b/i,
     model: 'saas',
     notes: {
-      vocabulary: ['billing counter', 'item and stock count', 'purchase order', 'supplier invoice', 'stock transfer between outlets', 'loyalty and offers', 'kitchen order', 'day end close', 'tax invoice', 'multi outlet reporting'],
+      vocabulary: ['billing counter', 'item and stock count', 'supplier invoice', 'stock transfer between outlets', 'loyalty and offers', 'kitchen order', 'day end close', 'tax invoice', 'multi outlet reporting'],
       buyerRoles: ['Business Owner', 'Head of Operations or Outlet Manager', 'Accounts or Finance Head', 'Purchase or Category Manager', 'Billing Counter Lead', 'IT or Systems Lead'],
       committee: 'The owner signs; the operations head or outlet manager champions it; billing counter, store and kitchen staff use it all day; the accounts head checks tax invoices and the accounting link; purchase managers use the stock and supplier parts; IT checks the payment, online ordering and accounting links.',
       objections: [
