@@ -5,6 +5,7 @@ export declare function coverageInfo(item: string, text: string): {
     direct: number;
     alias: number;
     words: string[];
+    matched: string[];
 };
 export declare function coverage(item: string, text: string): number;
 export interface ProfileRead {
@@ -62,6 +63,7 @@ export interface GapDeps {
     anyPair: boolean;
     onlyOneSide: string[];
     notGivenAtAll: string[];
+    productText: string;
     productGiven: boolean;
     modelGiven: boolean;
     bestRole: (a: string, list: string[]) => string | undefined;

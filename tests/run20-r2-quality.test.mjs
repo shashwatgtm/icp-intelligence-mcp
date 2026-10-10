@@ -302,7 +302,7 @@ test("gap analysis: in investment management CIO is the Chief Investment Officer
 test("gap analysis: 'B2B SaaS and software' is related to 'SaaS'; a page claim is not a size qualifier; 'platform leader' is the Platform Engineering Lead", async () => {
   const a = await call("icp_gap_analysis", { current_customers: "Pathwise customers: B2B SaaS and software, Gen AI, Gaming; streaming and entertainment.", ideal_icp: "the world's leading AI, SaaS and consumer subscription businesses, with CFO as the buyer, who face messy pricing" });
   ok(a);
-  assert.match(a.text, /Named in both\*\*: [^\n]*B2B SaaS and software/);   // run 22: "B2B SaaS and software" is recognised as SaaS
+  assert.match(a.text, /(?:Named in both|Covered by your words, not named outright)\*\*: [^\n]*B2B SaaS and software/);   // run 22: "B2B SaaS and software" is recognised as SaaS (covered by the word SaaS when "software" is not in the same phrase)
   assert.doesNotMatch(a.text, /Nothing in common|not named in your ideal profile\*\*: [^\n]*B2B SaaS/);
   const b = await call("icp_gap_analysis", { product_category: "developer testing tools", company: "Cloudmoat", current_customers: "Cloudmoat customers: Financial services, Retail.",
     ideal_icp: "API teams and developers at 500,000 companies, including 98% of the Fortune 500 (page claim), with platform leader as the buyer, who face disconnected tools" });

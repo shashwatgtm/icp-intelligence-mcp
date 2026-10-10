@@ -108,7 +108,9 @@ const ALIASES = [
     ['hospitality', 'hotel', 'hotels', 'hostel', 'hostels', 'travel', 'accommodation', 'resort', 'resorts'],
 ];
 const stemOf = (w) => { const x = w.toLowerCase().replace(/[^a-z0-9]/g, ''); return x.length > 5 ? x.slice(0, 5) : x; };
-const STOP_STEMS = new Set([...STOP].map(stemOf));
+// generic words are matched as whole words (a stem would make "marketing" a stop word because "market" is one)
+const STOP_FORMS = new Set(['company', 'companies', 'business', 'businesses', 'organization', 'organizations', 'organisation', 'organisations', 'customers', 'clients', 'players', 'providers', 'provider', 'industries', 'industry', 'sectors', 'sector', 'segments', 'segment', 'markets', 'market', 'types', 'kinds', 'services']);
+const isStop = (w) => STOP.has(w) || STOP_FORMS.has(w);
 // alias groups are keyed by the first 7 letters, so that two different words with the same first 5 letters (enterprise and entertainment, public and publishing) are not mixed
 const akey = (w) => w.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 7);
 const ALIAS_OF = (() => {
@@ -136,7 +138,7 @@ function wordsFor(t, dropSizes) {
         else
             out.push(w);
     }
-    return out.filter((w) => w.length >= 2 && !STOP_STEMS.has(stemOf(w)));
+    return out.filter((w) => w.length >= 2 && !isStop(w));
 }
 function tokensOf(t, dropSizes = true) {
     return wordsFor(t, dropSizes).map(stemOf);
@@ -161,14 +163,18 @@ const aliasHit = (w, hayWords) => { const group = ALIAS_OF.get(akey(w)); return 
 function coverageInfo(item, text) {
     const iw = [...new Set(wordsFor(itemKey(item), true))];
     if (!iw.length)
-        return { ratio: 1, direct: 1, alias: 0, words: [] };
+        return { ratio: 1, direct: 1, alias: 0, words: [], matched: [] };
     const hw = [...new Set(wordsFor(text, false))];
     let direct = 0;
     let alias = 0;
     const words = [];
+    const matched = [];
     for (const w of iw) {
-        if (hw.some((h) => sameWord(h, w))) {
+        const same = hw.find((h) => sameWord(h, w));
+        if (same) {
             direct++;
+            if (!matched.includes(same))
+                matched.push(same);
             continue;
         }
         const h = aliasHit(w, hw);
@@ -176,9 +182,11 @@ function coverageInfo(item, text) {
             alias++;
             if (!words.includes(h))
                 words.push(h);
+            if (!matched.includes(h))
+                matched.push(h);
         }
     }
-    return { ratio: (direct + alias) / iw.length, direct, alias, words };
+    return { ratio: (direct + alias) / iw.length, direct, alias, words, matched };
 }
 function coverage(item, text) {
     return coverageInfo(item, text).ratio;
@@ -457,7 +465,7 @@ function readTarget(clause, res, listForm) {
         // size or generic organisation words only
         const left = squash(it.replace(/\([^)]*\)/g, ' ').replace(SIZE_WORD, ' ').replace(GENERIC_ORG, ' ').replace(/\b(?:of|all|sizes|from|to|and|with|the|a|an|worldwide|globally)\b/gi, ' '));
         const sw = it.match(SIZE_WORD) || [];
-        if (!left || left.split(/\s+/).every((w) => STOP_STEMS.has(stemOf(w)))) {
+        if (!left || left.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).every((w) => isStop(w))) {
             for (const s of sw)
                 res.sizes.push(s);
             continue;
@@ -546,9 +554,13 @@ function gapAnalysis(curText, idlText, d) {
     // a kind is NAMED when a word of it is in the ideal profile as the same word (bank, banks, banking); it is only COVERED when the match runs through an
     // alias group alone (apps for software), and then the user's own words that cover it are shown
     const cov = (s) => coverageInfo(s, idlWho);
-    const curNamed = idlSeg.length ? curSeg.filter((s) => { const c = cov(s); return c.ratio >= 0.5 && c.direct > 0; }) : [];
-    const curAliasCovered = idlSeg.length ? curSeg.filter((s) => { const c = cov(s); return c.ratio >= 0.5 && c.direct === 0; }) : [];
-    const curPartly = idlSeg.length ? curSeg.filter((s) => { const c = cov(s).ratio; return c > 0 && c < 0.5; }) : [];
+    // NAMED means the kind's own words stand together in one phrase of the ideal profile (each side of an "and" in the kind may sit in its own phrase);
+    // words that come from separate phrases ("software companies" and "global enterprises" for "enterprise software") only cover the kind
+    const idlPhrases = idlSeg.map((sg) => [sg, ...idl.subs.filter((x) => x.main === sg).map((x) => x.sub)].join(' '));
+    const kindNamed = (kind) => itemKey(kind).split(/\s+and\s+/i).map((c) => c.trim()).filter(Boolean).every((c) => idlPhrases.some((ph) => { const i = coverageInfo(c, ph); return i.ratio === 1 && i.alias === 0 && i.direct > 0; }));
+    const curNamed = idlSeg.length ? curSeg.filter(kindNamed) : [];
+    const curAliasCovered = idlSeg.length ? curSeg.filter((k) => !kindNamed(k) && cov(k).ratio >= 0.5) : [];
+    const curPartly = idlSeg.length ? curSeg.filter((k) => { const c = cov(k).ratio; return c > 0 && c < 0.5; }) : [];
     const idlNotInBase = idlSeg.filter((s) => coverage(s, curAll) < 0.5);
     const idlSubsNotInBase = idl.subs.filter((x) => coverage(x.sub, curAll) === 0 && !idlSeg.some((s) => coverage(x.sub, s) >= 1 && s !== x.main));
     const idealNamesIndustries = idlSeg.length > 0;
@@ -601,7 +613,9 @@ function gapAnalysis(curText, idlText, d) {
     const roleGaps = d.sectorRoles.filter((r) => !namedRoles.some((n) => { const alt = roleAlternatives([r]); const m = findRole(cleanRole(n)); return (!!m && alt.includes(m)) || alt.some((a) => d.sameRole(n, a)); })).slice(0, 4);
     const L = [];
     const push = (...x) => L.push(...x);
-    push(`# ICP Gap Analysis${d.company ? ` for ${d.company}` : ''}`, '', `- ${d.companyLine}`, '', d.contextLine, '');
+    const sellText = d.productText ? quote(d.productText) : '';
+    const contextLine = !sellText ? d.contextLine : /\. Business model:/.test(d.contextLine) && /Sector: read from/.test(d.contextLine) ? d.contextLine.replace(/\. Business model:/, ` (you sell ${sellText}). Business model:`) : d.contextLine.replace('the product text you gave names none', `the product text you gave (${sellText}) names none`);
+    push(`# ICP Gap Analysis${d.company ? ` for ${d.company}` : ''}`, '', `- ${d.companyLine}`, '', contextLine, '');
     // ---------- bottom line ----------
     const behindRows = d.metricRows.filter((m) => m.both && m.behind);
     const bottom = [];
@@ -638,13 +652,13 @@ function gapAnalysis(curText, idlText, d) {
     if (curNamed.length)
         seg.push(`- **Named in both**: ${curNamed.length === curSeg.length && curSeg.length > 3 ? `all ${curSeg.length} kinds of customer in your current base` : listText(curNamed.map(cleanSeg))}. ${curNamed.length === 1 ? 'It is' : 'They are'} already inside your ideal profile and the place to look first for proof.`);
     if (curAliasCovered.length)
-        seg.push(`- **Covered by your words, not named outright**: ${listText(curAliasCovered.map((x) => { const w = coverageInfo(x, idlWho).words; return `${cleanSeg(x)}${w.length ? ` (covered by your words ${listText(w.map(quote))})` : ''}`; }))}. Your words are broader than ${curAliasCovered.length === 1 ? 'this kind of customer' : 'these kinds of customer'}, so confirm that you count ${curAliasCovered.length === 1 ? 'it' : 'them'} as inside your ideal profile.`);
+        seg.push(`- **Covered by your words, not named outright**: ${listText(curAliasCovered.map((x) => { const w = coverageInfo(x, idlWho).matched; return `${cleanSeg(x)}${w.length ? ` (covered by your words ${listText(w.map(quote))})` : ''}`; }))}. Your words are broader than ${curAliasCovered.length === 1 ? 'this kind of customer' : 'these kinds of customer'}, so confirm that you count ${curAliasCovered.length === 1 ? 'it' : 'them'} as inside your ideal profile.`);
     if (curPartly.length)
-        seg.push(`- **Partly named in your ideal profile**: ${listText(curPartly.map(cleanSeg))}. Only some of the words are in your ideal profile, so decide whether it covers them.`);
+        seg.push(`- **Partly named in your ideal profile**: ${listText(curPartly.map((x) => { const w = coverageInfo(x, idlWho).matched; return `${cleanSeg(x)}${w.length ? ` (shares ${listText(w.map(quote))} with your words)` : ''}`; }))}. Only some of the words are in your ideal profile, so decide whether it covers ${curPartly.length === 1 ? 'it' : 'them'}.`);
     if (noSharedWording)
         seg.push(`- **No shared wording**: your current base lists ${listText(missingList.map(cleanSeg))}, and your ideal profile names ${segPhrase(idlSeg)}. The two lists may describe different things (for example kinds of project against kinds of company), so look up in your CRM which of your current customers are the kinds your ideal profile names before you compare them.`);
     if (curMissing.length && idealNamesIndustries) {
-        seg.push(`- **In your current base but ${curAliasCovered.length ? "neither named nor covered by your ideal profile's words" : 'not named in your ideal profile'}**: ${listText(curMissing.map(cleanSeg))}. ${comparable || openEnded || !idealNamesIndustries ? 'Your ideal profile may simply describe them in other words, so check their win rate, ACV and churn against the named segments before you decide: keep prospecting there and add them to your ideal profile if they are as strong, or keep serving them without prospecting if they are weaker.' : 'Check their win rate, ACV and churn before you decide to keep prospecting there.'}`);
+        seg.push(`- **In your current base but ${curAliasCovered.length || curPartly.length ? "neither named nor covered by your ideal profile's words" : 'not named in your ideal profile'}**: ${listText(curMissing.map(cleanSeg))}. ${comparable || openEnded || !idealNamesIndustries ? `Your ideal profile may simply describe ${curMissing.length === 1 ? 'it' : 'them'} in other words, so check ${curMissing.length === 1 ? 'its' : 'their'} win rate, ACV and churn against the named segments before you decide: keep prospecting there and add ${curMissing.length === 1 ? 'it' : 'them'} to your ideal profile if ${curMissing.length === 1 ? 'it is' : 'they are'} as strong, or keep serving ${curMissing.length === 1 ? 'it' : 'them'} without prospecting if ${curMissing.length === 1 ? 'it is' : 'they are'} weaker.` : 'Check their win rate, ACV and churn before you decide to keep prospecting there.'}`);
     }
     if (idlNotInBase.length || idlSubsNotInBase.length) {
         if (!noSharedWording)
@@ -725,6 +739,17 @@ function gapAnalysis(curText, idlText, d) {
             push(`No gap on ${listText(metRows.map((m) => LABEL_TEXT[m.key] || m.label))}: you are at or better than your target there, so there is nothing to fix on ${metRows.length === 1 ? 'it' : 'them'}.`, '');
         if (hyp)
             push('You labelled the figures you gave as hypothetical, and they are treated that way here.', '');
+        // figures with no target are read on their own, with no benchmark; the ACV is set beside the ideal profile's own size words
+        const phraseOf = { acv: 'an average ACV of', cycle: 'a sales cycle of', winRate: 'a win rate of', churn: 'churn of', nps: 'an NPS of' };
+        const ownRows = d.metricRows.filter((m) => !m.both && m.cur !== 'not supplied');
+        if (ownRows.length) {
+            const acvRow = ownRows.find((m) => m.key === 'acv');
+            const cycleRow = ownRows.find((m) => m.key === 'cycle');
+            const bigWord = idl.allSizes ? undefined : idl.sizes.find((z) => /enterprise|large|global|fortune|corporat/i.test(z));
+            const big = bigWord && /^(?:large|larger|global)$/i.test(bigWord.trim()) ? `${bigWord.trim()} companies` : bigWord;
+            const tension = acvRow && big ? ` Your ideal profile aims at ${big}, while your current average ACV is ${acvRow.cur}${cycleRow ? ` with a sales cycle of ${cycleRow.cur}` : ''}. Look up the ACV and the cycle of the ${big} you already serve: if they sit near these figures, your ideal profile and your price point are not yet matched; if they sit well above, other accounts are pulling your average down.` : '';
+            push(`Read on their own, your figures are ${listText(ownRows.map((m) => `${phraseOf[m.key] || m.label} ${m.cur}`))}.${tension}`, '');
+        }
     }
     // ---------- causes to check ----------
     const causes = causeText(d, cur, idl, curNamed, curMissing);
@@ -767,7 +792,7 @@ function gapAnalysis(curText, idlText, d) {
     if (curMissing.length)
         push(`${ucFirst(listText(curMissing.map(cleanSeg)))} ${curMissing.length === 1 ? 'is not a disqualifier' : 'are not disqualifiers'} on their own: only move ${curMissing.length === 1 ? 'it' : 'them'} out once win rate, ACV and churn show ${curMissing.length === 1 ? 'it is' : 'they are'} weaker.`, '');
     // ---------- plan ----------
-    push('---', '', '## 30-Day Action Plan', '', plan(d, cur, idl, curSeg, curNamed, curMissing, idlNotInBase, idealNamesIndustries, curAliasCovered.length > 0), '');
+    push('---', '', '## 30-Day Action Plan', '', plan(d, cur, idl, curSeg, curNamed, curMissing, idlNotInBase, idealNamesIndustries, curAliasCovered.length > 0 || curPartly.length > 0), '');
     if (d.sectorNotes)
         push(d.sectorNotes, '');
     // ---------- missing inputs, once, at the end ----------
@@ -1044,7 +1069,7 @@ function matchWords(value, statement) {
     const stmtWords = [...new Set(own(statement))];
     const out = [];
     for (const w of own(value)) {
-        if (STOP_STEMS.has(stemOf(w)))
+        if (isStop(w))
             continue;
         const hit = stmtWords.find((x) => sameWord(x, w)) || aliasHit(w, stmtWords);
         if (hit && !out.includes(hit))

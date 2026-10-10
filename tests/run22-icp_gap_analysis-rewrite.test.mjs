@@ -269,15 +269,14 @@ test("round 4: a kind matched only through an alias group is shown as covered by
     current_customers: "Brightwave customers: enterprise software, financial services, web and mobile apps, marketing content and customer support",
     ideal_icp: "product, engineering, localization and marketing teams at software companies and global enterprises, with localization manager as the buyer, who face spreadsheets and manual work" });
   const named = out.split("\n").find((l) => l.startsWith("- **Named in both**")) || "";
-  assert.match(named, /enterprise software/);
-  assert.doesNotMatch(named, /web and mobile apps/, "an alias-only match is called named");
-  assert.match(out, /- \*\*Covered by your words, not named outright\*\*: web and mobile apps \(covered by your words \u201csoftware\u201d\)/);
+  assert.doesNotMatch(named, /web and mobile apps|enterprise software/, "an alias-only or spread-out match is called named");
+  assert.match(out, /- \*\*Covered by your words, not named outright\*\*: [^\n]*web and mobile apps \(covered by your words \u201csoftware\u201d\)/);
   const bottom = out.split("\n").find((l) => l.startsWith("Your current base lists")) || "";
   assert.doesNotMatch(bottom, /names enterprise software, and web and mobile apps|names [^.,]*web and mobile apps/);
-  assert.match(bottom, /its words cover web and mobile apps/);
-  assert.match(out, /\*\*In your current base but neither named nor covered by your ideal profile's words\*\*: financial services, and marketing content and customer support/);
+  assert.match(bottom, /its words cover [^.]*web and mobile apps/);
+  assert.match(out, /\*\*In your current base but neither named nor covered by your ideal profile's words\*\*: financial services\./);
   assert.doesNotMatch(out, /Look first at financial services/);
-  assert.match(out, /First decide whether financial services, and marketing content and customer support belong to your ideal profile/);
+  assert.match(out, /First decide whether financial services belongs to your ideal profile/);
 });
 
 test("round 4: plain word variants are still named outright; a kind named only in the problem text is neither named nor covered", async () => {
@@ -295,6 +294,49 @@ test("round 4: two different words that start alike are not the same kind (enter
     ideal_icp: "retail chains, enterprises and startups, with CIO as the buyer" });
   assert.doesNotMatch(out, /Named in both\*\*:[^\n]*(?:Public sector|Media and entertainment)/);
   assert.doesNotMatch(out, /Covered by your words[^\n]*(?:Public sector|Media and entertainment)/);
+});
+
+
+// ---- round 5: a kind is named only when its own words stand together in one phrase of the ideal profile ----
+const PLATFORM = {
+  company: "Brightwave", product_category: "continuous localization and translation management platform (translation management system) from Brightwave",
+  current_customers: "Brightwave customers: enterprise software, financial services, web and mobile apps, marketing content and customer support. The metric figures sent are hypothetical.",
+  ideal_icp: "product, engineering, localization and marketing teams at software companies and global enterprises; 1 million users across 3,000+ companies (page claim), with localization manager as the buyer, who face spreadsheets and manual work",
+  current_metrics: { avg_acv: 9000, avg_sales_cycle: 45, churn_rate: 18, nps: 45 },
+};
+test("round 5: words from two separate phrases do not make a named kind; a function word is matched as a whole word", async () => {
+  const out = await call(PLATFORM);
+  const bottom = out.split("\n").find((l) => l.startsWith("Your current base lists")) || "";
+  assert.doesNotMatch(bottom, /names enterprise software/);
+  assert.match(bottom, /names none of them outright, and its words cover enterprise software, and web and mobile apps/);
+  assert.doesNotMatch(out, /\*\*Named in both\*\*[^\n]*enterprise software/);
+  assert.match(out, /Covered by your words, not named outright\*\*: enterprise software \(covered by your words \u201centerprises\u201d and \u201csoftware\u201d\), and web and mobile apps \(covered by your words \u201csoftware\u201d\)/);
+  assert.match(out, /Partly named in your ideal profile\*\*: marketing content and customer support \(shares \u201cmarketing\u201d with your words\)/);
+  assert.match(out, /neither named nor covered by your ideal profile's words\*\*: financial services\./);
+  const kept = await call({ ...PLATFORM, ideal_icp: "enterprise software companies, with localization manager as the buyer, who face spreadsheets" });
+  assert.match(kept, /\*\*Named in both\*\*: enterprise software/);
+});
+
+test("round 5: with no targets the figures are read on their own, the product text is used once, and the ACV against an enterprise ideal is stated without a benchmark", async () => {
+  const out = await call(PLATFORM);
+  assert.match(out, /Read on their own, your figures are an average ACV of \$9,000, a sales cycle of 45 days, churn of 18% and an NPS of 45/);
+  assert.match(out, /Your ideal profile aims at enterprises, while your current average ACV is \$9,000 with a sales cycle of 45 days/);
+  const tension = out.split("\n").find((l) => /aims at enterprises/.test(l)) || "";
+  assert.doesNotMatch(tension, /\b(?:small|low|typical|benchmark|industry average)\b/i, "a benchmark judgement");
+  assert.match(out, /\(you sell \u201ccontinuous localization and translation management platform \(translation management system\)\u201d\)/);
+  assert.equal((out.match(/you sell \u201c/g) || []).length, 1, "the product text is used once");
+  const large = await call({ ...PLATFORM, ideal_icp: "teams at large banks, with CFO as the buyer, who face spreadsheets" });
+  assert.match(large, /Your ideal profile aims at large companies, while your current average ACV is \$9,000/);
+  assert.match(large, /the large companies you already serve/);
+  const sellers = await call({ company: "Lanehop", current_customers: "Lanehop customers: Social sellers on Instagram; WhatsApp and Facebook, Offline stores", ideal_icp: "online retailers, social sellers, offline stores, with Founder as the buyer, who face late delivery" });
+  assert.match(sellers, /Named in both\*\*: Social sellers on Instagram, WhatsApp and Facebook/, "a kind with an 'and' after 'on' is read by the words before 'on'");
+  const smb = await call({ ...PLATFORM, ideal_icp: "small startups, with founder as the buyer, who face spreadsheets" });
+  assert.doesNotMatch(smb, /aims at/);
+  const noacv = await call({ ...PLATFORM, current_metrics: { churn_rate: 18 } });
+  assert.doesNotMatch(noacv, /aims at/);
+  assert.match(noacv, /Read on their own, your figures are churn of 18%\./);
+  const withTargets = await call({ ...PLATFORM, target_metrics: { avg_acv: 20000, avg_sales_cycle: 60, churn_rate: 10, nps: 50 } });
+  assert.doesNotMatch(withTargets, /Read on their own/);
 });
 
 // ---- the pool scenarios through the real builders (private folder; skipped when HELIX_POOL_DIR is not set) ----
