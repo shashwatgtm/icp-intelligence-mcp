@@ -777,6 +777,144 @@
    "sector": "software",
    "subtype": "data-infrastructure",
    "model": "saas"
+  },
+  {
+   "id": "st-r26b-1",
+   "text": "An intelligent document processing platform that extracts data from invoices and forms",
+   "sector": "ai-native",
+   "subtype": "document-ai",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-2",
+   "text": "Document AI that classifies scanned forms and captures their data for back office teams",
+   "sector": "ai-native",
+   "subtype": "document-ai",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-3",
+   "text": "An AI video generator that turns slides into training videos with AI avatars",
+   "sector": "ai-native",
+   "subtype": "ai-video",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-4",
+   "text": "Text to video software with AI presenters and voiceovers in many languages",
+   "sector": "ai-native",
+   "subtype": "ai-video",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-5",
+   "text": "Staff augmentation that adds vetted nearshore engineers to your development teams",
+   "sector": "ites",
+   "subtype": "engineering-talent",
+   "model": "services"
+  },
+  {
+   "id": "st-r26b-6",
+   "text": "Team augmentation with vetted nearshore engineers who join the client's own engineering teams",
+   "sector": "ites",
+   "subtype": "engineering-talent",
+   "model": "services"
+  },
+  {
+   "id": "st-r26b-7",
+   "text": "Product management software for roadmaps, customer feedback and prioritization",
+   "sector": "saas",
+   "subtype": "product-management",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-8",
+   "text": "Roadmapping software that helps product teams collect ideas and plan their product direction",
+   "sector": "saas",
+   "subtype": "product-management",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-9",
+   "text": "A digital adoption platform with in-app guidance and walkthroughs for employees",
+   "sector": "saas",
+   "subtype": "digital-adoption",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-10",
+   "text": "Software adoption platform that guides users inside the enterprise applications they already use",
+   "sector": "saas",
+   "subtype": "digital-adoption",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-11",
+   "text": "Penetration testing as a service with vetted testers and retesting",
+   "sector": "cybersecurity",
+   "subtype": "pentest"
+  },
+  {
+   "id": "st-r26b-12",
+   "text": "Offensive security testing and red team exercises delivered through a platform",
+   "sector": "cybersecurity",
+   "subtype": "pentest"
+  },
+  {
+   "id": "st-r26b-13",
+   "text": "External attack surface management that discovers internet-facing assets and exposed services",
+   "sector": "cybersecurity",
+   "subtype": "attack-surface-dast",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-14",
+   "text": "Attack surface monitoring and dynamic application security testing for web applications",
+   "sector": "cybersecurity",
+   "subtype": "attack-surface-dast",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-15",
+   "text": "Process orchestration software that runs end-to-end business processes with BPMN",
+   "sector": "software",
+   "subtype": "process-orchestration",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-16",
+   "text": "A workflow engine for long running business processes and cases",
+   "sector": "software",
+   "subtype": "process-orchestration",
+   "model": "saas"
+  },
+  {
+   "id": "st-r26b-17",
+   "text": "Open source database support and consulting with no license fees",
+   "sector": "software",
+   "subtype": "open-source-support",
+   "model": "services"
+  },
+  {
+   "id": "st-r26b-18",
+   "text": "Open-source software support subscriptions and consulting for PostgreSQL and MySQL",
+   "sector": "software",
+   "subtype": "open-source-support",
+   "model": "services"
+  },
+  {
+   "id": "st-r26b-19",
+   "text": "IoT SIMs and eSIMs for connected devices in many countries",
+   "sector": "telecom",
+   "subtype": "iot-connectivity",
+   "model": "connectivity"
+  },
+  {
+   "id": "st-r26b-20",
+   "text": "Cellular IoT connectivity with multi-network SIMs and a management portal",
+   "sector": "telecom",
+   "subtype": "iot-connectivity",
+   "model": "connectivity"
   }
  ]
 }

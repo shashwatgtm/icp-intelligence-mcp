@@ -640,7 +640,7 @@ exports.SUBTYPES = [
     },
     {
         id: 'product-growth', vertical: 'saas', name: 'product analytics and customer success',
-        match: /\b(?:product analytics|product adoption (?:platform|software)|user onboarding (?:software|platform|tool)|in app messaging|customer success (?:platform|software)|experimentation platform|feature adoption|digital adoption platform|product led growth (?:platform|tools?)|customer feedback (?:software|platform))\b/i,
+        match: /\b(?:product analytics|product adoption (?:platform|software)|user onboarding (?:software|platform|tool)|in app messaging|customer success (?:platform|software)|experimentation platform|feature adoption|product led growth (?:platform|tools?)|customer feedback (?:software|platform))\b/i,
         model: 'saas',
         notes: {
             vocabulary: ['activation', 'time to value', 'net revenue retention', 'renewal', 'expansion', 'onboarding', 'usage', 'churn', 'customer success'],
@@ -1468,6 +1468,275 @@ exports.SUBTYPES = [
             ],
         },
     },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S01, S02 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'document-ai', vertical: 'ai-native', name: 'document AI and intelligent document processing',
+        match: /\b(?:intelligent document processing|idp|document (?:ai|automation|processing|extraction|understanding|capture)|(?:invoice|document) (?:data )?(?:capture|extraction)|data extraction from documents|ocr)\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['document types', 'data extraction', 'classification', 'manual data entry', 'exceptions', 'structured and unstructured documents', 'handwriting', 'accuracy', 'downstream systems'],
+            buyerRoles: ['Head of the operations team that processes the documents', 'Head of Finance Operations or Accounts Payable', 'Head of Process Automation', 'Chief Technology Officer', 'Head of IT', 'Head of Risk and Compliance'],
+            committee: 'The head of the operations or finance team that handles the documents signs and feels the manual work; the automation or IT lead checks the fit with the systems the data goes into; the technology leader judges accuracy and scale; risk and compliance check how the documents and the extracted data are handled.',
+            objections: [
+                { objection: 'Our documents are too varied, or handwritten', response: 'Test on a sample of the buyer\'s own documents, including handwritten and unstructured ones, and report accuracy by document type, not as one average.' },
+                { objection: 'We already have OCR', response: 'OCR turns an image into text; show what is added on the buyer\'s documents: the document type recognised, the fields extracted and checked, and the exceptions sent to a person.' },
+                { objection: 'It must feed the systems we already run', response: 'Name the systems the extracted data goes into, the fields that move, and who on the buyer side owns each connection.' },
+                { objection: 'Errors will reach our records', response: 'Show the exceptions that go to a person for review, how a correction is made, and the error rate measured on the buyer\'s own documents.' },
+            ],
+            salesMotion: 'An evaluation on a sample of the buyer\'s own documents, then one document flow in production, then more document types and volume.',
+            metrics: ['share of documents processed without manual data entry', 'field accuracy by document type', 'exception rate', 'processing time per document', 'cost per document', 'documents waiting in the backlog'],
+            proofShape: 'Accuracy and manual entry removed on a sample of the buyer\'s own documents, by document type, then the same measures on live volume over a full month.',
+            discovery: [
+                'Which documents arrive today (invoices, forms, orders, contracts), in what volume, and in what formats?',
+                'Who keys the data in today, and where do errors and exceptions come from?',
+                'Which systems must the extracted data go into, and who owns them?',
+                'How do you check accuracy today, and what error can you not accept?',
+                'Which document flow would you start with, and how would you judge it?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S03 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'ai-video', vertical: 'ai-native', name: 'AI video for training and communications',
+        match: /\b(?:ai video(?: platform| generator| generation| creation)?|ai avatars?|video avatars?|ai presenters?|text to video|ai dubbing|ai voiceovers?|synthetic (?:video|media)|(?:training|explainer) videos? (?:with|from) ai)\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['training video', 'AI avatar', 'voiceover', 'localization', 'course', 'interactive video', 'SCORM', 'LMS', 'onboarding', 'compliance training', 'content updates'],
+            buyerRoles: ['Head of Learning and Development', 'Learning Design Manager', 'Instructional Designer', 'Head of Sales Enablement', 'Internal Communications Lead', 'Head of IT or Security'],
+            committee: 'The head of learning and development or enablement signs; learning designers and instructional designers champion it and build the content; internal communications and sales enablement teams use it too; IT and security check single sign on, access and how content and data are handled.',
+            objections: [
+                { objection: 'AI output we cannot trust', response: 'Show that the AI drafts and a person reviews and approves each scene before anything is published.' },
+                { objection: 'Our content goes out of date quickly', response: 'Show a module updated after a change without re-recording, and how long the update took.' },
+                { objection: 'Our content and data must stay protected', response: 'State where content is processed and stored, whether it is used to train models, and the single sign on and access controls on offer.' },
+                { objection: 'It has to reach our LMS and every language we train in', response: 'Export one module to the buyer\'s LMS and localise it into the buyer\'s languages during the trial.' },
+            ],
+            salesMotion: 'A self serve trial by a team, then a demo with the buyer\'s own scripts and brand, then an enterprise plan with single sign on and governance.',
+            metrics: ['time to produce a training video', 'production cost per video', 'languages delivered from one source', 'learner completion', 'engagement with the content', 'time to update content after a change'],
+            proofShape: 'One training module produced and localised with the product, compared with the module it replaced on production time, cost and learner completion.',
+            discovery: [
+                'Which training or communication content do you produce today (onboarding, compliance, product, sales), and how?',
+                'How long does one video take today, and who makes it?',
+                'Into how many languages must content go, and how is that done now?',
+                'Which LMS or channel must the content reach, and how is completion tracked?',
+                'How often does the content change, and what does an update cost you?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S25 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'engineering-talent', vertical: 'ites', name: 'engineering talent and team augmentation',
+        match: /\b(?:staff augmentation|team augmentation|(?:engineering|developer|tech|technical|ai|software) talent|(?:fully managed|nearshore|remote|embedded|extended) (?:engineering |development |software )?teams?|(?:deploys?|embeds?|places?) (?:[\w-]+ ){0,3}(?:engineers|developers)\b|vetted (?:[\w-]+ ){0,2}(?:engineers|developers)|hire (?:remote |vetted )?(?:engineers|developers))\b/i,
+        model: 'services',
+        notes: {
+            vocabulary: ['staff augmentation', 'dedicated team', 'vetted engineers', 'skill gaps', 'ramp up', 'time zone overlap', 'roadmap capacity', 'onboarding', 'knowledge transfer', 'retention on the engagement', 'delivery manager'],
+            buyerRoles: ['Chief Technology Officer', 'VP Engineering', 'Engineering Manager', 'Head of Product or Delivery', 'Head of Talent Acquisition', 'Head of Finance'],
+            committee: 'The CTO or VP Engineering signs; the engineering manager whose roadmap is behind champions it and interviews the candidates; the engineers join the client\'s own team rituals; talent acquisition compares it with hiring; finance compares the cost with a fully loaded local hire.',
+            objections: [
+                { objection: 'We would rather hire our own engineers', response: 'Compare the time to hire, ramp up and keep an engineer with the time to start, and offer interviews of the shortlisted engineers before anyone joins.' },
+                { objection: 'Quality of the engineers', response: 'Explain the vetting (technical assessments and interviews by senior engineers) and how performance is tracked once the engineer has joined.' },
+                { objection: 'Time zones and communication', response: 'State the working hours overlap and how engineers join the team\'s standups, reviews and planning.' },
+                { objection: 'Engineers leave in the middle of the work', response: 'Say how long engineers usually stay on an engagement, how a replacement is found and how knowledge is handed over.' },
+            ],
+            salesMotion: 'A discovery call on the roadmap and the skills missing, a shortlist of vetted engineers the client can interview, onboarding in weeks, then the team grows as the work grows.',
+            metrics: ['time to fill a role', 'time to the first productive contribution', 'engineer retention on the engagement', 'delivery against the roadmap', 'cost against a fully loaded local hire', 'placements that fit the first time'],
+            proofShape: 'A client team that was augmented: roles filled, how soon the engineers started contributing, how long they stayed and what the team delivered.',
+            discovery: [
+                'Which part of the roadmap is behind, and which skills are missing?',
+                'How long does it take you to hire and ramp up an engineer today?',
+                'How should outside engineers work with your team: inside your team, or as a dedicated team?',
+                'Which working hours and tools must they share with your team?',
+                'How would you judge the first month?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S22 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'product-management', vertical: 'saas', name: 'product management software',
+        match: /\b(?:product management (?:platform|software|tool|system|suite)s?|product roadmap(?:ping)? (?:software|tools?|platform)|roadmapping (?:software|tools?|platform)|product (?:feedback|discovery|ideas?) (?:platform|software|tools?|portal)|idea management (?:software|platform|portal)|feature (?:request|prioriti[sz]ation) (?:software|tools?|platform)|customer feedback (?:repository|management|hub))\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['product strategy', 'roadmap', 'ideas', 'customer feedback', 'user interviews', 'feature specs', 'backlog', 'initiatives', 'product teams', 'product direction'],
+            buyerRoles: ['Head of Product (Chief Product Officer or VP Product)', 'Product Manager', 'Product Operations Lead', 'Head of Engineering', 'Head of Design', 'Head of IT'],
+            committee: 'The head of product signs; product managers champion it and use it every day; engineering and design leads check how plans and specs reach their own tools; IT checks access and integrations.',
+            objections: [
+                { objection: 'We plan in slides and spreadsheets', response: 'Take one real roadmap update and show the time it takes today against the product, from ideas to a shared roadmap.' },
+                { objection: 'Our feedback lives in many tools', response: 'Name the tools the feedback comes from and show it collected in one place on the buyer\'s own data.' },
+                { objection: 'Engineering already tracks the work in its own tool', response: 'Show how plans and specs connect to the engineering tool instead of replacing it.' },
+                { objection: 'Another tool for the product team', response: 'Show what it removes from the product manager\'s week: status decks, scattered notes, repeated update meetings.' },
+            ],
+            salesMotion: 'A trial with one product team on its own roadmap and feedback, then a team or company plan led by the head of product.',
+            metrics: ['time to prepare and share a roadmap', 'decisions linked to customer feedback', 'roadmap items delivered as planned', 'time from idea to decision', 'adoption by product managers'],
+            proofShape: 'One product team before and after: time to build and share the roadmap, and how many decisions trace back to customer feedback.',
+            discovery: [
+                'How do you decide what goes on the roadmap today, and who decides?',
+                'Where do ideas and customer feedback reach the product team?',
+                'How is the roadmap shared with leadership, sales and engineering?',
+                'How do specs reach engineering?',
+                'Which product team would try it first?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S06 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'digital-adoption', vertical: 'saas', name: 'digital adoption platforms',
+        match: /\b(?:digital adoption (?:platforms?|solutions?|software)|dap|in-?app guidance|interactive walkthroughs?|electronic performance support|software adoption (?:platform|software|solution)s?)\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['in-app guidance', 'walkthroughs', 'self help', 'just in time support', 'application rollout', 'new employees', 'usage analytics', 'manual support', 'training', 'enterprise application'],
+            buyerRoles: ['Owner of the enterprise application (ERP, CRM, HR or another)', 'Head of Learning and Development', 'Chief Information Officer or Head of IT', 'Head of HR', 'Change Management Lead', 'Head of the Service Desk'],
+            committee: 'The owner of the application being rolled out signs, often with IT; learning and development and change management champion it; HR joins for new employee onboarding; the service desk feels the support load it should reduce; employees use it inside the application.',
+            objections: [
+                { objection: 'We already train people', response: 'Show the support questions and mistakes that remain after training, and how in-app guidance answers them in the flow of work.' },
+                { objection: 'The application has its own help', response: 'Show guidance built on the buyer\'s own processes across the applications people use, not generic help pages.' },
+                { objection: 'Experienced users will find it annoying', response: 'Show how guidance is targeted by role and experience so that only the users who need it see it.' },
+                { objection: 'We cannot prove the value', response: 'Agree before the start which usage, support and task completion measures the analytics will report.' },
+            ],
+            salesMotion: 'Sold around an application rollout, upgrade or consolidation: a pilot on one application and one user group, then more applications.',
+            metrics: ['support tickets and how to questions about the application', 'training time per new user', 'time for a new user to complete a process alone', 'task completion in the application', 'usage of the application', 'errors in the process'],
+            proofShape: 'One application rollout or one group of new users before and after: support tickets, training time and task completion from the usage analytics.',
+            discovery: [
+                'Which application are you rolling out or changing, and for whom?',
+                'What do new users struggle with in it today?',
+                'How many support questions about it reach the service desk?',
+                'How is training done today, and how long does it take?',
+                'How do you measure whether people use the application as intended?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S08, S09, S10 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'pentest', vertical: 'cybersecurity', name: 'penetration testing and offensive security',
+        match: /\b(?:penetration test\w*|pen ?test\w*|ptaas|red team\w*|offensive security|vapt)\b/i,
+        notes: {
+            vocabulary: ['scope', 'test window', 'black box and white box testing', 'findings', 'vulnerabilities', 'exploit', 'report', 'remediation', 'retest', 'red team', 'compliance'],
+            buyerRoles: ['CISO', 'Head of Application or Product Security', 'Head of Risk and Compliance', 'Security Architect', 'Engineering leads who fix the findings', 'Head of IT'],
+            committee: 'The CISO or the head of application security signs; the security lead who owns the test champions it and agrees the scope; engineering leads fix the findings; risk and compliance need the report for an audit or a standard; IT grants and watches the access the testers use.',
+            objections: [
+                { objection: 'We already run scanners', response: 'Show what manual testing finds that scanners miss (business logic flaws, chained weaknesses) on a scope the buyer chooses.' },
+                { objection: 'Outside testers in our systems', response: 'State how testers are vetted, the rules of engagement, the authorisation and how the test window is agreed.' },
+                { objection: 'Reports that nobody acts on', response: 'Show how findings reach the people who fix them and how the retest confirms each fix.' },
+                { objection: 'One test a year is enough for the audit', response: 'Map the standard\'s own wording (a regular schedule and after system changes) to a testing plan for the buyer\'s release pace.' },
+            ],
+            salesMotion: 'Security led: a scoping call (targets, test type, rules of engagement), a quote by scope, the test window, the report, then remediation and a retest; often timed to an audit, a customer request or a major release.',
+            metrics: ['critical and high findings', 'time to remediate a finding', 'findings confirmed fixed on retest', 'coverage of the systems in scope', 'time from scoping to report', 'audit requirements met'],
+            proofShape: 'Findings from a test on the buyer\'s own scope with their severity, the fixes made and the retest that confirmed them, plus the report an auditor accepted.',
+            discovery: [
+                'Which systems, applications or networks must be tested, and why now (an audit, a customer, a release)?',
+                'Which standard or customer asks for a test, and how often?',
+                'How were the last test\'s findings fixed and checked?',
+                'Who on your side will grant access and agree the rules of engagement?',
+                'What should the report contain for your auditors or customers?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S10, S11 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'attack-surface-dast', vertical: 'cybersecurity', name: 'external attack surface and dynamic testing',
+        match: /\b(?:(?:external )?attack surface (?:management|monitoring|discovery|protection|analysis|mapping)|easm|surface monitoring|internet[- ]facing assets?|(?:external|exposed) assets? discovery)\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['attack surface', 'internet facing assets', 'entry points', 'exposed services', 'dynamic testing', 'black box', 'vulnerabilities', 'continuous monitoring', 'production-like environment', 'changes to the attack surface'],
+            buyerRoles: ['CISO', 'Head of Application Security', 'Security Architect', 'Security Engineering or DevSecOps Lead', 'Head of IT Infrastructure'],
+            committee: 'The CISO or the head of application security signs; the security engineering lead champions it and runs the scans; security architects use the attack surface map; the owners of the internet facing assets fix what is found.',
+            objections: [
+                { objection: 'We already scan our code', response: 'Show what testing the running application from outside finds that code scanning cannot see (configuration and runtime issues), on the buyer\'s own assets.' },
+                { objection: 'We do not know all our assets anyway', response: 'Run discovery on the buyer\'s domains and show the assets nobody listed.' },
+                { objection: 'Scans may harm production', response: 'Agree which environments are scanned, how, and when, and use a production-like environment where data could be changed.' },
+                { objection: 'Too many findings', response: 'Show how findings are ranked by exposure from the internet so the team fixes the reachable ones first.' },
+            ],
+            salesMotion: 'Security led: a trial that discovers and scans the buyer\'s own internet facing assets, then a plan sized by assets or domains.',
+            metrics: ['internet facing assets found against those listed', 'exposed services and vulnerabilities open', 'time to fix a finding', 'new assets detected', 'coverage of applications scanned', 'false positive rate'],
+            proofShape: 'Assets and exposures found on the buyer\'s own attack surface during the trial that the team did not know about, and how fast they were fixed.',
+            discovery: [
+                'Which domains and applications face the internet, and who keeps the list?',
+                'How do you find out about a new site, subdomain or service today?',
+                'How are running applications tested today, and how often?',
+                'Who fixes an exposed asset, and how long does it take?',
+                'How would you judge a trial a success?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S12, S13 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'process-orchestration', vertical: 'software', name: 'process orchestration and workflow engines',
+        match: /\b(?:(?:business )?process (?:orchestration|automation)|workflow (?:orchestration|engine)s?|bpmn|cmmn|dmn|business process model and notation|case management (?:platform|software|engine)|orchestration (?:platform|software|engine)|orchestrat(?:es|ion|ing)\b[^.;:]{0,100}\b(?:business )?processes)\b/i,
+        model: 'saas',
+        notes: {
+            vocabulary: ['process model', 'BPMN', 'DMN decisions', 'case', 'end to end process', 'exceptions', 'escalation', 'audit trail', 'people in the loop', 'policy rules', 'portability'],
+            buyerRoles: ['Chief Information Officer', 'Enterprise Architect', 'Head of Process Automation', 'Head of Operations for the process', 'Head of Risk and Compliance', 'Developers who model and run the processes'],
+            committee: 'The CIO or the head of the business operation signs; enterprise architects and the automation lead evaluate it and champion it; developers model and run the processes; risk and compliance check that every decision is recorded and can be shown to an auditor or regulator.',
+            objections: [
+                { objection: 'We already have bots, integrations and workflow tools', response: 'Take one end to end process and show where it breaks today between those tools, and how one model with exceptions and escalation runs it.' },
+                { objection: 'We do not want lock in', response: 'Show that the processes are modelled in open standards the buyer can inspect, extend and move.' },
+                { objection: 'Regulators and auditors will ask what happened', response: 'Show the trail of every step and decision in one real process instance.' },
+                { objection: 'AI agents should not act alone', response: 'Show how the process bounds what an agent may do and where a person signs off.' },
+            ],
+            salesMotion: 'Architect and IT led: one high stakes end to end process (onboarding, claims, orders) modelled and run in production with its audit trail, then more processes.',
+            metrics: ['process cycle time', 'exceptions handled without manual escalation', 'cases completed without manual work', 'audit findings on the process', 'time to change a process', 'cost per case'],
+            proofShape: 'One end to end process before and after: cycle time, exceptions and manual hand-offs, with the audit trail an auditor or regulator can read.',
+            discovery: [
+                'Which end to end process hurts most today, and where does it stop or wait?',
+                'Which systems, teams and agents take part in it?',
+                'How are exceptions found and handled today?',
+                'What must you show an auditor or regulator about each case?',
+                'Who models and changes processes today, and how long does a change take?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S14, S15 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'open-source-support', vertical: 'software', name: 'open source software support and services',
+        match: /\b(?:open[- ]source\b[^.;:]{0,40}\b(?:support|consulting|services|subscriptions?)|(?:database|dba) (?:support|consulting) services?|remote dba|enterprise support for open[- ]source|(?:24\/7|24x7) (?:expert |technical )?support for (?:open[- ]source|databases?))\b/i,
+        model: 'services',
+        notes: {
+            vocabulary: ['open source licence', 'no licence fees', 'support subscription', 'SLA', 'uptime', 'performance tuning', 'high availability', 'upgrades', 'security audits', 'lock in', 'community and enterprise editions'],
+            buyerRoles: ['Head of Infrastructure or Platform', 'DBA Lead', 'VP Engineering or CTO', 'Head of IT Operations', 'Head of Procurement', 'Chief Financial Officer'],
+            committee: 'The head of infrastructure or engineering signs; the DBA or platform lead who runs the production systems champions it; developers and DBAs work with the support engineers; procurement and finance compare the support subscription with licence and in house costs.',
+            objections: [
+                { objection: 'We run the free version with our own team', response: 'Compare the time the team spends on incidents, upgrades and tuning with what proactive support and an SLA remove.' },
+                { objection: 'Commercial vendors bundle support with the licence', response: 'Compare the licence plus support cost with support for the open source version, on the buyer\'s own environments.' },
+                { objection: 'We fear a new kind of lock in', response: 'Show that the software stays open source and that the support can end without changing the software.' },
+                { objection: 'Response time when production is down', response: 'State the SLA tiers, the response times and who answers a critical incident at night.' },
+            ],
+            salesMotion: 'Often starts from a production problem, a migration or a licence renewal; scoped to the buyer\'s environments; a support subscription with SLA tiers plus consulting and training.',
+            metrics: ['uptime of production systems', 'time to restore service', 'support response time against the SLA', 'performance of critical workloads', 'licence and infrastructure cost', 'time to upgrade or migrate'],
+            proofShape: 'A production estate before and after: incidents, recovery time, performance and licence cost, with the environments and the period stated.',
+            discovery: [
+                'Which open source systems run in production, and who supports them today?',
+                'What happened in your last serious incident, and how long did recovery take?',
+                'What do you pay today in licences, support and staff time?',
+                'Which upgrades or migrations are coming?',
+                'What response time do you need at night and at weekends?',
+            ],
+        },
+    },
+    {
+        // Run 26B (a sub-sector misread on a test pool). Sources: S16, S18 in independent-audit/run26b/sector-notes.md (pages fetched 11 October 2026).
+        id: 'iot-connectivity', vertical: 'telecom', name: 'IoT connectivity',
+        match: /\b(?:iot connectivity|cellular iot|iot sims?|m2m (?:sims?|connectivity)|esims? for (?:iot|devices|connected devices)|euicc|(?:global|multi[- ]network|roaming) sims?|nb-?iot|lte-?m|connectivity for (?:iot|connected) devices|connected devices? connectivity)\b/i,
+        model: 'connectivity',
+        notes: {
+            vocabulary: ['SIM', 'eSIM', 'eUICC', 'devices in the field', 'fleet of devices', 'coverage', 'roaming', 'network failover', 'data plan', 'over the air provisioning', 'NB-IoT and LTE-M', 'private APN'],
+            buyerRoles: ['Head of IoT or Connected Products', 'Device or Hardware Engineering Lead', 'Product Manager for the connected device', 'Chief Technology Officer', 'Head of Operations for the device fleet', 'Head of Procurement'],
+            committee: 'The head of connected products or the CTO signs; the device engineering lead champions it and tests the SIMs; operations runs the fleet in the field; procurement compares the cost per device and data; security checks how device data is protected.',
+            objections: [
+                { objection: 'Coverage in the countries where our devices go', response: 'Test SIMs in the buyer\'s own countries and show the networks each device can use.' },
+                { objection: 'A carrier outage takes our devices offline', response: 'Show how devices switch network or core automatically and what the uptime commitment says.' },
+                { objection: 'The cost per device grows with the fleet', response: 'Model the cost per device and data for the buyer\'s own fleet plan, including low bandwidth options.' },
+                { objection: 'Security of device data', response: 'State the private networking, segmentation and encryption options and who can see device data.' },
+            ],
+            salesMotion: 'Engineers test SIMs on a prototype, then a pilot batch of devices in the field, then a plan priced per SIM and data that grows with the fleet.',
+            metrics: ['devices online', 'connectivity uptime per device', 'coverage in target countries', 'data cost per device', 'time to activate a device', 'devices recovered after an outage'],
+            proofShape: 'A pilot batch of devices in the buyer\'s own countries: uptime, failover events and cost per device against the previous provider.',
+            discovery: [
+                'What devices do you connect, how many, and in which countries?',
+                'How do devices get connected today, and with how many carrier contracts?',
+                'What happens to your service when a device goes offline?',
+                'How much data does a device use, and how do you watch the cost?',
+                'Who manages SIMs and devices in the field today?',
+            ],
+        },
+    },
 ];
 // The order in which the sectors are tried: the specific ones first, SaaS last (most text mentions software). It breaks a
 // tie only after the score and the position of the first strong word.
@@ -1738,6 +2007,12 @@ const CORE_BANKING_WORDS = /\b(?:core banking|banking core|core ledger|banking l
 const MOBILE_APP_SECURITY = /\b(?:mobile (?:app(?:lication)?s? )?security|mobile app(?:lication)? (?:pen(?:etration)? ?test\w*|vulnerabilit\w+|binar\w+|scan\w*)|apk and ipa|app binar(?:y|ies))\b/i;
 const HOTEL_WORDS = /\b(?:hotels?|hostels?|hospitality|resorts?|housekeeping|front desk|guests?|reservations?)\b/i;
 const LEASE_WORDS = /\b(?:tenants?|leases?|landlords?|rent roll|rent collection|rental propert\w+)\b/i;
+// Run 26B: words that move a reading to a kind of its own (pages cited in the project's sector-notes.md; rule B82: words only).
+const PENTEST_WORDS = /\b(?:penetration test\w*|pen ?test\w*|ptaas|red team\w*|offensive security|vapt)\b/i;
+const SURFACE_WORDS = /\b(?:attack surface|easm|surface monitoring|internet[- ]facing assets?|dast|dynamic application security testing)\b/i;
+const CODE_SCAN_WORDS = /\b(?:static (?:application security testing|analysis)|sast|code scanning|software composition|secrets scanning|dependency scanning|pull requests?|source code)\b/i;
+const IOT_WORDS = /\b(?:iot|m2m|euicc|connected devices?)\b/i;
+const VOICE_API_WORDS = /\b(?:programmable (?:voice|sms|messaging|video)|(?:voice|messaging|sms|communications) apis?|cpaas|developers?)\b/i;
 const GENERIC_PAYROLL = { id: 'hr-payroll-general', vertical: 'saas', name: 'HR and payroll', match: /$^/, notes: {} };
 function categoryHits(seller, whole = seller) {
     const out = [];
@@ -1756,6 +2031,16 @@ function categoryHits(seller, whole = seller) {
             st = exports.SUBTYPES.find((x) => x.id === 'mobile-appsec') ?? st;
         if (st.id === 'property-management' && HOTEL_WORDS.test(whole) && !LEASE_WORDS.test(whole))
             st = exports.SUBTYPES.find((x) => x.id === 'hotel-lodging') ?? st;
+        // Run 26B: penetration testing and attack surface words name their own kinds, not the developer pipeline kind; IoT words name IoT connectivity,
+        // not branch networking; voice and messaging APIs settle the tie between CPaaS and business voice.
+        if (st.id === 'appsec' && PENTEST_WORDS.test(whole))
+            st = exports.SUBTYPES.find((x) => x.id === 'pentest') ?? st;
+        else if (st.id === 'appsec' && SURFACE_WORDS.test(whole) && !CODE_SCAN_WORDS.test(whole))
+            st = exports.SUBTYPES.find((x) => x.id === 'attack-surface-dast') ?? st;
+        if (st.id === 'operators-connectivity' && IOT_WORDS.test(whole))
+            st = exports.SUBTYPES.find((x) => x.id === 'iot-connectivity') ?? st;
+        if (st.id === 'business-voice-ucaas' && VOICE_API_WORDS.test(whole))
+            st = exports.SUBTYPES.find((x) => x.id === 'cpaas-messaging') ?? st;
         out.push({ st, word: m[0].toLowerCase().replace(/\s+/g, ' '), index: m.index, end: m.index + m[0].length });
     }
     return out.sort((a, b) => a.index - b.index);
@@ -1795,7 +2080,9 @@ function subtypeFor(v, args) {
     // the seller's own words first; when they name no sub-type of this vertical, the job titles and the free text about the deal may (a head of
     // last-mile operations, an expense module the buyer already has); the buyer's industry never does
     // Run 22: a vertical SaaS seller names its trade in a phrase the buyer marker may have cut ("ERP and POS software for retail ..."): the whole seller text is read too, after the cut one.
-    for (const text of [sd.seller, ...(v.id === 'vertical-saas' ? [sellerWhole(args)] : []), [sd.role, sd.context].join(' \n ')]) {
+    // Run 26B: for every vertical (not only vertical SaaS) the seller's whole text is read after the cut one ("an open platform for agentic orchestration
+    // ... across business processes" names its kind after "for"); the buyer's industry still never does.
+    for (const text of [sd.seller, sellerWhole(args), [sd.role, sd.context].join(' \n ')]) {
         const hits = categoryHits(text, whole).filter((h) => h.st.vertical === v.id && h.st !== GENERIC_PAYROLL);
         const ids = new Set(hits.map((h) => h.st.id));
         // A loose descriptive word ("testing in the DevOps cycle") is not enough when the deal text names another kind of the same vertical.
@@ -1942,6 +2229,14 @@ function explainSector(...args) {
         if (alt && alt.v.id !== 'ai-native')
             s = null;
     }
+    // Run 26B: a seller whose own words carry only AI labels (AI, AI-first, AI-native, agentic, generative AI) says how it is built, not what it sells:
+    // software for a named trade in the rest of its own words ("an AI operating system for service businesses: field service management software
+    // for the trades") is vertical SaaS of that trade.
+    if (s && s.v.id === 'ai-native' && s.strong.every((w) => AI_MARKETING.test(w) || AI_LABELS.test(w))) {
+        const rest = categoryPick(buyer, [sellerWhole(args), buyer].join(' \n '));
+        if (rest && rest.v.id === 'vertical-saas')
+            s = rest;
+    }
     // A seller that manages money (investment strategies, portfolios for allocators) and uses AI words of its own, anywhere in its
     // description, is AI native with the investment model, not fintech (the model is read in detectModel).
     if (s && s.v.id === 'fintech' && modelFromSeller(seller) === 'investment') {
@@ -2030,6 +2325,8 @@ const MODEL_MATCH = [
     // hardware only when the seller makes, sells or ships devices, or names devices it sells; "test on real devices" is not that
     // the adjective form ("smart sensors", "iot devices") says the seller makes them, unless a word of software follows ("IoT device management software" is a subscription)
     { model: 'hardware_software', re: new RegExp(`\\b(?:hardware|(?:sells?|makes?|makers? of|manufactur\\w*|ships?|produces?)\\b[^.;]{0,40}\\b${DEVICE}\\b|${DEVICE}\\b[^.;]{0,20}(?:\\bplus\\b|\\bwith\\b|\\+)[^.;]{0,20}\\b(?:software|apps?|dashboard)\\b|(?:smart|iot|connected|handheld|rugged|gps|pos|wearable|embedded) (?:\\w+ )?${DEVICE}(?! (?:management|monitoring|analytics|security|software|platform|cloud|data|dashboards?)\\b))\\b`, 'i') },
+    // Run 26B: free open source software paid for through support, consulting or training (no licence fees) is a services business, not a software subscription.
+    { model: 'services', re: /\b(?:no licen[cs]e fees?|open[- ]source\b[^.;:]{0,40}\b(?:support|consulting|services|training)|(?:support|consulting|services|training)\b[^.;:]{0,40}\bopen[- ]source)\b/i, not: /\b(?:saas|per seat|per user|subscription (?:plans?|pricing)|cloud (?:services?|platforms?)|hosted|serverless|(?:fully )?managed (?:services?|databases?|platforms?|clusters?)|on any cloud|by the hour)\b/i },
     { model: 'saas', re: /\b(?:saas|subscriptions?|software|platform|apps?|per seat|per user|licen[cs]es?|cloud|apis?|sdks?|tools?|analytics)\b/i },
 ];
 // The model most companies in a sector use, assumed only when the text names none (the answer says it was assumed).
