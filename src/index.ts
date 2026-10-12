@@ -6,6 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import { neutraliseDeep } from './echo-safe.ts';
 
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -2523,7 +2524,11 @@ export function createServer(): Server {
   }));
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const problem = checkRequiredInputs(request.params.name, request.params.arguments as Record<string, unknown> | undefined);
+    // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
+    // has its text arguments made inert once, before any tool reads them. The words stay; markup, tracking images, script
+    // links, hidden characters and fake chat markers do not stay live (src/echo-safe.ts).
+    const safeArgs = neutraliseDeep(request.params.arguments) as Record<string, unknown> | undefined;
+    const problem = checkRequiredInputs(request.params.name, safeArgs);
     if (problem) {
       return { content: [{ type: 'text', text: problem }], isError: true };
     }
@@ -2541,7 +2546,7 @@ export function createServer(): Server {
     }
   
     try {
-      const result = tool.execute(request.params.arguments as any);
+      const result = tool.execute(safeArgs as any);
       return {
         content: [{ type: 'text', text: result }]
       };
