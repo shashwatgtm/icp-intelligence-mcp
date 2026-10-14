@@ -75,6 +75,10 @@ test("a made up field name in a length refusal is not echoed live, at the top an
     assert.match(nested, /longer than/);
     safe(nested, `nested ${key}`);
   }
+  // round 2 (run 32D auditor): two made up field names, inert one by one, must not join into an image in the refusal text
+  const joined = textOf(await rpc("tools/call", { name: tool.name, arguments: { ...requiredArgs(tool), "![x": "a".repeat(4001), "](https://evil.example/c.png)": "a".repeat(4001) } }));
+  assert.match(joined, /longer than/);
+  assert.doesNotMatch(joined, LIVE_IMAGE, `live image: ${joined.slice(0, 300)}`);
   const t = textOf(await rpc("tools/call", { name: tool.name, arguments: { ...requiredArgs(tool), [INSTR]: "a".repeat(4001) } }));
   assert.ok(quotedOrAbsent(t, INSTR), `instruction echoed unquoted: ${t.slice(0, 300)}`);
 });
