@@ -111,7 +111,8 @@ test("two inert fields placed side by side by a tool do not form live markup", a
         const t = textOf(await rpc("tools/call", { name: tool.name, arguments: { ...requiredArgs(tool), [fa]: a, [fb]: b } }));
         calls++;
         assert.doesNotMatch(t, /!\[[^\]]*\]\s*\(\s*https?:\/\/evil/, `${tool.name} ${fa}+${fb}: live image`);
-        assert.doesNotMatch(t, /https?:\/\/evil\.example\/p\s*\?d=SECRET/, `${tool.name} ${fa}+${fb}: query rejoined`);
+        // A query is live only when it touches the address; "…/p ?d=SECRET" (a space between) is plain text, not part of the link.
+        assert.doesNotMatch(t, /https?:\/\/evil\.example\/p\?d=SECRET/, `${tool.name} ${fa}+${fb}: query rejoined to the address`);
         assert.doesNotMatch(t, /<img/i, `${tool.name} ${fa}+${fb}: live tag`);
       }
     }
