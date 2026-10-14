@@ -5,7 +5,7 @@
 
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createServer } from "../../src/index.ts";
-import { neutraliseText } from "../../src/echo-safe.ts";
+import { neutraliseText, neutraliseAnswer } from "../../src/echo-safe.ts";
 
 // Run 11 addendum 2 (R11-A2-3), addendum 3 (R11-A3-9) and addendum 4 (R11-A4-1): limits and input checks before the SDK,
 // so the tool definitions in tools/list are unchanged and a request inside the limits runs exactly as before.
@@ -42,8 +42,9 @@ function rpcError(id, code, message, status, extraHeaders) {
   });
 }
 
+// Run 32D round 2: every refusal text passes through neutraliseAnswer, so two names that are inert one by one cannot join into markup.
 function toolError(id, text) {
-  return new Response(JSON.stringify({ jsonrpc: "2.0", id, result: { content: [{ type: "text", text }], isError: true } }), {
+  return new Response(JSON.stringify({ jsonrpc: "2.0", id, result: { content: [{ type: "text", text: neutraliseAnswer(text) }], isError: true } }), {
     status: 200,
     headers: { "Content-Type": "application/json", ...SECURITY_HEADERS },
   });
