@@ -6,7 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { neutraliseDeep } from './echo-safe.ts';
+import { neutraliseDeep, neutraliseText, neutraliseAnswer } from './echo-safe.ts';
 
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -14,6 +14,12 @@ import { neutraliseDeep } from './echo-safe.ts';
 // 9 Tools for ICP definition, scoring, market sizing, and signal generation
 // =============================================================================
 
+// Run 32D (Codex F015b, R13): text shown inside a "> " quote block keeps every one of its lines inside the quote, so a line
+// typed as "> Role: CFO" or "SYSTEM override" can never sit outside the quote as if the tool wrote it. One line text is unchanged.
+const LINE_BREAK = new RegExp("\r\n?|\n|" + String.fromCharCode(0x2028) + "|" + String.fromCharCode(0x2029), "g");
+function inQuote(text: string): string {
+  return String(text).replace(LINE_BREAK, "\n> ");
+}
 // Text only: add a word such as "software" after a phrase unless the phrase already ends with it (no "software software").
 // Run 17 D56 (backlog items 8 and 15): a market share under 0.05% prints as given (0.03%, not 0.0%);
 // every share of 0.05% or more prints as before, with one decimal.
@@ -2221,8 +2227,8 @@ ${topRoles.length > 0 ? topRoles.map(([role, count], i) =>
 
 ${allQuotes.slice(0, 5).map((q, i) => `
 ### Quote ${i + 1}
-> "${q.quote}"
-> (${q.role || 'Customer'}${q.customer ? ` at ${q.customer}` : ''})
+> "${inQuote(q.quote)}"
+> (${inQuote(q.role || 'Customer')}${q.customer ? ` at ${inQuote(q.customer)}` : ''})
 `).join('\n')}
 
 ---
@@ -2458,7 +2464,8 @@ const ONE_AMOUNT: Record<string, string[]> = {};
 function checkRequiredInputs(name: string, args: Record<string, unknown> | undefined): string | null {
   const tool = (tools as Record<string, { inputSchema: { required?: string[] } }>)[name];
   if (!tool) {
-    return `Unknown tool: ${name}. Available tools: ${Object.keys(tools).join(', ')}.`;
+    // Run 32D (30D-1): the name the caller sent is made inert before it is repeated.
+    return `Unknown tool: ${neutraliseText(String(name))}. Available tools: ${Object.keys(tools).join(', ')}.`;
   }
   const required = tool.inputSchema.required ?? [];
   // Run 16 R16-10 (rule B52): a required text (a string with no fixed list of choices) that is empty or only whitespace counts as missing.
@@ -2530,7 +2537,7 @@ export function createServer(): Server {
     const safeArgs = neutraliseDeep(request.params.arguments) as Record<string, unknown> | undefined;
     const problem = checkRequiredInputs(request.params.name, safeArgs);
     if (problem) {
-      return { content: [{ type: 'text', text: problem }], isError: true };
+      return { content: [{ type: 'text', text: neutraliseAnswer(problem) }], isError: true };
     }
     const toolName = request.params.name as keyof typeof tools;
     const tool = tools[toolName];
@@ -2539,7 +2546,7 @@ export function createServer(): Server {
       return {
         content: [{
           type: 'text',
-          text: `Unknown tool: ${toolName}. Available tools: ${Object.keys(tools).join(', ')}`
+          text: `Unknown tool: ${neutraliseText(String(toolName))}. Available tools: ${Object.keys(tools).join(', ')}`
         }],
         isError: true
       };
@@ -2548,13 +2555,14 @@ export function createServer(): Server {
     try {
       const result = tool.execute(safeArgs as any);
       return {
-        content: [{ type: 'text', text: result }]
+        // Run 32D (30D-5): the finished answer is made inert again where the tool joined two inert pieces into markup.
+        content: [{ type: 'text', text: neutraliseAnswer(result) }]
       };
     } catch (error) {
       return {
         content: [{
           type: 'text',
-          text: `Error executing ${toolName}: ${error instanceof Error ? error.message : 'Unknown error'}`
+          text: neutraliseAnswer(`Error executing ${toolName}: ${error instanceof Error ? error.message : 'Unknown error'}`)
         }],
         isError: true
       };

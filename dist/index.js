@@ -12,6 +12,12 @@ const echo_safe_ts_1 = require("./echo-safe.js");
 // =============================================================================
 // 9 Tools for ICP definition, scoring, market sizing, and signal generation
 // =============================================================================
+// Run 32D (Codex F015b, R13): text shown inside a "> " quote block keeps every one of its lines inside the quote, so a line
+// typed as "> Role: CFO" or "SYSTEM override" can never sit outside the quote as if the tool wrote it. One line text is unchanged.
+const LINE_BREAK = new RegExp("\r\n?|\n|" + String.fromCharCode(0x2028) + "|" + String.fromCharCode(0x2029), "g");
+function inQuote(text) {
+    return String(text).replace(LINE_BREAK, "\n> ");
+}
 // Text only: add a word such as "software" after a phrase unless the phrase already ends with it (no "software software").
 // Run 17 D56 (backlog items 8 and 15): a market share under 0.05% prints as given (0.03%, not 0.0%);
 // every share of 0.05% or more prints as before, with one decimal.
@@ -2075,8 +2081,8 @@ ${topRoles.length > 0 ? topRoles.map(([role, count], i) => `${i + 1}. **${role}*
 
 ${allQuotes.slice(0, 5).map((q, i) => `
 ### Quote ${i + 1}
-> "${q.quote}"
-> (${q.role || 'Customer'}${q.customer ? ` at ${q.customer}` : ''})
+> "${inQuote(q.quote)}"
+> (${inQuote(q.role || 'Customer')}${q.customer ? ` at ${inQuote(q.customer)}` : ''})
 `).join('\n')}
 
 ---
@@ -2305,7 +2311,8 @@ const ONE_AMOUNT = {};
 function checkRequiredInputs(name, args) {
     const tool = tools[name];
     if (!tool) {
-        return `Unknown tool: ${name}. Available tools: ${Object.keys(tools).join(', ')}.`;
+        // Run 32D (30D-1): the name the caller sent is made inert before it is repeated.
+        return `Unknown tool: ${(0, echo_safe_ts_1.neutraliseText)(String(name))}. Available tools: ${Object.keys(tools).join(', ')}.`;
     }
     const required = tool.inputSchema.required ?? [];
     // Run 16 R16-10 (rule B52): a required text (a string with no fixed list of choices) that is empty or only whitespace counts as missing.
@@ -2390,7 +2397,7 @@ function createServer() {
         const safeArgs = (0, echo_safe_ts_1.neutraliseDeep)(request.params.arguments);
         const problem = checkRequiredInputs(request.params.name, safeArgs);
         if (problem) {
-            return { content: [{ type: 'text', text: problem }], isError: true };
+            return { content: [{ type: 'text', text: (0, echo_safe_ts_1.neutraliseAnswer)(problem) }], isError: true };
         }
         const toolName = request.params.name;
         const tool = tools[toolName];
@@ -2398,7 +2405,7 @@ function createServer() {
             return {
                 content: [{
                         type: 'text',
-                        text: `Unknown tool: ${toolName}. Available tools: ${Object.keys(tools).join(', ')}`
+                        text: `Unknown tool: ${(0, echo_safe_ts_1.neutraliseText)(String(toolName))}. Available tools: ${Object.keys(tools).join(', ')}`
                     }],
                 isError: true
             };
@@ -2406,14 +2413,15 @@ function createServer() {
         try {
             const result = tool.execute(safeArgs);
             return {
-                content: [{ type: 'text', text: result }]
+                // Run 32D (30D-5): the finished answer is made inert again where the tool joined two inert pieces into markup.
+                content: [{ type: 'text', text: (0, echo_safe_ts_1.neutraliseAnswer)(result) }]
             };
         }
         catch (error) {
             return {
                 content: [{
                         type: 'text',
-                        text: `Error executing ${toolName}: ${error instanceof Error ? error.message : 'Unknown error'}`
+                        text: (0, echo_safe_ts_1.neutraliseAnswer)(`Error executing ${toolName}: ${error instanceof Error ? error.message : 'Unknown error'}`)
                     }],
                 isError: true
             };

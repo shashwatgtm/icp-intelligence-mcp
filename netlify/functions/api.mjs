@@ -8,6 +8,7 @@
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { createServer } from "../../src/index.ts";
+import { neutraliseText } from "../../src/echo-safe.ts";
 
 const MAX_BODY_BYTES = 32000;
 const MAX_TEXT = 6000;
@@ -245,7 +246,8 @@ export default async (req, context) => {
     client = await connectClient();
     const { tools } = await client.listTools();
     const tool = tools.find((t) => t.name === toolName);
-    if (!tool) return reply(404, { ok: false, error: `Unknown tool: ${toolName}.` });
+    // Run 32D (30D-1): names the caller made up (the tool in the address, a form box, an ignored field) are made inert before they are repeated.
+    if (!tool) return reply(404, { ok: false, error: `Unknown tool: ${neutraliseText(String(toolName))}.` });
     // Run 15 D39: each part of an object from a form post gets the type its schema asks for (a number box gives a number).
     const partErrors = [];
     const props = (tool.inputSchema && tool.inputSchema.properties) || {};
@@ -253,7 +255,7 @@ export default async (req, context) => {
       const subProps = (props[parent] && props[parent].properties) || {};
       const obj = {};
       for (const [sk, sv] of Object.entries(sub)) {
-        const c = coerce(subProps[sk] || { type: "string" }, sv, `${parent}.${sk}`, partErrors);
+        const c = coerce(subProps[sk] || { type: "string" }, sv, neutraliseText(`${parent}.${sk}`), partErrors);
         if (c !== undefined) obj[sk] = c;
       }
       if (Object.keys(obj).length) input[parent] = obj;
@@ -263,7 +265,7 @@ export default async (req, context) => {
     if (errors.length) return reply(400, { ok: false, errors });
     const result = await client.callTool({ name: tool.name, arguments: args });
     const text = (result.content || []).filter((c) => c.type === "text").map((c) => c.text).join("\n\n");
-    return reply(result.isError ? 422 : 200, { ok: !result.isError, tool: tool.name, title: tool.title || tool.name, text, error: result.isError ? text : undefined, ignored_fields: ignored.length ? ignored : undefined });
+    return reply(result.isError ? 422 : 200, { ok: !result.isError, tool: tool.name, title: tool.title || tool.name, text, error: result.isError ? text : undefined, ignored_fields: ignored.length ? ignored.map((k) => neutraliseText(k)) : undefined });
   } catch {
     return reply(500, { ok: false, error: "The tool could not run. Please try again." });
   } finally {

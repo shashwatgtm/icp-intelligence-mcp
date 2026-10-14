@@ -5,6 +5,7 @@
 
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createServer } from "../../src/index.ts";
+import { neutraliseText } from "../../src/echo-safe.ts";
 
 // Run 11 addendum 2 (R11-A2-3), addendum 3 (R11-A3-9) and addendum 4 (R11-A4-1): limits and input checks before the SDK,
 // so the tool definitions in tools/list are unchanged and a request inside the limits runs exactly as before.
@@ -116,8 +117,9 @@ const count = (n) => n.toLocaleString("en-US");
 function tooLong(value, name, out, limit) {
   if (typeof value === "string") {
     if (value.length > limit) {
+      // Run 32D (30D-1): a field name the caller made up is made inert before it is repeated.
       out.push(
-        name + " is longer than " + count(limit) + " characters. " + (limit > MAX_TEXT ? "Shorten it or split it into parts." : "Shorten it.")
+        neutraliseText(name) + " is longer than " + count(limit) + " characters. " + (limit > MAX_TEXT ? "Shorten it or split it into parts." : "Shorten it.")
       );
     }
   } else if (Array.isArray(value)) {
@@ -182,7 +184,7 @@ export default async (req) => {
       }
       const long = argumentsTooLong(name, args);
       if (long.length > 0) {
-        return toolError(body.id, "Invalid input for " + name + ": " + long.join(" "));
+        return toolError(body.id, "Invalid input for " + neutraliseText(name) + ": " + long.join(" "));
       }
     }
     const server = createServer();

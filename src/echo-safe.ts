@@ -8,6 +8,10 @@
 // A string that tried to give the assistant an instruction (English and a few other languages, spaced or width-changed
 // letters included) is quoted as the user's own text.
 // Applied once, to every string argument of a tool call, before the tool builds its answer (the choke point).
+// Run 32D (connector safety run 2): tags are made inert before the query step, so a tag between an address and its query
+// no longer hides the query (register 30D-5, R4); an instruction to state a made up fact or to set a score is quoted
+// (Codex F014, R12); and neutraliseAnswer makes the finished answer inert again where a tool joined two inert pieces into
+// markup (30D-5, R4). neutraliseAnswer never quotes and leaves an answer with no live markup byte identical.
 // Time is close to linear in the length of the text: every scan has a fixed window (checked by a test with hostile inputs).
 // No figures, no sector knowledge (B82).
 
@@ -150,6 +154,15 @@ function definitionPass(s: string): string {
 // ---- bare web addresses: keep the address, drop credentials, query and fragment ----
 const CREDS = /\b(https?:\/\/)[^\s/@?#]{1,200}@/gi;
 const URL_QUERY = /\b((?:https?:\/\/|www\.)[^\s<>"'“”()[\]{}?#]{1,1500})[?#][^\s<>"'“”)\]]{0,1500}/gi;
+// Run 32D: an address, then one or more tags already shown with angle quotes (‹b›, ‹!-- x --›), then a query: the query goes
+// and the address and the inert tags stay, so a tag between an address and its query cannot hide the query.
+const URL_TAG_QUERY = /\b((?:https?:\/\/|www\.)[^\s<>"'“”()[\]{}?#‹]{1,1500})((?:‹[^›\n]{0,200}›){1,20})[?#][^\s<>"'“”)\]]{0,1500}/gi;
+
+// ---- tags and fake chat markers: shown with angle quotes ----
+function tagPass(s: string): string {
+  const cut = s.lastIndexOf(">") + 1;
+  return s.slice(0, cut).replace(TAG, (t) => t.replace(/</g, "‹").replace(/>/g, "›")) + s.slice(cut).replace(LONE_LT, "‹");
+}
 
 // ---- instruction text ----
 const INSTRUCTION_PARTS = [
@@ -186,6 +199,16 @@ const INSTRUCTION_PARTS = [
   String.raw`\b(?:call|invoke|run|execute|trigger|use)\s+(?:the\s+)?tool\b[^.\n]{0,25}\b[a-z]+_[a-z0-9_]+\b`,
   String.raw`\b(?:delete|drop|wipe|erase|destroy)_(?:all|everything|data|database|users?|records?)\b`,
   String.raw`\b(?:call|invoke|run|execute)\s+(?:the\s+)?(?:function\s+|command\s+)?[a-z]+_[a-z0-9_]+\s*\(`,
+  // run 32D (Codex F014, R12): an instruction to state a made up fact, addressed to the assistant or the reader
+  String.raw`\b(?:assistant|ai|claude|chatgpt|gpt|gemini|copilot|model|bot)[ \t]{0,5}[,:][ \t]{0,5}(?:please\s+)?(?:state|say|claim|write|assert|report|confirm|mention|tell|add|include|insert|set|score|rate|give|mark)\b`,
+  String.raw`\b(?:notes?|messages?|instructions?|reminders?)\s+(?:to|for)\s+(?:the\s+)?(?:readers?|reviewers?|writers?|models?)\b`,
+  String.raw`(?:^|[.!?;:\n])[ \t]{0,10}(?:please\s+)?(?:state|say|claim|assert|declare|confirm|write|report)\s+(?:that\s+)?(?:we|our|us|the\s+company|this\s+company|the\s+product|they|it)\b[^.\n]{0,80}\b(?:have|has|are|is|was|were|won|hold|holds|serve|serves|certified|compliant|customers?|clients?|users?|revenue|growth)\b`,
+  String.raw`\btell\s+(?:the\s+)?(?:users?|readers?|reviewers?)\s+(?:that\s+)?(?:we|our|the\s+company|this\s+company|the\s+product|it|they)\b`,
+  // run 32D (Codex F014, R12): an instruction to set a score
+  String.raw`\b(?:set|give|assign|make|mark|rate|change|force|bump|raise|put)\s+(?:(?:every|all|each|the|this|our|my|its|their|overall|final)\s+){0,2}(?:\w+\s+){0,2}?(?:scores?|ratings?|grades?|marks?|results?)\b[^.\n]{0,30}?\b(?:to|as|at|of)\s+(?:a\s+|the\s+)?(?:10\s*(?:\/|out\s+of)\s*10|100\s*(?:\/|out\s+of)\s*100|5\s*(?:\/|out\s+of)\s*5|100\b|perfect\b|full\s+marks|(?:maximum|highest|top)\b)`,
+  String.raw`\b(?:score|rate|grade|mark)\s+(?:this|the|our|my|every|each|all)\b[^.\n]{0,40}\b(?:100|10\s*(?:\/|out\s+of)\s*10|maximum|perfect|highest)\b`,
+  String.raw`\bgive\s+(?:it|this|us|them|our\s+\w+|the\s+\w+)\s+(?:a\s+|the\s+)?(?:perfect|maximum|top|full|highest)\s+(?:scores?|ratings?|marks?|grades?)\b`,
+  String.raw`\b(?:regardless|irrespective)[ \t]{1,5}of[ \t]{1,5}(?:the\s+|any\s+|all\s+)?(?:inputs?|data|answers?|evidence|facts|results?|responses?|scores?)\b`,
   // other languages
   String.raw`\bignor(?:ez|er|e|ons)\b[^.\n]{0,40}\b(?:instructions?|consignes?|directives?)\b`,
   String.raw`\bignorier(?:e|en|t|st)?\b[^.\n]{0,40}\b(?:anweisungen|instruktionen|vorgaben|befehle|regeln)\b`,
@@ -206,17 +229,33 @@ function looksLikeInstruction(text: string): boolean {
   return squeezed !== wide && INSTRUCTION.test(squeezed);
 }
 
-export function neutraliseText(input: string): string {
+// Markup only: images, bad links and definitions, script and data addresses, credentials, tags (before the query step,
+// so a tag cannot hide a query), then the query and fragment of bare addresses.
+function markupPass(input: string): string {
   let s = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "");
-  const before = s;
   s = markdownPass(s);
   s = definitionPass(s);
   s = s.replace(BARE_SCRIPT, "[link removed]").replace(BARE_DATA, "[link removed]");
-  s = s.replace(CREDS, "$1").replace(URL_QUERY, "$1 (query removed)");
-  const cut = s.lastIndexOf(">") + 1;
-  s = s.slice(0, cut).replace(TAG, (t) => t.replace(/</g, "‹").replace(/>/g, "›")) + s.slice(cut).replace(LONE_LT, "‹");
+  s = s.replace(CREDS, "$1");
+  s = tagPass(s);
+  s = s.replace(URL_TAG_QUERY, "$1$2 (query removed)").replace(URL_QUERY, "$1 (query removed)");
+  return s;
+}
+
+export function neutraliseText(input: string): string {
+  const before = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "");
+  let s = markupPass(input);
   if (looksLikeInstruction(before) && !/^“[\s\S]*”$/.test(s)) s = `“${s}”`;
   return s;
+}
+
+// Run 32D (30D-5, R4): the finished answer of a tool, after it joined what the user typed with its own text. Two pieces that
+// were inert one by one can form markup when joined (an "!" before a link, an address before its query, the two halves of
+// a tag or of a script address). This pass makes such markup inert again. It never quotes, and an answer with no live
+// markup comes back byte identical (the tools' own answers hold no images, tags or addresses with a query).
+export function neutraliseAnswer(answer: string): string {
+  if (typeof answer !== "string" || answer === "") return answer;
+  return markupPass(answer);
 }
 
 export function neutraliseDeep<T>(value: T): T {
