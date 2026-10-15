@@ -347,7 +347,16 @@ function markupPass(input) {
 function plainBang(s) {
     return s.indexOf("![") < 0 ? s : s.replace(/(\\*)!\[/g, (m, bs) => (bs.length % 2 === 1 ? m : `${bs}!\\[`));
 }
+// Run 36D (register 34D-7): a lone carriage return is a line end for CommonMark and micromark, but pandoc drops it before it
+// reads the text, so markup split by one is live for pandoc and two plain lines for the parser. Every lone "\r" becomes "\n"
+// (a CommonMark renderer reads the same text as before, and pandoc now reads it the same way); "\r\n" is kept as it is.
+const LONE_CR = /\r(?!\n)/g;
+function lineEnds(s) {
+    return s.indexOf("\r") < 0 ? s : s.replace(LONE_CR, "\n");
+}
 function neutraliseText(input) {
+    if (typeof input === "string")
+        input = lineEnds(input);
     const before = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "");
     let s = plainBang(markupPass(input));
     if (looksLikeInstruction(before) && !/^“[\s\S]*”$/.test(s))
@@ -361,13 +370,40 @@ const ext = md;
 // A third, wider reading is used when the answer holds "$" or "[^": pandoc's GFM reads $...$ as TeX math (which can hide a
 // backtick, so a code span for micromark is plain text for pandoc) and has footnotes (whose indented lines are code for
 // micromark, and whose "[^1]: ..." is not a link definition); so code spans, indented code and definitions are turned off.
+// In the block wise pass for long answers (run 36D, register 34D-5), when the answer holds a line that may open or close a fence,
+// every part is read without any code (fenced, indented or span): a part may then start inside a fence of the whole answer, so
+// nothing in it is trusted to be code (only more is read as markup, never less). Without such a line no code block or span
+// can cross from one part to the next (a span ends at a blank line, and each part starts after one).
+let noCode = false;
+const FENCE_LIKE = /(?:^|\n)[ \t>*+\-0-9.)]*(?:`{3,}|~{3,})/;
+// the whole answer, lower case with its spaces joined, while the block wise pass reads one part (labels are looked for in it)
+let wholeFlat = null;
+// whether a reading of any part of the whole answer holds a definition (block wise pass)
+let wholeDefinition = false;
+// Run 36D: a cap on the parser's work for one answer. Every reading adds its cost (costOf below, about a millisecond per unit,
+// measured on micromark with every budget class); the cap is 360 units, or one round of readings of the whole answer plus 60
+// when that is more (plus one round for each part read again for a definition). An ordinary answer is read once, in two or
+// three readings, so it stays inside the cap; crafted text that needs many parses again reaches the cap and gets the last
+// resort.
+let work = 0;
+let workCap = 360;
+// Text as labels are compared: lower case, every run of white space (U+0085 too) one space, and no space just inside a bracket
+// (pandoc trims a label and treats a vertical tab, a form feed and U+0085 as white space; micromark does not; run 36D)
+const SPACE = /[\s\u0085]+/g;
+const norm = (s) => s.toLowerCase().replace(SPACE, " ").replace(/\[ /g, "[").replace(/ \]/g, "]");
+const flatOf = (s) => wholeFlat ?? norm(s);
 function parseTree(s, gfm, wide = false) {
+    const c = countsOf(s);
+    work += c ? costOf(c) : s.length / 4000;
+    if (work > workCap)
+        throw new Error("parse work cap");
+    const off = noCode ? ["codeFenced", "codeIndented", "codeText"] : [];
     if (wide)
-        return parseMarkdown(s, { extensions: [{ disable: { null: ["attention", "codeText", "codeIndented", "definition"] } }], mdastExtensions: [] });
+        return parseMarkdown(s, { extensions: [{ disable: { null: ["attention", "codeText", "codeIndented", "definition", ...off] } }], mdastExtensions: [] });
     if (!gfm)
-        return parseMarkdown(s, { extensions: [{ disable: { null: ["attention"] } }], mdastExtensions: [] });
+        return parseMarkdown(s, { extensions: [{ disable: { null: ["attention", ...off] } }], mdastExtensions: [] });
     return parseMarkdown(s, {
-        extensions: [ext.gfmTable(), ext.gfmTaskListItem(), { disable: { null: ["attention"] } }],
+        extensions: [ext.gfmTable(), ext.gfmTaskListItem(), { disable: { null: ["attention", ...off] } }],
         mdastExtensions: [ext.gfmTableFromMarkdown(), ext.gfmTaskListItemFromMarkdown()],
     });
 }
@@ -424,8 +460,9 @@ function bareEdits(s, from, to, edits) {
         if (at > 0 && /[A-Za-z0-9]/.test(s[at - 1]))
             continue;
         let end = at;
-        // the address runs to an ASCII space or "<" (pandoc keeps a U+2028 or a no-break space inside it)
-        while (end < to && !/[ \t\n\r\f\v<]/.test(s[end]))
+        // the address runs to an ASCII space or "<" (pandoc keeps a U+2028 or a no-break space inside it); in JSON text it also
+        // stops at a backslash, which is a JSON escape there (pandoc ends a bare address at a backslash too; run 36D, 34D-3)
+        while (end < to && !/[ \t\n\r\f\v<]/.test(s[end]) && !(entityMode && s[end] === "\\"))
             end++;
         let kept = end;
         for (;;) {
@@ -459,8 +496,17 @@ function bareEdits(s, from, to, edits) {
                 slashes++;
             i += len - 1;
         }
-        if (cut >= 0)
-            edits.push({ at: cut, del: kept - cut, ins: " (query removed)" });
+        if (cut >= 0) {
+            // in JSON text the cut never takes a quote (it may close the JSON string): " (query removed)" ends the address there,
+            // so what follows the quote is no longer part of it (run 36D, register 34D-3)
+            let stop = kept;
+            if (entityMode) {
+                const q = s.indexOf('"', cut);
+                if (q >= 0 && q < stop)
+                    stop = q;
+            }
+            edits.push({ at: cut, del: stop - cut, ins: " (query removed)" });
+        }
         BARE_START.lastIndex = Math.max(end - from, m.index + 1);
     }
 }
@@ -511,7 +557,22 @@ function editsOf(s, code, gfm, wide = false, seen) {
                     return;
                 }
                 if (unsafeAddress(node.url ?? "")) {
-                    if (!removable(node.url ?? ""))
+                    if (entityMode) {
+                        // JSON text: the "[" may be a JSON array bracket, so the "]" of "](" is made plain (it always sits inside one JSON
+                        // string) and nothing is deleted (run 36D, register 34D-3); an autolink's "<" is always inside a string
+                        const kids = node.children ?? [];
+                        const close = s[at] === "[" ? (kids.length ? kids[kids.length - 1].position?.end.offset ?? -1 : at + 1) : -1;
+                        if (s[at] === "[" && close >= 0 && s[close] === "]")
+                            edits.push(mark(s, close));
+                        else if (s[at] === "[") {
+                            const k = s.indexOf("](", at);
+                            if (k >= 0 && k < end)
+                                edits.push(mark(s, k));
+                        }
+                        else
+                            edits.push(mark(s, at));
+                    }
+                    else if (!removable(node.url ?? ""))
                         edits.push(mark(s, at));
                     else {
                         // a script, data, file or other address: the link keeps its words and loses its address (the run 22 form)
@@ -532,7 +593,7 @@ function editsOf(s, code, gfm, wide = false, seen) {
         seen.definition = true;
     // a definition with an unsafe address is made plain when a reference uses it, or (a second layer, because renderers do not
     // always agree on which brackets form a reference) when its label appears in brackets anywhere else in the answer
-    const flat = s.toLowerCase().replace(/\s+/g, " ");
+    const flat = flatOf(s);
     const twice = (label) => {
         const first = flat.indexOf(label);
         return first >= 0 && flat.indexOf(label, first + 1) >= 0;
@@ -545,8 +606,13 @@ function editsOf(s, code, gfm, wide = false, seen) {
         let i = k + 1;
         while (i < s.length && s[i] !== "]")
             i += s[i] === "\\" ? 2 : 1;
-        const raw = s.slice(k, i + 1).toLowerCase().replace(/\s+/g, " ");
-        const elsewhere = twice(`[${(d.label ?? "").toLowerCase().replace(/\s+/g, " ")}]`) || twice(raw);
+        const raw = norm(s.slice(k, i + 1));
+        // the second layer acts on an address that can load or send something by itself: one with a scheme, a query or fragment, or
+        // a host ("//"); a relative one such as a tool's own "[Date]: [Deliverable]" (repeated in a long answer) keeps its bytes
+        // (run 36D); a used definition is made plain whatever its address (above)
+        const url = (d.url ?? "").replace(INVISIBLE, "");
+        const risky = /^[a-z][a-z0-9+.-]*:/i.test(url) || /[?#]/.test(url) || /^[\\/]{2}/.test(url);
+        const elsewhere = risky && (twice(norm(`[${d.label ?? ""}]`)) || twice(raw));
         const usedFirst = d.identifier !== undefined && used.has(d.identifier) && definitions.get(d.identifier) === d;
         if (usedFirst || elsewhere)
             plainAt(d.position?.start.offset ?? 0, "[");
@@ -621,30 +687,67 @@ function prefixOk(s, i) {
             return true;
     }
 }
-function withinBudget(s) {
-    if (s.length > 120000)
-        return false;
-    let open = 0, close = 0, pipe = 0, lt = 0, tick = 0, lines = 0;
+const PUNCT = /[!-/:-@[-`{-~]/;
+// the counts of s, or null when a line of s has too many container markers or spaces before them
+function countsOf(s) {
+    const c = { len: s.length, open: 0, far: 0, close: 0, pipe: 0, lt: 0, tick: 0, lines: 0, esc: 0, amp: 0, opener: 0 };
     if (!prefixOk(s, 0))
-        return false;
-    for (let i = 0; i < s.length; i++) {
-        const c = s.charCodeAt(i);
-        if (c === 10) {
-            if (++lines > 2000 || !prefixOk(s, i + 1))
-                return false;
-        }
-        else if (c === 91)
-            open++;
-        else if (c === 93)
-            close++;
-        else if (c === 124)
-            pipe++;
-        else if (c === 60)
-            lt++;
-        else if (c === 96)
-            tick++;
+        return null;
+    // the place of the next "]" after each place, so a "[" closed soon (a task box, a link) counts as cheap
+    let nextClose = s.length + 1000;
+    const lastClose = [];
+    for (let i = s.length - 1; i >= 0; i--) {
+        if (s.charCodeAt(i) === 93)
+            nextClose = i;
+        else if (s.charCodeAt(i) === 91)
+            lastClose.push(nextClose);
     }
-    return open <= 1000 && close <= 1000 && pipe <= 3000 && lt <= 2000 && tick <= 2000;
+    for (let i = 0; i < s.length; i++) {
+        const k = s.charCodeAt(i);
+        if (k === 10) {
+            c.lines++;
+            if (!prefixOk(s, i + 1))
+                return null;
+        }
+        else if (k === 91) {
+            c.open++;
+            if ((lastClose.pop() ?? s.length) - i > 300)
+                c.far++;
+        }
+        else if (k === 93)
+            c.close++;
+        else if (k === 124)
+            c.pipe++;
+        else if (k === 60) {
+            c.lt++;
+            const n = s.charCodeAt(i + 1);
+            if (n === 33 || n === 63)
+                c.opener++;
+        }
+        else if (k === 96)
+            c.tick++;
+        else if (k === 38)
+            c.amp++;
+        else if (k === 92 && i + 1 < s.length && PUNCT.test(s[i + 1])) {
+            c.esc++;
+            i++;
+        }
+    }
+    return c;
+}
+// the estimated cost of one reading, in units of about a millisecond (run 36D measurements: 100,000 characters of prose 25,
+// 1,000 "[" 75, 2,000 lines 100)
+function costOf(c) {
+    return c.len / 4000 + 0.01 * c.open + 0.065 * c.far + 0.02 * c.close + 0.02 * c.lt + 0.025 * c.esc + 0.055 * c.amp + 0.013 * c.pipe + 0.025 * c.tick + 0.05 * c.lines + 0.5 * c.opener;
+}
+// how many readings one round of the parse loop makes (the third, wider one when "$" or "[^" is in the text)
+const readings = (s) => (/\$|\[\^/.test(s) ? 3 : 2);
+function fits(c) {
+    return costOf(c) <= 120 && c.len <= 120000 && c.lines <= 2000 && c.open <= 1000 && c.close <= 1000 && c.pipe <= 3000 && c.lt <= 2000 && c.tick <= 2000 && c.esc <= 1000 && c.amp <= 1000 && c.opener <= 32;
+}
+function withinBudget(s) {
+    const c = countsOf(s);
+    return c !== null && fits(c);
 }
 // A fourth layer that does not depend on either parser (run 34D fix round, CRAFT GTM auditor: a definition inside a task list
 // item, or on the line right after a table, that pandoc reads and micromark does not): a line that, after its quote, list and
@@ -653,7 +756,7 @@ function withinBudget(s) {
 function definitionLineEdits(s, edits) {
     if (s.indexOf("]:") < 0)
         return;
-    const flat = s.toLowerCase().replace(/\s+/g, " ");
+    const flat = flatOf(s);
     let lineStart = 0;
     while (lineStart <= s.length) {
         let lineEnd = s.indexOf("\n", lineStart);
@@ -708,7 +811,7 @@ function definitionLineEdits(s, edits) {
                 const tail = s.slice(s[j] === "<" ? e + 1 : e, lineOfDest).trim();
                 const titled = tail === "" || /^(?:"[^"]*"|'[^']*'|\([^()]*\))$/.test(tail);
                 const address = decodeEntities(raw.replace(/\\([!-/:-@[-`{-~])/g, "$1"));
-                const label = s.slice(i, k + 1).toLowerCase().replace(/\s+/g, " ");
+                const label = norm(s.slice(i, k + 1));
                 const bare = label.replace(/\\([!-/:-@[-`{-~])/g, "$1");
                 const twice = (l) => {
                     const f = flat.indexOf(l);
@@ -732,7 +835,10 @@ function editsOfBoth(s, code, seenDef) {
     const edits = [];
     const wide = /\$|\[\^/.test(s) ? editsOf(s, [], false, true, seenDef) : [];
     const lines = [];
-    definitionLineEdits(s, lines);
+    // JSON text is one paragraph (JSON.stringify writes no blank line), so no definition can form in it, and a "[" at the start
+    // of one of its lines may be a JSON bracket (run 36D)
+    if (!entityMode)
+        definitionLineEdits(s, lines);
     for (const e of [...editsOf(s, codeGfm, true, false, seenDef), ...editsOf(s, codePlain, false, false, seenDef), ...wide, ...lines]) {
         const key = `${e.at}:${e.del}:${e.ins}`;
         if (!seen.has(key)) {
@@ -752,7 +858,7 @@ function editsOfBoth(s, code, seenDef) {
 function plainBangWhereImagePossible(s, code, definition) {
     if (s.indexOf("![") < 0)
         return s;
-    const flat = s.toLowerCase().replace(/\s+/g, " ");
+    const flat = flatOf(s);
     return s.replace(/(\\*)!\[/g, (m, bs, at) => {
         if (bs.length % 2 === 1)
             return m;
@@ -764,9 +870,9 @@ function plainBangWhereImagePossible(s, code, definition) {
         let close = bang + 2;
         while (close < s.length && close < bang + 1002 && s[close] !== "]")
             close += s[close] === "\\" ? 2 : 1;
-        const label = s.slice(bang + 2, close).toLowerCase().replace(/\s+/g, " ").trim();
+        const label = norm(s.slice(bang + 2, close)).trim();
         const named = label !== "" && flat.indexOf(`[${label}]:`) >= 0;
-        return definition || named || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? (entityMode ? `${bs}!&#91;` : `${bs}!\\[`) : m;
+        return definition || wholeDefinition || named || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? (entityMode ? `${bs}!&#91;` : `${bs}!\\[`) : m;
     });
 }
 // A third layer that does not depend on how a renderer pairs brackets: an inline link needs "](" right before its address,
@@ -822,11 +928,8 @@ function plainCloserBeforeUnsafeAddress(s, code) {
     return edits.length ? applyEdits(s, edits) : s;
 }
 const MAY_HOLD_MARKUP = /[<[]|https?:\/\/|ftp:\/\/|www\.|mailto:/i;
-function answerPass(answer) {
-    if (!MAY_HOLD_MARKUP.test(answer))
-        return answer;
-    if (!withinBudget(answer))
-        return plainEverything(answer);
+// The parse loop on text inside the budget: [the clean text, whether a reading held a definition].
+function parseLoop(answer) {
     let s = answer;
     for (let parses = 0; parses < 5; parses++) {
         const code = [];
@@ -836,25 +939,111 @@ function answerPass(answer) {
             edits = editsOfBoth(s, code, seenDef);
         }
         catch {
-            return plainEverything(s);
+            return [plainEverything(s), false];
         }
         if (edits.length > 0) {
-            const onlyQueries = edits.every((e) => e.ins === " (query removed)");
+            // every edit is followed by a parse again (run 36D, register 34D-1: the run 34D shortcut after query removals let a cut
+            // that took the backslash before a "<" leave raw HTML live)
             s = applyEdits(s, edits);
-            // removing a query (it becomes " (query removed)", which opens nothing) cannot form new markup, and with no "![" and
-            // no "](" the second and third layers have nothing to do: no parse again (many bare queries stay fast)
-            if (onlyQueries && s.indexOf("![") < 0 && s.indexOf("](") < 0)
-                return s;
             continue;
         }
         // with a "$" in the answer, pandoc's TeX math can pair backticks differently, so the code places are not trusted here
         const trusted = s.indexOf("$") >= 0 ? [] : code;
         const next = plainCloserBeforeUnsafeAddress(plainBangWhereImagePossible(s, trusted, seenDef.definition), trusted);
         if (next === s)
-            return s;
+            return [s, seenDef.definition];
         s = next;
     }
-    return plainEverything(s);
+    return [plainEverything(s), false];
+}
+// Run 36D (register 34D-5): an answer outside the budget is read part by part, so an ordinary long answer keeps its bytes. A
+// part starts at a line that follows a blank line and starts with a character that is not a space or a tab (every list item,
+// quote, table, paragraph and HTML block of type 6 or 7 has ended there); parts are joined into pieces of at most 60,000
+// characters that are inside the budget. Each piece is read without code when the answer holds a fence (see noCode), every label is
+// looked for in the whole answer, and a definition seen in any piece counts for all. A piece outside the budget by itself
+// gets the last resort (inert by construction).
+const PIECE = 60000;
+function blockWise(answer) {
+    const parts = [];
+    const at = /\r?\n[ \t]*\r?\n(?=[^ \t\r\n])/g;
+    let from = 0;
+    for (let m = at.exec(answer); m; m = at.exec(answer)) {
+        parts.push(answer.slice(from, m.index + m[0].length));
+        from = m.index + m[0].length;
+    }
+    parts.push(answer.slice(from));
+    const pieces = [];
+    let cur = "";
+    let sum = null;
+    for (const p of parts) {
+        const c = countsOf(p);
+        const joined = c && sum ? { len: sum.len + c.len, open: sum.open + c.open, far: sum.far + c.far, close: sum.close + c.close, pipe: sum.pipe + c.pipe, lt: sum.lt + c.lt, tick: sum.tick + c.tick, lines: sum.lines + c.lines, esc: sum.esc + c.esc, amp: sum.amp + c.amp, opener: sum.opener + c.opener } : null;
+        if (cur !== "" && (joined === null || joined.len > PIECE || !fits(joined))) {
+            pieces.push(cur);
+            cur = p;
+            sum = c;
+        }
+        else {
+            cur += p;
+            sum = cur === p ? c : joined;
+        }
+    }
+    pieces.push(cur);
+    // a long answer may cost at most 1.5 units per 1,000 characters on average (ordinary text costs well under that); denser text
+    // gets the last resort as a whole
+    let total = 0;
+    for (const p of parts) {
+        const c = countsOf(p);
+        total += c ? costOf(c) : p.length / 4000;
+    }
+    if (total > Math.max(120, (1.5 * answer.length) / 1000))
+        return plainEverything(answer);
+    workCap = Math.max(360, readings(answer) * total + 60);
+    const saved = [noCode, wholeFlat, wholeDefinition];
+    noCode = FENCE_LIKE.test(answer);
+    wholeFlat = norm(answer);
+    wholeDefinition = false;
+    try {
+        const once = (list) => {
+            let def = false;
+            const out = list.map((piece) => {
+                if (!MAY_HOLD_MARKUP.test(piece))
+                    return piece;
+                if (piece.length > PIECE || !withinBudget(piece))
+                    return plainEverything(piece);
+                const [t, d] = parseLoop(piece);
+                if (d)
+                    def = true;
+                return t;
+            });
+            return [out, def];
+        };
+        let [out, def] = once(pieces);
+        if (def) {
+            // a definition in one piece can make an "![" in another an image: read every piece with an "![" again with that known
+            wholeDefinition = true;
+            for (const piece of out)
+                if (piece.indexOf("![") >= 0) {
+                    const c = countsOf(piece);
+                    workCap += readings(piece) * (c ? costOf(c) : piece.length / 4000);
+                }
+            out = out.map((piece) => (piece.indexOf("![") < 0 ? piece : once([piece])[0][0]));
+        }
+        return out.join("");
+    }
+    finally {
+        [noCode, wholeFlat, wholeDefinition] = saved;
+    }
+}
+function answerPass(answer) {
+    if (!MAY_HOLD_MARKUP.test(answer))
+        return answer;
+    work = 0;
+    const c = countsOf(answer);
+    if (c === null || !fits(c))
+        return blockWise(answer);
+    workCap = Math.max(360, readings(answer) * costOf(c) + 60);
+    return parseLoop(answer)[0];
 }
 // Run 32D (30D-5, R4), run 33D round 6 and run 34D: the finished answer of a tool, after it joined what the user typed with
 // its own text. Two pieces that were inert one by one can form markup when joined (an "!" before a link, an address before
@@ -864,16 +1053,17 @@ function answerPass(answer) {
 function neutraliseAnswer(answer) {
     if (typeof answer !== "string" || answer === "")
         return answer;
-    return answerPass(answer);
+    return answerPass(lineEnds(answer));
 }
 // Run 34D fix round (GTM Alpha auditor): a tool whose answer text is JSON. Each string value has had neutraliseAnswer, but in
 // the JSON text every backslash it added is doubled, so "\\[" reads as a plain backslash and a live "[", and two values side
 // by side can form markup. This pass reads the JSON text itself and makes plain with HTML entities ("&#91;", "&lt;"), which
 // JSON leaves as they are. If the parse budget is passed, every "[", "<" and "!" inside each string value becomes an entity
 // (the JSON is parsed and written again with the same two space indent). JSON text with no live markup comes back as it is.
-function neutraliseJsonText(text) {
+function neutraliseJsonText(text, indent = 2) {
     if (typeof text !== "string" || text === "")
         return text;
+    text = lineEnds(text);
     entityMode = true;
     fellBack = false;
     try {
@@ -898,7 +1088,7 @@ function neutraliseJsonText(text) {
         return v;
     };
     try {
-        return JSON.stringify(plainStrings(JSON.parse(text)), null, 2);
+        return JSON.stringify(plainStrings(JSON.parse(text)), null, indent);
     }
     catch {
         return text.replace(/[[<!]/g, (c) => ENTITY[c]);
