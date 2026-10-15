@@ -387,6 +387,10 @@ let wholeDefinition = false;
 // resort.
 let work = 0;
 let workCap = 360;
+// and a guard in time for crafted text the estimate reads too low: once the parser has done more than one round of readings
+// of the answer (an ordinary answer needs exactly one) and 300 ms have passed, the answer gets the last resort
+let oneRound = Infinity;
+let startedAt = 0;
 // Text as labels are compared: lower case, every run of white space (U+0085 too) one space, and no space just inside a bracket
 // (pandoc trims a label and treats a vertical tab, a form feed and U+0085 as white space; micromark does not; run 36D)
 const SPACE = /[\s\u0085]+/g;
@@ -395,7 +399,7 @@ const flatOf = (s) => wholeFlat ?? norm(s);
 function parseTree(s, gfm, wide = false) {
     const c = countsOf(s);
     work += c ? costOf(c) : s.length / 4000;
-    if (work > workCap)
+    if (work > workCap || (work > oneRound && Date.now() - startedAt > 300))
         throw new Error("parse work cap");
     const off = noCode ? ["codeFenced", "codeIndented", "codeText"] : [];
     if (wide)
@@ -638,10 +642,11 @@ function applyEdits(s, edits) {
 // text cannot be undone), and every bare address loses its query, fragment or user name.
 function plainEverything(s) {
     fellBack = true;
-    const t = s.replace(/[[<!\\]/g, (c) => "\\" + c);
+    // the queries go first, then the escapes (run 36D fix round, Revenue auditor: a cut made after the escapes could take the
+    // backslash just added before a "<")
     const edits = [];
-    bareEdits(t, 0, t.length, edits);
-    return applyEdits(t, edits);
+    bareEdits(s, 0, s.length, edits);
+    return applyEdits(s, edits).replace(/[[<!\\]/g, (c) => "\\" + c);
 }
 // The budget, counted in one pass: at most 120,000 characters, 1,000 "[" and 1,000 "]", 3,000 "|", 2,000 "<", 2,000 "`" and
 // 2,000 lines, and before the text of a line at most 12 container markers (">" or a list marker followed by a space), with
@@ -690,7 +695,7 @@ function prefixOk(s, i) {
 const PUNCT = /[!-/:-@[-`{-~]/;
 // the counts of s, or null when a line of s has too many container markers or spaces before them
 function countsOf(s) {
-    const c = { len: s.length, open: 0, far: 0, close: 0, pipe: 0, lt: 0, tick: 0, lines: 0, esc: 0, amp: 0, opener: 0 };
+    const c = { len: s.length, open: 0, far: 0, defn: 0, close: 0, pipe: 0, lt: 0, tick: 0, lines: 0, esc: 0, amp: 0, opener: 0 };
     if (!prefixOk(s, 0))
         return null;
     // the place of the next "]" after each place, so a "[" closed soon (a task box, a link) counts as cheap
@@ -714,8 +719,11 @@ function countsOf(s) {
             if ((lastClose.pop() ?? s.length) - i > 300)
                 c.far++;
         }
-        else if (k === 93)
+        else if (k === 93) {
             c.close++;
+            if (s.charCodeAt(i + 1) === 58)
+                c.defn++;
+        }
         else if (k === 124)
             c.pipe++;
         else if (k === 60) {
@@ -738,12 +746,12 @@ function countsOf(s) {
 // the estimated cost of one reading, in units of about a millisecond (run 36D measurements: 100,000 characters of prose 25,
 // 1,000 "[" 75, 2,000 lines 100)
 function costOf(c) {
-    return c.len / 4000 + 0.01 * c.open + 0.065 * c.far + 0.02 * c.close + 0.02 * c.lt + 0.025 * c.esc + 0.055 * c.amp + 0.013 * c.pipe + 0.025 * c.tick + 0.05 * c.lines + 0.5 * c.opener;
+    return c.len / 4000 + 0.01 * c.open + 0.065 * c.far + 0.004 * c.close + 0.008 * c.lt + 0.01 * c.esc + 0.015 * c.amp + 0.002 * c.pipe + 0.008 * c.tick + 0.04 * c.lines + 0.5 * c.opener + 0.25 * c.defn;
 }
 // how many readings one round of the parse loop makes (the third, wider one when "$" or "[^" is in the text)
 const readings = (s) => (/\$|\[\^/.test(s) ? 3 : 2);
 function fits(c) {
-    return costOf(c) <= 120 && c.len <= 120000 && c.lines <= 2000 && c.open <= 1000 && c.close <= 1000 && c.pipe <= 3000 && c.lt <= 2000 && c.tick <= 2000 && c.esc <= 1000 && c.amp <= 1000 && c.opener <= 32;
+    return costOf(c) <= 120 && c.len <= 120000 && c.lines <= 2000 && c.open <= 1000 && c.close <= 1000 && c.pipe <= 3000 && c.lt <= 2000 && c.tick <= 2000 && c.esc <= 4000 && c.amp <= 4000 && c.opener <= 32;
 }
 function withinBudget(s) {
     const c = countsOf(s);
@@ -754,8 +762,11 @@ function withinBudget(s) {
 // task box markers, starts with "[label]:" and an address with a scheme that is not safe (escapes and entities decoded), and
 // holds nothing else but a title, gets its "[" made plain when that label appears in brackets anywhere else in the answer.
 function definitionLineEdits(s, edits) {
-    if (s.indexOf("]:") < 0)
+    if (s.indexOf("]:") < 0 && s.indexOf("<") < 0)
         return;
+    // with a footnote in the answer, a footnote's text can start on an indented line of its own (GTM Alpha auditor), so a "<"
+    // that starts any line's text is made plain then
+    const notes = s.indexOf("[^") >= 0;
     const flat = flatOf(s);
     let lineStart = 0;
     while (lineStart <= s.length) {
@@ -763,6 +774,7 @@ function definitionLineEdits(s, edits) {
         if (lineEnd < 0)
             lineEnd = s.length;
         let i = lineStart;
+        let boxed = false;
         for (;;) {
             while (s[i] === " " || s[i] === "\t")
                 i++;
@@ -782,10 +794,22 @@ function definitionLineEdits(s, edits) {
             const box = /^\[[ xX]\][ \t]/.exec(s.slice(i, i + 4));
             if (box) {
                 i += box[0].length;
+                boxed = true;
+                continue;
+            }
+            // run 36D fix round (ICP auditor): a footnote's own label ("[^1]: "), whose text pandoc reads as a block of its own
+            const note = /^\[\^[^\]\s]{1,60}\]:[ \t]*/.exec(s.slice(i, i + 70));
+            if (note) {
+                i += note[0].length;
+                boxed = true;
                 continue;
             }
             break;
         }
+        // run 36D fix round (ICP auditor and the lead's corpus): pandoc reads a "<" that starts a task item's or a footnote's text
+        // as the start of an HTML block; micromark reads it inside a paragraph
+        if ((boxed || notes) && s[i] === "<" && /[A-Za-z!?/]/.test(s[i + 1] ?? "") && !escaped(s, i))
+            edits.push(mark(s, i));
         if (s[i] === "[" && !escaped(s, i)) {
             let k = i + 1;
             while (k < lineEnd && s[k] !== "]")
@@ -818,7 +842,9 @@ function definitionLineEdits(s, edits) {
                     return f >= 0 && flat.indexOf(l, f + 1) >= 0;
                 };
                 // only an address with a scheme (a relative one, such as a tool's own "[Date]: [Deliverable]", loads and sends nothing)
-                const schemed = /^[a-z][a-z0-9+.-]*:/i.test(address.replace(INVISIBLE, ""));
+                // (run 36D fix round, ICP auditor: a host without a scheme, "//evil.example/x", and a query or fragment count too)
+                const plainAddress = address.replace(INVISIBLE, "");
+                const schemed = /^[a-z][a-z0-9+.-]*:/i.test(plainAddress) || /^[\\/]{2}/.test(plainAddress) || /[?#]/.test(plainAddress);
                 // pandoc also accepts some lines with text after the address, so a title is not required when the address has a scheme
                 if (raw && (titled || schemed) && schemed && unsafeAddress(address) && (twice(label) || twice(bare)))
                     edits.push(mark(s, i));
@@ -928,6 +954,52 @@ function plainCloserBeforeUnsafeAddress(s, code) {
     return edits.length ? applyEdits(s, edits) : s;
 }
 const MAY_HOLD_MARKUP = /[<[]|https?:\/\/|ftp:\/\/|www\.|mailto:/i;
+// Run 36D fix round (GTM Alpha auditor): pandoc's GFM reads a YAML metadata block (a line "---" at the start or after a blank line,
+// not followed by a blank line, up to a line "---" or "...") and decodes YAML escapes in it ("\x21" is "!", "\x3c" is "<", a
+// backslash at a line end joins two lines), then reads each value as Markdown, so markup can hide from the parser there. Inside
+// every such block, a run of an odd number of backslashes before a character that is not ASCII punctuation gets one more
+// backslash: YAML then reads a plain backslash, and a Markdown renderer shows the same text as before ("\x" and "\\x" both
+// show as \x). Text with no such block keeps its bytes.
+const YAML_OPEN = /^[ \t]*---[ \t]*$/;
+const YAML_CLOSE = /^[ \t]*(?:---|\.\.\.)[ \t]*$/;
+function yamlEscapes(s) {
+    if (s.indexOf("---") < 0 || s.indexOf("\\") < 0)
+        return s;
+    const lines = s.split("\n");
+    const bare = lines.map((l) => l.replace(/\r$/, ""));
+    const edits = [];
+    let offset = 0;
+    const starts = [];
+    for (const l of lines) {
+        starts.push(offset);
+        offset += l.length + 1;
+    }
+    for (let i = 0; i < lines.length; i++) {
+        if (!YAML_OPEN.test(bare[i]) || (i > 0 && bare[i - 1].trim() !== "") || i + 1 >= lines.length || bare[i + 1].trim() === "")
+            continue;
+        let j = i + 1;
+        while (j < lines.length && !YAML_CLOSE.test(bare[j]))
+            j++;
+        if (j >= lines.length)
+            continue;
+        for (let k = i + 1; k < j; k++) {
+            const l = lines[k];
+            for (let a = 0; a < l.length; a++) {
+                if (l[a] !== "\\")
+                    continue;
+                let b = a;
+                while (b < l.length && l[b] === "\\")
+                    b++;
+                const next = b < l.length ? l[b] : "\n";
+                if ((b - a) % 2 === 1 && !PUNCT.test(next))
+                    edits.push({ at: starts[k] + a, del: 0, ins: "\\" });
+                a = b - 1;
+            }
+        }
+        i = j;
+    }
+    return edits.length ? applyEdits(s, edits) : s;
+}
 // The parse loop on text inside the budget: [the clean text, whether a reading held a definition].
 function parseLoop(answer) {
     let s = answer;
@@ -947,8 +1019,9 @@ function parseLoop(answer) {
             s = applyEdits(s, edits);
             continue;
         }
-        // with a "$" in the answer, pandoc's TeX math can pair backticks differently, so the code places are not trusted here
-        const trusted = s.indexOf("$") >= 0 ? [] : code;
+        // with a "$" in the answer, pandoc's TeX math can pair backticks differently, and with "[^" pandoc's footnotes can end a
+        // paragraph that micromark goes on reading (run 36D fix round), so the code places are not trusted here
+        const trusted = s.indexOf("$") >= 0 || s.indexOf("[^") >= 0 ? [] : code;
         const next = plainCloserBeforeUnsafeAddress(plainBangWhereImagePossible(s, trusted, seenDef.definition), trusted);
         if (next === s)
             return [s, seenDef.definition];
@@ -977,7 +1050,7 @@ function blockWise(answer) {
     let sum = null;
     for (const p of parts) {
         const c = countsOf(p);
-        const joined = c && sum ? { len: sum.len + c.len, open: sum.open + c.open, far: sum.far + c.far, close: sum.close + c.close, pipe: sum.pipe + c.pipe, lt: sum.lt + c.lt, tick: sum.tick + c.tick, lines: sum.lines + c.lines, esc: sum.esc + c.esc, amp: sum.amp + c.amp, opener: sum.opener + c.opener } : null;
+        const joined = c && sum ? { len: sum.len + c.len, open: sum.open + c.open, far: sum.far + c.far, defn: sum.defn + c.defn, close: sum.close + c.close, pipe: sum.pipe + c.pipe, lt: sum.lt + c.lt, tick: sum.tick + c.tick, lines: sum.lines + c.lines, esc: sum.esc + c.esc, amp: sum.amp + c.amp, opener: sum.opener + c.opener } : null;
         if (cur !== "" && (joined === null || joined.len > PIECE || !fits(joined))) {
             pieces.push(cur);
             cur = p;
@@ -989,16 +1062,17 @@ function blockWise(answer) {
         }
     }
     pieces.push(cur);
-    // a long answer may cost at most 1.5 units per 1,000 characters on average (ordinary text costs well under that); denser text
+    // a long answer may cost at most 2 units per 1,000 characters on average (ordinary text costs well under that); denser text
     // gets the last resort as a whole
     let total = 0;
     for (const p of parts) {
         const c = countsOf(p);
         total += c ? costOf(c) : p.length / 4000;
     }
-    if (total > Math.max(120, (1.5 * answer.length) / 1000))
+    if (total > Math.max(120, (2 * answer.length) / 1000))
         return plainEverything(answer);
     workCap = Math.max(360, readings(answer) * total + 60);
+    oneRound = readings(answer) * total;
     const saved = [noCode, wholeFlat, wholeDefinition];
     noCode = FENCE_LIKE.test(answer);
     wholeFlat = norm(answer);
@@ -1009,7 +1083,9 @@ function blockWise(answer) {
             const out = list.map((piece) => {
                 if (!MAY_HOLD_MARKUP.test(piece))
                     return piece;
-                if (piece.length > PIECE || !withinBudget(piece))
+                // a long answer has at most 2 seconds; the pieces left after that get the last resort (an ordinary answer of a
+                // megabyte is read in well under that)
+                if (piece.length > PIECE || !withinBudget(piece) || Date.now() - startedAt > 2000)
                     return plainEverything(piece);
                 const [t, d] = parseLoop(piece);
                 if (d)
@@ -1036,13 +1112,18 @@ function blockWise(answer) {
     }
 }
 function answerPass(answer) {
+    if (!entityMode)
+        answer = yamlEscapes(answer);
     if (!MAY_HOLD_MARKUP.test(answer))
         return answer;
     work = 0;
+    startedAt = Date.now();
+    oneRound = Infinity;
     const c = countsOf(answer);
     if (c === null || !fits(c))
         return blockWise(answer);
     workCap = Math.max(360, readings(answer) * costOf(c) + 60);
+    oneRound = readings(answer) * costOf(c);
     return parseLoop(answer)[0];
 }
 // Run 32D (30D-5, R4), run 33D round 6 and run 34D: the finished answer of a tool, after it joined what the user typed with

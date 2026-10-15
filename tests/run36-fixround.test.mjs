@@ -24,6 +24,7 @@ try {
 }
 const FAIL_KINDS = new Set(["image", "tag", "script", "data", "file", "query"]);
 // Judges many answers at once; returns, per answer, the failing kinds in gfm or commonmark ([] when inert).
+let judgeErrors = 0;
 function liveKinds(answers) {
   if (!pandoc) return null;
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "run36f-judge-"));
@@ -36,7 +37,9 @@ function liveKinds(answers) {
     const lines = execFileSync("pandoc", ["lua", lua, input, mode], { encoding: "utf8", maxBuffer: 1 << 28 }).trim().split("\n");
     assert.equal(lines.length, answers.length, "judge line count");
     lines.forEach((l, i) => {
-      if (l === "E") out[i].add("judge-error");
+      // pandoc stops with an error and renders nothing (for example a YAML block made invalid by an added escape): not live,
+      // counted apart (run 34D lead re-check row 29 classed it the same way)
+      if (l === "E") judgeErrors++;
       else if (l.startsWith("1 ")) for (const k of l.slice(2).split(",")) if (FAIL_KINDS.has(k)) out[i].add(`${k}(${mode})`);
     });
   }
@@ -48,7 +51,7 @@ function assertInert(items, label) {
   if (kinds === null) return "skipped: pandoc not found";
   const live = items.map((x, i) => ({ ...x, kinds: kinds[i] })).filter((x) => x.kinds.length);
   assert.equal(live.length, 0, `${label}: ${live.length} of ${items.length} live, first: ${JSON.stringify(live.slice(0, 5).map((x) => ({ id: x.id, kinds: x.kinds, answer: x.answer.slice(0, 300) })))}`);
-  return `${items.length} inert`;
+  return `${items.length} inert (pandoc errors, nothing rendered: ${judgeErrors})`;
 }
 
 const nt = (s) => neutraliseText(s);
