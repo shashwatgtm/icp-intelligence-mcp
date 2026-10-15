@@ -263,6 +263,9 @@ const ROUND2B = [
   "Note[^1]\n\n[^1]: body https://evil.example/c?d=1 and <b>x</b>", "Note[^t]\n\n[^t]: \"https://evil.example/c\"?d=1",
   "see [https://evil.example/c\"?d=1](https://gtmhelix.com/)", "see [x (https://evil.example/c)?d=1](https://gtmhelix.com/)",
   "a $[x$](https://evil.example/c?d=1) b", "a $x$ https://evil.example/c?d=1 $y$",
+  // the CRAFT GTM auditor (run 34D): a definition in a task list item, and right after a table with an escaped colon
+  "x\n- [ ] [foo]: data:,sentinel\n\nsee [foo]", "x\n- [x] [foo]: file:///sentinel\n\nsee [foo]",
+  "| a | b |\n|---|---|\n| c | d |\n[foo]: javascript\\:alert(1)\n\nsee [foo]", "| a | b |\n|---|---|\n[foo]:\n  data:,sentinel\n\nsee [foo]",
 ];
 test("run 34D fix round: ftp, footnote, link text and math shapes of the GTM Alpha auditor are inert", (t) => {
   const items = [];
