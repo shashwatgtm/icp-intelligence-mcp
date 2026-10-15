@@ -662,12 +662,18 @@ function editsOfBoth(s: string, code: Array<[number, number]>, seenDef: { defini
 // hashtag line "#Wow![Great]onboarding" keeps its bytes (register 33D-7), also next to a tool's own "[Common Practice]:".
 function plainBangWhereImagePossible(s: string, code: Array<[number, number]>, definition: boolean): string {
   if (s.indexOf("![") < 0) return s;
+  const flat = s.toLowerCase().replace(/\s+/g, " ");
   return s.replace(/(\\*)!\[/g, (m: string, bs: string, at: number) => {
     if (bs.length % 2 === 1) return m;
     const bang = at + bs.length;
     if (code.some(([a, b]) => bang >= a && bang < b)) return m;
     const rest = s.slice(bang + 2);
-    return definition || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? (entityMode ? `${bs}!&#91;` : `${bs}!\\[`) : m;
+    // its own bracket text written as "[text]:" anywhere (a definition line a renderer may accept even with text after it)
+    let close = bang + 2;
+    while (close < s.length && close < bang + 1002 && s[close] !== "]") close += s[close] === "\\" ? 2 : 1;
+    const label = s.slice(bang + 2, close).toLowerCase().replace(/\s+/g, " ").trim();
+    const named = label !== "" && flat.indexOf(`[${label}]:`) >= 0;
+    return definition || named || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? (entityMode ? `${bs}!&#91;` : `${bs}!\\[`) : m;
   });
 }
 // A third layer that does not depend on how a renderer pairs brackets: an inline link needs "](" right before its address,

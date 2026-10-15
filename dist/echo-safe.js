@@ -752,6 +752,7 @@ function editsOfBoth(s, code, seenDef) {
 function plainBangWhereImagePossible(s, code, definition) {
     if (s.indexOf("![") < 0)
         return s;
+    const flat = s.toLowerCase().replace(/\s+/g, " ");
     return s.replace(/(\\*)!\[/g, (m, bs, at) => {
         if (bs.length % 2 === 1)
             return m;
@@ -759,7 +760,13 @@ function plainBangWhereImagePossible(s, code, definition) {
         if (code.some(([a, b]) => bang >= a && bang < b))
             return m;
         const rest = s.slice(bang + 2);
-        return definition || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? (entityMode ? `${bs}!&#91;` : `${bs}!\\[`) : m;
+        // its own bracket text written as "[text]:" anywhere (a definition line a renderer may accept even with text after it)
+        let close = bang + 2;
+        while (close < s.length && close < bang + 1002 && s[close] !== "]")
+            close += s[close] === "\\" ? 2 : 1;
+        const label = s.slice(bang + 2, close).toLowerCase().replace(/\s+/g, " ").trim();
+        const named = label !== "" && flat.indexOf(`[${label}]:`) >= 0;
+        return definition || named || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? (entityMode ? `${bs}!&#91;` : `${bs}!\\[`) : m;
     });
 }
 // A third layer that does not depend on how a renderer pairs brackets: an inline link needs "](" right before its address,
