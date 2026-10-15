@@ -304,9 +304,14 @@ function markupPass(input) {
     s = s.replace(URL_TAG_QUERY, "$1$2 (query removed)").replace(URL_QUERY, "$1 (query removed)");
     return s;
 }
+// Run 33D round 6: every "![" that is not already escaped becomes "!\\[", so no image can start in text a user typed or in an
+// answer (the tools' own text holds no image). A run of backslashes before "!" is counted, so "\\\\![" is caught too.
+function plainBang(s) {
+    return s.indexOf("![") < 0 ? s : s.replace(/(\\*)!\[/g, (m, bs) => (bs.length % 2 === 1 ? m : `${bs}!\\[`));
+}
 function neutraliseText(input) {
     const before = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "");
-    let s = markupPass(input);
+    let s = plainBang(markupPass(input));
     if (looksLikeInstruction(before) && !/^“[\s\S]*”$/.test(s))
         s = `“${s}”`;
     return s;
@@ -317,58 +322,13 @@ function neutraliseText(input) {
 // markup comes back byte identical (the tools' own answers hold no images, tags or addresses with a query).
 // It works one line at a time, so a crafted link in one line can never swallow the tool's own text on later lines. A tool that
 // answers JSON runs it on each string value, never on the JSON text.
-// Run 33D (round 2 and round 3 auditors): the text of an image or link, and its destination, can run over a line break inside
-// one paragraph ("![a" on one line, "b](https://...)" on the next; "![a](" then the address on the next line). So:
-// (1) once a line of a paragraph ends with a "[" that may still be open, every "]" on the later lines of that paragraph is made
-//     plain text ("\\]"), which no inline, full, collapsed or shortcut link or image can use; a code span on the line is skipped
-//     when counting (it binds tighter than a link), and after a backtick with no partner on the line a "]" never counts as a
-//     closer, so a code span cannot hide an open "[";
-// (2) a "](" or "] (" whose ")" is not on the same line is made plain text too.
-// An answer with no "[" left open across a line and no destination split over a line comes back byte identical.
+// Run 33D round 6 (the round 3 and 4 bracket count is removed, see the header of make_echo_safe33r6.py): an image or link text
+// may run over a line break, so after the line pass every "![" left in the answer becomes plain text ("!\\["). A link that is not
+// an image cannot load anything by itself; its script, data or file address and its query are removed in each field and line.
 function neutraliseAnswer(answer) {
     if (typeof answer !== "string" || answer === "")
         return answer;
-    const lines = answer.split("\n").map((line) => markupPass(line));
-    let open = 0;
-    let tainted = false;
-    for (let i = 0; i < lines.length; i++) {
-        if (/^[ \t]*$/.test(lines[i])) {
-            open = 0;
-            tainted = false;
-            continue;
-        }
-        if (tainted)
-            lines[i] = lines[i].replace(/(^|[^\\])((?:\\\\)*)\]/g, "$1$2\\]").replace(/(^|[^\\])((?:\\\\)*)\]/g, "$1$2\\]").replace(/\](?=[([])/g, "]\\");
-        lines[i] = lines[i].replace(/(^|[^\\])((?:\\\\)*)\](?=[ \t]*\((?![^)]*\)))/g, "$1$2\\]");
-        const line = lines[i];
-        let codeSeen = false;
-        for (let j = 0; j < line.length; j++) {
-            const ch = line[j];
-            if (ch === "\\") {
-                j++;
-                continue;
-            }
-            if (ch === "`") {
-                let n = 1;
-                while (line[j + n] === "`")
-                    n++;
-                const close = line.indexOf("`".repeat(n), j + n);
-                if (close >= 0 && line[close + n] !== "`") {
-                    j = close + n - 1;
-                    continue;
-                }
-                codeSeen = true;
-                j += n - 1;
-            }
-            else if (ch === "[")
-                open++;
-            else if (ch === "]" && open > 0 && !codeSeen)
-                open--;
-        }
-        if (open > 0)
-            tainted = true;
-    }
-    return lines.join("\n");
+    return plainBang(answer.split("\n").map((line) => markupPass(line)).join("\n"));
 }
 function neutraliseDeep(value) {
     if (typeof value === "string")
