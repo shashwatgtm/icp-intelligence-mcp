@@ -229,7 +229,7 @@
   <ul class="hx-prose">
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
     <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
-    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.19.</li>
+    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.20.</li>
     <li>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document fields <code>customer_descriptions</code> (ICP Deep Dive) and <code>raw_transcripts</code> (ICP Interview Synthesizer), which take up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
   </ul>
@@ -273,13 +273,13 @@
 <tr><td>1.2.15</td><td>30 September 2026</td><td>GitHub, commit 170d76b</td></tr>
 <tr><td>1.2.16</td><td>1 October 2026</td><td>GitHub, commit 56a76f8</td></tr>
 <tr><td>1.2.18</td><td>12 October 2026</td><td>safety fix only: the instruction echo safeguard; tool list and answers otherwise unchanged</td></tr>
-<tr><td>1.2.19 (this site)</td><td>15 October 2026</td><td>safety fix only, safeguard run 2: as on the other connectors, plus every line of a key quote stays inside the quote; tool list and ordinary answers unchanged</td></tr>
+<tr><td>1.2.20 (this site)</td><td>15 October 2026</td><td>safety fix only, safeguard runs 2 and 3: as on the other connectors, plus every line of a key quote stays inside the quote; run 3: the finished answer, every refusal and every REST reply are read with a CommonMark and GFM parser, and every image, raw HTML, a link to an address that is not https or mailto, or a query or fragment on a web address that it finds is shown as plain text; MCP SDK 1.31.0; tool list unchanged; ordinary answers unchanged on the parity sets</td></tr>
   </tbody></table></div>
 </section>
 
 <section class="hx-section" aria-labelledby="ref-h">
   <h2 id="ref-h">Tool reference</h2>
-  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.19.</p>
+  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.20.</p>
 </section>
 <section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
   <h3 id="d-icp-deep-dive">ICP Deep Dive</h3>

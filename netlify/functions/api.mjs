@@ -8,7 +8,16 @@
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { createServer } from "../../src/index.ts";
-import { neutraliseText } from "../../src/echo-safe.ts";
+import { neutraliseText, neutraliseAnswer } from "../../src/echo-safe.ts";
+
+// Run 34D: every string of a REST reply passes through neutraliseAnswer (the parser based answer pass), so a name or text that
+// the reply repeats or joins cannot form live markup.
+function answerStrings(value) {
+  if (typeof value === "string") return neutraliseAnswer(value);
+  if (Array.isArray(value)) return value.map(answerStrings);
+  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, answerStrings(v)]));
+  return value;
+}
 
 const MAX_BODY_BYTES = 32000;
 const MAX_TEXT = 6000;
@@ -170,6 +179,7 @@ export default async (req, context) => {
   const toolName = context.params && context.params.tool;
   const wantsHtml = (req.headers.get("content-type") || "").includes("application/x-www-form-urlencoded");
   const reply = (status, payload) => {
+    payload = answerStrings(payload);
     if (wantsHtml) {
       const back = `<p><a href="/tools/${esc(String(toolName || "").replace(/_/g, "-"))}/">Back to the tool</a></p>`;
       let body;

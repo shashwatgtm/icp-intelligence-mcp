@@ -14,6 +14,11 @@
 // markup (30D-5, R4). neutraliseAnswer never quotes and leaves an answer with no live markup byte identical.
 // Time is close to linear in the length of the text: every scan has a fixed window (checked by a test with hostile inputs).
 // No figures, no sector knowledge (B82).
+// Run 34D (connector safety run 3): neutraliseAnswer reads the finished answer with a bundled CommonMark and GFM parser
+// (src/md-parse.ts) in place of the line by line patterns; see the run 34D section above neutraliseAnswer.
+
+// Run 34D: the bundled CommonMark and GFM parser used by neutraliseAnswer (src/md-parse.ts; netlify/lib/md-parse.js in GTM Alpha).
+import * as md from "./md-parse.ts";
 
 const HIDDEN = /[​-‏‪-‮⁠-⁤⁦-⁩﻿\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 const HIDDEN_MORE = /[\u00ad\u034f\u061c\u180e\u{E0000}-\u{E007F}\u{E0100}-\u{E01EF}]/gu;
@@ -301,18 +306,372 @@ export function neutraliseText(input: string): string {
   return s;
 }
 
-// Run 32D (30D-5, R4): the finished answer of a tool, after it joined what the user typed with its own text. Two pieces that
-// were inert one by one can form markup when joined (an "!" before a link, an address before its query, the two halves of
-// a tag or of a script address). This pass makes such markup inert again. It never quotes, and an answer with no live
-// markup comes back byte identical (the tools' own answers hold no images, tags or addresses with a query).
-// It works one line at a time, so a crafted link in one line can never swallow the tool's own text on later lines. A tool that
-// answers JSON runs it on each string value, never on the JSON text.
-// Run 33D round 6 (the round 3 and 4 bracket count is removed, see the header of make_echo_safe33r6.py): an image or link text
-// may run over a line break, so after the line pass every "![" left in the answer becomes plain text ("!\\["). A link that is not
-// an image cannot load anything by itself; its script, data or file address and its query are removed in each field and line.
+// ---- run 34D (connector safety run 3): the finished answer is read with a real CommonMark and GFM parser ----
+// The parser (mdast-util-from-markdown 2.0.3 on micromark 4.0.3, with the GFM table and task list extensions, all MIT;
+// bundled in md-parse; emphasis is not parsed, it cannot move a link) finds every image, raw HTML, link and definition with
+// its exact place in the text.
+// Each one that could load or send anything is made plain text where it starts, and the answer is parsed again until the
+// parse is clean (in GFM and in plain CommonMark): an image gets "\" before its "[" ("!\["); raw HTML gets "\" before its "<"; a link, an autolink or a used
+// definition whose address is not https or mailto, or holds a query, a fragment or a user name, gets "\" before its "[" or
+// "<" (a link to a script, data, file or other address that is not a web, mail or phone address keeps only its words and
+// "(link removed)", the form of the run 22 field pass); a bare address with a query or fragment loses it ("(query removed)"). Bare addresses are looked for in every text
+// node with pandoc's wider rule (after any character that is not a letter or digit), and character references are decoded
+// before the query check. An answer with none of these comes back byte for byte.
+// micromark is not linear on some crafted shapes (long runs of brackets, list markers or quote markers), so the parse runs
+// only inside a budget counted in one pass (BUDGET below; every ordinary answer is far inside it) and at most 5 times. An
+// answer outside the budget, or not clean after 5 parses, gets the last resort plainEverything, which is inert by
+// construction (no "[", "<", "!" or backslash stays live, and every bare address loses its query).
+type MdPoint = { offset?: number };
+type MdNode = {
+  type: string;
+  url?: string;
+  identifier?: string;
+  label?: string;
+  children?: MdNode[];
+  position?: { start: MdPoint; end: MdPoint };
+};
+type MdParse = (value: string, options: object) => MdNode;
+const parseMarkdown = md.fromMarkdown as unknown as MdParse;
+const ext = md as unknown as Record<string, () => object>;
+// The answer is read twice, as GFM (tables and task lists) and as plain CommonMark, because a renderer may use either: a line
+// that GFM reads as a table row is a paragraph line in CommonMark, so a link split over two such lines is live only there.
+function parseTree(s: string, gfm: boolean): MdNode {
+  if (!gfm) return parseMarkdown(s, { extensions: [{ disable: { null: ["attention"] } }], mdastExtensions: [] });
+  return parseMarkdown(s, {
+    extensions: [ext.gfmTable(), ext.gfmTaskListItem(), { disable: { null: ["attention"] } }],
+    mdastExtensions: [ext.gfmTableFromMarkdown(), ext.gfmTaskListItemFromMarkdown()],
+  });
+}
+type Edit = { at: number; del: number; ins: string };
+const cc = (a: number, b: number): string => String.fromCharCode(a) + "-" + String.fromCharCode(b);
+// characters a browser drops from an address before it reads the scheme (controls, spaces and invisible format characters)
+const INVISIBLE = new RegExp("[" + cc(0, 32) + cc(127, 160) + cc(0xad, 0xad) + cc(0x200b, 0x200f) + cc(0x2028, 0x202e) + cc(0x2060, 0x2064) + cc(0xfeff, 0xfeff) + "]", "g");
+function unsafeAddress(url: string): boolean {
+  const t = url.replace(INVISIBLE, "");
+  const m = /^([a-z][a-z0-9+.-]*):/i.exec(t);
+  if (!m) return true;
+  const scheme = m[1].toLowerCase();
+  if (scheme !== "https" && scheme !== "mailto") return true;
+  if (/[?#]/.test(t)) return true;
+  return scheme === "https" && /^https:\/*[^/?#]*@/i.test(t);
+}
+// an address whose scheme is neither a web nor a mail or phone scheme (javascript, vbscript, data, file and the rest)
+function removable(url: string): boolean {
+  const m = /^([a-z][a-z0-9+.-]*):/i.exec(url.replace(INVISIBLE, ""));
+  return m !== null && !["http", "https", "mailto", "tel"].includes(m[1].toLowerCase());
+}
+const QUERY_NAMES: Record<string, string> = { quest: "?", num: "#", commat: "@", sol: "/" };
+// one character reference at s[i] ("&#63;", "&#x3F", "&quest;"; the ";" may be missing): [character, length] or null
+function referenceAt(s: string, i: number): [string, number] | null {
+  const m = /^&(?:#[xX]([0-9a-fA-F]{1,8})|#([0-9]{1,10})|([A-Za-z][A-Za-z0-9]{1,31}));?/.exec(s.slice(i, i + 45));
+  if (!m) return null;
+  if (m[3] !== undefined) {
+    const c = QUERY_NAMES[m[3].toLowerCase()];
+    return c === undefined ? null : [c, m[0].length];
+  }
+  const n = m[1] !== undefined ? parseInt(m[1], 16) : parseInt(m[2], 10);
+  return [n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : "", m[0].length];
+}
+const BARE_START = /(?:https?:\/\/|www\.|mailto:)/gi;
+const TRAILING = new Set([..."?!.,:;*_~'\")]}>”’›»"]);
+// bare addresses in s[from, to): the query, fragment or user name of each is removed, its trailing punctuation kept
+function bareEdits(s: string, from: number, to: number, edits: Edit[]): void {
+  const part = s.slice(from, to);
+  BARE_START.lastIndex = 0;
+  for (let m = BARE_START.exec(part); m; m = BARE_START.exec(part)) {
+    const at = from + m.index;
+    if (at > 0 && /[A-Za-z0-9]/.test(s[at - 1])) continue;
+    let end = at;
+    // the address runs to an ASCII space or "<" (pandoc keeps a U+2028 or a no-break space inside it)
+    while (end < to && !/[ \t\n\r\f\v<]/.test(s[end])) end++;
+    let kept = end;
+    for (;;) {
+      if (kept > at && TRAILING.has(s[kept - 1])) {
+        kept--;
+        continue;
+      }
+      const amp = s.lastIndexOf("&", kept - 1);
+      if (s[kept - 1] === ";" && amp > at && /^&[A-Za-z0-9#]+;$/.test(s.slice(amp, kept))) {
+        kept = amp;
+        continue;
+      }
+      break;
+    }
+    let cut = -1;
+    let slashes = 0;
+    for (let i = at; i < kept; i++) {
+      let c = s[i];
+      let len = 1;
+      if (c === "&") {
+        // pandoc may keep "&#63;" or "&#91;" as it is, and its "#" then starts a fragment
+        if (s[i + 1] === "#") {
+          cut = i;
+          break;
+        }
+        const r = referenceAt(s, i);
+        if (r) [c, len] = r;
+      }
+      if (c === "?" || c === "#" || (c === "@" && slashes === 2)) {
+        cut = i;
+        break;
+      }
+      if (c === "/") slashes++;
+      i += len - 1;
+    }
+    if (cut >= 0) edits.push({ at: cut, del: kept - cut, ins: " (query removed)" });
+    BARE_START.lastIndex = Math.max(end - from, m.index + 1);
+  }
+}
+// the edits that make the live parts of s plain, and the places of code (where an "![" is plain text already)
+function editsOf(s: string, code: Array<[number, number]>, gfm: boolean): Edit[] {
+  const edits: Edit[] = [];
+  const definitions = new Map<string, MdNode>();
+  const all: MdNode[] = [];
+  const used = new Set<string>();
+  const plainAt = (at: number, mark: string) => {
+    const k = s.indexOf(mark, at);
+    if (k >= 0) edits.push({ at: k, del: 0, ins: "\\" });
+  };
+  const walk = (node: MdNode, inLink: boolean): void => {
+    const at = node.position?.start.offset ?? 0;
+    const end = node.position?.end.offset ?? at;
+    switch (node.type) {
+      case "image":
+      case "imageReference":
+        plainAt(at, "[");
+        return;
+      case "html":
+        plainAt(at, "<");
+        return;
+      case "definition":
+        if (node.identifier !== undefined && !definitions.has(node.identifier)) definitions.set(node.identifier, node);
+        all.push(node);
+        return;
+      case "inlineCode":
+      case "code":
+        code.push([at, end]);
+        return;
+      case "text":
+        if (!inLink) bareEdits(s, at, end, edits);
+        return;
+      case "linkReference":
+        if (node.identifier !== undefined) used.add(node.identifier);
+        break;
+      case "link":
+        if (s[at] !== "[" && s[at] !== "<") {
+          // a bare address the parser linked (GFM): the same rule as for text
+          bareEdits(s, at, end, edits);
+          return;
+        }
+        if (unsafeAddress(node.url ?? "")) {
+          if (!removable(node.url ?? "")) edits.push({ at, del: 0, ins: "\\" });
+          else {
+            // a script, data, file or other address: the link keeps its words and loses its address (the run 22 form)
+            const kids = node.children ?? [];
+            const words = s[at] === "[" && kids.length ? s.slice(kids[0].position?.start.offset ?? at, kids[kids.length - 1].position?.end.offset ?? at) : "";
+            edits.push({ at, del: end - at, ins: words ? `${words} (link removed)` : "(link removed)" });
+          }
+          return;
+        }
+        break;
+    }
+    const inside = inLink || node.type === "link" || node.type === "linkReference";
+    for (const child of node.children ?? []) walk(child, inside);
+  };
+  walk(parseTree(s, gfm), false);
+  // a definition with an unsafe address is made plain when a reference uses it, or (a second layer, because renderers do not
+  // always agree on which brackets form a reference) when its label appears in brackets anywhere else in the answer
+  const flat = s.toLowerCase().replace(/\s+/g, " ");
+  const twice = (label: string) => {
+    const first = flat.indexOf(label);
+    return first >= 0 && flat.indexOf(label, first + 1) >= 0;
+  };
+  for (const d of all) {
+    if (!unsafeAddress(d.url ?? "")) continue;
+    // the label as the parser read it, and as written in the source (with its backslashes)
+    const k = s.indexOf("[", d.position?.start.offset ?? 0);
+    let i = k + 1;
+    while (i < s.length && s[i] !== "]") i += s[i] === "\\" ? 2 : 1;
+    const raw = s.slice(k, i + 1).toLowerCase().replace(/\s+/g, " ");
+    const elsewhere = twice(`[${(d.label ?? "").toLowerCase().replace(/\s+/g, " ")}]`) || twice(raw);
+    const usedFirst = d.identifier !== undefined && used.has(d.identifier) && definitions.get(d.identifier) === d;
+    if (usedFirst || elsewhere) plainAt(d.position?.start.offset ?? 0, "[");
+  }
+  return edits;
+}
+// applies the edits from the start of the text to its end in one pass; an edit that overlaps an earlier one waits for the
+// next parse
+function applyEdits(s: string, edits: Edit[]): string {
+  edits.sort((a, b) => a.at - b.at || a.del - b.del);
+  const parts: string[] = [];
+  let last = 0;
+  for (const e of edits) {
+    if (e.at < last) continue;
+    parts.push(s.slice(last, e.at), e.ins);
+    last = e.at + e.del;
+  }
+  parts.push(s.slice(last));
+  return parts.join("");
+}
+// The last resort: every "[", "<", "!" and backslash gets a backslash (so none can open markup, and an escape already in the
+// text cannot be undone), and every bare address loses its query, fragment or user name.
+function plainEverything(s: string): string {
+  const t = s.replace(/[[<!\\]/g, (c) => "\\" + c);
+  const edits: Edit[] = [];
+  bareEdits(t, 0, t.length, edits);
+  return applyEdits(t, edits);
+}
+// The budget, counted in one pass: at most 120,000 characters, 1,000 "[" and 1,000 "]", 3,000 "|", 2,000 "<", 2,000 "`" and
+// 2,000 lines, and before the text of a line at most 12 container markers (">" or a list marker followed by a space), with
+// at most 48 spaces before any of them.
+function prefixOk(s: string, i: number): boolean {
+  let markers = 0;
+  let spaces = 0;
+  for (;;) {
+    const c = s.charCodeAt(i);
+    if (c === 32 || c === 9) {
+      spaces++;
+      i++;
+    } else if (spaces > 48 && (c === 62 || c === 45 || c === 42 || c === 43 || (c >= 48 && c <= 57))) {
+      // deep indentation only matters before a quote or list marker (nesting); a marker may still not follow, so be strict
+      return false;
+    } else if (c === 62) {
+      if (++markers > 12) return false;
+      i++;
+    } else if ((c === 45 || c === 42 || c === 43) && (s.charCodeAt(i + 1) === 32 || s.charCodeAt(i + 1) === 9)) {
+      if (++markers > 12) return false;
+      i++;
+    } else if (c >= 48 && c <= 57) {
+      let k = i;
+      while (k < i + 10 && s.charCodeAt(k) >= 48 && s.charCodeAt(k) <= 57) k++;
+      const d = s.charCodeAt(k);
+      const after = s.charCodeAt(k + 1);
+      if ((d === 46 || d === 41) && (after === 32 || after === 9)) {
+        if (++markers > 12) return false;
+        i = k + 1;
+      } else return true;
+    } else return true;
+  }
+}
+function withinBudget(s: string): boolean {
+  if (s.length > 120000) return false;
+  let open = 0, close = 0, pipe = 0, lt = 0, tick = 0, lines = 0;
+  if (!prefixOk(s, 0)) return false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    if (c === 10) {
+      if (++lines > 2000 || !prefixOk(s, i + 1)) return false;
+    } else if (c === 91) open++;
+    else if (c === 93) close++;
+    else if (c === 124) pipe++;
+    else if (c === 60) lt++;
+    else if (c === 96) tick++;
+  }
+  return open <= 1000 && close <= 1000 && pipe <= 3000 && lt <= 2000 && tick <= 2000;
+}
+// both readings: the edits of either (the same edit once), and code only where both readings see code
+function editsOfBoth(s: string, code: Array<[number, number]>): Edit[] {
+  const codeGfm: Array<[number, number]> = [];
+  const codePlain: Array<[number, number]> = [];
+  const seen = new Set<string>();
+  const edits: Edit[] = [];
+  for (const e of [...editsOf(s, codeGfm, true), ...editsOf(s, codePlain, false)]) {
+    const key = `${e.at}:${e.del}:${e.ins}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      edits.push(e);
+    }
+  }
+  for (const [a, b] of codeGfm) for (const [c, d] of codePlain) if (Math.max(a, c) < Math.min(b, d)) code.push([Math.max(a, c), Math.min(b, d)]);
+  return edits;
+}
+// The round 6 rule as a second layer in the answer: an unescaped "![" outside code is made plain where an image is still
+// possible, that is when a "](" or "][" follows it or the answer holds a "]:" (a definition); ordinary text such as a hashtag
+// line "#Wow![Great]onboarding" keeps its bytes (register 33D-7).
+function plainBangWhereImagePossible(s: string, code: Array<[number, number]>): string {
+  if (s.indexOf("![") < 0) return s;
+  const definition = s.indexOf("]:") >= 0;
+  return s.replace(/(\\*)!\[/g, (m: string, bs: string, at: number) => {
+    if (bs.length % 2 === 1) return m;
+    const bang = at + bs.length;
+    if (code.some(([a, b]) => bang >= a && bang < b)) return m;
+    const rest = s.slice(bang + 2);
+    return definition || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? `${bs}!\\[` : m;
+  });
+}
+// A third layer that does not depend on how a renderer pairs brackets: an inline link needs "](" right before its address,
+// so an unescaped "]" outside code that is followed by "(" and an address that is not https or mailto, or that holds a query,
+// a fragment or a user name, is made plain ("\]"). The tools' own links are https addresses without a query.
+function plainCloserBeforeUnsafeAddress(s: string, code: Array<[number, number]>): string {
+  if (s.indexOf("](") < 0) return s;
+  const edits: Edit[] = [];
+  for (let k = s.indexOf("]("); k >= 0; k = s.indexOf("](", k + 1)) {
+    if (escaped(s, k) || code.some(([a, b]) => k >= a && k < b)) continue;
+    let j = k + 2;
+    while (s[j] === " " || s[j] === "\t") j++;
+    if (s[j] === "\r") j++;
+    if (s[j] === "\n") j++;
+    while (s[j] === " " || s[j] === "\t") j++;
+    let raw = "";
+    if (s[j] === "<") {
+      const close = s.indexOf(">", j);
+      const nl = s.indexOf("\n", j);
+      raw = s.slice(j + 1, close >= 0 && (nl < 0 || close < nl) ? close : nl >= 0 ? nl : s.length);
+    } else {
+      let depth = 0;
+      let e = j;
+      for (; e < s.length; e++) {
+        const c = s[e];
+        if (c === "\\") {
+          e++;
+          continue;
+        }
+        if (c === " " || c === "\t" || c === "\n" || c === "\r") break;
+        if (c === "(") depth++;
+        else if (c === ")") {
+          if (depth === 0) break;
+          depth--;
+        }
+      }
+      raw = s.slice(j, e);
+    }
+    const address = decodeEntities(raw.replace(/\\([!-/:-@[-`{-~])/g, "$1"));
+    if (unsafeAddress(address)) edits.push({ at: k, del: 0, ins: "\\" });
+  }
+  return edits.length ? applyEdits(s, edits) : s;
+}
+const MAY_HOLD_MARKUP = /[<[]|https?:\/\/|www\./i;
+function answerPass(answer: string): string {
+  if (!MAY_HOLD_MARKUP.test(answer)) return answer;
+  if (!withinBudget(answer)) return plainEverything(answer);
+  let s = answer;
+  for (let parses = 0; parses < 5; parses++) {
+    const code: Array<[number, number]> = [];
+    let edits: Edit[];
+    try {
+      edits = editsOfBoth(s, code);
+    } catch {
+      return plainEverything(s);
+    }
+    if (edits.length > 0) {
+      s = applyEdits(s, edits);
+      continue;
+    }
+    const next = plainCloserBeforeUnsafeAddress(plainBangWhereImagePossible(s, code), code);
+    if (next === s) return s;
+    s = next;
+  }
+  return plainEverything(s);
+}
+
+// Run 32D (30D-5, R4), run 33D round 6 and run 34D: the finished answer of a tool, after it joined what the user typed with
+// its own text. Two pieces that were inert one by one can form markup when joined (an "!" before a link, an address before
+// its query, the two halves of a tag or of a link over lines). Run 34D replaces the line by line patterns with the parser
+// pass above (with the round 6 rule where an image is still possible). It never quotes, and an answer with no live
+// markup comes back byte identical. A tool that answers JSON runs it on each string value, never on the JSON text.
 export function neutraliseAnswer(answer: string): string {
   if (typeof answer !== "string" || answer === "") return answer;
-  return plainBang(answer.split("\n").map((line) => markupPass(line)).join("\n"));
+  return answerPass(answer);
 }
 
 export function neutraliseDeep<T>(value: T): T {
