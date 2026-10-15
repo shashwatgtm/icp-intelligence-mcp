@@ -403,11 +403,7 @@ function bareEdits(s: string, from: number, to: number, edits: Edit[]): void {
         kept--;
         continue;
       }
-      const amp = s.lastIndexOf("&", kept - 1);
-      if (s[kept - 1] === ";" && amp > at && /^&[A-Za-z0-9#]+;$/.test(s.slice(amp, kept))) {
-        kept = amp;
-        continue;
-      }
+      // a character reference at the end stays in the address (pandoc keeps "&#91;" there, and its "#" is a fragment)
       break;
     }
     let cut = -1;
@@ -635,7 +631,8 @@ function definitionLineEdits(s: string, edits: Edit[]): void {
         };
         // only an address with a scheme (a relative one, such as a tool's own "[Date]: [Deliverable]", loads and sends nothing)
         const schemed = /^[a-z][a-z0-9+.-]*:/i.test(address.replace(INVISIBLE, ""));
-        if (raw && titled && schemed && unsafeAddress(address) && (twice(label) || twice(bare))) edits.push(mark(s, i));
+        // pandoc also accepts some lines with text after the address, so a title is not required when the address has a scheme
+        if (raw && (titled || schemed) && schemed && unsafeAddress(address) && (twice(label) || twice(bare))) edits.push(mark(s, i));
       }
     }
     lineStart = lineEnd + 1;
@@ -736,7 +733,9 @@ function answerPass(answer: string): string {
       if (onlyQueries && s.indexOf("![") < 0 && s.indexOf("](") < 0) return s;
       continue;
     }
-    const next = plainCloserBeforeUnsafeAddress(plainBangWhereImagePossible(s, code, seenDef.definition), code);
+    // with a "$" in the answer, pandoc's TeX math can pair backticks differently, so the code places are not trusted here
+    const trusted = s.indexOf("$") >= 0 ? [] : code;
+    const next = plainCloserBeforeUnsafeAddress(plainBangWhereImagePossible(s, trusted, seenDef.definition), trusted);
     if (next === s) return s;
     s = next;
   }
