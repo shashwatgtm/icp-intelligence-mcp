@@ -53,6 +53,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.neutraliseText = neutraliseText;
 exports.neutraliseAnswer = neutraliseAnswer;
+exports.neutraliseJsonText = neutraliseJsonText;
 exports.neutraliseDeep = neutraliseDeep;
 // Run 34D: the bundled CommonMark and GFM parser used by neutraliseAnswer (src/md-parse.ts; netlify/lib/md-parse.js in GTM Alpha).
 const md = __importStar(require("./md-parse.js"));
@@ -357,13 +358,26 @@ const parseMarkdown = md.fromMarkdown;
 const ext = md;
 // The answer is read twice, as GFM (tables and task lists) and as plain CommonMark, because a renderer may use either: a line
 // that GFM reads as a table row is a paragraph line in CommonMark, so a link split over two such lines is live only there.
-function parseTree(s, gfm) {
+// A third, wider reading is used when the answer holds "$" or "[^": pandoc's GFM reads $...$ as TeX math (which can hide a
+// backtick, so a code span for micromark is plain text for pandoc) and has footnotes (whose indented lines are code for
+// micromark, and whose "[^1]: ..." is not a link definition); so code spans, indented code and definitions are turned off.
+function parseTree(s, gfm, wide = false) {
+    if (wide)
+        return parseMarkdown(s, { extensions: [{ disable: { null: ["attention", "codeText", "codeIndented", "definition"] } }], mdastExtensions: [] });
     if (!gfm)
         return parseMarkdown(s, { extensions: [{ disable: { null: ["attention"] } }], mdastExtensions: [] });
     return parseMarkdown(s, {
         extensions: [ext.gfmTable(), ext.gfmTaskListItem(), { disable: { null: ["attention"] } }],
         mdastExtensions: [ext.gfmTableFromMarkdown(), ext.gfmTaskListItemFromMarkdown()],
     });
+}
+// How a character is made plain: a backslash before it, or (in JSON text, where JSON doubles every backslash and so would undo
+// the escape) the character as an HTML entity, which CommonMark shows as the character and never as markup.
+let entityMode = false;
+let fellBack = false;
+const ENTITY = { "[": "&#91;", "]": "&#93;", "<": "&lt;", "!": "&#33;" };
+function mark(s, k) {
+    return entityMode ? { at: k, del: 1, ins: ENTITY[s[k]] ?? s[k] } : { at: k, del: 0, ins: "\\" };
 }
 const cc = (a, b) => String.fromCharCode(a) + "-" + String.fromCharCode(b);
 // characters a browser drops from an address before it reads the scheme (controls, spaces and invisible format characters)
@@ -398,8 +412,9 @@ function referenceAt(s, i) {
     const n = m[1] !== undefined ? parseInt(m[1], 16) : parseInt(m[2], 10);
     return [n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : "", m[0].length];
 }
-const BARE_START = /(?:https?:\/\/|www\.|mailto:)/gi;
-const TRAILING = new Set([..."?!.,:;*_~'\")]}>”’›»"]);
+const BARE_START = /(?:https?:\/\/|ftp:\/\/|www\.|mailto:)/gi;
+// what pandoc (GFM autolinks) strips from the end of a bare address; quotes, ")" and ";" stay in it (run 34D audit 1)
+const TRAILING = new Set([..."?!.,:*_~"]);
 // bare addresses in s[from, to): the query, fragment or user name of each is removed, its trailing punctuation kept
 function bareEdits(s, from, to, edits) {
     const part = s.slice(from, to);
@@ -454,15 +469,15 @@ function bareEdits(s, from, to, edits) {
     }
 }
 // the edits that make the live parts of s plain, and the places of code (where an "![" is plain text already)
-function editsOf(s, code, gfm) {
+function editsOf(s, code, gfm, wide = false, seen) {
     const edits = [];
     const definitions = new Map();
     const all = [];
     const used = new Set();
-    const plainAt = (at, mark) => {
-        const k = s.indexOf(mark, at);
+    const plainAt = (at, opener) => {
+        const k = s.indexOf(opener, at);
         if (k >= 0)
-            edits.push({ at: k, del: 0, ins: "\\" });
+            edits.push(mark(s, k));
     };
     const walk = (node, inLink) => {
         const at = node.position?.start.offset ?? 0;
@@ -485,8 +500,9 @@ function editsOf(s, code, gfm) {
                 code.push([at, end]);
                 return;
             case "text":
-                if (!inLink)
-                    bareEdits(s, at, end, edits);
+                // also inside link text: a renderer that does not form the link (run 34D audit 1: a reference label that
+                // micromark matches and pandoc does not) shows the address as a bare one
+                bareEdits(s, at, end, edits);
                 return;
             case "linkReference":
                 if (node.identifier !== undefined)
@@ -500,7 +516,7 @@ function editsOf(s, code, gfm) {
                 }
                 if (unsafeAddress(node.url ?? "")) {
                     if (!removable(node.url ?? ""))
-                        edits.push({ at, del: 0, ins: "\\" });
+                        edits.push(mark(s, at));
                     else {
                         // a script, data, file or other address: the link keeps its words and loses its address (the run 22 form)
                         const kids = node.children ?? [];
@@ -515,7 +531,9 @@ function editsOf(s, code, gfm) {
         for (const child of node.children ?? [])
             walk(child, inside);
     };
-    walk(parseTree(s, gfm), false);
+    walk(parseTree(s, gfm, wide), false);
+    if (seen && all.length)
+        seen.definition = true;
     // a definition with an unsafe address is made plain when a reference uses it, or (a second layer, because renderers do not
     // always agree on which brackets form a reference) when its label appears in brackets anywhere else in the answer
     const flat = s.toLowerCase().replace(/\s+/g, " ");
@@ -557,6 +575,7 @@ function applyEdits(s, edits) {
 // The last resort: every "[", "<", "!" and backslash gets a backslash (so none can open markup, and an escape already in the
 // text cannot be undone), and every bare address loses its query, fragment or user name.
 function plainEverything(s) {
+    fellBack = true;
     const t = s.replace(/[[<!\\]/g, (c) => "\\" + c);
     const edits = [];
     bareEdits(t, 0, t.length, edits);
@@ -631,13 +650,87 @@ function withinBudget(s) {
     }
     return open <= 1000 && close <= 1000 && pipe <= 3000 && lt <= 2000 && tick <= 2000;
 }
+// A fourth layer that does not depend on either parser (run 34D fix round, CRAFT GTM auditor: a definition inside a task list
+// item, or on the line right after a table, that pandoc reads and micromark does not): a line that, after its quote, list and
+// task box markers, starts with "[label]:" and an address that is not safe (escapes and entities decoded), gets its "[" made
+// plain when that label appears in brackets anywhere else in the answer.
+function definitionLineEdits(s, edits) {
+    if (s.indexOf("]:") < 0)
+        return;
+    const flat = s.toLowerCase().replace(/\s+/g, " ");
+    let lineStart = 0;
+    while (lineStart <= s.length) {
+        let lineEnd = s.indexOf("\n", lineStart);
+        if (lineEnd < 0)
+            lineEnd = s.length;
+        let i = lineStart;
+        for (;;) {
+            while (s[i] === " " || s[i] === "\t")
+                i++;
+            if (s[i] === ">") {
+                i++;
+                continue;
+            }
+            if ((s[i] === "-" || s[i] === "*" || s[i] === "+") && (s[i + 1] === " " || s[i + 1] === "\t")) {
+                i += 2;
+                continue;
+            }
+            const num = /^\d{1,9}[.)][ \t]/.exec(s.slice(i, i + 12));
+            if (num) {
+                i += num[0].length;
+                continue;
+            }
+            const box = /^\[[ xX]\][ \t]/.exec(s.slice(i, i + 4));
+            if (box) {
+                i += box[0].length;
+                continue;
+            }
+            break;
+        }
+        if (s[i] === "[" && !escaped(s, i)) {
+            let k = i + 1;
+            while (k < lineEnd && s[k] !== "]")
+                k += s[k] === "\\" ? 2 : 1;
+            if (k < lineEnd && s[k + 1] === ":") {
+                let j = k + 2;
+                while (s[j] === " " || s[j] === "\t")
+                    j++;
+                if (s[j] === "\n" || s[j] === "\r") {
+                    j++;
+                    while (s[j] === " " || s[j] === "\t" || s[j] === ">")
+                        j++;
+                }
+                let e = j;
+                if (s[j] === "<")
+                    e = s.indexOf(">", j) < 0 ? s.length : s.indexOf(">", j);
+                else
+                    while (e < s.length && !/[ \t\r\n]/.test(s[e]))
+                        e++;
+                const raw = s.slice(s[j] === "<" ? j + 1 : j, e);
+                const address = decodeEntities(raw.replace(/\\([!-/:-@[-`{-~])/g, "$1"));
+                const label = s.slice(i, k + 1).toLowerCase().replace(/\s+/g, " ");
+                const bare = label.replace(/\\([!-/:-@[-`{-~])/g, "$1");
+                const twice = (l) => {
+                    const f = flat.indexOf(l);
+                    return f >= 0 && flat.indexOf(l, f + 1) >= 0;
+                };
+                if (raw && unsafeAddress(address) && (twice(label) || twice(bare)))
+                    edits.push(mark(s, i));
+            }
+        }
+        lineStart = lineEnd + 1;
+    }
+}
 // both readings: the edits of either (the same edit once), and code only where both readings see code
-function editsOfBoth(s, code) {
+function editsOfBoth(s, code, seenDef) {
     const codeGfm = [];
     const codePlain = [];
     const seen = new Set();
     const edits = [];
-    for (const e of [...editsOf(s, codeGfm, true), ...editsOf(s, codePlain, false)]) {
+    const wide = /\$|\[\^/.test(s) ? editsOf(s, [], false, true, seenDef) : [];
+    const lines = [];
+    definitionLineEdits(s, lines);
+    for (const e of [...editsOf(s, codeGfm, true, false, seenDef), ...editsOf(s, codePlain, false, false, seenDef), ...wide, ...lines]) {
         const key = `${e.at}:${e.del}:${e.ins}`;
         if (!seen.has(key)) {
             seen.add(key);
@@ -651,12 +744,11 @@ function editsOfBoth(s, code) {
     return edits;
 }
 // The round 6 rule as a second layer in the answer: an unescaped "![" outside code is made plain where an image is still
-// possible, that is when a "](" or "][" follows it or the answer holds a "]:" (a definition); ordinary text such as a hashtag
-// line "#Wow![Great]onboarding" keeps its bytes (register 33D-7).
-function plainBangWhereImagePossible(s, code) {
+// possible, that is when a "](" or "][" follows it or a reading of the answer holds a definition; ordinary text such as a
+// hashtag line "#Wow![Great]onboarding" keeps its bytes (register 33D-7), also next to a tool's own "[Common Practice]:".
+function plainBangWhereImagePossible(s, code, definition) {
     if (s.indexOf("![") < 0)
         return s;
-    const definition = s.indexOf("]:") >= 0;
     return s.replace(/(\\*)!\[/g, (m, bs, at) => {
         if (bs.length % 2 === 1)
             return m;
@@ -664,7 +756,7 @@ function plainBangWhereImagePossible(s, code) {
         if (code.some(([a, b]) => bang >= a && bang < b))
             return m;
         const rest = s.slice(bang + 2);
-        return definition || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? `${bs}!\\[` : m;
+        return definition || rest.indexOf("](") >= 0 || rest.indexOf("][") >= 0 ? (entityMode ? `${bs}!&#91;` : `${bs}!\\[`) : m;
     });
 }
 // A third layer that does not depend on how a renderer pairs brackets: an inline link needs "](" right before its address,
@@ -715,11 +807,11 @@ function plainCloserBeforeUnsafeAddress(s, code) {
         }
         const address = decodeEntities(raw.replace(/\\([!-/:-@[-`{-~])/g, "$1"));
         if (unsafeAddress(address))
-            edits.push({ at: k, del: 0, ins: "\\" });
+            edits.push(mark(s, k));
     }
     return edits.length ? applyEdits(s, edits) : s;
 }
-const MAY_HOLD_MARKUP = /[<[]|https?:\/\/|www\./i;
+const MAY_HOLD_MARKUP = /[<[]|https?:\/\/|ftp:\/\/|www\.|mailto:/i;
 function answerPass(answer) {
     if (!MAY_HOLD_MARKUP.test(answer))
         return answer;
@@ -728,18 +820,24 @@ function answerPass(answer) {
     let s = answer;
     for (let parses = 0; parses < 5; parses++) {
         const code = [];
+        const seenDef = { definition: false };
         let edits;
         try {
-            edits = editsOfBoth(s, code);
+            edits = editsOfBoth(s, code, seenDef);
         }
         catch {
             return plainEverything(s);
         }
         if (edits.length > 0) {
+            const onlyQueries = edits.every((e) => e.ins === " (query removed)");
             s = applyEdits(s, edits);
+            // removing a query (it becomes " (query removed)", which opens nothing) cannot form new markup, and with no "![" and
+            // no "](" the second and third layers have nothing to do: no parse again (many bare queries stay fast)
+            if (onlyQueries && s.indexOf("![") < 0 && s.indexOf("](") < 0)
+                return s;
             continue;
         }
-        const next = plainCloserBeforeUnsafeAddress(plainBangWhereImagePossible(s, code), code);
+        const next = plainCloserBeforeUnsafeAddress(plainBangWhereImagePossible(s, code, seenDef.definition), code);
         if (next === s)
             return s;
         s = next;
@@ -755,6 +853,44 @@ function neutraliseAnswer(answer) {
     if (typeof answer !== "string" || answer === "")
         return answer;
     return answerPass(answer);
+}
+// Run 34D fix round (GTM Alpha auditor): a tool whose answer text is JSON. Each string value has had neutraliseAnswer, but in
+// the JSON text every backslash it added is doubled, so "\\[" reads as a plain backslash and a live "[", and two values side
+// by side can form markup. This pass reads the JSON text itself and makes plain with HTML entities ("&#91;", "&lt;"), which
+// JSON leaves as they are. If the parse budget is passed, every "[", "<" and "!" inside each string value becomes an entity
+// (the JSON is parsed and written again with the same two space indent). JSON text with no live markup comes back as it is.
+function neutraliseJsonText(text) {
+    if (typeof text !== "string" || text === "")
+        return text;
+    entityMode = true;
+    fellBack = false;
+    try {
+        const out = answerPass(text);
+        if (!fellBack)
+            return out;
+    }
+    finally {
+        entityMode = false;
+    }
+    const plainStrings = (v) => {
+        if (typeof v === "string") {
+            const t = v.replace(/[[<!]/g, (c) => ENTITY[c]);
+            const edits = [];
+            bareEdits(t, 0, t.length, edits);
+            return applyEdits(t, edits);
+        }
+        if (Array.isArray(v))
+            return v.map(plainStrings);
+        if (v && typeof v === "object")
+            return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, plainStrings(x)]));
+        return v;
+    };
+    try {
+        return JSON.stringify(plainStrings(JSON.parse(text)), null, 2);
+    }
+    catch {
+        return text.replace(/[[<!]/g, (c) => ENTITY[c]);
+    }
 }
 function neutraliseDeep(value) {
     if (typeof value === "string")
