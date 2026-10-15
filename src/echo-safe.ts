@@ -588,8 +588,8 @@ function withinBudget(s: string): boolean {
 }
 // A fourth layer that does not depend on either parser (run 34D fix round, CRAFT GTM auditor: a definition inside a task list
 // item, or on the line right after a table, that pandoc reads and micromark does not): a line that, after its quote, list and
-// task box markers, starts with "[label]:" and an address that is not safe (escapes and entities decoded), gets its "[" made
-// plain when that label appears in brackets anywhere else in the answer.
+// task box markers, starts with "[label]:" and an address with a scheme that is not safe (escapes and entities decoded), and
+// holds nothing else but a title, gets its "[" made plain when that label appears in brackets anywhere else in the answer.
 function definitionLineEdits(s: string, edits: Edit[]): void {
   if (s.indexOf("]:") < 0) return;
   const flat = s.toLowerCase().replace(/\s+/g, " ");
@@ -622,6 +622,10 @@ function definitionLineEdits(s: string, edits: Edit[]): void {
         if (s[j] === "<") e = s.indexOf(">", j) < 0 ? s.length : s.indexOf(">", j);
         else while (e < s.length && !/[ \t\r\n]/.test(s[e])) e++;
         const raw = s.slice(s[j] === "<" ? j + 1 : j, e);
+        // a definition has nothing after its address on that line but an optional title ("t", 't' or (t))
+        const lineOfDest = s.indexOf("\n", e) < 0 ? s.length : s.indexOf("\n", e);
+        const tail = s.slice(s[j] === "<" ? e + 1 : e, lineOfDest).trim();
+        const titled = tail === "" || /^(?:"[^"]*"|'[^']*'|\([^()]*\))$/.test(tail);
         const address = decodeEntities(raw.replace(/\\([!-/:-@[-`{-~])/g, "$1"));
         const label = s.slice(i, k + 1).toLowerCase().replace(/\s+/g, " ");
         const bare = label.replace(/\\([!-/:-@[-`{-~])/g, "$1");
@@ -629,7 +633,9 @@ function definitionLineEdits(s: string, edits: Edit[]): void {
           const f = flat.indexOf(l);
           return f >= 0 && flat.indexOf(l, f + 1) >= 0;
         };
-        if (raw && unsafeAddress(address) && (twice(label) || twice(bare))) edits.push(mark(s, i));
+        // only an address with a scheme (a relative one, such as a tool's own "[Date]: [Deliverable]", loads and sends nothing)
+        const schemed = /^[a-z][a-z0-9+.-]*:/i.test(address.replace(INVISIBLE, ""));
+        if (raw && titled && schemed && unsafeAddress(address) && (twice(label) || twice(bare))) edits.push(mark(s, i));
       }
     }
     lineStart = lineEnd + 1;
