@@ -104,7 +104,10 @@ test("neutraliseAnswer: an image or link split over a line break of one paragrap
     "x.![y is longer than 4000 characters\n](https://evil.example/d.png) is longer than 4000 characters",
   ]) {
     const o = neutraliseAnswer(answer);
-    assert.doesNotMatch(o, LIVE_LINK, `live: ${JSON.stringify(o)}`);
+    // run 33D round 6 correction: live means an image a renderer can show (an unescaped "![") or a link to a script, data or
+    // file address; an ordinary https link without a query stays a link by design (since run 20), so it is not counted.
+    assert.ok(!/(^|[^\\])(\\\\)*!\[/.test(o), `live image: ${JSON.stringify(o)}`);
+    assert.doesNotMatch(o, /\]\s*\(\s*(?:javascript|vbscript|data|file):/i, `live script link: ${JSON.stringify(o)}`);
     assert.equal(neutraliseAnswer(o), o, `not idempotent: ${JSON.stringify(o)}`);
   }
 });

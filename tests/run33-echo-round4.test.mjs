@@ -8,8 +8,10 @@ import assert from "node:assert/strict";
 
 const MODULE = process.env.ECHO_MODULE || "../dist/echo-safe.js";
 const { neutraliseAnswer } = await import(new URL(MODULE, import.meta.url));
-// an unescaped "]" followed by "(" and the test address, also when the address is on the next line
-const LIVE_INLINE = /(?<!\\)\]\s*\(\s*https?:\/\/evil/;
+// round 4 checked for an unescaped "]" followed by "(" and the test address, also when the address is on the next line.
+// run 33D round 6 correction: every input here is an image, and an image can only render from an unescaped "![" (round 6 makes
+// that "!" + "\\[" at the source); the round 4 form above also flagged a plain https link, which the safeguard allows by design.
+const LIVE_INLINE = /(^|[^\\])(\\\\)*!\[/;
 
 test("a ] inside a code span does not hide an open [ (the image stays inert)", () => {
   for (const answer of [
@@ -25,9 +27,9 @@ test("a ] inside a code span does not hide an open [ (the image stays inert)", (
 
 test("a shortcut reference image split over a line break is inert", () => {
   const o = neutraliseAnswer("Company: x ![a\nChallenge: b]\n\n[a Challenge: b]: https://evil.example/c.png ...");
-  assert.ok(o.includes("Challenge: b\\]"), `the closing bracket is still live: ${JSON.stringify(o)}`);
+  assert.ok(!LIVE_INLINE.test(o), `the image is still live: ${JSON.stringify(o)}`);
   const p = neutraliseAnswer("x ![a\nb] tail\n[a b]: https://evil.example/c.png");
-  assert.ok(p.includes("b\\] tail"), `the closing bracket is still live: ${JSON.stringify(p)}`);
+  assert.ok(!LIVE_INLINE.test(p), `the image is still live: ${JSON.stringify(p)}`);
 });
 
 test("an image whose destination starts on the next line is inert", () => {
@@ -65,7 +67,7 @@ test("a line of only Unicode spaces does not end the paragraph (the split image 
 
 test("a shortcut reference image split over a line break, with markup in the second line, is inert", () => {
   const o = neutraliseAnswer("Persona: ![q\n**Product Context:** z]\n\n[q **Product Context:** z]: https://evil.example/c.png");
-  assert.ok(o.includes("z\\]"), `the closing bracket is still live: ${JSON.stringify(o)}`);
+  assert.ok(!LIVE_INLINE.test(o), `the image is still live: ${JSON.stringify(o)}`);
 });
 
 test("an image whose text is longer than the scan window is made inert, in a field and in an answer", () => {
