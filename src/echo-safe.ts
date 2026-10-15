@@ -119,6 +119,12 @@ function markdownOnce(s: string): string {
       if (paren >= 0) {
         end = paren + 1;
         target = s.slice(close + 2, paren);
+      } else if (bang) {
+        // Run 33D round 5: no balanced ")" (a "(" in a quoted title, or a destination longer than the window): the image could
+        // still render, so its "[" is made plain text.
+        out += s.slice(last, k) + "\\[";
+        last = k + 1;
+        continue;
       }
     } else if (bang) {
       let q = close + 1;
