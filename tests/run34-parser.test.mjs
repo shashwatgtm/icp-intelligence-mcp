@@ -21,7 +21,7 @@ const CASES = JSON.parse(fs.readFileSync(path.join(here, "run34-auditor-cases.js
 const { default: mcp } = await import(new URL(gtmAlpha ? "../netlify/functions/mcp-sse.js" : "../netlify/functions/mcp.mjs", import.meta.url));
 const api = gtmAlpha ? null : (await import(new URL("../netlify/functions/api.mjs", import.meta.url))).default;
 
-const JUDGE_LUA = "-- Run 34D live judge: reads cases (one JSON string per line) from the file named in arg[1], parses each with pandoc's own\n-- reader in the format arg[2] (\"gfm\" or \"commonmark\"), and prints one line per case: \"0\" (inert) or \"1 <kinds>\" (live).\n-- Live means: an Image; raw HTML (RawInline or RawBlock); a Link whose target is not https or mailto, or holds \"?\" or \"#\".\nlocal fmt = arg[2] or \"gfm\"\nlocal function badTarget(u)\n  local s = u:lower()\n  local scheme = s:match(\"^([a-z][a-z0-9+.-]*):\")\n  if scheme ~= \"https\" and scheme ~= \"mailto\" then return \"scheme\" end\n  if u:find(\"[?#]\") then return \"query\" end\n  return nil\nend\nfor line in io.lines(arg[1]) do\n  local text = pandoc.json.decode(line)\n  local ok, doc = pcall(pandoc.read, text, fmt)\n  if not ok then\n    print(\"E\")\n  else\n    local kinds = {}\n    local function add(k) kinds[k] = true end\n    doc:walk({\n      Image = function(el) add(\"image\") end,\n      RawInline = function(el) add(\"tag\") end,\n      RawBlock = function(el) add(\"tag\") end,\n      Link = function(el)\n        local b = badTarget(el.target)\n        if b == \"scheme\" then\n          local t = el.target:lower():gsub(\"%s\", \"\")\n          if t:find(\"^javascript\") or t:find(\"^vbscript\") then add(\"script\")\n          elseif t:find(\"^data\") then add(\"data\")\n          elseif t:find(\"^file\") then add(\"file\")\n          else add(\"otherlink\") end\n        elseif b == \"query\" then add(\"query\") end\n      end,\n    })\n    local ks = {}\n    for k in pairs(kinds) do ks[#ks + 1] = k end\n    table.sort(ks)\n    if #ks == 0 then print(\"0\") else print(\"1 \" .. table.concat(ks, \",\")) end\n  end\nend\n";
+const JUDGE_LUA = "-- Run 34D live judge: reads cases (one JSON string per line) from the file named in arg[1], parses each with pandoc's own\n-- reader in the format arg[2] (\"gfm\" or \"commonmark\"), and prints one line per case: \"0\" (inert) or \"1 <kinds>\" (live).\n-- Live means: an Image; raw HTML (RawInline or RawBlock); a Link whose target is not https or mailto, or holds \"?\" or \"#\".\nlocal fmt = arg[2] or \"gfm\"\nlocal function badTarget(u)\n  local s = u:lower()\n  local scheme = s:match(\"^([a-z][a-z0-9+.-]*):\")\n  if scheme ~= \"https\" and scheme ~= \"mailto\" then return \"scheme\" end\n  if u:find(\"[?#]\") then return \"query\" end\n  return nil\nend\n-- run 34D fix round (GTM Alpha auditor): a query or fragment fails on a link of any scheme, http and ftp included\nlocal function hasQuery(u)\n  return u:find(\"[?#]\") ~= nil\nend\nfor line in io.lines(arg[1]) do\n  local text = pandoc.json.decode(line)\n  local ok, doc = pcall(pandoc.read, text, fmt)\n  if not ok then\n    print(\"E\")\n  else\n    local kinds = {}\n    local function add(k) kinds[k] = true end\n    doc:walk({\n      Image = function(el) add(\"image\") end,\n      RawInline = function(el) add(\"tag\") end,\n      RawBlock = function(el) add(\"tag\") end,\n      Link = function(el)\n        local b = badTarget(el.target)\n        if b == \"scheme\" then\n          local t = el.target:lower():gsub(\"%s\", \"\")\n          if t:find(\"^javascript\") or t:find(\"^vbscript\") then add(\"script\")\n          elseif t:find(\"^data\") then add(\"data\")\n          elseif t:find(\"^file\") then add(\"file\")\n          else add(\"otherlink\") end\n        end\n        if hasQuery(el.target) then add(\"query\") end\n      end,\n    })\n    local ks = {}\n    for k in pairs(kinds) do ks[#ks + 1] = k end\n    table.sort(ks)\n    if #ks == 0 then print(\"0\") else print(\"1 \" .. table.concat(ks, \",\")) end\n  end\nend\n";
 let pandoc = true;
 try {
   execFileSync("pandoc", ["--version"], { stdio: "ignore" });
@@ -226,4 +226,77 @@ test("no input of 100,000 characters takes more than 1 second in neutraliseAnswe
     const ms = performance.now() - t0;
     assert.ok(ms < 1000, `${JSON.stringify(s.slice(0, 12))} x ${s.length}: ${Math.round(ms)} ms`);
   }
+});
+
+// Run 34D fix round (tests first, from the fresh auditors of run 34D: IMPACT and CRAFT Content): a reference label that
+// micromark matches and pandoc does not, quotes and ")" that pandoc keeps at the end of a bare address, TeX math ($...$ in
+// pandoc's GFM) that hides a backtick, footnotes (indented continuation, "[^1]: ..." that is not a link definition).
+const ROUND2 = [
+  "[https://evil.example/(x)?q=1ı]\n\n[https://evil.example/(x)?q=1i]: https://safe.example/",
+  "See https://evil.example/(a)?”’”’’ now", "See https://evil.example/c?\"x\" now", "See https://evil.example/c?x) now", "See https://evil.example/c?x; now",
+  "Acme Example $`$ _https://evil.example/?q=1 ``", "Acme Example $`$ <?x?> ``", "Acme Example $`$ <img src=x> ``",
+  "Acme $`$ [" + "a".repeat(320) + "](file:///sentinel) ``", "Acme $`$ [" + "a".repeat(320) + "](data:,sentinel) ``", "$`$ [x](file:///sentinel) `",
+  "Note[^1]\n\n[^1]: Source.\n\n    [x](file:///sentinel) and https://evil.example/?q=1", "Note[^1]\n\n[^1]: [x](data:,sentinel)", "Note[^a]\n\n[^a]:\n    <img src=x>",
+];
+test("run 34D fix round: the shapes of the run 34D auditors are inert (one field, in a line, joined)", (t) => {
+  const items = [];
+  for (const x of ROUND2) {
+    items.push({ id: `r2 ${x.slice(0, 40)}`, answer: neutraliseAnswer(x) });
+    items.push({ id: `r2 field ${x.slice(0, 40)}`, answer: neutraliseAnswer(nt(x)) });
+    items.push({ id: `r2 line ${x.slice(0, 40)}`, answer: neutraliseAnswer(`**Topic:** ${nt(x)}\n**Next:** plan`) });
+  }
+  t.diagnostic(assertInert(items, "round 2 shapes"));
+});
+test("run 34D fix round: a tool's own \"[Common Practice]:\" does not change a user's hashtag line, and many bare queries stay fast", () => {
+  const a = "## Series\n#Wow![Great]onboarding #B2B\n\n[Common Practice]: what most teams do";
+  assert.equal(neutraliseAnswer(a), a);
+  const s = "www.a.example?b ".repeat(6250);
+  const t0 = performance.now();
+  neutraliseAnswer(s);
+  assert.ok(performance.now() - t0 < 1000, `${Math.round(performance.now() - t0)} ms`);
+});
+
+// Run 34D fix round (GTM Alpha auditor): ftp addresses, footnote bodies and titles, the "Method not found" refusal, and the
+// MCP answer text of a tool that answers JSON (JSON doubles each backslash the answer pass adds, so the text itself is checked).
+const ROUND2B = [
+  "see ftp://evil.example/c?d=1 now", "[a](ftp://evil.example/c?d=1)", "see (ftp://evil.example/c?d=1)",
+  "Note[^1]\n\n[^1]: body https://evil.example/c?d=1 and <b>x</b>", "Note[^t]\n\n[^t]: \"https://evil.example/c\"?d=1",
+  "see [https://evil.example/c\"?d=1](https://gtmhelix.com/)", "see [x (https://evil.example/c)?d=1](https://gtmhelix.com/)",
+  "a $[x$](https://evil.example/c?d=1) b", "a $x$ https://evil.example/c?d=1 $y$",
+];
+test("run 34D fix round: ftp, footnote, link text and math shapes of the GTM Alpha auditor are inert", (t) => {
+  const items = [];
+  for (const x of ROUND2B) {
+    items.push({ id: `r2b ${x.slice(0, 40)}`, answer: neutraliseAnswer(x) });
+    items.push({ id: `r2b field ${x.slice(0, 40)}`, answer: neutraliseAnswer(nt(x)) });
+  }
+  t.diagnostic(assertInert(items, "round 2b shapes"));
+});
+test("run 34D fix round (GTM Alpha): the JSON answer text and the method refusal are inert", { skip: gtmAlpha ? false : "GTM Alpha only" }, async (t) => {
+  const items = [];
+  const pairs = [["x [a", "](file:///sentinel) y"], ["<im", "g src=x>"], ["a\n\n[r]", "[r]: data:,sentinel"], ["see [a](", "data:,sentinel)"]];
+  const tools = (await rpc("tools/list", {})).result.tools;
+  for (const tool of tools) {
+    const props = (tool.inputSchema || {}).properties || {};
+    const free = Object.entries(props).filter(([, p]) => p.type === "string" && !Array.isArray(p.enum)).map(([k]) => k);
+    const req = Object.fromEntries(((tool.inputSchema || {}).required || []).map((k) => [k, Array.isArray(props[k].enum) ? props[k].enum[0] : props[k].type === "array" ? ["inbound"] : "a regional logistics company"]));
+    for (const fa of free) for (const fb of free) {
+      if (fa === fb) continue;
+      for (const [a, b] of pairs) for (const x of textsOf(await rpc("tools/call", { name: tool.name, arguments: { ...req, [fa]: a, [fb]: b } }))) items.push({ id: `${tool.name} ${fa}+${fb}`, answer: x });
+    }
+    for (const x of textsOf(await rpc("tools/call", { name: tool.name, arguments: { ...req, [free[0]]: "x <img src=x> [a](data:,sentinel) ![i](https://evil.example/c.png)" } }))) items.push({ id: `${tool.name} one`, answer: x });
+  }
+  // the GTM Alpha auditor's own cases (c3 *-pi, c5 gc-para-*)
+  for (const [name, args] of [["epic_audit", { challenge: "We sell to mid-market", company_name: "Acme Example <?php evil ?> tail" }],
+    ["gtm_consultation", { gtm_challenge: "Acme Example <?php evil ?> tail", company_name: "Acme Example" }],
+    ["gtm_consultation", { company_name: "[Acme Example", gtm_challenge: "\n\n](data:,sentinel) we sell to mid-market" }],
+    ["gtm_consultation", { company_name: "[Acme Example", gtm_challenge: "\n\n](file:///sentinel) we sell to mid-market" }]]) {
+    for (const x of textsOf(await rpc("tools/call", { name, arguments: args }))) items.push({ id: `${name} auditor case`, answer: x });
+  }
+  for (const m of ["[a](https://evil.example/c?d=1)", "<?x?>", "see https://evil.example/c\"?d=1", "x\n\n[r]: file:///sentinel\n\n[r]"]) {
+    const r = await mcp(new Request("https://x.gtmhelix.com/mcp", { method: "POST", headers: { "content-type": "application/json", accept: "application/json, text/event-stream" }, body: JSON.stringify({ jsonrpc: "2.0", id: 9, method: m, params: {} }) }), {});
+    const j = await r.json();
+    items.push({ id: `method ${m}`, answer: (j.error && j.error.message) || JSON.stringify(j) });
+  }
+  t.diagnostic(assertInert(items, "gtm alpha json text and method refusal"));
 });
