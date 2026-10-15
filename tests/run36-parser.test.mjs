@@ -211,15 +211,17 @@ test("run 36D, 34D-2 and 34D-8: no input of 100,000 characters takes more than 1
   }
 });
 
+// (An "![" with a "](" anywhere after it is made plain in any answer, short or long: the run 34D rule, unchanged; so these
+// ordinary blocks hold no "![".)
 // Register 34D-5: an ordinary answer over the budget (for example over 120,000 characters) keeps its bytes (block wise pass), and
 // a crafted one is inert.
 const ORDINARY_BLOCKS = [
   "## Buyer group\n\n**Their Concern**: [Their main concern, in their words]\n**Our Answer**: [How we address it]",
   "- [ ] security review\n- [x] pricing agreed\nSee https://acme.example/plan and [our plan](https://gtmhelix.com/plan/).",
   "| **Author Credibility** | [your role] |\n|---|---|\n| Pilot [1] | RevOps |", "Use `![x](y)` and `<b>x</b>` in code, as a writer would.",
-  "#Wow![Great]onboarding #B2B and Stop Doing [Common Practice]: What Actually Works", "[Date]: [Deliverable]\n[Owner]: [Name]",
+  "#Wow #B2B and Stop Doing [Common Practice]: What Actually Works", "- Date: [Deliverable]\n- [Owner] to confirm",
   "Score: 72/100 (target 80, hypothetical). Next: [book a call](https://gtmhelix.com/consultation).", "a < b and c > d, 5<10, x<=y, <3 teams & partners",
-  "1. Map the ICP\n2. Draft the deck\n   - ![ is a sign we use in notes", "> Quote from the call (as pasted, not yet checked)\n> second line",
+  "1. Map the ICP\n2. Draft the deck\n   - [ ] is a sign we use in notes", "> Quote from the call (as pasted, not yet checked)\n> second line",
 ];
 function longOrdinary(n) {
   let s = "";
@@ -231,11 +233,15 @@ test("run 36D, 34D-5: ordinary answers over the budget keep their bytes", () => 
     const a = longOrdinary(n);
     assert.equal(neutraliseAnswer(a), a, `changed at ${n} characters`);
   }
-  // over the budget by count, not by length: 1,100 task boxes, 2,100 lines
-  const boxes = "- [ ] item\n".repeat(1100) + "\n\nDone.";
+  // over the budget by count, not by length: 1,100 task boxes in sections of 50 (one block by itself over the budget, with no
+  // blank line in it, still gets the last resort: the recorded limit)
+  const boxes = ("## Section\n\n" + "- [ ] item\n".repeat(50) + "\n" + "Pasted note ".repeat(300) + "\n\n").repeat(22) + "Done.";
   assert.equal(neutraliseAnswer(boxes), boxes);
-  const lines = ("Line of the plan with [a](https://gtmhelix.com/) link\n\n").repeat(1100);
+  const lines = ("Line of the plan with [a](https://gtmhelix.com/) link\n\n" + "Pasted note ".repeat(40) + "\n\n").repeat(1100);
   assert.equal(neutraliseAnswer(lines), lines);
+  // a tool's own placeholder definition lines, repeated in a long answer (no "![" in it)
+  const timeline = ("## Week\n\n[Date]: [Deliverable]\n[Owner]: [Name]\n\n" + "Pasted note ".repeat(50) + "\n\n").repeat(250);
+  assert.equal(neutraliseAnswer(timeline), timeline);
 });
 test("run 36D, 34D-5: crafted answers over the budget are inert (block wise pass)", (t) => {
   const pad = longOrdinary(125000);
@@ -250,4 +256,18 @@ test("run 36D, 34D-5: crafted answers over the budget are inert (block wise pass
   items.push({ id: "fence", answer: neutraliseAnswer("```\n" + pad + "\n\n```\n\n[a](javascript:alert(1)) <img src=x>\n\n" + pad) });
   items.push({ id: "fence 2", answer: neutraliseAnswer(pad + "\n\n  ```\n  x\n\nb\n```\n<!-- -->\n\nc\n\n" + pad + "\n\n```\n\n[a](file:///sentinel)") });
   t.diagnostic(assertInert(items, "34D-5 crafted"));
+});
+
+// Run 36D, found by the lead before the fix commit: pandoc trims a reference label and treats a vertical tab, a form feed, U+0085
+// and a no-break space as white space; micromark does not, so "[c][\vr]" uses "[r]: ..." in pandoc only.
+test("run 36D: reference labels with white space that only pandoc folds are inert (every position, seven targets)", (t) => {
+  const T = ["![a](https://evil.example/p.png)", "[c](javascript:alert(1))", "<img src=x>", "x https://evil.example/x?q=1", "[c](file:///sentinel)", "[c][r]\n\n[r]: file:///sentinel", "![c][r]\n\n[r]: https://evil.example/p.png"];
+  const CH = ["\u0000", "\u000b", "\u000c", "\u0085", " ", " ", " ", "\u001c", "\u001e", "\t", "​", "﻿", "　", " "];
+  const items = [];
+  for (const x0 of T) for (const c of CH) for (let i = 0; i <= x0.length; i++) {
+    const x = x0.slice(0, i) + c + x0.slice(i);
+    items.push({ id: `direct ${JSON.stringify(x)}`, answer: neutraliseAnswer(x) });
+    items.push({ id: `field ${JSON.stringify(x)}`, answer: neutraliseAnswer(nt(x)) });
+  }
+  t.diagnostic(assertInert(items, "label white space"));
 });
