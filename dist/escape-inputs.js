@@ -24,6 +24,7 @@
 // Line breaks, spaces and tabs are kept as typed (a backslash cannot escape them). No figures, no sector knowledge (B82).
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.escapeMarkup = escapeMarkup;
+exports.escapePiece = escapePiece;
 exports.dropLoneBackslash = dropLoneBackslash;
 exports.escapeText = escapeText;
 exports.quoteIfInstruction = quoteIfInstruction;
@@ -118,62 +119,83 @@ const isWordChar = (s, i) => {
     const lo = c >= 0xdc00 && c <= 0xdfff && i > 0 ? s.slice(i - 1, i + 1) : s[i];
     return WORD.test(lo);
 };
-// Each check below looks at most a fixed number of characters around the current one, except the "rest of the line" checks
-// for "-" and "=" lines, which run once per line from its first character: the pass stays linear.
-function escapeMarkup(s) {
+// Each check below looks at most a fixed number of characters around the current one (a run of "#" or digits is read once):
+// the pass stays linear. scan() decides, for each character, 0 (as typed), 1 (a backslash before it) or 2 (a visible backslash
+// before it: a literal backslash, then the character as typed). escapeMarkup() writes those decisions; escapePiece() (below)
+// uses the same decisions again on a piece a tool cut, joined or changed.
+//
+// Run 40S2 (40S-2, 40S-4): a block marker counts as live before ANY character that is not a letter or digit (white space,
+// punctuation such as "," "." ";" "(" ")" ":" "|", or the end), not only before white space: the tools cut typed text at that
+// punctuation, so a marker right before it could reach a line start. That also covers a table delimiter row ("--:", "-:").
+// Run 40S2 (40S-3): the trailing backslash after a last line of digits is gone (it escaped the tool's own "**", "*" or "]").
+// In its place, a run of 1 to 9 digits that starts a line the caller typed (after a line break) and that a tool could end there
+// (the end, a line break, white space up to the end or a line break or a non letter, or one of , ; ! ? : ( or a "." or ")"
+// before a letter or digit) gets a backslash before its first digit: "\2024" (a small visible backslash), so no "." or ")" the
+// tool writes after it can make a numbered item. "1. " stays escaped invisibly ("1\. "), as before.
+const CUT_AFTER_DIGITS = new Set([44, 59, 33, 63, 58, 40]); // , ; ! ? : (
+function scan(s, emit) {
     const n = s.length;
-    let out = "";
+    let lineStart = false; // only trim spaces since the last line break the caller typed
+    const endsAt = (k) => k >= n || !isWordChar(s, k);
     for (let i = 0; i < n; i++) {
         const ch = s[i];
         const c = s.charCodeAt(i);
         const prev = i > 0 ? s.charCodeAt(i - 1) : -1;
-        const next = i + 1 < n ? s.charCodeAt(i + 1) : -1;
+        const atLine = lineStart;
+        lineStart = isEol(c) ? true : isTrimSpace(c) ? lineStart : false;
         // block markers are escaped wherever a piece can start, not only at a line start: the tools split typed text at ".", ",",
         // ";", "!", "?" and line breaks and put each trimmed piece on a line of its own, so any place after a character that is not
         // a letter or digit (white space, punctuation, the start) can become a line start ("100+ " and "C# " stay as typed)
-        const endsHere = next === -1 || isTrimSpace(next);
+        const endsHere = endsAt(i + 1);
         const pieceStart = prev === -1 || !isWordChar(s, i - 1);
         if (c === 35) {
-            // "#" run then a space, a tab or the end: it could open a heading, or close one (a last run of "#" after a space)
-            // the whole run is read once and written at once (reading it again from each "#" would be quadratic)
+            // a run of "#" before a character that is not a letter or digit: it could open a heading, or close one
+            // the whole run is read once (reading it again from each "#" would be quadratic)
             let j = i;
             while (j < n && s.charCodeAt(j) === 35)
                 j++;
-            const after = j < n ? s.charCodeAt(j) : -1;
-            out += (pieceStart && (after === -1 || isTrimSpace(after)) ? "\\" : "") + s.slice(i, j);
+            if (pieceStart && endsAt(j))
+                emit(i, 1);
             i = j - 1;
             continue;
         }
-        if (c === 45) {
-            // "-" then a space, a tab or the end (a list item), or the first of three or more (a rule or a heading underline)
-            if (pieceStart && (endsHere || (next === 45 && i + 2 < n && s.charCodeAt(i + 2) === 45))) {
-                out += "\\-";
-                continue;
-            }
-            out += "-";
-            continue;
-        }
-        if (c === 43) {
-            out += pieceStart && endsHere ? "\\+" : "+";
+        if (c === 45 || c === 43) {
+            // "-" or "+" before a character that is not a letter or digit: a list item, a rule, a heading underline, a delimiter row
+            // (only the first of a run: a line can start inside a run only where a tool cuts in it, and escapePiece reads such a piece)
+            if (pieceStart && prev !== c && endsHere)
+                emit(i, 1);
             continue;
         }
         if (c === 61) {
-            // "=": the first of a run, or one before a space, a tab or the end (a heading underline)
-            out += pieceStart && prev !== 61 && (next === 61 || endsHere) ? "\\=" : "=";
+            // "=": the first of a run, or one before a character that is not a letter or digit (a heading underline)
+            if (pieceStart && prev !== 61 && endsHere)
+                emit(i, 1);
             continue;
         }
         if (isDigit(c) && pieceStart) {
-            // a numbered item: up to 9 digits, then "." or ")", then a space, a tab or the end
             let j = i;
             while (j < n && j - i < 10 && isDigit(s.charCodeAt(j)))
                 j++;
             const p = j < n ? s.charCodeAt(j) : -1;
-            const q = j + 1 < n ? s.charCodeAt(j + 1) : -1;
-            if (j - i <= 9 && (p === 46 || p === 41) && (q === -1 || isTrimSpace(q))) {
-                out += s.slice(i, j) + "\\" + s[j];
-                i = j;
-                continue;
+            if (j - i <= 9) {
+                const dotOrParen = p === 46 || p === 41;
+                // a numbered item: up to 9 digits, then "." or ")", then a character that is not a letter or digit
+                if (dotOrParen && endsAt(j + 1)) {
+                    emit(j, 1);
+                    i = j;
+                    continue;
+                }
+                if (atLine) {
+                    let k = j;
+                    while (k < n && isTrimSpace(s.charCodeAt(k)) && !isEol(s.charCodeAt(k)))
+                        k++;
+                    const cut = p === -1 || isEol(p) || (k > j && endsAt(k)) || CUT_AFTER_DIGITS.has(p) || dotOrParen;
+                    if (cut)
+                        emit(i, 1);
+                }
             }
+            i = j - 1;
+            continue;
         }
         if (c === 38) {
             // "&" that starts a character reference ("&#58;", "&colon;", "&#x3a;": a name or number, then ";"): shown as typed, so no
@@ -181,30 +203,34 @@ function escapeMarkup(s) {
             let j = i + 1;
             while (j < n && j - i <= 33 && (isAsciiAlnum(s.charCodeAt(j)) || s.charCodeAt(j) === 35))
                 j++;
-            out += j > i + 1 && j < n && s.charCodeAt(j) === 59 ? "\\&" : "&";
+            if (j > i + 1 && j < n && s.charCodeAt(j) === 59)
+                emit(i, 1);
             continue;
         }
         if (ALWAYS.has(ch)) {
-            out += "\\" + ch;
+            emit(i, 1);
             continue;
         }
+        const next = i + 1 < n ? s.charCodeAt(i + 1) : -1;
         if (c === 95) {
             // "_" between two ASCII letters or digits can neither open nor close emphasis
-            out += prev >= 0 && next >= 0 && isAsciiAlnum(prev) && isAsciiAlnum(next) ? "_" : "\\_";
+            if (!(prev >= 0 && next >= 0 && isAsciiAlnum(prev) && isAsciiAlnum(next)))
+                emit(i, 1);
             continue;
         }
         if (c === 36) {
             // "$": pandoc gfm reads "$...$" as TeX math (an opening "$" has no space after it, a closing one no space before it).
             // An amount "$75" at the start of the text or after a space or tab stays as typed (it can only open, never close, and the
             // tools read amounts from it); every other "$" gets a backslash
-            out += isDigit(next) && (prev === -1 || isBlank(prev) || isEol(prev)) ? "$" : "\\$";
+            if (!(isDigit(next) && (prev === -1 || isBlank(prev) || isEol(prev))))
+                emit(i, 1);
             continue;
         }
         if (c === 58) {
             // ":" before "//" after a letter (an address scheme): shown with a backslash, so no reader finds an address here
-            // (a letter of any script: a tool that changes case can turn "\u017f" into "S")
-            if (i > 0 && isWordChar(s, i - 1) && s.charCodeAt(i + 1) === 47 && s.charCodeAt(i + 2) === 47) {
-                out += "\\\\:";
+            // (a letter of any script: a tool that changes case can turn "ſ" into "S")
+            if (i > 0 && isWordChar(s, i - 1) && next === 47 && s.charCodeAt(i + 2) === 47) {
+                emit(i, 2);
                 continue;
             }
             // ":" that opens an emoji short code (":name:", up to 50 name characters), also when the name runs to the end of the
@@ -212,11 +238,8 @@ function escapeMarkup(s) {
             let j = i + 1;
             while (j < n && j - i <= 50 && isShortcode(s.charCodeAt(j)))
                 j++;
-            if (j > i + 1 && (j === n || s.charCodeAt(j) === 58)) {
-                out += "\\:";
-                continue;
-            }
-            out += ":";
+            if (j > i + 1 && (j === n || s.charCodeAt(j) === 58))
+                emit(i, 1);
             continue;
         }
         if (c === 46) {
@@ -226,25 +249,71 @@ function escapeMarkup(s) {
                 lower(s.charCodeAt(i - 2)) === 119 &&
                 lower(s.charCodeAt(i - 3)) === 119 &&
                 (i === 3 || !isAsciiAlnum(s.charCodeAt(i - 4)))) {
-                out += "\\\\.";
-                continue;
+                emit(i, 2);
             }
-            out += ".";
             continue;
         }
         if (c === 64) {
             // "@" of a mail address: a local part character before it and a domain character after it
             // (letters of any script count: a tool that changes case can turn one into an ASCII letter)
             if (prev >= 0 && (isMailLocal(prev) || isWordChar(s, i - 1)) && next >= 0 && (isAsciiAlnum(next) || next === 95 || next === 45 || isWordChar(s, i + 1))) {
-                out += "\\\\@";
-                continue;
+                emit(i, 2);
             }
-            out += "@";
             continue;
         }
-        out += ch;
     }
-    return out;
+}
+function write(s, kinds) {
+    let out = "";
+    let from = 0;
+    for (let i = 0; i < s.length; i++) {
+        const k = kinds[i];
+        if (k === 0)
+            continue;
+        out += s.slice(from, i) + (k === 2 ? "\\\\" : "\\");
+        from = i;
+    }
+    return out + s.slice(from);
+}
+function escapeMarkup(s) {
+    const kinds = new Uint8Array(s.length);
+    scan(s, (i, k) => {
+        kinds[i] = k;
+    });
+    return write(s, kinds);
+}
+// Run 40S2 (40S-2, 40S-3; the HANDOFF's helper): every tool calls this on each piece of caller text it cuts, joins or changes
+// case, right before the piece enters its template. The piece is read back into its typed characters (each backslash pair of
+// the pass is one escaped character) and scanned again in its own context, as if it were a whole value; every escape it had
+// stays, and the new context can only add escapes. So a cut, a join or a case change can never undo what the pass decided.
+// A lone backslash at the end (its character was cut away) or before a line break (the pass never writes one there) is
+// dropped, so it cannot escape the tool's own next character. On text the pass made and no tool changed, it returns the same
+// text (tested). One pass, linear.
+function escapePiece(piece) {
+    if (piece.length === 0)
+        return piece;
+    let d = "";
+    const had = [];
+    for (let i = 0; i < piece.length; i++) {
+        if (piece.charCodeAt(i) === 92) {
+            if (i + 1 >= piece.length || isEol(piece.charCodeAt(i + 1)))
+                continue;
+            d += piece[i + 1];
+            had.push(1);
+            i++;
+            continue;
+        }
+        d += piece[i];
+        had.push(0);
+    }
+    const kinds = new Uint8Array(d.length);
+    scan(d, (i, k) => {
+        kinds[i] = k;
+    });
+    for (let i = 0; i < d.length; i++)
+        if (had[i] > kinds[i])
+            kinds[i] = had[i];
+    return write(d, kinds);
 }
 // For a tool that cuts typed text (at "!", ".", "?" or at a length): a piece that ends in a lone backslash kept the backslash of an
 // escape whose character was cut away; that backslash would escape the tool's own next character, so it is dropped. A piece
@@ -261,10 +330,6 @@ function escapeText(input) {
     const clean = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "");
     let s = clean.replace(BARE_SCRIPT, "[link removed]").replace(BARE_DATA, "[link removed]");
     s = escapeMarkup(s);
-    // a last line of 1 to 9 digits after a line break: the tool's own "." or ")" right after the value would make it a numbered
-    // item, so the value ends in one backslash, which escapes that character (a visible backslash only if a letter follows)
-    if (/[\n\r][ \t]*\d{1,9}$/.test(s))
-        s += "\\";
     if (looksLikeInstruction(clean) && !QUOTED.test(s))
         s = `“${s}”`;
     return s;
@@ -301,27 +366,34 @@ function escapeDeep(value) {
     }
     return value;
 }
-// JSON answers (REST bodies; GTM Alpha's tool answers are JSON text): JSON writes each backslash of an escaped value as "\\",
-// which a reader of the raw JSON text takes as one plain backslash, leaving the escaped character live again. So, inside JSON
-// strings only, an ASCII punctuation character that follows a backslash of the value is written as a \u escape: the parsed
-// value is unchanged, and the raw text holds no markup character the caller typed. Text without backslashes is unchanged.
-// One pass, linear. Usage: jsonInert(JSON.stringify(value)).
+// JSON answers (REST bodies, MCP bodies; GTM Alpha's tool answers are JSON text): JSON writes each backslash of an escaped value
+// as "\\", which a reader of the raw JSON text takes as one plain backslash, leaving the escaped character live again. So,
+// inside JSON strings only, the ASCII punctuation character a value backslash escapes is written as a \u escape: the parsed
+// value is unchanged, and the raw text holds no markup character the caller typed.
+// Run 40S2 (40S-5 and the ICP auditor's finding 2): (1) backslash pairs are counted, so only the character a backslash escapes
+// is written this way, never the tool's own next character (its "**" stays as it is); (2) JSON writes a line feed, a carriage
+// return, a tab, a lone surrogate or a \u escape with a letter or digit last ("\n", "\ud800", "\"), so an "@" or ":" right
+// after one would follow a letter or digit in the raw text ("n@host" is a mail address there): that "@" or ":" is written as
+// a \u escape too. JSON without any backslash is unchanged. One pass, linear. Usage: jsonInert(JSON.stringify(value)).
 const isPunct = (c) => (c >= 33 && c <= 47) || (c >= 58 && c <= 64) || (c >= 91 && c <= 96) || (c >= 123 && c <= 126);
+const hex = (v) => "\\u" + v.toString(16).padStart(4, "0");
 function jsonInert(json) {
-    if (json.indexOf("\\\\") < 0)
+    if (json.indexOf("\\") < 0)
         return json;
     let out = "";
     let i = 0;
     const n = json.length;
     let inString = false;
-    let afterBackslash = false; // the previous value character inside this string was a backslash (written as "\\")
+    let pending = false; // an odd value backslash came last: it escapes the next value character
+    let afterSeq = false; // the raw text written last is a JSON escape ending in a letter or digit
     while (i < n) {
         const c = json.charCodeAt(i);
         if (!inString) {
             out += json[i];
             if (c === 34) {
                 inString = true;
-                afterBackslash = false;
+                pending = false;
+                afterSeq = false;
             }
             i++;
             continue;
@@ -353,14 +425,27 @@ function jsonInert(json) {
             v = c;
             i++;
         }
-        if (afterBackslash && v >= 0 && isPunct(v)) {
-            out += "\\u00" + v.toString(16).padStart(2, "0");
-            // a backslash written this way still escapes what follows it in the value ("\\@" of an address: the "@" too)
-            afterBackslash = v === 92;
+        if (pending) {
+            pending = false;
+            if (v >= 0 && isPunct(v)) {
+                out += hex(v);
+                afterSeq = true;
+                continue;
+            }
+        }
+        else if (v === 92) {
+            out += raw;
+            pending = true;
+            afterSeq = false;
+            continue;
+        }
+        if (afterSeq && (v === 64 || v === 58)) {
+            out += hex(v);
+            afterSeq = true;
             continue;
         }
         out += raw;
-        afterBackslash = v === 92;
+        afterSeq = raw.length > 1 && /[A-Za-z0-9]$/.test(raw);
     }
     return out;
 }

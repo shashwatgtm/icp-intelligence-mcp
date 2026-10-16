@@ -1,4 +1,5 @@
 export declare function escapeMarkup(s: string): string;
+export declare function escapePiece(piece: string): string;
 export declare function dropLoneBackslash(piece: string): string;
 export declare function escapeText(input: string): string;
 export declare function quoteIfInstruction(text: string): string;
