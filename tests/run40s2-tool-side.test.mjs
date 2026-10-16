@@ -266,3 +266,37 @@ test("jsonInert: pairs counted, the tool's own markup kept, '@' and ':' after a 
   }
   assert.equal(mod.jsonInert('{"a":"plain [x] <b> text\\nnext line"}'), '{"a":"plain [x] <b> text\\nnext line"}');
 });
+
+// Run 40S2 fix round, tests first: the wave 1 auditors' findings (ICP F1 to F3, IMPACT F1, F2, F4, GTM Alpha F1 to F4).
+test("fix round: lone CR, '@.', a combining mark before '@', an open reference, 'www' at the end or before '-' or '_' (unit)", () => {
+  const LIVE2 = [/[A-Za-z0-9._+̀-ͯ-]@\.?evil/, /https?:\/\/evil/, /(?:^|[^A-Za-z0-9\\])www[.\-_]?$/m, /(?:^|[^A-Za-z0-9\\])www[-_]evil/];
+  const live2 = (t) => LIVE2.filter((re) => { const m = re.exec(t); if (!m) return false; let k = 0; for (let i = m.index + (m[0].length > 1 && /[A-Za-z0-9]/.test(m[0][0]) ? 1 : 0) - 1; i >= 0 && t[i] === "\\"; i--) k++; return k % 2 === 0; }).map(String);
+  const cases = [
+    "ops a" + CR + "@evil.example", "qz@" + CR + "evil.example", "https" + CR + "://evil.example/c", "https:" + CR + "//evil.example", "www" + CR + ".evil.example",
+    "ops@.evil.example", "x www@.evil.example y", "qz" + S(0x301) + "@evil.example", "see www-evil.example now", "see www_evil.example now", "LinkedIn and www",
+  ];
+  const bad = [];
+  for (const v of cases) {
+    // pandoc drops a lone CR before it reads the text: the halves on both sides must not join into an address
+    const o = mod.escapeText(v).replace(/\r(?!\n)/g, "");
+    if (live2(o + ".").length) bad.push(`${JSON.stringify(v)} -> ${JSON.stringify(o)}`);
+  }
+  // emoji codes split by a lone CR, and a character reference the tool's own ";" would complete
+  for (const v of [":rocket" + CR + ":", ":s" + CR + "mile:", "x :smile" + CR + ": y"]) { const o = mod.escapeText(v).replace(/\r(?!\n)/g, ""); if (/(?<!\\):[a-z_]+:/.test(o)) bad.push(JSON.stringify(o)); }
+  for (const v of ["&#58", "a &colon", "&#x3a"]) if (!mod.escapeText(v).includes(S(92) + "&")) bad.push(`reference ${JSON.stringify(v)}`);
+  assert.deepEqual(bad, []);
+  // a "$" amount after a JSON escape cannot pair in the raw JSON text
+  assert.ok(!/\\[ntr]\$/.test(mod.jsonInert(JSON.stringify({ a: mod.escapeText("x" + NL + "$5 and" + S(9) + "$7") }))));
+});
+
+test("fix round: a refusal joins made up key names escaped as one name (hosted MCP)", async () => {
+  const bad = [];
+  for (const path of [["www", "evil", "example"], ["q", "@evil", "example"], ["x", "https:", "", "evil.example"]]) {
+    let a = "y".repeat(4100);
+    for (const k of [...path].reverse()) a = { [k]: a };
+    const raw = await rawCall("tools/call", { name: tools[0].name, arguments: a });
+    for (const f of liveIn(raw)) bad.push(`raw ${path.join(".")}: ${f}`);
+    try { for (const f of liveIn(textOf(parse(raw)))) bad.push(`${path.join(".")}: ${f}`); } catch { /* not JSON */ }
+  }
+  assert.deepEqual(bad, []);
+});
