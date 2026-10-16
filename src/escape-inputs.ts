@@ -414,12 +414,19 @@ function escapeDeepOnce<T>(value: T): T {
 // a \u escape too. JSON without any backslash is unchanged. One pass, linear. Usage: jsonInert(JSON.stringify(value)).
 const isPunct = (c: number) => (c >= 33 && c <= 47) || (c >= 58 && c <= 64) || (c >= 91 && c <= 96) || (c >= 123 && c <= 126);
 const hex = (v: number) => "\\u" + v.toString(16).padStart(4, "0");
+// Run 40S3 (40S2-2): the same decisions as before, written into a buffer of UTF-16 code units in place of joining strings (a
+// tool answer of 40 MB with a million escapes took 1 to 2 seconds here, most of it in string joins and garbage collection).
+// The output is the same text, character for character (tested against the 40S2 version on random and long inputs).
+// every character written this way is ASCII punctuation (below 128), so its escape is "\\u00" and two hex digits
+const HEX_DIGITS = Uint16Array.from("0123456789abcdef", (ch) => ch.charCodeAt(0));
+const EMPTY_UNITS = new Uint16Array(0);
 export function jsonInert(json: string): string {
   if (json.indexOf("\\") < 0) return json;
-  let out = "";
-  let from = 0; // json[from, at) is copied as it is when the next change is written
-  let i = 0;
   const n = json.length;
+  let out = EMPTY_UNITS; // made at the first change; json[from, at) is copied into it when the next change is written
+  let len = 0;
+  let from = 0;
+  let i = 0;
   let inString = false;
   let pending = false; // an odd value backslash came last: it escapes the next value character
   let afterSeq = false; // the raw text written last is a JSON escape ending in a letter or digit
@@ -468,12 +475,44 @@ export function jsonInert(json: string): string {
     }
     if (!write && afterSeq && (v === 64 || v === 58 || v === 36)) write = true; // Run 40S2 fix round (IMPACT F4): "$" too
     if (write) {
-      out += json.slice(from, at) + hex(v);
+      // copy json[from, at), then the six characters of the \u escape
+      const need = len + (at - from) + 6;
+      if (need > out.length) {
+        const bigger = new Uint16Array(Math.max(need, out.length === 0 ? n + (n >> 1) + 16 : out.length * 2));
+        bigger.set(out.subarray(0, len));
+        out = bigger;
+      }
+      for (let k = from; k < at; k++) out[len++] = json.charCodeAt(k);
+      out[len++] = 92;
+      out[len++] = 117;
+      out[len++] = 48;
+      out[len++] = 48;
+      out[len++] = HEX_DIGITS[v >> 4];
+      out[len++] = HEX_DIGITS[v & 15];
       from = i;
       afterSeq = true;
       continue;
     }
     afterSeq = seq && isAsciiAlnum(json.charCodeAt(i - 1));
   }
-  return from === 0 ? json : out + json.slice(from);
+  if (out.length === 0) return json;
+  const need = len + (n - from);
+  if (need > out.length) {
+    const bigger = new Uint16Array(need);
+    bigger.set(out.subarray(0, len));
+    out = bigger;
+  }
+  for (let k = from; k < n; k++) out[len++] = json.charCodeAt(k);
+  return unitsToString(out, len);
+}
+// Node's Buffer reads UTF-16 code units as they are (a lone surrogate stays a lone surrogate) and is fast; elsewhere, or on a
+// big endian machine, String.fromCharCode in pieces gives the same text
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const NodeBuffer: any = (globalThis as any).Buffer;
+const LITTLE_ENDIAN = new Uint8Array(new Uint16Array([1]).buffer)[0] === 1;
+function unitsToString(u: Uint16Array, len: number): string {
+  if (NodeBuffer && LITTLE_ENDIAN) return NodeBuffer.from(u.buffer, u.byteOffset, len * 2).toString("utf16le");
+  const parts: string[] = [];
+  for (let k = 0; k < len; k += 8192) parts.push(String.fromCharCode.apply(null, u.subarray(k, Math.min(len, k + 8192)) as unknown as number[]));
+  return parts.join("");
 }
