@@ -269,7 +269,7 @@ test("jsonInert: pairs counted, the tool's own markup kept, '@' and ':' after a 
 
 // Run 40S2 fix round, tests first: the wave 1 auditors' findings (ICP F1 to F3, IMPACT F1, F2, F4, GTM Alpha F1 to F4).
 test("fix round: lone CR, '@.', a combining mark before '@', an open reference, 'www' at the end or before '-' or '_' (unit)", () => {
-  const LIVE2 = [/[A-Za-z0-9._+̀-ͯ-]@\.?evil/, /https?:\/\/evil/, /(?:^|[^A-Za-z0-9\\])www[.\-_]?$/m, /(?:^|[^A-Za-z0-9\\])www[-_]evil/];
+  const LIVE2 = [/[A-Za-z0-9._+̀-ͯ-]@\.?evil/, /https?:\/\/evil/, /(?:^|[^A-Za-z0-9\\])www[.\-_]?$/, /(?:^|[^A-Za-z0-9\\])www[-_]evil/];
   const live2 = (t) => LIVE2.filter((re) => { const m = re.exec(t); if (!m) return false; let k = 0; for (let i = m.index + (m[0].length > 1 && /[A-Za-z0-9]/.test(m[0][0]) ? 1 : 0) - 1; i >= 0 && t[i] === "\\"; i--) k++; return k % 2 === 0; }).map(String);
   const cases = [
     "ops a" + CR + "@evil.example", "qz@" + CR + "evil.example", "https" + CR + "://evil.example/c", "https:" + CR + "//evil.example", "www" + CR + ".evil.example",

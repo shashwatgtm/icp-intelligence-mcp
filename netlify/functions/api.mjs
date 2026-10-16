@@ -7,7 +7,7 @@
 
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { escapeText, jsonInert } from "../../src/escape-inputs.ts";
+import { escapeText, escapePiece, jsonInert } from "../../src/escape-inputs.ts";
 import { createServer } from "../../src/index.ts";
 
 const MAX_BODY_BYTES = 32000;
@@ -255,7 +255,7 @@ export default async (req, context) => {
       const subProps = (props[parent] && props[parent].properties) || {};
       const obj = {};
       for (const [sk, sv] of Object.entries(sub)) {
-        const c = coerce(subProps[sk] || { type: "string" }, sv, `${escapeText(parent)}.${escapeText(sk)}`, partErrors); // Run 40S2: a part name the caller made up is repeated escaped
+        const c = coerce(subProps[sk] || { type: "string" }, sv, escapePiece(`${escapeText(parent)}.${escapeText(sk)}`), partErrors); // Run 40S2: a part name the caller made up is repeated escaped
         if (c !== undefined) obj[sk] = c;
       }
       if (Object.keys(obj).length) input[parent] = obj;

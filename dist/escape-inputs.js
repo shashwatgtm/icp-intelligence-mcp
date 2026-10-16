@@ -111,7 +111,8 @@ const isMailLocal = (c) => isAsciiAlnum(c) || c === 46 || c === 43 || c === 45 |
 const isShortcode = (c) => isAsciiAlnum(c) || c === 95 || c === 43 || c === 45;
 const lower = (c) => (c >= 65 && c <= 90 ? c + 32 : c);
 // a letter or digit of any script (the character at i, a whole code point when it is a surrogate pair)
-const WORD = /[\p{L}\p{N}]/u;
+// Run 40S2 fix round (GTM Alpha F4): combining marks count too (pandoc composes a letter and its mark into one letter)
+const WORD = /[\p{L}\p{N}\p{M}]/u;
 const isWordChar = (s, i) => {
     const c = s.charCodeAt(i);
     if (c < 128)
@@ -163,6 +164,16 @@ function scan(s, emit) {
             i = j - 1;
             continue;
         }
+        // Run 40S2 fix round (ICP F2, F3): "www" (any case, not after a letter or digit) before "-" or "_" (pandoc gfm links
+        // "www-host" and "www_host"), or at the end of the value (the tool's own "." may follow): a visible backslash
+        if ((c === 45 || c === 95) && isWww(s, i)) {
+            emit(i, 2);
+            continue;
+        }
+        if ((c === 119 || c === 87) && i + 1 > last && isWww(s, i + 1)) {
+            emit(i, 1);
+            continue;
+        }
         if (c === 45 || c === 43) {
             // "-" or "+" before a character that is not a letter or digit: a list item, a rule, a heading underline, a delimiter row
             // (only the first of a run: a line can start inside a run only where a tool cuts in it, and escapePiece reads such a piece)
@@ -207,7 +218,9 @@ function scan(s, emit) {
             let j = i + 1;
             while (j < n && j - i <= 33 && (isAsciiAlnum(s.charCodeAt(j)) || s.charCodeAt(j) === 35))
                 j++;
-            if (j > i + 1 && j < n && s.charCodeAt(j) === 59)
+            // Run 40S2 fix round (GTM Alpha F2): also a reference that runs to the end (the tool's own ";" may follow): a number,
+            // or a name of two or more characters (no entity name has one letter, so "AT&T" stays as typed)
+            if (j > i + 1 && ((j > last && (s.charCodeAt(i + 1) === 35 || j > i + 2)) || (j < n && s.charCodeAt(j) === 59)))
                 emit(i, 1);
             continue;
         }
@@ -260,12 +273,21 @@ function scan(s, emit) {
         if (c === 64) {
             // "@" of a mail address: a local part character before it and a domain character after it
             // (letters of any script count: a tool that changes case can turn one into an ASCII letter)
-            if (prev >= 0 && (isMailLocal(prev) || isWordChar(s, i - 1)) && next >= 0 && (isAsciiAlnum(next) || next === 95 || next === 45 || isWordChar(s, i + 1))) {
+            // Run 40S2 fix round (IMPACT F2, GTM Alpha F3): a "." after "@" counts too (micromark and mdast link "q@.host")
+            if (prev >= 0 && (isMailLocal(prev) || isWordChar(s, i - 1)) && next >= 0 && (isAsciiAlnum(next) || next === 95 || next === 45 || next === 46 || isWordChar(s, i + 1))) {
                 emit(i, 2);
             }
             continue;
         }
     }
+}
+// "www" (any case) right before position k, not after an ASCII letter or digit
+function isWww(s, k) {
+    return (k >= 3 &&
+        lower(s.charCodeAt(k - 1)) === 119 &&
+        lower(s.charCodeAt(k - 2)) === 119 &&
+        lower(s.charCodeAt(k - 3)) === 119 &&
+        (k === 3 || !isAsciiAlnum(s.charCodeAt(k - 4))));
 }
 function write(s, kinds) {
     let out = "";
@@ -331,7 +353,9 @@ function dropLoneBackslash(piece) {
 // The text a tool may repeat: hidden characters removed, bare script and data addresses replaced (run 22), then escaped;
 // an instruction-like text is quoted as the caller's own.
 function escapeText(input) {
-    const clean = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "");
+    // Run 40S2 fix round (IMPACT F1, GTM Alpha F1): a lone carriage return becomes a line feed (pandoc drops a lone CR before it
+    // reads the text, which would join the characters on both sides; CommonMark reads it as a line end, as this pass does)
+    const clean = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "").replace(/\r(?!\n)/g, "\n");
     let s = clean.replace(BARE_SCRIPT, "[link removed]").replace(BARE_DATA, "[link removed]");
     s = escapeMarkup(s);
     if (looksLikeInstruction(clean) && !QUOTED.test(s))
@@ -437,8 +461,8 @@ function jsonInert(json) {
             afterSeq = false;
             continue;
         }
-        if (!write && afterSeq && (v === 64 || v === 58))
-            write = true;
+        if (!write && afterSeq && (v === 64 || v === 58 || v === 36))
+            write = true; // Run 40S2 fix round (IMPACT F4): "$" too
         if (write) {
             out += json.slice(from, at) + hex(v);
             from = i;

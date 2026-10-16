@@ -5,7 +5,7 @@
 
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createServer } from "../../src/index.ts";
-import { escapeText, jsonInert } from "../../src/escape-inputs.ts";
+import { escapeText, escapePiece, jsonInert } from "../../src/escape-inputs.ts";
 
 // Run 11 addendum 2 (R11-A2-3), addendum 3 (R11-A3-9) and addendum 4 (R11-A4-1): limits and input checks before the SDK,
 // so the tool definitions in tools/list are unchanged and a request inside the limits runs exactly as before.
@@ -116,17 +116,18 @@ function wrongType(schema, value, name, out, isItem) {
 const count = (n) => n.toLocaleString("en-US");
 
 // Every text input over its limit, at any depth (a list of competitors is checked item by item).
-function tooLong(value, name, out, limit) {
+function tooLong(value, name, out, limit, keyed) {
   if (typeof value === "string") {
     if (value.length > limit) {
+      // Run 40S2 fix round (ICP F1): a name that joins escaped key names with "." is read again as one piece
       out.push(
-        name + " is longer than " + count(limit) + " characters. " + (limit > MAX_TEXT ? "Shorten it or split it into parts." : "Shorten it.")
+        (keyed ? escapePiece(name) : name) + " is longer than " + count(limit) + " characters. " + (limit > MAX_TEXT ? "Shorten it or split it into parts." : "Shorten it.")
       );
     }
   } else if (Array.isArray(value)) {
-    value.forEach((v, i) => tooLong(v, name + "[" + i + "]", out, MAX_TEXT));
+    value.forEach((v, i) => tooLong(v, name + "[" + i + "]", out, MAX_TEXT, keyed));
   } else if (value && typeof value === "object") {
-    for (const key of Object.keys(value)) tooLong(value[key], name ? name + "." + escapeText(key) : escapeText(key), out, MAX_TEXT);
+    for (const key of Object.keys(value)) tooLong(value[key], name ? name + "." + escapeText(key) : escapeText(key), out, MAX_TEXT, Boolean(name));
   }
   return out;
 }
