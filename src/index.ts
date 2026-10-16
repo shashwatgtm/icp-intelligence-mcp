@@ -6,7 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { neutraliseDeep } from './echo-safe.ts';
+import { cleanDeep, escapeDeep } from './escape-inputs.ts';
 
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -2525,10 +2525,10 @@ export function createServer(): Server {
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
     // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
-    // has its text arguments made inert once, before any tool reads them. The words stay; markup, tracking images, script
-    // links, hidden characters and fake chat markers do not stay live (src/echo-safe.ts).
-    const safeArgs = neutraliseDeep(request.params.arguments) as Record<string, unknown> | undefined;
-    const problem = checkRequiredInputs(request.params.name, safeArgs);
+    // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
+    const typed = cleanDeep(request.params.arguments) as Record<string, unknown> | undefined;
+    const problem = checkRequiredInputs(request.params.name, typed);
+    const safeArgs = escapeDeep(typed);
     if (problem) {
       return { content: [{ type: 'text', text: problem }], isError: true };
     }

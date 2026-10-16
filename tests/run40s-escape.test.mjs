@@ -5,7 +5,7 @@
 // with pandoc gfm and commonmark, micromark and mdast: work/run40s/prop/). Neutral targets only (evil.example, B81).
 import test from "node:test";
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const G = existsSync(new URL("../netlify/functions/mcp-sse.js", import.meta.url));
 const mcp = (await import(new URL(G ? "../netlify/functions/mcp-sse.js" : "../netlify/functions/mcp.mjs", import.meta.url))).default;
@@ -66,9 +66,13 @@ const argsWith = (t, k, type, v) => {
 const strings = (v) => typeof v === "string" ? [v] : Array.isArray(v) ? v.flatMap(strings) : v && typeof v === "object" ? Object.entries(v).flatMap(([k, x]) => [k, ...strings(x)]) : [];
 const textOf = (res) => strings(res.result ? res.result : res.error).join("\n");
 
+// the hostile inputs of the run 20 and run 22 echo tests this design replaces (tests/fixtures/run40s-old-echo-inputs.json)
+const OLD = existsSync(new URL("./fixtures/run40s-old-echo-inputs.json", import.meta.url)) ? JSON.parse(readFileSync(new URL("./fixtures/run40s-old-echo-inputs.json", import.meta.url), "utf8")) : [];
+
 test("the escape pass: every escaped value is inert by itself (unit)", () => {
   assert.ok(mod, "the escape module is missing");
-  for (const v of VALUES) {
+  assert.ok(OLD.length > 50, "the old echo inputs are missing");
+  for (const v of [...VALUES, ...OLD.map((o) => o.replace(/evil\.com|attacker\.example|example\.com/g, "evil.example"))]) {
     const o = mod.escapeText(v);
     assert.deepEqual(liveIn(o), [], `${JSON.stringify(v)} -> ${JSON.stringify(o)}`);
   }
@@ -90,6 +94,16 @@ test("no tool repeats live markup from any text field (MCP)", async () => {
     for (const f of liveIn(out)) bad.push(`${t.name}.${k}: ${f}`);
   }
   assert.deepEqual(bad.slice(0, 20), [], `${bad.length} live`);
+});
+
+test("JSON answers keep the escapes when the raw JSON text is read (unit)", () => {
+  for (const v of [...VALUES, ...OLD]) {
+    const j = JSON.stringify({ a: mod.escapeText(v), b: ["x", mod.escapeText(v)] });
+    const k = mod.jsonInert(j);
+    assert.equal(JSON.stringify(JSON.parse(k)), j);
+    assert.deepEqual(liveIn(k), [], `${JSON.stringify(v)} -> ${k}`);
+  }
+  assert.equal(mod.jsonInert('{"a":"plain [x] <b> text"}'), '{"a":"plain [x] <b> text"}');
 });
 
 test("no tool repeats live markup from any text field (REST)", async () => {

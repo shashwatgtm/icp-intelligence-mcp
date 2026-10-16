@@ -7,6 +7,7 @@
 
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { escapeText, jsonInert } from "../../src/escape-inputs.ts";
 import { createServer } from "../../src/index.ts";
 
 const MAX_BODY_BYTES = 32000;
@@ -187,7 +188,8 @@ export default async (req, context) => {
       }
       return htmlPage(payload.ok ? payload.title : "Could not run the tool", body, status);
     }
-    return new Response(JSON.stringify(payload), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": JSON_CSP } });
+    // Run 40S: the escapes stay escapes when the JSON text itself is read (src/escape-inputs.ts jsonInert)
+    return new Response(jsonInert(JSON.stringify(payload)), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...SECURITY, "Content-Security-Policy": JSON_CSP } });
   };
 
   if (req.method !== "POST") {
@@ -263,7 +265,7 @@ export default async (req, context) => {
     if (errors.length) return reply(400, { ok: false, errors });
     const result = await client.callTool({ name: tool.name, arguments: args });
     const text = (result.content || []).filter((c) => c.type === "text").map((c) => c.text).join("\n\n");
-    return reply(result.isError ? 422 : 200, { ok: !result.isError, tool: tool.name, title: tool.title || tool.name, text, error: result.isError ? text : undefined, ignored_fields: ignored.length ? ignored : undefined });
+    return reply(result.isError ? 422 : 200, { ok: !result.isError, tool: tool.name, title: tool.title || tool.name, text, error: result.isError ? text : undefined, ignored_fields: ignored.length ? ignored.map(escapeText) : undefined });
   } catch {
     return reply(500, { ok: false, error: "The tool could not run. Please try again." });
   } finally {

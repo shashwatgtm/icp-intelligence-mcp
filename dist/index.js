@@ -6,7 +6,7 @@ exports.createServer = createServer;
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
-const echo_safe_ts_1 = require("./echo-safe.js");
+const escape_inputs_ts_1 = require("./escape-inputs.js");
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
 // =============================================================================
@@ -2385,10 +2385,10 @@ function createServer() {
     }));
     server.setRequestHandler(types_js_1.CallToolRequestSchema, async (request) => {
         // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
-        // has its text arguments made inert once, before any tool reads them. The words stay; markup, tracking images, script
-        // links, hidden characters and fake chat markers do not stay live (src/echo-safe.ts).
-        const safeArgs = (0, echo_safe_ts_1.neutraliseDeep)(request.params.arguments);
-        const problem = checkRequiredInputs(request.params.name, safeArgs);
+        // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
+        const typed = (0, escape_inputs_ts_1.cleanDeep)(request.params.arguments);
+        const problem = checkRequiredInputs(request.params.name, typed);
+        const safeArgs = (0, escape_inputs_ts_1.escapeDeep)(typed);
         if (problem) {
             return { content: [{ type: 'text', text: problem }], isError: true };
         }
