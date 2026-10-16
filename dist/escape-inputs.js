@@ -9,10 +9,10 @@
 //   always:            \ [ ] < > ! ` * ~ |
 //   "_"                unless it sits between two ASCII letters or digits (there it can never open or close emphasis)
 //   "$"                unless it starts an amount ("$75,000" after a space stays; "$x$" would be math in pandoc gfm)
-//   "#"                after a line start, a space or a tab when its run ends the word (it could open or close a heading)
-//   ":"                when it opens an emoji short code (":rocket:" is an emoji in pandoc gfm)
-//   first character of a line (after spaces and tabs): "-" or "+" that would start a list item,
-//                      a line of "-" or "=" (a heading underline or a rule), and the "." or ")" after the digits of a numbered item
+//   ":"                when it opens an emoji short code (":rocket:" is an emoji in pandoc gfm), or a name running to the end
+//   block markers wherever they stand (the tools split typed text and start a line with any piece): a run of "#" before a
+//                      space, tab or end; "-" or "+" before a space, tab or end; the first of three "-"; the first "=" of a
+//                      run or one before a space, tab or end; the "." or ")" after up to 9 digits before a space, tab or end
 // A bare web or mail address cannot be escaped with an invisible backslash (some readers find addresses in the finished
 // text), so the answer shows one small backslash in it: "https\://", "www\.", "name\@example.com". The words stay.
 // Also kept from the run 22 safeguard, unchanged: hidden and control characters are removed; a bare "javascript:", "vbscript:"
@@ -26,8 +26,8 @@ exports.quoteIfInstruction = quoteIfInstruction;
 exports.cleanDeep = cleanDeep;
 exports.escapeDeep = escapeDeep;
 exports.jsonInert = jsonInert;
-const HIDDEN = /[​-‏‪-‮⁠-⁤⁦-⁩﻿\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
-const HIDDEN_MORE = /[­͏؜᠎\u{E0000}-\u{E007F}\u{E0100}-\u{E01EF}]/gu;
+const HIDDEN = /[\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
+const HIDDEN_MORE = /[\u00ad\u034f\u061c\u180e\u{E0000}-\u{E007F}\u{E0100}-\u{E01EF}]/gu;
 // ---- schemes written with tabs, newlines, entities or case changes (the run 22 rule, unchanged) ----
 const SEP = "(?:[\\s\\u0000-\\u001f]|&(?:Tab|NewLine);|&#0{0,10}(?:9|10|13);?|&#x0{0,10}(?:9|a|d);?){0,12}";
 const COLON = "(?::|&colon;|&#0{0,10}58;?|&#x0{0,10}3a;?)";
@@ -107,68 +107,22 @@ const lower = (c) => (c >= 65 && c <= 90 ? c + 32 : c);
 function escapeMarkup(s) {
     const n = s.length;
     let out = "";
-    let lineStart = true;
     for (let i = 0; i < n; i++) {
         const ch = s[i];
         const c = s.charCodeAt(i);
-        if (isEol(c)) {
-            out += ch;
-            lineStart = true;
-            continue;
-        }
-        if (lineStart) {
-            if (isBlank(c)) {
-                out += ch;
-                continue;
-            }
-            lineStart = false;
-            const next = i + 1 < n ? s.charCodeAt(i + 1) : -1;
-            const endsHere = next === -1 || isBlank(next) || isEol(next);
-            if (c === 45 || c === 61) {
-                // "-" a list item or a line of "-" (rule, heading underline); "=" a line of "=" (heading underline)
-                let only = true;
-                for (let j = i; j < n && !isEol(s.charCodeAt(j)); j++) {
-                    const d = s.charCodeAt(j);
-                    if (d !== c && !isBlank(d)) {
-                        only = false;
-                        break;
-                    }
-                }
-                if (only || (c === 45 && endsHere)) {
-                    out += "\\" + ch;
-                    continue;
-                }
-            }
-            else if (c === 43) {
-                if (endsHere) {
-                    out += "\\+";
-                    continue;
-                }
-            }
-            else if (isDigit(c)) {
-                // a numbered item: up to 9 digits, then "." or ")", then a space, a tab or the end of the line
-                let j = i;
-                while (j < n && j - i < 10 && isDigit(s.charCodeAt(j)))
-                    j++;
-                const p = j < n ? s.charCodeAt(j) : -1;
-                const q = j + 1 < n ? s.charCodeAt(j + 1) : -1;
-                if (j - i <= 9 && (p === 46 || p === 41) && (q === -1 || isBlank(q) || isEol(q))) {
-                    out += s.slice(i, j) + "\\" + s[j];
-                    i = j;
-                    continue;
-                }
-            }
-        }
+        const prev = i > 0 ? s.charCodeAt(i - 1) : -1;
+        const next = i + 1 < n ? s.charCodeAt(i + 1) : -1;
+        // block markers are escaped wherever they stand, not only at a line start: the tools split typed text at ".", ",", ";",
+        // "!", "?" and line breaks and put each trimmed piece on a line of its own, so any place can become a line start
+        const endsHere = next === -1 || isBlank(next) || isEol(next);
         if (c === 35) {
-            // "#" at the start of a line or after a space or tab, its run then followed by a space, a tab or the end: it could open a
-            // heading, or close one (a heading drops a last run of "#" after a space)
-            const prev = i > 0 ? s.charCodeAt(i - 1) : -1;
-            if (prev === -1 || isBlank(prev) || isEol(prev) || s.charCodeAt(i - 1) === 35) {
+            // "#" run then a space, a tab or the end: it could open a heading, or close one (a last run of "#" after a space)
+            if (prev !== 35) {
                 let j = i;
                 while (j < n && s.charCodeAt(j) === 35)
                     j++;
                 const after = j < n ? s.charCodeAt(j) : -1;
-                if (prev !== 35 && (after === -1 || isBlank(after) || isEol(after))) {
+                if (after === -1 || isBlank(after) || isEol(after)) {
                     out += "\\#";
                     continue;
                 }
@@ -176,14 +130,43 @@ function escapeMarkup(s) {
             out += "#";
             continue;
         }
+        if (c === 45) {
+            // "-" then a space, a tab or the end (a list item), or the first of three or more (a rule or a heading underline)
+            if (endsHere || (prev !== 45 && next === 45 && i + 2 < n && s.charCodeAt(i + 2) === 45)) {
+                out += "\\-";
+                continue;
+            }
+            out += "-";
+            continue;
+        }
+        if (c === 43) {
+            out += endsHere ? "\\+" : "+";
+            continue;
+        }
+        if (c === 61) {
+            // "=": the first of a run, or one before a space, a tab or the end (a heading underline)
+            out += prev !== 61 && (next === 61 || endsHere) ? "\\=" : "=";
+            continue;
+        }
+        if (isDigit(c) && !isDigit(prev)) {
+            // a numbered item: up to 9 digits, then "." or ")", then a space, a tab or the end
+            let j = i;
+            while (j < n && j - i < 10 && isDigit(s.charCodeAt(j)))
+                j++;
+            const p = j < n ? s.charCodeAt(j) : -1;
+            const q = j + 1 < n ? s.charCodeAt(j + 1) : -1;
+            if (j - i <= 9 && (p === 46 || p === 41) && (q === -1 || isBlank(q) || isEol(q))) {
+                out += s.slice(i, j) + "\\" + s[j];
+                i = j;
+                continue;
+            }
+        }
         if (ALWAYS.has(ch)) {
             out += "\\" + ch;
             continue;
         }
         if (c === 95) {
             // "_" between two ASCII letters or digits can neither open nor close emphasis
-            const prev = i > 0 ? s.charCodeAt(i - 1) : -1;
-            const next = i + 1 < n ? s.charCodeAt(i + 1) : -1;
             out += prev >= 0 && next >= 0 && isAsciiAlnum(prev) && isAsciiAlnum(next) ? "_" : "\\_";
             continue;
         }
@@ -191,8 +174,6 @@ function escapeMarkup(s) {
             // "$": pandoc gfm reads "$...$" as TeX math (an opening "$" has no space after it, a closing one no space before it).
             // An amount "$75" at the start of the text or after a space or tab stays as typed (it can only open, never close, and the
             // tools read amounts from it); every other "$" gets a backslash
-            const prev = i > 0 ? s.charCodeAt(i - 1) : -1;
-            const next = i + 1 < n ? s.charCodeAt(i + 1) : -1;
             out += isDigit(next) && (prev === -1 || isBlank(prev) || isEol(prev)) ? "$" : "\\$";
             continue;
         }
@@ -202,11 +183,12 @@ function escapeMarkup(s) {
                 out += "\\\\:";
                 continue;
             }
-            // ":" that opens an emoji short code (":name:", up to 50 name characters)
+            // ":" that opens an emoji short code (":name:", up to 50 name characters), also when the name runs to the end of the
+            // text (the tool's own text after it may hold the closing ":")
             let j = i + 1;
             while (j < n && j - i <= 50 && isShortcode(s.charCodeAt(j)))
                 j++;
-            if (j > i + 1 && j < n && s.charCodeAt(j) === 58) {
+            if (j > i + 1 && (j === n || s.charCodeAt(j) === 58)) {
                 out += "\\:";
                 continue;
             }
@@ -228,8 +210,6 @@ function escapeMarkup(s) {
         }
         if (c === 64) {
             // "@" of a mail address: a local part character before it and a domain character after it
-            const prev = i > 0 ? s.charCodeAt(i - 1) : -1;
-            const next = i + 1 < n ? s.charCodeAt(i + 1) : -1;
             if (prev >= 0 && isMailLocal(prev) && next >= 0 && (isAsciiAlnum(next) || next === 95 || next === 45)) {
                 out += "\\\\@";
                 continue;
