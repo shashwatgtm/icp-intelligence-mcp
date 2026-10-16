@@ -143,3 +143,11 @@ test("fix round (IMPACT auditor F1): impact_full_audit writes its own placeholde
   const p = textOf(await call("tools/call", { name: tool.name, arguments: { product_description: "a route planner", target_customer: "fleet managers", problem_solved: "late deliveries", key_differentiation: "[live] data for every lane" } }));
   assert.ok(!/The \[live\]/.test(p), "a typed bracket stays escaped");
 });
+
+test("fix round (GTM Alpha auditor F2): characters whose NFC form is markup (U+1FEF to a backtick, U+037E to a semicolon) are escaped like that markup", () => {
+  const V = String.fromCharCode(0x1fef), Q = String.fromCharCode(0x37e);
+  const e = mod.escapeText(`a ${V}qzcode${V} b ${V}${V}${V}`);
+  assert.equal(e.normalize("NFC").match(/(?<!\\)`/g), null, JSON.stringify(e));
+  assert.ok(mod.escapeText(`x &#58${Q} y`).includes("\\&"), "a reference that U+037E completes is escaped");
+  assert.equal(mod.escapeText("plain words"), "plain words");
+});
