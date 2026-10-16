@@ -111,6 +111,63 @@ test("a piece the tools cut from an escaped text never starts with a live block 
   assert.deepEqual(bad, []);
 });
 
+// Wave 1 auditors (run 40S): (1) a character reference typed for ":" "." "@" or "/" ("https&#58;//...") was left as typed and
+// mdast (GFM) decodes it into finished text, where it finds an address; (2) the tools cut typed text at "!" or "." (or at a
+// fixed length) and a piece kept the backslash of an escape whose character was cut away, so the lone backslash escaped the
+// tool's own next character (its bold, its quote mark). Tests first for both.
+test("a typed character reference is shown as typed, never decoded (unit)", () => {
+  const AMP = String.fromCharCode(38);
+  for (const body of ["#58;", "colon;", "#x3a;", "#46;", "period;", "#x2E;", "#64;", "commat;", "#x40;", "#47;", "sol;", "#91;", "lt;", "#0000058;"]) {
+    const o = mod.escapeText(`see https${AMP}${body}//evil.example/x and www${AMP}${body}evil.example and q${AMP}${body}evil.example`);
+    assert.doesNotMatch(o, /(?<!\\)&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);/, o);
+  }
+  assert.equal(mod.escapeText("R&D, P&L and AT&T"), "R&D, P&L and AT&T");
+});
+
+// every backslash of an answer that is not the tool's own must stand right before a character the pass escaped
+function loneBackslashes(answer, allowed, own) {
+  let n = 0;
+  for (let i = 0; i < answer.length; i++) {
+    if (answer[i] !== "\\") continue;
+    let j = i; while (j < answer.length && answer[j] === "\\") j++;
+    const run = j - i;
+    if (run % 2 === 1 && !allowed.includes(answer[j])) n++;
+    i = j - 1;
+  }
+  return n - own;
+}
+test("no tool leaves a lone backslash where it cuts typed text at '!', '.' or a length (MCP)", async () => {
+  const bad = [];
+  const SENT = "Teams ship faster now! Onboarding takes half the time! Support tickets dropped sharply! Renewals improved this year!";
+  const cuts = [];
+  for (const at of [47, 48, 49, 50, 97, 98, 99, 100, 275, 276, 277, 278, 497, 498, 499, 500]) cuts.push("a".repeat(at - 1) + " [b] " + "c ".repeat(300));
+  for (const t of tools) for (const [k, type] of freeFields(t)) {
+    for (const [v, twin, allowed] of [[SENT, SENT.replace(/!/g, "."), "!"], ...cuts.map((c) => [c, c.replace(/\[/g, "(").replace(/\]/g, ")"), "[]"])]) {
+      const a = textOf(await call("tools/call", { name: t.name, arguments: argsWith(t, k, type, v) }));
+      const b = textOf(await call("tools/call", { name: t.name, arguments: argsWith(t, k, type, twin) }));
+      const own = loneBackslashes(b, "", 0) ;
+      const lone = loneBackslashes(a, allowed, own);
+      if (lone > 0) bad.push(`${t.name}.${k}: ${lone} lone backslash(es) for ${JSON.stringify(v.slice(0, 30))}`);
+    }
+  }
+  assert.deepEqual(bad.slice(0, 20), [], `${bad.length}`);
+});
+
+test("a made up tool name or method is repeated escaped in every refusal (MCP and REST)", async () => {
+  const bad = [];
+  for (const v of VALUES.filter((x) => x.length <= 90)) {
+    const r = await call("tools/call", { name: v, arguments: {} });
+    for (const f of liveIn(textOf(r))) bad.push(`mcp name ${JSON.stringify(v)}: ${f}`);
+    const m = await call(v, {});
+    for (const f of liveIn(textOf(m))) bad.push(`mcp method ${JSON.stringify(v)}: ${f}`);
+    if (!G) {
+      const q = await api(new Request(`https://x.gtmhelix.com/api/tools/${encodeURIComponent(v)}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ input: {} }) }), { params: { tool: v } });
+      for (const f of liveIn(strings(await q.json()).join("\n"))) bad.push(`rest name ${JSON.stringify(v)}: ${f}`);
+    }
+  }
+  assert.deepEqual(bad.slice(0, 20), [], `${bad.length}`);
+});
+
 test("JSON answers keep the escapes when the raw JSON text is read (unit)", () => {
   for (const v of [...VALUES, ...OLD]) {
     const j = JSON.stringify({ a: mod.escapeText(v), b: ["x", mod.escapeText(v)] });
