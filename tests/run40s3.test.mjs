@@ -92,3 +92,27 @@ test("40S2-4: proposal_section_writer never turns a digits only implementation_a
   const o = textOf(await call("tools/call", { name: tool.name, arguments: argsWith(tool, "implementation_approach", "Three phases over 2024") }));
   assert.ok(o.includes("\nThree phases over 2024.\n"));
 });
+
+test("40S-6 guard: no tool puts text from two different caller fields side by side with nothing between them", async () => {
+  const SHAPES = [(k) => `x${k}w1`, (k) => `x${k}w1 x${k}w2 x${k}w3`, (k) => `x${k}w1\nx${k}w2\nx${k}w3`, (k) => `x${k}w1, x${k}w2. x${k}w3! x${k}w4? x${k}w5; x${k}w6`];
+  const joins = [];
+  let markers = 0;
+  for (const t of tools) {
+    const props = (t.inputSchema || {}).properties || {};
+    const keys = Object.keys(props);
+    for (const shape of SHAPES) {
+      const a = {};
+      keys.forEach((k, ki) => {
+        const p = props[k];
+        if (p.type === "string" && !Array.isArray(p.enum)) a[k] = shape(ki);
+        else if (p.type === "array" && p.items && p.items.type === "string") a[k] = [shape(ki), `x${ki}w8 x${ki}w9`];
+        else a[k] = sample(p);
+      });
+      const o = textOf(await call("tools/call", { name: t.name, arguments: a }));
+      markers += (o.match(/x\d+w\d+/gi) || []).length;
+      for (const m of o.matchAll(/x(\d+)w\d+(?:\\.)?x(\d+)w\d+/gi)) if (m[1] !== m[2]) joins.push(`${t.name}: ${keys[+m[1]]} then ${keys[+m[2]]}`);
+    }
+  }
+  assert.ok(markers > 0, "the markers reach the answers");
+  assert.deepEqual([...new Set(joins)], []);
+});
