@@ -201,7 +201,8 @@ export default async (req) => {
     // request field) is escaped like caller text, and the whole JSON body goes through jsonInert. A tool answer keeps its text.
     if (res.body && /json/i.test(headers.get("content-type") || "")) {
       let text = await res.text();
-      try {
+      // only an error answer is read (a JSON-RPC error has "error" among its first keys; a tool answer is not parsed again)
+      if (/"error"\s*:/.test(text.slice(0, 200))) try {
         const msg = JSON.parse(text);
         if (msg && msg.error && typeof msg.error.message === "string") {
           msg.error.message = escapeText(msg.error.message);

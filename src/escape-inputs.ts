@@ -361,6 +361,7 @@ const hex = (v: number) => "\\u" + v.toString(16).padStart(4, "0");
 export function jsonInert(json: string): string {
   if (json.indexOf("\\") < 0) return json;
   let out = "";
+  let from = 0; // json[from, at) is copied as it is when the next change is written
   let i = 0;
   const n = json.length;
   let inString = false;
@@ -369,7 +370,6 @@ export function jsonInert(json: string): string {
   while (i < n) {
     const c = json.charCodeAt(i);
     if (!inString) {
-      out += json[i];
       if (c === 34) {
         inString = true;
         pending = false;
@@ -379,50 +379,45 @@ export function jsonInert(json: string): string {
       continue;
     }
     if (c === 34) {
-      out += '"';
       inString = false;
       i++;
       continue;
     }
-    // one value character and its raw JSON text
-    let raw: string;
+    // one value character and its raw JSON text json[at, i)
+    const at = i;
     let v: number;
+    let seq = false;
     if (c === 92) {
-      const e = json[i + 1];
-      if (e === "u") {
-        raw = json.slice(i, i + 6);
+      const e = json.charCodeAt(i + 1);
+      seq = true;
+      if (e === 117) {
         v = parseInt(json.slice(i + 2, i + 6), 16);
         i += 6;
       } else {
-        raw = json.slice(i, i + 2);
-        v = e === "\\" ? 92 : e === '"' ? 34 : e === "/" ? 47 : -1;
+        v = e === 92 ? 92 : e === 34 ? 34 : e === 47 ? 47 : -1;
         i += 2;
       }
     } else {
-      raw = json[i];
       v = c;
       i++;
     }
+    let write = false;
     if (pending) {
       pending = false;
-      if (v >= 0 && isPunct(v)) {
-        out += hex(v);
-        afterSeq = true;
-        continue;
-      }
+      write = v >= 0 && isPunct(v);
     } else if (v === 92) {
-      out += raw;
       pending = true;
       afterSeq = false;
       continue;
     }
-    if (afterSeq && (v === 64 || v === 58)) {
-      out += hex(v);
+    if (!write && afterSeq && (v === 64 || v === 58)) write = true;
+    if (write) {
+      out += json.slice(from, at) + hex(v);
+      from = i;
       afterSeq = true;
       continue;
     }
-    out += raw;
-    afterSeq = raw.length > 1 && /[A-Za-z0-9]$/.test(raw);
+    afterSeq = seq && isAsciiAlnum(json.charCodeAt(i - 1));
   }
-  return out;
+  return from === 0 ? json : out + json.slice(from);
 }
