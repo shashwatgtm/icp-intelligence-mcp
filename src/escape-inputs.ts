@@ -358,9 +358,13 @@ export function dropLoneBackslash(piece: string): string {
 // The text a tool may repeat: hidden characters removed, bare script and data addresses replaced (run 22), then escaped;
 // an instruction-like text is quoted as the caller's own.
 export function escapeText(input: string): string {
-  // Run 40S2 fix round (IMPACT F1, GTM Alpha F1): a lone carriage return becomes a line feed (pandoc drops a lone CR before it
-  // reads the text, which would join the characters on both sides; CommonMark reads it as a line end, as this pass does)
-  const clean = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "").replace(/\r(?!\n)/g, "\n");
+  // Run 40S2 fix round (IMPACT F1, GTM Alpha F1): a lone carriage return is replaced before the scan (pandoc drops a lone CR
+  // before it reads the text, which would join the characters on both sides).
+  // Run 40S3 (40S2-5, time): it becomes a space, not a line feed. A line feed made the tools split the value at every CR
+  // (production keeps the CR, and the tools split only at line feeds), so an answer with every field full of CR lines grew from
+  // 0.2 MB to 40 MB and took 800 ms in place of 6 ms. CommonMark shows a lone CR as a soft line break, which a page shows as a
+  // space, so the rendered text stays as production shows it; markers after it are escaped by the piece start rule.
+  const clean = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "").replace(/\r(?!\n)/g, " ");
   let s = clean.replace(BARE_SCRIPT, "[link removed]").replace(BARE_DATA, "[link removed]");
   s = escapeMarkup(s);
   if (looksLikeInstruction(clean) && !QUOTED.test(s)) s = `“${s}”`;
