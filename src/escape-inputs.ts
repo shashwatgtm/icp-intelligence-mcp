@@ -424,7 +424,7 @@ const hex = (v: number) => "\\u" + v.toString(16).padStart(4, "0");
 // Run 40S3 (40S2-2): the same decisions as before, written into a buffer of UTF-16 code units in place of joining strings (a
 // tool answer of 40 MB with a million escapes took 1 to 2 seconds here, most of it in string joins and garbage collection).
 // The output is the same text, character for character (tested against the 40S2 version on random and long inputs).
-// every character written this way is ASCII punctuation (below 128), so its escape is "\\u00" and two hex digits
+// the four hex digits of a \\u escape
 const HEX_DIGITS = Uint16Array.from("0123456789abcdef", (ch) => ch.charCodeAt(0));
 const EMPTY_UNITS = new Uint16Array(0);
 export function jsonInert(json: string): string {
@@ -474,7 +474,8 @@ export function jsonInert(json: string): string {
     let write = false;
     if (pending) {
       pending = false;
-      write = v >= 0 && isPunct(v);
+      // Run 40S3 fix round (CRAFT GTM auditor F3): U+1FEF too (a backtick after NFC, which pandoc applies to the raw text)
+      write = v >= 0 && (isPunct(v) || v === 0x1fef);
     } else if (v === 92) {
       pending = true;
       afterSeq = false;
@@ -492,9 +493,9 @@ export function jsonInert(json: string): string {
       for (let k = from; k < at; k++) out[len++] = json.charCodeAt(k);
       out[len++] = 92;
       out[len++] = 117;
-      out[len++] = 48;
-      out[len++] = 48;
-      out[len++] = HEX_DIGITS[v >> 4];
+      out[len++] = HEX_DIGITS[(v >> 12) & 15];
+      out[len++] = HEX_DIGITS[(v >> 8) & 15];
+      out[len++] = HEX_DIGITS[(v >> 4) & 15];
       out[len++] = HEX_DIGITS[v & 15];
       from = i;
       afterSeq = true;
