@@ -159,3 +159,12 @@ test("fix round (CRAFT GTM auditor F3): in raw JSON text an escaped U+1FEF is a 
   assert.equal(JSON.parse(j).t, mod.escapeText(`${V}qz evil.example${V}`));
   assert.equal(mod.jsonInert(JSON.stringify({ t: `plain ${V} no backslash` })), JSON.stringify({ t: `plain ${V} no backslash` }));
 });
+
+test("fix round (CRAFT GTM auditor F2, found again in CRAFT Content): a typed '_' a tool turns into a space leaves no stray backslash", async (t) => {
+  const tool = tools.find((x) => x.name === "content_repurposer");
+  if (!tool) return t.skip("no content_repurposer here");
+  const o = textOf(await call("tools/call", { name: tool.name, arguments: argsWith(tool, "target_formats", "(_beta) launch slip, x_ y") }));
+  assert.equal((o.match(/(?<!\\)\\ /g) || []).length, 0, JSON.stringify(o.slice(o.indexOf("beta") - 40, o.indexOf("beta") + 40)));
+  const p = textOf(await call("tools/call", { name: tool.name, arguments: argsWith(tool, "target_formats", "Cut late deliveries by 20% in 90 days") }));
+  assert.ok(p.includes("cut_late_deliveries_by_20%_in_90_days"));
+});
