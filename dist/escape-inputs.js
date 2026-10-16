@@ -10,9 +10,10 @@
 //   "_"                unless it sits between two ASCII letters or digits (there it can never open or close emphasis)
 //   "$"                unless it starts an amount ("$75,000" after a space stays; "$x$" would be math in pandoc gfm)
 //   ":"                when it opens an emoji short code (":rocket:" is an emoji in pandoc gfm), or a name running to the end
-//   block markers wherever they stand (the tools split typed text and start a line with any piece): a run of "#" before a
-//                      space, tab or end; "-" or "+" before a space, tab or end; the first of three "-"; the first "=" of a
-//                      run or one before a space, tab or end; the "." or ")" after up to 9 digits before a space, tab or end
+//   block markers wherever a piece can start (the tools split typed text and start a line with any piece), that is not right
+//                      after a letter or digit: a run of "#" before a space, tab or end; "-" or "+" before a space, tab or end;
+//                      the first of three "-"; the first "=" of a run or one before a space, tab or end; the "." or ")" after up
+//                      to 9 digits before a space, tab or end
 // A bare web or mail address cannot be escaped with an invisible backslash (some readers find addresses in the finished
 // text), so the answer shows one small backslash in it: "https\://", "www\.", "name\@example.com". The words stay.
 // Also kept from the run 22 safeguard, unchanged: hidden and control characters are removed; a bare "javascript:", "vbscript:"
@@ -102,6 +103,15 @@ const isEol = (c) => c === 10 || c === 13;
 const isMailLocal = (c) => isAsciiAlnum(c) || c === 46 || c === 43 || c === 45 || c === 95;
 const isShortcode = (c) => isAsciiAlnum(c) || c === 95 || c === 43 || c === 45;
 const lower = (c) => (c >= 65 && c <= 90 ? c + 32 : c);
+// a letter or digit of any script (the character at i, a whole code point when it is a surrogate pair)
+const WORD = /[\p{L}\p{N}]/u;
+const isWordChar = (s, i) => {
+    const c = s.charCodeAt(i);
+    if (c < 128)
+        return isAsciiAlnum(c);
+    const lo = c >= 0xdc00 && c <= 0xdfff && i > 0 ? s.slice(i - 1, i + 1) : s[i];
+    return WORD.test(lo);
+};
 // Each check below looks at most a fixed number of characters around the current one, except the "rest of the line" checks
 // for "-" and "=" lines, which run once per line from its first character: the pass stays linear.
 function escapeMarkup(s) {
@@ -112,12 +122,14 @@ function escapeMarkup(s) {
         const c = s.charCodeAt(i);
         const prev = i > 0 ? s.charCodeAt(i - 1) : -1;
         const next = i + 1 < n ? s.charCodeAt(i + 1) : -1;
-        // block markers are escaped wherever they stand, not only at a line start: the tools split typed text at ".", ",", ";",
-        // "!", "?" and line breaks and put each trimmed piece on a line of its own, so any place can become a line start
+        // block markers are escaped wherever a piece can start, not only at a line start: the tools split typed text at ".", ",",
+        // ";", "!", "?" and line breaks and put each trimmed piece on a line of its own, so any place after a character that is not
+        // a letter or digit (white space, punctuation, the start) can become a line start ("100+ " and "C# " stay as typed)
         const endsHere = next === -1 || isBlank(next) || isEol(next);
+        const pieceStart = prev === -1 || !isWordChar(s, i - 1);
         if (c === 35) {
             // "#" run then a space, a tab or the end: it could open a heading, or close one (a last run of "#" after a space)
-            if (prev !== 35) {
+            if (pieceStart) {
                 let j = i;
                 while (j < n && s.charCodeAt(j) === 35)
                     j++;
@@ -132,7 +144,7 @@ function escapeMarkup(s) {
         }
         if (c === 45) {
             // "-" then a space, a tab or the end (a list item), or the first of three or more (a rule or a heading underline)
-            if (endsHere || (prev !== 45 && next === 45 && i + 2 < n && s.charCodeAt(i + 2) === 45)) {
+            if (pieceStart && (endsHere || (next === 45 && i + 2 < n && s.charCodeAt(i + 2) === 45))) {
                 out += "\\-";
                 continue;
             }
@@ -140,15 +152,15 @@ function escapeMarkup(s) {
             continue;
         }
         if (c === 43) {
-            out += endsHere ? "\\+" : "+";
+            out += pieceStart && endsHere ? "\\+" : "+";
             continue;
         }
         if (c === 61) {
             // "=": the first of a run, or one before a space, a tab or the end (a heading underline)
-            out += prev !== 61 && (next === 61 || endsHere) ? "\\=" : "=";
+            out += pieceStart && prev !== 61 && (next === 61 || endsHere) ? "\\=" : "=";
             continue;
         }
-        if (isDigit(c) && !isDigit(prev)) {
+        if (isDigit(c) && pieceStart) {
             // a numbered item: up to 9 digits, then "." or ")", then a space, a tab or the end
             let j = i;
             while (j < n && j - i < 10 && isDigit(s.charCodeAt(j)))
