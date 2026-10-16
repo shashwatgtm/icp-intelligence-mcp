@@ -5,7 +5,7 @@
 
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createServer } from "../../src/index.ts";
-import { escapeText } from "../../src/escape-inputs.ts";
+import { escapeText, jsonInert } from "../../src/escape-inputs.ts";
 
 // Run 11 addendum 2 (R11-A2-3), addendum 3 (R11-A3-9) and addendum 4 (R11-A4-1): limits and input checks before the SDK,
 // so the tool definitions in tools/list are unchanged and a request inside the limits runs exactly as before.
@@ -35,15 +35,17 @@ const SECURITY_HEADERS = {
   "Strict-Transport-Security": "max-age=31536000",
 };
 
+// Run 40S2 (40S-1, 40S-5): every JSON body this endpoint sends goes through jsonInert, so an escape in a refusal stays an
+// escape when the raw body is read; the SDK's own answers too (below).
 function rpcError(id, code, message, status, extraHeaders) {
-  return new Response(JSON.stringify({ jsonrpc: "2.0", error: { code, message }, id: id === undefined ? null : id }), {
+  return new Response(jsonInert(JSON.stringify({ jsonrpc: "2.0", error: { code, message }, id: id === undefined ? null : id })), {
     status,
     headers: { "Content-Type": "application/json", ...SECURITY_HEADERS, ...(extraHeaders || {}) },
   });
 }
 
 function toolError(id, text) {
-  return new Response(JSON.stringify({ jsonrpc: "2.0", id, result: { content: [{ type: "text", text }], isError: true } }), {
+  return new Response(jsonInert(JSON.stringify({ jsonrpc: "2.0", id, result: { content: [{ type: "text", text }], isError: true } })), {
     status: 200,
     headers: { "Content-Type": "application/json", ...SECURITY_HEADERS },
   });
@@ -178,12 +180,12 @@ export default async (req) => {
       if (schemas.has(name) && args !== undefined && args !== null) {
         const wrong = wrongType(schemas.get(name), args, "", [], false).map((p) => (p.startsWith(" must") ? "arguments" + p : p));
         if (wrong.length > 0) {
-          return toolError(body.id, "Invalid input for " + name + ": " + wrong.join(" "));
+          return toolError(body.id, "Invalid input for " + escapeText(name) + ": " + wrong.join(" "));
         }
       }
       const long = argumentsTooLong(name, args);
       if (long.length > 0) {
-        return toolError(body.id, "Invalid input for " + name + ": " + long.join(" "));
+        return toolError(body.id, "Invalid input for " + escapeText(name) + ": " + long.join(" "));
       }
     }
     const server = createServer();
@@ -195,6 +197,22 @@ export default async (req) => {
     const res = await transport.handleRequest(req, { parsedBody: body });
     const headers = new Headers(res.headers);
     for (const [name, value] of Object.entries(SECURITY_HEADERS)) headers.set(name, value);
+    // Run 40S2 (40S-1): the SDK's own answers are intercepted here. A JSON-RPC error message the SDK wrote (it could repeat a
+    // request field) is escaped like caller text, and the whole JSON body goes through jsonInert. A tool answer keeps its text.
+    if (res.body && /json/i.test(headers.get("content-type") || "")) {
+      let text = await res.text();
+      try {
+        const msg = JSON.parse(text);
+        if (msg && msg.error && typeof msg.error.message === "string") {
+          msg.error.message = escapeText(msg.error.message);
+          text = JSON.stringify(msg);
+        }
+      } catch {
+        // not one JSON value: sent as it came
+      }
+      headers.delete("content-length");
+      return new Response(jsonInert(text), { status: res.status, statusText: res.statusText, headers });
+    }
     return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
   } catch (error) {
     console.error("mcp error:", error && error.message);

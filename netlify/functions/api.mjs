@@ -193,7 +193,7 @@ export default async (req, context) => {
   };
 
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ ok: false, error: "Use POST with a JSON body: {\"input\": {...}}. See /docs/." }),
+    return new Response(jsonInert(JSON.stringify({ ok: false, error: "Use POST with a JSON body: {\"input\": {...}}. See /docs/." })),
       { status: 405, headers: { "Content-Type": "application/json", Allow: "POST", ...SECURITY, "Content-Security-Policy": JSON_CSP } });
   }
   const raw = await req.text();
@@ -255,7 +255,7 @@ export default async (req, context) => {
       const subProps = (props[parent] && props[parent].properties) || {};
       const obj = {};
       for (const [sk, sv] of Object.entries(sub)) {
-        const c = coerce(subProps[sk] || { type: "string" }, sv, `${parent}.${sk}`, partErrors);
+        const c = coerce(subProps[sk] || { type: "string" }, sv, `${escapeText(parent)}.${escapeText(sk)}`, partErrors); // Run 40S2: a part name the caller made up is repeated escaped
         if (c !== undefined) obj[sk] = c;
       }
       if (Object.keys(obj).length) input[parent] = obj;
