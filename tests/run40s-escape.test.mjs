@@ -96,6 +96,21 @@ test("no tool repeats live markup from any text field (MCP)", async () => {
   assert.deepEqual(bad.slice(0, 20), [], `${bad.length} live`);
 });
 
+// Tools split typed text at ".", ",", ";", "!", "?" and line breaks and start a line with each trimmed piece (run 40S lead's
+// reposition test, work/run40s/prop/reposition.mjs: 92 of 2,420 tool answers gained lists or headings on the first build).
+// So no piece of an escaped text may start with a block marker that is not escaped.
+test("a piece the tools cut from an escaped text never starts with a live block marker (unit)", () => {
+  const MARKER = /^(?:[-+*]|#{1,6}|\d{1,9}[.)])(?:[ \t]|$)|^(?:-{3,}|={1,}|_{3,}|\*{3,})\s*$|^[>|`~]/;
+  const bad = [];
+  for (const sep of [". ", ", ", "; ", "! ", "? ", ": ", "\n", " and ", ".", ",", " - ", " | "]) {
+    for (const m of ["- ", "+ ", "* ", "1. ", "12) ", "# ", "### ", "---", "===", "=", "> ", "| a |", "```", "~~~", "2019. "]) {
+      const o = mod.escapeText(`Acme Example plans${sep}${m}item${sep}end`);
+      for (const piece of o.split(/[.,;!?\n]|\band\b/)) if (MARKER.test(piece.trim())) bad.push(`${JSON.stringify(sep + m)}: ${JSON.stringify(piece.trim())}`);
+    }
+  }
+  assert.deepEqual(bad, []);
+});
+
 test("JSON answers keep the escapes when the raw JSON text is read (unit)", () => {
   for (const v of [...VALUES, ...OLD]) {
     const j = JSON.stringify({ a: mod.escapeText(v), b: ["x", mod.escapeText(v)] });
