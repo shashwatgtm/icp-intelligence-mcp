@@ -129,6 +129,9 @@ const CUT_AFTER_DIGITS = new Set([44, 59, 33, 63, 58, 40]); // , ; ! ? : (
 function scan(s: string, emit: (i: number, kind: number) => void): void {
   const n = s.length;
   let lineStart = false; // only trim spaces since the last line break the caller typed
+  // the text "ends" after its last character that trim() keeps: the tools trim values, so trailing white space counts as the end
+  let last = n - 1;
+  while (last >= 0 && isTrimSpace(s.charCodeAt(last))) last--;
   const endsAt = (k: number) => k >= n || !isWordChar(s, k);
   for (let i = 0; i < n; i++) {
     const ch = s[i];
@@ -219,7 +222,7 @@ function scan(s: string, emit: (i: number, kind: number) => void): void {
       // text (the tool's own text after it may hold the closing ":")
       let j = i + 1;
       while (j < n && j - i <= 50 && isShortcode(s.charCodeAt(j))) j++;
-      if (j > i + 1 && (j === n || s.charCodeAt(j) === 58)) emit(i, 1);
+      if (j > i + 1 && (j > last || s.charCodeAt(j) === 58)) emit(i, 1);
       continue;
     }
     if (c === 46) {

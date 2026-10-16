@@ -137,6 +137,8 @@ test("a marker before any character a tool cuts at is escaped; no digit tail bac
       assert.doesNotMatch(o, /[\n\r][ \t]*\d{1,9}[.)](?:\s|$)/, JSON.stringify(o));
     }
   }
+  // a tool trims values: trailing white space counts as the end (an emoji name running to the end, GTM Alpha wiring helper's finding)
+  for (const v of [":q  ", ":rocket\t", "see :tada" + NL]) assert.ok(mod.escapeText(v).trim().startsWith(S(92)) || mod.escapeText(v).includes(S(92) + ":"), JSON.stringify(mod.escapeText(v)));
   // ordinary text stays as typed
   for (const v of ["2024", "50000", "Founded in 2024", "Goals" + NL + "2024 revenue grew 20%", "100+ engineers", "C# and C++", "30-day pilot", "$75,000 a year", "(hypothetical) 3.5x"]) assert.equal(mod.escapeText(v), v);
 });
