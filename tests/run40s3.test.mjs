@@ -151,3 +151,11 @@ test("fix round (GTM Alpha auditor F2): characters whose NFC form is markup (U+1
   assert.ok(mod.escapeText(`x &#58${Q} y`).includes("\\&"), "a reference that U+037E completes is escaped");
   assert.equal(mod.escapeText("plain words"), "plain words");
 });
+
+test("fix round (CRAFT GTM auditor F3): in raw JSON text an escaped U+1FEF is a \\u escape, so no reader that applies NFC sees a backtick", () => {
+  const V = String.fromCharCode(0x1fef);
+  const j = mod.jsonInert(JSON.stringify({ t: mod.escapeText(`${V}qz evil.example${V}`) }));
+  assert.ok(!j.includes(V), JSON.stringify(j));
+  assert.equal(JSON.parse(j).t, mod.escapeText(`${V}qz evil.example${V}`));
+  assert.equal(mod.jsonInert(JSON.stringify({ t: `plain ${V} no backslash` })), JSON.stringify({ t: `plain ${V} no backslash` }));
+});
