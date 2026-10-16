@@ -164,15 +164,15 @@ function keepsFirstCapital(word, next, third = '') {
 function lowerFirstIfCommon(phrase) {
     const t = fixNames(phrase.trim());
     if (isJobTitle(t))
-        return lowerJobTitle(t);
+        return (0, escape_inputs_ts_1.escapePiece)(lowerJobTitle(t));
     const parts = t.split(/(\s+)/);
     if (keepsFirstCapital(parts[0] || '', parts[2] || '', parts[4] || ''))
-        return t;
+        return (0, escape_inputs_ts_1.escapePiece)(t);
     parts[0] = parts[0].replace(/[A-Z]/, c => c.toLowerCase());
     // Run 11: after a lowered first word, a capitalised common second word is lowered too ("why forecasting matters now").
     if (parts[2] && isCommonWord(parts[2]))
         parts[2] = parts[2].charAt(0).toLowerCase() + parts[2].slice(1);
-    return parts.join('');
+    return (0, escape_inputs_ts_1.escapePiece)(parts.join(''));
 }
 // The same for a whole phrase (this replaces a plain toLowerCase(), which also lowered names and acronyms): the first
 // word follows the rule above, and a later word is lowered only when it is a common word. A capitalised word straight
@@ -182,24 +182,24 @@ function lowerCommonWords(phrase) {
     let first = true;
     const t = fixNames(phrase.trim());
     if (isJobTitle(t))
-        return lowerJobTitle(t);
+        return (0, escape_inputs_ts_1.escapePiece)(lowerJobTitle(t));
     const parts = t.split(/(\s+)/);
-    return parts.map((w, i) => {
+    return (0, escape_inputs_ts_1.escapePiece)(parts.map((w, i) => {
         if (!w.trim())
             return w;
         const lower = first ? !keepsFirstCapital(w, parts[i + 2] || '', parts[i + 4] || '') : !afterName && isCommonWord(w);
         first = false;
         afterName = !lower && /^[A-Z]/.test(w);
         return lower ? w.replace(/[A-Z]/, c => c.toLowerCase()) : w;
-    }).join('');
+    }).join(''));
 }
 // Text only (run 9): a phrase that starts a sentence, a heading or a table cell starts with a capital. A first word
 // written with a small letter and an inner capital (iPhone, eBay) is a name and is kept as typed.
 function cap(phrase) {
     const t = fixNames(phrase.trim());
     if (/^[a-z]+[A-Z]/.test(t.split(/\s+/)[0] || ''))
-        return t;
-    return t.charAt(0).toUpperCase() + t.slice(1);
+        return (0, escape_inputs_ts_1.escapePiece)(t);
+    return (0, escape_inputs_ts_1.escapePiece)(t.charAt(0).toUpperCase() + t.slice(1));
 }
 // Output labels (run 5, owner decision 1). A figure that is not the user's input, and not computed only
 // from it, carries EXAMPLE on its own line, or sits under an EXAMPLES line placed directly above its table,
@@ -447,6 +447,7 @@ ${topTriggers.length === 0 ? 'Note: **Trigger data missing**. Ask "Why now?" in 
                 };
                 // Run 12 (R12-21): the stage the user typed, when there is one, instead of a range
                 const stageTyped = [...new Set((args.customer_descriptions.match(/\bseries [a-d]\b/gi) || []).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', ');
+                const stageShown = (0, escape_inputs_ts_1.escapePiece)(stageTyped);
                 return `# ICP Pattern Analysis (from Description)
 
 ## Input Analyzed
@@ -470,7 +471,7 @@ ${patterns.size === 'SMB (10-100)' ? `- Expect 1-3 month sales cycles, founder/e
 - Research industry-specific compliance/requirements
 
 ### Likely Stage
-**${stageTyped || patterns.stage}**
+**${stageShown || patterns.stage}**
 - Match your pricing to their typical budget capacity
 - Adjust value messaging to their growth priorities
 
@@ -624,7 +625,7 @@ ${EXAMPLES} Every point value and band below is an example.
 
 | Criterion | Weight | Scoring Values |
 |-----------|--------|----------------|
-${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.length ? c.values.join(' / ') : '[no values supplied: add the values you score]'} |`).join('\n')}
+${criteria.map(c => `| **${c.criterion}** | ${c.weight} pts | ${c.values.length ? (criteria === defaultCriteria ? c.values.join(' / ') : (0, escape_inputs_ts_1.escapePiece)(c.values.join(' / '))) : '[no values supplied: add the values you score]'} |`).join('\n')}
 
 **Maximum Score**: ${maxScore} points ${EXAMPLE}
 
@@ -794,7 +795,7 @@ ${SUGGESTED}
 - **Product**: ${args.product_category}
 - **Deal Size**: ${dealSize}${args.deal_size ? '' : ` ${EXAMPLE}`}
 - **Target Company**: ${companySize}${args.target_company_size ? '' : ` ${EXAMPLE}`}
-- **Known Stakeholders**: ${args.known_stakeholders?.join(', ') || 'Not specified'}
+- **Known Stakeholders**: ${(0, escape_inputs_ts_1.escapePiece)(args.known_stakeholders?.join(', ') || '') || 'Not specified'}
 
 ---
 
@@ -1223,9 +1224,9 @@ Geography: ${locations.join(' OR ')}
 ### Custom Intent Audiences
 **Keywords to target** (people searching for solutions):
 \`\`\`
-${tech.map(t => `"${t.toLowerCase()} integration"`).join('\n')}
-${tech.map(t => `"${t.toLowerCase()} alternative"`).join('\n')}
-"${withSoftware(industries[0]?.toLowerCase() || 'b2b', 'software')}"
+${(0, escape_inputs_ts_1.escapePiece)(tech.map(t => `"${t.toLowerCase()} integration"`).join('\n'))}
+${(0, escape_inputs_ts_1.escapePiece)(tech.map(t => `"${t.toLowerCase()} alternative"`).join('\n'))}
+"${(0, escape_inputs_ts_1.escapePiece)(withSoftware(industries[0]?.toLowerCase() || 'b2b', 'software'))}"
 \`\`\`
 
 ### Custom Audience: Website Visitors
@@ -2119,7 +2120,7 @@ Based on gaps in this analysis, ask about:
 
 ## Your Notes
 \`\`\`
-${(0, escape_inputs_ts_1.dropLoneBackslash)(args.raw_transcripts.substring(0, 500))}${args.raw_transcripts.length > 500 ? '...' : ''}
+${(0, escape_inputs_ts_1.escapePiece)(args.raw_transcripts.substring(0, 500))}${args.raw_transcripts.length > 500 ? '...' : ''}
 \`\`\`
 
 ---
