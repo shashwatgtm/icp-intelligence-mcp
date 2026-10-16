@@ -9,6 +9,8 @@
 //   always:            \ [ ] < > ! ` * ~ |
 //   "_"                unless it sits between two ASCII letters or digits (there it can never open or close emphasis)
 //   "$"                unless it starts an amount ("$75,000" after a space stays; "$x$" would be math in pandoc gfm)
+//   a last line of only digits (after a line break) gets one backslash after it, for the tool's own "." or ")" that may follow
+//   "&"                when it starts a character reference ("&#58;" would be decoded into ":")
 //   ":"                when it opens an emoji short code (":rocket:" is an emoji in pandoc gfm), or a name running to the end
 //   block markers wherever a piece can start (the tools split typed text and start a line with any piece), that is not right
 //                      after a letter or digit: a run of "#" before a space, tab or end; "-" or "+" before a space, tab or end;
@@ -22,6 +24,7 @@
 // Line breaks, spaces and tabs are kept as typed (a backslash cannot escape them). No figures, no sector knowledge (B82).
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.escapeMarkup = escapeMarkup;
+exports.dropLoneBackslash = dropLoneBackslash;
 exports.escapeText = escapeText;
 exports.quoteIfInstruction = quoteIfInstruction;
 exports.cleanDeep = cleanDeep;
@@ -98,6 +101,9 @@ const isAsciiAlnum = (c) => (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >
 const isDigit = (c) => c >= 48 && c <= 57;
 const isLetter = (c) => (c >= 65 && c <= 90) || (c >= 97 && c <= 122);
 const isBlank = (c) => c === 32 || c === 9;
+// every character String.prototype.trim() removes (the tools trim each piece they cut): a marker before any of them can open a block
+const isTrimSpace = (c) => c === 32 || (c >= 9 && c <= 13) || c === 0xa0 || c === 0x1680 || (c >= 0x2000 && c <= 0x200a) || c === 0x2028 || c === 0x2029 ||
+    c === 0x202f || c === 0x205f || c === 0x3000 || c === 0xfeff;
 const isEol = (c) => c === 10 || c === 13;
 // characters that may stand right before "@" in a GFM mail address
 const isMailLocal = (c) => isAsciiAlnum(c) || c === 46 || c === 43 || c === 45 || c === 95;
@@ -125,21 +131,17 @@ function escapeMarkup(s) {
         // block markers are escaped wherever a piece can start, not only at a line start: the tools split typed text at ".", ",",
         // ";", "!", "?" and line breaks and put each trimmed piece on a line of its own, so any place after a character that is not
         // a letter or digit (white space, punctuation, the start) can become a line start ("100+ " and "C# " stay as typed)
-        const endsHere = next === -1 || isBlank(next) || isEol(next);
+        const endsHere = next === -1 || isTrimSpace(next);
         const pieceStart = prev === -1 || !isWordChar(s, i - 1);
         if (c === 35) {
             // "#" run then a space, a tab or the end: it could open a heading, or close one (a last run of "#" after a space)
-            if (pieceStart) {
-                let j = i;
-                while (j < n && s.charCodeAt(j) === 35)
-                    j++;
-                const after = j < n ? s.charCodeAt(j) : -1;
-                if (after === -1 || isBlank(after) || isEol(after)) {
-                    out += "\\#";
-                    continue;
-                }
-            }
-            out += "#";
+            // the whole run is read once and written at once (reading it again from each "#" would be quadratic)
+            let j = i;
+            while (j < n && s.charCodeAt(j) === 35)
+                j++;
+            const after = j < n ? s.charCodeAt(j) : -1;
+            out += (pieceStart && (after === -1 || isTrimSpace(after)) ? "\\" : "") + s.slice(i, j);
+            i = j - 1;
             continue;
         }
         if (c === 45) {
@@ -167,11 +169,20 @@ function escapeMarkup(s) {
                 j++;
             const p = j < n ? s.charCodeAt(j) : -1;
             const q = j + 1 < n ? s.charCodeAt(j + 1) : -1;
-            if (j - i <= 9 && (p === 46 || p === 41) && (q === -1 || isBlank(q) || isEol(q))) {
+            if (j - i <= 9 && (p === 46 || p === 41) && (q === -1 || isTrimSpace(q))) {
                 out += s.slice(i, j) + "\\" + s[j];
                 i = j;
                 continue;
             }
+        }
+        if (c === 38) {
+            // "&" that starts a character reference ("&#58;", "&colon;", "&#x3a;": a name or number, then ";"): shown as typed, so no
+            // reader decodes it (mdast with GFM decodes it into finished text and finds an address there)
+            let j = i + 1;
+            while (j < n && j - i <= 33 && (isAsciiAlnum(s.charCodeAt(j)) || s.charCodeAt(j) === 35))
+                j++;
+            out += j > i + 1 && j < n && s.charCodeAt(j) === 59 ? "\\&" : "&";
+            continue;
         }
         if (ALWAYS.has(ch)) {
             out += "\\" + ch;
@@ -191,7 +202,8 @@ function escapeMarkup(s) {
         }
         if (c === 58) {
             // ":" before "//" after a letter (an address scheme): shown with a backslash, so no reader finds an address here
-            if (i > 0 && isLetter(s.charCodeAt(i - 1)) && s.charCodeAt(i + 1) === 47 && s.charCodeAt(i + 2) === 47) {
+            // (a letter of any script: a tool that changes case can turn "\u017f" into "S")
+            if (i > 0 && isWordChar(s, i - 1) && s.charCodeAt(i + 1) === 47 && s.charCodeAt(i + 2) === 47) {
                 out += "\\\\:";
                 continue;
             }
@@ -222,7 +234,8 @@ function escapeMarkup(s) {
         }
         if (c === 64) {
             // "@" of a mail address: a local part character before it and a domain character after it
-            if (prev >= 0 && isMailLocal(prev) && next >= 0 && (isAsciiAlnum(next) || next === 95 || next === 45)) {
+            // (letters of any script count: a tool that changes case can turn one into an ASCII letter)
+            if (prev >= 0 && (isMailLocal(prev) || isWordChar(s, i - 1)) && next >= 0 && (isAsciiAlnum(next) || next === 95 || next === 45 || isWordChar(s, i + 1))) {
                 out += "\\\\@";
                 continue;
             }
@@ -233,12 +246,25 @@ function escapeMarkup(s) {
     }
     return out;
 }
+// For a tool that cuts typed text (at "!", ".", "?" or at a length): a piece that ends in a lone backslash kept the backslash of an
+// escape whose character was cut away; that backslash would escape the tool's own next character, so it is dropped. A piece
+// without backslashes is returned as it is.
+function dropLoneBackslash(piece) {
+    let k = 0;
+    for (let i = piece.length - 1; i >= 0 && piece.charCodeAt(i) === 92; i--)
+        k++;
+    return k % 2 === 1 ? piece.slice(0, -1) : piece;
+}
 // The text a tool may repeat: hidden characters removed, bare script and data addresses replaced (run 22), then escaped;
 // an instruction-like text is quoted as the caller's own.
 function escapeText(input) {
     const clean = input.replace(HIDDEN, "").replace(HIDDEN_MORE, "");
     let s = clean.replace(BARE_SCRIPT, "[link removed]").replace(BARE_DATA, "[link removed]");
     s = escapeMarkup(s);
+    // a last line of 1 to 9 digits after a line break: the tool's own "." or ")" right after the value would make it a numbered
+    // item, so the value ends in one backslash, which escapes that character (a visible backslash only if a letter follows)
+    if (/[\n\r][ \t]*\d{1,9}$/.test(s))
+        s += "\\";
     if (looksLikeInstruction(clean) && !QUOTED.test(s))
         s = `“${s}”`;
     return s;

@@ -5,6 +5,7 @@
 
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createServer } from "../../src/index.ts";
+import { escapeText } from "../../src/escape-inputs.ts";
 
 // Run 11 addendum 2 (R11-A2-3), addendum 3 (R11-A3-9) and addendum 4 (R11-A4-1): limits and input checks before the SDK,
 // so the tool definitions in tools/list are unchanged and a request inside the limits runs exactly as before.
@@ -123,7 +124,7 @@ function tooLong(value, name, out, limit) {
   } else if (Array.isArray(value)) {
     value.forEach((v, i) => tooLong(v, name + "[" + i + "]", out, MAX_TEXT));
   } else if (value && typeof value === "object") {
-    for (const key of Object.keys(value)) tooLong(value[key], name ? name + "." + key : key, out, MAX_TEXT);
+    for (const key of Object.keys(value)) tooLong(value[key], name ? name + "." + escapeText(key) : escapeText(key), out, MAX_TEXT);
   }
   return out;
 }
@@ -132,7 +133,7 @@ function argumentsTooLong(tool, args) {
   const out = [];
   if (!args || typeof args !== "object" || Array.isArray(args)) return tooLong(args, "arguments", out, MAX_TEXT);
   const long = LONG_TEXT[tool] || [];
-  for (const key of Object.keys(args)) tooLong(args[key], key, out, long.includes(key) ? MAX_LONG_TEXT : MAX_TEXT);
+  for (const key of Object.keys(args)) tooLong(args[key], escapeText(key), out, long.includes(key) ? MAX_LONG_TEXT : MAX_TEXT);
   return out;
 }
 

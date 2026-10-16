@@ -6,7 +6,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { cleanDeep, escapeDeep } from './escape-inputs.ts';
+import { cleanDeep, escapeDeep, escapeText, dropLoneBackslash } from './escape-inputs.ts';
 
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -2268,7 +2268,7 @@ Based on gaps in this analysis, ask about:
 
 ## Your Notes
 \`\`\`
-${args.raw_transcripts.substring(0, 500)}${args.raw_transcripts.length > 500 ? '...' : ''}
+${dropLoneBackslash(args.raw_transcripts.substring(0, 500))}${args.raw_transcripts.length > 500 ? '...' : ''}
 \`\`\`
 
 ---
@@ -2458,7 +2458,7 @@ const ONE_AMOUNT: Record<string, string[]> = {};
 function checkRequiredInputs(name: string, args: Record<string, unknown> | undefined): string | null {
   const tool = (tools as Record<string, { inputSchema: { required?: string[] } }>)[name];
   if (!tool) {
-    return `Unknown tool: ${name}. Available tools: ${Object.keys(tools).join(', ')}.`;
+    return `Unknown tool: ${escapeText(String(name))}. Available tools: ${Object.keys(tools).join(', ')}.`;
   }
   const required = tool.inputSchema.required ?? [];
   // Run 16 R16-10 (rule B52): a required text (a string with no fixed list of choices) that is empty or only whitespace counts as missing.
@@ -2539,7 +2539,7 @@ export function createServer(): Server {
       return {
         content: [{
           type: 'text',
-          text: `Unknown tool: ${toolName}. Available tools: ${Object.keys(tools).join(', ')}`
+          text: `Unknown tool: ${escapeText(String(toolName))}. Available tools: ${Object.keys(tools).join(', ')}`
         }],
         isError: true
       };
@@ -2554,7 +2554,7 @@ export function createServer(): Server {
       return {
         content: [{
           type: 'text',
-          text: `Error executing ${toolName}: ${error instanceof Error ? error.message : 'Unknown error'}`
+          text: `Error executing ${escapeText(String(toolName))}: ${error instanceof Error ? error.message : 'Unknown error'}`
         }],
         isError: true
       };

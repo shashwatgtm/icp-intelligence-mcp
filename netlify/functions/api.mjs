@@ -247,7 +247,7 @@ export default async (req, context) => {
     client = await connectClient();
     const { tools } = await client.listTools();
     const tool = tools.find((t) => t.name === toolName);
-    if (!tool) return reply(404, { ok: false, error: `Unknown tool: ${toolName}.` });
+    if (!tool) return reply(404, { ok: false, error: `Unknown tool: ${escapeText(String(toolName))}.` });
     // Run 15 D39: each part of an object from a form post gets the type its schema asks for (a number box gives a number).
     const partErrors = [];
     const props = (tool.inputSchema && tool.inputSchema.properties) || {};

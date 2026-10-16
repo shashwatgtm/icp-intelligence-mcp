@@ -2119,7 +2119,7 @@ Based on gaps in this analysis, ask about:
 
 ## Your Notes
 \`\`\`
-${args.raw_transcripts.substring(0, 500)}${args.raw_transcripts.length > 500 ? '...' : ''}
+${(0, escape_inputs_ts_1.dropLoneBackslash)(args.raw_transcripts.substring(0, 500))}${args.raw_transcripts.length > 500 ? '...' : ''}
 \`\`\`
 
 ---
@@ -2305,7 +2305,7 @@ const ONE_AMOUNT = {};
 function checkRequiredInputs(name, args) {
     const tool = tools[name];
     if (!tool) {
-        return `Unknown tool: ${name}. Available tools: ${Object.keys(tools).join(', ')}.`;
+        return `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(name))}. Available tools: ${Object.keys(tools).join(', ')}.`;
     }
     const required = tool.inputSchema.required ?? [];
     // Run 16 R16-10 (rule B52): a required text (a string with no fixed list of choices) that is empty or only whitespace counts as missing.
@@ -2398,7 +2398,7 @@ function createServer() {
             return {
                 content: [{
                         type: 'text',
-                        text: `Unknown tool: ${toolName}. Available tools: ${Object.keys(tools).join(', ')}`
+                        text: `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(toolName))}. Available tools: ${Object.keys(tools).join(', ')}`
                     }],
                 isError: true
             };
@@ -2413,7 +2413,7 @@ function createServer() {
             return {
                 content: [{
                         type: 'text',
-                        text: `Error executing ${toolName}: ${error instanceof Error ? error.message : 'Unknown error'}`
+                        text: `Error executing ${(0, escape_inputs_ts_1.escapeText)(String(toolName))}: ${error instanceof Error ? error.message : 'Unknown error'}`
                     }],
                 isError: true
             };
