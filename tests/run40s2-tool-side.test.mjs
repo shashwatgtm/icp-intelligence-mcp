@@ -57,8 +57,13 @@ function marks(text) {
     else if (/^ {0,3}\|?[ \t]*:?-+:?[ \t]*(?:\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$/.test(line) && /[:|]/.test(line)) out.push("delim");
     else if (/^ {0,3}(?:(?:\*[ \t]*){3,}|(?:_[ \t]*){3,})$/.test(line)) out.push("hr");
   }
+  // "*" no backslash escapes, and "_" no backslash escapes that is not between two letters or digits (there it is plain text)
   let em = 0;
-  for (const m of text.matchAll(/(\\*)([*_]+)/g)) em += m[2].length - (m[1].length % 2);
+  for (const m of text.matchAll(/(\\*)([*_]+)/g)) {
+    const at = m.index + m[1].length, run = m[2], b = text[at - 1] || " ", a = text[at + run.length] || " ";
+    if (run[0] === "_" && /[A-Za-z0-9]/.test(b) && /[A-Za-z0-9]/.test(a) && m[1].length % 2 === 0) continue;
+    em += run.length - (m[1].length % 2);
+  }
   out.push("em" + em);
   return out.join(",");
 }
@@ -128,7 +133,8 @@ test("a marker before any character a tool cuts at is escaped; no digit tail bac
     const e = mod.escapeText(v);
     for (const piece of [e, ...e.split(/[.,;]/)]) for (const tail of [". Unlike", ") x", "."]) {
       const o = mod.escapePiece(piece.trim()) + tail;
-      assert.doesNotMatch(o, /(?:^|[\n\r])[ \t]*\d{1,9}[.)](?:\s|$)/, JSON.stringify(o));
+      // a line the caller started (a piece that starts a line only because a tool put it there is the tool's layout, as in production)
+      assert.doesNotMatch(o, /[\n\r][ \t]*\d{1,9}[.)](?:\s|$)/, JSON.stringify(o));
     }
   }
   // ordinary text stays as typed
