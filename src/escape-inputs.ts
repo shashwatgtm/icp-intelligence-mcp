@@ -206,10 +206,13 @@ function scan(s: string, emit: (i: number, kind: number) => void): void {
       while (j < n && j - i <= 33 && (isAsciiAlnum(s.charCodeAt(j)) || s.charCodeAt(j) === 35)) j++;
       // Run 40S2 fix round (GTM Alpha F2): also a reference that runs to the end (the tool's own ";" may follow): a number,
       // or a name of two or more characters (no entity name has one letter, so "AT&T" stays as typed)
-      if (j > i + 1 && ((j > last && (s.charCodeAt(i + 1) === 35 || j > i + 2)) || (j < n && s.charCodeAt(j) === 59))) emit(i, 1);
+      // Run 40S3 fix round: U+037E (Greek question mark) is a ";" after NFC (pandoc), so it closes a reference too
+      if (j > i + 1 && ((j > last && (s.charCodeAt(i + 1) === 35 || j > i + 2)) || (j < n && (s.charCodeAt(j) === 59 || s.charCodeAt(j) === 0x37e)))) emit(i, 1);
       continue;
     }
-    if (ALWAYS.has(ch)) {
+    // Run 40S3 fix round (GTM Alpha auditor F2): U+1FEF (Greek varia) is a backtick after NFC, which pandoc applies before it
+    // reads the text, so it is escaped as a backtick is (in readers without NFC the backslash stays visible before it)
+    if (ALWAYS.has(ch) || c === 0x1fef) {
       emit(i, 1);
       continue;
     }
