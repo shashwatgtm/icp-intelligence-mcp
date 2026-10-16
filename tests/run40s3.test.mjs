@@ -134,3 +134,12 @@ test("40S2-5 (time): a lone CR does not make a tool split a value into more piec
     assert.ok(a.length <= b.length * 1.25 + 64, `${t.name}.${f}: ${a.length} characters against ${b.length}`);
   }
 });
+
+test("fix round (IMPACT auditor F1): impact_full_audit writes its own placeholder as production when key_differentiation is left out", async (t) => {
+  const tool = tools.find((x) => x.name === "impact_full_audit");
+  if (!tool) return t.skip("no impact_full_audit here");
+  const o = textOf(await call("tools/call", { name: tool.name, arguments: { product_description: "a route planner", target_customer: "fleet managers", problem_solved: "late deliveries" } }));
+  assert.ok(o.includes('2. "The [your differentiation] solution"'), JSON.stringify(o.slice(o.indexOf("Tagline"), o.indexOf("Tagline") + 200)));
+  const p = textOf(await call("tools/call", { name: tool.name, arguments: { product_description: "a route planner", target_customer: "fleet managers", problem_solved: "late deliveries", key_differentiation: "[live] data for every lane" } }));
+  assert.ok(!/The \[live\]/.test(p), "a typed bracket stays escaped");
+});
