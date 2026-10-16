@@ -155,9 +155,11 @@ function scan(s: string, emit: (i: number, kind: number) => void): void {
       continue;
     }
     // Run 40S2 fix round (ICP F2, F3): "www" (any case, not after a letter or digit) before "-" or "_" (pandoc gfm links
-    // "www-host" and "www_host"), or at the end of the value (the tool's own "." may follow): a visible backslash
+    // "www-host" and "www_host"), or at the end of the value (the tool's own "." may follow)
+    // Run 40S3 (40S2-1): an invisible escape (pandoc does not link "www\_host"), because a visible backslash (kind 2) left the
+    // "_" itself free to open or close emphasis ("www_a ... www_ b")
     if ((c === 45 || c === 95) && isWww(s, i)) {
-      emit(i, 2);
+      emit(i, 1);
       continue;
     }
     if ((c === 119 || c === 87) && i + 1 > last && isWww(s, i + 1)) {
