@@ -129,6 +129,8 @@ test("40S2-5 (time): a lone CR does not make a tool split a value into more piec
     const unit = (sep) => (sep + "!x").repeat(300);
     const a = textOf(await call("tools/call", { name: t.name, arguments: argsWith(t, f, unit(CR)) }));
     const b = textOf(await call("tools/call", { name: t.name, arguments: argsWith(t, f, unit(" ")) }));
-    assert.ok(a.length <= b.length + 64, `${t.name}.${f}: ${a.length} characters against ${b.length}`);
+    // a margin for a tool's own random pick (CRAFT Content newsletter_builder picks one of its previews at random); a split
+    // at every CR made answers about 100 times larger
+    assert.ok(a.length <= b.length * 1.25 + 64, `${t.name}.${f}: ${a.length} characters against ${b.length}`);
   }
 });
