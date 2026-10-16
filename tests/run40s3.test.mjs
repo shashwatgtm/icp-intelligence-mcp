@@ -116,3 +116,19 @@ test("40S-6 guard: no tool puts text from two different caller fields side by si
   assert.ok(markers > 0, "the markers reach the answers");
   assert.deepEqual([...new Set(joins)], []);
 });
+
+test("40S2-5 (time): a lone CR does not make a tool split a value into more pieces than production (it becomes a space)", async () => {
+  const CR = String.fromCharCode(13);
+  assert.equal(mod.escapeText("a" + CR + "b"), "a b");
+  assert.equal(mod.escapeText("a" + CR + String.fromCharCode(10) + "b"), "a" + CR + String.fromCharCode(10) + "b");
+  assert.equal(mod.escapeText("x" + CR + "- y"), "x \\- y");
+  // the answer grows no more with "\r!" lines than with " !" (the same text with spaces), through every tool
+  for (const t of tools) {
+    const f = freeFields(t)[0];
+    if (!f) continue;
+    const unit = (sep) => (sep + "!x").repeat(300);
+    const a = textOf(await call("tools/call", { name: t.name, arguments: argsWith(t, f, unit(CR)) }));
+    const b = textOf(await call("tools/call", { name: t.name, arguments: argsWith(t, f, unit(" ")) }));
+    assert.ok(a.length <= b.length + 64, `${t.name}.${f}: ${a.length} characters against ${b.length}`);
+  }
+});
