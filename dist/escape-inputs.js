@@ -317,9 +317,30 @@ function escapeMarkup(s) {
 // A lone backslash at the end (its character was cut away) or before a line break (the pass never writes one there) is
 // dropped, so it cannot escape the tool's own next character. On text the pass made and no tool changed, it returns the same
 // text (tested). One pass, linear.
+// Run 40S3 (40S2-2): the tools call this inside helpers that run once per generated line, so the same long value came back
+// many times in one call and was scanned again each time (CRAFT Content sales_enablement_content took 3.4 s, not 0.5 s, with
+// every field filled). Each piece is now read once per call: its result is kept in a cache keyed by the piece's text, which
+// escapeDeep (the start of every call) empties; the cache is also emptied when it holds more than 4,000,000 characters. The
+// function is pure (its result depends only on the piece), so a cached answer is the answer the scan would give.
+const PIECES = new Map();
+let pieceChars = 0;
+const PIECE_CHARS_MAX = 4_000_000;
 function escapePiece(piece) {
     if (piece.length === 0)
         return piece;
+    const hit = PIECES.get(piece);
+    if (hit !== undefined)
+        return hit;
+    const out = escapePieceOnce(piece);
+    if (pieceChars + piece.length + out.length > PIECE_CHARS_MAX) {
+        PIECES.clear();
+        pieceChars = 0;
+    }
+    PIECES.set(piece, out);
+    pieceChars += piece.length + out.length;
+    return out;
+}
+function escapePieceOnce(piece) {
     let d = "";
     const had = [];
     for (let i = 0; i < piece.length; i++) {
@@ -383,15 +404,22 @@ function cleanDeep(value) {
     }
     return value;
 }
+// Run 40S3: escapeDeep runs once at the start of every call (where the connector receives the caller's values), so it also
+// empties escapePiece's cache of the last call.
 function escapeDeep(value) {
+    PIECES.clear();
+    pieceChars = 0;
+    return escapeDeepOnce(value);
+}
+function escapeDeepOnce(value) {
     if (typeof value === "string")
         return escapeText(value);
     if (Array.isArray(value))
-        return value.map((v) => escapeDeep(v));
+        return value.map((v) => escapeDeepOnce(v));
     if (value && typeof value === "object") {
         const out = {};
         for (const [k, v] of Object.entries(value))
-            out[k] = escapeDeep(v);
+            out[k] = escapeDeepOnce(v);
         return out;
     }
     return value;
