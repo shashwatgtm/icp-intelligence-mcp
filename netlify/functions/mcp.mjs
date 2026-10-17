@@ -3,6 +3,7 @@
 // one function, a fresh server and transport per request, POST only, rate limited.
 // The tools come from the same createServer() that the npm (stdio) package uses.
 
+import { countUse } from "../lib/usage-count.mjs";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createServer } from "../../src/index.ts";
 import { escapeText, escapePiece, jsonInert } from "../../src/escape-inputs.ts";
@@ -140,7 +141,7 @@ function argumentsTooLong(tool, args) {
   return out;
 }
 
-export default async (req) => {
+export default async (req, context) => {
   let id = null;
   if (req.method !== "POST") {
     return rpcError(
@@ -187,7 +188,7 @@ export default async (req) => {
       const long = argumentsTooLong(name, args);
       if (long.length > 0) {
         return toolError(body.id, "Invalid input for " + escapeText(name) + ": " + long.join(" "));
-      }
+      }      if (schemas.has(name)) countUse("icp-intelligence", name, req, "mcp", context);
     }
     const server = createServer();
     const transport = new WebStandardStreamableHTTPServerTransport({
