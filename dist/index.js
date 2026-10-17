@@ -1040,7 +1040,8 @@ This tool will analyze patterns across your customers to identify your ideal pro
                     description: 'What correlates with success? (e.g., "deals with VP Sales champion close 2x faster")'
                 },
                 product_category: {
-                    type: 'string'
+                    type: 'string',
+                    description: 'Optional: what you sell, as a product category, so the scoring notes use your sector'
                 },
                 company: COMPANY_INPUT
             }
@@ -2902,7 +2903,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.24';
+exports.SERVER_VERSION = '1.2.25';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",
