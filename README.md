@@ -61,6 +61,8 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `customers` | No | array of object | List of customer objects with available attributes |
 | `customer_descriptions` | No | string | Alternative: Describe your best customers in text format |
 | `product_category` | No | string | What type of product you sell |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
+| `business_model` | No | string | Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out (allowed: `saas`, `services`, `connectivity`, `transactions`, `marketplace`, `hardware_software`, `investment`) |
 
 #### 2. ICP Scoring Model (`icp_scoring_model`)
 
@@ -68,7 +70,8 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 |---|---|---|---|
 | `scoring_criteria` | No | array of object | Criteria for scoring with importance levels |
 | `success_correlation` | No | string | What correlates with success? (e.g., "deals with VP Sales champion close 2x faster") |
-| `product_category` | No | string |  |
+| `product_category` | No | string | What type of product you sell |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 3. Buyer Group Analyzer (`buyer_group_analyzer`)
 
@@ -79,6 +82,8 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `target_company_size` | No | string | Company size (e.g., "500-1000 employees") |
 | `known_stakeholders` | No | array of string | Roles you know are involved |
 | `typical_champion` | No | string | Your typical champion role |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
+| `business_model` | No | string | Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out (allowed: `saas`, `services`, `connectivity`, `transactions`, `marketplace`, `hardware_software`, `investment`) |
 
 #### 4. TAM SAM SOM Calculator (`tam_sam_som_calculator`)
 
@@ -86,10 +91,12 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 |---|---|---|---|
 | `total_potential_companies` | Yes | number (0 or more) | Estimated total companies that could buy (from LinkedIn, industry reports) |
 | `average_contract_value` | Yes | number (more than 0) | Your average ACV in dollars |
-| `icp_percentage` | No | number (0 or more) | Percentage that match your ICP (1-100) |
-| `year1_market_share_target` | No | number (0 or more) | Realistic Year 1 market share percentage (typically 1-5%) |
+| `icp_percentage` | No | number (0 or more) | Percentage of those companies that match your ICP, from 0 to 100. Left out, 30 is used and marked as an example |
+| `year1_market_share_target` | No | number (0 or more) | Realistic Year 1 market share percentage, from 0 to 100 (typically 1-5%). Left out, 3 is used and marked as an example |
 | `data_sources` | No | string | Where you got your numbers (for documentation) |
 | `segment_name` | No | string | Name of the market segment |
+| `product_category` | No | string | Optional: what you sell (for example "spend management software"), used for sector notes. The arithmetic does not use it |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 5. Lookalike Signal Generator (`lookalike_signal_generator`)
 
@@ -99,14 +106,18 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `icp_firmographics` | No | object | Firmographic criteria |
 | `icp_technographics` | No | array of string | Technologies your ICP typically uses |
 | `buying_triggers` | No | array of string | Events that trigger buying |
-| `platforms` | No | array of string | Accepted but not used yet: the output always includes every platform section (linkedin, google_ads, 6sense, zoominfo) |
+| `platforms` | No | array of string | Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included |
+| `product_category` | No | string | Optional: what you sell (for example "spend management software"), used for search keywords and sector notes |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 6. Account Prioritization (`account_prioritization`)
 
 | Input | Required | Type | Description |
 |---|---|---|---|
-| `accounts` | No | array of object | List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship, timing |
+| `accounts` | No | array of object | List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown) |
 | `prioritization_weights` | No | object | Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100 |
+| `product_category` | No | string | Optional: what you sell (for example "spend management software"), used for sector notes. The arithmetic does not use it |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 7. ICP Gap Analysis (`icp_gap_analysis`)
 
@@ -116,6 +127,9 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `ideal_icp` | Yes | string | Description of your ideal customer profile |
 | `current_metrics` | No | object | Current performance metrics |
 | `target_metrics` | No | object | Target performance metrics |
+| `product_category` | No | string | Optional: what you sell, used for sector notes |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
+| `business_model` | No | string | Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out (allowed: `saas`, `services`, `connectivity`, `transactions`, `marketplace`, `hardware_software`, `investment`) |
 
 #### 8. ICP Evolution Tracker (`icp_evolution_tracker`)
 
@@ -125,15 +139,19 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | `recent_wins` | No | string | Description of recent successful customers |
 | `recent_losses` | No | string | Description of recent lost deals |
 | `market_changes` | No | string | Recent market or competitive changes |
-| `time_period` | No | string | Time period for analysis (e.g., "Q4 2024") |
+| `time_period` | No | string | Time period you are reviewing, in your own words (for example "last quarter") |
+| `product_category` | No | string | Optional: what you sell, used for sector notes |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 #### 9. ICP Interview Synthesizer (`icp_interview_synthesizer`)
 
 | Input | Required | Type | Description |
 |---|---|---|---|
 | `interview_notes` | No | array of object | Structured interview notes |
-| `raw_transcripts` | No | string | Alternative: Paste raw interview transcripts or notes |
+| `raw_transcripts` | No | string | Alternative: paste interview notes or transcripts. This tool does not analyze pasted text: it shows up to 500 characters back with a template to structure them as interview_notes, which it does analyze |
 | `analysis_focus` | No | string | Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all) |
+| `product_category` | No | string | Optional: what you sell, used for sector notes |
+| `company` | No | string | Optional: your company or product name, so the answer can name it |
 
 ## Who Is This For?
 
