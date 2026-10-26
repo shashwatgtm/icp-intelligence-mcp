@@ -1423,11 +1423,20 @@ ${SUGGESTED}
             // A job title fills a seat before a group of people ("Director IT" before "enterprise developers").
             for (const k of Object.keys(placed))
                 placed[k] = [...placed[k].filter(isTitleItem), ...placed[k].filter(x => !isTitleItem(x))];
+            // 26 Oct 2026: a sector role the user typed (as champion or any stakeholder) is never "not in your list". Across seats the title must be
+            // the same once case, acronyms and a plural are set aside ("CISO" is the "Chief Information Security Officer"); sameRole is too loose
+            // there ("VP Engineering" would be the "Engineering Manager"). sameRole also drops two-letter words such as IT, so the same-level heads
+            // of IT are matched here ("Head of IT", "IT Head", "IT Director", "Director of IT"). A CIO is not one of them: the telecom seats name
+            // the CIO and the Head of IT as two people.
+            const IT_HEAD = /^(?:head of (?:it|information technology)|(?:it|information technology) (?:head|director)|director(?: of)? (?:it|information technology))$/i;
+            const roleKey = (x) => aliasRole(x, v).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(Boolean).map(w => ROLE_ACRONYM[w] || w).join(' ').replace(/s$/, '');
+            const typedAs = (x, r) => roleKey(x) === roleKey(r) || (IT_HEAD.test(aliasRole(x, v).trim().replace(/\s+/g, ' ')) && IT_HEAD.test(r));
+            const typedAnywhere = (r) => [typedChampion, ...stakeholders].some(x => x && typedAs(x, r));
             // A stakeholder the user typed replaces the sector's default for that seat; the default stays in the answer as a second name.
             const sectorDefaults = [];
             for (const k of ['economic', 'technical', 'blocker', 'user']) {
                 if (placed[k][0]) {
-                    if (seat && !horizontal && !sameRole(placed[k][0], seat[k]) && !placed[k].some(x => sameRole(x, seat[k])))
+                    if (seat && !horizontal && !sameRole(placed[k][0], seat[k]) && !placed[k].some(x => sameRole(x, seat[k])) && !typedAnywhere(seat[k]))
                         sectorDefaults.push(`${seat[k]} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`);
                     buyingGroup[k].role = placed[k][0];
                 }
@@ -1438,11 +1447,11 @@ ${SUGGESTED}
                 if (!placed[k][0] && seat && !horizontal) {
                     // a person cannot hold two roles: when the sector's usual role is one of the people already named (the champion, or "risk teams"
                     // placed elsewhere), the role stays open instead
-                    const taken = [typedChampion, ...stakeholders].some(x => x && sameRole(aliasRole(x, v), seat[k]));
+                    const taken = [typedChampion, ...stakeholders].some(x => x && sameRole(aliasRole(x, v), seat[k])) || typedAnywhere(seat[k]);
                     buyingGroup[k].role = taken ? OPEN_ROLE[k] : buyingGroup[k].role + ` (usual in ${v.name}; none of your stakeholders fits this role)`;
                 }
             }
-            if (typedChampion && seat && !horizontal && !sameRole(typedChampion, seat.champion) && !stakeholders.some(x => sameRole(x, seat.champion)))
+            if (typedChampion && seat && !horizontal && !sameRole(typedChampion, seat.champion) && !stakeholders.some(x => sameRole(x, seat.champion)) && !typedAnywhere(seat.champion))
                 sectorDefaults.push(`${seat.champion} (champion)`);
             const extra = ['economic', 'technical', 'blocker', 'user'].flatMap(k => placed[k].slice(1).map(x => `${x} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`));
             const technicalSteps = ctx.model === 'connectivity' ? ['Offer a site survey and a small set of pilot sites', 'Share the network design and the cut-over plan', 'Offer a technical session with your network team', 'Answer the security questionnaire before it is asked']
@@ -1947,6 +1956,42 @@ ${[`Job Titles: ${titles.join(', ')}`, sizes ? `Company Size: ${sizes.join(', ')
 ### Intent Signals to Layer
 - Job changes in target titles (last 90 days)
 ${stages ? `- Funding or listing news at your stages: ${stages.join(', ')}\n` : ''}${tech ? '- Technology adoption changes\n' : ''}- Hiring for related roles`);
+            // 26 Oct 2026: the checklist and the subscriptions follow the same platforms as the sections above (all of them when platforms is left out).
+            const checklist = [];
+            const needs = [];
+            if (show('linkedin')) {
+                checklist.push(`### LinkedIn Sales Navigator
+- [ ] Build and save company search
+- [ ] Build and save lead search
+- [ ] Enable weekly alert emails
+- [ ] Export first batch (25 leads) ${EXAMPLE}
+- [ ] Add to outreach sequence`);
+                needs.push('**LinkedIn Sales Navigator** subscription');
+            }
+            if (show('googleads')) {
+                checklist.push(`### Google Ads
+- [ ] Create custom intent audience
+- [ ] Create competitor website audience
+- [ ] Set up retargeting pixel
+- [ ] Launch awareness campaign`);
+                needs.push('**Google Ads** account with budget');
+            }
+            if (show('6sense')) {
+                checklist.push(`### Intent Data (6sense/Bombora)
+- [ ] Configure account fit model
+- [ ] Set up intent topic tracking
+- [ ] Create daily alert for surging accounts
+- [ ] Integrate with CRM`);
+                needs.push('**6sense/Bombora** intent data subscription (optional)');
+            }
+            if (show('zoominfo') || show('apollo')) {
+                checklist.push(`### Contact Database
+- [ ] Run search with criteria
+- [ ] Verify data quality (10% sample) ${EXAMPLE}
+- [ ] Export qualified contacts
+- [ ] Enrich with additional data`);
+                needs.push('**ZoomInfo/Apollo** contact database subscription');
+            }
             return `# Lookalike Signal & Targeting Criteria
 
 - ${companyLine(args.company)}
@@ -1982,46 +2027,20 @@ ${triggers ? triggers.map(t => {
 
 ${v ? `${sectorNotes(v, ['metrics', 'vocabulary', 'proof'])}\n\n` : ''}---
 
-## Implementation Checklist
+${checklist.length ? `## Implementation Checklist
 
-### LinkedIn Sales Navigator
-- [ ] Build and save company search
-- [ ] Build and save lead search
-- [ ] Enable weekly alert emails
-- [ ] Export first batch (25 leads) ${EXAMPLE}
-- [ ] Add to outreach sequence
-
-### Google Ads
-- [ ] Create custom intent audience
-- [ ] Create competitor website audience
-- [ ] Set up retargeting pixel
-- [ ] Launch awareness campaign
-
-### Intent Data (6sense/Bombora)
-- [ ] Configure account fit model
-- [ ] Set up intent topic tracking
-- [ ] Create daily alert for surging accounts
-- [ ] Integrate with CRM
-
-### Contact Database
-- [ ] Run search with criteria
-- [ ] Verify data quality (10% sample) ${EXAMPLE}
-- [ ] Export qualified contacts
-- [ ] Enrich with additional data
+${checklist.join('\n\n')}
 
 ---
 
-## Important Notes
+` : ''}## Important Notes
 
 **This tool generates targeting CRITERIA, not actual data.**
 
-To execute these searches, you need:
-1. **LinkedIn Sales Navigator** subscription
-2. **Google Ads** account with budget
-3. **6sense/Bombora** intent data subscription (optional)
-4. **ZoomInfo/Apollo** contact database subscription
+${needs.length ? `To execute these searches, you need:
+${needs.map((x, i) => `${i + 1}. ${x}`).join('\n')}
 
-${missing.length
+` : ''}${missing.length
                 ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`
                 : 'The criteria above are built from your inputs and ready to copy/paste into each platform.'}
 
@@ -2903,7 +2922,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // message when a required input is missing. Tool code above is unchanged.
 // =============================================================================
 exports.SERVER_NAME = 'icp-intelligence-mcp';
-exports.SERVER_VERSION = '1.2.25';
+exports.SERVER_VERSION = '1.2.26';
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES = {
     "icp_deep_dive": "ICP Deep Dive",

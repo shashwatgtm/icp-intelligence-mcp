@@ -229,7 +229,7 @@
   <ul class="hx-prose">
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
     <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
-    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.25.</li>
+    <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.26.</li>
     <li>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document fields <code>customer_descriptions</code> (ICP Deep Dive) and <code>raw_transcripts</code> (ICP Interview Synthesizer), which take up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
   </ul>
@@ -275,13 +275,14 @@
 <tr><td>1.2.18</td><td>12 October 2026</td><td>safety fix only: the instruction echo safeguard; tool list and answers otherwise unchanged</td></tr>
 <tr><td>1.2.22</td><td>15 October 2026</td><td>security update only: MCP SDK 1.31.0 (advisory GHSA-6qxp-vccf-f47h); tool list and answers unchanged</td></tr>
 <tr><td>1.2.24</td><td>16 October 2026</td><td>security update: text you type is shown with a small backslash before characters that could start a link, image, tag or code, so it can never become live markup; tool list unchanged</td></tr>
-<tr><td>1.2.25 (this site)</td><td>17 October 2026</td><td>quality update: sector knowledge for the nine verticals and their sub industries on all nine tools; new optional inputs company, product_category and business_model; a usage count per tool (no text you type is kept)</td></tr>
+<tr><td>1.2.25</td><td>17 October 2026</td><td>quality update: sector knowledge for the nine verticals and their sub industries on all nine tools; new optional inputs company, product_category and business_model; a usage count per tool (no text you type is kept)</td></tr>
+<tr><td>1.2.26 (this site)</td><td>26 October 2026</td><td>fix: buyer_group_analyzer no longer lists a role you named (for example Head of IT) as not in your list; lookalike_signal_generator shows the checklist and subscriptions only for the platforms you ask for; tool list unchanged</td></tr>
   </tbody></table></div>
 </section>
 
 <section class="hx-section" aria-labelledby="ref-h">
   <h2 id="ref-h">Tool reference</h2>
-  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.25.</p>
+  <p class="hx-sub">Generated from the server's own input schemas, version 1.2.26.</p>
 </section>
 <section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
   <h3 id="d-icp-deep-dive">ICP Deep Dive</h3>
