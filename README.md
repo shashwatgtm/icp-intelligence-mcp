@@ -245,7 +245,7 @@ The tool reference on the docs page (https://icp-intelligence.gtmhelix.com/docs/
 
 ## Privacy Policy
 
-Full policy: https://icp-intelligence.gtmhelix.com/privacy/ (also in [PRIVACY.md](PRIVACY.md)).
+Full policy: <https://icp-intelligence.gtmhelix.com/privacy/> (also in [PRIVACY.md](PRIVACY.md)).
 
 - **Data collection:** the hosted server receives only the tool name and the inputs of each tool call. The npm package runs on your computer and sends nothing to us.
 - **Use and storage:** inputs are used only to build that call's reply. Nothing is stored: no database, no files, no cache, no logging of inputs or outputs by our code.
