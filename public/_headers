@@ -17,3 +17,7 @@
 /favicon.svg
   Cache-Control: public, max-age=86400
 
+
+/.well-known/openai-apps-challenge
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: no-store
