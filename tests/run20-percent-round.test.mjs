@@ -159,14 +159,14 @@ test("icp_interview_synthesizer: 3 of 7 interviews (42.857...) prints 43%", asyn
 // ---- Ledger A17-O24: the hints in tools/list ----
 const listTools = async () => Object.fromEntries((await rpc("tools/list", {})).result.tools.map((t) => [t.name, t]));
 
-test("A17-O24: the interview synthesizer hint says what the tool does with pasted notes", async () => {
+test("scan finding 28 Oct 2026: the interview synthesizer asks only for structured notes (no raw_transcripts, no analysis_focus)", async () => {
   const t = await listTools();
-  const hint = t.icp_interview_synthesizer.inputSchema.properties.raw_transcripts.description;
-  assert.doesNotMatch(hint, /^Alternative: Paste raw interview transcripts or notes$/);
-  assert.match(hint, /does not analy[sz]e pasted text/i);
-  assert.match(hint, /interview_notes/);
-  assert.match(hint, /500 characters/);
-  // and the tool really does that: it shows the first 500 characters back and does not analyze them
+  const props = t.icp_interview_synthesizer.inputSchema.properties;
+  assert.deepEqual(Object.keys(props), ["interview_notes", "product_category", "company"]);
+  assert.match(t.icp_interview_synthesizer.description, /does not take full transcripts/);
+  const none = await call("icp_interview_synthesizer", {});
+  assert.doesNotMatch(none.text, /raw_transcripts|analysis_focus/);
+  // an older client that still sends raw_transcripts gets the same answer as before: the first 500 characters back, not analyzed
   const long = "We lost a week every month. ".repeat(60);
   const r = await call("icp_interview_synthesizer", { raw_transcripts: long });
   assert.match(r.text, /This tool analyzes structured notes only/);

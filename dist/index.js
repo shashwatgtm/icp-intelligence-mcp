@@ -2618,7 +2618,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
     // Tool 9: ICP Interview Synthesizer - Pattern Extraction from Interviews
     // ---------------------------------------------------------------------------
     icp_interview_synthesizer: {
-        description: 'Extract ICP patterns from customer interview notes: pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. Pasted notes are shown back (shortened) with a template to structure them; only structured notes are analyzed.',
+        description: 'Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized and key quotes per interview): pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed.',
         inputSchema: {
             type: 'object',
             properties: {
@@ -2635,15 +2635,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
                             value_realized: { type: 'array', items: { type: 'string' } }
                         }
                     },
-                    description: 'Structured interview notes'
-                },
-                raw_transcripts: {
-                    type: 'string',
-                    description: 'Alternative: paste interview notes or transcripts. This tool does not analyze pasted text: it shows up to 500 characters back with a template to structure them as interview_notes, which it does analyze'
-                },
-                analysis_focus: {
-                    type: 'string',
-                    description: 'Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)'
+                    description: 'Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze'
                 },
                 product_category: {
                     type: 'string',
@@ -2652,6 +2644,9 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
                 company: COMPANY_INPUT
             }
         },
+        // raw_transcripts and analysis_focus are no longer in the input schema (OpenAI scan finding, 28 October 2026): pasted
+        // text was never analyzed and analysis_focus was never used. An older client that still sends raw_transcripts gets the
+        // same answer as before (up to 500 characters shown back with the template); nothing asks for it.
         execute: (args) => {
             const notesIn = args.interview_notes || [];
             const ctx = readContext(undefined, {
@@ -2876,9 +2871,9 @@ Re-run with structured data for full analysis.
 
 - ${companyLine(args.company)}
 
-Provide interview data in one of these formats:
+Provide interview data in this format:
 
-## Option 1: Structured Notes (Recommended)
+## Structured Notes
 \`\`\`json
 {
   "interview_notes": [
@@ -2894,19 +2889,7 @@ Provide interview data in one of these formats:
 }
 \`\`\`
 
-## Option 2: Raw Transcripts
-\`\`\`json
-{
-  "raw_transcripts": "Paste your interview notes or transcript here..."
-}
-\`\`\`
-
-## Analysis Focus Options
-The analysis_focus input is accepted but not used yet: every run gives the complete analysis.
-- **pain_points**: Focus on problem patterns
-- **buying_journey**: Focus on triggers and process
-- **value_props**: Focus on outcomes and value
-- **all**: Complete analysis (default)
+Give one object per interview, with only the points and quotes you want analyzed. Full transcripts are not needed.
 
 This tool will identify patterns across interviews to refine your ICP.
 `;

@@ -230,7 +230,7 @@
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
     <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
     <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.26.</li>
-    <li>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document fields <code>customer_descriptions</code> (ICP Deep Dive) and <code>raw_transcripts</code> (ICP Interview Synthesizer), which take up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</li>
+    <li>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document field <code>customer_descriptions</code> (ICP Deep Dive), which takes up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
   </ul>
 </section>
@@ -392,11 +392,9 @@
 <section class="hx-section" id="icp-interview-synthesizer" aria-labelledby="d-icp-interview-synthesizer">
   <h3 id="d-icp-interview-synthesizer">ICP Interview Synthesizer</h3>
   <p><code>icp_interview_synthesizer</code></p>
-  <p class="hx-prose">Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed. <a href="/tools/icp-interview-synthesizer/">Open the form</a>.</p>
+  <p class="hx-prose">Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized, key quotes). It does not take full transcripts. <a href="/tools/icp-interview-synthesizer/">Open the form</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
-<tr><td><code>interview_notes</code></td><td>list of objects</td><td>no</td><td></td><td>Structured interview notes</td></tr>
-<tr><td><code>raw_transcripts</code></td><td>string</td><td>no</td><td></td><td>Alternative: paste interview notes or transcripts. This tool does not analyze pasted text: it shows up to 500 characters back with a template to structure them as interview_notes, which it does analyze</td></tr>
-<tr><td><code>analysis_focus</code></td><td>string</td><td>no</td><td></td><td>Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all)</td></tr>
+<tr><td><code>interview_notes</code></td><td>list of objects</td><td>no</td><td></td><td>Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze</td></tr>
 <tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell, used for sector notes</td></tr>
 <tr><td><code>company</code></td><td>string</td><td>no</td><td></td><td>Optional: your company or product name, so the answer can name it</td></tr>
   </tbody></table></div>

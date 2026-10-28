@@ -25,9 +25,6 @@ const MAX_NAME = 100;
 const LONG_TEXT = {
   "icp_deep_dive": [
     "customer_descriptions"
-  ],
-  "icp_interview_synthesizer": [
-    "raw_transcripts"
   ]
 };
 // Answers are never cached (privacy page: web and MCP answers are sent with Cache-Control: no-store).

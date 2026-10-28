@@ -50,7 +50,7 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 | 6 | `account_prioritization` | Account Prioritization | Rank and prioritize accounts using multi-dimensional scoring |
 | 7 | `icp_gap_analysis` | ICP Gap Analysis | Analyze gaps between current customer base and ideal ICP |
 | 8 | `icp_evolution_tracker` | ICP Evolution Tracker | Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text |
-| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from customer interview notes. Pasted notes are shown back with a template to structure them; only structured notes are analysed. |
+| 9 | `icp_interview_synthesizer` | ICP Interview Synthesizer | Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized, key quotes). It does not take full transcripts. |
 
 ### Inputs of each tool
 
@@ -147,9 +147,7 @@ Generated on 27 September 2026 from the server's own tool list, and checked agai
 
 | Input | Required | Type | Description |
 |---|---|---|---|
-| `interview_notes` | No | array of object | Structured interview notes |
-| `raw_transcripts` | No | string | Alternative: paste interview notes or transcripts. This tool does not analyze pasted text: it shows up to 500 characters back with a template to structure them as interview_notes, which it does analyze |
-| `analysis_focus` | No | string | Accepted but not used yet: every run gives the complete analysis (pain_points, buying_journey, value_props, all) |
+| `interview_notes` | No | array of object | Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze |
 | `product_category` | No | string | Optional: what you sell, used for sector notes |
 | `company` | No | string | Optional: your company or product name, so the answer can name it |
 
