@@ -1,0 +1,6 @@
+test_current_replay_is_offline_and_keeps_parsing_finding (__main__.FreshLiveTests.test_current_replay_is_offline_and_keeps_parsing_finding) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.016s
+
+OK

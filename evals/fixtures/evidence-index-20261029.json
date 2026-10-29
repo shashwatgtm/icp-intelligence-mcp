@@ -1,0 +1,49 @@
+{
+  "scope": "Historical evidence is retained. Fresh LIVE connector observations supersede only the named GTM/Content cases. No current Positioning observation is claimed.",
+  "current_capture": "evals/fixtures/fresh-live-20261029.json",
+  "current_replay": "evals/receipts/current-connector-replay.json",
+  "historical_sources": [
+    "evals/source/HOST-REVIEW-CASES.json",
+    "evals/source/ICP-ALPHA-PACKAGE-CASES.json",
+    "evals/fixtures/readiness-live-20261029.json",
+    "evals/fixtures/connector-observed-20261029.json",
+    "evals/fixtures/cloud-source-20261029.json",
+    "evals/receipts/offline-observation-replay.json"
+  ],
+  "superseded_failures": [
+    {
+      "historical_tool": "pmf_scorecard",
+      "current_case": "pmf_scorecard-review",
+      "evidence_status": "superseded by fresh passing observation; retained as negative regression input"
+    },
+    {
+      "historical_tool": "customer_interview_kit",
+      "current_case": "customer_interview_kit-review",
+      "evidence_status": "superseded by fresh passing observation; retained as negative regression input"
+    },
+    {
+      "historical_tool": "craft_gtm_analyzer",
+      "current_case": "craft_gtm_analyzer-review",
+      "evidence_status": "superseded by fresh passing observation; retained as negative regression input"
+    },
+    {
+      "historical_tool": "content_repurposer",
+      "current_case": "content_repurposer-review",
+      "evidence_status": "superseded by fresh passing observation; retained as negative regression input"
+    },
+    {
+      "historical_tool": "case_study_generator four outcomes",
+      "current_case": "case-study-four-outcomes",
+      "evidence_status": "superseded by fresh passing observation; retained as negative regression input"
+    }
+  ],
+  "not_retested": "Historical IMPACT records are not current findings. Owner reports Positioning In review, no new version, W5b stopped.",
+  "targeted_capture": "evals/fixtures/pmf-incomplete-evidence-20261029.json",
+  "superseded_pmf_findings": [
+    "pmf-activation-supplied: unlabelled activation rate 70% is not read; labelled Activation: 70% control passes.",
+    "pmf-incomplete-retention-evidence: churn and retention absent, activation read at 70%, 3 of 5 dimensions, but Priority Actions still recommends scaling."
+  ],
+  "remaining_current_findings": [],
+  "pmf_refresh": "evals/fixtures/pmf-fixed-refresh-20261029.json",
+  "pmf_refresh_status": "Both prior PMF failures superseded by exact-input fresh passing observations under unchanged graders. Earlier bad captures remain negative regression inputs."
+}
