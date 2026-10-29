@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { calculateMarket } from './market-sizing.ts';
+import { calculateMarket, structuredMarket, marketTextMetadata } from './market-sizing.ts';
 import { marketSizingHtml } from './market-sizing-ui.ts';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -3122,7 +3122,7 @@ export function createServer(): Server {
       const result = tool.execute(safeArgs as any);
       return {
         content: [{ type: 'text', text: result }],
-        ...(toolName === 'tam_sam_som_calculator' ? { structuredContent: calculateMarket(safeArgs as Record<string, unknown>) } : {})
+        ...(toolName === 'tam_sam_som_calculator' ? { structuredContent: structuredMarket(safeArgs as Record<string, unknown>), _meta: marketTextMetadata(typed as Record<string, unknown>) } : {})
       };
     } catch (error) {
       return {

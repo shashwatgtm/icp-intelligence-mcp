@@ -3069,7 +3069,7 @@ function createServer() {
             const result = tool.execute(safeArgs);
             return {
                 content: [{ type: 'text', text: result }],
-                ...(toolName === 'tam_sam_som_calculator' ? { structuredContent: (0, market_sizing_ts_1.calculateMarket)(safeArgs) } : {})
+                ...(toolName === 'tam_sam_som_calculator' ? { structuredContent: (0, market_sizing_ts_1.structuredMarket)(safeArgs), _meta: (0, market_sizing_ts_1.marketTextMetadata)(typed) } : {})
             };
         }
         catch (error) {
