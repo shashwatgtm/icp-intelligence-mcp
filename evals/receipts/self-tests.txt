@@ -1,0 +1,56 @@
+test_defect_alpha_audit_0 (__main__.GraderTests.test_defect_alpha_audit_0) ... ok
+test_defect_alpha_audit_1 (__main__.GraderTests.test_defect_alpha_audit_1) ... ok
+test_defect_alpha_consult_0 (__main__.GraderTests.test_defect_alpha_consult_0) ... ok
+test_defect_alpha_consult_1 (__main__.GraderTests.test_defect_alpha_consult_1) ... ok
+test_defect_case_study_0 (__main__.GraderTests.test_defect_case_study_0) ... ok
+test_defect_case_study_1 (__main__.GraderTests.test_defect_case_study_1) ... ok
+test_defect_churn_0 (__main__.GraderTests.test_defect_churn_0) ... ok
+test_defect_churn_1 (__main__.GraderTests.test_defect_churn_1) ... ok
+test_defect_impact_0 (__main__.GraderTests.test_defect_impact_0) ... ok
+test_defect_impact_1 (__main__.GraderTests.test_defect_impact_1) ... ok
+test_defect_impact_2 (__main__.GraderTests.test_defect_impact_2) ... ok
+test_defect_map_0 (__main__.GraderTests.test_defect_map_0) ... ok
+test_defect_map_1 (__main__.GraderTests.test_defect_map_1) ... ok
+test_defect_market_0 (__main__.GraderTests.test_defect_market_0) ... ok
+test_defect_market_1 (__main__.GraderTests.test_defect_market_1) ... ok
+test_defect_market_2 (__main__.GraderTests.test_defect_market_2) ... ok
+test_defect_repurpose_0 (__main__.GraderTests.test_defect_repurpose_0) ... ok
+test_defect_repurpose_1 (__main__.GraderTests.test_defect_repurpose_1) ... ok
+test_defect_roadmap_0 (__main__.GraderTests.test_defect_roadmap_0) ... ok
+test_defect_roadmap_1 (__main__.GraderTests.test_defect_roadmap_1) ... ok
+test_defect_roadmap_2 (__main__.GraderTests.test_defect_roadmap_2) ... ok
+test_defect_roi_0 (__main__.GraderTests.test_defect_roi_0) ... ok
+test_defect_roi_1 (__main__.GraderTests.test_defect_roi_1) ... ok
+test_defect_roi_2 (__main__.GraderTests.test_defect_roi_2) ... ok
+test_defect_roi_3 (__main__.GraderTests.test_defect_roi_3) ... ok
+test_defect_unused_fields_0 (__main__.GraderTests.test_defect_unused_fields_0) ... ok
+test_good_alpha_audit (__main__.GraderTests.test_good_alpha_audit) ... ok
+test_good_alpha_consult (__main__.GraderTests.test_good_alpha_consult) ... ok
+test_good_case_study (__main__.GraderTests.test_good_case_study) ... ok
+test_good_churn (__main__.GraderTests.test_good_churn) ... ok
+test_good_impact (__main__.GraderTests.test_good_impact) ... ok
+test_good_map (__main__.GraderTests.test_good_map) ... ok
+test_good_market (__main__.GraderTests.test_good_market) ... ok
+test_good_repurpose (__main__.GraderTests.test_good_repurpose) ... ok
+test_good_roadmap (__main__.GraderTests.test_good_roadmap) ... ok
+test_good_roi (__main__.GraderTests.test_good_roi) ... ok
+test_good_unused_fields (__main__.GraderTests.test_good_unused_fields) ... ok
+test_dry_run_zero_network_and_no_passes (__main__.ProtocolTests.test_dry_run_zero_network_and_no_passes) ... ok
+test_empty_output_cannot_pass (__main__.ProtocolTests.test_empty_output_cannot_pass) ... ok
+test_initialize_session_version_notification_then_call (__main__.ProtocolTests.test_initialize_session_version_notification_then_call) ... ok
+test_million_units (__main__.ProtocolTests.test_million_units) ... ok
+test_mismatched_id_rejected (__main__.ProtocolTests.test_mismatched_id_rejected) ... ok
+test_pagination (__main__.ProtocolTests.test_pagination) ... ok
+test_redirect_refused (__main__.ProtocolTests.test_redirect_refused) ... ok
+test_roadmap_other_source_motions (__main__.ProtocolTests.test_roadmap_other_source_motions) ... ok
+test_rpc_error_rejected (__main__.ProtocolTests.test_rpc_error_rejected) ... ok
+test_sources_and_three_negatives_each (__main__.ProtocolTests.test_sources_and_three_negatives_each) ... ok
+test_sse_multiline_and_timeout (__main__.ProtocolTests.test_sse_multiline_and_timeout) ... ok
+test_timeout_fails_without_printing_payload (__main__.ProtocolTests.test_timeout_fails_without_printing_payload) ... ok
+test_tool_error_cannot_pass (__main__.ProtocolTests.test_tool_error_cannot_pass) ... ok
+test_unsupported_protocol_rejected (__main__.ProtocolTests.test_unsupported_protocol_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 51 tests in 0.024s
+
+OK

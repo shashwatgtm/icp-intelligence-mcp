@@ -1,0 +1,486 @@
+{
+  "mode": "dry-run",
+  "counts": {
+    "pass": 0,
+    "fail": 0,
+    "skip": 68
+  },
+  "receipts": [
+    {
+      "server": "helix-revenue-enablement",
+      "case": "negative-1",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "negative-2",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "negative-3",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "positive-1",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "positive-2",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "positive-3",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "positive-4",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "positive-5",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "payment-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "private-data-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-revenue-enablement",
+      "case": "hostile-markup-inert",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "negative-1",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "negative-2",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "negative-3",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "positive-1",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "positive-2",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "positive-3",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "positive-4",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "positive-5",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "payment-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "private-data-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "hostile-markup-inert",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-impact",
+      "case": "negative-1",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-impact",
+      "case": "negative-2",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-impact",
+      "case": "negative-3",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-impact",
+      "case": "positive-1",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-impact",
+      "case": "positive-2",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-impact",
+      "case": "positive-3",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-impact",
+      "case": "positive-4",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-impact",
+      "case": "positive-5",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-impact",
+      "case": "empty-feedback-size",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-impact",
+      "case": "payment-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-impact",
+      "case": "private-data-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-impact",
+      "case": "hostile-markup-inert",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "negative-1",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "negative-2",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "negative-3",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "positive-1",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "positive-2",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "positive-3",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "positive-4",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "positive-5",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "payment-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "private-data-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "hostile-markup-inert",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "negative-1",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "negative-2",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "negative-3",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "positive-1",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "positive-2",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "positive-3",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "positive-4",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "positive-5",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "unused-interview-fields",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "payment-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "private-data-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-icp-intelligence",
+      "case": "hostile-markup-inert",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "negative-1",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "negative-2",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "negative-3",
+      "status": "skip",
+      "reason": "Requires ChatGPT host observation; raw MCP cannot establish refusal or isolation",
+      "scope": "manual-host"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "positive-1",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "positive-2",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "positive-3",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "positive-4",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "positive-5",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "payment-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "private-data-tool-absence",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    },
+    {
+      "server": "helix-gtm-alpha",
+      "case": "hostile-markup-inert",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend-limited"
+    }
+  ]
+}
