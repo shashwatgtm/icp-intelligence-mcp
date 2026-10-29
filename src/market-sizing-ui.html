@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Market sizing | Helix GTM Consulting</title>
+<style>
+@font-face{font-family:Archivo;src:url(data:font/woff2;base64,FONT_DATA) format('woff2');font-display:swap}
+*{box-sizing:border-box}body{margin:0;background:#FAF8F6;color:#1A0E10;font:16px/1.5 Archivo,Arial,sans-serif}main{max-width:1000px;margin:auto;padding:24px}header{display:flex;gap:12px;align-items:center;border-bottom:2px solid #641220;padding-bottom:16px}.mark{background:#C1121F;color:white;font:italic 700 30px/1 Georgia,serif;width:40px;height:40px;display:grid;place-items:center;padding-bottom:3px}.brand{font-weight:bold}h1{font-size:clamp(28px,5vw,44px);line-height:1.1;color:#641220}h2{font-size:22px}p{max-width:75ch}.muted{color:#5A4B4E}form{padding:20px;background:#EAD9D5;border:1px solid #641220}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}label{display:block;font-weight:bold}input,textarea,button{font:inherit}input,textarea{width:100%;padding:10px;border:1px solid #5A4B4E;background:#fff;color:#1A0E10}textarea{min-height:70px}small{display:block;font-weight:normal}button{padding:12px 20px;margin-top:16px;background:#641220;color:white;border:2px solid #641220;cursor:pointer}button:disabled{opacity:.6;cursor:wait}:focus-visible{outline:3px solid #C1121F;outline-offset:3px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.card{padding:16px;border-top:4px solid #C1121F;background:white;overflow-wrap:anywhere}.value{display:block;font-size:clamp(20px,3vw,30px);font-weight:bold;color:#641220}.scroll{overflow:auto}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:12px;border-bottom:1px solid #EAD9D5}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#EAD9D5;padding:16px;font:inherit}#status{min-height:24px}#status.error{color:#9b101b;font-weight:bold}[hidden]{display:none!important}@media(max-width:600px){main{padding:16px}.fields,.cards{grid-template-columns:1fr}form{padding:16px}}
+</style>
+<main><header><span class="mark" aria-hidden="true">h</span><span class="brand">Helix GTM<br><small>Consulting / ICP Intelligence</small></span></header>
+<h1>Size the market. See the assumptions.</h1><p>Bottom-up TAM, SAM and Year 1 SOM. All amounts are annual contract value in USD. This is a calculation framework, not market research.</p>
+<p id="mode" class="muted"></p><noscript>This calculator needs JavaScript. No inputs are sent when JavaScript is disabled.</noscript><form id="calculator" hidden><div class="fields">
+<label>Total potential companies<input name="total_potential_companies" type="number" min="0" step="any" required><small>Company count. Zero is allowed.</small></label>
+<label>Average annual contract value (USD)<input name="average_contract_value" type="number" min="0" step="any" required><small>Must be greater than zero.</small></label>
+<label>ICP match rate (%)<input name="icp_percentage" type="number" min="0" max="100" step="any"><small>Blank uses 30%, an example assumption.</small></label>
+<label>Year 1 share of SAM (%)<input name="year1_market_share_target" type="number" min="0" max="100" step="any"><small>Blank uses 3%, an example assumption.</small></label>
+<label>Segment name<input name="segment_name" maxlength="4000"></label>
+<label>Product category<input name="product_category" maxlength="4000"></label>
+<label>Company context<input name="company" maxlength="4000"><small>Optional context. Does not affect arithmetic.</small></label>
+<label>Input source and review label<textarea name="data_sources" maxlength="4000"></textarea></label>
+</div><button id="recalculate" type="submit">Recalculate</button></form>
+<p id="status" role="status" aria-live="polite">Enter your inputs to calculate. No example is prefilled.</p>
+<section id="results" hidden aria-label="Market sizing results"><h2 id="segment"></h2><p id="source"></p><p id="assumptions"></p><div class="cards"><div class="card">TAM<span class="value" id="tam"></span></div><div class="card">SAM<span class="value" id="sam"></span></div><div class="card">Year 1 SOM<span class="value" id="som"></span></div></div>
+<h2>Share scenarios</h2><p>Lower and higher cases use 0.5 and 1.5 times the entered Year 1 share. Shares are capped at 100% of SAM. These are assumptions, not forecasts.</p><div class="scroll"><table><thead><tr><th scope="col">Scenario</th><th scope="col">Share of SAM</th><th scope="col">Annual SOM (USD)</th></tr></thead><tbody id="scenarios"></tbody></table></div><h2>Formula trace</h2><pre id="trace"></pre></section>
+<p class="muted">No accounts, analytics, external calls or browser storage. Standalone calculations stay in this page. In an MCP host, recalculation sends the form inputs to the existing calculator tool through the host.</p></main>
+<script>
+'use strict';
+const calculateMarket = /*CALCULATE*/;
+const form=document.querySelector('form'), status=document.querySelector('#status'), results=document.querySelector('#results'), button=document.querySelector('button');
+const hosted=window.parent!==window; let ready=false, nextId=1, latestCall=0; const pending=new Map();
+const text=(id,value)=>{document.getElementById(id).textContent=String(value)};
+const number=value=>{const n=Number(value),s=n.toLocaleString('en-US',{maximumFractionDigits:10});return n!==0&&Number(s.replaceAll(',',''))===0?String(n):s;};
+const money=value=>value>0&&value<0.005?'under USD 0.01':'USD '+Number(value).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+text('mode',hosted?'MCP host mode. Waiting for initialization.':'Standalone mode. Fully local calculation.');
+function error(message){status.className='error';text('status',message);results.hidden=true;}
+function inputs(){const args={};for(const field of form.elements){if(!field.name)continue;const value=field.value.trim();if(field.type==='number'){if(value!=='')args[field.name]=Number(value);}else if(value!=='')args[field.name]=value;}return args;}
+function populate(args){if(!args||typeof args!=='object')return;for(const field of form.elements){if(field.name)field.value=typeof args[field.name]==='string'||typeof args[field.name]==='number'?String(args[field.name]):'';}}
+function render(data){
+  // Validate and recompute from received inputs. Never trust markup or derived values.
+  const r=calculateMarket(data.inputs);results.hidden=false;status.className='';text('status','Calculation updated.');
+  text('segment',typeof r.inputs.segment_name==='string'?r.inputs.segment_name:'Target market');text('source',typeof r.inputs.data_sources==='string'?r.inputs.data_sources:'Source: your inputs. Not independently verified.');
+  text('assumptions',r.exampleAssumptions.icp||r.exampleAssumptions.share?'Example assumptions used: '+[r.exampleAssumptions.icp?'ICP match 30%':'',r.exampleAssumptions.share?'Year 1 share 3%':''].filter(Boolean).join('; ')+'. Replace with your own.':'All calculation inputs supplied.');
+  for(const key of ['tam','sam','som'])text(key,money(r[key]));
+  const rows=document.querySelector('#scenarios');rows.replaceChildren();for(const s of r.scenarios){const row=document.createElement('tr');for(const v of [s.name,number(s.share)+'%',money(s.som)]){const cell=document.createElement('td');cell.textContent=v;row.append(cell);}rows.append(row);}
+  text('trace','TAM = '+number(r.totalCompanies)+' companies × '+money(r.acv)+' per company per year = '+money(r.tam)+'\nSAM = TAM × '+number(r.icpPercent*100)+'% = '+money(r.sam)+'\nYear 1 SOM = SAM × '+number(r.marketSharePercent*100)+'% = '+money(r.som));
+}
+function notify(method,params){parent.postMessage({jsonrpc:'2.0',method,params},'*');}
+function request(method,params){const id=nextId++;return new Promise((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(new Error('The MCP host did not respond. Please retry.'));},15000);pending.set(id,{resolve,reject,timer});parent.postMessage({jsonrpc:'2.0',id,method,params},'*');});}
+window.addEventListener('message',event=>{
+  if(!hosted||event.source!==window.parent)return;
+  const m=event.data;if(!m||m.jsonrpc!=='2.0')return;
+  if(pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(new Error('MCP host request failed.')):p.resolve(m.result);return;}
+  try{
+    if(m.method==='ui/notifications/tool-input'){populate(m.params?.arguments);results.hidden=true;text('status','Inputs received. Waiting for tool result.');}
+    if(m.method==='ui/notifications/tool-result'){
+      if(m.params?.isError)throw new Error('The calculator returned an error. Check the inputs and retry.');
+      if(!m.params?.structuredContent)throw new Error('No structured calculation was received. Recalculate to retry.');
+      populate(m.params.structuredContent.inputs);render(m.params.structuredContent);
+    }
+  }catch(e){error(e.message);}
+});
+form.addEventListener('input',()=>{latestCall++;results.hidden=true;text('status','Inputs changed. Recalculate to update results.');});
+form.addEventListener('submit',async event=>{event.preventDefault();const call=++latestCall;try{const args=inputs();calculateMarket(args);button.disabled=true;if(hosted){if(!ready)throw new Error('The MCP host is not ready. Please retry after initialization.');const r=await request('tools/call',{name:'tam_sam_som_calculator',arguments:args});if(call!==latestCall)return;if(r?.isError||!r?.structuredContent)throw new Error('The calculator returned no valid result. Check inputs and retry.');render(r.structuredContent);}else render({inputs:args});}catch(e){error(e.message);}finally{button.disabled=false;}});
+form.hidden=false;
+if(hosted){request('ui/initialize',{protocolVersion:'2026-01-26',appInfo:{name:'Helix market sizing',version:'1.0.0'},appCapabilities:{}}).then(()=>{ready=true;notify('ui/notifications/initialized',{});text('mode','MCP host mode. Recalculation uses the existing calculator tool.');}).catch(e=>error(e.message));}
+</script></html>

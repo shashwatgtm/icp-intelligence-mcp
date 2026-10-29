@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
+import { calculateMarket } from './market-sizing.ts';
+import { marketSizingHtml } from './market-sizing-ui.ts';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { gapAnalysis, pointsFor, splitStatements, clearVertical, aliasNamed, fitQuestions, matchWords, GENERIC_CRITERION_WORDS } from './rw-icp.ts';
 import { SAAS_ONLY, VERTICALS, explainSector, detectModel, profileFor, MODEL_NAME, BUSINESS_MODELS, type Vertical, type BusinessModel } from './verticals.ts';
@@ -1575,19 +1579,10 @@ ${SUGGESTED}
     }) => {
       const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, args.data_sources], buyer: [args.segment_name] });
       const sideM = buyerSide(ctx.v, args.product_category, args.segment_name).bv?.metrics || ctx.v?.metrics || [];
-      const totalCompanies = args.total_potential_companies;
-      const acv = args.average_contract_value;
-      // Run 16 D45: a typed 0 is used as 0; only an omitted or null value takes the preset.
-      const icpPercent = (args.icp_percentage ?? 30) / 100;
-      const marketSharePercent = (args.year1_market_share_target ?? 3) / 100;
+      const { totalCompanies, acv, icpPercent, marketSharePercent, tam, sam, som } = calculateMarket(args);
       const segment = args.segment_name || 'Target Market';
       const sources = args.data_sources || 'Your input';
-      
-      // Calculate TAM/SAM/SOM
-      const tam = totalCompanies * acv;
-      const sam = tam * icpPercent;
-      const som = sam * marketSharePercent;
-      
+
       // Calculate deal targets
       const targetDeals = Math.round(som / acv);
       
@@ -2980,6 +2975,7 @@ function withMeta<T extends { name: string }>(tool: T) {
   return {
     ...tool,
     title,
+    ...(tool.name === 'tam_sam_som_calculator' ? { _meta: { ui: { resourceUri: 'ui://helix/market-sizing/v1.html' } } } : {}),
     annotations: { title, readOnlyHint: true, destructiveHint: false, openWorldHint: false },
   };
 }
@@ -3085,8 +3081,16 @@ function checkRequiredInputs(name: string, args: Record<string, unknown> | undef
 export function createServer(): Server {
   const server = new Server(
     { name: SERVER_NAME, version: SERVER_VERSION },
-    { capabilities: { tools: {} } }
+    { capabilities: { tools: {}, resources: {} } }
   );
+
+  const resourceUri = 'ui://helix/market-sizing/v1.html';
+  const mimeType = 'text/html;profile=mcp-app';
+  server.setRequestHandler(ListResourcesRequestSchema, async () => ({ resources: [{ uri: resourceUri, name: 'Helix market sizing', mimeType }] }));
+  server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    if (request.params.uri !== resourceUri) throw new Error('Unknown resource');
+    return { contents: [{ uri: resourceUri, mimeType, text: marketSizingHtml, _meta: { ui: { csp: { connectDomains: [], resourceDomains: [], frameDomains: [] } } } }] };
+  });
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })),
@@ -3117,7 +3121,8 @@ export function createServer(): Server {
     try {
       const result = tool.execute(safeArgs as any);
       return {
-        content: [{ type: 'text', text: result }]
+        content: [{ type: 'text', text: result }],
+        ...(toolName === 'tam_sam_som_calculator' ? { structuredContent: calculateMarket(safeArgs as Record<string, unknown>) } : {})
       };
     } catch (error) {
       return {
