@@ -246,7 +246,7 @@ The tool reference on the docs page (https://icp-intelligence.gtmhelix.com/docs/
 Full policy: <https://icp-intelligence.gtmhelix.com/privacy/> (also in [PRIVACY.md](PRIVACY.md)).
 
 - **Data collection:** the hosted server receives only the tool name and the inputs of each tool call. The npm package runs on your computer and sends nothing to us.
-- **Use and storage:** inputs are used only to build that call's reply. Nothing is stored: no database, no files, no cache, no logging of inputs or outputs by our code.
+- **Use and storage:** inputs are used only to build that call's reply. Inputs and answers are not stored: no database, no files, no cache, no logging of inputs or outputs by our code. Each call adds one anonymous usage record (date and time, site and tool name, app kind, web form or assistant); see the privacy page.
 - **Third-party sharing:** none by us. Netlify hosts the server and processes requests under its own policy (https://www.netlify.com/privacy/). Fonts are served from this site, so loading a page contacts no one else.
 - **Retention:** we keep no tool inputs or outputs. Netlify keeps its own platform logs under its policy.
 - **Contact:** shashwat@gtmhelix.com

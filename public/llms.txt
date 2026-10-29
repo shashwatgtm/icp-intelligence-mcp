@@ -42,7 +42,7 @@ No. Each tool applies fixed rules in the ICP Intelligence code to the inputs you
 
 ### What happens to what I type?
 
-It is sent to this site's server, used once to build the answer, and dropped when the answer is sent back. Nothing is stored and nothing you type is logged. The privacy page has the details.
+It is sent to this site's server, used once to build the answer, and dropped when the answer is sent back. What you type and the answer are not stored, and nothing you type is logged. Only an anonymous count of tool calls is kept. The privacy page has the details.
 
 ### How do I use ICP Intelligence in Claude?
 
@@ -66,7 +66,7 @@ Yes, at https://github.com/shashwatgtm/icp-intelligence-mcp under the MIT licenc
 
 ### Who is ICP Intelligence not ideal for?
 
-Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies. Market sizing without your own numbers: TAM, SAM and SOM are built from the figures you enter; an ICP match rate or market share you leave out is filled with a labelled example (30% and 3%). Teams that need saved models or CRM sync: nothing is stored and no CRM is connected.
+Teams looking for a list of companies to target: the tools describe and score profiles from your data but find no companies. Market sizing without your own numbers: TAM, SAM and SOM are built from the figures you enter; an ICP match rate or market share you leave out is filled with a labelled example (30% and 3%). Teams that need saved models or CRM sync: answers are not stored and no CRM is connected.
 
 ### How do I report a problem?
 

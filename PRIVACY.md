@@ -2,7 +2,7 @@
 
 The published version is at https://icp-intelligence.gtmhelix.com/privacy/.
 
-Last updated 29 September 2026
+Last updated 29 October 2026
 
 ## Who we are
 
@@ -16,10 +16,21 @@ ICP Intelligence is built and run by Shashwat Ghosh, Helix GTM Consulting. Conta
 ## How it is used and stored
 
 - The inputs are used once, inside that request, to build the answer. The web form and the MCP address are two small functions that call the same tool code.
-- Nothing is stored: there is no database, file storage or cache for inputs or answers. Web and MCP answers are sent with `Cache-Control: no-store`.
+- Inputs and answers are not stored: there is no database, file storage or cache for them. Web and MCP answers are sent with `Cache-Control: no-store`.
 - Our code does not log your inputs or the answers.
 - The page does not save what you type in your browser either. It is gone when you close or reload the page.
-- There are no accounts, cookies, analytics, advertising or tracking scripts. Fonts are served from this site, so loading a page contacts no one else.
+- There are no accounts, cookies, advertising or tracking scripts. The only analytics is the usage count below. Fonts are served from this site, so loading a page contacts no one else.
+
+## Usage counts
+
+Since 17 October 2026, each call to a tool adds one record to a usage count, kept in Netlify's storage for this site. It shows us which tools people use. Each record holds only:
+
+- The date and time of the call.
+- This site's name and the tool's name.
+- One word for the kind of app that made the call, such as `claude`, `chatgpt` or `browser`. It is read from the User-Agent header the app sends.
+- Whether the call came from a web form or an AI assistant.
+
+It never holds your inputs, the answer, your IP address or the full User-Agent. Nothing in a record says who you are. To use the tools without being counted, use the local version described below.
 
 ## Limits that protect the service
 
@@ -28,14 +39,14 @@ ICP Intelligence is built and run by Shashwat Ghosh, Helix GTM Consulting. Conta
 
 ## Who else processes data
 
-- **Netlify** hosts the site and the functions. Like any web host it processes each request, including your IP address, and keeps its own platform logs under its policy: [netlify.com/privacy](https://www.netlify.com/privacy/).
+- **Netlify** hosts the site and the functions, and stores the usage counts. Like any web host it processes each request, including your IP address, and keeps its own platform logs under its policy: [netlify.com/privacy](https://www.netlify.com/privacy/).
 - If you use an AI assistant, its provider (for example Anthropic for Claude) handles your conversation under its own policy.
 
 We do not sell or share data with anyone else.
 
 ## Retention and your rights
 
-We keep no inputs or answers, so there is nothing of yours for us to find, correct or delete. Netlify's platform logs are kept by Netlify under its policy. Questions: [shashwat@gtmhelix.com](mailto:shashwat@gtmhelix.com).
+We keep no inputs or answers, so there is nothing of yours for us to find, correct or delete. Usage counts have no set end date. They cannot be linked to you, so we cannot find or delete one person's records. Netlify's platform logs are kept by Netlify under its policy. Questions: [shashwat@gtmhelix.com](mailto:shashwat@gtmhelix.com).
 
 ## Local version
 

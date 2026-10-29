@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ICP Intelligence Privacy Policy | Helix GTM Consulting</title>
-<meta name="description" content="How ICP Intelligence handles data: your input is used once to build the answer. Nothing is stored or logged, and there are no cookies or analytics.">
+<meta name="description" content="How ICP Intelligence handles data: your input is used once to build the answer. Inputs and answers are not stored or logged. Only an anonymous count of tool calls is kept, and there are no cookies.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Shashwat Ghosh, Helix GTM Consulting">
 <link rel="canonical" href="https://icp-intelligence.gtmhelix.com/privacy/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ICP Intelligence by Helix GTM Consulting">
 <meta property="og:title" content="ICP Intelligence Privacy Policy | Helix GTM Consulting">
-<meta property="og:description" content="How ICP Intelligence handles data: your input is used once to build the answer. Nothing is stored or logged, and there are no cookies or analytics.">
+<meta property="og:description" content="How ICP Intelligence handles data: your input is used once to build the answer. Inputs and answers are not stored or logged. Only an anonymous count of tool calls is kept, and there are no cookies.">
 <meta property="og:url" content="https://icp-intelligence.gtmhelix.com/privacy/">
 <meta property="og:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="ICP Intelligence by Helix GTM Consulting">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ICP Intelligence Privacy Policy | Helix GTM Consulting">
-<meta name="twitter:description" content="How ICP Intelligence handles data: your input is used once to build the answer. Nothing is stored or logged, and there are no cookies or analytics.">
+<meta name="twitter:description" content="How ICP Intelligence handles data: your input is used once to build the answer. Inputs and answers are not stored or logged. Only an anonymous count of tool calls is kept, and there are no cookies.">
 <meta name="twitter:image" content="https://icp-intelligence.gtmhelix.com/og.png">
 <meta name="twitter:creator" content="@Shashwat_Ghosh">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -162,14 +162,14 @@
    "@id": "https://icp-intelligence.gtmhelix.com/privacy/#page",
    "url": "https://icp-intelligence.gtmhelix.com/privacy/",
    "name": "ICP Intelligence Privacy Policy | Helix GTM Consulting",
-   "description": "How ICP Intelligence handles data: your input is used once to build the answer. Nothing is stored or logged, and there are no cookies or analytics.",
+   "description": "How ICP Intelligence handles data: your input is used once to build the answer. Inputs and answers are not stored or logged. Only an anonymous count of tool calls is kept, and there are no cookies.",
    "isPartOf": {
     "@id": "https://icp-intelligence.gtmhelix.com/#site"
    },
    "about": {
     "@id": "https://icp-intelligence.gtmhelix.com/#app"
    },
-   "dateModified": "2026-09-29",
+   "dateModified": "2026-10-29",
    "inLanguage": "en",
    "primaryImageOfPage": "https://icp-intelligence.gtmhelix.com/og.png"
   },
@@ -213,11 +213,11 @@
 <main id="main">
 <section class="hero" aria-labelledby="h1">
   <div class="wrap">
-    <p class="eyebrow"><span class="tag">No cookies · no analytics · no accounts</span></p>
+    <p class="eyebrow"><span class="tag">No cookies · no tracking scripts · no accounts</span></p>
     <div class="crop"><span class="cm tl" aria-hidden="true"></span><span class="cm tr" aria-hidden="true"></span><span class="cm bl" aria-hidden="true"></span><span class="cm br" aria-hidden="true"></span><h1 id="h1">Privacy policy</h1></div>
     <div class="hx-hero-text"><div class="hx10-split-text">
-      <p class="sub">What the web forms and AI assistants send us, and what happens to it. Short version: used once, never stored.</p>
-      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-09-29">29 September 2026</time></p>
+      <p class="sub">What the web forms and AI assistants send us, and what happens to it. Short version: your inputs are used once and never stored. We only count tool calls.</p>
+      <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-10-29">29 October 2026</time></p>
     </div></div>
   </div>
 </section>
@@ -236,11 +236,21 @@
 <h2>How it is used and stored</h2>
 <ul>
 <li>The inputs are used once, inside that request, to build the answer. The web form and the MCP address are two small functions that call the same tool code.</li>
-<li>Nothing is stored: there is no database, file storage or cache for inputs or answers. Web and MCP answers are sent with <code>Cache-Control: no-store</code>.</li>
+<li>Inputs and answers are not stored: there is no database, file storage or cache for them. Web and MCP answers are sent with <code>Cache-Control: no-store</code>.</li>
 <li>Our code does not log your inputs or the answers.</li>
 <li>The page does not save what you type in your browser either. It is gone when you close or reload the page.</li>
-<li>There are no accounts, cookies, analytics, advertising or tracking scripts. Fonts are served from this site, so loading a page contacts no one else.</li>
+<li>There are no accounts, cookies, advertising or tracking scripts. The only analytics is the usage count below. Fonts are served from this site, so loading a page contacts no one else.</li>
 </ul>
+
+<h2>Usage counts</h2>
+<p>Since 17 October 2026, each call to a tool adds one record to a usage count, kept in Netlify's storage for this site. It shows us which tools people use. Each record holds only:</p>
+<ul>
+<li>The date and time of the call.</li>
+<li>This site's name and the tool's name.</li>
+<li>One word for the kind of app that made the call, such as <code>claude</code>, <code>chatgpt</code> or <code>browser</code>. It is read from the User-Agent header the app sends.</li>
+<li>Whether the call came from a web form or an AI assistant.</li>
+</ul>
+<p>It never holds your inputs, the answer, your IP address or the full User-Agent. Nothing in a record says who you are. To use the tools without being counted, use the local version described below.</p>
 
 <h2>Limits that protect the service</h2>
 <ul>
@@ -250,13 +260,13 @@
 
 <h2>Who else processes data</h2>
 <ul>
-<li><strong>Netlify</strong> hosts the site and the functions. Like any web host it processes each request, including your IP address, and keeps its own platform logs under its policy: <a href="https://www.netlify.com/privacy/">netlify.com/privacy</a>.</li>
+<li><strong>Netlify</strong> hosts the site and the functions, and stores the usage counts. Like any web host it processes each request, including your IP address, and keeps its own platform logs under its policy: <a href="https://www.netlify.com/privacy/">netlify.com/privacy</a>.</li>
 <li>If you use an AI assistant, its provider (for example Anthropic for Claude) handles your conversation under its own policy.</li>
 </ul>
 <p>We do not sell or share data with anyone else.</p>
 
 <h2>Retention and your rights</h2>
-<p>We keep no inputs or answers, so there is nothing of yours for us to find, correct or delete. Netlify's platform logs are kept by Netlify under its policy. Questions: <a href="mailto:shashwat@gtmhelix.com">shashwat@gtmhelix.com</a>.</p>
+<p>We keep no inputs or answers, so there is nothing of yours for us to find, correct or delete. Usage counts have no set end date. They cannot be linked to you, so we cannot find or delete one person's records. Netlify's platform logs are kept by Netlify under its policy. Questions: <a href="mailto:shashwat@gtmhelix.com">shashwat@gtmhelix.com</a>.</p>
 
 <h2>Local version</h2>
 <p>The npm package (@shashwatgtmalpha/icp-intelligence-mcp) runs entirely on your own computer and sends nothing to us.</p>

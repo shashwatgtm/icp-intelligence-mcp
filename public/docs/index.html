@@ -245,7 +245,7 @@
     <li>Errors: 400 with <code>errors</code> (missing or invalid fields), 404 for an unknown tool, 405 for methods other than POST, 413 above 32,000 bytes, 422 when the tool itself refuses the input (<code>ok</code> is false and <code>error</code> holds the tool's message), 429 when the rate limit is reached, 500 if the tool fails.</li>
     <li>Limits: 30 requests per minute per IP address; the whole request up to 32,000 bytes; top-level text fields up to 6,000 characters and top-level lists up to 50 items.</li>
     <li>Forms without JavaScript post <code>application/x-www-form-urlencoded</code> and get an HTML page back.</li>
-    <li>Nothing is stored and the input is not logged (see <a href="/privacy/">Privacy</a>).</li>
+    <li>Inputs and answers are not stored, and the input is not logged (see <a href="/privacy/">Privacy</a>).</li>
   </ul>
 </section>
 
