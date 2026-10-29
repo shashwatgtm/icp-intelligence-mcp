@@ -3,9 +3,15 @@
   "scope": "Offline replay of fresh LIVE Helix connector calls. Not evals/run.py HTTP requests. No new calls during replay.",
   "fixture": "evals/fixtures/fresh-live-20261029.json",
   "fixture_sha256": "86722e4688e5389d21b73534bf148a4c5207119d24ac07ed3196ed073685fc20",
+  "additional_fixtures": [
+    {
+      "path": "evals/fixtures/pmf-incomplete-evidence-20261029.json",
+      "sha256": "c09beeaf90b7fdb0e80d239b11514dd56abf609e7478548e415de11af9990c3f"
+    }
+  ],
   "counts": {
     "pass": 12,
-    "fail": 1,
+    "fail": 2,
     "skip": 0
   },
   "receipts": [
@@ -151,6 +157,17 @@
       "start_utc": "2026-10-29 13:25:24 UTC",
       "end_utc": "2026-10-29 13:25:27 UTC",
       "provenance": "Fresh LIVE Helix test connector call. Derived labelled activation control. Not an evals/run.py HTTP call."
+    },
+    {
+      "case": "pmf-incomplete-retention-evidence",
+      "tool": "pmf_scorecard",
+      "server": "helix-craft-gtm",
+      "grader": "pmf-incomplete",
+      "status": "fail",
+      "reason": "Failed: no conflicting scaling action with incomplete evidence",
+      "start_utc": "2026-10-29 13:37:32 UTC",
+      "end_utc": "2026-10-29 13:37:37 UTC",
+      "provenance": "One fresh LIVE connected Helix PMF call for the W1 targeted incomplete-evidence case. Synthetic inputs only. Labelled Activation: 70% separates parsing. Not an evals/run.py HTTP call."
     }
   ]
 }

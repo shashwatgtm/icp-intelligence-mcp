@@ -7,7 +7,7 @@ import re
 
 from graders import section, structural_sentence
 
-KINDS = {'pmf', 'launch', 'interview', 'plan-review', 'newsletter', 'webinar', 'content-review'}
+KINDS = {'pmf', 'pmf-incomplete', 'launch', 'interview', 'plan-review', 'newsletter', 'webinar', 'content-review'}
 
 
 def contains(s, value):
@@ -23,7 +23,19 @@ def unique_body_lines(s):
 def check(kind, s, args):
     checks = {}
     low = s.lower()
-    if kind == 'pmf':
+    if kind == 'pmf-incomplete':
+        overall = section(s, 'Overall PMF Assessment')
+        actions = section(s, 'Priority Actions')
+        churn = section(s, r'1\. Customer Retention \(Churn\)')
+        retention = section(s, r'4\. Revenue Retention')
+        activation = section(s, r'5\. Activation')
+        checks['labelled activation is read'] = bool(re.search(r'\|\s*Activation Rate\s*\|\s*70%\s*\|', activation))
+        checks['churn and retention gaps are explicit'] = all('NOT PROVIDED' in p and 'not scored' in p.lower() for p in [churn, retention])
+        checks['three of five dimensions scored'] = '3 of 5' in overall and '9/10' in overall
+        checks['rule score is not proof'] = bool(re.search(r'rule score.{0,80}not proof', overall, re.I))
+        checks['incomplete evidence caveat is retained'] = bool(re.search(r'fill.{0,40}missing.{0,80}before.{0,80}scale', overall, re.I | re.S))
+        checks['no conflicting scaling action with incomplete evidence'] = bool(actions) and not re.search(r'all dimensions scoring well|focus on scaling|scale (?:now|immediately|aggressively)', actions, re.I)
+    elif kind == 'pmf':
         overall = section(s, 'Overall PMF Assessment')
         activation = section(s, r'5\. Activation')
         actions = section(s, 'Priority Actions')

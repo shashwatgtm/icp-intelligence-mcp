@@ -5,12 +5,52 @@ Branch: `codex/mcp-evals-20261029`.
 Revision parent: `e6819fc689e1d96348e3d595be1d2e7abab2a02a`.
 The delivered head is in the PR metadata. Keep this PR draft.
 
-All ten exact review fixtures pass. The four-outcome probe passes. One derived
-activation input remains a parsing failure. No check was weakened to hide it.
+All ten exact review fixtures and the four-outcome probe passed the prior full
+review. The current replay retains two derived PMF findings: activation parsing
+and conflicting scaling advice with incomplete evidence. Neither was hidden.
+
+## Targeted PMF correction
+
+One additional fresh connected PMF call reproduced W1's incomplete-evidence case.
+Its synthetic metrics are NPS 70, CAC USD 500, LTV USD 3000 and labelled
+`Activation: 70%`. Churn and retention are absent. The tool reads activation,
+reports 3 of 5 dimensions and a rule score of 9/10, and correctly warns that
+missing data must be filled before scaling. Priority Actions still says:
+"All dimensions scoring well: focus on scaling."
+
+`evals/fixtures/pmf-incomplete-evidence-20261029.json` saves the complete input,
+output, UTC timestamps and connector provenance. This was exactly one new LIVE
+connector call. It was not a direct HTTP runner call. No other tool or host chat
+was called in this targeted follow-up.
+
+The derived `pmf-incomplete` grader checks the read activation, two evidence gaps,
+3 of 5 dimensions, rule-score caveat and Priority Actions. The real response fails
+only the conflicting scaling action. Changing only that action to evidence
+collection passes. Restoring the bad action fails. Missing actions, forged full
+coverage and a wrong activation value also fail. No production file was edited.
+
+| Current added case | Grader | Result |
+| --- | --- | --- |
+| `pmf-incomplete-retention-evidence` | `pmf-incomplete` | Fail: scaling advice conflicts with incomplete evidence |
+
+Only targeted tests and current saved-response replay ran:
+
+```sh
+python tests/evals-pmf-incomplete-20261029.test.py
+python tests/evals-fresh-live-20261029.test.py FreshLiveTests.test_current_replay_is_offline_and_keeps_parsing_finding
+python evals/replay.py --current --output evals/receipts/current-connector-replay.json
+git diff --cached --check
+```
+
+The new targeted tests pass 8/8. The affected replay integration test passes 1/1.
+Current replay has 12 pass, 2 fail and 0 skip, with exit 1 preserving both real
+findings. The earlier 224-test full run and dry-run were not repeated. Their
+receipts below remain historical validation. New receipts are
+`pmf-incomplete-self-tests.txt` and `pmf-incomplete-replay-test.txt`.
 
 ## Capture and provenance
 
-Thirteen fresh LIVE calls used the connected Helix GTM Planning Test and Helix
+The earlier thirteen fresh LIVE calls used the connected Helix GTM Planning Test and Helix
 Content Studio Test tools. All requested tools were available. Ten calls used
 the exact five source inputs for each server. Three calls were derived probes:
 the existing four-outcome case study and two activation input formats.
@@ -86,9 +126,11 @@ counter-evidence, qualifications and individual outcomes. They add repeated
 openings, fabricated testimony, product pitches and inconsistent schedules.
 The previous 150 tests and negative inventory/protocol checks remain in place.
 
-## Commands and results
+## Prior full review commands and current replay
 
-All computation ran in cloud. No production build was needed.
+All computation ran in cloud. No production build was needed. The broad test
+commands below belong to the prior full review and were not rerun for the targeted
+PMF correction. The current replay row includes the added PMF case.
 
 ```sh
 python tests/evals-20261029.test.py
@@ -104,8 +146,8 @@ git diff --cached --check
 | Original offline tests | 51 | 0 | 0 | 0 |
 | Prior observed-format tests | 99 | 0 | 0 | 0 |
 | Fresh capture and mutation tests | 74 | 0 | 0 | 0 |
-| Total offline tests | 224 | 0 | 0 | 0 |
-| Current connector capture replay | 12 | 1 | 0 | 1 |
+| Prior total offline tests, not rerun | 224 | 0 | 0 | 0 |
+| Current connector capture replay | 12 | 2 | 0 | 1 |
 | Dry-run | 0 | 0 | 73 | 0 |
 | Whitespace check | 1 | 0 | 0 | 0 |
 
