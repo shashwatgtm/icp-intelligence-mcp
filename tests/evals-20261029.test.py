@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'evals'))
 from generate import generate
-from graders import grade
+from graders import grade, inventory_findings, section, structural_sentence
 from run import MCP, NoRedirect, ProtocolError, evaluate
 
 
@@ -23,7 +23,7 @@ GOOD = {
     'market': 'Synthetic review inputs\nTAM: USD 50,000,000\nSAM: USD 20,000,000\nSOM: USD 400,000',
     'churn': 'Compounded monthly at 2%. Annual churn: 21.5%',
     'map': 'Target close: 2027-01-31\nPilot: 2027-01-25\nSecurity review: 2027-01-26\nProcurement approval: 2027-01-29\nHoliday calendar not checked. Verify local holidays manually.',
-    'impact': 'Company size alone cannot decide the buying team. Missing evidence is not proof of absence. Collect interviews and baseline evidence before making a claim.',
+    'impact': '## Proof You Already Have\nNo customer results were supplied. Collect a customer baseline and after result, over the same period, with a named owner to confirm it.\n## 30-Day Action Plan\n- Confirm who champions and who signs: Revenue Operations lead and Chief Revenue Officer.\n- Gather new customer evidence before drafting proof points.',
     'case-study': 'Synthetic review case. Reporting preparation fell from 4 hours to 2 hours per week. No customer quote supplied.',
     'repurpose': '# LinkedIn post\nSynthetic demonstration. The pilot surfaced missing data.\n# Email\nSynthetic demonstration. A named owner checked reporting fields weekly.\n# Blog summary\nSynthetic demonstration. One region piloted before rollout.',
     'roadmap': 'Ecosystem and ABM roadmap for 30-day. These are proposed tasks.',
@@ -37,7 +37,7 @@ DEFECTS = {
     'market': [GOOD['market'].replace('50,000,000', '5,000,000'), GOOD['market'].replace('20,000,000', '2,000,000'), GOOD['market'].replace('400,000', '1,000,000')],
     'churn': ['2% monthly. Annual churn: 24%. Compounded.', 'Monthly churn is 2%; annual churn is unknown. 21.5% is mentioned as a keyword.'],
     'map': [GOOD['map'].replace('2027-01-25', '2027-01-30'), GOOD['map'].replace('Holiday calendar not checked. Verify local holidays manually.', 'All holidays were checked.')],
-    'impact': ['500 employees determines the buying team. Missing evidence proves no demand. Proof is strong.', GOOD['impact'].replace('Collect interviews and baseline evidence before making a claim.', ''), GOOD['impact'] + ' Company size determines the buyer.'],
+    'impact': ['500 employees determines the buying team. Missing evidence proves no demand. Proof is strong.', GOOD['impact'].replace('Collect a customer baseline and after result, over the same period, with a named owner to confirm it.', ''), GOOD['impact'].replace('Revenue Operations lead and Chief Revenue Officer', 'Head of HR and CHRO')],
     'case-study': [GOOD['case-study'].replace('2 hours', '1 hour'), GOOD['case-study'] + ' The customer said "This changed everything."'],
     'repurpose': [GOOD['repurpose'].replace('Synthetic demonstration. A named owner', 'A named owner'), GOOD['repurpose'].replace('The pilot surfaced missing data.', 'The pilot surfaced missing data.\nSynthetic demonstration. The pilot surfaced missing data.')],
     'roadmap': ['Product-led roadmap for 30-day.', 'Ecosystem roadmap for 90-day.', GOOD['roadmap'] + ' We have executed the tasks.'],
@@ -127,7 +127,7 @@ class ProtocolTests(unittest.TestCase):
     def test_dry_run_zero_network_and_no_passes(self):
         with patch('urllib.request.OpenerDirector.open', side_effect=AssertionError('network forbidden')), patch('run.MCP', side_effect=AssertionError('client forbidden')):
             report = evaluate(generate(), dry_run=True, factory=lambda *a, **k: self.fail('client created'))
-        self.assertEqual(report['counts'], {'pass': 0, 'fail': 0, 'skip': 68})
+        self.assertEqual(report['counts'], {'pass': 0, 'fail': 0, 'skip': 71})
         self.assertEqual(sum(r['scope'] == 'manual-host' for r in report['receipts']), 18)
 
     def test_sources_and_three_negatives_each(self):

@@ -3,7 +3,7 @@
   "counts": {
     "pass": 0,
     "fail": 0,
-    "skip": 68
+    "skip": 71
   },
   "receipts": [
     {
@@ -218,7 +218,21 @@
     },
     {
       "server": "helix-impact",
-      "case": "empty-feedback-size",
+      "case": "empty-feedback",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-impact",
+      "case": "size500",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-impact",
+      "case": "size5000",
       "status": "skip",
       "reason": "Dry run; zero network calls",
       "scope": "backend"
@@ -296,6 +310,13 @@
     {
       "server": "helix-craft-content",
       "case": "positive-5",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-content",
+      "case": "case-study-four-outcomes",
       "status": "skip",
       "reason": "Dry run; zero network calls",
       "scope": "backend"

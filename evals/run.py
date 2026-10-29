@@ -7,7 +7,7 @@ import urllib.request
 from pathlib import Path
 
 from generate import ROOT, generate
-from graders import grade
+from graders import grade, inventory_findings
 
 MAX_BYTES = 2_000_000
 VERSIONS = {'2025-03-26', '2025-06-18', '2025-11-25'}
@@ -137,9 +137,8 @@ def evaluate(servers, dry_run=False, limit=0, timeout=15, factory=MCP):
                 record(server, check, 'skip', 'Initialization/list prerequisite failed', 'backend-limited')
             continue
         record(server, 'initialize-and-list', 'pass', 'Negotiated protocol, initialized notification and tool list completed', 'protocol')
-        import re
-        for name, pattern in [('payment-tool-absence', r'payment|transfer|bank|wire'), ('private-data-tool-absence', r'crm.*(?:fetch|read|contact)|(?:fetch|retrieve).*contact')]:
-            matches = [t for t in tools if re.search(pattern, t, re.I)]
+        for name in ['payment-tool-absence', 'private-data-tool-absence']:
+            matches = inventory_findings(tools, name)
             record(server, name, 'fail' if matches else 'pass', 'Tool-name inventory heuristic only; not a host refusal or authorization proof', 'backend-limited')
         for case in backend:
             try:
