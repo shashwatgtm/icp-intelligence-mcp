@@ -123,6 +123,9 @@ def grade(kind, result, args=None):
         return False, 'Tool error or empty text result'
     low = s.lower()
     ok = False
+    from gtm_content_graders import KINDS, check
+    if kind in KINDS:
+        return check(kind, s, args)
     if kind == 'smoke':
         return True, 'Nonempty text only; semantic source expectations remain manual'
     if kind == 'roi':
@@ -136,6 +139,8 @@ def grade(kind, result, args=None):
     elif kind == 'churn':
         annual = annual_churn_values(s)
         ok = bool(annual) and all(abs(v - 100 * (1 - .98 ** 12)) < .15 for v in annual) and bool(re.search(r'compound|1\s*-\s*\(?0?\.98', low))
+        simple = re.findall(r'(?:monthly rate times twelve|simple (?:annual(?:ized)? )?(?:comparison|estimate|rate|multiplication))[^\d%]{0,20}(\d+(?:\.\d+)?)\s*%', low)
+        ok = ok and all(abs(float(v) - 24) < .01 for v in simple) and not re.search(r'not compounded', low)
     elif kind == 'map':
         dates = re.findall(r'\b20\d{2}-\d{2}-\d{2}\b', s)
         # Target close is Sunday. It may appear as context, never as a work milestone.

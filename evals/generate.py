@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 DOMAINS = ['revenue-enablement', 'craft-gtm', 'impact', 'craft-content', 'icp-intelligence', 'gtmalpha']
 GRADERS = {'roi_business_case_builder': 'roi', 'mutual_action_plan_generator': 'map', 'retention_playbook': 'churn', 'case_study_generator': 'case-study', 'content_repurposer': 'repurpose', 'tam_sam_som_calculator': 'market', 'generate_roadmap': 'roadmap', 'epic_audit': 'alpha-audit', 'gtm_consultation': 'alpha-consult', 'impact_full_audit': 'impact'}
+GRADERS.update({'pmf_scorecard': 'pmf', 'launch_commander': 'launch', 'customer_interview_kit': 'interview', 'craft_gtm_analyzer': 'plan-review', 'newsletter_builder': 'newsletter', 'webinar_script': 'webinar', 'craft_content_improver': 'content-review'})
 SOURCE_BLOBS = {'HOST-REVIEW-CASES.json': '55798516394fa253d2815e94a7af67936cbaf7f2', 'ICP-ALPHA-PACKAGE-CASES.json': '3d0622f9c15273615dd6b495fd6e5dc5a9c9f157'}
 
 
@@ -27,6 +28,11 @@ def generate():
             for i, c in enumerate(mcp['cases']['negative']):
                 cases.append(dict(id=f'negative-{i+1}', mode='manual-host', source_case=c,
                                   backend_check=['payment-tool-absence', 'private-data-tool-absence', 'hostile-source-handling'][i]))
+            if mcp['name'] == 'helix-craft-gtm':
+                original = cases[0]['arguments']
+                for label, metric in [('pmf-activation-supplied', 'activation rate 70%'), ('pmf-activation-labelled', 'Activation: 70%')]:
+                    args = dict(original, current_metrics=original['current_metrics'] + '; ' + metric)
+                    cases.append(dict(id=label, mode='backend', tool='pmf_scorecard', arguments=args, grader='pmf', source_case='Derived synthetic activation parsing control, not a replacement source'))
             if mcp['name'] == 'helix-impact':
                 original = cases[4]['arguments']
                 for label, target in [('empty-feedback', original['target_customer']), ('size500', original['target_customer'] + ' with 500 employees'), ('size5000', original['target_customer'] + ' with 5000 employees')]:
