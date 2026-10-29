@@ -1,0 +1,13 @@
+test_both_new_outputs_pass_unchanged_graders (__main__.PMFFixedRefreshTests.test_both_new_outputs_pass_unchanged_graders) ... ok
+test_current_actions_and_closing_match_reported_fix (__main__.PMFFixedRefreshTests.test_current_actions_and_closing_match_reported_fix) ... ok
+test_exact_historical_inputs_are_reused (__main__.PMFFixedRefreshTests.test_exact_historical_inputs_are_reused) ... ok
+test_old_activation_capture_still_fails (__main__.PMFFixedRefreshTests.test_old_activation_capture_still_fails) ... ok
+test_old_scaling_capture_still_fails (__main__.PMFFixedRefreshTests.test_old_scaling_capture_still_fails) ... ok
+test_restored_activation_defect_still_fails (__main__.PMFFixedRefreshTests.test_restored_activation_defect_still_fails) ... ok
+test_restored_conflicting_scaling_action_still_fails (__main__.PMFFixedRefreshTests.test_restored_conflicting_scaling_action_still_fails) ... ok
+test_two_complete_timestamped_connector_records (__main__.PMFFixedRefreshTests.test_two_complete_timestamped_connector_records) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK

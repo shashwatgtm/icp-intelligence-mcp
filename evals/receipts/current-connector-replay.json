@@ -6,12 +6,18 @@
   "additional_fixtures": [
     {
       "path": "evals/fixtures/pmf-incomplete-evidence-20261029.json",
-      "sha256": "c09beeaf90b7fdb0e80d239b11514dd56abf609e7478548e415de11af9990c3f"
+      "sha256": "c09beeaf90b7fdb0e80d239b11514dd56abf609e7478548e415de11af9990c3f",
+      "scope": "Historical bad capture, superseded for current selection"
+    },
+    {
+      "path": "evals/fixtures/pmf-fixed-refresh-20261029.json",
+      "sha256": "10f22a66a9dcc38da94f4e8c241522859da6b818a0309071057139a75f4dc24e",
+      "scope": "Current selection for exactly two PMF cases"
     }
   ],
   "counts": {
-    "pass": 12,
-    "fail": 2,
+    "pass": 14,
+    "fail": 0,
     "skip": 0
   },
   "receipts": [
@@ -141,11 +147,11 @@
       "tool": "pmf_scorecard",
       "server": "helix-craft-gtm",
       "grader": "pmf",
-      "status": "fail",
-      "reason": "Failed: supplied activation is read; all five dimensions scored",
-      "start_utc": "2026-10-29 13:24:54 UTC",
-      "end_utc": "2026-10-29 13:24:56 UTC",
-      "provenance": "Fresh LIVE Helix test connector call. Derived synthetic probe. Not an evals/run.py HTTP call."
+      "status": "pass",
+      "reason": "Assertions met: rule score is not proof; supplied activation is read; all five dimensions scored; input metrics retained",
+      "start_utc": "2026-10-29 15:52:56 UTC",
+      "end_utc": "2026-10-29 15:53:01 UTC",
+      "provenance": "Fresh LIVE connected Helix PMF refresh. Exact prior synthetic inputs. Not an evals/run.py HTTP call."
     },
     {
       "case": "pmf-activation-labelled",
@@ -163,11 +169,11 @@
       "tool": "pmf_scorecard",
       "server": "helix-craft-gtm",
       "grader": "pmf-incomplete",
-      "status": "fail",
-      "reason": "Failed: no conflicting scaling action with incomplete evidence",
-      "start_utc": "2026-10-29 13:37:32 UTC",
-      "end_utc": "2026-10-29 13:37:37 UTC",
-      "provenance": "One fresh LIVE connected Helix PMF call for the W1 targeted incomplete-evidence case. Synthetic inputs only. Labelled Activation: 70% separates parsing. Not an evals/run.py HTTP call."
+      "status": "pass",
+      "reason": "Assertions met: labelled activation is read; churn and retention gaps are explicit; three of five dimensions scored; rule score is not proof; incomplete evidence caveat is retained; no conflicting scaling action with incomplete evidence",
+      "start_utc": "2026-10-29 15:53:01 UTC",
+      "end_utc": "2026-10-29 15:53:04 UTC",
+      "provenance": "Fresh LIVE connected Helix PMF refresh. Exact prior synthetic inputs. Not an evals/run.py HTTP call."
     }
   ]
 }
