@@ -4,6 +4,7 @@
 // Same file in every repo. Checks the answer text itself (no Markdown parser here; the run's property test renders every answer
 // with pandoc gfm and commonmark, micromark and mdast: work/run40s/prop/). Neutral targets only (evil.example, B81).
 import test from "node:test";
+import { assertCpuBudget } from "./helpers/cpu-budget.mjs";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 
@@ -79,13 +80,13 @@ test("the escape pass: every escaped value is inert by itself (unit)", () => {
   }
   // ordinary text without the escaped characters is unchanged
   for (const v of ["Mid-market logistics software company.\nBuyers: VP Operations and the CFO.", "Budget $75,000 (hypothetical), 40 reps", "hardware_software", "30-day", "Series A fintech, 3x pipeline"]) assert.equal(mod.escapeText(v), v);
-  // linear: 200,000 characters of the worst atoms in well under a second
-  for (const unit of ["[](", "\\`<!", "\n- ", "www.a@b.c ", "\t#", "#", "##x", "&#", ":a", "1", "-", "=", "$", "_"]) {
-    const s = unit.repeat(Math.ceil(200000 / unit.length));
-    const t0 = performance.now();
-    mod.escapeText(s);
-    assert.ok(performance.now() - t0 < 250, `slow on ${JSON.stringify(unit)}`);
-  }
+});
+
+// Correctness above is independent of machine scheduling and performance below.
+test("the escape pass: large adversarial inputs stay within the CPU budget", async () => {
+  const inputs = ["[](", "\\`<!", "\n- ", "www.a@b.c ", "\t#", "#", "##x", "&#", ":a", "1", "-", "=", "$", "_"].map((unit) => unit.repeat(Math.ceil(200000 / unit.length)));
+  await assertCpuBudget(new URL(G ? "../netlify/lib/escape-inputs.js" : "../dist/escape-inputs.js", import.meta.url),
+    "escapeText", inputs, 250);
 });
 
 test("no tool repeats live markup from any text field (MCP)", async () => {
