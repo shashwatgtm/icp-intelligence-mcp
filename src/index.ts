@@ -1104,7 +1104,11 @@ This tool will analyze patterns across your customers to identify your ideal pro
       })) : [];
       const hitKeys = new Set(proofHits.map(h => `${h.criterion}|${h.value}`));
       const notFound = proofItems.length ? criteria.flatMap(c => c.values.filter(val => !hitKeys.has(`${c.criterion}|${val}`) && !nameMatched(c)).map(val => ({ criterion: c.criterion, value: val }))).filter(x => x.value.length <= 80) : [];
-      const proofKind = (t: string) => /\((?:customer|partner|analyst|client) quote\)|customer words/i.test(t) ? 'a customer statement' : /page claim|case study|story title|story headline|headline|ebook|home page|award|recogni|leader|gartner|forrester|named|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
+      // Host review 30 Oct 2026: a note that no evidence exists, or a hypothesis, is said to be one before any other reading
+      // ("Hypothesis only: named owners may improve adoption" was read as a page claim because of the word "named").
+      const proofKind = (t: string) => /^\s*(?:no|not)\b[^;]{0,40}\b(?:measured|data|correlation|evidence|results?|proof)\b|\b(?:not|none) (?:yet )?(?:measured|supplied|given|available|tested|proven)\b/i.test(t) ? 'a note that no evidence is given yet, so it cannot score anything'
+        : /\b(?:hypothes[ie]s|assum(?:e|ed|ption)|untested|we think|we believe|may|might|could)\b/i.test(t) ? 'a hypothesis to test in your closed deals, not evidence yet'
+        : /\((?:customer|partner|analyst|client) quote\)|customer words/i.test(t) ? 'a customer statement' : /page claim|case study|story title|story headline|headline|ebook|home page|award|recogni|leader|gartner|forrester|named(?! (?:process |account |deal |budget )?(?:owners?|champions?|contacts?|sponsors?|persons?|buyers?)\b)|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
       const longValues = criteria.flatMap(c => c.values.filter(v2 => v2.length > LONG_VALUE).map(v2 => ({ criterion: c.criterion, value: v2 })));
 
       // D30: the qualification tiers are bands of the maximum score (sum of criteria weights),
@@ -2704,12 +2708,17 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
         const quoteLike = (t: string) => /\((?:customer|partner|analyst|client) quote\)|\b(?:customer|partner|client) quote\b|\bcustomer words\b|^["“]/i.test(t);
         const claimLike = (t: string) => !quoteLike(t) && /page claim|case study|story title|success story|ebook|home page|\baward|recogni[sz]|\blisted\b|ranking|named a\b|leader in|featured in|\(case study\)|magic quadrant|frost radar/i.test(t);
         const unquote = (t: string) => t.replace(/\s*\((?:customer|partner|analyst|client) quote\)\s*$/i, '').replace(/^customer (?:quote|words):\s*/i, '').replace(/^["“](.*)["”]$/, '$1').trim();
+        // Host review 30 Oct 2026: "Not measured", "None yet", "Unknown" or "N/A" in a field says nothing was captured; it is not a pain,
+        // a trigger or an outcome to lead with, so it is left out of the counts and named once under "Read this first".
+        const notCaptured = (t: string) => /^\s*(?:not (?:yet )?(?:measured|known|captured|recorded|asked|available|tracked)|none(?: yet| reported| given)?|n\/?a|unknown|tbd|to be (?:confirmed|measured)|no (?:data|result|value|outcome)s?(?: yet)?|-)\s*\.?\s*$/i.test(t);
+        const gaps: string[] = [];
+        const keep = (list: string[] | undefined, field: string) => (list || []).filter(x => { if (notCaptured(x)) { gaps.push(`${field} ("${x.trim()}")`); return false; } return true; });
         const per = interviews.map(i => ({
-          pains: (i.pain_points || []).filter(p => !isQuestion(p) && !isObjection(p)),
+          pains: keep(i.pain_points, 'pain_points').filter(p => !isQuestion(p) && !isObjection(p)),
           asked: (i.pain_points || []).filter(isQuestion),
           objections: (i.pain_points || []).filter(p => !isQuestion(p) && isObjection(p)),
-          triggers: i.buying_triggers || [],
-          values: i.value_realized || [],
+          triggers: keep(i.buying_triggers, 'buying_triggers'),
+          values: keep(i.value_realized, 'value_realized'),
           quotes: i.key_quotes || [],
         }));
         const tally = (lists: string[][]) => {
@@ -2755,6 +2764,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
           : "Write the answer once, in the buyer's words, and put it where the question is asked.";
 
         const readFirst = [
+          gaps.length ? `${gaps.length === 1 ? 'One entry says' : `${gaps.length} entries say`} nothing was captured, so ${gaps.length === 1 ? 'it is' : 'they are'} left out of the counts below: ${andList([...new Set(gaps)])}. Ask about ${gaps.length === 1 ? 'it' : 'them'} in the next interview.` : '',
           sameAcross ? `All ${n} interview notes carry the same pain points, questions and value statements, so every count below is ${n} of ${n} by repetition. Treat them as one source until you add notes from separate interviews.` : '',
           asked.length ? `${plural(asked.length, 'item')} in pain_points ${asked.length === 1 ? 'is a question a buyer asked' : 'are questions buyers asked'} (listed apart, not counted as pain points).` : '',
           claims.length ? `${plural(claims.length, 'value statement')} read${claims.length === 1 ? 's' : ''} like a page claim, award or case study title rather than an outcome a customer told you (listed apart; confirm ${claims.length === 1 ? 'it' : 'them'} with customers before you lead with ${claims.length === 1 ? 'it' : 'them'}).` : '',

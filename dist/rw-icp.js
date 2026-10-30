@@ -959,19 +959,26 @@ const GRADED_NAME = /\b(?:size|employees?|headcount|revenue|budget|timeline|timi
 const GRADED_NUMBER = /(?<![A-Za-z0-9])\d[\d,.]*\+?(?![A-Za-z])/;
 const GRADED_WORD = /^(?:yes|no|partly|partial|none|high|medium|low|large|small|mid|midsize|mid-size|active|active project|planned|planning|exploring|confirmed|unknown|this (?:quarter|year|month)|next (?:quarter|year)|immediate|urgent|soon|later|always|sometimes|never|strong|weak|good|poor|full|some|high fit|medium fit|low fit|budget planned|no budget|confirmed budget)$/i;
 const NONE_VALUE = /^(?:none|no|other|others|none of (?:these|the above)|not applicable|n\/a|unknown|not (?:sure|known|listed))\b/i;
+// Host review 30 Oct 2026: a value that says the thing is missing ("Not documented", "Absent", "Without a sponsor") never scores points.
+const NEGATIVE_VALUE = /^(?:not|no|non|without|absent|missing|lacking|never|none|undocumented|unconfirmed|unqualified|unknown)\b/i;
 // The example points for the values of one criterion. A list that is ordered by nature keeps the preset steps (first value full weight, last 0,
-// even steps between). A list of named targets scores the full weight for each name, and a closing "none" or "other" scores 0.
+// even steps between). A yes-or-no pair ("Present" and "Absent", "Documented" and "Not documented") is graded too: the value that says the
+// thing is missing scores 0 in either order. A list of named targets scores the full weight for each name, and a closing "none" or "other",
+// or any value that says the thing is missing, scores 0.
 function pointsFor(criterion, values, weight, userGiven) {
     if (!userGiven)
         return { kind: 'graded', points: [], closing: false };
     if (values.length === 1)
         return { kind: 'single', points: [weight], closing: false };
+    const negative = values.map((v) => NEGATIVE_VALUE.test(v.trim()));
+    if (values.length === 2 && negative.filter(Boolean).length === 1)
+        return { kind: 'graded', points: negative.map((n) => (n ? 0 : weight)), closing: false };
     const graded = GRADED_NAME.test(criterion) || values.filter((v) => GRADED_NUMBER.test(v) || GRADED_WORD.test(v.trim())).length * 2 >= values.length;
     if (graded)
         return { kind: 'graded', points: values.map((_v, i) => Math.round(weight * (values.length - 1 - i) / (values.length - 1))), closing: false };
     const last = values.length - 1;
     const closing = NONE_VALUE.test(values[last].trim());
-    return { kind: 'named', points: values.map((_v, i) => (closing && i === last ? 0 : weight)), closing };
+    return { kind: 'named', points: values.map((_v, i) => ((closing && i === last) || negative[i] ? 0 : weight)), closing };
 }
 // ---------------------------------------------------------------------------
 // statements: a list typed in one field ("A; B; C" or one per line). A semicolon, a full stop or a new line inside quotes or brackets
