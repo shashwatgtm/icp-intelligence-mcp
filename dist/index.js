@@ -3,6 +3,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
+const market_sizing_ts_1 = require("./market-sizing.js");
+const market_sizing_ui_ts_1 = require("./market-sizing-ui.js");
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
@@ -1602,17 +1604,9 @@ ${SUGGESTED}
         execute: (args) => {
             const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, args.data_sources], buyer: [args.segment_name] });
             const sideM = buyerSide(ctx.v, args.product_category, args.segment_name).bv?.metrics || ctx.v?.metrics || [];
-            const totalCompanies = args.total_potential_companies;
-            const acv = args.average_contract_value;
-            // Run 16 D45: a typed 0 is used as 0; only an omitted or null value takes the preset.
-            const icpPercent = (args.icp_percentage ?? 30) / 100;
-            const marketSharePercent = (args.year1_market_share_target ?? 3) / 100;
+            const { totalCompanies, acv, icpPercent, marketSharePercent, tam, sam, som } = (0, market_sizing_ts_1.calculateMarket)(args);
             const segment = args.segment_name || 'Target Market';
             const sources = args.data_sources || 'Your input';
-            // Calculate TAM/SAM/SOM
-            const tam = totalCompanies * acv;
-            const sam = tam * icpPercent;
-            const som = sam * marketSharePercent;
             // Calculate deal targets
             const targetDeals = Math.round(som / acv);
             // Format numbers
@@ -2923,6 +2917,7 @@ function withMeta(tool) {
     return {
         ...tool,
         title,
+        ...(tool.name === 'tam_sam_som_calculator' ? { _meta: { ui: { resourceUri: 'ui://helix/market-sizing/v1.html' } } } : {}),
         annotations: { title, readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     };
 }
@@ -3038,7 +3033,15 @@ function checkRequiredInputs(name, args) {
     return null;
 }
 function createServer() {
-    const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {} } });
+    const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {}, resources: {} } });
+    const resourceUri = 'ui://helix/market-sizing/v1.html';
+    const mimeType = 'text/html;profile=mcp-app';
+    server.setRequestHandler(types_js_1.ListResourcesRequestSchema, async () => ({ resources: [{ uri: resourceUri, name: 'Helix market sizing', mimeType }] }));
+    server.setRequestHandler(types_js_1.ReadResourceRequestSchema, async (request) => {
+        if (request.params.uri !== resourceUri)
+            throw new Error('Unknown resource');
+        return { contents: [{ uri: resourceUri, mimeType, text: market_sizing_ui_ts_1.marketSizingHtml, _meta: { ui: { csp: { connectDomains: [], resourceDomains: [], frameDomains: [] } } } }] };
+    });
     server.setRequestHandler(types_js_1.ListToolsRequestSchema, async () => ({
         tools: Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })),
     }));
@@ -3065,7 +3068,8 @@ function createServer() {
         try {
             const result = tool.execute(safeArgs);
             return {
-                content: [{ type: 'text', text: result }]
+                content: [{ type: 'text', text: result }],
+                ...(toolName === 'tam_sam_som_calculator' ? { structuredContent: (0, market_sizing_ts_1.structuredMarket)(safeArgs), _meta: (0, market_sizing_ts_1.marketTextMetadata)(typed) } : {})
             };
         }
         catch (error) {

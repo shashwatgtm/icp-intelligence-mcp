@@ -1,0 +1,71 @@
+{
+  "pass": 7,
+  "fail": 0,
+  "skip": 0,
+  "receipts": [
+    {
+      "case": "standalone unsupported range",
+      "pass": 1,
+      "fail": 0
+    },
+    {
+      "mode": "standalone",
+      "pass": 1,
+      "fail": 0,
+      "checks": [
+        "exact labelled fixture",
+        "changed count and scenarios and trace",
+        "zero rate",
+        "blank example assumptions",
+        "zero ACV refusal",
+        "inert untrusted values",
+        "forged source ignored",
+        "390px no horizontal overflow",
+        "keyboard tab order",
+        "no external requests or page errors"
+      ],
+      "hostedErrorChecked": false
+    },
+    {
+      "case": "literal host round trips",
+      "pass": 1,
+      "fail": 0,
+      "samples": 7,
+      "roundsPerSample": 3
+    },
+    {
+      "case": "stale RPC success, RPC error, tool-input and tool-result",
+      "pass": 1,
+      "fail": 0
+    },
+    {
+      "case": "mcp unsupported range",
+      "pass": 1,
+      "fail": 0
+    },
+    {
+      "mode": "mcp",
+      "pass": 1,
+      "fail": 0,
+      "checks": [
+        "size-changed grows iframe, shrinks after edits and follows mobile width",
+        "exact labelled fixture",
+        "changed count and scenarios and trace",
+        "zero rate",
+        "blank example assumptions",
+        "zero ACV refusal",
+        "inert untrusted values",
+        "forged source ignored",
+        "390px no horizontal overflow",
+        "keyboard tab order",
+        "no external requests or page errors"
+      ],
+      "hostedErrorChecked": true
+    },
+    {
+      "case": "result-only literal hydration and three host calls",
+      "pass": 1,
+      "fail": 0
+    }
+  ]
+}
