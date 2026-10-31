@@ -13,3 +13,5 @@ First test failure: a size notification was emitted before ui/initialize. The as
 Official source: https://developers.openai.com/apps-sdk/build/chatgpt-ui/ . The fetched, hashed page is in hub dot-sources/apps-ui.html.gz; the table states Call a tool from the UI / tools/call, and its example calls request("tools/call", {name: "roll_dice", arguments: {sides}}). Source bytes and exact snippet are in C2-OFFICIAL-BRIDGE.json in the hub.
 
 Hosts without widgets still receive the same text and error flags, plus structuredContent on selected successful tool calls, additive UI metadata and resource discovery. The widget resource loads only if requested. Exact UTF-8 JSON byte deltas are in hub checks/c2-final-compat-details.json. No host latency was measured.
+
+Final brand correction: the market cards now use the shared square, two-pixel ink border and hard shadow; the funnel uses #641220, #C1121F and #1A0E10. CSP hashes were rebuilt. The final build and 90 focused/widget/market checks passed, and every original tool still has identical schema and text. c2-brand-* receipts cover these bytes. Visual/browser acceptance remains NOT_TESTED.

@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-31T16:31:56.485690+00:00",
+  "checks": [
+    "c2-brand-build.json",
+    "c2-brand-tests.json",
+    "c2-brand-compat-details.json"
+  ],
+  "bytes": {
+    "src/widget-document.ts": "4c354e526f967ce3f3370fc7480593c540b00787fc39573518e560a353f7cc77",
+    "wave2/ui/widget-runtime.js": "f61234f51c95c5e2eff420aa533c2ed91a6d397bf550a7035783e0e3d894fe22",
+    "dist/widget-document.d.ts": "8d33e091bcba9898b60080fb8c48e869955a513b33e3ef5d1711de01f01bdee6",
+    "dist/widget-document.js.map": "42ae92e0fd0bd15b45f35591c9b9f0cdc7a36842dee93aff2b6afdfeeb10ec99",
+    "dist/widget-document.d.ts.map": "6f5e8cac6d81691842934781865682f0727ec95ffe62efaf5b548b3362663e1c",
+    "dist/widget-document.js": "47c73bdb53ecd1e300d4f10f877a4ad33298e07f86a06cba196e1b15e59a7b60"
+  },
+  "browser": "NOT_TESTED",
+  "host": "NOT_TESTED"
+}
