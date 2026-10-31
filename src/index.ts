@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { attachWidgets } from './widget-layer.ts';
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -3097,6 +3098,8 @@ export function createServer(): Server {
     { name: SERVER_NAME, version: SERVER_VERSION },
     { capabilities: { tools: {} } }
   );
+
+  attachWidgets(server);
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })),

@@ -1,0 +1,166 @@
+{
+  "icp_deep_dive": {
+    "normal": {
+      "product_category": "Operations workflow software",
+      "customers": [
+        {
+          "name": "Record A",
+          "industry": "software",
+          "size": "50 to 100 employees",
+          "acv": 12000,
+          "sales_cycle_days": 30,
+          "tech_stack": [
+            "Existing CRM"
+          ],
+          "buying_trigger": "New approval process",
+          "champion_title": "Operations lead"
+        },
+        {
+          "name": "Record B",
+          "industry": "software",
+          "size": "50 to 100 employees",
+          "acv": 18000,
+          "sales_cycle_days": 45,
+          "tech_stack": [
+            "Existing CRM"
+          ],
+          "buying_trigger": "New approval process",
+          "champion_title": "Operations lead"
+        }
+      ]
+    },
+    "weak": {}
+  },
+  "icp_scoring_model": {
+    "normal": {
+      "product_category": "Operations workflow software",
+      "scoring_criteria": [
+        {
+          "criterion": "Operational pain",
+          "importance": "critical",
+          "values": [
+            "Manual approvals",
+            "Missed handoffs"
+          ]
+        },
+        {
+          "criterion": "Integration fit",
+          "importance": "important",
+          "values": [
+            "Existing CRM"
+          ]
+        }
+      ],
+      "success_correlation": "User hypothesis: urgent handoff problems correlate with purchase; not yet validated."
+    },
+    "weak": {}
+  },
+  "buyer_group_analyzer": {
+    "normal": {
+      "product_category": "Operations workflow software",
+      "deal_size": "12000 to 18000 annual",
+      "target_company_size": "50 to 100 employees",
+      "known_stakeholders": [
+        "Operations lead",
+        "Finance director"
+      ],
+      "typical_champion": "Operations lead"
+    },
+    "weak": {
+      "product_category": "Not supplied"
+    }
+  },
+  "tam_sam_som_calculator": {
+    "normal": {
+      "total_potential_companies": 1000,
+      "average_contract_value": 12000,
+      "icp_percentage": 20,
+      "year1_market_share_target": 2,
+      "data_sources": "Synthetic arithmetic test inputs, not market evidence",
+      "segment_name": "Operational workflow segment",
+      "product_category": "Operations workflow software"
+    },
+    "weak": {
+      "total_potential_companies": 0,
+      "average_contract_value": 12000
+    }
+  },
+  "icp_gap_analysis": {
+    "normal": {
+      "current_customers": "Small software operations teams",
+      "ideal_icp": "Mid-size software operations teams",
+      "current_metrics": {
+        "avg_acv": 12000,
+        "avg_sales_cycle": 45,
+        "win_rate": 20,
+        "churn_rate": 10,
+        "nps": 20
+      },
+      "target_metrics": {
+        "avg_acv": 18000,
+        "avg_sales_cycle": 30,
+        "win_rate": 30,
+        "churn_rate": 5,
+        "nps": 40
+      },
+      "product_category": "Operations workflow software"
+    },
+    "weak": {
+      "current_customers": "Not supplied",
+      "ideal_icp": "Not supplied"
+    }
+  },
+  "icp_evolution_tracker": {
+    "normal": {
+      "current_icp": "Software operations teams with manual approvals",
+      "recent_wins": "Two teams bought after adding an approval owner",
+      "recent_losses": "One team deferred because no owner was assigned",
+      "market_changes": "No external market change supplied",
+      "time_period": "last quarter",
+      "product_category": "Operations workflow software"
+    },
+    "weak": {
+      "current_icp": "Not supplied"
+    }
+  },
+  "icp_interview_synthesizer": {
+    "normal": {
+      "product_category": "Operations workflow software",
+      "interview_notes": [
+        {
+          "customer": "Interview A",
+          "role": "Operations lead",
+          "key_quotes": [
+            "We lose the next action at handoff."
+          ],
+          "pain_points": [
+            "Missed handoffs"
+          ],
+          "buying_triggers": [
+            "New process owner"
+          ],
+          "value_realized": [
+            "Clear ownership"
+          ]
+        },
+        {
+          "customer": "Interview B",
+          "role": "Operations lead",
+          "key_quotes": [
+            "We need to know who owns the next step."
+          ],
+          "pain_points": [
+            "Missed handoffs"
+          ],
+          "buying_triggers": [
+            "New process owner"
+          ],
+          "value_realized": [
+            "Clear ownership"
+          ]
+        }
+      ]
+    },
+    "weak": {}
+  }
+}
