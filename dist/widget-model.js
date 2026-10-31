@@ -28,7 +28,21 @@ function parseSections(text) {
     const flush = () => { if (current.body.trim() || current.tables.length)
         sections.push(current); };
     const lines = text.split('\n');
+    let fence = '';
     for (let i = 0; i < lines.length; i++) {
+        const marker = /^\s*(`{3,}|~{3,})/.exec(lines[i]);
+        if (marker) {
+            if (!fence)
+                fence = marker[1][0];
+            else if (marker[1][0] === fence)
+                fence = '';
+            current.body += (current.body ? '\n' : '') + lines[i];
+            continue;
+        }
+        if (fence) {
+            current.body += (current.body ? '\n' : '') + lines[i];
+            continue;
+        }
         const heading = /^#{1,6}\s+(.+?)\s*$/.exec(lines[i]);
         if (heading) {
             flush();
