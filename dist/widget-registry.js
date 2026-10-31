@@ -7,6 +7,7 @@ exports.WIDGETS = {
     "buyer_group_analyzer": "Buyer Group Analyzer",
     "tam_sam_som_calculator": "TAM SAM SOM Calculator",
     "icp_gap_analysis": "ICP Gap Analysis",
-    "icp_evolution_tracker": "ICP Evolution Tracker"
+    "icp_evolution_tracker": "ICP Evolution Tracker",
+    "icp_interview_synthesizer": "ICP Interview Synthesizer"
 };
 //# sourceMappingURL=widget-registry.js.map
