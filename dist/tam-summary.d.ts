@@ -9,7 +9,7 @@ export declare function formatMarketCurrency(num: number): string;
 export declare function marketSummary(args: MarketInputs): {
     kind: string;
     reason: string;
-    toolArguments?: undefined;
+    toolArgumentsEncoded?: undefined;
     figures?: undefined;
     inputs?: undefined;
     rates?: undefined;
@@ -18,7 +18,7 @@ export declare function marketSummary(args: MarketInputs): {
     sourceNote?: undefined;
 } | {
     kind: string;
-    toolArguments: Record<string, unknown>;
+    toolArgumentsEncoded: string;
     figures: {
         key: string;
         label: string;

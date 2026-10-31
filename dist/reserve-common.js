@@ -84,15 +84,18 @@ else if (s.type === 'number') {
 else if (s.type === 'boolean' && typeof v !== 'boolean')
     issues.push(path + ': boolean required'); return issues; }
 const registry = {};
-function define(name, description, schema, run) { registry[name] = { tool: { name, description, inputSchema: schema, annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, run }; }
+function define(name, description, schema, run) { schema = { ...schema, properties: { ...schema.properties, company: { ...exports.text, description: 'Optional company context supplied by you.' } } }; registry[name] = { tool: { name, description, inputSchema: schema, annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }, run }; }
 const reserveTools = () => Object.values(registry).map(x => x.tool);
 exports.reserveTools = reserveTools;
 const isReserveTool = (name) => Object.prototype.hasOwnProperty.call(registry, name);
 exports.isReserveTool = isReserveTool;
 function callReserveTool(name, args) { if (!(0, exports.isReserveTool)(name))
-    return { isError: true, content: [{ type: 'text', text: 'Unknown reserve tool.' }] }; const entry = registry[name], issues = validate(entry.tool.inputSchema, args); if (issues.length)
+    return { isError: true, content: [{ type: 'text', text: 'Unknown reserve tool.' }] }; const entry = registry[name], schema = entry.tool.inputSchema; const input = args && typeof args === 'object' ? args : {}; const missing = (schema.required ?? []).find(k => schema.properties?.[k].type === 'string' && !schema.properties[k].enum && (input[k] == null || typeof input[k] === 'string' && !input[k].trim())); if (missing)
+    return { isError: true, content: [{ type: 'text', text: 'Missing required input for ' + name + ': ' + missing + '. Please supply text for this field.' }] }; const issues = validate(schema, args); if (issues.length)
     return { isError: true, content: [{ type: 'text', text: 'Invalid input: ' + issues.join('; ') }] }; try {
     const report = entry.run(args);
+    if (input.company)
+        report.summary.unshift('Company: ' + input.company);
     return { content: [{ type: 'text', text: reportText(report) }], structuredContent: { report: safeData(report) } };
 }
 catch (error) {

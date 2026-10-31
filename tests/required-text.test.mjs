@@ -21,8 +21,8 @@ const present = (p) => (Array.isArray(p.enum) ? p.enum[0] : p.type === "string" 
   ? Math.max(typeof p.minimum === "number" ? p.minimum : 1, 1) + 1 : p.type === "boolean" ? true : p.type === "array" ? [] : {});
 const withText = tools.filter((t) => (t.inputSchema.required || []).some((k) => isText(t.inputSchema.properties[k])));
 
-test("the tools with a required text field are all counted (3)", () => {
-  assert.equal(withText.length, 3, withText.map((t) => t.name).join(", "));
+test("the tools with a required text field are all counted (4)", () => {
+  assert.equal(withText.length, 4, withText.map((t) => t.name).join(", "));
 });
 
 for (const t of withText) {
