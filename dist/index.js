@@ -8,6 +8,8 @@ const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 const rw_icp_ts_1 = require("./rw-icp.js");
 const verticals_ts_1 = require("./verticals.js");
+const account_prioritization_ts_1 = require("./account-prioritization.js");
+const account_prioritization_ui_ts_1 = require("./account-prioritization-ui.js");
 const escape_inputs_ts_1 = require("./escape-inputs.js");
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -2093,94 +2095,16 @@ ${SUGGESTED}
                 company: COMPANY_INPUT
             }
         },
-        execute: (args) => {
+        execute: (args, preparedModel) => {
             const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company] });
-            // Default weights
-            const weights = {
-                // Run 16 D45: a weight given as 0 is used as 0; only an omitted or null weight takes its default.
-                fit: args.prioritization_weights?.fit ?? 40,
-                intent: args.prioritization_weights?.intent ?? 30,
-                relationship: args.prioritization_weights?.relationship ?? 15,
-                timing: args.prioritization_weights?.timing ?? 15
-            };
-            // Labels only: a weight the input did not supply is the default (an example figure).
-            const givenWeights = args.prioritization_weights || {};
+            const model = preparedModel ?? (0, account_prioritization_ts_1.computeAccountPrioritization)(args);
+            const { weights, givenWeights, noWeights, W, tierA, tierB, tierC, scoredAccounts } = model;
             const has = (v) => v !== undefined && v !== null;
-            const noWeights = !(has(givenWeights.fit) || has(givenWeights.intent) || has(givenWeights.relationship) || has(givenWeights.timing));
             const wEx = (given) => (noWeights || has(given)) ? '' : ` ${EXAMPLE}`;
-            // If accounts provided, score them
             if (args.accounts && args.accounts.length > 0) {
-                const timingScore = (timing) => {
-                    switch (timing?.toLowerCase()) {
-                        case 'now': return 100;
-                        case 'soon': return 70;
-                        case 'later': return 40;
-                        default: return 50;
-                    }
-                };
-                // D41 (run 15): the tier cut-offs are 80%, 60% and 40% of the highest possible score W, the sum of the four weights
-                // (ceil in integer-safe form; with the default weights W = 100 they are 80, 60 and 40, as before).
-                const W = Number((weights.fit + weights.intent + weights.relationship + weights.timing).toPrecision(12)); // run 20: 33.3 + 33.3 + 33.3 + 0.1 is 100, not 99.99999999999999
-                const cut = (p) => Math.ceil((W * p) / 100);
-                const tierA = cut(80), tierB = cut(60), tierC = cut(40);
-                const scoredAccounts = args.accounts.map(account => {
-                    // Run 16 D45: a score given as 0 is used as 0; only an omitted or null score takes the default 50.
-                    const fitScore = account.fit_score ?? 50;
-                    const intentScore = account.intent_signals ?? 50;
-                    const relationshipScore = account.relationship ?? 50;
-                    const timingScoreValue = timingScore(account.timing || 'unknown');
-                    const totalScore = Math.round((fitScore * weights.fit / 100) +
-                        (intentScore * weights.intent / 100) +
-                        (relationshipScore * weights.relationship / 100) +
-                        (timingScoreValue * weights.timing / 100));
-                    return {
-                        name: account.name || 'Unknown',
-                        fit: fitScore,
-                        intent: intentScore,
-                        relationship: relationshipScore,
-                        timing: account.timing || 'unknown',
-                        timingScore: timingScoreValue,
-                        totalScore,
-                        tier: totalScore >= tierA ? 'A' : totalScore >= tierB ? 'B' : totalScore >= tierC ? 'C' : 'D',
-                        // Labels only: the values that fell back to the default because the account did not supply them.
-                        defaults: { fit: account.fit_score == null, intent: account.intent_signals == null, relationship: account.relationship == null, timing: !account.timing }
-                    };
-                });
-                // Sort by total score
-                scoredAccounts.sort((a, b) => b.totalScore - a.totalScore);
-                // Run 19 D80 (problem 5): the reason names the factor that adds the most points, with its arithmetic (the score and tier
-                // are unchanged). The old labels stay as the opening words where they applied; "Balanced scoring" is gone.
-                const reasonFor = (a) => {
-                    const parts = [
-                        { k: 'fit', v: a.fit, w: weights.fit, txt: `fit ${cleanNum1(a.fit)}` },
-                        { k: 'intent', v: a.intent, w: weights.intent, txt: `intent ${cleanNum1(a.intent)}` },
-                        { k: 'relationship', v: a.relationship, w: weights.relationship, txt: `relationship ${cleanNum1(a.relationship)}` },
-                        { k: 'timing', v: a.timingScore, w: weights.timing, txt: `timing ${a.timing} (${a.timingScore} pts)` },
-                    ].map(x => ({ ...x, pts: x.v * x.w / 100 })).filter(x => x.w > 0).sort((x, y) => y.pts - x.pts);
-                    const label = weights.fit > 0 && a.fit >= 80 ? 'Strong ICP fit' : weights.intent > 0 && a.intent >= 80 ? 'High buying intent' : weights.relationship > 0 && a.relationship >= 80 ? 'Strong relationship' : '';
-                    const top = parts[0];
-                    const num = cleanNum1;
-                    const why = top ? `the most points come from ${top.txt.replace(/^(\w+) (\d+)$/, '$1 $2')} × ${cleanPct(top.w)} = ${num(top.pts)} points of ${a.totalScore}` : 'no factor carries weight';
-                    return label ? `${label} (${why})` : why.charAt(0).toUpperCase() + why.slice(1);
-                };
-                // Run 20 round 1: the next step follows the account's own scores and timing, so two accounts in one tier do not get the same line
-                // (the tier decides the base; the weakest factor and the timing decide the focus). No sales-motion words that belong to one
-                // business model (SDR sequences, 24 hour replies) are used.
-                // The weakest of fit, intent and relationship decides the label and the next step, so the two always agree (a score of 60 or more is not a gap).
-                const weakestOf = (a) => {
-                    const w = [['fit', a.fit], ['intent', a.intent], ['relationship', a.relationship]].sort((x, y) => x[1] - y[1])[0];
-                    return w[1] < 60 ? w : ['timing', a.timingScore];
-                };
-                const nextStep = (a) => {
-                    const base = a.tier === 'A' ? 'Personal outreach from the account owner this week' : a.tier === 'B' ? 'A targeted sequence of personal messages this week, through a warm introduction where you have one' : a.tier === 'C' ? 'Nurture with relevant content and watch for a change in intent or timing' : 'Monitor and check again next quarter';
-                    const [wk, wv] = weakestOf(a);
-                    const focus = a.tier === 'C' || a.tier === 'D' ? `the weakest factor is ${([['fit', a.fit], ['intent', a.intent], ['relationship', a.relationship]].sort((x, y) => x[1] - y[1]).map(([k, n]) => `${k} (${cleanNum1(n)})`)[0])}, so spend sales time only when it changes`
-                        : wk === 'fit' ? `fit is ${cleanNum1(wv)}, so confirm the buyer has the problem and the budget before you spend time on a proposal`
-                            : wk === 'relationship' ? `relationship is ${cleanNum1(wv)}, so ask your champion or a mutual contact for an introduction to the budget owner`
-                                : wk === 'intent' ? `intent is ${cleanNum1(wv)}, so share something relevant to their situation and watch who responds`
-                                    : a.timing.toLowerCase() === 'later' ? 'timing is later, so agree a date to revisit rather than push for a decision' : a.timing.toLowerCase() === 'now' ? 'timing is now, so ask for the next two meeting dates' : 'the scores are strong, so verify the timing with the budget owner';
-                    return `${base}; ${focus}`;
-                };
+                const reasonFor = (a) => a.reason;
+                const nextStep = (a) => a.nextAction;
+                const weakestOf = (a) => a.weakest;
                 const sv = ctx.v;
                 return `# Account Prioritization Results
 
@@ -2937,6 +2861,7 @@ function withMeta(tool) {
         ...tool,
         title,
         annotations: { title, readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+        ...(tool.name === 'account_prioritization' ? { _meta: { ui: { resourceUri: account_prioritization_ts_1.ACCOUNT_UI_URI } } } : {}),
     };
 }
 const NEGATIVE_AMOUNT = /\$\s*[-\u2212]\s*\d|(^|[\s(:=,;])[-\u2212](?:\$|usd|inr|eur|gbp|rs\.?|\u20b9|\u20ac|\u00a3)?\s?\d[\d,]*(?:\.\d+)?(?![\d,.]|\s*%)/i;
@@ -3051,10 +2976,16 @@ function checkRequiredInputs(name, args) {
     return null;
 }
 function createServer() {
-    const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {} } });
+    const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {}, resources: {} } });
     server.setRequestHandler(types_js_1.ListToolsRequestSchema, async () => ({
         tools: Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })),
     }));
+    server.setRequestHandler(types_js_1.ListResourcesRequestSchema, async () => ({ resources: [{ uri: account_prioritization_ts_1.ACCOUNT_UI_URI, name: 'Account prioritization', mimeType: account_prioritization_ts_1.ACCOUNT_UI_MIME, _meta: account_prioritization_ts_1.ACCOUNT_UI_META }] }));
+    server.setRequestHandler(types_js_1.ReadResourceRequestSchema, async (request) => {
+        if (request.params.uri !== account_prioritization_ts_1.ACCOUNT_UI_URI)
+            throw new Error('Unknown resource');
+        return { contents: [{ uri: account_prioritization_ts_1.ACCOUNT_UI_URI, mimeType: account_prioritization_ts_1.ACCOUNT_UI_MIME, text: account_prioritization_ui_ts_1.accountPrioritizationHtml, _meta: account_prioritization_ts_1.ACCOUNT_UI_META }] };
+    });
     server.setRequestHandler(types_js_1.CallToolRequestSchema, async (request) => {
         // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
         // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
@@ -3076,6 +3007,11 @@ function createServer() {
             };
         }
         try {
+            if (toolName === 'account_prioritization' && safeArgs !== undefined && safeArgs !== null) {
+                const model = (0, account_prioritization_ts_1.computeAccountPrioritization)((safeArgs ?? {}));
+                const text = tools.account_prioritization.execute((safeArgs ?? {}), model);
+                return { content: [{ type: 'text', text }], ...(0, account_prioritization_ts_1.accountWidgetResult)(model, safeArgs ?? {}, typed ?? {}, text) };
+            }
             const result = tool.execute(safeArgs);
             return {
                 content: [{ type: 'text', text: result }]
