@@ -1,0 +1,13 @@
+{
+  "repository": "icp-intelligence-mcp",
+  "starting_commit": "db0de05e754e45861fe59e63c153c824dddc4ddf",
+  "source_path": "src/index.ts",
+  "source_sha256": "5e5cb6b25fbaad5fb9efe4a2c628c3c44cae0bd9eda19e256a7a031c6c56d31b",
+  "method": "tam_sam_som_calculator",
+  "checks": [
+    "c2-final-tests.json",
+    "c2-final-compat-details.json"
+  ],
+  "browser": "NOT_TESTED",
+  "host": "NOT_TESTED"
+}
