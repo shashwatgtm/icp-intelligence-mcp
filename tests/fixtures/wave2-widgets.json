@@ -286,5 +286,103 @@
       },
       "targets": {}
     }
+  },
+  "icp_evidence_review": {
+    "normal": {
+      "icp": "Operations teams with a named owner and a weekly review.",
+      "current_customers": "Some teams have no named owner.",
+      "as_of": "2026-10-31",
+      "current": {
+        "acv": 18000,
+        "cycle": 95,
+        "win_rate": 22,
+        "churn": 16
+      },
+      "target": {
+        "acv": 30000,
+        "cycle": 60,
+        "win_rate": 30,
+        "churn": 9
+      },
+      "bases": [
+        {
+          "metric": "acv",
+          "current_basis": "annual USD per contract",
+          "target_basis": "annual USD per contract"
+        },
+        {
+          "metric": "cycle",
+          "current_basis": "days per won deal",
+          "target_basis": "days per won deal"
+        },
+        {
+          "metric": "win_rate",
+          "current_basis": "closed deals percent this quarter",
+          "target_basis": "closed deals percent this quarter"
+        },
+        {
+          "metric": "churn",
+          "current_basis": "annual logo percent",
+          "target_basis": "annual logo percent"
+        }
+      ],
+      "comparisons": [
+        {
+          "part": "Owner",
+          "icp_quote": "a named owner",
+          "customer_quote": "no named owner",
+          "classification": "Conflict",
+          "reason": "The supplied owner descriptions conflict."
+        }
+      ],
+      "evidence": [
+        {
+          "id": "loss-1",
+          "kind": "loss",
+          "quote": "The review stalled without an owner.",
+          "date": "2026-10-01"
+        },
+        {
+          "id": "loss-2",
+          "kind": "loss",
+          "quote": "No one owned the decision.",
+          "date": "2026-10-12"
+        }
+      ],
+      "hypotheses": [
+        {
+          "change": "Require a confirmed review owner before a trial.",
+          "proposed_mark": "Add on trial",
+          "evidence_ids": [
+            "loss-1",
+            "loss-2"
+          ],
+          "test": "Compare cycle and win rate with and without a confirmed owner.",
+          "disproof": "Deals without an owner perform equally or better.",
+          "crm_fields": [
+            "review owner status",
+            "cycle days",
+            "closed outcome"
+          ]
+        }
+      ],
+      "counts": {
+        "total": 22,
+        "parts": [
+          {
+            "part": "Named owner",
+            "count": 15
+          },
+          {
+            "part": "Weekly review",
+            "count": 14
+          }
+        ]
+      }
+    },
+    "weak": {
+      "icp": "Operations teams with a named owner.",
+      "as_of": "2026-10-31"
+    }
   }
 }

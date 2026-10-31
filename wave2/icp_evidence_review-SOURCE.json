@@ -1,0 +1,34 @@
+{
+  "repo": "b2b-icp-and-customer-insight",
+  "path": "plugins/b2b-icp-and-customer-insight/skills/icp-review/SKILL.md",
+  "commit": "fe8fbd84bcb46daf779dc24cca14bd7d6eee01f6",
+  "source_sha256": "af7ecfce006d0d633573763ba46e7f3e3ec5b60de0ce8a57fd25b645a5931e49",
+  "sha": "85b151731468d81137e039a0b764ffddd53fe073",
+  "name": "icp-review",
+  "references": [
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/icp-review/references/causes-to-check.md",
+      "sha256": "3ee028fa17ceadf4ef679c8f5a59188e6256ea9e07a0384122b816af1e153fa1"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/icp-review/references/review-method.md",
+      "sha256": "7a7be8fd1123b5f961ff0e0b0490d5825407bed0b992625f39c136b177006503"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/icp-review/references/sector-notes.md",
+      "sha256": "16e108a166466cde12fd1c49bebc087096e90e715fe0cf40162bc8861157683f"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/icp-review/references/voice-check-short.md",
+      "sha256": "c9bb0d78dbeb17f80655bab0b8e1a3a8e5eeefbddab1eb3953ca485c0687d43c"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/icp-review/scripts/fit_count.py",
+      "sha256": "19bd3d063100c2b908deba64699ea13f93ebcff54eeb7a52f784359f97e27790"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/icp-review/scripts/icp_gap.py",
+      "sha256": "6a06fb5ec57140b126d621871bed2d0929ce6bdc1eac92c45399a736d4c4e868"
+    }
+  ]
+}
