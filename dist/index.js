@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
+const reserve_tools_ts_1 = require("./reserve-tools.js");
 const widget_layer_ts_1 = require("./widget-layer.js");
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
@@ -3055,9 +3056,11 @@ function createServer() {
     const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {} } });
     (0, widget_layer_ts_1.attachWidgets)(server);
     server.setRequestHandler(types_js_1.ListToolsRequestSchema, async () => ({
-        tools: Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })),
+        tools: [...Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })), ...(0, reserve_tools_ts_1.reserveTools)()],
     }));
     server.setRequestHandler(types_js_1.CallToolRequestSchema, async (request) => {
+        if ((0, reserve_tools_ts_1.isReserveTool)(request.params.name))
+            return (0, reserve_tools_ts_1.callReserveTool)(request.params.name, request.params.arguments);
         // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
         // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
         const typed = (0, escape_inputs_ts_1.cleanDeep)(request.params.arguments);

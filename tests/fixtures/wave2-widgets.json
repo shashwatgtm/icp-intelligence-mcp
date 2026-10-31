@@ -162,5 +162,74 @@
       ]
     },
     "weak": {}
+  },
+  "lead_fit_score": {
+    "normal": {
+      "criteria": [
+        {
+          "criterion": "Capacity",
+          "importance": "critical",
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "medium"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Owner",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Capacity",
+              "value": "medium"
+            },
+            {
+              "criterion": "Owner",
+              "value": "yes"
+            }
+          ]
+        }
+      ]
+    },
+    "weak": {
+      "criteria": [
+        {
+          "criterion": "Confirmed need",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Incomplete record",
+          "fields": []
+        }
+      ]
+    }
   }
 }

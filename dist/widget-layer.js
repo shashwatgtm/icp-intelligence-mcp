@@ -17,7 +17,7 @@ function attachWidgets(server) {
         if (request.method === 'tools/call' && !result.isError && Object.prototype.hasOwnProperty.call(widget_registry_ts_1.WIDGETS, request.params.name)) {
             const text = result.content?.filter((c) => c.type === 'text').map((c) => c.text).join('\n');
             if (typeof text === 'string')
-                return { ...result, structuredContent: { ...(0, widget_model_ts_1.widgetPayload)(request.params.name, widget_registry_ts_1.WIDGETS[request.params.name], text), ...(request.params.name === 'tam_sam_som_calculator' ? { marketSizing: (0, tam_summary_ts_1.marketSummary)(request.params.arguments) } : {}) } };
+                return { ...result, structuredContent: { ...result.structuredContent, ...(0, widget_model_ts_1.widgetPayload)(request.params.name, widget_registry_ts_1.WIDGETS[request.params.name], text), ...(request.params.name === 'tam_sam_som_calculator' ? { marketSizing: (0, tam_summary_ts_1.marketSummary)(request.params.arguments) } : {}) } };
         }
         return result;
     }));

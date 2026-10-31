@@ -1,0 +1,26 @@
+{
+  "repo": "b2b-icp-and-customer-insight",
+  "path": "plugins/b2b-icp-and-customer-insight/skills/lead-scoring-model/SKILL.md",
+  "commit": "fe8fbd84bcb46daf779dc24cca14bd7d6eee01f6",
+  "source_sha256": "98308011e9d10f423cbabcfb36198ac3fe59aaf79512f4fb1a23e3b843e49d8b",
+  "sha": "b3dcb5ae1675b421fe21bc339bbe215bf48a2c42",
+  "name": "lead-scoring-model",
+  "references": [
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/lead-scoring-model/references/scoring-method.md",
+      "sha256": "0763dc06911330424002b59f2a70099d6741ec3c07b2cfa18546bc0e60459f1b"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/lead-scoring-model/references/sector-notes.md",
+      "sha256": "16e108a166466cde12fd1c49bebc087096e90e715fe0cf40162bc8861157683f"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/lead-scoring-model/references/voice-check-short.md",
+      "sha256": "c9bb0d78dbeb17f80655bab0b8e1a3a8e5eeefbddab1eb3953ca485c0687d43c"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/lead-scoring-model/scripts/lead_score.py",
+      "sha256": "d8c052646835e1de89c09ef7ed831d005fd2b8c363555da8fa965c22a0c29aae"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {reserveTools,isReserveTool,callReserveTool} from './reserve-tools.ts';
 import { attachWidgets } from './widget-layer.ts';
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -3102,10 +3103,11 @@ export function createServer(): Server {
   attachWidgets(server);
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })),
+    tools: [...Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })), ...reserveTools()],
   }));
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    if(isReserveTool(request.params.name)) return callReserveTool(request.params.name,request.params.arguments);
     // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
     // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
     const typed = cleanDeep(request.params.arguments) as Record<string, unknown> | undefined;
