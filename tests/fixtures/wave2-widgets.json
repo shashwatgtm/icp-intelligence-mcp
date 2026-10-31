@@ -231,5 +231,60 @@
         }
       ]
     }
+  },
+  "pmf_target_check": {
+    "normal": {
+      "business_model": "saas",
+      "metrics": {
+        "churn": 2.5,
+        "nps": 31,
+        "ltv": 90000,
+        "cac": 30000,
+        "retention": 88,
+        "activation": 45
+      },
+      "targets": {
+        "churn": 2,
+        "nps": 40,
+        "ltv_cac": 4,
+        "retention": 92,
+        "activation": 60
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "monthly logo percent",
+          "target_basis": "monthly logo percent"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "survey points",
+          "target_basis": "survey points"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "same cohort currency ratio",
+          "target_basis": "same cohort currency ratio"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "annual net revenue percent",
+          "target_basis": "annual net revenue percent"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "first workflow within 30 days percent",
+          "target_basis": "first workflow within 30 days percent"
+        }
+      ]
+    },
+    "weak": {
+      "business_model": "services",
+      "metrics": {
+        "nps": 22,
+        "activation": 30
+      },
+      "targets": {}
+    }
   }
 }

@@ -1,0 +1,26 @@
+{
+  "repo": "b2b-icp-and-customer-insight",
+  "path": "plugins/b2b-icp-and-customer-insight/skills/pmf-check/SKILL.md",
+  "commit": "fe8fbd84bcb46daf779dc24cca14bd7d6eee01f6",
+  "source_sha256": "0d68a83a01da682e77f56c791f777435d731b5136d86e709127a083d759a457c",
+  "sha": "4547de06e0fa9a12de6ec26306f2e1d3cd8b482a",
+  "name": "pmf-check",
+  "references": [
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/pmf-check/references/pmf-method.md",
+      "sha256": "ef46e0ec9c04ea2ef627484f73b3a4f85dfc3a12ab2bba26b3767a357524d515"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/pmf-check/references/sector-notes.md",
+      "sha256": "16e108a166466cde12fd1c49bebc087096e90e715fe0cf40162bc8861157683f"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/pmf-check/references/voice-check-short.md",
+      "sha256": "c9bb0d78dbeb17f80655bab0b8e1a3a8e5eeefbddab1eb3953ca485c0687d43c"
+    },
+    {
+      "path": "plugins/b2b-icp-and-customer-insight/skills/pmf-check/scripts/pmf_score.py",
+      "sha256": "c6753a4088f161f154c27b399f1513784bd99dd40e73aa0a5288ebd79c150090"
+    }
+  ]
+}
