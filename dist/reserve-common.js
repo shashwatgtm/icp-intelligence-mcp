@@ -6,6 +6,7 @@ exports.requireUnique = requireUnique;
 exports.reportText = reportText;
 exports.define = define;
 exports.callReserveTool = callReserveTool;
+const escape_inputs_ts_1 = require("./escape-inputs.js");
 exports.text = { type: 'string', maxLength: 8000 };
 const num = (minimum = 0, maximum = Number.MAX_VALUE) => ({ type: 'number', minimum, maximum });
 exports.num = num;
@@ -96,7 +97,7 @@ function callReserveTool(name, args) { if (!(0, exports.isReserveTool)(name))
     const report = entry.run(args);
     if (input.company)
         report.summary.unshift('Company: ' + input.company);
-    return { content: [{ type: 'text', text: reportText(report) }], structuredContent: { report: safeData(report) } };
+    return { content: [{ type: 'text', text: reportText(report) }], structuredContent: { report: (0, escape_inputs_ts_1.escapeDeep)(safeData(report)), reportStringEncoding: 'Markdown backslash escapes; control characters removed and long dashes normalized. Display as inert text, not HTML.' } };
 }
 catch (error) {
     return { isError: true, content: [{ type: 'text', text: 'Invalid input: ' + (0, exports.esc)(error instanceof Error ? error.message : 'could not be assessed') }] };
