@@ -1,4 +1,4 @@
-import { type Row } from './reserve-common.ts';
+import { type Row } from "./reserve-common.ts";
 export declare function leadFit(a: Row): {
     criteria: any;
     max: number;

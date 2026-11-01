@@ -1,1 +1,1 @@
-{"version":3,"file":"lead-fit.d.ts","sourceRoot":"","sources":["../src/lead-fit.ts"],"names":[],"mappings":"AAAA,OAAO,EAA4D,KAAK,GAAG,EAAC,MAAM,qBAAqB,CAAC;AAExG,wBAAgB,OAAO,CAAC,CAAC,EAAC,GAAG;;;;;;;;;;;;EAI6Z"}
+{"version":3,"file":"lead-fit.d.ts","sourceRoot":"","sources":["../src/lead-fit.ts"],"names":[],"mappings":"AAAA,OAAO,EAUL,KAAK,GAAG,EACT,MAAM,qBAAqB,CAAC;AAQ7B,wBAAgB,OAAO,CAAC,CAAC,EAAE,GAAG;;;;;;;;;;;;EA4O7B"}

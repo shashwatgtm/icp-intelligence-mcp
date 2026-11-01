@@ -1,4 +1,4 @@
-import { type Row } from './reserve-common.ts';
+import { type Row } from "./reserve-common.ts";
 export declare function icpGaps(a: Row): {
     rows: Row[];
     largest: any;

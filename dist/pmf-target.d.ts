@@ -1,4 +1,4 @@
-import { type Row } from './reserve-common.ts';
+import { type Row } from "./reserve-common.ts";
 export declare function compareOwn(key: string, name: string, better: string, value: number | undefined, target: number | undefined): Row;
 export declare function pmfCheck(a: Row): {
     rows: Row[];
