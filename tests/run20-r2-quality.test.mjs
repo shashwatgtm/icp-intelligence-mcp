@@ -100,8 +100,8 @@ test("buyer group: a billing platform sold to a CFO gets finance measures, not a
   assert.doesNotMatch(r.text, /activation|time to value/i);
   assert.doesNotMatch(r.text, /card spends|policy breach|accounts payable|days to close the books/i);   // an expense profile is not a billing buyer's (the billing profile comes with the shared file)
   const t = await call("buyer_group_analyzer", { product_category: "developer testing tools", company: "Cloudmoat", typical_champion: "Platform Engineer", known_stakeholders: ["VP Engineering", "Security Lead", "Software Developer"] });
-  assert.match(t.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: Security Lead\n\*\*Their Concern\*\*: Likely objection: security review/);
-  assert.match(t.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: VP Engineering\n[^\n]*per[- ]user cost/i);
+  assert.match(t.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: Security Lead\n\*\*Evidence\*\*: [^\n]+\n\*\*Validation question\*\*: [^\n]+\n\*\*Their Concern\*\*: Likely objection: security review/);
+  assert.match(t.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: VP Engineering\n\*\*Evidence\*\*: [^\n]+\n\*\*Validation question\*\*: [^\n]+\n[^\n]*per[- ]user cost/i);
 });
 
 // ---- (4) deep dive ----

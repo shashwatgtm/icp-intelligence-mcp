@@ -1512,8 +1512,8 @@ The deal size and company size are shown for context: the roles below come from 
 
 ## Buying Group Map
 
-${seatBlock(confirmedChampion ? 'Confirmed champion (observed internal advocacy)' : 'Champion hypothesis (internal advocacy unconfirmed)', 'champion', ['Lead with their specific pain points', 'Provide ammo to sell internally', 'Make them look good to leadership', 'Give them early wins to share'], championDefault ? ` (the usual one in ${v!.name}; you named none)` : '')}
-${seatBlock(budgetConfirmed ? 'Economic buyer (authority confirmed in your answer)' : 'Economic buyer hypothesis (budget authority unconfirmed)', 'economic', ['Lead with business outcomes, not features', 'Provide clear ROI documentation', 'Connect to strategic priorities', 'Reference similar company results'])}
+${seatBlock(confirmedChampion ? 'Confirmed champion (observed internal advocacy)' : 'Champion (hypothesis; internal advocacy unconfirmed)', 'champion', ['Lead with their specific pain points', 'Provide ammo to sell internally', 'Make them look good to leadership', 'Give them early wins to share'], championDefault ? ` (the usual one in ${v!.name}; you named none)` : '')}
+${seatBlock(budgetConfirmed ? 'Economic Buyer (authority confirmed in your answer)' : 'Economic Buyer hypothesis (budget authority unconfirmed)', 'economic', ['Lead with business outcomes, not features', 'Provide clear ROI documentation', 'Connect to strategic priorities', 'Reference similar company results'])}
 ${seatBlock('Technical Evaluator (Implementation Voice)', 'technical', technicalSteps)}
 ${seatBlock('End User (Day-to-Day User)', 'user', ctx.model === 'saas' || ctx.model === null ? ['Demo through their lens', 'Show quick wins possible', 'Minimize learning curve fear', 'Get pilot users as advocates'] : ['Walk through their working day with the new way in it', 'Show the first week, not the full rollout', 'Agree who trains the users and how adoption is measured', 'Get pilot users as advocates'])}
 ${seatBlock('Potential Blocker (Reviewer)', 'blocker', ['Engage early, not late', 'Proactively share compliance info', 'Provide comparison to status quo risk', 'Have champion introduce you'])}
@@ -2176,17 +2176,19 @@ ${SUGGESTED}
           const next = signals[0];
           return `# Account prioritization: confirm missing signals
 
+${args.product_category ? ctx.line : ''}
+
 ${noWeights ? 'No weights supplied. These are illustrative defaults.' : 'Supplied weights are preserved. Any omitted weight uses the labelled default.'}
 | Factor | Weight | Source |
 | --- | --- | --- |
 ${(Object.keys(weights) as Array<keyof typeof weights>).map(k=>`| ${k} | ${weights[k]} | ${givenWeights[k] == null ? 'Default' : 'Supplied'} |`).join('\n')}
 
 ## Possible scores
-Missing dimensions remain unknown and range from 0 to 100 before weighting. Timing points for known timing are default model choices: now 100, soon 70, later 40. Ranges use the same rounded weighted sum as complete scores. Input order below does not imply rank.
+Missing dimensions remain unknown and range from 0 to 100 before weighting. Timing points for known timing are default model choices: now 100, soon 70, later 40. Ranges use the same rounded weighted sum as complete scores. Input order below does not imply rank. Relationship is a supplied 0 to 100 score. Timing options are now, soon, later or unknown; unknown does not earn default points.
 
 | Account | Fit | Intent | Relationship | Timing | Possible score | Rank |
 | --- | --- | --- | --- | --- | --- | --- |
-${intervals.map(a=>`| ${a.account.name || 'Unknown'} | ${a.values.fit ?? 'Unknown'} | ${a.values.intent ?? 'Unknown'} | ${a.values.relationship ?? 'Unknown'} | ${a.values.timing == null ? 'Unknown' : a.account.timing} | ${a.low} to ${a.high} of ${W} | ${intervals.some(b=>a!==b&&overlaps(a,b)) ? 'Unresolved: overlapping intervals' : 1+intervals.filter(b=>b.low>a.high).length} |`).join('\n')}
+${intervals.map(a=>`| ${a.account.name || 'Unknown'} | ${a.values.fit ?? 'Unknown'} | ${a.values.intent ?? 'Unknown'} | ${a.values.relationship ?? 'Unknown'} | ${a.values.timing == null ? (a.account.timing || 'Not supplied')+' (Unknown)' : a.account.timing+' ('+a.values.timing+' pts)'} | ${a.low} to ${a.high} of ${W} | ${intervals.some(b=>a!==b&&overlaps(a,b)) ? 'Unresolved: overlapping intervals' : 1+intervals.filter(b=>b.low>a.high).length} |`).join('\n')}
 
 ## Next evidence to collect
 ${next ? `Confirm ${next.key} for ${next.account || 'the unnamed account'} first. It has the largest missing weighted contribution among overlapping accounts: up to ${next.swing} points, so it is most able to reverse the order. Keep the source and date with the answer.` : 'No weighted signal is missing. Equal scores do not establish a strict order; agree a buyer relevant tie breaker.'}

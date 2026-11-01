@@ -7,7 +7,7 @@ const verticals=['Logistics tech','Fintech','SaaS','Vertical SaaS','AI native','
 test.after(()=>child.kill());
 for(const v of verticals)test('C12 '+v+' timing points follow the stated horizon',async()=>{
  for(const [timing,score]of [['now',100],['Ready to buy immediately',100],['We cannot start now',50],['soon',70],['In the next few weeks',70],['later',40],['Next year',40],['Now or later',50]]){
- const t=await call('account_prioritization',{product_category:v+' vendor',accounts:[{name:'Account record',fit_score:50,intent_signals:50,relationship:50,timing}],prioritization_weights:{fit:0,intent:0,relationship:0,timing:100}});assert.ok(t.includes('('+score+' pts)'),timing+' '+score);assert.ok(t.includes(timing));
+ const t=await call('account_prioritization',{product_category:v+' vendor',accounts:[{name:'Account record',fit_score:50,intent_signals:50,relationship:50,timing}],prioritization_weights:{fit:0,intent:0,relationship:0,timing:100}});if(score===50){assert.match(t,/Unknown/);assert.match(t,/0 to 100 of 100/);}else assert.ok(t.includes('('+score+' pts)'),timing+' '+score);assert.ok(t.includes(timing));
  }
 });
 for(const v of verticals)test('R4 '+v+' denied buyer and pain do not become requirements',async()=>{

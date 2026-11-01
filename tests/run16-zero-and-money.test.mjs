@@ -74,12 +74,12 @@ test("D45: year1_market_share_target 0 is used as 0 (SOM $0, 0 customers), omitt
 
 const ACC = (over) => ({ name: "Example Manufacturing Co", fit_score: 80, intent_signals: 60, relationship: 40, timing: "soon", ...over });
 
-test("D45: account scores given as 0 are used as 0, not 50 (default); omitted and null keep the default", async () => {
+test("D45: account scores given as 0 are used as 0, not 50 (default); omitted and null remain unknown", async () => {
   const z = await call("account_prioritization", { accounts: [ACC({ fit_score: 0, intent_signals: 0, relationship: 0 })] });
   assert.match(z.text, /\| 1 \| \*\*Example Manufacturing Co\*\* \| 0 \| 0 \| 0 \| soon \(70 pts\) \| \*\*11\*\* \| D \|/);
   for (const v of [undefined, null]) {
     const r = await call("account_prioritization", { accounts: [ACC({ fit_score: v })] });
-    assert.match(r.text, /\| \*\*Example Manufacturing Co\*\* \| 50 \(default\) \| 60 \|/, String(v));
+    assert.match(r.text, /\| Example Manufacturing Co \| Unknown \| 60 \| 40 \| soon \(70 pts\) \| 35 to 75 of 100/, String(v));
   }
   const o = await call("account_prioritization", { accounts: [ACC({})] });
   assert.match(o.text, /\| \*\*Example Manufacturing Co\*\* \| 80 \| 60 \| 40 \| soon \(70 pts\) \| \*\*67\*\* \| B \|/);

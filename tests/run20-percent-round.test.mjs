@@ -221,9 +221,9 @@ test("A17-O24: the account_prioritization hints give the relationship and timing
   assert.doesNotMatch(item.intent_signals.description, /0 if unknown/);
   assert.match(item.timing.description, /now, soon, later or unknown/);
   for (const k of ["fit_score", "intent_signals", "relationship"]) assert.doesNotMatch(item[k].description, /^1-100/);
-  // what the code does with the ranges: 0 is used as 0, over 100 is refused, an unknown timing word counts as unknown (50 points)
+  // what the code does with the ranges: 0 is used as 0, over 100 is refused, an unknown timing word remains a range
   const ok = await call("account_prioritization", { accounts: [{ name: "Lanehop", fit_score: 0, intent_signals: 0, relationship: 0, timing: "whenever" }] });
   assert.equal(ok.isError, false);
-  assert.match(ok.text, /whenever \(50 pts\)/);
+  assert.match(ok.text, /whenever \(Unknown\).*0 to 15 of 100/);
   assert.equal((await call("account_prioritization", { accounts: [{ name: "Lanehop", relationship: 101 }] })).isError, true);
 });
