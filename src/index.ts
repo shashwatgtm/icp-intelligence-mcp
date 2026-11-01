@@ -837,7 +837,7 @@ ${topSizes.length > 0 ? dist(topSizes, 'customer') : '- No size data provided'}
 | ACV Range | ${acvs.length > 0 ? (minACV === maxACV ? `$${minACV.toLocaleString('en-US')} (the same in every record)` : `$${minACV.toLocaleString('en-US')} to $${maxACV.toLocaleString('en-US')}`) + hypo : 'not supplied'} |
 | Avg Sales Cycle | ${cycles.length > 0 ? `${avgCycle} days` : 'not supplied'} |
 
-**Pattern**: ${acvs.length === 0 ? 'none yet, add this data' : `${ctx.v && !isHorizontal(ctx.v) ? `In ${ctx.v.name}, deals usually run like this: ${ctx.v.salesMotion} ` : avgACV > 50000 ? 'Average ACV above $50,000 (this tool\'s example threshold): expect several stakeholders and a longer buying process. ' : avgACV > 15000 ? 'Average ACV between $15,000 and $50,000 (this tool\'s example thresholds). ' : 'Average ACV under $15,000 (this tool\'s example threshold). '}Your own average cycle is ${avgCycle ? `${avgCycle} days` : 'not supplied'}.`}
+**Pattern**: ${acvs.length === 0 ? 'none yet, add this data' : `${ctx.v && !isHorizontal(ctx.v) ? `In ${ctx.v.name}, deals usually run like this: ${ctx.v.salesMotion} ` : avgACV > 50000 ? 'Average ACV above $50,000 (this tool\'s example threshold): expect several stakeholders and a longer buying process. ' : avgACV >= 15000 ? 'Average ACV between $15,000 and $50,000 inclusive (example contract band, not a market benchmark). ' : 'Average ACV under $15,000 (this tool\'s example threshold). '}Your own average cycle is ${avgCycle ? `${avgCycle} days` : 'not supplied'}.`}
 
 ### Technology Stack Signals
 ${topTech.length > 0 ? dist(topTech, 'customer') : '- No tech stack data provided'}
