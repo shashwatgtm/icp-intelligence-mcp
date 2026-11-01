@@ -43,17 +43,26 @@ function attachWidgets(server) {
                 ?.filter((c) => c.type === "text")
                 .map((c) => c.text)
                 .join("\n");
-            if (typeof text === "string")
-                return {
-                    ...result,
-                    structuredContent: {
-                        ...result.structuredContent,
-                        ...(0, widget_model_ts_1.widgetPayload)(request.params.name, widget_registry_ts_1.WIDGETS[request.params.name], text),
-                        ...(request.params.name === "tam_sam_som_calculator"
-                            ? { marketSizing: (0, tam_summary_ts_1.marketSummary)(request.params.arguments) }
-                            : {}),
-                    },
-                };
+            if (typeof text === "string") {
+                const display = { ...result.structuredContent, ...(0, widget_model_ts_1.widgetPayload)(request.params.name, widget_registry_ts_1.WIDGETS[request.params.name], text) };
+                const facts = {};
+                const summary = request.params.name === 'tam_sam_som_calculator' ? (0, tam_summary_ts_1.marketSummary)(request.params.arguments) : null;
+                if (summary)
+                    display.marketSizing = summary;
+                if (summary?.kind === 'market-sizing')
+                    facts.marketSizing = { kind: summary.kind, figures: summary.figures, targets: summary.targets, rates: summary.rates };
+                else if (summary)
+                    facts.marketSizing = summary;
+                if (build_profile_ts_1.BUILD_PROFILE.payload === 'full')
+                    return { ...result, structuredContent: display };
+                // Display data and caller context are delivered only to the component.
+                if (display.marketSizing) {
+                    const { toolArgumentsEncoded, ...summary } = display.marketSizing;
+                    display.marketSizing = summary;
+                }
+                const { structuredContent, ...plain } = result;
+                return { ...plain, ...(Object.keys(facts).length ? { structuredContent: facts } : {}), _meta: { ...result._meta, ...display, toolArguments: request.params.arguments } };
+            }
         }
         return result;
     }));
