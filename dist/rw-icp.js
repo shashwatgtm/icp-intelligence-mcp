@@ -822,27 +822,27 @@ function gapAnalysis(curText, idlText, d) {
     if (d.notGivenAtAll.length && d.anyMetric)
         ask.push(`${listText(d.notGivenAtAll)}, current and target (it would change the gap table and the causes to check)`);
     if (!d.anyMetric)
-        ask.push('current_metrics and target_metrics with avg_acv, avg_sales_cycle, win_rate, churn_rate and nps (it would change the whole metric section, which is empty now)');
+        ask.push('current metrics and target metrics with average annual contract value, average sales cycle, win rate, churn rate and nps (it would change the whole metric section, which is empty now)');
     if (!cur.roles.length && idl.roles.length)
-        ask.push('the title that signed in your last won deals, in current_customers (it would change the buyer check from a question to a comparison)');
+        ask.push('the title that signed in your last won deals, in current customers (it would change the buyer check from a question to a comparison)');
     if (!cur.problems.length && idl.problems.length)
-        ask.push('why your current customers bought, in current_customers (it would change the problem check from a question to a comparison)');
+        ask.push('why your current customers bought, in current customers (it would change the problem check from a question to a comparison)');
     const wordSizes = idl.sizes.filter((s) => !/\d/.test(s) && !idl.allSizes);
     if (wordSizes.length)
         ask.push(`a number behind ${listText(wordSizes.map((s) => quote(s)))}, such as the smallest employee count among your best customers (it would change the size criterion from a word to a number you can disqualify on)`);
     if (!idl.roles.length)
-        ask.push('the role that signs and the role that champions, in ideal_icp (it would change the buyer check and the disqualifiers)');
+        ask.push('the role that signs and the role that champions, in ideal icp (it would change the buyer check and the disqualifiers)');
     if (!idl.problems.length)
-        ask.push('the problem your best customers had before they bought, in ideal_icp (it would change the problem criterion)');
+        ask.push('the problem your best customers had before they bought, in ideal icp (it would change the problem criterion)');
     if (!d.productGiven && !d.sectorName)
-        ask.push('product_category, saying what you sell (it would change the sector notes and the role check, which are empty now)');
+        ask.push('product category, saying what you sell (it would change the sector notes and the role check, which are empty now)');
     if (!d.modelGiven)
-        ask.push('business_model (it would change the wording of the pricing action and the unit of the deal value)');
+        ask.push('how you charge (it would change the wording of the pricing action and the unit of the deal value)');
     if (!d.company)
         ask.push('company (it would put your company name on this analysis)');
     if (ask.length)
         push(`To sharpen this, give:`, ...ask.slice(0, 7).map((x) => `- ${x}`), '');
-    push('**Next Step**: Use `icp_evolution_tracker` to monitor ICP changes over time', '', 'Suggested timings, lengths and counts: adjust them to your own.');
+    push('**Next Step**: Use `ICP Evolution Tracker` to monitor ICP changes over time', '', 'Suggested timings, lengths and counts: adjust them to your own.');
     void NOT_ASKED;
     return L.join('\n').replace(/\n{3,}/g, '\n\n') + '\n';
 }

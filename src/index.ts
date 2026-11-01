@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readerLabel, readerIssue, claimRisk, outcomeReading } from './text-signals.ts';
 import { hasSignal, signal, timingFact, correlationFact } from './text-signals.ts';
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -338,8 +339,8 @@ function readContext(explicitModel: unknown, input: ReadInput): { v: Vertical | 
   const via = read.source === 'context' ? ' (from the deal details: your own description names no sector)'
     : read.source === 'role' ? ' (from the buyer job titles: your own description names no sector)'
     : read.source === 'buyer' ? ' (from the buyer\'s industry: your own description names no sector, so describe what you sell for notes that fit it)' : '';
-  const sector = vp ? `read from your inputs as ${vp.name}${via}` : 'not clear from what you sell (describe your product, for example in product_category, for sector notes)';
-  const modelText = model ? `${MODEL_NAME[model]} (${how === 'input' ? 'from business_model' : how === 'sector' ? 'the usual model in this sector, assumed; set business_model to change it' : 'read from your inputs; set business_model to change it'})` : `not clear from your inputs; set business_model (${BUSINESS_MODELS.join(', ')}) for advice that fits it`;
+  const sector = vp ? `read from your inputs as ${vp.name}${via}` : 'not clear from what you sell (describe your product, for example in product category, for sector notes)';
+  const modelText = model ? `${MODEL_NAME[model]} (${how === 'input' ? 'from your answer' : how === 'sector' ? 'the usual model in this sector, assumed; confirm how you charge' : 'read from your inputs; confirm how you charge'})` : `not clear from your inputs; describe how you charge (${BUSINESS_MODELS.join(', ')}) for advice that fits it`;
   return { v: vp, model, via, line: `*Sector: ${sector}. Business model: ${modelText}.*` };
 }
 // Job titles are weak evidence of what the seller sells ("Director of Transportation Data Operations" is a logistics title in a
@@ -397,7 +398,7 @@ function rankByUserWords<T>(items: T[], text: (x: T) => string, primary: string,
 }
 // The sector only, for tools whose advice does not depend on the business model.
 function sectorLine(v: Vertical | null, via = ''): string {
-  return v ? `*Sector: read from your inputs as ${v.name}${via}.*` : '*Sector: not clear from what you sell (describe your product, for example in product_category, for sector notes).*';
+  return v ? `*Sector: read from your inputs as ${v.name}${via}.*` : '*Sector: not clear from what you sell (describe your product, for example in product category, for sector notes).*';
 }
 // Sector notes: the buying committee, what the sector measures, its usual objections and a proof point (no figures, rule B82).
 function sectorNotes(v: Vertical | null, what: Array<'committee' | 'roles' | 'metrics' | 'objections' | 'vocabulary' | 'proof'> = ['committee', 'metrics', 'proof'], label = ''): string {
@@ -723,7 +724,7 @@ const tools = {
       business_model?: string;
     }) => {
       // Run 19 D80: no preset category; what is not given is said plainly.
-      const category = args.product_category ? args.product_category.trim() : 'not given (add product_category)';
+      const category = args.product_category ? args.product_category.trim() : 'not given (add product category)';
       const custs = args.customers || [];
       const ctx = readContext(args.business_model, {
         seller: [productWords(args.product_category, args.company)],
@@ -866,7 +867,7 @@ ${sectorChecks}${notes ? `${notes}\n\n` : ''}---
 
 ${gaps.length ? gaps.join('\n') : 'None: every field this analysis reads was supplied for at least one customer.'}
 
-**Next Step**: Use \`icp_scoring_model\` to create a qualification scorecard
+**Next Step**: Use \`ICP Scoring Model\` to create a qualification scorecard
 `;
       }
 
@@ -925,10 +926,10 @@ ${EXAMPLES}
       "industry": "Manufacturing",
       "size": "300-1000 employees",
       "acv": 24000,
-      "sales_cycle_days": 60,
-      "tech_stack": ["SAP"],
-      "buying_trigger": "Audit finding",
-      "champion_title": "Finance Controller"
+      "sales cycle days": 60,
+      "tech stack": ["SAP"],
+      "buying trigger": "Audit finding",
+      "champion title": "Finance Controller"
     }
   ]
 }
@@ -954,10 +955,10 @@ ${EXAMPLES}
       "industry": "Manufacturing",
       "size": "300-1000 employees",
       "acv": 24000,
-      "sales_cycle_days": 60,
-      "tech_stack": ["SAP"],
-      "buying_trigger": "Audit finding",
-      "champion_title": "Finance Controller"
+      "sales cycle days": 60,
+      "tech stack": ["SAP"],
+      "buying trigger": "Audit finding",
+      "champion title": "Finance Controller"
     }
   ]
 }
@@ -967,7 +968,7 @@ ${EXAMPLES}
 ${EXAMPLES}
 \`\`\`json
 {
-  "customer_descriptions": "Our best customers are mid-size manufacturers with 300 to 3,000 employees. They run SAP and the finance controller becomes our champion."
+  "customer descriptions": "Our best customers are mid-size manufacturers with 300 to 3,000 employees. They run SAP and the finance controller becomes our champion."
 }
 \`\`\`
 
@@ -1019,7 +1020,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
       correlation_direction?: 'positive'|'negative'|'unknown';
       product_category?: string;
     }) => {
-      const category = args.product_category ? args.product_category.trim() : 'your product (product_category not given)';
+      const category = args.product_category ? args.product_category.trim() : 'your product (product category not given)';
       const correlations = args.success_correlation || '';
       const directionOf = (text:string) => args.correlation_direction || correlationFact(text);
       const adversePattern = directionOf(correlations) === 'negative';
@@ -1137,17 +1138,17 @@ This tool will analyze patterns across your customers to identify your ideal pro
       ].filter(Boolean).join(' ') : '';
       const noValues = userGiven ? criteria.filter(c => !(args.scoring_criteria || []).find(x => (x.criterion || '') === c.criterion)?.values?.length).map(c => c.criterion) : [];
       const askFor: string[] = [];
-      if (!userGiven) askFor.push('scoring_criteria, each with an importance and the values you score (it would change the whole model: the criteria, weights and points above are an example, not yours)');
+      if (!userGiven) askFor.push('scoring criteria, each with an importance and the values you score (it would change the whole model: the criteria, weights and points above are an example, not yours)');
       if (noValues.length) askFor.push(`the values you score for ${andList(noValues)} (it would change the scorecard, which is empty for ${noValues.length === 1 ? 'it' : 'them'})`);
-      if (!correlations.trim()) askFor.push('success_correlation, what your best customers have in common (it would change which values the evidence says to score highest)');
-      if (!(args.product_category && args.product_category.trim())) askFor.push('product_category, what you sell (it would change the sector notes, the fit signals and the wording of the tier actions)');
+      if (!correlations.trim()) askFor.push('success correlation, what your best customers have in common (it would change which values the evidence says to score highest)');
+      if (!(args.product_category && args.product_category.trim())) askFor.push('product category, what you sell (it would change the sector notes, the fit signals and the wording of the tier actions)');
       if (!(typeof args.company === 'string' && args.company.trim())) askFor.push('company (it would put your company name on the model)');
 
       // the sector line: said plainly when the product text you gave names no sector this server has notes for
       const productGiven = !!(args.product_category && args.product_category.trim());
       const sectorText = vv ? sectorLine(vv, ctx.via) : productGiven
         ? '*Sector: the product text you gave names none of the sectors this server has notes for, so there are no sector notes, fit signals or objections below. The points, weights and tiers do not depend on it.*'
-        : sectorLine(null).replace(/ \(describe your product, for example in product_category, for sector notes\)/, '');
+        : sectorLine(null).replace(/ \(describe your product, for example in product category, for sector notes\)/, '');
       return `# ICP Scoring Model
 
 ## Scoring Framework for ${category}
@@ -1261,7 +1262,7 @@ Add these fields to your CRM to improve scoring over time:
 | Trigger Event | Text | Identify timing signals |
 | Competitor | Picklist | Track displacement success |
 
-${notes ? `${notes}\n\n` : ''}${askFor.length ? `To sharpen this, give:\n${askFor.map(x => `- ${x}`).join('\n')}\n\n` : ''}**Next Step**: Use \`buyer_group_analyzer\` to map decision-making dynamics
+${notes ? `${notes}\n\n` : ''}${askFor.length ? `To sharpen this, give:\n${askFor.map(x => `- ${x}`).join('\n')}\n\n` : ''}**Next Step**: Use \`Buyer Group Analyzer\` to map decision-making dynamics
 
 ${SUGGESTED}
 `;
@@ -1291,8 +1292,9 @@ ${SUGGESTED}
         known_stakeholders: {
           type: 'array',
           items: { type: 'string' },
-          description: 'Roles you know are involved'
+          description: 'Roles you know are involved. A title suggests a role, not confirmed authority. Confirm who owns this purchase budget.'
         },
+        confirmed_budget_owner: { type: 'string', description: 'Optional confirmed fact: the person or role who owns the budget for this purchase. Ask the user; do not infer from title. Overrides candidate ordering.' },
         typical_champion: {
           type: 'string',
           description: 'Your typical champion role'
@@ -1307,13 +1309,14 @@ ${SUGGESTED}
       target_company_size?: string;
       product_category: string;
       known_stakeholders?: string[];
+      confirmed_budget_owner?: string;
       typical_champion?: string;
       company?: string;
       business_model?: string;
     }) => {
       // Run 19 D80: no default deal size, company size or champion in place of an input that was not given (rule B81).
-      const dealSize = args.deal_size ? args.deal_size.trim() : 'not given (add deal_size)';
-      const companySize = args.target_company_size ? args.target_company_size.trim() : 'not given (add target_company_size)';
+      const dealSize = args.deal_size ? args.deal_size.trim() : 'not given (add deal size)';
+      const companySize = args.target_company_size ? args.target_company_size.trim() : 'not given (add target company size)';
       const stakeholders = (args.known_stakeholders || []).map(x => String(x).trim()).filter(Boolean);
       const ctx = readContext(args.business_model, { seller: [productWords(args.product_category, args.company)], context: [args.company], role: agreedRoles([args.typical_champion, ...stakeholders]) });
       const v = ctx.v;
@@ -1365,13 +1368,13 @@ ${SUGGESTED}
       const hm3 = hv.bv ? andList(hv.bv.metrics.slice(0, 3)) : '';
       const qv = horizontal ? hv.bv : v;
       const buyingGroup: { champion: Seat; economic: Seat; technical: Seat; user: Seat; blocker: Seat } = v && seat ? {
-        champion: { role: pick('champion', 'not given (add typical_champion)'), concern: horizontal ? (hv.bv ? `In ${hv.name} the usual measures are ${hm3}; ask which of them they are held to` : 'Ask them in discovery what they are measured on today') : `Owns ${m3} day to day, so the pain is theirs`, message: horizontal ? (hv.bv ? `Show the effect on ${hv.bv.metrics[0]} or another measure they already track, with the kind of proof ${hv.name} trust (${lower1(stripEnd(hv.bv.proofShape))}).` : 'Show the effect on one number they already track, with proof from a customer like them.') : `Lead with ${v.metrics[0]}: show the effect on their own numbers, with the kind of proof this sector trusts (${lower1(stripEnd(v.proofShape))}).`, label: 'Message angle' },
+        champion: { role: pick('champion', 'not given (add typical champion)'), concern: horizontal ? (hv.bv ? `In ${hv.name} the usual measures are ${hm3}; ask which of them they are held to` : 'Ask them in discovery what they are measured on today') : `Owns ${m3} day to day, so the pain is theirs`, message: horizontal ? (hv.bv ? `Show the effect on ${hv.bv.metrics[0]} or another measure they already track, with the kind of proof ${hv.name} trust (${lower1(stripEnd(hv.bv.proofShape))}).` : 'Show the effect on one number they already track, with proof from a customer like them.') : `Lead with ${v.metrics[0]}: show the effect on their own numbers, with the kind of proof this sector trusts (${lower1(stripEnd(v.proofShape))}).`, label: 'Message angle' },
         economic: { role: pick('economic', 'not named in your stakeholders (ask your champion who holds the budget)'), concern: (horizontal ? (hv.bv ? `Whether ${andList(hv.bv.metrics.slice(0, 2))} move enough to justify the spend and the risk of change` : 'Return on the spend and the risk of change') : `Whether ${m2} move enough to justify the spend and the risk of change`) + (objEcon ? `. Likely objection: ${lowerCommonWords(objEcon.objection)}` : ''), message: (horizontal ? (hv.bv ? `Tie the spend to ${hv.bv.metrics[0]} and to the risk of staying as they are, and bring proof from a buyer like them.` : 'Tie the spend to one business result and to the cost of staying as they are, with proof from a buyer like them.') : `Tie the spend to ${v.metrics[0]} and to the risk of staying as they are, and bring proof from a buyer like them.`) + (objEcon ? ` If it comes up: ${objEcon.response}` : ''), label: 'Message angle' },
         technical: { role: pick('technical', 'not named in your stakeholders (ask your champion who evaluates it technically)'), concern: objTech ? `Likely objection: ${lowerCommonWords(objTech.objection)}` : ctx.model === 'services' ? 'Access, security and how the transition is run' : ctx.model === 'connectivity' ? 'Network design and the risk of the cut-over' : 'Integration and upkeep', message: objTech ? objTech.response : ctx.model === 'services' ? 'Show the transition plan, the access model and who from your team works on their systems.' : ctx.model === 'connectivity' ? 'Share the network design and a wave plan with a fallback link and a rollback rule for each wave.' : 'Name the systems involved and who on each side owns the integration.', label: 'How to answer' },
         user: { role: pick('user', 'not named in your stakeholders (ask who uses it every day)'), concern: objUser ? `Likely objection: ${lowerCommonWords(objUser.objection)}` : ctx.model === 'services' ? 'How the service works for them every day' : 'Ease of use in the daily workflow', message: objUser ? objUser.response : ctx.model === 'services' ? 'Show the service through their eyes: who they call, how fast they get an answer and what is reported to their leadership.' : 'Show the daily workflow through their eyes and agree a small pilot with the people who will use it.', label: 'How to answer' },
         blocker: { role: pick('blocker', 'not named in your stakeholders (ask who reviews it: procurement, legal, security or audit)'), concern: objBlock ? `Likely objection: ${lowerCommonWords(objBlock.objection)}` : 'Risk and compliance', message: objBlock ? objBlock.response : 'Bring the evidence they will ask for before they ask for it.', label: 'How to answer' },
       } : {
-        champion: { role: 'not given (add typical_champion)', concern: 'Ask them in discovery what they are measured on today', message: 'Say how your product changes what they are measured on, using a result you can prove. Add product_category or typical_champion and this answer is built from your sector.', label: 'Message angle' },
+        champion: { role: 'not given (add typical champion)', concern: 'Ask them in discovery what they are measured on today', message: 'Say how your product changes what they are measured on, using a result you can prove. Add product category or typical champion and this answer is built from your sector.', label: 'Message angle' },
         economic: { role: 'not named in your stakeholders (ask your champion who holds the budget)', concern: 'Return on the spend and the risk of change', message: 'Tie the spend to one business result and to the cost of staying as they are, with proof from a similar buyer.', label: 'Message angle' },
         technical: { role: 'not named in your stakeholders (ask your champion who evaluates it technically)', concern: 'Integration and upkeep', message: 'Name the systems involved and who on each side owns the integration.', label: 'How to answer' },
         user: { role: 'not named in your stakeholders (ask who uses it every day)', concern: 'Ease of use in the daily workflow', message: 'Show the daily workflow through their eyes and agree a small pilot with them.', label: 'How to answer' },
@@ -1382,20 +1385,22 @@ ${SUGGESTED}
       // economic buyer, technology and security roles as technical evaluator, procurement, legal, audit, compliance and risk as
       // reviewers, everyone else as users.
       if (typedChampion) buyingGroup.champion.role = typedChampion;
-      const kindOf = (t: string): 'economic' | 'technical' | 'blocker' | 'user' => {
+      const kindOf = (t: string): 'economic' | 'technical' | 'blocker' | 'user' | 'unknown' => {
+        if (/\b(?:not|no|without)\b[^.;]{0,35}\b(?:budget|authority|sign.off|approv)/i.test(t)) return 'unknown';
         if (v && v.id === 'cybersecurity' && /\bCISO\b|chief information security/i.test(t)) return 'economic';
         if (/procurement|legal|compliance|audit|\brisk\b|vendor management|purchasing/i.test(t)) return 'blocker';
         if (!(v && v.id === 'cybersecurity') && /\bCISO\b|security|privacy/i.test(t) && !/\b(CTO|engineer|architect|devops)\b/i.test(t)) return 'blocker';   // outside a security product the security lead reviews
-        if (/\b(CFO|CEO|COO|CIO|CRO|CMO|MD|VP|SVP|EVP)\b|vice president|chief (?:financial|executive|operating|information officer|revenue|marketing)|managing director|president|founder|business unit head|national sales head/i.test(t) && !/chief information security/i.test(t)) return 'economic';
-        if (/\bchief\b[^,]*\bofficer\b/i.test(t) && !/technolog|security/i.test(t)) return 'economic';   // any other chief officer (commercial, risk ...) holds budget or sign-off, he is not a day-to-day user
-        if (/\b(IT|CTO|CISO|QA)\b|chief technology|chief information security|engineer|architect|devops|platform|security|infrastructure|network|data|technical/i.test(t)) return 'technical';
+        if (/\b(CFO|CEO|COO|CIO|CRO|CMO|MD|VP|SVP|EVP)\b|vice president|chief (?:financial|executive|operating|information officer|revenue|marketing)|managing director|executive director|general manager|president|founder|business unit head|national sales head/i.test(t) && !/chief information security/i.test(t)) return 'economic';
+        if (/\bchief\b[^,]*\bofficer\b/i.test(t) && !/technolog|security/i.test(t)) return 'unknown';   // An unfamiliar chief title alone does not establish purchase authority.
+        if (/\b(IT|CTO|CISO|QA)\b|chief technology|chief information security|engineer|architect|devops|platform|security|infrastructure|network|data|technolog|digital|technical/i.test(t)) return 'technical';
         return 'user';
       };
       const others = stakeholders.filter(x => x.toLowerCase() !== buyingGroup.champion.role.toLowerCase());
-      const placed: Record<string, string[]> = { economic: [], technical: [], blocker: [], user: [] };
+      const placed: Record<string, string[]> = { economic: [], technical: [], blocker: [], user: [], unknown: [] };
       for (const x of others) placed[kindOf(x)].push(x);
       // A job title fills a seat before a group of people ("Director IT" before "enterprise developers").
       for (const k of Object.keys(placed)) placed[k] = [...placed[k].filter(isTitleItem), ...placed[k].filter(x => !isTitleItem(x))];
+      placed.economic.sort((a,b)=>a.localeCompare(b));
       // 26 Oct 2026: a sector role the user typed (as champion or any stakeholder) is never "not in your list". Across seats the title must be
       // the same once case, acronyms and a plural are set aside ("CISO" is the "Chief Information Security Officer"); sameRole is too loose
       // there ("VP Engineering" would be the "Engineering Manager"). sameRole also drops two-letter words such as IT, so the same-level heads
@@ -1424,7 +1429,10 @@ ${SUGGESTED}
         }
       }
       if (typedChampion && seat && !horizontal && !sameRole(typedChampion, seat.champion) && !stakeholders.some(x => sameRole(x, seat.champion)) && !typedAnywhere(seat.champion)) sectorDefaults.push(`${seat.champion} (champion)`);
-      const extra = (['economic', 'technical', 'blocker', 'user'] as const).flatMap(k => placed[k].slice(1).map(x => `${x} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`));
+      const budgetCandidates = placed.economic;
+      if (args.confirmed_budget_owner?.trim()) buyingGroup.economic.role = args.confirmed_budget_owner.trim() + ' (budget authority confirmed in your answer)';
+      else if (budgetCandidates.length > 1) buyingGroup.economic.role = 'not confirmed; candidates from your stakeholder list: ' + budgetCandidates.join('; ') + '. Confirm who owns this purchase budget; list order does not establish authority';
+      const extra = (['economic', 'technical', 'blocker', 'user'] as const).filter(k=>k!=='economic'||budgetCandidates.length<2).flatMap(k => placed[k].slice(1).map(x => `${x} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`));
       const technicalSteps = ctx.model === 'connectivity' ? ['Offer a site survey and a small set of pilot sites', 'Share the network design and the cut-over plan', 'Offer a technical session with your network team', 'Answer the security questionnaire before it is asked']
         : ctx.model === 'services' ? ['Share the transition plan and the team model', 'Agree the SLA and the reports up front', 'Offer a session with the delivery lead', 'Answer the security questionnaire before it is asked']
         : ctx.model === 'saas' ? ['Provide sandbox/POC access', 'Share integration documentation', 'Offer technical deep-dive call', 'Address security questionnaire proactively']
@@ -1445,13 +1453,15 @@ ${strategy.map(x => `- ${x}`).join('\n')}
 
       return `# Buyer Group Analysis
 
+${placed.unknown.length ? `**Authority unconfirmed:** ${placed.unknown.join('; ')}. Their role in this purchase is not established; ask who owns the budget and who must approve. They are not assigned a decision seat from title alone.\n` : ''}
+
 ## Deal Context
 - ${companyLine(args.company)}
 - **Product**: ${args.product_category}
 - **Deal Size**: ${dealSize}
 - **Target Company**: ${companySize}
 - **Known Stakeholders**: ${stakeholders.length ? escapePiece(stakeholders.join(', ')) : 'Not specified'}
-- **Champion you named**: ${typedChampion || 'not given (add typical_champion)'}
+- **Champion you named**: ${typedChampion || 'not given (add typical champion)'}
 
 ${ctx.line}
 
@@ -1519,7 +1529,7 @@ ${qv ? `4. "${qv.discovery[1]}"\n` : ''}
 1. "Which reviews must this pass, how long do they take, and what do you need from us before they start?"
 2. ${objBlock ? `"Has '${lowerCommonWords(objBlock.objection)}' come up on similar purchases, and how was it settled?"` : '"What has stopped similar purchases at the review stage before?"'}
 
-${qv && moreQs.length ? `### More ${horizontal ? hv.name || qv.name : qv.name} questions\n${moreQs.map((x, i) => `${i + 1}. "${x}"`).join('\n')}\n\n` : ''}**Next Step**: Use \`tam_sam_som_calculator\` to size your market
+${qv && moreQs.length ? `### More ${horizontal ? hv.name || qv.name : qv.name} questions\n${moreQs.map((x, i) => `${i + 1}. "${x}"`).join('\n')}\n\n` : ''}**Next Step**: Use \`TAM SAM SOM Calculator\` to size your market
 
 ${SUGGESTED}
 `;
@@ -1636,7 +1646,7 @@ ${SUGGESTED}
 
 - ${companyLine(args.company)}
 
-${ctx.v ? (args.product_category ? ctx.line : `*Sector: read from your inputs as ${ctx.v.name}.*`) : '*Sector notes: none. This calculator takes a market segment, not a product; give product_category to the other ICP tools for notes that fit what you sell.*'}
+${ctx.v ? (args.product_category ? ctx.line : `*Sector: read from your inputs as ${ctx.v.name}.*`) : '*Sector notes: none. This calculator takes a market segment, not a product; give product category to the other ICP tools for notes that fit what you sell.*'}
 
 ---
 
@@ -1710,7 +1720,7 @@ ${somEx ? `Values computed with a preset rate you did not supply are examples.\n
 ### Year 1 Target
 - **Revenue Goal**: ${formatCurrency(som)}${somEx}
 - **Deals Needed**: ${countText(targetDeals, som / acv, '~')} closed customers${somEx}
-- **Monthly Target**: ${countText(Math.ceil(targetDeals / 12), som / acv, '~')} deals/month${somEx}
+- **Monthly Target**: ${countText(Math.ceil(targetDeals / 12), som / acv, '~')} ${Math.ceil(targetDeals / 12) === 1 ? 'deal' : 'deals'}/month${somEx}
 - **Pipeline Required**: ${formatCurrency(som * 3)} (SOM × 3, a 1 in 3 win rate) ${EXAMPLE}
 
 ### Growth Path
@@ -1752,7 +1762,7 @@ Later years assume your market share doubles each year.
 > 
 > *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
 
-${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'proof'], args.product_category, args.segment_name)}\n- **Counting companies in this sector:** count only companies where the roles above exist and the problem is measured (${andList(sideM.slice(0, 2))}).\n\n` : ''}**Next Step**: Use \`lookalike_signal_generator\` to create targeting criteria
+${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'proof'], args.product_category, args.segment_name)}\n- **Counting companies in this sector:** count only companies where the roles above exist and the problem is measured (${andList(sideM.slice(0, 2))}).\n\n` : ''}**Next Step**: Use \`Lookalike Signal Generator\` to create targeting criteria
 `;
     }
   },
@@ -1885,7 +1895,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
 
 **Company Search**:
 \`\`\`
-${[industries ? `Industry: ${industries.join(' OR ')}` : '', sizes ? `Company headcount: ${sizes.join(' OR ')}` : '', locations ? `Headquarters: ${locations.join(' OR ')}` : '', tech ? `Technologies used: ${tech.join(' OR ')}` : ''].filter(Boolean).join('\n') || 'No firmographic input given: add icp_firmographics (industries, company_sizes, locations) to fill this search'}
+${[industries ? `Industry: ${industries.join(' OR ')}` : '', sizes ? `Company headcount: ${sizes.join(' OR ')}` : '', locations ? `Headquarters: ${locations.join(' OR ')}` : '', tech ? `Technologies used: ${tech.join(' OR ')}` : ''].filter(Boolean).join('\n') || 'No firmographic input given: add icp firmographics (industries, company sizes, locations) to fill this search'}
 \`\`\`
 
 **Lead Search**:
@@ -1908,9 +1918,9 @@ ${groups.length ? `\nNot job titles, so not in the title search: ${groups.join('
 ### Custom Intent Audiences
 **Keywords to target** (people searching for what you sell):
 \`\`\`
-${keywords.length ? escapePiece(keywords.map(k => `"${k}"`).join('\n')) : 'No product_category and no sector read: add product_category (what you sell) for search keywords about your product'}
+${keywords.length ? escapePiece(keywords.map(k => `"${k}"`).join('\n')) : 'No product category and no sector read: add product category (what you sell) for search keywords about your product'}
 \`\`\`
-${product ? '' : 'Add product_category (what you sell) for search keywords about your product: this tool does not guess it.\n'}${keywordWords.length ? `The keywords after the first one are the sector's own words with "${suffix}" added: test each in the Keyword Planner and drop what does not fit how you sell.\n` : ''}
+${product ? '' : 'Add product category (what you sell) for search keywords about your product: this tool does not guess it.\n'}${keywordWords.length ? `The keywords after the first one are the sector's own words with "${suffix}" added: test each in the Keyword Planner and drop what does not fit how you sell.\n` : ''}
 ### Custom Audience: Website Visitors
 Target visitors to the sites of the competitors your buyers compare you with (add their addresses).
 
@@ -1925,7 +1935,7 @@ ${JSON.stringify({ firmographics: { ...(industries ? { industry: industries } : 
 
 ### Intent Topic Keywords
 \`\`\`
-${[...new Set([...(searchProduct && !(phraseFirst && productPhrases.length) ? [searchProduct.replace(/ \.\.\.$/, '')] : []), ...(phraseFirst || keywordWords.length === 0 ? productPhrases.slice(0, 3) : []), ...(vocabOk ? v!.vocabulary.slice(0, 5) : []), ...(tech || [])])].join('\n') || 'Add product_category for intent topics'}
+${[...new Set([...(searchProduct && !(phraseFirst && productPhrases.length) ? [searchProduct.replace(/ \.\.\.$/, '')] : []), ...(phraseFirst || keywordWords.length === 0 ? productPhrases.slice(0, 3) : []), ...(vocabOk ? v!.vocabulary.slice(0, 5) : []), ...(tech || [])])].join('\n') || 'Add product category for intent topics'}
 \`\`\`
 
 ### Buying Stage Indicators
@@ -1970,18 +1980,18 @@ ${stages ? `- Funding or listing news at your stages: ${stages.join(', ')}\n` : 
       return `# Lookalike Signal & Targeting Criteria
 
 - ${companyLine(args.company)}
-- **What you sell**: ${product || 'not given (add product_category for search keywords)'}
+- **What you sell**: ${product || 'not given (add product category for search keywords)'}
 
 ${sectorLine(v, ctx.via)}
 
 ## ICP Summary
-- **Industries**: ${industriesTyped ? industriesTyped.join(industriesTyped.some(i => i.includes(',')) ? '; ' : ', ') : 'not supplied (add icp_firmographics.industries)'}
-- **Company Sizes**: ${sizes ? sizes.join(', ') : 'not supplied (add icp_firmographics.company_sizes, for example employee ranges of your best customers)'}
-- **Locations**: ${locations ? locations.join(', ') : 'not supplied (add icp_firmographics.locations)'}
+- **Industries**: ${industriesTyped ? industriesTyped.join(industriesTyped.some(i => i.includes(',')) ? '; ' : ', ') : 'not supplied (add icp firmographics.industries)'}
+- **Company Sizes**: ${sizes ? sizes.join(', ') : 'not supplied (add icp firmographics.company sizes, for example employee ranges of your best customers)'}
+- **Locations**: ${locations ? locations.join(', ') : 'not supplied (add icp firmographics.locations)'}
 - **Funding Stages**: ${stages ? stages.join(', ') : 'not supplied'}
-- **Technologies**: ${tech ? tech.join(', ') : `not supplied (add icp_technographics: the systems your buyers run that your product connects to${sysList ? `; in ${v!.name} these are usually ${sysList}` : ''})`}
+- **Technologies**: ${tech ? tech.join(', ') : `not supplied (add icp technographics: the systems your buyers run that your product connects to${sysList ? `; in ${v!.name} these are usually ${sysList}` : ''})`}
 - **Champion Titles**: ${titles.join(', ')}${groups.length ? ` (groups, not titles: ${groups.join(', ')})` : ''}
-- **Buying Triggers**: ${triggers ? triggers.join('; ') : 'not supplied (add buying_triggers: the events that make a buyer start looking)'}
+- **Buying Triggers**: ${triggers ? triggers.join('; ') : 'not supplied (add buying triggers: the events that make a buyer start looking)'}
 ${v && !isHorizontal(v) ? `- **Other roles in ${/^[aeiou]/i.test(v.name) ? 'an' : 'a'} ${v.name} buying group** (not in your input): ${v.buyerRoles.filter(r => !titles.some(t => sameRole(aliasRole(t, v), r))).join(', ')}\n` : ''}
 ${wanted.length ? `Sections shown: the platforms you asked for (${args.platforms!.join(', ')}).\n` : ''}
 ---
@@ -1995,7 +2005,7 @@ ${sections.join('\n\n---\n\n')}
 ${triggers ? triggers.map(t => { const [signal, why, how] = signalFor(t); return `### Trigger: ${trigHead(t)}
 **Signal**: ${signal}
 **Why it matters**: ${why}
-**How to track**: ${how}`; }).join('\n\n') : `No buying triggers were given, so no trigger-specific signals are written: this tool does not assume them. One signal that fits any B2B purchase (general, not from your input): a new ${titles[0] || 'leader'} or a related leader in the last 90 days, tracked with LinkedIn alerts or ZoomInfo job changes. Add buying_triggers for signals that fit your buyers.${v ? ` In ${v.name}, deals usually run like this, which tells you when to search: ${v.salesMotion}` : ''}`}
+**How to track**: ${how}`; }).join('\n\n') : `No buying triggers were given, so no trigger-specific signals are written: this tool does not assume them. One signal that fits any B2B purchase (general, not from your input): a new ${titles[0] || 'leader'} or a related leader in the last 90 days, tracked with LinkedIn alerts or ZoomInfo job changes. Add buying triggers for signals that fit your buyers.${v ? ` In ${v.name}, deals usually run like this, which tells you when to search: ${v.salesMotion}` : ''}`}
 
 ${v ? `${sectorNotes(v, ['metrics', 'vocabulary', 'proof'])}\n\n` : ''}---
 
@@ -2013,10 +2023,10 @@ ${needs.length ? `To execute these searches, you need:
 ${needs.map((x, i) => `${i + 1}. ${x}`).join('\n')}
 
 ` : ''}${missing.length
-  ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`
+  ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.map(readerLabel).join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`
   : 'The criteria above are built from your inputs and ready to copy/paste into each platform.'}
 
-**Next Step**: Use \`account_prioritization\` to rank accounts for outreach
+**Next Step**: Use \`Account Prioritization\` to rank accounts for outreach
 
 ${SUGGESTED}
 `;
@@ -2043,7 +2053,7 @@ ${SUGGESTED}
               timing: { type: 'string', description: 'Buying horizon: now, soon, later or unknown (100, 70, 40 and 50 points respectively). Equivalent phrases are read by clause; denied or conflicting horizons remain unknown. Confirm the horizon with the user.' }
             }
           },
-          description: 'List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)'
+          description: 'List of accounts to prioritize. Each account: name, fit score (0 to 100), intent signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)'
         },
         prioritization_weights: {
           type: 'object',
@@ -2233,7 +2243,7 @@ ${sv ? `How deals run in ${sv.name}: ${sv.salesMotion}\n${isHorizontal(sv) ? '' 
 - **Recommended action**: ${nextStep(a)}
 `).join('')}
 
-**Next Step**: Use \`icp_gap_analysis\` to compare current vs ideal customers
+**Next Step**: Use \`ICP Gap Analysis\` to compare current vs ideal customers
 
 ${SUGGESTED}
 `;
@@ -2269,7 +2279,7 @@ ${EXAMPLES}
 
 ## How to Use
 
-Provide accounts in this format (the accounts and scores below are examples; the tool reads name, fit_score, intent_signals, relationship and timing):
+Provide accounts in this format (the accounts and scores below are examples; the tool reads name, fit score, intent signals, relationship and timing):
 
 ${EXAMPLES}
 \`\`\`json
@@ -2277,15 +2287,15 @@ ${EXAMPLES}
   "accounts": [
     {
       "name": "Example Manufacturing Co",
-      "fit_score": 85,
-      "intent_signals": 70,
+      "fit score": 85,
+      "intent signals": 70,
       "relationship": 60,
       "timing": "now"
     },
     {
       "name": "Example IT Services Co",
-      "fit_score": 75,
-      "intent_signals": 90,
+      "fit score": 75,
+      "intent signals": 90,
       "relationship": 40,
       "timing": "soon"
     }
@@ -2449,7 +2459,7 @@ ${SUGGESTED}
       const acvOnly = sectorV;
       // the shared sector line, without its requests for inputs (the missing inputs are named once, at the end of the answer)
       const productGivenText = !!(args.product_category && args.product_category.trim());
-      const contextLine0 = ctx.line.replace(ctx.v ? ctx.v.name : '\u0000', vv ? vv.name : '\u0000').replace(/ \(describe your product, for example in product_category, for sector notes\)/, '').replace(/; set business_model \([^)]*\) for advice that fits it/, '').replace(/; set business_model to change it/g, '').replace(/, so describe what you sell for notes that fit it/, '');
+      const contextLine0 = ctx.line.replace(ctx.v ? ctx.v.name : '\u0000', vv ? vv.name : '\u0000').replace(/ \(describe your product, for example in product category, for sector notes\)/, '').replace(/; set business_model \([^)]*\) for advice that fits it/, '').replace(/; set business_model to change it/g, '').replace(/, so describe what you sell for notes that fit it/, '');
       const contextLine = !ctx.v && productGivenText ? contextLine0.replace('Sector: not clear from what you sell.', 'Sector: the product text you gave names none of the sectors this server has notes for, so there are no sector notes or role checks below.') : contextLine0;
       const targetAcv = pairs.acv[1];
       const sectorNotesText = vv ? sideNotes(vv, ['committee', 'metrics', 'vocabulary', 'proof'], ctx0.idl.roles, ctx0.cur.roles, args.product_category) : '';
@@ -2598,7 +2608,7 @@ ${SUGGESTED}
 1. **Collect**: for ${segList}, the deals closed (won and lost) in the last two quarters: ACV, sales cycle, who signed, and the reason given for the result. Write each loss reason in the buyer's words, next to ${what}.
 2. **Ask**: ${from.length ? `${andList(from)} at three customers you won and three you lost, and ask what they were comparing and what finally decided it.` : 'the buyer at three customers you won and three you lost, and ask what they were comparing and what finally decided it.'}
 3. **Tag**: ${sig.length ? `how the deals moved ${andList(sig)}` : 'the measure each buyer said they were held to'}${tags.length ? `, and tag losses with ${andList(tags)} where they apply` : ''}.
-4. **Then rerun this tool** with recent_wins, recent_losses and market_changes filled from steps 1 to 3.
+4. **Then rerun this tool** with recent wins, recent losses and market changes filled from steps 1 to 3.
 
 `;
       })() : '';
@@ -2621,16 +2631,16 @@ This review reads your notes against your current ICP and states candidate chang
 ## Win/Loss Pattern Analysis
 
 ### Recent Wins
-${wins.length ? winLines.join('\n') : '- No win data provided: add recent_wins to find possible additions'}
+${wins.length ? winLines.join('\n') : '- No win data provided: add recent wins to find possible additions'}
 
 ### Recent Losses
-${losses.length ? lossLines.join('\n') : '- No loss data provided: add recent_losses to find possible disqualifiers'}
+${losses.length ? lossLines.join('\n') : '- No loss data provided: add recent losses to find possible disqualifiers'}
 
 ---
 
 ## Market Change Impact
 
-${changes.length ? changeLines.join('\n') : '- No market changes provided: add market_changes to assess the impact on your ICP'}
+${changes.length ? changeLines.join('\n') : '- No market changes provided: add market changes to assess the impact on your ICP'}
 
 ${noDataPlan}## Your Current ICP, Part by Part
 
@@ -2652,7 +2662,7 @@ ${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4)
 
 For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the deals you won and lost, the ACV and the sales cycle, and the churn and renewals. ${roles.length ? `For ${andList(roles.slice(0, 3))}: the deals where they were involved against the deals where they were not.` : ''} Put the answers next to the draft above and change a line only where the numbers say so.
 
-**Next Step**: Use \`icp_interview_synthesizer\` to extract patterns from customer interviews
+**Next Step**: Use \`ICP Interview Synthesizer\` to extract patterns from customer interviews
 `;
     }
   },
@@ -2781,7 +2791,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
         const readFirst = [
           gaps.length ? `${gaps.length === 1 ? 'One entry says' : `${gaps.length} entries say`} nothing was captured, so ${gaps.length === 1 ? 'it is' : 'they are'} left out of the counts below: ${andList([...new Set(gaps)])}. Ask about ${gaps.length === 1 ? 'it' : 'them'} in the next interview.` : '',
           sameAcross ? `All ${n} interview notes carry the same pain points, questions and value statements, so every count below is ${n} of ${n} by repetition. Treat them as one source until you add notes from separate interviews.` : '',
-          asked.length ? `${plural(asked.length, 'item')} in pain_points ${asked.length === 1 ? 'is a question a buyer asked' : 'are questions buyers asked'} (listed apart, not counted as pain points).` : '',
+          asked.length ? `${plural(asked.length, 'item')} in pain points ${asked.length === 1 ? 'is a question a buyer asked' : 'are questions buyers asked'} (listed apart, not counted as pain points).` : '',
           claims.length ? `${plural(claims.length, 'value statement')} read${claims.length === 1 ? 's' : ''} like a page claim, award or case study title rather than an outcome a customer told you (listed apart; confirm ${claims.length === 1 ? 'it' : 'them'} with customers before you lead with ${claims.length === 1 ? 'it' : 'them'}).` : '',
         ].filter(Boolean);
 
@@ -2809,14 +2819,14 @@ ${asked.length ? `\n### Questions Buyers Asked (not counted as pain points)\n${a
 ### Top Buying Triggers
 ${topTriggers.length > 0 ? topTriggers.map(([trigger, count], i) =>
   `${i + 1}. **${trigger}**: ${of(count)}`
-).join('\n') : '- No triggers captured. Ask each customer: "What changed that made you start looking?" and record the answer as buying_triggers.'}
+).join('\n') : '- No triggers captured. Ask each customer: "What changed that made you start looking?" and record the answer as buying triggers.'}
 
 **ICP Implication**: Time outreach around these events
 
 ### Value Realized (Post-Purchase)
 ${results.length > 0 ? results.map(([value, count], i) =>
   `${i + 1}. **${shortText(value, 300)}**: ${of(count)}`
-).join('\n') : '- No outcomes captured as results. Ask each customer what changed for them, in their own words, and record it as value_realized.'}
+).join('\n') : '- No outcomes captured as results. Ask each customer what changed for them, in their own words, and record it as value realized.'}
 ${claims.length ? `\n**Claims and recognition in your notes** (seller claims and testimonials: statements from the seller's own pages, quotes from the seller's customers or awards, not outcomes a customer reported to you in an interview; use them as proof points only after a customer confirms them):\n${claims.map(([value, count]) => `- ${shortText(value, 300)} (${of(count)})`).join('\n')}\n` : ''}
 **ICP Implication**: ${results.length ? 'Lead with these outcomes in messaging' : 'Collect customer outcomes before you lead with value in messaging'}
 
@@ -2834,8 +2844,8 @@ ${tieNote(topRoles, 'role')}
 ${allQuotes.length ? allQuotes.slice(0, 5).map((qt, i) => `
 ### Quote ${i + 1}
 > "${qt.quote}"
-> (${qt.role || 'Customer'}${qt.customer ? (qt.from ? `: ${qt.customer}` : ` at ${qt.customer}`) : ''}${qt.from ? `; written in ${qt.from}, marked as a customer quote` : ''})
-`).join('\n') : 'No key_quotes were given and none of your statements is marked as a customer quote, so none are shown. Quotes are never written for you: add key_quotes, word for word, from your interviews.'}
+> (${qt.role || 'Customer'}${qt.customer ? (qt.from ? `: ${qt.customer}` : ` at ${qt.customer}`) : ''}${qt.from ? `; written in ${readerLabel(qt.from)}, marked as a customer quote` : ''})
+`).join('\n') : 'No key quotes were given and none of your statements is marked as a customer quote, so none are shown. Quotes are never written for you: add key quotes, word for word, from your interviews.'}
 
 ---
 
@@ -2888,24 +2898,24 @@ For better analysis, structure your interviews in this format. Example only, not
 ${EXAMPLES}
 \`\`\`json
 {
-  "interview_notes": [
+  "interview notes": [
     {
       "customer": "Example Manufacturing Co",
       "role": "Finance Controller",
-      "key_quotes": [
+      "key quotes": [
         "We spent the first week of every month matching card spends by hand",
         "The old process could not keep up with our branches"
       ],
-      "pain_points": [
+      "pain points": [
         "Slow month-end close",
         "Manual reconciliation",
         "Late expense claims"
       ],
-      "buying_triggers": [
+      "buying triggers": [
         "New CFO hire",
         "Audit finding"
       ],
-      "value_realized": [
+      "value realized": [
         "Close 5 days faster",
         "Fewer policy breaches"
       ]
@@ -2953,14 +2963,14 @@ Provide interview data in this format:
 ## Structured Notes
 \`\`\`json
 {
-  "interview_notes": [
+  "interview notes": [
     {
       "customer": "Company Name",
       "role": "Job Title",
-      "key_quotes": ["Quote 1", "Quote 2"],
-      "pain_points": ["Pain 1", "Pain 2"],
-      "buying_triggers": ["Trigger 1", "Trigger 2"],
-      "value_realized": ["Value 1", "Value 2"]
+      "key quotes": ["Quote 1", "Quote 2"],
+      "pain points": ["Pain 1", "Pain 2"],
+      "buying triggers": ["Trigger 1", "Trigger 2"],
+      "value realized": ["Value 1", "Value 2"]
     }
   ]
 }
@@ -3056,7 +3066,7 @@ const ONE_AMOUNT: Record<string, string[]> = {};
 function checkRequiredInputs(name: string, args: Record<string, unknown> | undefined): string | null {
   const tool = (tools as Record<string, { inputSchema: { required?: string[] } }>)[name];
   if (!tool) {
-    return `Unknown tool: ${escapeText(String(name))}. Available tools: ${Object.keys(tools).join(', ')}.`;
+    return `Unknown tool: ${escapeText(String(name))}. Available tools: ${Object.keys(tools).map(readerLabel).join(', ')}.`;
   }
   const required = tool.inputSchema.required ?? [];
   // Run 16 R16-10 (rule B52): a required text (a string with no fixed list of choices) that is empty or only whitespace counts as missing.
@@ -3064,7 +3074,7 @@ function checkRequiredInputs(name: string, args: Record<string, unknown> | undef
   const blankText = (key: string) => typeof args?.[key] === "string" && (args[key] as string).trim() === "" && props[key]?.type === "string" && !Array.isArray(props[key]?.enum);
   const missing = required.filter((key) => args?.[key] === undefined || args?.[key] === null || blankText(key));
   if (missing.length > 0) {
-    return `Missing required input for ${name}: ${missing.join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and call the tool again.`;
+    return `Missing required input for ${readerLabel(name)}: ${missing.map(readerLabel).join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and try again.${name === 'tam_sam_som_calculator' && missing.includes('average_contract_value') ? ' This calculator takes US dollars (USD) only. Supply the annual contract value in USD using a conversion you choose; no exchange rate is assumed.' : ''}`;
   }
   // Decision N2 (run 6) and run 7: schema limits at any depth, choices, money text and single amounts.
   const problems: string[] = [];
@@ -3102,7 +3112,7 @@ function checkRequiredInputs(name: string, args: Record<string, unknown> | undef
     }
   }
   if (problems.length > 0) {
-    return `Invalid input for ${name}: ${problems.join("; ")}.`;
+    return `Invalid input for ${readerLabel(name)}: ${problems.map(readerIssue).join("; ")}.`;
   }
   return null;
 }
@@ -3133,7 +3143,7 @@ export function createServer(): Server {
       return {
         content: [{
           type: 'text',
-          text: `Unknown tool: ${escapeText(String(toolName))}. Available tools: ${Object.keys(tools).join(', ')}`
+          text: `Unknown tool: ${escapeText(String(toolName))}. Available tools: ${Object.keys(tools).map(readerLabel).join(', ')}`
         }],
         isError: true
       };
@@ -3148,7 +3158,7 @@ export function createServer(): Server {
       return {
         content: [{
           type: 'text',
-          text: `Error executing ${escapeText(String(toolName))}: ${error instanceof Error ? error.message : 'Unknown error'}`
+          text: `Could not complete ${readerLabel(escapeText(String(toolName)))}: ${error instanceof Error ? error.message : 'Unknown error'}`
         }],
         isError: true
       };

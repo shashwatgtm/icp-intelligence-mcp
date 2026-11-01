@@ -36,4 +36,15 @@ export declare function sectorChoiceNotice(tool: string, args: Record<string, un
 /** EPIC rules retain the documented trigger floor, with clause evidence and optional confirmed facts. */
 export declare function epicReading(text: string, floor: RegExp, kind: string, typed?: unknown): SignalReading;
 export declare function epicChannelReview(text: string, nrrLow: boolean, selfServe: boolean | null): string[];
+export declare function readerLabel(value: string): string;
+/** Validation text only: translate the generated field path, never a caller's quoted value. */
+export declare function readerIssue(value: string): string;
+export declare function claimRisk(text: string): {
+    hold: boolean;
+    reason: string;
+    evidence: string;
+};
+export declare function outcomeReading(text: string): SignalReading;
+export declare function contactDeclined(text: string, typed?: unknown): SignalReading;
+export declare function claimOwnerConflict(text: string, alternatives: string[], ownProduct: string): boolean;
 //# sourceMappingURL=text-signals.d.ts.map

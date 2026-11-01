@@ -310,7 +310,7 @@ test("gap analysis: 'B2B SaaS and software' is related to 'SaaS'; a page claim i
   assert.doesNotMatch(b.text, /companies outside Fortune 500|\*\*Size\*\*: companies outside/);
   assert.match(b.text, /Platform leader is one of the roles usual in software, testing and QA tools \(Platform Engineering Lead\)/);
 });
-test("roles: a person is in one place in the buyer group; any other chief officer is budget or sign-off, not a day-to-day user", async () => {
+test("roles: a person is in one place in the buyer group; F19 known fault: an unfamiliar chief title does not establish budget authority", async () => {
   const q = await call("buyer_group_analyzer", { product_category: "AI platform and investment strategies", company: "Quantara AI", typical_champion: "portfolio manager", known_stakeholders: ["CIO", "risk teams", "compliance committees"] });
   ok(q);
   assert.doesNotMatch(q.text, /### End User[^\n]*\n\*\*Role\*\*: Portfolio Manager/);
@@ -318,7 +318,7 @@ test("roles: a person is in one place in the buyer group; any other chief office
   assert.match(q.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: risk teams/);
   const t = await call("buyer_group_analyzer", { product_category: "managed SD-WAN for branch offices", company: "Branchwire", typical_champion: "IT Infrastructure Head", known_stakeholders: ["CIO", "IT Infrastructure Head", "Chief Commercial Officer"] });
   assert.doesNotMatch(t.text, /### End User[^\n]*\n\*\*Role\*\*: Chief Commercial Officer/);
-  assert.match(t.text, /Chief Commercial Officer \(budget or sign-off\)/);
+  assert.match(t.text, /Authority unconfirmed[^\n]*Chief Commercial Officer/);
 });
 test("evolution tracker: CIO is not listed as missing when the ICP names the CIO in investment management; every segment line has its own words", async () => {
   const r = await call("icp_evolution_tracker", { company: "Quantara AI", product_category: "AI platform and investment strategies (Quantara Edge from Quantara AI)",
@@ -335,7 +335,7 @@ test("interview: a partner quote is attributed to a partner by the input's own l
   const r = await call("icp_interview_synthesizer", { product_category: "modernization engineering services", company: "Pathwise", interview_notes: [{ customer: "BFSI", role: "CIO", pain_points: ["slow modernization"],
     value_realized: ["CIO of a US energy firm: a cloud based ERP was needed within 60 days and Pathwise came through (customer quote)", "Microsoft's CVP thanks Pathwise as a global partner (partner quote)"] }] });
   ok(r);
-  assert.match(r.text, /> \(Partner[^\n]*written in value_realized/);
+  assert.match(r.text, /> \(Partner[^\n]*written in value realized/);
   assert.match(r.text, /> "a cloud based ERP was needed within 60 days and Pathwise came through"\s*\n> \(Customer: CIO of a US energy firm; written/);
   assert.doesNotMatch(r.text, /> \(Customer[^\n]*Microsoft/);
 });

@@ -76,7 +76,7 @@ Example figures: replace with your own.
 ### Year 1 Target
 - **Revenue Goal**: $3K (Example figure: replace with your own)
 - **Deals Needed**: ~4 closed customers (Example figure: replace with your own)
-- **Monthly Target**: ~1 deals/month (Example figure: replace with your own)
+- **Monthly Target**: ~1 deal/month (Example figure: replace with your own)
 - **Pipeline Required**: $10K (at 33% win rate) (Example figure: replace with your own)
 
 ### Growth Path
@@ -118,4 +118,4 @@ Later years assume your market share doubles each year.
 > 
 > *Figures calculated from your inputs, plus the preset rates marked as examples above.*
 
-**Next Step**: Use `lookalike_signal_generator` to create targeting criteria
+**Next Step**: Use `Lookalike Signal Generator` to create targeting criteria

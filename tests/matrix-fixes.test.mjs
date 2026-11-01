@@ -17,8 +17,8 @@ const call = async (name, args) => {
 test("tam_sam_som_calculator: percentages over 100 are refused in plain words", async () => {
   const r = await call("tam_sam_som_calculator", { total_potential_companies: 5000, average_contract_value: 24000, icp_percentage: 150, year1_market_share_target: 120 });
   assert.equal(r.isError, true);
-  assert.match(r.text, /icp_percentage must be 100 or less/);
-  assert.match(r.text, /year1_market_share_target must be 100 or less/);
+  assert.match(r.text, /icp percentage must be 100 or less/);
+  assert.match(r.text, /year1 market share target must be 100 or less/);
 });
 
 test("tam_sam_som_calculator: very large figures print with separators and never an exponent", async () => {
@@ -32,13 +32,13 @@ test("tam_sam_som_calculator: very large figures print with separators and never
 test("account_prioritization: a score over 100 is refused in plain words", async () => {
   const r = await call("account_prioritization", { accounts: [{ name: "Alpha", fit_score: 850, intent_signals: 60, relationship: 40, timing: "soon" }] });
   assert.equal(r.isError, true);
-  assert.match(r.text, /accounts\[0\]\.fit_score must be 100 or less/);
+  assert.match(r.text, /accounts\[0\] \/ fit score must be 100 or less/);
 });
 
 test("icp_gap_analysis: a rate over 100 is refused; a metric with no gap says so instead of listing causes", async () => {
   const bad = await call("icp_gap_analysis", { current_customers: "Small manufacturers", ideal_icp: "Mid-size manufacturers", current_metrics: { win_rate: 1000 } });
   assert.equal(bad.isError, true);
-  assert.match(bad.text, /current_metrics\.win_rate must be from 0 to 100/);
+  assert.match(bad.text, /current metrics \/ win rate must be from 0 to 100/);
   const r = await call("icp_gap_analysis", { current_customers: "Small manufacturers", ideal_icp: "Mid-size manufacturers",
     current_metrics: { avg_acv: 20000, avg_sales_cycle: 40, win_rate: 20, churn_rate: 10, nps: 30 },
     target_metrics: { avg_acv: 30000, avg_sales_cycle: 45, win_rate: 20, churn_rate: 8, nps: 40 } });
@@ -62,6 +62,6 @@ test("lookalike_signal_generator: an empty list is treated like a list left out"
   const r = await call("lookalike_signal_generator", { champion_titles: ["Operations Director"], icp_technographics: [], buying_triggers: [] });
   assert.doesNotMatch(r.text, /Technologies: \n/);
   // run 20 round 1: no preset technologies (Salesforce, HubSpot) in place of an input that was not given; the field says what to add
-  assert.match(r.text, /\*\*Technologies\*\*: not supplied \(add icp_technographics/);
+  assert.match(r.text, /\*\*Technologies\*\*: not supplied \(add icp technographics/);
   assert.doesNotMatch(r.text, /Salesforce|HubSpot/);
 });

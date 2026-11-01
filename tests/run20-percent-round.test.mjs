@@ -204,8 +204,8 @@ test("A17-O24: the TAM icp_percentage hint and schema agree with what the code a
   assert.equal((await call("tam_sam_som_calculator", { ...base, icp_percentage: 100 })).isError, false, "100 is accepted");
   const over = await call("tam_sam_som_calculator", { ...base, icp_percentage: 100.5 });
   assert.equal(over.isError, true);
-  assert.match(over.text, /icp_percentage must be 100 or less/);
-  assert.equal((over.text.match(/icp_percentage must be 100 or less/g) || []).length, 1, "the refusal names the problem once");
+  assert.match(over.text, /icp percentage must be 100 or less/);
+  assert.equal((over.text.match(/icp percentage must be 100 or less/g) || []).length, 1, "the refusal names the problem once");
   assert.equal((await call("tam_sam_som_calculator", { ...base, icp_percentage: -1 })).isError, true);
 });
 

@@ -29,6 +29,10 @@ const secure = (r) =>
 const { r: listRes, j: listJson } = await rpc({ jsonrpc: "2.0", id: 0, method: "tools/list" });
 const tools = listJson.result.tools;
 const names = tools.map((t) => t.name);
+// D2: reader labels are independent of the machine schema identifiers.
+const fieldLabel = k => ({average_contract_value:'annual contract value in US dollars',total_potential_companies:'number of potential companies',your_sector:'your selected sector',business_model:'how you charge'}[k] || k.replace(/_/g,' '));
+const toolLabel = name => {const t=tools.find(t=>t.name===name);return t?.title||t?.annotations?.title||name.replace(/_/g,' ')};
+
 
 // A plain value of the right type for a schema (used to fill required inputs).
 function sample(p) {
@@ -112,7 +116,7 @@ test("short text fields: 4,001 characters refused (also inside a list), 4,000 pa
   let { r, j } = await call(shortTool.name, { ...required(shortTool), [shortName]: "x".repeat(4001) });
   assert.equal(r.status, 200);
   assert.equal(j.result.isError, true);
-  assert.equal(text(j), `Invalid input for ${shortTool.name}: ${shortName} is longer than 4,000 characters. Shorten it.`);
+  assert.equal(text(j), `Invalid input for ${toolLabel(shortTool.name)}: ${fieldLabel(shortName)} is longer than 4,000 characters. Shorten it.`);
   assert.ok(secure(r));
   ({ j } = await call(shortTool.name, { ...required(shortTool), [shortName]: "x".repeat(4000) }));
   assert.ok(!/longer than/.test(text(j)));
@@ -121,14 +125,14 @@ test("short text fields: 4,001 characters refused (also inside a list), 4,000 pa
     const [lk] = Object.entries(listTool.inputSchema.properties).find(([, p]) => p.type === "array" && p.items && p.items.type === "string");
     ({ j } = await call(listTool.name, { ...required(listTool), [lk]: ["short", "y".repeat(4001)] }));
     assert.equal(j.result.isError, true);
-    assert.match(text(j), new RegExp(`${lk}\\[1\\] is longer than 4,000 characters\\. Shorten it\\.`));
+    assert.match(text(j), new RegExp(`${fieldLabel(lk)}\\[1\\] is longer than 4,000 characters\\. Shorten it\\.`));
   }
   for (const [tool, fields] of Object.entries(LONG_TEXT)) {
     const t = tools.find((x) => x.name === tool);
     const other = Object.entries(t.inputSchema.properties).find(([k, p]) => p.type === "string" && !p.enum && !fields.includes(k));
     if (!other) continue;
     ({ j } = await call(tool, { ...required(t), [other[0]]: "z".repeat(4001) }));
-    assert.equal(text(j), `Invalid input for ${tool}: ${other[0]} is longer than 4,000 characters. Shorten it.`);
+    assert.equal(text(j), `Invalid input for ${toolLabel(tool)}: ${fieldLabel(other[0])} is longer than 4,000 characters. Shorten it.`);
   }
 });
 
@@ -152,7 +156,7 @@ for (const [tool, fields] of Object.entries(LONG_TEXT)) {
       }
       const { j } = await call(tool, { ...required(t), [field]: doc(100001) });
       assert.equal(j.result.isError, true);
-      assert.equal(text(j), `Invalid input for ${tool}: ${field} is longer than 100,000 characters. Shorten it or split it into parts.`);
+      assert.equal(text(j), `Invalid input for ${toolLabel(tool)}: ${fieldLabel(field)} is longer than 100,000 characters. Shorten it or split it into parts.`);
     });
   }
 }
@@ -164,16 +168,16 @@ test("wrong JSON types are refused before the tool runs, for every input of ever
       const { r, j } = await call(t.name, { ...required(t), [k]: wrong(p.type) });
       assert.equal(r.status, 200);
       assert.equal(j.result.isError, true, `${t.name}.${k}`);
-      assert.equal(text(j), `Invalid input for ${t.name}: ${k} must be ${TYPE_WORDS[p.type]}.`);
+      assert.equal(text(j), `Invalid input for ${toolLabel(t.name)}: ${fieldLabel(k)} must be ${TYPE_WORDS[p.type]}.`);
       if (p.type === "array" && p.items && p.items.type) {
         const { j: j2 } = await call(t.name, { ...required(t), [k]: [wrong(p.items.type)] });
-        assert.equal(text(j2), `Invalid input for ${t.name}: ${k}[0] must be ${TYPE_WORDS[p.items.type]}.`);
+        assert.equal(text(j2), `Invalid input for ${toolLabel(t.name)}: ${fieldLabel(k)}[0] must be ${TYPE_WORDS[p.items.type]}.`);
       }
     }
   }
   const t = tools[0];
   const { j } = await call(t.name, "not an object");
-  assert.equal(text(j), `Invalid input for ${t.name}: arguments must be an object.`);
+  assert.equal(text(j), `Invalid input for ${toolLabel(t.name)}: arguments must be an object.`);
 });
 
 test("a number sent as text is still passed to the tool (run 6 decision N2)", async () => {
@@ -181,11 +185,11 @@ test("a number sent as text is still passed to the tool (run 6 decision N2)", as
   if (!t) return;
   const [k] = Object.entries(t.inputSchema.properties).find(([, p]) => p.type === "number");
   const { j } = await call(t.name, { ...required(t), [k]: "100" });
-  assert.notEqual(text(j), `Invalid input for ${t.name}: ${k} must be a number.`);
+  assert.notEqual(text(j), `Invalid input for ${toolLabel(t.name)}: ${fieldLabel(k)} must be a number.`);
 });
 
 test("a tool name that is not text, or longer than 100 characters, answers Unknown tool and is never echoed", async () => {
-  const expected = "Unknown tool. Available tools: " + names.join(", ") + ".";
+  const expected = "Unknown tool. Available tools: " + names.map(toolLabel).join(", ") + ".";
   for (const name of ["Q".repeat(5000), "Q".repeat(101), 42, { a: 1 }, ["x"], null, undefined, true]) {
     const { r, j } = await rpc({ jsonrpc: "2.0", id: nextId++, method: "tools/call", params: { name, arguments: {} } });
     assert.equal(r.status, 200);
