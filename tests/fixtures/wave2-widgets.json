@@ -1,0 +1,388 @@
+{
+  "icp_deep_dive": {
+    "normal": {
+      "product_category": "Operations workflow software",
+      "customers": [
+        {
+          "name": "Record A",
+          "industry": "software",
+          "size": "50 to 100 employees",
+          "acv": 12000,
+          "sales_cycle_days": 30,
+          "tech_stack": [
+            "Existing CRM"
+          ],
+          "buying_trigger": "New approval process",
+          "champion_title": "Operations lead"
+        },
+        {
+          "name": "Record B",
+          "industry": "software",
+          "size": "50 to 100 employees",
+          "acv": 18000,
+          "sales_cycle_days": 45,
+          "tech_stack": [
+            "Existing CRM"
+          ],
+          "buying_trigger": "New approval process",
+          "champion_title": "Operations lead"
+        }
+      ]
+    },
+    "weak": {}
+  },
+  "icp_scoring_model": {
+    "normal": {
+      "product_category": "Operations workflow software",
+      "scoring_criteria": [
+        {
+          "criterion": "Operational pain",
+          "importance": "critical",
+          "values": [
+            "Manual approvals",
+            "Missed handoffs"
+          ]
+        },
+        {
+          "criterion": "Integration fit",
+          "importance": "important",
+          "values": [
+            "Existing CRM"
+          ]
+        }
+      ],
+      "success_correlation": "User hypothesis: urgent handoff problems correlate with purchase; not yet validated."
+    },
+    "weak": {}
+  },
+  "buyer_group_analyzer": {
+    "normal": {
+      "product_category": "Operations workflow software",
+      "deal_size": "12000 to 18000 annual",
+      "target_company_size": "50 to 100 employees",
+      "known_stakeholders": [
+        "Operations lead",
+        "Finance director"
+      ],
+      "typical_champion": "Operations lead"
+    },
+    "weak": {
+      "product_category": "Not supplied"
+    }
+  },
+  "tam_sam_som_calculator": {
+    "normal": {
+      "total_potential_companies": 1000,
+      "average_contract_value": 12000,
+      "icp_percentage": 20,
+      "year1_market_share_target": 2,
+      "data_sources": "Synthetic arithmetic test inputs, not market evidence",
+      "segment_name": "Operational workflow segment",
+      "product_category": "Operations workflow software"
+    },
+    "weak": {
+      "total_potential_companies": 0,
+      "average_contract_value": 12000
+    }
+  },
+  "icp_gap_analysis": {
+    "normal": {
+      "current_customers": "Small software operations teams",
+      "ideal_icp": "Mid-size software operations teams",
+      "current_metrics": {
+        "avg_acv": 12000,
+        "avg_sales_cycle": 45,
+        "win_rate": 20,
+        "churn_rate": 10,
+        "nps": 20
+      },
+      "target_metrics": {
+        "avg_acv": 18000,
+        "avg_sales_cycle": 30,
+        "win_rate": 30,
+        "churn_rate": 5,
+        "nps": 40
+      },
+      "product_category": "Operations workflow software"
+    },
+    "weak": {
+      "current_customers": "Not supplied",
+      "ideal_icp": "Not supplied"
+    }
+  },
+  "icp_evolution_tracker": {
+    "normal": {
+      "current_icp": "Software operations teams with manual approvals",
+      "recent_wins": "Two teams bought after adding an approval owner",
+      "recent_losses": "One team deferred because no owner was assigned",
+      "market_changes": "No external market change supplied",
+      "time_period": "last quarter",
+      "product_category": "Operations workflow software"
+    },
+    "weak": {
+      "current_icp": "Not supplied"
+    }
+  },
+  "icp_interview_synthesizer": {
+    "normal": {
+      "product_category": "Operations workflow software",
+      "interview_notes": [
+        {
+          "customer": "Interview A",
+          "role": "Operations lead",
+          "key_quotes": [
+            "We lose the next action at handoff."
+          ],
+          "pain_points": [
+            "Missed handoffs"
+          ],
+          "buying_triggers": [
+            "New process owner"
+          ],
+          "value_realized": [
+            "Clear ownership"
+          ]
+        },
+        {
+          "customer": "Interview B",
+          "role": "Operations lead",
+          "key_quotes": [
+            "We need to know who owns the next step."
+          ],
+          "pain_points": [
+            "Missed handoffs"
+          ],
+          "buying_triggers": [
+            "New process owner"
+          ],
+          "value_realized": [
+            "Clear ownership"
+          ]
+        }
+      ]
+    },
+    "weak": {}
+  },
+  "lead_fit_score": {
+    "normal": {
+      "criteria": [
+        {
+          "criterion": "Capacity",
+          "importance": "critical",
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "medium"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Owner",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Capacity",
+              "value": "medium"
+            },
+            {
+              "criterion": "Owner",
+              "value": "yes"
+            }
+          ]
+        }
+      ]
+    },
+    "weak": {
+      "criteria": [
+        {
+          "criterion": "Confirmed need",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Incomplete record",
+          "fields": []
+        }
+      ]
+    }
+  },
+  "pmf_target_check": {
+    "normal": {
+      "business_model": "saas",
+      "metrics": {
+        "churn": 2.5,
+        "nps": 31,
+        "ltv": 90000,
+        "cac": 30000,
+        "retention": 88,
+        "activation": 45
+      },
+      "targets": {
+        "churn": 2,
+        "nps": 40,
+        "ltv_cac": 4,
+        "retention": 92,
+        "activation": 60
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "monthly logo percent",
+          "target_basis": "monthly logo percent"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "survey points",
+          "target_basis": "survey points"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "same cohort currency ratio",
+          "target_basis": "same cohort currency ratio"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "annual net revenue percent",
+          "target_basis": "annual net revenue percent"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "first workflow within 30 days percent",
+          "target_basis": "first workflow within 30 days percent"
+        }
+      ]
+    },
+    "weak": {
+      "business_model": "services",
+      "metrics": {
+        "nps": 22,
+        "activation": 30
+      },
+      "targets": {}
+    }
+  },
+  "icp_evidence_review": {
+    "normal": {
+      "icp": "Operations teams with a named owner and a weekly review.",
+      "current_customers": "Some teams have no named owner.",
+      "as_of": "2026-10-31",
+      "current": {
+        "acv": 18000,
+        "cycle": 95,
+        "win_rate": 22,
+        "churn": 16
+      },
+      "target": {
+        "acv": 30000,
+        "cycle": 60,
+        "win_rate": 30,
+        "churn": 9
+      },
+      "bases": [
+        {
+          "metric": "acv",
+          "current_basis": "annual USD per contract",
+          "target_basis": "annual USD per contract"
+        },
+        {
+          "metric": "cycle",
+          "current_basis": "days per won deal",
+          "target_basis": "days per won deal"
+        },
+        {
+          "metric": "win_rate",
+          "current_basis": "closed deals percent this quarter",
+          "target_basis": "closed deals percent this quarter"
+        },
+        {
+          "metric": "churn",
+          "current_basis": "annual logo percent",
+          "target_basis": "annual logo percent"
+        }
+      ],
+      "comparisons": [
+        {
+          "part": "Owner",
+          "icp_quote": "a named owner",
+          "customer_quote": "no named owner",
+          "classification": "Conflict",
+          "reason": "The supplied owner descriptions conflict."
+        }
+      ],
+      "evidence": [
+        {
+          "id": "loss-1",
+          "kind": "loss",
+          "quote": "The review stalled without an owner.",
+          "date": "2026-10-01"
+        },
+        {
+          "id": "loss-2",
+          "kind": "loss",
+          "quote": "No one owned the decision.",
+          "date": "2026-10-12"
+        }
+      ],
+      "hypotheses": [
+        {
+          "change": "Require a confirmed review owner before a trial.",
+          "proposed_mark": "Add on trial",
+          "evidence_ids": [
+            "loss-1",
+            "loss-2"
+          ],
+          "test": "Compare cycle and win rate with and without a confirmed owner.",
+          "disproof": "Deals without an owner perform equally or better.",
+          "crm_fields": [
+            "review owner status",
+            "cycle days",
+            "closed outcome"
+          ]
+        }
+      ],
+      "counts": {
+        "total": 22,
+        "parts": [
+          {
+            "part": "Named owner",
+            "count": 15
+          },
+          {
+            "part": "Weekly review",
+            "count": 14
+          }
+        ]
+      }
+    },
+    "weak": {
+      "icp": "Operations teams with a named owner.",
+      "as_of": "2026-10-31"
+    }
+  }
+}

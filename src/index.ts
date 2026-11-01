@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+import { conversationDefinition, CONVERSATION_INSTRUCTIONS } from "./conversation-guidance.ts";
+import { BUILD_PROFILE } from './build-profile.ts';
+import {reserveTools,isReserveTool,callReserveTool} from './reserve-tools.ts';
+import { attachWidgets } from './widget-layer.ts';
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -1597,6 +1601,7 @@ ${SUGGESTED}
       
       // Format numbers
       const formatCurrency = (num: number) => {
+        if (BUILD_PROFILE.profile !== "current" && num < 1000 && Number(num.toFixed(2)) >= 1000) return "$1K";
         // Run 15 R15-32 (D38): separators, and never an exponent however large the figure
         if (num >= 1000000000) return `$${(num / 1000000000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
         // Run 19 (backlog B16-17, display only): a figure that rounds up to 1000 of a unit moves to the next unit
@@ -3095,14 +3100,17 @@ function checkRequiredInputs(name: string, args: Record<string, unknown> | undef
 export function createServer(): Server {
   const server = new Server(
     { name: SERVER_NAME, version: SERVER_VERSION },
-    { capabilities: { tools: {} } }
+    { capabilities: { tools: {} }, ...(BUILD_PROFILE.profile !== "current" ? {instructions: CONVERSATION_INSTRUCTIONS} : {}) }
   );
 
+  if (BUILD_PROFILE.profile !== "current") attachWidgets(server);
+
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })),
+    tools: [...Object.entries(tools).map(([name, config]) => withMeta(conversationDefinition({ name, description: config.description, inputSchema: config.inputSchema }))), ...(BUILD_PROFILE.profile === "wave" ? reserveTools() : [])],
   }));
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    if(BUILD_PROFILE.profile === "wave" && isReserveTool(request.params.name)) return callReserveTool(request.params.name,request.params.arguments);
     // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
     // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
     const typed = cleanDeep(request.params.arguments) as Record<string, unknown> | undefined;

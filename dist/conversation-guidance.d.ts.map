@@ -1,0 +1,1 @@
+{"version":3,"file":"conversation-guidance.d.ts","sourceRoot":"","sources":["../src/conversation-guidance.ts"],"names":[],"mappings":"AACA,eAAO,MAAM,yBAAyB,oXAAoX,CAAC;AAU3Z,wBAAgB,sBAAsB,CAAC,CAAC,SAAS;IAAC,IAAI,EAAE,MAAM,CAAC;IAAC,WAAW,EAAE,MAAM,CAAC;IAAC,WAAW,EAAE,GAAG,CAAA;CAAC,EAAE,UAAU,EAAE,CAAC,GAAG,CAAC,CAIxH"}

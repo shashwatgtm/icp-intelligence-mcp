@@ -1,0 +1,1 @@
+{"version":3,"file":"resource-handlers.d.ts","sourceRoot":"","sources":["../src/resource-handlers.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,MAAM,EAAE,MAAM,2CAA2C,CAAC;AAOxE,KAAK,OAAO,GAAG,CAAC,OAAO,EAAE,GAAG,EAAE,KAAK,EAAE,GAAG,KAAK,OAAO,CAAC,GAAG,CAAC,GAAG,GAAG,CAAC;AAGhE,wBAAgB,gBAAgB,CAC9B,MAAM,EAAE,MAAM,EACd,WAAW,EAAE,OAAO,EACpB,UAAU,EAAE,OAAO,GAClB,IAAI,CAgEN"}

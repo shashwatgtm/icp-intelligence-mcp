@@ -3,6 +3,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
+const conversation_guidance_ts_1 = require("./conversation-guidance.js");
+const build_profile_ts_1 = require("./build-profile.js");
+const reserve_tools_ts_1 = require("./reserve-tools.js");
+const widget_layer_ts_1 = require("./widget-layer.js");
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
@@ -1621,6 +1625,8 @@ ${SUGGESTED}
             const targetDeals = Math.round(som / acv);
             // Format numbers
             const formatCurrency = (num) => {
+                if (build_profile_ts_1.BUILD_PROFILE.profile !== "current" && num < 1000 && Number(num.toFixed(2)) >= 1000)
+                    return "$1K";
                 // Run 15 R15-32 (D38): separators, and never an exponent however large the figure
                 if (num >= 1000000000)
                     return `$${(num / 1000000000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
@@ -3051,11 +3057,15 @@ function checkRequiredInputs(name, args) {
     return null;
 }
 function createServer() {
-    const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {} } });
+    const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {} }, ...(build_profile_ts_1.BUILD_PROFILE.profile !== "current" ? { instructions: conversation_guidance_ts_1.CONVERSATION_INSTRUCTIONS } : {}) });
+    if (build_profile_ts_1.BUILD_PROFILE.profile !== "current")
+        (0, widget_layer_ts_1.attachWidgets)(server);
     server.setRequestHandler(types_js_1.ListToolsRequestSchema, async () => ({
-        tools: Object.entries(tools).map(([name, config]) => withMeta({ name, description: config.description, inputSchema: config.inputSchema })),
+        tools: [...Object.entries(tools).map(([name, config]) => withMeta((0, conversation_guidance_ts_1.conversationDefinition)({ name, description: config.description, inputSchema: config.inputSchema }))), ...(build_profile_ts_1.BUILD_PROFILE.profile === "wave" ? (0, reserve_tools_ts_1.reserveTools)() : [])],
     }));
     server.setRequestHandler(types_js_1.CallToolRequestSchema, async (request) => {
+        if (build_profile_ts_1.BUILD_PROFILE.profile === "wave" && (0, reserve_tools_ts_1.isReserveTool)(request.params.name))
+            return (0, reserve_tools_ts_1.callReserveTool)(request.params.name, request.params.arguments);
         // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
         // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
         const typed = (0, escape_inputs_ts_1.cleanDeep)(request.params.arguments);

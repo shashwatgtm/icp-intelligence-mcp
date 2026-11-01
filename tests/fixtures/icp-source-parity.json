@@ -1,0 +1,697 @@
+[
+  {
+    "input": {
+      "current": {
+        "acv": 18000,
+        "cycle": 95,
+        "win_rate": 22,
+        "churn": 16,
+        "nps": 10
+      },
+      "target": {
+        "acv": 30000,
+        "cycle": 60,
+        "win_rate": 30,
+        "churn": 9,
+        "nps": 30
+      }
+    },
+    "expected": {
+      "rows": [
+        {
+          "metric": "acv",
+          "name": "Average contract value",
+          "current": 18000,
+          "target": 30000,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 67,
+          "text": "+67% increase needed",
+          "band": "High",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "cycle",
+          "name": "Sales cycle (days)",
+          "current": 95,
+          "target": 60,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 37,
+          "text": "37% reduction needed",
+          "band": "High",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "win_rate",
+          "name": "Win rate (%)",
+          "current": 22,
+          "target": 30,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 36,
+          "text": "+36% relative increase needed (+8 points)",
+          "band": "Medium",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "churn",
+          "name": "Churn (%)",
+          "current": 16,
+          "target": 9,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 44,
+          "text": "44% reduction needed",
+          "band": "High",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "nps",
+          "name": "NPS",
+          "current": 10,
+          "target": 30,
+          "status": "compared",
+          "met": false,
+          "ranked": false,
+          "gap": 20,
+          "text": "+20 points needed",
+          "band": "High (on the relative change, 200%)",
+          "band_source": "example default bands"
+        }
+      ],
+      "largest": "acv",
+      "largest_ties": [],
+      "compared": 5
+    }
+  },
+  {
+    "input": {
+      "current": {
+        "acv": 0,
+        "nps": -5
+      },
+      "target": {
+        "acv": 100,
+        "nps": 0
+      }
+    },
+    "expected": {
+      "rows": [
+        {
+          "metric": "acv",
+          "name": "Average contract value",
+          "current": 0,
+          "target": 100,
+          "status": "n/a",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "n/a: today's value is 0, so no percentage can be taken",
+          "band": "Not rated",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "cycle",
+          "name": "Sales cycle (days)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "win_rate",
+          "name": "Win rate (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "churn",
+          "name": "Churn (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "nps",
+          "name": "NPS",
+          "current": -5,
+          "target": 0,
+          "status": "compared",
+          "met": false,
+          "ranked": false,
+          "gap": 5,
+          "text": "+5 points needed",
+          "band": "Not rated (today's NPS is 0 or below, so a relative change means nothing)",
+          "band_source": "example default bands"
+        }
+      ],
+      "largest": null,
+      "largest_ties": [],
+      "compared": 2
+    }
+  },
+  {
+    "input": {
+      "current": {
+        "cycle": 30,
+        "churn": 0,
+        "nps": 40
+      },
+      "target": {
+        "cycle": 60,
+        "churn": 0,
+        "nps": 30
+      }
+    },
+    "expected": {
+      "rows": [
+        {
+          "metric": "acv",
+          "name": "Average contract value",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "cycle",
+          "name": "Sales cycle (days)",
+          "current": 30,
+          "target": 60,
+          "status": "compared",
+          "met": true,
+          "ranked": false,
+          "gap": -100,
+          "text": "target met: already 100% better than target",
+          "band": "None (target met)",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "win_rate",
+          "name": "Win rate (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "churn",
+          "name": "Churn (%)",
+          "current": 0,
+          "target": 0,
+          "status": "compared",
+          "met": true,
+          "ranked": false,
+          "gap": 0,
+          "text": "target met",
+          "band": "None (target met)",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "nps",
+          "name": "NPS",
+          "current": 40,
+          "target": 30,
+          "status": "compared",
+          "met": true,
+          "ranked": false,
+          "gap": -10,
+          "text": "target met: already 10 points above target",
+          "band": "None (target met)",
+          "band_source": "example default bands"
+        }
+      ],
+      "largest": null,
+      "largest_ties": [],
+      "compared": 3
+    }
+  },
+  {
+    "input": {
+      "current": {
+        "win_rate": 20
+      },
+      "target": {
+        "win_rate": 20.01
+      }
+    },
+    "expected": {
+      "rows": [
+        {
+          "metric": "acv",
+          "name": "Average contract value",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "cycle",
+          "name": "Sales cycle (days)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "win_rate",
+          "name": "Win rate (%)",
+          "current": 20,
+          "target": 20.01,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 0.5,
+          "text": "less than 1% increase needed",
+          "band": "Low",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "churn",
+          "name": "Churn (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "nps",
+          "name": "NPS",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        }
+      ],
+      "largest": "win_rate",
+      "largest_ties": [],
+      "compared": 1
+    }
+  },
+  {
+    "input": {
+      "current": {
+        "acv": 100,
+        "cycle": 100
+      },
+      "target": {
+        "acv": 125,
+        "cycle": 75
+      },
+      "bands": {
+        "acv": [
+          25,
+          10
+        ],
+        "cycle": [
+          25,
+          10
+        ]
+      }
+    },
+    "expected": {
+      "rows": [
+        {
+          "metric": "acv",
+          "name": "Average contract value",
+          "current": 100,
+          "target": 125,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 25,
+          "text": "+25% increase needed",
+          "band": "Medium",
+          "band_source": "your bands"
+        },
+        {
+          "metric": "cycle",
+          "name": "Sales cycle (days)",
+          "current": 100,
+          "target": 75,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 25,
+          "text": "25% reduction needed",
+          "band": "Medium",
+          "band_source": "your bands"
+        },
+        {
+          "metric": "win_rate",
+          "name": "Win rate (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "churn",
+          "name": "Churn (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "nps",
+          "name": "NPS",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        }
+      ],
+      "largest": "acv",
+      "largest_ties": [
+        "acv",
+        "cycle"
+      ],
+      "compared": 2
+    }
+  },
+  {
+    "input": {
+      "current": {
+        "acv": 100,
+        "cycle": 100,
+        "win_rate": 20,
+        "churn": 50,
+        "nps": 20
+      },
+      "target": {
+        "acv": 150,
+        "cycle": 50,
+        "win_rate": 30,
+        "churn": 25,
+        "nps": 30
+      }
+    },
+    "expected": {
+      "rows": [
+        {
+          "metric": "acv",
+          "name": "Average contract value",
+          "current": 100,
+          "target": 150,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 50,
+          "text": "+50% increase needed",
+          "band": "Medium",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "cycle",
+          "name": "Sales cycle (days)",
+          "current": 100,
+          "target": 50,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 50,
+          "text": "50% reduction needed",
+          "band": "High",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "win_rate",
+          "name": "Win rate (%)",
+          "current": 20,
+          "target": 30,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 50,
+          "text": "+50% relative increase needed (+10 points)",
+          "band": "High",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "churn",
+          "name": "Churn (%)",
+          "current": 50,
+          "target": 25,
+          "status": "compared",
+          "met": false,
+          "ranked": true,
+          "gap": 50,
+          "text": "50% reduction needed",
+          "band": "High",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "nps",
+          "name": "NPS",
+          "current": 20,
+          "target": 30,
+          "status": "compared",
+          "met": false,
+          "ranked": false,
+          "gap": 10,
+          "text": "+10 points needed",
+          "band": "Medium (on the relative change, 50%)",
+          "band_source": "example default bands"
+        }
+      ],
+      "largest": "acv",
+      "largest_ties": [
+        "acv",
+        "cycle",
+        "win_rate",
+        "churn"
+      ],
+      "compared": 5
+    }
+  },
+  {
+    "input": {
+      "current": {
+        "nps": 0
+      },
+      "target": {
+        "nps": 10
+      }
+    },
+    "expected": {
+      "rows": [
+        {
+          "metric": "acv",
+          "name": "Average contract value",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "cycle",
+          "name": "Sales cycle (days)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "win_rate",
+          "name": "Win rate (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "churn",
+          "name": "Churn (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "nps",
+          "name": "NPS",
+          "current": 0,
+          "target": 10,
+          "status": "compared",
+          "met": false,
+          "ranked": false,
+          "gap": 10,
+          "text": "+10 points needed",
+          "band": "Not rated (today's NPS is 0 or below, so a relative change means nothing)",
+          "band_source": "example default bands"
+        }
+      ],
+      "largest": null,
+      "largest_ties": [],
+      "compared": 1
+    }
+  },
+  {
+    "input": {
+      "current": {
+        "acv": 100
+      },
+      "target": {}
+    },
+    "expected": {
+      "rows": [
+        {
+          "metric": "acv",
+          "name": "Average contract value",
+          "current": 100,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "cycle",
+          "name": "Sales cycle (days)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "win_rate",
+          "name": "Win rate (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "churn",
+          "name": "Churn (%)",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        },
+        {
+          "metric": "nps",
+          "name": "NPS",
+          "current": null,
+          "target": null,
+          "status": "missing",
+          "met": false,
+          "ranked": false,
+          "gap": null,
+          "text": "missing: no current and target value given, not compared",
+          "band": "not compared",
+          "band_source": "example default bands"
+        }
+      ],
+      "largest": null,
+      "compared": 0
+    }
+  }
+]

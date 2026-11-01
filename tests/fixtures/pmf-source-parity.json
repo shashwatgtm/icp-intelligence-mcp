@@ -1,0 +1,1022 @@
+[
+  {
+    "input": {
+      "business_model": "saas",
+      "metrics": {
+        "churn": 2.5,
+        "nps": 31,
+        "ltv": 90000,
+        "cac": 30000,
+        "retention": 88,
+        "activation": 45
+      },
+      "targets": {
+        "churn": 2,
+        "nps": 40,
+        "ltv_cac": 4,
+        "retention": 92,
+        "activation": 60
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": 2.5,
+          "target": 2,
+          "better": "lower",
+          "status": "behind",
+          "text": "20% reduction needed",
+          "gap": 20
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": 31,
+          "target": 40,
+          "better": "higher",
+          "status": "behind",
+          "text": "+9 points needed",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": 3.0,
+          "target": 4,
+          "better": "higher",
+          "status": "behind",
+          "text": "+33% increase needed",
+          "gap": 33
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": 88,
+          "target": 92,
+          "better": "higher",
+          "status": "behind",
+          "text": "+5% increase needed",
+          "gap": 5
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": 45,
+          "target": 60,
+          "better": "higher",
+          "status": "behind",
+          "text": "+33% increase needed",
+          "gap": 33
+        }
+      ],
+      "scored": 5,
+      "met": 0,
+      "weakest": "ltv_cac",
+      "weakest_ties": [
+        "ltv_cac",
+        "activation"
+      ],
+      "model": "saas"
+    }
+  },
+  {
+    "input": {
+      "business_model": "services",
+      "metrics": {
+        "churn": 12,
+        "activation": 30,
+        "nps": 22
+      },
+      "targets": {
+        "churn": 8
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": 12,
+          "target": 8,
+          "better": "lower",
+          "status": "behind",
+          "text": "33% reduction needed",
+          "gap": 33
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": 22,
+          "target": null,
+          "better": "higher",
+          "status": "no target",
+          "text": "not scored: no target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": 30,
+          "target": null,
+          "better": "higher",
+          "status": "not applicable",
+          "text": "not applicable for a services business: use the adoption measure your buyers use",
+          "gap": null
+        }
+      ],
+      "scored": 1,
+      "met": 0,
+      "weakest": "churn",
+      "weakest_ties": [],
+      "model": "services"
+    }
+  },
+  {
+    "input": {
+      "business_model": "saas",
+      "custom": [
+        {
+          "name": "Growth",
+          "value": -12,
+          "target": 20,
+          "better": "higher"
+        }
+      ],
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "custom:Growth",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": null,
+          "target": null,
+          "better": "lower",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "custom:Growth",
+          "name": "Growth",
+          "value": -12,
+          "target": 20,
+          "better": "higher",
+          "status": "behind",
+          "text": "+267% increase needed",
+          "gap": 267
+        }
+      ],
+      "scored": 1,
+      "met": 0,
+      "weakest": "custom:Growth",
+      "weakest_ties": [],
+      "model": "saas"
+    }
+  },
+  {
+    "input": {
+      "business_model": "saas",
+      "metrics": {
+        "retention": 99.9,
+        "nps": -3
+      },
+      "targets": {
+        "retention": 100,
+        "nps": 0
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": null,
+          "target": null,
+          "better": "lower",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": -3,
+          "target": 0,
+          "better": "higher",
+          "status": "behind",
+          "text": "+3 points needed",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": 99.9,
+          "target": 100,
+          "better": "higher",
+          "status": "behind",
+          "text": "less than 1% increase needed",
+          "gap": 0.5
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        }
+      ],
+      "scored": 2,
+      "met": 0,
+      "weakest": "retention",
+      "weakest_ties": [],
+      "model": "saas"
+    }
+  },
+  {
+    "input": {
+      "business_model": "saas",
+      "metrics": {
+        "churn": 0,
+        "activation": 0
+      },
+      "targets": {
+        "churn": 0,
+        "activation": 20
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": 0,
+          "target": 0,
+          "better": "lower",
+          "status": "met",
+          "text": "target met",
+          "gap": null
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": 0,
+          "target": 20,
+          "better": "higher",
+          "status": "n/a",
+          "text": "n/a: the value is 0, so no percentage can be taken",
+          "gap": null
+        }
+      ],
+      "scored": 2,
+      "met": 1,
+      "weakest": null,
+      "weakest_ties": [],
+      "model": "saas"
+    }
+  },
+  {
+    "input": {
+      "business_model": "saas",
+      "metrics": {
+        "ltv": 100,
+        "cac": 0
+      },
+      "targets": {
+        "ltv_cac": 3
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": null,
+          "target": null,
+          "better": "lower",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": null,
+          "target": 3,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: needs both LTV and CAC, and CAC above 0",
+          "gap": null
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        }
+      ],
+      "scored": 0,
+      "met": 0,
+      "weakest": null,
+      "weakest_ties": [],
+      "model": "saas"
+    }
+  },
+  {
+    "input": {
+      "business_model": "connectivity",
+      "metrics": {
+        "activation": 30
+      },
+      "targets": {
+        "activation": 40
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": null,
+          "target": null,
+          "better": "lower",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": 30,
+          "target": 40,
+          "better": "higher",
+          "status": "not applicable",
+          "text": "not applicable for a connectivity business: use the adoption measure your buyers use",
+          "gap": null
+        }
+      ],
+      "scored": 0,
+      "met": 0,
+      "weakest": null,
+      "weakest_ties": [],
+      "model": "connectivity"
+    }
+  },
+  {
+    "input": {
+      "business_model": "investment",
+      "metrics": {},
+      "targets": {},
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": null,
+          "target": null,
+          "better": "lower",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "not applicable",
+          "text": "not applicable for a investment business: use the adoption measure your buyers use",
+          "gap": null
+        }
+      ],
+      "scored": 0,
+      "met": 0,
+      "weakest": null,
+      "weakest_ties": [],
+      "model": "investment"
+    }
+  },
+  {
+    "input": {
+      "business_model": "saas",
+      "metrics": {
+        "ltv": 3999,
+        "cac": 1000
+      },
+      "targets": {
+        "ltv_cac": 4
+      },
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": null,
+          "target": null,
+          "better": "lower",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": 3.999,
+          "target": 4,
+          "better": "higher",
+          "status": "behind",
+          "text": "less than 1% increase needed",
+          "gap": 0.5
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        }
+      ],
+      "scored": 1,
+      "met": 0,
+      "weakest": "ltv_cac",
+      "weakest_ties": [],
+      "model": "saas"
+    }
+  },
+  {
+    "input": {
+      "business_model": "saas",
+      "custom": [
+        {
+          "name": "Cost",
+          "value": 20,
+          "target": 15,
+          "better": "lower"
+        }
+      ],
+      "bases": [
+        {
+          "metric": "churn",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "nps",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "ltv_cac",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "retention",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "activation",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        },
+        {
+          "metric": "custom:Cost",
+          "value_basis": "confirmed source basis",
+          "target_basis": "confirmed source basis"
+        }
+      ]
+    },
+    "expected": {
+      "rows": [
+        {
+          "dimension": "churn",
+          "name": "Churn (%)",
+          "value": null,
+          "target": null,
+          "better": "lower",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "nps",
+          "name": "NPS",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "ltv_cac",
+          "name": "LTV to CAC ratio",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "retention",
+          "name": "Retention (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "activation",
+          "name": "Activation (%)",
+          "value": null,
+          "target": null,
+          "better": "higher",
+          "status": "missing",
+          "text": "not scored: no value and target of yours given",
+          "gap": null
+        },
+        {
+          "dimension": "custom:Cost",
+          "name": "Cost",
+          "value": 20,
+          "target": 15,
+          "better": "lower",
+          "status": "behind",
+          "text": "25% reduction needed",
+          "gap": 25
+        }
+      ],
+      "scored": 1,
+      "met": 0,
+      "weakest": "custom:Cost",
+      "weakest_ties": [],
+      "model": "saas"
+    }
+  }
+]

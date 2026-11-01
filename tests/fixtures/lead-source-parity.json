@@ -1,0 +1,1700 @@
+[
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 1,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "high"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ]
+    },
+    "expected": {
+      "max": 21.0,
+      "tiers": {
+        "A": 17,
+        "B": 13,
+        "C": 9
+      },
+      "points": [
+        [
+          1.0,
+          1.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 21.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 17 of 21 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 17).",
+      "Tier B (from 13 of 21 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 13).",
+      "Tier C (from 9 of 21 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier C: needs full points on Fit (without them the most it can score is below 9)."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 2,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "middle"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ],
+      "tier_percents": [
+        70,
+        50,
+        30
+      ]
+    },
+    "expected": {
+      "max": 22.0,
+      "tiers": {
+        "A": 16,
+        "B": 11,
+        "C": 7
+      },
+      "points": [
+        [
+          2.0,
+          1.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 21.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 16 of 22 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 16).",
+      "Tier B (from 11 of 22 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 11).",
+      "Tier C (from 7 of 22 points): the fewest criteria at full points that reach it: 2 of 3 (for example Size, Region at full points; Fit = no: 7 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 3,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "low"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ]
+    },
+    "expected": {
+      "max": 23.0,
+      "tiers": {
+        "A": 19,
+        "B": 14,
+        "C": 10
+      },
+      "points": [
+        [
+          3.0,
+          2.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 20.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 19 of 23 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 19).",
+      "Tier B (from 14 of 23 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 14).",
+      "Tier C (from 10 of 23 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier C: needs full points on Fit (without them the most it can score is below 10)."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 4,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "high"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ],
+      "tier_percents": [
+        70,
+        50,
+        30
+      ]
+    },
+    "expected": {
+      "max": 24.0,
+      "tiers": {
+        "A": 17,
+        "B": 12,
+        "C": 8
+      },
+      "points": [
+        [
+          4.0,
+          2.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 24.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 17 of 24 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 17).",
+      "Tier B (from 12 of 24 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 12).",
+      "Tier C (from 8 of 24 points): the fewest criteria at full points that reach it: 2 of 3 (for example Size, Region at full points; Fit = no: 9 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 5,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "middle"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ]
+    },
+    "expected": {
+      "max": 25.0,
+      "tiers": {
+        "A": 20,
+        "B": 15,
+        "C": 10
+      },
+      "points": [
+        [
+          5.0,
+          3.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 23.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 20 of 25 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 20).",
+      "Tier B (from 15 of 25 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 15).",
+      "Tier C (from 10 of 25 points): the fewest criteria at full points that reach it: 2 of 3 (for example Size, Region at full points; Fit = no: 10 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 6,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "low"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ],
+      "tier_percents": [
+        70,
+        50,
+        30
+      ]
+    },
+    "expected": {
+      "max": 26.0,
+      "tiers": {
+        "A": 19,
+        "B": 13,
+        "C": 8
+      },
+      "points": [
+        [
+          6.0,
+          3.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 20.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 19 of 26 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 19).",
+      "Tier B (from 13 of 26 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 13).",
+      "Tier C (from 8 of 26 points): the fewest criteria at full points that reach it: 1 of 3 (for example Region at full points; Size = middle, Fit = no: 8 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 7,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "high"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ]
+    },
+    "expected": {
+      "max": 27.0,
+      "tiers": {
+        "A": 22,
+        "B": 17,
+        "C": 11
+      },
+      "points": [
+        [
+          7.0,
+          4.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 27.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 22 of 27 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = middle: 24 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 22).",
+      "Tier B (from 17 of 27 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 17).",
+      "Tier C (from 11 of 27 points): the fewest criteria at full points that reach it: 2 of 3 (for example Size, Region at full points; Fit = no: 12 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 8,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "middle"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ],
+      "tier_percents": [
+        70,
+        50,
+        30
+      ]
+    },
+    "expected": {
+      "max": 28.0,
+      "tiers": {
+        "A": 20,
+        "B": 14,
+        "C": 9
+      },
+      "points": [
+        [
+          8.0,
+          4.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 24.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 20 of 28 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 20).",
+      "Tier B (from 14 of 28 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 14).",
+      "Tier C (from 9 of 28 points): the fewest criteria at full points that reach it: 1 of 3 (for example Region at full points; Size = middle, Fit = no: 9 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 9,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "low"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ]
+    },
+    "expected": {
+      "max": 29.0,
+      "tiers": {
+        "A": 24,
+        "B": 18,
+        "C": 12
+      },
+      "points": [
+        [
+          9.0,
+          5.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 20.0,
+          "tier": "B",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 24 of 29 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = middle: 25 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 24).",
+      "Tier B (from 18 of 29 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 18).",
+      "Tier C (from 12 of 29 points): the fewest criteria at full points that reach it: 2 of 3 (for example Size, Region at full points; Fit = no: 14 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 10,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "high"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ],
+      "tier_percents": [
+        70,
+        50,
+        30
+      ]
+    },
+    "expected": {
+      "max": 30.0,
+      "tiers": {
+        "A": 21,
+        "B": 15,
+        "C": 9
+      },
+      "points": [
+        [
+          10.0,
+          5.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 30.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 21 of 30 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = middle: 25 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 21).",
+      "Tier B (from 15 of 30 points): the fewest criteria at full points that reach it: 2 of 3 (for example Size, Region at full points; Fit = no: 15 points).",
+      "Tier B: no single criterion is required at full points.",
+      "Tier C (from 9 of 30 points): the fewest criteria at full points that reach it: 1 of 3 (for example Region at full points; Size = middle, Fit = no: 10 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 11,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "middle"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ]
+    },
+    "expected": {
+      "max": 31.0,
+      "tiers": {
+        "A": 25,
+        "B": 19,
+        "C": 13
+      },
+      "points": [
+        [
+          11.0,
+          6.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 26.0,
+          "tier": "A",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 25 of 31 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = middle: 26 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 25).",
+      "Tier B (from 19 of 31 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = low: 20 points).",
+      "Tier B: needs full points on Fit (without them the most it can score is below 19).",
+      "Tier C (from 13 of 31 points): the fewest criteria at full points that reach it: 2 of 3 (for example Size, Region at full points; Fit = no: 16 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  },
+  {
+    "input": {
+      "criteria": [
+        {
+          "criterion": "Size",
+          "importance": "critical",
+          "weight": 12,
+          "values": [
+            {
+              "value": "high"
+            },
+            {
+              "value": "middle"
+            },
+            {
+              "value": "low"
+            }
+          ]
+        },
+        {
+          "criterion": "Fit",
+          "importance": "important",
+          "values": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "criterion": "Region",
+          "weight": 5,
+          "graded": false,
+          "values": [
+            {
+              "value": "one"
+            },
+            {
+              "value": "two"
+            }
+          ]
+        }
+      ],
+      "leads": [
+        {
+          "label": "Record 1",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "low"
+            },
+            {
+              "criterion": "Fit",
+              "value": "yes"
+            },
+            {
+              "criterion": "Region",
+              "value": "two"
+            }
+          ]
+        },
+        {
+          "label": "Record 2",
+          "fields": [
+            {
+              "criterion": "Size",
+              "value": "mid"
+            },
+            {
+              "criterion": "Fit",
+              "value": "no"
+            }
+          ]
+        },
+        {
+          "label": "Record 3",
+          "fields": []
+        }
+      ],
+      "tier_percents": [
+        70,
+        50,
+        30
+      ]
+    },
+    "expected": {
+      "max": 32.0,
+      "tiers": {
+        "A": 23,
+        "B": 16,
+        "C": 10
+      },
+      "points": [
+        [
+          12.0,
+          6.0,
+          0.0
+        ],
+        [
+          15.0,
+          0.0
+        ],
+        [
+          5.0,
+          5.0
+        ]
+      ],
+      "leads": [
+        {
+          "score": 20.0,
+          "tier": "B",
+          "missing": []
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Region"
+          ]
+        },
+        {
+          "score": 0.0,
+          "tier": null,
+          "missing": [
+            "Size",
+            "Fit",
+            "Region"
+          ]
+        }
+      ]
+    },
+    "sourceTierReading": [
+      "Tier reading (from the points above; copy these lines, never write a tier rule by hand):",
+      "Tier A (from 23 of 32 points): the fewest criteria at full points that reach it: 2 of 3 (for example Fit, Region at full points; Size = middle: 26 points).",
+      "Tier A: needs full points on Fit (without them the most it can score is below 23).",
+      "Tier B (from 16 of 32 points): the fewest criteria at full points that reach it: 2 of 3 (for example Size, Region at full points; Fit = no: 17 points).",
+      "Tier B: no single criterion is required at full points.",
+      "Tier C (from 10 of 32 points): the fewest criteria at full points that reach it: 1 of 3 (for example Region at full points; Size = middle, Fit = no: 11 points).",
+      "Tier C: no single criterion is required at full points."
+    ]
+  }
+]

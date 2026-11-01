@@ -65,7 +65,14 @@ const argsWith = (t, k, type, v) => {
 };
 // every string inside a reply, joined (the text a reader is shown)
 const strings = (v) => typeof v === "string" ? [v] : Array.isArray(v) ? v.flatMap(strings) : v && typeof v === "object" ? Object.entries(v).flatMap(([k, x]) => [k, ...strings(x)]) : [];
-const textOf = (res) => strings(res.result ? res.result : res.error).join("\n");
+// Caller arguments are component-only recalculation input, not displayed prose.
+// Keep scanning every other result field, including display metadata and report values.
+const textOf = (res) => {
+  const result = res.result;
+  if (!result?._meta?.toolArguments) return strings(result ?? res.error).join("\n");
+  const { toolArguments, ...displayMetadata } = result._meta;
+  return strings({...result, _meta: displayMetadata}).join("\n");
+};
 
 // the hostile inputs of the run 20 and run 22 echo tests this design replaces (tests/fixtures/run40s-old-echo-inputs.json)
 const OLD = existsSync(new URL("./fixtures/run40s-old-echo-inputs.json", import.meta.url)) ? JSON.parse(readFileSync(new URL("./fixtures/run40s-old-echo-inputs.json", import.meta.url), "utf8")) : [];
