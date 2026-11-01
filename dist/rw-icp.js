@@ -340,6 +340,7 @@ function readProfile(raw) {
     const targets = (listForm ? [body] : tgtClauses).flatMap((t) => sentenceSplit(t));
     for (const tc of targets)
         readTarget(tc, res, listForm || labelled);
+    res.sizes = res.sizes.filter(x => (0, text_signals_ts_1.sizeReading)(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')).state === 'affirmed');
     return finish(res);
 }
 function finish(res) {

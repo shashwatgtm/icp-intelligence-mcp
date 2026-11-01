@@ -1,4 +1,4 @@
-import { clauses as readClauses, hasSignal } from './text-signals.ts';
+import { clauses as readClauses, hasSignal, sizeReading } from './text-signals.ts';
 // Run 22 rewrite helpers for icp_gap_analysis and icp_scoring_model (text only: no network, no files, no environment, no logging).
 //
 // Why this file exists: the old gap analysis split a profile into pieces and compared the pieces word for word, so a segment the ideal profile
@@ -265,7 +265,7 @@ export function readProfile(raw: string): ProfileRead {
   const listForm = labelled && /,/.test(body) && /;/.test(body);
   const targets = (listForm ? [body] : tgtClauses).flatMap((t) => sentenceSplit(t));
   for (const tc of targets) readTarget(tc, res, listForm || labelled);
-  return finish(res);
+  res.sizes = res.sizes.filter(x => sizeReading(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i')).state === 'affirmed'); return finish(res);
 }
 
 function finish(res: ProfileRead): ProfileRead {

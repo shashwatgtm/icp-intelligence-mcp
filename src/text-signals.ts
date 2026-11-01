@@ -106,9 +106,32 @@ export function readSignal(text: string, floor: RegExp, additional?: RegExp): Si
  const state:SignalState=affirmed.length&&negative.length?'unclear':affirmed.length?'affirmed':unclear.length?'unclear':negative.length?'negated':'absent';
  return {state,evidence:[...new Set([...affirmed,...negative,...unclear])],matched:[...new Set(matched)]};
 }
-export function hasSignal(text:string,floor:RegExp,kind?:string):boolean{return readSignal(text,floor,kind?SIGNALS[kind]:undefined).state==='affirmed'}
+/** Size comparisons name a boundary, not membership in that size band. */
+export function sizeReading(text:string,floor:RegExp,additional?:RegExp):SignalReading {
+ const bands=String.raw`(?:enterprises?|mid[- ]?(?:market|size[d]?)|medium(?:[- ]sized)?|SMBs?|SMEs?|MSMEs?|small(?: businesses)?|large(?:r)?|global|corporate|institution\w*|micro|startups?|Fortune\s+\d+)`;
+ const comparisons=[
+  new RegExp(String.raw`\btoo\s+(?:small|large|big|early|young)\b.{0,35}?\bfor\s+(?:(?:the|an?|our)\s+)?(${bands})\b`,'gi'),
+  new RegExp(String.raw`\b(?:below|above|outside|short of|smaller than|larger than|outgrown|beyond)\s+(?:(?:the|an?|our)\s+)?(${bands})\b`,'gi'),
+  new RegExp(String.raw`\bnot\s+(?:large|big|small|mature)\s+enough\b.{0,35}?\b(?:for|as)\s+(?:(?:the|an?|our)\s+)?(${bands})\b`,'gi'),
+  new RegExp(String.raw`\b(?:do not|does not|don't|doesn't|cannot|can't|fail(?:s|ed)? to)\s+(?:meet|qualify|reach|satisfy)\b.{0,40}?\b(${bands})\b`,'gi'),
+  new RegExp(String.raw`\b(?:not|never)\s+(?:at|in|within)\s+(?:(?:the|an?|our)\s+)?(${bands})\b`,'gi')
+ ];
+ const reads=clauses(text).map(original=>{
+  let c=normalized(original),excluded=false;
+  for(const re of comparisons)c=c.replace(re,(whole,band)=>{
+   if(readSignal(band,floor,additional).state==='affirmed')excluded=true;
+   return ' '.repeat(whole.length);
+  });
+  const r=readSignal(c,floor,additional);
+  if(excluded)return {state:r.state==='affirmed'?'unclear' as SignalState:'negated' as SignalState,evidence:[original],matched:r.matched};
+  return {...r,evidence:r.evidence.length?[original]:[]};
+ });
+ const states=reads.map(r=>r.state);return {state:states.includes('unclear')||states.includes('affirmed')&&states.includes('negated')?'unclear':states.includes('affirmed')?'affirmed':states.includes('negated')?'negated':'absent',evidence:[...new Set(reads.flatMap(r=>r.evidence))],matched:[...new Set(reads.flatMap(r=>r.matched))]};
+}
+export function hasSignal(text:string,floor:RegExp,kind?:string):boolean{return (kind&&['enterprise','midmarket','small'].includes(kind)?sizeReading(text,floor,SIGNALS[kind]):readSignal(text,floor,kind?SIGNALS[kind]:undefined)).state==='affirmed'}
 export function signal(text:string,kind:string):SignalReading {
  if(kind==='adverse_result')return adverseResult(text);
+ if(['enterprise','midmarket','small'].includes(kind))return sizeReading(text,SIGNALS[kind]);
  return readSignal(text,SIGNALS[kind]??/(?!)/);
 }
 /** A refund approval workflow is a product capability, not a refund requested by a dissatisfied customer. */

@@ -512,7 +512,7 @@ const SIZE_WORD = /\b(?:mid-?size[d]?|mid-?market|medium(?:-sized)?|large(?:r)?|
 function sizeWordsIn(text) {
     const found = String(text).match(SIZE_WORD) || [];
     const seen = new Set();
-    return found.filter(x => (0, text_signals_ts_4.hasSignal)(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).map((x) => x.replace(/^(enterprise|startup|smb|msme|sme)s$/i, '$1')).filter((x) => { const k = x.toLowerCase(); if (seen.has(k))
+    return found.filter(x => (0, text_signals_ts_1.sizeReading)(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')).state === 'affirmed').map((x) => x.replace(/^(enterprise|startup|smb|msme|sme)s$/i, '$1')).filter((x) => { const k = x.toLowerCase(); if (seen.has(k))
         return false; seen.add(k); return true; });
 }
 // Job titles named in a text (as typed). A capitalised phrase with a title word, or an acronym such as CFO or CISO.

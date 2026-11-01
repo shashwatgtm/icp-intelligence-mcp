@@ -10,6 +10,8 @@ export interface SignalReading {
 export declare const SIGNALS: Record<string, RegExp>;
 export declare function clauses(text: string): string[];
 export declare function readSignal(text: string, floor: RegExp, additional?: RegExp): SignalReading;
+/** Size comparisons name a boundary, not membership in that size band. */
+export declare function sizeReading(text: string, floor: RegExp, additional?: RegExp): SignalReading;
 export declare function hasSignal(text: string, floor: RegExp, kind?: string): boolean;
 export declare function signal(text: string, kind: string): SignalReading;
 /** A refund approval workflow is a product capability, not a refund requested by a dissatisfied customer. */
