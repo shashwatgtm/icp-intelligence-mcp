@@ -26,6 +26,7 @@ export const SIGNALS: Record<string, RegExp> = {
   incumbent: /\b(?:incumbent|already (?:use|uses|using|have|has) (?:a |the )?(?:rival|competitor|supplier|provider|vendor)|current (?:supplier|provider|vendor)|existing (?:supplier|provider|vendor))\b/i,
   blocker: /\b(?:blockers?|blocked|cannot proceed|can't proceed|held up|stalled|waiting for (?:budget|approval)|approval pending|budget (?:approval )?pending|stands? in the way|obstacles?|barriers?)\b/i,
   cancelled: /\b(?:cancelled|canceled|terminated|called off|abandoned|will not proceed|won't proceed|asked for a refund|requested a refund|ended the contract)\b/i,
+  company_claim: /\b(?:offices?|locations?|headquartered|based in|founded|established|partners?|recognized|recognised|ranked|rated|listed|named|positioned|certified|accredited|judged (?:best|a leader))\b/i,
   recognition: /\b(?:industry analysts? (?:consider|regard|rate|place)|analysts? (?:placed|ranked|rated|selected)|front[- ]runner|top[- ]rated|judged (?:best|top)|recognition|award\w*|gartner|forrester|magic quadrant|named (?:a )?leader)\b/i,
   unique: /\b(?:no other (?:vendor|platform|supplier)|one[- ]of[- ]a[- ]kind|first and only|the only|unique|unrivalled|unrivaled|nothing else (?:can|does))\b/i,
   enterprise: /\b(?:enterprise|very large (?:corporate|companies|groups)|global corporations?|fortune 500|large corporate groups|big banks)\b/i,
@@ -124,6 +125,6 @@ export function timingFact(text:string):{score:number;state:SignalState;evidence
 
 export function correlationFact(text:string):'positive'|'negative'|'unknown' {
  const bad=readSignal(text,/\b(?:negative correlation|negatively correlated|correlat\w* negatively|lower win rate|higher churn|win rate (?:fell|dropped|declined)|lost (?:every|all|most)|lose more|lost more|close more slowly|longer sales cycle)\b/i);
- const good=readSignal(text,/\b(?:positive correlation|positively correlated|correlat\w* positively|higher win rate|lower churn|win rate (?:rose|grew|improved)|close\w* (?:\w+ ){0,4}faster|renew\w* more|win more|won more)\b/i);
+ const good=readSignal(text,/\b(?:positive correlation|positively correlated|correlat\w* positively|higher win rate|lower churn|win rate (?:rose|grew|improved)|close\w* (?:\w+ ){0,4}faster|renew\w* (?:more|most)|win more|won more)\b/i);
  return bad.state==='affirmed'&&good.state!=='affirmed'?'negative':good.state==='affirmed'&&bad.state!=='affirmed'?'positive':'unknown';
 }

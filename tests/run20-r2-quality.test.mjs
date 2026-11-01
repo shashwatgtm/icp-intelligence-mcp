@@ -353,7 +353,7 @@ test("lookalike: filters are built from clean industry terms; the Google keyword
   assert.doesNotMatch(long.text, /\.\.\."/);
   for (const t of [r, long, await call("lookalike_signal_generator", { company: "Pathwise", product_category: "recurring billing and revenue infrastructure", champion_titles: ["CFO"] })]) assert.doesNotMatch(t.text, /### Sector notes: [^\n]*\n\s*\n\s*(?:###|---|\*\*)/);
 });
-test("scoring evidence: CFO is found in a statement that names a CFO; a group word is never found inside one title; the 'already a criterion' line agrees with the evidence", async () => {
+test("scoring evidence: CFO is found in a statement that names a CFO; a group word is never found inside one title; F10 known fault: a customer quote is not a directional closed-deal correlation", async () => {
   const r = await call("icp_scoring_model", { product_category: "spend management software", company: "Spendrill",
     success_correlation: "Sula Vineyards CFO on the home page: the tool cut a 60 day cycle to 10 days (customer quote); Nivea Sr. Sales Automation Manager: helped us grow our top line (customer quote)",
     scoring_criteria: [{ criterion: "Buyer or champion role", importance: "important", values: ["CFO", "managers", "employees"] }, { criterion: "Segment", importance: "critical", values: ["Retail", "Banks"] }] });
@@ -361,7 +361,8 @@ test("scoring evidence: CFO is found in a statement that names a CFO; a group wo
   assert.match(r.text, /Buyer or champion role, "CFO": named in "Sula Vineyards CFO/);
   assert.doesNotMatch(r.text, /"managers": named in/);
   assert.doesNotMatch(r.text, /No statement names these yet[^\n]*: [^\n]*"CFO"/);
-  assert.match(r.text, /already a criterion: \*\*Buyer or champion role\*\*/);
+  assert.match(r.text, /direction of this pattern is not clear/);
+  assert.doesNotMatch(r.text, /make (?:it|them) critical/);
   assert.match(r.text, /- "Sula Vineyards CFO[^\n]*": a customer statement/);
   assert.doesNotMatch(r.text, /already a criterion: [^\n]*\*\*Segment\*\*/);
 });

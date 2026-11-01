@@ -2586,6 +2586,23 @@ ${SUGGESTED}
       const roleAdds = sideV ? sideV.buyerRoles.filter(r => ![...prof.roles].some(n => sameRole(aliasRole(n, sideV), r))).slice(0, 4) : [];
 
 
+      // Run 42c: with no wins and no losses given, the review is a short plan for what to collect, from whom and which signals to tag, in the seller's own words and the sector's.
+      const noDataPlan = (!wins.length && !losses.length) ? (() => {
+        const what = args.product_category ? `what ${q(clauseHead(args.product_category, 80))} is bought for` : 'what you sell';
+        const from = [...(roles.length ? roles.slice(0, 2) : (sideV ? sideV.buyerRoles.slice(0, 2) : []))];
+        const sig = vRanked ? vRanked.metrics.slice(0, 3) : [];
+        const tags = vRanked ? vRanked.objections.slice(0, 3).map(o => lowerCommonWords(o.objection)) : [];
+        const segList = segs.length ? andList(segs.slice(0, 3)) : 'each customer group in your ICP';
+        return `## Next Step Plan (no wins or losses were given)
+
+1. **Collect**: for ${segList}, the deals closed (won and lost) in the last two quarters: ACV, sales cycle, who signed, and the reason given for the result. Write each loss reason in the buyer's words, next to ${what}.
+2. **Ask**: ${from.length ? `${andList(from)} at three customers you won and three you lost, and ask what they were comparing and what finally decided it.` : 'the buyer at three customers you won and three you lost, and ask what they were comparing and what finally decided it.'}
+3. **Tag**: ${sig.length ? `how the deals moved ${andList(sig)}` : 'the measure each buyer said they were held to'}${tags.length ? `, and tag losses with ${andList(tags)} where they apply` : ''}.
+4. **Then rerun this tool** with recent_wins, recent_losses and market_changes filled from steps 1 to 3.
+
+`;
+      })() : '';
+
       return `# ICP Evolution Analysis
 
 - ${companyLine(args.company)}
@@ -2615,7 +2632,7 @@ ${losses.length ? lossLines.join('\n') : '- No loss data provided: add recent_lo
 
 ${changes.length ? changeLines.join('\n') : '- No market changes provided: add market_changes to assess the impact on your ICP'}
 
-## Your Current ICP, Part by Part
+${noDataPlan}## Your Current ICP, Part by Part
 
 ${partLines.length ? `${partLines.join('\n')}\n` : 'Your current ICP text did not split into segments, size, buyer role or problem. Write it in those parts (for example "mid-size banks, 500 to 2,000 employees, CFO as buyer, who face manual reconciliation") to get a test for each part.\n'}${roleAdds.length ? `\n**Roles usual in ${sideName} that your ICP does not name**: ${andList(roleAdds)}. Check whether they sign or evaluate in the deals you won or lost; if they do, the ICP should name them.\n` : ''}${vRanked ? `\n**Loss reasons to tag in your CRM** (the objections ${vRanked.name} buyers raise): ${vRanked.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Count each over the period you are reviewing; a reason that rises is a change to your ICP or your qualification.\n` : ''}
 ${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.roles, args.current_icp, args.product_category)}\n\n` : ''}---
@@ -2704,7 +2721,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
         // as a customer quote belongs under Key Quotes. Counts read "2 of 3 interviews", and notes that repeat one text say so.
         const isQuestion = (t: string) => /\?\s*$/.test(t.trim());
         const quoteLike = (t: string) => /\((?:customer|partner|analyst|client) quote\)|\b(?:customer|partner|client) quote\b|\bcustomer words\b|^["“]/i.test(t);
-        const claimLike = (t: string) => !quoteLike(t) && /page claim|case study|story title|success story|ebook|home page|\baward|recogni[sz]|\blisted\b|ranking|named a\b|leader in|featured in|\(case study\)|magic quadrant|frost radar/i.test(t);
+        const claimLike = (t: string) => !quoteLike(t) && /page claim|case study|story title|success story|ebook|home page|\baward|recogni[sz]|\blisted\b|ranking|named a\b|leader in|featured in|\(case study\)|magic quadrant|frost radar|^(?:a )?(?:quote|testimonial)s? (?:from|by)\b|\btestimonial\b/i.test(t);
         const unquote = (t: string) => t.replace(/\s*\((?:customer|partner|analyst|client) quote\)\s*$/i, '').replace(/^customer (?:quote|words):\s*/i, '').replace(/^["“](.*)["”]$/, '$1').trim();
         // Host review 30 Oct 2026: "Not measured", "None yet", "Unknown" or "N/A" in a field says nothing was captured; it is not a pain,
         // a trigger or an outcome to lead with, so it is left out of the counts and named once under "Read this first".
@@ -2800,7 +2817,7 @@ ${topTriggers.length > 0 ? topTriggers.map(([trigger, count], i) =>
 ${results.length > 0 ? results.map(([value, count], i) =>
   `${i + 1}. **${shortText(value, 300)}**: ${of(count)}`
 ).join('\n') : '- No outcomes captured as results. Ask each customer what changed for them, in their own words, and record it as value_realized.'}
-${claims.length ? `\n**Claims and recognition in your notes** (not outcomes a customer reported to you; use them as proof points only after a customer confirms them):\n${claims.map(([value, count]) => `- ${shortText(value, 300)} (${of(count)})`).join('\n')}\n` : ''}
+${claims.length ? `\n**Claims and recognition in your notes** (seller claims and testimonials: statements from the seller's own pages, quotes from the seller's customers or awards, not outcomes a customer reported to you in an interview; use them as proof points only after a customer confirms them):\n${claims.map(([value, count]) => `- ${shortText(value, 300)} (${of(count)})`).join('\n')}\n` : ''}
 **ICP Implication**: ${results.length ? 'Lead with these outcomes in messaging' : 'Collect customer outcomes before you lead with value in messaging'}
 
 ### Champion Roles
