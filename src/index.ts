@@ -1861,6 +1861,10 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
       const industriesTyped = firmographics.industries;
       const industries = industriesTyped ? [...new Set(industriesTyped.flatMap(i => { const m = /^(.*?)\s*\(([^()]*)\)\s*$/.exec(i.trim()); return m ? [m[1].trim(), ...m[2].split(/[;,]\s*/).map(x => x.trim())] : [i.trim()]; }).filter(Boolean))] : undefined;
       const sizes = firmographics.company_sizes;
+      const headcounts = sizes?.filter(size => /\d/.test(size) && /\b(?:employees?|staff|headcount|people|workers?)\b/i.test(size) && !/\b(?:not|no|without|excluding)\b/i.test(size));
+      const employeeSizes = headcounts?.length ? headcounts : undefined;
+      const sizeNotice = sizes?.some(size => !headcounts?.includes(size)) ? 'Your supplied size labels are preserved below. Employee headcount was not explicitly supplied for every size label. Supply employee counts before building the employee count filters; vehicles, sites, accounts and other units are not headcount.' : '';
+
       const locations = firmographics.locations;
       const tech = args.icp_technographics;
       const allTitles = (args.champion_titles || []).map(t => String(t).trim()).filter(Boolean);
@@ -1917,12 +1921,12 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
 
 **Company Search**:
 \`\`\`
-${[industries ? `Industry: ${industries.join(' OR ')}` : '', sizes ? `Company headcount: ${sizes.join(' OR ')}` : '', locations ? `Headquarters: ${locations.join(' OR ')}` : '', tech ? `Technologies used: ${tech.join(' OR ')}` : ''].filter(Boolean).join('\n') || 'No firmographic input given: add icp firmographics (industries, company sizes, locations) to fill this search'}
+${[industries ? `Industry: ${industries.join(' OR ')}` : '', employeeSizes ? `Company headcount: ${employeeSizes.join(' OR ')}` : '', locations ? `Headquarters: ${locations.join(' OR ')}` : '', tech ? `Technologies used: ${tech.join(' OR ')}` : ''].filter(Boolean).join('\n') || 'No firmographic input given: add icp firmographics (industries, company sizes, locations) to fill this search'}
 \`\`\`
 
 **Lead Search**:
 \`\`\`
-${[`Current job title: ${quote(titles)}`, sizes ? `Current company headcount: ${sizes.join(' OR ')}` : '', industries ? `Current company industry: ${industries.join(' OR ')}` : '', locations ? `Geography: ${locations.join(' OR ')}` : ''].filter(Boolean).join('\n')}
+${[`Current job title: ${quote(titles)}`, employeeSizes ? `Current company headcount: ${employeeSizes.join(' OR ')}` : '', industries ? `Current company industry: ${industries.join(' OR ')}` : '', locations ? `Geography: ${locations.join(' OR ')}` : ''].filter(Boolean).join('\n')}
 \`\`\`
 ${groups.length ? `\nNot job titles, so not in the title search: ${groups.join(', ')}. Search these as departments (functions) next to the titles above.\n` : ''}
 ### Boolean Search String
@@ -1952,7 +1956,7 @@ ${vocabOk ? `Pick the in-market category Google Ads offers that is closest to ${
 
 ### Account Fit Criteria
 \`\`\`json
-${JSON.stringify({ firmographics: { ...(industries ? { industry: industries } : {}), ...(sizes ? { employee_range: sizes } : {}), ...(locations ? { geography: locations } : {}) }, ...(tech ? { technographics: { technologies_used: tech } } : {}) }, null, 2)}
+${JSON.stringify({ firmographics: { ...(industries ? { industry: industries } : {}), ...(employeeSizes ? { employee_range: employeeSizes } : {}), ...(locations ? { geography: locations } : {}) }, ...(tech ? { technographics: { technologies_used: tech } } : {}) }, null, 2)}
 \`\`\`
 
 ### Intent Topic Keywords
@@ -1968,7 +1972,7 @@ ${[...new Set([...(searchProduct && !(phraseFirst && productPhrases.length) ? [s
 
 ### Contact Search Criteria
 \`\`\`
-${[`Job Titles: ${titles.join(', ')}`, sizes ? `Company Size: ${sizes.join(', ')} employees` : '', industries ? `Industry: ${industries.join(', ')}` : '', locations ? `Location: ${locations.join(', ')}` : '', tech ? `Technologies: ${tech.join(', ')}` : ''].filter(Boolean).join('\n')}
+${[`Job Titles: ${titles.join(', ')}`, employeeSizes ? `Company headcount: ${employeeSizes.join(', ')}` : '', industries ? `Industry: ${industries.join(', ')}` : '', locations ? `Location: ${locations.join(', ')}` : '', tech ? `Technologies: ${tech.join(', ')}` : ''].filter(Boolean).join('\n')}
 \`\`\`
 
 ### Intent Signals to Layer
@@ -1999,7 +2003,7 @@ ${stages ? `- Funding or listing news at your stages: ${stages.join(', ')}\n` : 
 - [ ] Export qualified contacts
 - [ ] Enrich with additional data`); needs.push('**ZoomInfo/Apollo** contact database subscription'); }
 
-      return `# Lookalike Signal & Targeting Criteria
+      return `${sizeNotice ? sizeNotice + '\n\n' : ''}# Lookalike Signal & Targeting Criteria
 
 - ${companyLine(args.company)}
 - **What you sell**: ${product || 'not given (add product category for search keywords)'}
