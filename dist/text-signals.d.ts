@@ -14,4 +14,11 @@ export declare function hasSignal(text: string, floor: RegExp, kind?: string): b
 export declare function signal(text: string, kind: string): SignalReading;
 export declare function evidenceLine(label: string, reading: SignalReading): string;
 export declare function confirmedMatches(text: string, floor: RegExp, additional?: RegExp): string[];
+/** Timing is a stated buying horizon. Contradictory or denied horizons stay at the documented unknown score. */
+export declare function timingFact(text: string): {
+    score: number;
+    state: SignalState;
+    evidence: string[];
+};
+export declare function correlationFact(text: string): 'positive' | 'negative' | 'unknown';
 //# sourceMappingURL=text-signals.d.ts.map

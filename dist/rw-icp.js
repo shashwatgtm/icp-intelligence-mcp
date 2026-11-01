@@ -294,13 +294,21 @@ function readProfile(raw) {
     }
     // the clauses that follow the first one were split at ";", but a buyer or problem clause may be in any of them: join them back for those two
     let body = rest.join('; ');
+    // A denied role is a note, not a target segment or a buyer requirement.
+    body = body.replace(/\b(?:where|with)\s+(.{2,80}?)\s+(?:is|are)\s+(?:never|not)\s+involved\b/gi, m => { res.descr.push(m); return ''; });
     // the buyer clause
+    const signing = /\bwhere\s+(?:the\s+)?(.{2,80}?)\s+signs?\s+(?:the\s+)?(?:contract|purchase|order)\b/gi;
+    for (const m of body.matchAll(signing))
+        if ((0, text_signals_ts_1.hasSignal)(body, /signs?\s+(?:the\s+)?(?:contract|purchase|order)/i))
+            res.roles.push(...splitRoles(m[1]));
+    body = body.replace(signing, '');
     for (const m of [...body.matchAll(/(?:,\s*)?\bwith\s+((?:(?!\bwith\b).){2,200}?)\s+as\s+(?:the\s+)?(?:buyers?|champions?|sponsors?|decision[- ]makers?|economic buyers?)\b/gi)])
         res.roles.push(...splitRoles(m[1]));
     body = body.replace(/(?:,\s*)?\bwith\s+(?:(?!\bwith\b).){2,200}?\s+as\s+(?:the\s+)?(?:buyers?|champions?|sponsors?|decision[- ]makers?|economic buyers?)\b/gi, '');
     for (const m of [...body.matchAll(/\b(?:buyers?|champions?|economic buyers?|sponsors?)\s*:\s*(.+?)(?=;|\.\s+[A-Z]|$)/gi)])
         res.roles.push(...splitRoles(m[1]));
     body = body.replace(/\b(?:buyers?|champions?|economic buyers?|sponsors?)\s*:\s*.+?(?=;|\.\s+[A-Z]|$)/gi, '');
+    res.roles = res.roles.filter(r => (0, text_signals_ts_1.hasSignal)(text, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')));
     if (res.roles.length) {
         res.roleSource = 'buyer';
         res.roleNotes = res.roles.filter((r) => /\([^)]+\)\s*$/.test(r));
@@ -316,9 +324,10 @@ function readProfile(raw) {
     }
     // the problem clause runs to the end
     const pm = /(?:,\s*)?\b(?:who|that|which)\s+(?:currently\s+)?(?:face|facing|faces|struggle|struggling|struggles|suffer|suffering|suffers|lose|lack|lacks)\b\s*(?:with |from |:)?\s*(.+)$/i.exec(body)
+        ?? /(?:,\s*)?\bwhose (?:biggest worry|main concern) is\s+(.+)$/i.exec(body)
         ?? /(?:,\s*)?\b(?:problems?|pain points?|challenges?)\s*:\s*(.+)$/i.exec(body);
     if (pm) {
-        res.problems.push(...splitTop(pm[1], /;/).map((x) => noDot(x)).filter(Boolean));
+        res.problems.push(...splitTop(pm[1], /;/).map((x) => noDot(x)).filter(x => x && !/^(?:no|not|without)\b/i.test(x)));
         body = body.slice(0, pm.index).trim();
     }
     body = body.replace(/[,;\s]+$/, '');
@@ -360,7 +369,7 @@ function titlesIn(text) {
         out.push(m[0]);
     for (const m of t.matchAll(/\b(?:finance|financial|operations|sales|marketing|security|network|procurement|engineering|supply chain|it|hr|data|platform|revenue|product|customer success) (?:controller|director|manager|head|lead|officer|analyst)\b/gi))
         out.push(m[0]);
-    return [...new Set(out)].filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
+    return [...new Set(out)].filter(r => (0, text_signals_ts_1.hasSignal)(t, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
 }
 function readTarget(clause, res, listForm) {
     let c = squash(clause);

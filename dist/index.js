@@ -505,7 +505,7 @@ const SIZE_WORD = /\b(?:mid-?size[d]?|mid-?market|medium(?:-sized)?|large(?:r)?|
 function sizeWordsIn(text) {
     const found = String(text).match(SIZE_WORD) || [];
     const seen = new Set();
-    return found.map((x) => x.replace(/^(enterprise|startup|smb|msme|sme)s$/i, '$1')).filter((x) => { const k = x.toLowerCase(); if (seen.has(k))
+    return found.filter(x => (0, text_signals_ts_1.hasSignal)(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).map((x) => x.replace(/^(enterprise|startup|smb|msme|sme)s$/i, '$1')).filter((x) => { const k = x.toLowerCase(); if (seen.has(k))
         return false; seen.add(k); return true; });
 }
 // Job titles named in a text (as typed). A capitalised phrase with a title word, or an acronym such as CFO or CISO.
@@ -523,7 +523,7 @@ function rolesIn(text) {
     // a title written in lower case ("a finance controller", "head of supply chain")
     for (const m of t.matchAll(/\b(?:(?:finance|financial|operations|sales|marketing|security|network|procurement|engineering|supply chain|it|hr|data|platform|revenue) (?:controller|director|manager|head|lead|officer|analyst)|head of [a-z]+(?: [a-z]+){0,2}|vp (?:of )?[a-z]+)\b/gi))
         out.push(m[0].trim());
-    return [...new Set(out)].filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
+    return [...new Set(out)].filter(r => (0, text_signals_ts_1.hasSignal)(t, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
 }
 // Is this one item a job title (as in champion_titles), and not a group of people ("finance teams", "managers", "employees")?
 function isTitleItem(item) {
@@ -923,7 +923,7 @@ ${gaps.length ? gaps.join('\n') : 'None: every field this analysis reads was sup
                         (0, text_signals_ts_1.signal)(text, 'small').state === 'affirmed' ? 'SMB (10-100)' :
                             (0, text_signals_ts_1.hasSignal)(text, /startup/i) ? 'Startup/Early-stage' : 'Mixed sizes';
                 const size = typedSizes.length ? andList(typedSizes) : sizeWord;
-                const stageTyped = (0, escape_inputs_ts_1.escapePiece)([...new Set((text.match(/\bseries [a-d]\b/gi) || []).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', '));
+                const stageTyped = (0, escape_inputs_ts_1.escapePiece)([...new Set((text.match(/\bseries [a-d]\b/gi) || []).filter(x => (0, text_signals_ts_1.hasSignal)(text, new RegExp(x, 'i'))).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', '));
                 const stage = stageTyped || ((0, text_signals_ts_1.hasSignal)(text, /public/i) ? 'Public companies' : 'not stated in your text');
                 const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => (0, text_signals_ts_1.hasSignal)(text, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')));
                 return `# ICP Pattern Analysis (from Description)
@@ -1036,6 +1036,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
                     },
                     description: 'Criteria for scoring with importance levels'
                 },
+                correlation_direction: { type: 'string', enum: ['positive', 'negative', 'unknown'], description: 'Optional confirmed direction of the success pattern. Ask the user whether the named values correlate with better or worse outcomes before filling this. Overrides word reading; unknown withholds a top-points recommendation.' },
                 success_correlation: {
                     type: 'string',
                     description: 'What correlates with success? (e.g., "deals with VP Sales champion close 2x faster")'
@@ -1050,6 +1051,8 @@ This tool will analyze patterns across your customers to identify your ideal pro
         execute: (args) => {
             const category = args.product_category ? args.product_category.trim() : 'your product (product_category not given)';
             const correlations = args.success_correlation || '';
+            const directionOf = (text) => args.correlation_direction || (0, text_signals_ts_1.correlationFact)(text);
+            const adversePattern = directionOf(correlations) === 'negative';
             const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, correlations], buyer: (args.scoring_criteria || []).flatMap(c => [c.criterion, ...(c.values || [])]) });
             // Default scoring model if no criteria provided
             const defaultCriteria = [
@@ -1108,7 +1111,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const namedBy = () => criteria.filter(c => nameMatched(c) || proofHits.some(h => h.criterion === c.criterion));
             const corrLine = () => {
                 const m = namedBy();
-                return !correlations ? '' : m.length
+                return !correlations ? '' : adversePattern ? 'The stated pattern is negative. Do not award top fit points for it; validate the named values as possible risk signals against closed deals.' : directionOf(correlations) === 'unknown' ? 'The direction of this pattern is not clear. Confirm whether it predicts better or worse outcomes before changing qualification points.' : m.length
                     ? `This pattern is already a criterion: ${andList(m.map(c => `**${c.criterion}**`))}. If it holds in your closed deals, make ${m.length === 1 ? 'it' : 'them'} critical.`
                     : 'This pattern is not yet one of your criteria: add it as a criterion if it holds in your closed deals.';
             };
@@ -1134,9 +1137,9 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const valueOf = (c) => c.values;
             const proofHits = proofItems.length ? criteria.flatMap(c => valueOf(c).flatMap(val => {
                 // a plain shared word is the strict match; another word for the same kind of thing (spirits for beverage) also names a value
-                const items = proofItems.filter(it => sharesWord(val, it));
+                const items = proofItems.filter(it => (!args.correlation_direction || args.correlation_direction === 'positive') && directionOf(it) !== 'negative' && sharesWord(val, it));
                 if (!items.length && !/\b(?:leaders?|managers?|heads?|directors?|officers?|teams?|developers?|engineers?|owners?|founders?|analysts?|roles?)\b/i.test(val)) {
-                    const alias = proofItems.filter(it => (0, rw_icp_ts_1.aliasNamed)(val, it));
+                    const alias = proofItems.filter(it => (!args.correlation_direction || args.correlation_direction === 'positive') && directionOf(it) !== 'negative' && (0, rw_icp_ts_1.aliasNamed)(val, it));
                     if (alias.length)
                         return [{ criterion: c.criterion, value: val, item: alias[0] }];
                 }
@@ -1146,7 +1149,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const notFound = proofItems.length ? criteria.flatMap(c => c.values.filter(val => !hitKeys.has(`${c.criterion}|${val}`) && !nameMatched(c)).map(val => ({ criterion: c.criterion, value: val }))).filter(x => x.value.length <= 80) : [];
             // Host review 30 Oct 2026: a note that no evidence exists, or a hypothesis, is said to be one before any other reading
             // ("Hypothesis only: named owners may improve adoption" was read as a page claim because of the word "named").
-            const proofKind = (t) => /^\s*(?:no|not)\b[^;]{0,40}\b(?:measured|data|correlation|evidence|results?|proof)\b|\b(?:not|none) (?:yet )?(?:measured|supplied|given|available|tested|proven)\b/i.test(t) ? 'a note that no evidence is given yet, so it cannot score anything'
+            const proofKind = (t) => directionOf(t) === 'negative' ? 'a negative pattern: test it as a risk, not as positive qualification evidence' : /^\s*(?:no|not)\b[^;]{0,40}\b(?:measured|data|correlation|evidence|results?|proof)\b|\b(?:not|none) (?:yet )?(?:measured|supplied|given|available|tested|proven)\b/i.test(t) ? 'a note that no evidence is given yet, so it cannot score anything'
                 : /\b(?:hypothes[ie]s|assum(?:e|ed|ption)|untested|we think|we believe|may|might|could)\b/i.test(t) ? 'a hypothesis to test in your closed deals, not evidence yet'
                     : /\((?:customer|partner|analyst|client) quote\)|customer words/i.test(t) ? 'a customer statement' : /page claim|case study|story title|story headline|headline|ebook|home page|award|recogni|leader|gartner|forrester|named(?! (?:process |account |deal |budget )?(?:owners?|champions?|contacts?|sponsors?|persons?|buyers?)\b)|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
             const longValues = criteria.flatMap(c => c.values.filter(v2 => v2.length > LONG_VALUE).map(v2 => ({ criterion: c.criterion, value: v2 })));
@@ -1256,7 +1259,7 @@ ${proofItems.length ? `## Evidence in Your Success Pattern
 
 Each statement you gave, and what it can do for the model:
 ${proofItems.map(it => `- ${q(shortText(it, 600))}: ${proofKind(it)}`).join('\n')}
-${proofHits.length ? `\n**Where your evidence names a value you score** (consider giving it the top points, then check it against your closed deals):\n${proofHits.slice(0, 6).map(h => { const c = criteria.find(x => x.criterion === h.criterion); return `- ${h.criterion}, ${q(c ? plainLabel(c, h.value) : h.value)}: named in ${q(shortText(h.item, 400))}${(() => { const w = (0, rw_icp_ts_1.matchWords)(h.value, h.item); return w.length ? ` (matching word${w.length > 1 ? 's' : ''}: ${w.join(', ')})` : ''; })()}`; }).join('\n')}\n` : '\nNone of your criterion values is named in these statements, so the evidence does not yet tell you which value to score highest.\n'}${notFound.length ? `\n**No statement names these yet** (that does not mean they are absent; check them against your closed deals): ${notFound.slice(0, 8).map(x => `${q(x.value)} (${x.criterion})`).join('; ')}.\n` : ''}
+${proofHits.length ? `\n**Where your evidence names a value you score** (confirm its direction and check it against your closed deals before assigning points):\n${proofHits.slice(0, 6).map(h => { const c = criteria.find(x => x.criterion === h.criterion); return `- ${h.criterion}, ${q(c ? plainLabel(c, h.value) : h.value)}: named in ${q(shortText(h.item, 400))}${(() => { const w = (0, rw_icp_ts_1.matchWords)(h.value, h.item); return w.length ? ` (matching word${w.length > 1 ? 's' : ''}: ${w.join(', ')})` : ''; })()}`; }).join('\n')}\n` : '\nNone of your criterion values is named in these statements, so the evidence does not yet tell you which value to score highest.\n'}${notFound.length ? `\n**No statement names these yet** (that does not mean they are absent; check them against your closed deals): ${notFound.slice(0, 8).map(x => `${q(x.value)} (${x.criterion})`).join('; ')}.\n` : ''}
 Use page claims and recognition as messaging, not as scoring evidence: score only what you can see in your closed-won and closed-lost deals.
 
 ---
@@ -1876,17 +1879,17 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
             // Run 19 D80 (problem 3): every trigger typed gets its own signal, chosen by its words.
             const signalFor = (t) => {
                 const x = t.toLowerCase();
-                if (/hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/.test(x))
+                if ((0, text_signals_ts_1.hasSignal)(x, /hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/, 'hiring'))
                     return [`A new ${titles[0] || 'leader'} or a related leader joined in the last 90 days`, 'New leaders review tools and processes early', 'LinkedIn alerts, ZoomInfo job changes'];
-                if (/fund|series|raise|raised|investment|ipo|listing/.test(x))
+                if ((0, text_signals_ts_1.hasSignal)(x, /fund|series|raise|raised|investment|ipo|listing/, 'funding'))
                     return [`Funding or listing news${stages ? ` at the stages you target (${stages.join(', ')})` : ''}`, 'New budget is allocated for scaling', 'Crunchbase alerts, news alerts, LinkedIn'];
-                if (/audit|compliance|regulat|breach|incident|finding/.test(x))
+                if ((0, text_signals_ts_1.hasSignal)(x, /audit|compliance|regulat|breach|incident|finding/, 'security'))
                     return ['Audit findings, regulatory notices or incidents made public, and hiring for audit, risk or compliance roles', 'A finding sets a deadline and a budget owner', 'News alerts, annual reports and filings, job posts'];
-                if (/migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/.test(x))
+                if ((0, text_signals_ts_1.hasSignal)(x, /migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/, 'migration'))
                     return ['Job posts and announcements that mention the new system or the migration', 'A system change reopens the processes around it', 'Job posting alerts, technographic change data, news alerts'];
-                if (/expan|new office|new market|branch|site|hiring|grow/.test(x))
+                if ((0, text_signals_ts_1.hasSignal)(x, /expan|new office|new market|branch|site|hiring|grow/, 'growth'))
                     return ['New offices, markets, branches or a hiring surge', 'Existing processes strain as the company grows', 'Job posting velocity, news alerts'];
-                if (/miss|target|loss|cost|margin|delay|outage|churn/.test(x))
+                if ((0, text_signals_ts_1.hasSignal)(x, /miss|target|loss|cost|margin|delay|outage|churn/, 'shortfall'))
                     return ['Results, statements or job posts that mention the problem', 'A missed target creates urgency and an owner', 'Earnings and news alerts, leadership posts on LinkedIn'];
                 return ['News, job posts or posts by your champion titles that mention it', 'Your team named this as a reason to buy', 'News alerts and job posting alerts on the exact words'];
             };
@@ -2072,7 +2075,7 @@ ${SUGGESTED}
                             fit_score: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100. Left out, 50 is used' },
                             intent_signals: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100 (0 scores zero). Left out, 50 is used' },
                             relationship: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100, based on existing connections. Left out, 50 is used' },
-                            timing: { type: 'string', description: 'now, soon, later or unknown (now 100 points, soon 70, later 40; unknown, left out or any other word 50)' }
+                            timing: { type: 'string', description: 'Buying horizon: now, soon, later or unknown (100, 70, 40 and 50 points respectively). Equivalent phrases are read by clause; denied or conflicting horizons remain unknown. Confirm the horizon with the user.' }
                         }
                     },
                     description: 'List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)'
@@ -2111,14 +2114,7 @@ ${SUGGESTED}
             const wEx = (given) => (noWeights || has(given)) ? '' : ` ${EXAMPLE}`;
             // If accounts provided, score them
             if (args.accounts && args.accounts.length > 0) {
-                const timingScore = (timing) => {
-                    switch (timing?.toLowerCase()) {
-                        case 'now': return 100;
-                        case 'soon': return 70;
-                        case 'later': return 40;
-                        default: return 50;
-                    }
-                };
+                const timingScore = (timing) => (0, text_signals_ts_1.timingFact)(timing).score;
                 // D41 (run 15): the tier cut-offs are 80%, 60% and 40% of the highest possible score W, the sum of the four weights
                 // (ceil in integer-safe form; with the default weights W = 100 they are 80, 60 and 40, as before).
                 const W = Number((weights.fit + weights.intent + weights.relationship + weights.timing).toPrecision(12)); // run 20: 33.3 + 33.3 + 33.3 + 0.1 is 100, not 99.99999999999999
@@ -2202,7 +2198,7 @@ ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default wei
 Your scores are shown as given (to one decimal at most); ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'} (now 100, soon 70, later 40, unknown 50 points). (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
 |------|---------|-----|--------|--------------|--------|-----------|------|
-${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${cleanNum1(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${cleanNum1(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${cleanNum1(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
+${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${cleanNum1(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${cleanNum1(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${cleanNum1(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${(0, text_signals_ts_1.timingFact)(a.timing).state === 'affirmed' ? '' : '; fact was not clear'}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
 
 ---
 

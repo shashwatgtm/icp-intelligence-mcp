@@ -7,6 +7,8 @@ exports.hasSignal = hasSignal;
 exports.signal = signal;
 exports.evidenceLine = evidenceLine;
 exports.confirmedMatches = confirmedMatches;
+exports.timingFact = timingFact;
+exports.correlationFact = correlationFact;
 exports.SIGNALS = {
     'a named role, title or team': /\b(?:head of (?:growth|revenue|marketing|sales|operations|security)|person in charge|business lead)\b/i,
     'an owner or responsible party': /\b(?:accountable for|answerable for|takes responsibility|person in charge)\b/i,
@@ -44,6 +46,30 @@ exports.SIGNALS = {
     departed: /\b(?:champion left|sponsor left|key contact left|champion departed|sponsor departed|advocate resigned|contact resigned)\b/i,
     positive_result: /\b(?:improv\w*|saved?|reduc\w*|cut|cuts|faster|fewer|a fifth of the time|half the time|time fell|costs? fell|collections (?:rose|grew)|revenue (?:rose|grew))\b/i,
     adverse_result: /\b(?:(?:costs?|errors?|delays?|churn|losses?|tickets?) (?:rose|grew|increased|doubled)|(?:revenue|collections|retention|sales) (?:fell|dropped|declined)|lost money|worse than before|no (?:customer|client|user).*improvement|cancelled|canceled|refund)\b/i,
+    team_finance: /\b(?:people who keep our books|close each period|match payments to bills)\b/i,
+    team_security: /\b(?:people who guard our systems|defend against intrusions|protect our records from attackers)\b/i,
+    team_sales: /\b(?:people who win new accounts|people who carry a quota|turn prospects into paying customers)\b/i,
+    team_customer: /\b(?:customer support|customer success|people who answer customer questions|help existing customers succeed|keep customers from leaving)\b/i,
+    team_marketing: /\b(?:people who generate demand|bring buyers to our site|build awareness of our offer)\b/i,
+    team_engineering: /\b(?:programmers who build|people who write code|people who ship releases)\b/i,
+    team_api: /\b(?:programmers who build integrations|connect systems through endpoints)\b/i,
+    team_modernization: /\b(?:replace the old stack|retire ageing systems|move off legacy applications)\b/i,
+    team_it: /\b(?:people who run our internal systems|keep the network running|look after our computers)\b/i,
+    team_operations: /\b(?:people who run daily delivery|keep work moving across teams|run the day to day process)\b/i,
+    team_workplace: /\b(?:people who handle employee requests|help staff with internal tools)\b/i,
+    team_people: /\b(?:people who recruit and develop staff|look after employee wellbeing)\b/i,
+    team_risk: /\b(?:people who assess exposure|keep us within regulatory limits)\b/i,
+    annual_period: /\b(?:over|in|during) (?:twelve|12) months\b|\b(?:over|in) (?:one|a|1) year\b/i,
+    monthly_period: /\b(?:over|in|during) (?:one|a|1) month\b|every (?:thirty|30) days/i,
+    quarterly_period: /\b(?:over|in|during) (?:three|3) months\b/i,
+    bundle: /\b(?:one supplier for everything|single provider for the whole stack|put all .* under one contract)\b/i,
+    feature: /\b(?:does not do what we need|cannot do the required job|key function is absent)\b/i,
+    service: /\b(?:keeps going down|takes days to restore|promised availability was missed)\b/i,
+    support: /\b(?:nobody answers when we ask|we cannot reach anyone|waiting days for an answer)\b/i,
+    funding: /\b(?:fresh capital|new capital|closed a round|secured financing|backers invested)\b/i,
+    migration: /\b(?:move to a new system|retire the old system|replace the old stack|switch platforms)\b/i,
+    growth: /\b(?:opening more locations|entering another country|doubling the team|adding more capacity)\b/i,
+    shortfall: /\b(?:falling behind plan|missed expectations|money is running out|service has become unreliable)\b/i,
     hiring: /\b(?:hired|appointed|new (?:cfo|ceo|ciso|cto)|joined as|took over as|became (?:the )?(?:head|chief|director))\b/i,
     timing: /\b(?:timing|priority|later|on hold|postponed|deferred|until (?:their|our) finances recover|next year|not now)\b/i,
     leaky: /\b(?:pipeline|new logos?|acquisition|top of funnel|more leads|more deals from new accounts|win new customers|bring in new customers)\b/i,
@@ -83,7 +109,9 @@ function readSignal(text, floor, additional) {
             for (const m of c.matchAll(new RegExp(re.source, flags))) {
                 if (!m[0])
                     continue;
-                if (denied(c, m.index ?? 0, m[0]))
+                const at = m.index ?? 0;
+                const suffix = /^[a-z0-9_]*/i.exec(c.slice(at + m[0].length))?.[0] || '';
+                if (denied(c, at, m[0] + (/[a-z0-9_]$/i.test(m[0]) ? suffix : '')))
                     negative.push(original);
                 else if (/\b(?:maybe|perhaps|might|unclear|not sure|not confirmed|hypothetically|if we|if they)\b/i.test(c))
                     unclear.push(original);
@@ -101,4 +129,20 @@ function hasSignal(text, floor, kind) { return readSignal(text, floor, kind ? ex
 function signal(text, kind) { return readSignal(text, exports.SIGNALS[kind] ?? /(?!)/); }
 function evidenceLine(label, reading) { return `${label}: ${reading.state === 'affirmed' ? 'stated' : reading.state === 'negated' ? 'negated' : 'fact was not clear'}${reading.evidence.length ? `; read "${reading.evidence.join('"; "')}"` : ''}.`; }
 function confirmedMatches(text, floor, additional) { const r = readSignal(text, floor, additional); return r.state === 'affirmed' ? r.matched : []; }
+/** Timing is a stated buying horizon. Contradictory or denied horizons stay at the documented unknown score. */
+function timingFact(text) {
+    const groups = [
+        [100, /\b(?:now|immediately|ready to (?:buy|start)|this week|without delay|as soon as possible)\b/i],
+        [70, /\b(?:soon|shortly|in the next few weeks|within (?:a|one) month)\b/i],
+        [40, /\b(?:later|next year|next quarter|postponed|deferred|not until next year)\b/i]
+    ];
+    const reads = groups.map(([score, re]) => ({ score, ...readSignal(text, re) }));
+    const positive = reads.filter(r => r.state === 'affirmed');
+    return positive.length === 1 ? { score: positive[0].score, state: 'affirmed', evidence: positive[0].evidence } : { score: 50, state: reads.some(r => r.state !== 'absent') ? 'unclear' : 'absent', evidence: [...new Set(reads.flatMap(r => r.evidence))] };
+}
+function correlationFact(text) {
+    const bad = readSignal(text, /\b(?:negative correlation|negatively correlated|correlat\w* negatively|lower win rate|higher churn|win rate (?:fell|dropped|declined)|lost (?:every|all|most)|lose more|lost more|close more slowly|longer sales cycle)\b/i);
+    const good = readSignal(text, /\b(?:positive correlation|positively correlated|correlat\w* positively|higher win rate|lower churn|win rate (?:rose|grew|improved)|close\w* (?:\w+ ){0,4}faster|renew\w* more|win more|won more)\b/i);
+    return bad.state === 'affirmed' && good.state !== 'affirmed' ? 'negative' : good.state === 'affirmed' && bad.state !== 'affirmed' ? 'positive' : 'unknown';
+}
 //# sourceMappingURL=text-signals.js.map
