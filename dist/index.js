@@ -1499,8 +1499,23 @@ ${SUGGESTED}
                 : ctx.model === 'services' ? ['Share the transition plan and the team model', 'Agree the SLA and the reports up front', 'Offer a session with the delivery lead', 'Answer the security questionnaire before it is asked']
                     : ctx.model === 'saas' ? ['Provide sandbox/POC access', 'Share integration documentation', 'Offer technical deep-dive call', 'Address security questionnaire proactively']
                         : ['Offer a pilot on their own data or sites', 'Share integration or setup documentation', 'Offer a technical session', 'Answer the security questionnaire before it is asked'];
+            const championPerson = typedChampion.match(/(?:Contact|Person|Named contact):\s*([^;\n.]+)/i)?.[1]?.trim();
+            const advocacy = (0, text_signals_ts_4.hasSignal)(typedChampion, /\b(?:introduced (?:us|the team) to|advocated (?:for|on behalf of)|presented (?:our|the) (?:case|proposal) to|secured (?:a|the) (?:budget|decision) meeting)\b/i);
+            const confirmedChampion = !!championPerson && advocacy;
+            const budgetConfirmed = !!args.confirmed_budget_owner?.trim();
+            const roleQuestions = {
+                economic: 'Who can approve the spend for this purchase, and what source confirms that authority?',
+                champion: 'Who is the named person, and what did they do to advocate internally? Record the observed action and date.',
+                technical: 'Who owns technical acceptance, and where are their agreed criteria recorded?',
+                user: 'Who will use this in daily work, and which observed task confirms their involvement?',
+                blocker: 'Who must review this purchase, and which policy or decision confirms their role?'
+            };
+            const evidenceFor = (key) => key === 'economic' && budgetConfirmed ? `Confirmed in your answer: ${args.confirmed_budget_owner}` : key === 'champion' && confirmedChampion ? `Named contact and observed advocacy supplied: ${typedChampion}` : `Role hypothesis only. ${[typedChampion, ...stakeholders].includes(buyingGroup[key].role) ? 'Title supplied; contact and decision evidence unconfirmed.' : 'Suggested from sector or role context; no contact evidence supplied.'}`;
+            const firstOpen = !budgetConfirmed ? 'economic' : !confirmedChampion ? 'champion' : 'technical';
             const seatBlock = (title, key, strategy, extraNote = '') => `### ${title}
 **Role**: ${buyingGroup[key].role}${extraNote}
+**Evidence**: ${evidenceFor(key)}
+**Validation question**: ${roleQuestions[key]}
 **Their Concern**: ${buyingGroup[key].concern}
 **${buyingGroup[key].label}**: ${buyingGroup[key].message}
 
@@ -1514,6 +1529,11 @@ ${strategy.map(x => `- ${x}`).join('\n')}
             const mapGroup = { economic: { role: mapRole(buyingGroup.economic.role) }, champion: { role: mapRole(buyingGroup.champion.role) }, technical: { role: mapRole(buyingGroup.technical.role) }, user: { role: mapRole(buyingGroup.user.role) }, blocker: { role: mapRole(buyingGroup.blocker.role) } };
             return `# Buyer Group Analysis
 
+## First unconfirmed decision role
+${firstOpen === 'economic' ? 'Budget authority' : firstOpen === 'champion' ? 'Internal advocate' : 'Technical acceptance'}: ${roleQuestions[firstOpen]}
+
+Role titles are hypotheses until contact and role evidence are supplied. A typical role alone does not confirm a champion.
+
 ${placed.unknown.length ? `**Authority unconfirmed:** ${placed.unknown.join('; ')}. Their role in this purchase is not established; ask who owns the budget and who must approve. They are not assigned a decision seat from title alone.\n` : ''}
 
 ## Deal Context
@@ -1522,7 +1542,7 @@ ${placed.unknown.length ? `**Authority unconfirmed:** ${placed.unknown.join('; '
 - **Deal Size**: ${dealSize}
 - **Target Company**: ${companySize}
 - **Known Stakeholders**: ${stakeholders.length ? (0, escape_inputs_ts_1.escapePiece)(stakeholders.join(', ')) : 'Not specified'}
-- **Champion you named**: ${typedChampion || 'not given (add typical champion)'}
+- **Champion candidate you supplied**: ${typedChampion || 'not given (add typical champion)'}
 
 ${ctx.line}
 
@@ -1532,8 +1552,8 @@ The deal size and company size are shown for context: the roles below come from 
 
 ## Buying Group Map
 
-${seatBlock('Champion (Your Internal Advocate)', 'champion', ['Lead with their specific pain points', 'Provide ammo to sell internally', 'Make them look good to leadership', 'Give them early wins to share'], championDefault ? ` (the usual one in ${v.name}; you named none)` : '')}
-${seatBlock('Economic Buyer (Budget Authority)', 'economic', ['Lead with business outcomes, not features', 'Provide clear ROI documentation', 'Connect to strategic priorities', 'Reference similar company results'])}
+${seatBlock(confirmedChampion ? 'Confirmed champion (observed internal advocacy)' : 'Champion hypothesis (internal advocacy unconfirmed)', 'champion', ['Lead with their specific pain points', 'Provide ammo to sell internally', 'Make them look good to leadership', 'Give them early wins to share'], championDefault ? ` (the usual one in ${v.name}; you named none)` : '')}
+${seatBlock(budgetConfirmed ? 'Economic buyer (authority confirmed in your answer)' : 'Economic buyer hypothesis (budget authority unconfirmed)', 'economic', ['Lead with business outcomes, not features', 'Provide clear ROI documentation', 'Connect to strategic priorities', 'Reference similar company results'])}
 ${seatBlock('Technical Evaluator (Implementation Voice)', 'technical', technicalSteps)}
 ${seatBlock('End User (Day-to-Day User)', 'user', ctx.model === 'saas' || ctx.model === null ? ['Demo through their lens', 'Show quick wins possible', 'Minimize learning curve fear', 'Get pilot users as advocates'] : ['Walk through their working day with the new way in it', 'Show the first week, not the full rollout', 'Agree who trains the users and how adoption is measured', 'Get pilot users as advocates'])}
 ${seatBlock('Potential Blocker (Reviewer)', 'blocker', ['Engage early, not late', 'Proactively share compliance info', 'Provide comparison to status quo risk', 'Have champion introduce you'])}
