@@ -33,4 +33,7 @@ export declare function sectorChoiceNotice(tool: string, args: Record<string, un
     name?: string;
     source?: string | null;
 }): string;
+/** EPIC rules retain the documented trigger floor, with clause evidence and optional confirmed facts. */
+export declare function epicReading(text: string, floor: RegExp, kind: string, typed?: unknown): SignalReading;
+export declare function epicChannelReview(text: string, nrrLow: boolean, selfServe: boolean | null): string[];
 //# sourceMappingURL=text-signals.d.ts.map

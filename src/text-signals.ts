@@ -151,3 +151,26 @@ export function sectorChoiceNotice(tool:string,args:Record<string,unknown>,infer
 
 const SECTOR_TOOL_FIELDS:Record<string,string[]>={"icp_deep_dive": ["product_category"], "icp_scoring_model": ["product_category"], "buyer_group_analyzer": ["product_category"], "tam_sam_som_calculator": ["product_category"], "icp_gap_analysis": ["product_category"], "icp_evolution_tracker": ["product_category"], "icp_interview_synthesizer": ["product_category"], "lookalike_signal_generator": ["product_category"], "account_prioritization": ["product_category"], "impact_get_framework": ["sector"], "impact_identify_champions": ["product_description"], "impact_map_alternatives": ["category"], "impact_pinpoint_value": ["category"], "impact_anchor_market": ["product_description"], "impact_craft_message": ["product_category"], "impact_translate_execution": ["positioning_statement"], "impact_full_audit": ["product_description"], "pmf_scorecard": ["product"], "launch_commander": ["product_feature"], "customer_interview_kit": ["product_context"], "retention_playbook": ["product"], "partner_architect": ["product"], "crisis_planner": ["company"], "competitive_intel": ["your_product"], "craft_gtm_analyzer": ["document_content"], "case_study_generator": ["your_product"], "newsletter_builder": ["your_product"], "webinar_script": ["your_product"], "content_repurposer": ["source_content"], "thought_leadership_series": ["topic"], "testimonial_capture": ["your_product"], "sales_enablement_content": ["product"], "craft_content_improver": ["content"], "account_plan_builder": ["your_solution"], "roi_business_case_builder": ["your_solution"], "mutual_action_plan_generator": ["your_solution"], "win_loss_analyzer": ["your_solution"], "deal_strategy_coach": ["your_solution"], "discovery_question_bank": ["your_solution"], "proposal_section_writer": ["your_solution"], "email_sequence_generator": ["your_solution"], "demo_script_builder": ["your_solution"], "pricing_negotiation_guide": ["your_solution"], "champion_enablement_kit": ["your_solution"], "competitive_trap_setter": ["your_solution"]};
 const GTM_INDUSTRY_TOOLS=["pmf_scorecard", "launch_commander", "customer_interview_kit", "retention_playbook", "partner_architect", "crisis_planner", "competitive_intel", "craft_gtm_analyzer"];
+
+/** EPIC rules retain the documented trigger floor, with clause evidence and optional confirmed facts. */
+export function epicReading(text:string, floor:RegExp, kind:string, typed?:unknown):SignalReading {
+ if(['present','none','unknown'].includes(String(typed)))return {state:typed==='present'?'affirmed':typed==='none'?'negated':'unclear',evidence:['Confirmed '+kind.replace(/_/g,' ')+': '+typed],matched:[]};
+ const all=clauses(text).map(c=>{const r=readSignal(c,floor,SIGNALS[kind]);
+  if(kind==='ai_search'&&/\b(?:organic (?:traffic|search)|seo leads?)\b.{0,20}\b(?:not|never|isn't|aren't)\b.{0,15}(?:drop|declin|down|fall|collaps)/i.test(c))return {...r,state:'negated' as SignalState};
+  return r;
+ });
+ const states=all.map(r=>r.state);return {state:states.includes('affirmed')&&states.includes('negated')?'unclear':states.includes('affirmed')?'affirmed':states.includes('unclear')?'unclear':states.includes('negated')?'negated':'absent',evidence:[...new Set(all.flatMap(r=>r.evidence))],matched:[...new Set(all.flatMap(r=>r.matched))]};
+}
+export function epicChannelReview(text:string, nrrLow:boolean, selfServe:boolean|null):string[] {
+ if(!text.trim())return [];
+ const result:string[]=[];
+ for(const c of clauses(text)){
+  const failed=readSignal(c,/\b(?:failed|not working|no (?:qualified )?(?:leads|deals|pipeline)|zero (?:leads|deals)|lost money|unprofitable)\b/i);
+  if(failed.state==='affirmed')result.push('Pause additional spend on the activity described until its owner explains the failure and sets a measurable restart condition. Sentence read: "'+c+'".');
+  const acquisition=epicReading(c,/pipeline|new\s*logo|acquisition|top\s*of\s*(the\s*)?funnel|more\s*leads/i,'leaky');
+  if(nrrLow&&acquisition.state==='affirmed')result.push('Stop expanding acquisition spend while net revenue retention is below 100%; first establish the retention problem and a recovery measure. Sentence read: "'+c+'".');
+  const plg=readSignal(c,/\b(?:PLG|self[- ]serve|free trial|freemium)\b/i);
+  if(selfServe===false&&plg.state==='affirmed')result.push('Pause a self-serve campaign until buyers can reach value without sales help, or use a sales-assisted pilot. Sentence read: "'+c+'".');
+ }
+ return [...new Set(result.length?result:['The channel list alone does not establish waste. Supply spend, qualified pipeline and closed revenue for each activity before deciding what to stop.'])];
+}
