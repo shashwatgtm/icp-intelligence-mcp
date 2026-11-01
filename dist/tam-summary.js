@@ -22,7 +22,8 @@ function formatMarketCurrency(num) {
     return `$${num}`;
 }
 function marketSummary(args) {
-    const companies = args.total_potential_companies, acv = args.average_contract_value, icp = args.icp_percentage ?? 30, share = args.year1_market_share_target ?? 3;
+    const numeric = (value) => typeof value === "string" && value.trim() ? Number(value.replace(/,/g, "").trim()) : value;
+    const companies = numeric(args.total_potential_companies), acv = numeric(args.average_contract_value), icp = numeric(args.icp_percentage ?? 30), share = numeric(args.year1_market_share_target ?? 3);
     if (![companies, acv, icp, share].every((x) => typeof x === "number" && Number.isFinite(x)) ||
         companies < 0 ||
         acv <= 0 ||

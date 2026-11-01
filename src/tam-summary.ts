@@ -28,10 +28,11 @@ export function formatMarketCurrency(num: number): string {
   return `$${num}`;
 }
 export function marketSummary(args: MarketInputs) {
-  const companies = args.total_potential_companies,
-    acv = args.average_contract_value,
-    icp = args.icp_percentage ?? 30,
-    share = args.year1_market_share_target ?? 3;
+  const numeric = (value: unknown) => typeof value === "string" && value.trim() ? Number(value.replace(/,/g, "").trim()) : value;
+  const companies = numeric(args.total_potential_companies) as number,
+    acv = numeric(args.average_contract_value) as number,
+    icp = numeric(args.icp_percentage ?? 30) as number,
+    share = numeric(args.year1_market_share_target ?? 3) as number;
   if (
     ![companies, acv, icp, share].every(
       (x) => typeof x === "number" && Number.isFinite(x),

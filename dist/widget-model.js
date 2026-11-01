@@ -68,9 +68,7 @@ function parseSections(text) {
                 lines[i].includes("|") &&
                 !/^\s*$/.test(lines[i])) {
                 const row = splitRow(lines[i]);
-                if (row.length !== headers.length)
-                    break;
-                rows.push(row);
+                rows.push(headers.map((_, index) => row[index] ?? ""));
                 i++;
             }
             i--;

@@ -74,7 +74,7 @@ export function attachWidgets(server: Server): void {
       uri: uri(name),
       name: title + " result",
       mimeType: "text/html;profile=mcp-app",
-      description: "Optional read-only view; the tool text remains available.",
+      description: name === "tam_sam_som_calculator" ? "Market sizing result; recalculate when the host enables tool calls." : "Result view with the complete source text.",
     })),
   }));
   register(ReadResourceRequestSchema, async (request) => {
@@ -98,7 +98,7 @@ export function attachWidgets(server: Server): void {
               entry[1] + " result with source text and table views.",
             "openai/widgetPrefersBorder": true,
             "openai/widgetCSP": { connect_domains: [], resource_domains: [] },
-            "openai/ui": { availableDisplayModes: ["inline"] },
+            "openai/ui": { availableDisplayModes: ["inline", "fullscreen"] },
           },
         },
       ],
