@@ -181,12 +181,19 @@ const values = {
     }), 50),
 }, ["business_model"]), (a) => {
     const r = pmfCheck(a);
+    const notes = (a.feedback ?? []).filter((f) => f.classification === 'unclassified').map((f) => f.quote).join('\n');
+    const read = (label) => notes.split(/[;\n]/).find((line) => new RegExp('^' + label + ':\\s*\\S', 'i').test(line.trim()))?.replace(/^[^:]+:\s*/, '').trim() || '';
+    const priority = read('Business priority') || read('Investigation priority');
+    const selected = r.rows.find(row => row.dimension === priority || row.name.toLowerCase() === priority.toLowerCase());
+    const owner = read('Owner') || 'Unknown; name the accountable person';
+    const review = read('Review date') || 'Unknown; agree a date';
+    const cohort = read('Cohort') || 'Unknown; choose one defined cohort and period';
     const metricName = (key) => r.rows.find((row) => row.dimension === key)?.name ?? key;
     return {
         title: "Metrics against your own targets",
         summary: [
             r.met + " of " + r.scored + " scored dimensions meet your own targets.",
-            "Furthest percentage gap: " +
+            "Numerical distance only: " +
                 (r.weakest_ties.length
                     ? r.weakest_ties.map(metricName).join(" and ") + " (tied)"
                     : r.weakest
@@ -195,10 +202,14 @@ const values = {
             "NPS: reported in points separately",
             "Next: " +
                 (r.scored
-                    ? "Confirm metric definitions, periods and units, then check the weakest dimension against your own data."
+                    ? "Confirm metric definitions, periods and units. Numerical distance does not select the business priority."
                     : "Supply your targets and confirm matching metric bases."),
         ],
         sections: [
+            {
+                heading: 'Choose one business investigation',
+                body: selected ? `User selected priority: ${selected.name}. Investigate one cohort: ${cohort}. ${checks[selected.dimension] || 'Inspect the source observations and competing explanations.'} Owner: ${owner}. Review date: ${review}. The numerical gap is not evidence of the cause.` : `Business priority: unconfirmed. Numerical choices${r.weakest_ties.length ? ' tied at the furthest percentage distance' : ' available to review'}: ${(r.weakest_ties.length ? r.weakest_ties : r.rows.filter(row => row.status === 'behind').map(row => row.dimension)).map(metricName).join(', ') || 'none established'}. Ask which matters most to the business, then choose one cohort investigation, owner and review date.`,
+            },
             {
                 heading: "Target comparison",
                 table: {
