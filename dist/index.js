@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
+const decision_limits_ts_1 = require("./decision-limits.js");
 const text_signals_ts_1 = require("./text-signals.js");
 const text_signals_ts_2 = require("./text-signals.js");
 const text_signals_ts_3 = require("./text-signals.js");
@@ -3096,6 +3097,10 @@ function checkRequiredInputs(name, args) {
     }
     return null;
 }
+for (const [name, tool] of Object.entries(tools)) {
+    Object.assign(tool.inputSchema.properties, (0, decision_limits_ts_1.decisionInputs)(name));
+    tool.description += (0, decision_limits_ts_1.decisionHelp)(name);
+}
 function createServer() {
     const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {} } });
     server.setRequestHandler(types_js_1.ListToolsRequestSchema, async () => ({
@@ -3122,7 +3127,8 @@ function createServer() {
             };
         }
         try {
-            const result = tool.execute(safeArgs);
+            const limit = (0, decision_limits_ts_1.decisionLimit)(String(toolName), safeArgs);
+            const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs);
             return {
                 content: [{ type: 'text', text: result }]
             };

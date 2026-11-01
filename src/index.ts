@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { decisionInputs, decisionHelp, decisionLimit } from './decision-limits.ts';
 import { buyingConstraint } from './text-signals.ts';
 import { readerLabel, readerIssue, claimRisk, outcomeReading, scopeDisposition } from './text-signals.ts';
 import { hasSignal, signal, timingFact, correlationFact } from './text-signals.ts';
@@ -3137,6 +3138,8 @@ function checkRequiredInputs(name: string, args: Record<string, unknown> | undef
   return null;
 }
 
+for(const [name,tool]of Object.entries(tools)){Object.assign(tool.inputSchema.properties,decisionInputs(name));tool.description+=decisionHelp(name);}
+
 export function createServer(): Server {
   const server = new Server(
     { name: SERVER_NAME, version: SERVER_VERSION },
@@ -3170,7 +3173,8 @@ export function createServer(): Server {
     }
   
     try {
-      const result = tool.execute(safeArgs as any);
+      const limit=decisionLimit(String(toolName),safeArgs as Record<string,unknown>);
+      const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs as any);
       return {
         content: [{ type: 'text', text: result }]
       };
