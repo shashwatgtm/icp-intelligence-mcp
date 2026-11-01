@@ -21,4 +21,16 @@ export declare function timingFact(text: string): {
     evidence: string[];
 };
 export declare function correlationFact(text: string): 'positive' | 'negative' | 'unknown';
+export declare const SECTOR_LABELS: Record<string, string>;
+/** An explicit trade label before a buyer marker names the vendor. Feature words and buyer names do not. */
+export declare function sellerSectorLabel(text: string): {
+    id: string | null;
+    evidence: string;
+    state: SignalState;
+};
+export declare function sectorChoiceNotice(tool: string, args: Record<string, unknown>, infer: (text: string) => {
+    id?: string;
+    name?: string;
+    source?: string | null;
+}): string;
 //# sourceMappingURL=text-signals.d.ts.map

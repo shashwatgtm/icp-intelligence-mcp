@@ -1,3 +1,4 @@
+import { sellerSectorLabel } from './text-signals.ts';
 // Sector knowledge for the nine verticals Shashwat Ghosh serves (run 19, owner decision D80; rule B82).
 // One data file, shared by every tool in this server, so the owner can read and correct it in one place.
 // The verticals and their order come from work/market.json in the owner's project (logistics tech, fintech, SaaS,
@@ -2201,6 +2202,7 @@ function firstIn(whole: string, words: string[]): number {
 /** The sector read, with the words that decided it and where they came from ('seller' or 'buyer'). */
 export function explainSector(...args: unknown[]): { vertical: Vertical | null; source: 'seller' | 'context' | 'role' | 'buyer' | null; strong: string[]; weak: string[] } {
   const { seller, buyer, context, role } = sides(args);
+  if (sellerSectorLabel(seller).state === 'negated') return { vertical:null,source:null,strong:[],weak:[] };
   // The product category noun decides when it comes BEFORE the first strong word of a different sector ("customer service software with AI agents"); otherwise the usual reading stands.
   const pk = pick(seller), cat = categoryPick(seller, [sellerWhole(args), buyer].join(' \n '));
   let s = cat && (!pk || (cat.v.id !== pk.v.id && (cat.first <= pk.first || pk.strong.every((w) => BUZZ.test(w))))) ? cat : pk;
@@ -2230,6 +2232,8 @@ export function explainSector(...args: unknown[]): { vertical: Vertical | null; 
     const ai = scan(AI_ANY, sellerWhole(args));
     if (ai.length) return { vertical: AI_NATIVE, source: 'seller', strong: ai, weak: s.weak };
   }
+  const explicitLabel = sellerSectorLabel(seller);
+  if (explicitLabel.id && !s) { const lv=VERTICALS.find(v=>v.id===explicitLabel.id); if(lv)s={v:lv,strong:[explicitLabel.evidence],weak:[],score:1,first:0}; }
   if (s) return { vertical: forUseCase(s.v, args), source: 'seller', strong: s.strong, weak: s.weak };
   const c = categoryPickUnique(context) ?? pick(context, 2);
   if (c) return { vertical: forUseCase(c.v, args), source: 'context', strong: c.strong, weak: c.weak };
