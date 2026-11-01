@@ -13,6 +13,7 @@ exports.timingFact = timingFact;
 exports.correlationFact = correlationFact;
 exports.sellerSectorLabel = sellerSectorLabel;
 exports.sectorChoiceNotice = sectorChoiceNotice;
+exports.pmfBenchmarkNotice = pmfBenchmarkNotice;
 exports.epicReading = epicReading;
 exports.epicChannelReview = epicChannelReview;
 exports.readerLabel = readerLabel;
@@ -214,11 +215,12 @@ function correlationFact(text) {
     return bad.state === 'affirmed' && good.state !== 'affirmed' ? 'negative' : good.state === 'affirmed' && bad.state !== 'affirmed' ? 'positive' : 'unknown';
 }
 exports.SECTOR_LABELS = { 'logistics-tech': 'Logistics tech', fintech: 'Fintech', saas: 'SaaS', 'vertical-saas': 'Vertical SaaS', 'ai-native': 'AI native', ites: 'ITeS', telecom: 'Telecom', software: 'Software', cybersecurity: 'Cybersecurity', other: 'other (neutral B2B)' };
+const SECTOR_PATTERNS = [['vertical-saas', /\b(?:vertical[- _]saas|industry[- ]specific saas)\b/i], ['logistics-tech', /\blogistics[- _](?:tech|technology)\b/i], ['ai-native', /\b(?:ai[- _]native|ai[- ]first)\b/i], ['cybersecurity', /\bcybersecurity\b/i], ['fintech', /\b(?:fintech|financial[- ]technology)\b/i], ['ites', /\b(?:ites|it services|it[- ]enabled services)\b/i], ['telecom', /\btelecom(?:munications)?\b/i], ['saas', /\b(?:saas|software as a service)\b/i], ['software', /\bsoftware\b/i]];
 /** An explicit trade label before a buyer marker names the vendor. Feature words and buyer names do not. */
 function sellerSectorLabel(text) {
     const head = String(text || '').split(/\b(?:for|serving|serves|sold to|selling to|whose customers|our customers)\b/i)[0].trim();
-    const patterns = [['vertical-saas', /\bvertical[- _]saas\b/i], ['logistics-tech', /\blogistics[- _](?:tech|technology)\b/i], ['ai-native', /\bai[- _]native\b/i], ['cybersecurity', /\bcybersecurity\b/i], ['fintech', /\bfintech\b/i], ['ites', /\b(?:ites|it services)\b/i], ['telecom', /\btelecom\b/i], ['saas', /\bsaas\b/i], ['software', /\bsoftware\b/i]];
-    const hits = patterns.filter(([id, re]) => re.test(head) && !(id === 'saas' && /vertical[- _]saas/i.test(head))).map(([id, re]) => ({ id, r: readSignal(head, re) }));
+    const patterns = SECTOR_PATTERNS;
+    const hits = patterns.filter(([, re]) => re.test(head)).map(([id, re]) => ({ id, r: readSignal(id === 'saas' ? head.replace(/\b(?:vertical[- _]saas|industry[- ]specific saas)\b/gi, '') : id === 'software' ? head.replace(/\bsoftware as a service\b/gi, '') : head, re) })).filter(x => x.r.state !== 'absent');
     const named = hits.filter(x => x.r.state === 'affirmed' && new RegExp('(?:^|[\\n;.]\\s*)(?:(?:we are|our company is|a|an|the)\\s+)*' + patterns.find(p => p[0] === x.id)[1].source.replace(/^\\b|\\b$/g, '') + '(?:\\s+(?:vendor|company|firm|business|provider|platform|product|software|tools?|solutions?))?(?:\\s+(?:building|protecting|delivering|providing)\\b[^.;]*)?[.!]?$', 'i').test(head));
     // A broad software word beside a specific label is a product noun, not a competing sector.
     const specific = named.filter(x => !['software', 'saas'].includes(x.id));
@@ -231,6 +233,9 @@ function sectorChoiceNotice(tool, args, infer) {
     if (!chosen || !exports.SECTOR_LABELS[chosen])
         return '';
     const texts = (fields[tool] || []).map(f => args[f]).filter((v) => typeof v === 'string' && !!v.trim());
+    for (const text of texts)
+        if (excludesSellerSector(text, chosen))
+            return `**Sector conflict:** You selected ${exports.SECTOR_LABELS[chosen]}, but the description explicitly excludes that sector. The selected ${exports.SECTOR_LABELS[chosen]} is used. Sentence read: "${text}".\n\n`;
     for (const text of texts) {
         const label = sellerSectorLabel(text), r = infer(text);
         const id = label.id || (label.state !== 'negated' && r.source === 'seller' ? r.id : null);
@@ -238,6 +243,25 @@ function sectorChoiceNotice(tool, args, infer) {
             return `**Sector conflict:** You selected ${exports.SECTOR_LABELS[chosen]}, but the description reads as ${exports.SECTOR_LABELS[id] || r.name || id}. The selected ${exports.SECTOR_LABELS[chosen]} is used. Sentence read: "${text}".\n\n`;
     }
     return '';
+}
+function excludesSellerSector(text, chosen) {
+    const head = String(text || '').split(/\b(?:for|serving|serves|sold to|selling to|whose customers|our customers)\b/i)[0];
+    const re = SECTOR_PATTERNS.find(([id]) => id === chosen)?.[1];
+    const scoped = chosen === 'saas' ? head.replace(/\b(?:vertical[- _]saas|industry[- ]specific saas)\b/gi, '') : chosen === 'software' ? head.replace(/\bsoftware as a service\b/gi, '') : head;
+    return !!re && readSignal(scoped, re).state === 'negated';
+}
+/** Benchmarks and sector notes are different choices; explain both without silently changing either. */
+function pmfBenchmarkNotice(args, infer) {
+    const selected = String(args.target_market || 'other'), trade = selected === 'enterprise_saas' || selected === 'smb_saas' ? 'saas' : selected.replace(/_/g, '-');
+    const text = String(args.product || ''), label = sellerSectorLabel(text), r = infer(text);
+    const id = label.id || (label.state !== 'negated' && r.source === 'seller' ? r.id : null);
+    const excluded = excludesSellerSector(text, trade);
+    if (!excluded && (!id || id === trade))
+        return '';
+    const selectedName = selected.replace(/_/g, ' '), actual = id ? exports.SECTOR_LABELS[id] || r.name || id : '';
+    const sector = typeof args.your_sector === 'string' ? args.your_sector.replace(/_/g, '-') : trade !== 'other' && exports.SECTOR_LABELS[trade] && !['enterprise_saas', 'smb_saas'].includes(selected) ? trade : null;
+    const used = sector ? exports.SECTOR_LABELS[sector] || sector : actual || 'the description where it is clear';
+    return `**Benchmark/description mismatch:** You selected ${selectedName}, but the product description ${excluded ? 'explicitly excludes that trade' : 'reads as ' + actual}. Scores continue to use the selected ${selectedName} benchmark choice (including its stated fallback ranges). Sector notes use ${used}. Confirm that this benchmark choice is intentional. Sentence read: "${text}".\n\n`;
 }
 const SECTOR_TOOL_FIELDS = { "icp_deep_dive": ["product_category"], "icp_scoring_model": ["product_category"], "buyer_group_analyzer": ["product_category"], "tam_sam_som_calculator": ["product_category"], "icp_gap_analysis": ["product_category"], "icp_evolution_tracker": ["product_category"], "icp_interview_synthesizer": ["product_category"], "lookalike_signal_generator": ["product_category"], "account_prioritization": ["product_category"], "impact_get_framework": ["sector"], "impact_identify_champions": ["product_description"], "impact_map_alternatives": ["category"], "impact_pinpoint_value": ["category"], "impact_anchor_market": ["product_description"], "impact_craft_message": ["product_category"], "impact_translate_execution": ["positioning_statement"], "impact_full_audit": ["product_description"], "pmf_scorecard": ["product"], "launch_commander": ["product_feature"], "customer_interview_kit": ["product_context"], "retention_playbook": ["product"], "partner_architect": ["product"], "crisis_planner": ["company"], "competitive_intel": ["your_product"], "craft_gtm_analyzer": ["document_content"], "case_study_generator": ["your_product"], "newsletter_builder": ["your_product"], "webinar_script": ["your_product"], "content_repurposer": ["source_content"], "thought_leadership_series": ["topic"], "testimonial_capture": ["your_product"], "sales_enablement_content": ["product"], "craft_content_improver": ["content"], "account_plan_builder": ["your_solution"], "roi_business_case_builder": ["your_solution"], "mutual_action_plan_generator": ["your_solution"], "win_loss_analyzer": ["your_solution"], "deal_strategy_coach": ["your_solution"], "discovery_question_bank": ["your_solution"], "proposal_section_writer": ["your_solution"], "email_sequence_generator": ["your_solution"], "demo_script_builder": ["your_solution"], "pricing_negotiation_guide": ["your_solution"], "champion_enablement_kit": ["your_solution"], "competitive_trap_setter": ["your_solution"] };
 const GTM_INDUSTRY_TOOLS = ["pmf_scorecard", "launch_commander", "customer_interview_kit", "retention_playbook", "partner_architect", "crisis_planner", "competitive_intel", "craft_gtm_analyzer"];

@@ -37,6 +37,12 @@ export declare function sectorChoiceNotice(tool: string, args: Record<string, un
     name?: string;
     source?: string | null;
 }): string;
+/** Benchmarks and sector notes are different choices; explain both without silently changing either. */
+export declare function pmfBenchmarkNotice(args: Record<string, unknown>, infer: (text: string) => {
+    id?: string;
+    name?: string;
+    source?: string | null;
+}): string;
 /** EPIC rules retain the documented trigger floor, with clause evidence and optional confirmed facts. */
 export declare function epicReading(text: string, floor: RegExp, kind: string, typed?: unknown): SignalReading;
 export declare function epicChannelReview(text: string, nrrLow: boolean, selfServe: boolean | null): string[];
