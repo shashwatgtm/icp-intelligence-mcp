@@ -1,3 +1,4 @@
+import { describeSchema, renderReport } from "./reserve-presentation.ts";
 import { escapeDeep } from "./escape-inputs.ts";
 import type { Tool, CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 export type Row = Record<string, any>;
@@ -115,44 +116,9 @@ const safeData = (v: any): any =>
           )
         : v;
 export function reportText(report: Report): string {
-  let s =
-    report.summary.map(esc).join("\n") + "\n\n# " + esc(report.title) + "\n";
-  if (report.metrics?.length) {
-    s += "\n| Measure | Result |\n| --- | --- |\n";
-    for (const m of report.metrics)
-      s +=
-        "| " +
-        esc(m.label) +
-        " | " +
-        esc(m.value) +
-        (m.example ? " (Example figure)" : "") +
-        " |\n";
-  }
-  for (const section of report.sections ?? []) {
-    s += "\n## " + esc(section.heading) + "\n\n";
-    if (section.body) s += esc(section.body) + "\n";
-    if (section.table) {
-      s +=
-        "\n| " +
-        section.table.headers.map(esc).join(" | ") +
-        " |\n| " +
-        section.table.headers.map(() => "---").join(" | ") +
-        " |\n";
-      for (const row of section.table.rows)
-        s += "| " + row.map(esc).join(" | ") + " |\n";
-    }
-  }
-  s +=
-    "\n## Limits\n\n" +
-    [
-      "Only supplied data was assessed. No page was fetched, model called, message sent or fact independently verified.",
-      ...(report.limitations ?? []),
-    ]
-      .map((x) => "- " + esc(x))
-      .join("\n") +
-    "\n";
-  return s;
+  return renderReport(report);
 }
+
 function validate(s: Schema, v: any, path = "$"): string[] {
   const issues: string[] = [];
   if (s.type === "object") {
@@ -210,6 +176,7 @@ export function define(
       },
     },
   };
+  schema = describeSchema(schema, name);
   registry[name] = {
     tool: {
       name,

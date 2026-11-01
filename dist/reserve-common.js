@@ -6,6 +6,7 @@ exports.requireUnique = requireUnique;
 exports.reportText = reportText;
 exports.define = define;
 exports.callReserveTool = callReserveTool;
+const reserve_presentation_ts_1 = require("./reserve-presentation.js");
 const escape_inputs_ts_1 = require("./escape-inputs.js");
 exports.text = { type: "string", maxLength: 8000 };
 const num = (minimum = 0, maximum = Number.MAX_VALUE) => ({
@@ -84,43 +85,7 @@ const safeData = (v) => typeof v === "string"
             ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, safeData(x)]))
             : v;
 function reportText(report) {
-    let s = report.summary.map(exports.esc).join("\n") + "\n\n# " + (0, exports.esc)(report.title) + "\n";
-    if (report.metrics?.length) {
-        s += "\n| Measure | Result |\n| --- | --- |\n";
-        for (const m of report.metrics)
-            s +=
-                "| " +
-                    (0, exports.esc)(m.label) +
-                    " | " +
-                    (0, exports.esc)(m.value) +
-                    (m.example ? " (Example figure)" : "") +
-                    " |\n";
-    }
-    for (const section of report.sections ?? []) {
-        s += "\n## " + (0, exports.esc)(section.heading) + "\n\n";
-        if (section.body)
-            s += (0, exports.esc)(section.body) + "\n";
-        if (section.table) {
-            s +=
-                "\n| " +
-                    section.table.headers.map(exports.esc).join(" | ") +
-                    " |\n| " +
-                    section.table.headers.map(() => "---").join(" | ") +
-                    " |\n";
-            for (const row of section.table.rows)
-                s += "| " + row.map(exports.esc).join(" | ") + " |\n";
-        }
-    }
-    s +=
-        "\n## Limits\n\n" +
-            [
-                "Only supplied data was assessed. No page was fetched, model called, message sent or fact independently verified.",
-                ...(report.limitations ?? []),
-            ]
-                .map((x) => "- " + (0, exports.esc)(x))
-                .join("\n") +
-            "\n";
-    return s;
+    return (0, reserve_presentation_ts_1.renderReport)(report);
 }
 function validate(s, v, path = "$") {
     const issues = [];
@@ -176,6 +141,7 @@ function define(name, description, schema, run) {
             },
         },
     };
+    schema = (0, reserve_presentation_ts_1.describeSchema)(schema, name);
     registry[name] = {
         tool: {
             name,

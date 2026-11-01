@@ -181,14 +181,17 @@ const values = {
     }), 50),
 }, ["business_model"]), (a) => {
     const r = pmfCheck(a);
+    const metricName = (key) => r.rows.find((row) => row.dimension === key)?.name ?? key;
     return {
         title: "Metrics against your own targets",
         summary: [
             r.met + " of " + r.scored + " scored dimensions meet your own targets.",
             "Furthest percentage gap: " +
                 (r.weakest_ties.length
-                    ? r.weakest_ties.join(" and ") + " (tied)"
-                    : (r.weakest ?? "Not established")),
+                    ? r.weakest_ties.map(metricName).join(" and ") + " (tied)"
+                    : r.weakest
+                        ? metricName(r.weakest)
+                        : "Not established"),
             "NPS: reported in points separately",
             "Next: " +
                 (r.scored
@@ -219,7 +222,7 @@ const values = {
                 heading: "Checks, not findings",
                 table: {
                     headers: ["Dimension", "Check"],
-                    rows: r.checks.map((x) => [x.dimension, x.check]),
+                    rows: r.checks.map((x) => [metricName(x.dimension), x.check]),
                 },
             },
             {
