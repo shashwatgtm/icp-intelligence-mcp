@@ -2160,6 +2160,40 @@ ${SUGGESTED}
                 const W = Number((weights.fit + weights.intent + weights.relationship + weights.timing).toPrecision(12)); // run 20: 33.3 + 33.3 + 33.3 + 0.1 is 100, not 99.99999999999999
                 const cut = (p) => Math.ceil((W * p) / 100);
                 const tierA = cut(80), tierB = cut(60), tierC = cut(40);
+                // Unknown signals remain ranges; supplied zero is evidence, never a default.
+                const intervals = args.accounts.map(account => {
+                    const tf = (0, text_signals_ts_4.timingFact)(account.timing || 'unknown');
+                    const values = { fit: account.fit_score, intent: account.intent_signals, relationship: account.relationship, timing: tf.state === 'affirmed' ? tf.score : undefined };
+                    const keys = Object.keys(weights);
+                    const unknown = keys.filter(k => values[k] == null);
+                    const low = keys.reduce((n, k) => n + (values[k] ?? 0) * weights[k] / 100, 0);
+                    const high = low + unknown.reduce((n, k) => n + weights[k], 0);
+                    return { account, values, unknown, low: Math.round(low), high: Math.round(high) };
+                });
+                if (intervals.some(a => a.unknown.length) || intervals.some((a, i) => intervals.some((b, j) => i !== j && a.low === b.low))) {
+                    const overlaps = (a, b) => a.low <= b.high && b.low <= a.high;
+                    const signals = intervals.flatMap(a => a.unknown.filter(k => weights[k] > 0).map(k => ({ account: a.account.name, key: k, swing: weights[k], overlap: intervals.some(b => a !== b && overlaps(a, b)) }))).sort((a, b) => Number(b.overlap) - Number(a.overlap) || b.swing - a.swing);
+                    const next = signals[0];
+                    return `# Account prioritization: confirm missing signals
+
+${noWeights ? 'No weights supplied. These are illustrative defaults.' : 'Supplied weights are preserved. Any omitted weight uses the labelled default.'}
+| Factor | Weight | Source |
+| --- | --- | --- |
+${Object.keys(weights).map(k => `| ${k} | ${weights[k]} | ${givenWeights[k] == null ? 'Default' : 'Supplied'} |`).join('\n')}
+
+## Possible scores
+Missing dimensions remain unknown and range from 0 to 100 before weighting. Timing points for known timing are default model choices: now 100, soon 70, later 40. Ranges use the same rounded weighted sum as complete scores. Input order below does not imply rank.
+
+| Account | Fit | Intent | Relationship | Timing | Possible score | Rank |
+| --- | --- | --- | --- | --- | --- | --- |
+${intervals.map(a => `| ${a.account.name || 'Unknown'} | ${a.values.fit ?? 'Unknown'} | ${a.values.intent ?? 'Unknown'} | ${a.values.relationship ?? 'Unknown'} | ${a.values.timing == null ? 'Unknown' : a.account.timing} | ${a.low} to ${a.high} of ${W} | ${intervals.some(b => a !== b && overlaps(a, b)) ? 'Unresolved: overlapping intervals' : 1 + intervals.filter(b => b.low > a.high).length} |`).join('\n')}
+
+## Next evidence to collect
+${next ? `Confirm ${next.key} for ${next.account || 'the unnamed account'} first. It has the largest missing weighted contribution among overlapping accounts: up to ${next.swing} points, so it is most able to reverse the order. Keep the source and date with the answer.` : 'No weighted signal is missing. Equal scores do not establish a strict order; agree a buyer relevant tie breaker.'}
+
+No strict rank or outreach tier is assigned where intervals overlap. Confirm the missing evidence before allocating sales effort. Default tier boundaries remain ${tierA}, ${tierB} and ${tierC} of ${W}; these are model choices, not observed purchase likelihood.
+`;
+                }
                 const scoredAccounts = args.accounts.map(account => {
                     // Run 16 D45: a score given as 0 is used as 0; only an omitted or null score takes the default 50.
                     const fitScore = account.fit_score ?? 50;
