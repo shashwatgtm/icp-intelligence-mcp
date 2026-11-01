@@ -14,6 +14,8 @@ const rpc = async (method, params) => {
   }), {});
   return (await r.json()).result;
 };
+const profileModule = await import('../dist/build-profile.js');
+const builtProfile = (profileModule.BUILD_PROFILE ?? profileModule.default.BUILD_PROFILE).profile;
 const { tools } = await rpc("tools/list", {});
 const isText = (p) => p && p.type === "string" && !Array.isArray(p.enum);
 // A present value for the other required fields, so the refusal names only the blank field.
@@ -21,8 +23,8 @@ const present = (p) => (Array.isArray(p.enum) ? p.enum[0] : p.type === "string" 
   ? Math.max(typeof p.minimum === "number" ? p.minimum : 1, 1) + 1 : p.type === "boolean" ? true : p.type === "array" ? [] : {});
 const withText = tools.filter((t) => (t.inputSchema.required || []).some((k) => isText(t.inputSchema.properties[k])));
 
-test("the tools with a required text field are all counted (4)", () => {
-  assert.equal(withText.length, 4, withText.map((t) => t.name).join(", "));
+test("the tools with a required text field are counted for the built profile", () => {
+  assert.equal(withText.length, builtProfile === "wave" ? 4 : 3, withText.map((t) => t.name).join(", "));
 });
 
 for (const t of withText) {
