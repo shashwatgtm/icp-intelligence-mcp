@@ -76,4 +76,6 @@ export declare function clearanceBlocker(text: string): SignalReading;
 export declare function blockerReading(text: string): SignalReading;
 /** Shared advice for an explicitly stated approval predicate, not a topic word. */
 export declare function clearanceAdvice(text: string): string | null;
+/** Feedback difficulty is a predicate with polarity, not the presence of a contrast word. */
+export declare function frictionReading(text: string): SignalReading;
 //# sourceMappingURL=text-signals.d.ts.map

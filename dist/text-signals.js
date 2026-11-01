@@ -33,6 +33,7 @@ exports.launchFollowup = launchFollowup;
 exports.clearanceBlocker = clearanceBlocker;
 exports.blockerReading = blockerReading;
 exports.clearanceAdvice = clearanceAdvice;
+exports.frictionReading = frictionReading;
 exports.SIGNALS = {
     'a named role, title or team': /\b(?:head of (?:growth|revenue|marketing|sales|operations|security)|person in charge|business lead)\b/i,
     'an owner or responsible party': /\b(?:accountable for|answerable for|takes responsibility|person in charge)\b/i,
@@ -429,5 +430,35 @@ function clearanceAdvice(text) {
     if (r.state === 'affirmed')
         return 'Clearance or another blocker remains outstanding: identify the required reviewer and the unresolved requirement before advancing the purchase. Sentence read: "' + text + '".';
     return 'Clearance is not clear from this sentence. Confirm whether the required reviewers have approved before treating it as cleared or blocked. Sentence read: "' + text + '".';
+}
+/** Feedback difficulty is a predicate with polarity, not the presence of a contrast word. */
+function frictionReading(text) {
+    const floor = /\b(?:unhappy|dissatisfied|wish|struggl\w*|late|slow\w*|confus\w*|difficult\w*|complex\w*|missing|lack\w*|problems?|issues?|frustrat\w*|longer|hard(?:er)?|friction|painful|obstacles?|barriers?|stuck|not synced)\b/i;
+    const relation = /\b(?:not|aren't|isn't)\s+happy\b|\b(?:do not|don't)\s+like\b|\b(?:takes?|requires?)\s+(?:too much |a lot of |extra |repeated |several )?(?:effort|workarounds?|retries|manual steps|time)\b|\b(?:keeps?|leaves?)\s+(?:people|users|operators|teams)\s+waiting\b|\barriv\w*\s+after\s+(?:the |our )?deadline\b|\b(?:function|feature|help|support)\s+(?:(?:that is|is)\s+)?(?:absent|unavailable)\b|\b(?:gets?|stands?)\s+in\s+the\s+way\b|\bout of\s+(?:step|sync)\b|\b(?:cannot|can't|will not|won't|does not|doesn't|not)\s+(?:sync|work|load|run|complete|finish|access|connect|export|import|save|submit|find)\b/i;
+    const all = clauses(text).flatMap(c => c.split(/\b(?:although|even though|while)\b/i).map(s => s.trim()).filter(Boolean)).map(original => {
+        const c = normalized(original);
+        let r = readSignal(c, floor, relation);
+        if (r.state === 'absent')
+            return r;
+        // Lack of difficulty is not itself a difficulty. Keep the rest of the clause available.
+        const masked = c.replace(/\b(?:free (?:of|from)|zero|nothing|hardly|barely)\s+(?:(?:any|remotely|particularly)\s+)?(?:difficult\w*|hard|confus\w*|complex\w*|friction|problems?|issues?|obstacles?|barriers?|missing)\b/gi, '').replace(/\b(?:friction|difficulty|problem|issue)[- ]free\b/gi, '');
+        if (masked !== c) {
+            const rest = readSignal(masked, floor, relation);
+            r = rest.state === 'affirmed' ? rest : { state: 'negated', evidence: [original], matched: [] };
+        }
+        const resolution = readSignal(c, /\b(?:resolved|fixed|eliminated|gone|no longer (?:occurs?|happens?|exists?))\b/i);
+        if (resolution.state === 'affirmed')
+            r = { state: 'negated', evidence: [original], matched: r.matched };
+        if (resolution.state === 'negated' && r.state === 'negated' && !/\bno\s+(?:problems?|issues?)\b/i.test(c))
+            r = { state: 'affirmed', evidence: [original], matched: r.matched };
+        return { ...r, evidence: [original] };
+    });
+    // A later sentence can explicitly resolve the immediately preceding difficulty.
+    const parts = clauses(text).flatMap(c => c.split(/\b(?:although|even though|while)\b/i).map(s => s.trim()).filter(Boolean));
+    for (let i = 1; i < all.length; i++)
+        if (all[i].state === 'negated' && /^(?:the|that|this)\s+(?:issue|problem|difficulty|friction)\b/i.test(parts[i]) && readSignal(parts[i], /\b(?:resolved|fixed|eliminated|gone)\b/i).state === 'affirmed')
+            all[i - 1] = { ...all[i - 1], state: 'negated' };
+    const states = all.map(r => r.state);
+    return { state: states.includes('affirmed') ? 'affirmed' : states.includes('unclear') ? 'unclear' : states.includes('negated') ? 'negated' : 'absent', evidence: all.filter(r => r.state !== 'absent').flatMap(r => r.evidence), matched: all.flatMap(r => r.matched) };
 }
 //# sourceMappingURL=text-signals.js.map
