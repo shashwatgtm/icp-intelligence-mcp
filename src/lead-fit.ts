@@ -1,3 +1,4 @@
+import { fitModelDecision } from './model-confirmation.ts';
 import {
   define,
   text,
@@ -306,12 +307,13 @@ define(
       summary: [
         "Scope: fit only, no engagement or MQL rule",
         "Maximum: " + r.max,
-        "Tier bands: " + r.tierLabel,
+        "Provisional tier bands: " + r.tierLabel,
+        "Model acceptance: unconfirmed. Review all weights, option points and boundaries below before using a tier.",
         "Scored leads: " +
           r.leads.filter((x: Row) => x.tier !== null).length +
           " of " +
           r.leads.length,
-        "Next: validate against your own closed won and lost deals",
+        "Next: explicitly accept or revise this model, then validate against your own closed won and lost deals",
       ],
       sections: [
         {
@@ -332,10 +334,10 @@ define(
           },
         },
         {
-          heading: "Lead results",
+          heading: "Provisional arithmetic; decision tiers held",
           table: {
-            headers: ["Record", "Points from known fields", "Status", "Tier"],
-            rows: r.leads.map((x: Row) => [x.label, x.score, x.status, x.tier]),
+            headers: ["Record", "Points from known fields", "Status", "Provisional tier", "Decision tier"],
+            rows: r.leads.map((x: Row) => [x.label, x.score, x.status, x.tier, fitModelDecision(x as {tier:string|null}, false).decisionTier]),
           },
         },
         {
@@ -358,7 +360,7 @@ define(
         },
         { heading: "Validation", body: r.validation.join(" ") },
       ],
-      data: r,
+      data: {...r, modelConfirmation: 'required before a decision tier', leads: r.leads.map((lead:Row)=>({...lead,...fitModelDecision(lead as {tier:string|null},false)}))},
       limitations: [
         "Default weights 25, 15 and 10 and default tier bands 80%, 60% and 40% are starting examples, not benchmarks.",
         "This port accepts whole-point weights, points and tier percentages. Numeric lead values must be supplied as their exact text; bands are never inferred.",
