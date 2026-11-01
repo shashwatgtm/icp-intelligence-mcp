@@ -8,10 +8,11 @@
     "icp-intelligence-mcp": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "node scripts/build-profile.mjs",
     "start": "node dist/index.js",
     "dev": "tsc --watch",
-    "test": "node --test"
+    "test": "node --test",
+    "check:current-dist": "node scripts/check-current-dist.mjs"
   },
   "keywords": [
     "mcp",

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.attachWidgets = attachWidgets;
+const build_profile_ts_1 = require("./build-profile.js");
 const tam_summary_ts_1 = require("./tam-summary.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 const widget_model_ts_1 = require("./widget-model.js");
@@ -8,6 +9,9 @@ const widget_document_ts_1 = require("./widget-document.js");
 const widget_registry_ts_1 = require("./widget-registry.js");
 const uri = (name) => `ui://helix-wave2/${name}.html`;
 function attachWidgets(server) {
+    const selected = build_profile_ts_1.BUILD_PROFILE.profile === "wave" ? widget_registry_ts_1.WIDGETS : Object.fromEntries(Object.entries(widget_registry_ts_1.WIDGETS).filter(([name]) => name === "tam_sam_som_calculator"));
+    if (!Object.keys(selected).length)
+        return;
     server.registerCapabilities({ resources: {} });
     const register = server.setRequestHandler.bind(server);
     server.setRequestHandler = ((schema, handler) => register(schema, async (request, extra) => {
@@ -15,7 +19,7 @@ function attachWidgets(server) {
         if (request.method === "tools/list")
             return {
                 ...result,
-                tools: result.tools.map((t) => Object.prototype.hasOwnProperty.call(widget_registry_ts_1.WIDGETS, t.name)
+                tools: result.tools.map((t) => Object.prototype.hasOwnProperty.call(selected, t.name)
                     ? {
                         ...t,
                         _meta: {
@@ -34,7 +38,7 @@ function attachWidgets(server) {
             };
         if (request.method === "tools/call" &&
             !result.isError &&
-            Object.prototype.hasOwnProperty.call(widget_registry_ts_1.WIDGETS, request.params.name)) {
+            Object.prototype.hasOwnProperty.call(selected, request.params.name)) {
             const text = result.content
                 ?.filter((c) => c.type === "text")
                 .map((c) => c.text)
@@ -54,7 +58,7 @@ function attachWidgets(server) {
         return result;
     }));
     register(types_js_1.ListResourcesRequestSchema, async () => ({
-        resources: Object.entries(widget_registry_ts_1.WIDGETS).map(([name, title]) => ({
+        resources: Object.entries(selected).map(([name, title]) => ({
             uri: uri(name),
             name: title + " result",
             mimeType: "text/html;profile=mcp-app",
@@ -62,7 +66,7 @@ function attachWidgets(server) {
         })),
     }));
     register(types_js_1.ReadResourceRequestSchema, async (request) => {
-        const entry = Object.entries(widget_registry_ts_1.WIDGETS).find(([name]) => uri(name) === request.params.uri);
+        const entry = Object.entries(selected).find(([name]) => uri(name) === request.params.uri);
         if (!entry)
             throw new types_js_1.McpError(types_js_1.ErrorCode.InvalidParams, "Unknown result resource");
         return {

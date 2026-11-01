@@ -1,3 +1,4 @@
+import { BUILD_PROFILE } from './build-profile.ts';
 import { marketSummary } from "./tam-summary.ts";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import {
@@ -11,6 +12,8 @@ import { WIDGET_HTML } from "./widget-document.ts";
 import { WIDGETS } from "./widget-registry.ts";
 const uri = (name: string) => `ui://helix-wave2/${name}.html`;
 export function attachWidgets(server: Server): void {
+  const selected = BUILD_PROFILE.profile === "wave" ? WIDGETS : Object.fromEntries(Object.entries(WIDGETS).filter(([name]) => name === "tam_sam_som_calculator"));
+  if (!Object.keys(selected).length) return;
   server.registerCapabilities({ resources: {} });
   const register = server.setRequestHandler.bind(server);
   server.setRequestHandler = ((schema: any, handler: any) =>
@@ -20,7 +23,7 @@ export function attachWidgets(server: Server): void {
         return {
           ...result,
           tools: result.tools.map((t: any) =>
-            Object.prototype.hasOwnProperty.call(WIDGETS, t.name)
+            Object.prototype.hasOwnProperty.call(selected, t.name)
               ? {
                   ...t,
                   _meta: {
@@ -42,7 +45,7 @@ export function attachWidgets(server: Server): void {
       if (
         request.method === "tools/call" &&
         !result.isError &&
-        Object.prototype.hasOwnProperty.call(WIDGETS, request.params.name)
+        Object.prototype.hasOwnProperty.call(selected, request.params.name)
       ) {
         const text = result.content
           ?.filter((c: any) => c.type === "text")
@@ -67,7 +70,7 @@ export function attachWidgets(server: Server): void {
       return result;
     })) as typeof server.setRequestHandler;
   register(ListResourcesRequestSchema, async () => ({
-    resources: Object.entries(WIDGETS).map(([name, title]) => ({
+    resources: Object.entries(selected).map(([name, title]) => ({
       uri: uri(name),
       name: title + " result",
       mimeType: "text/html;profile=mcp-app",
@@ -75,7 +78,7 @@ export function attachWidgets(server: Server): void {
     })),
   }));
   register(ReadResourceRequestSchema, async (request) => {
-    const entry = Object.entries(WIDGETS).find(
+    const entry = Object.entries(selected).find(
       ([name]) => uri(name) === request.params.uri,
     );
     if (!entry)

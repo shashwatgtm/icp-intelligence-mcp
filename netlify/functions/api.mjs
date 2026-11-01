@@ -8,8 +8,8 @@
 import { countUse } from "../lib/usage-count.mjs";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { escapeText, escapePiece, jsonInert } from "../../src/escape-inputs.ts";
-import { createServer } from "../../src/index.ts";
+import { escapeText, escapePiece, jsonInert } from "../../dist/escape-inputs.js";
+import { createServer } from "../../dist/index.js";
 
 const MAX_BODY_BYTES = 32000;
 const MAX_TEXT = 6000;
