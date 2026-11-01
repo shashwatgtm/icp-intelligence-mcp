@@ -6,8 +6,8 @@
 import { countUse } from "../lib/usage-count.mjs";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { LATEST_PROTOCOL_VERSION, SUPPORTED_PROTOCOL_VERSIONS } from "@modelcontextprotocol/sdk/types.js";
-import { createServer } from "../../dist/index.js";
-import { escapeText, escapePiece, jsonInert } from "../../dist/escape-inputs.js";
+import { createServer } from "../../src/index.ts";
+import { escapeText, escapePiece, jsonInert } from "../../src/escape-inputs.ts";
 
 // Run 11 addendum 2 (R11-A2-3), addendum 3 (R11-A3-9) and addendum 4 (R11-A4-1): limits and input checks before the SDK,
 // so the tool definitions in tools/list are unchanged and a request inside the limits runs exactly as before.
