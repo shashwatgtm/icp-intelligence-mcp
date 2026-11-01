@@ -1585,7 +1585,7 @@ ${SUGGESTED}
           type: 'number',
           minimum: 0,
           maximum: 100,
-          description: 'Realistic Year 1 market share percentage, from 0 to 100 (typically 1-5%). Left out, 3 is used and marked as an example'
+          description: 'Assumed Year 1 share percentage, from 0 to 100. This is a planning assumption, not evidence of attainable share. Left out, 3 is used and marked as an example'
         },
         data_sources: {
           type: 'string',
@@ -1713,7 +1713,7 @@ SOM = ${formatCurrency(sam)} × ${sharePct(marketSharePercent)}${somEx}
 \`\`\`
 ### **SOM = ${formatCurrency(som)}**${somEx}
 
-*Realistic Year 1 revenue target*
+*${shareGiven ? `This is the Year 1 share you assumed (${sharePct(marketSharePercent)} of SAM)` : `This uses an example Year 1 share (${sharePct(marketSharePercent)} of SAM) because you did not supply one`}. The calculation does not establish that this revenue or share is attainable.*
 
 ---
 
@@ -1738,8 +1738,8 @@ ${somEx ? `Values computed with a preset rate you did not supply are examples.\n
 
 ## What This Means for Your Business
 
-### Year 1 Target
-- **Revenue Goal**: ${formatCurrency(som)}${somEx}
+### Year 1 assumed share scenario
+- **Revenue at the assumed share**: ${formatCurrency(som)}${somEx}
 - **Deals Needed**: ${countText(targetDeals, som / acv, '~')} closed customers${somEx}
 - **Monthly Target**: ${countText(Math.ceil(targetDeals / 12), som / acv, '~')} ${Math.ceil(targetDeals / 12) === 1 ? 'deal' : 'deals'}/month${somEx}
 - **Pipeline Required**: ${formatCurrency(som * 3)} (SOM × 3, a 1 in 3 win rate) ${EXAMPLE}
@@ -1779,9 +1779,9 @@ Later years assume your market share doubles each year.
 ## Investor-Ready Summary
 
 > The **${lowerFirstIfCommon(segment)}** segment represents a **${formatCurrency(tam)} TAM** with **${formatCurrency(sam)} SAM** of companies matching our ICP. 
-> We target **${formatCurrency(som)} SOM** in Year 1, requiring **${countText(targetDeals, som / acv)} customers** at **${formatCurrency(acv)} ACV**.
+> At ${shareGiven ? 'our assumed' : 'the example'} Year 1 share of ${sharePct(marketSharePercent)}, the calculation gives **${formatCurrency(som)} SOM**, requiring **${countText(targetDeals, som / acv)} customers** at **${formatCurrency(acv)} ACV**.
 > 
-> *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
+> *This scenario does not establish attainable market share. Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
 
 ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'proof'], args.product_category, args.segment_name)}\n- **Counting companies in this sector:** count only companies where the roles above exist and the problem is measured (${andList(sideM.slice(0, 2))}).\n\n` : ''}**Next Step**: Use \`Lookalike Signal Generator\` to create targeting criteria
 `;

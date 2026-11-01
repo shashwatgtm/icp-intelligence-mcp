@@ -101,7 +101,7 @@ export function marketSummary(args: MarketInputs) {
       },
       {
         key: "SOM",
-        label: "Year 1 obtainable market",
+        label: shareExample ? "Year 1 revenue at the example share" : "Year 1 revenue at your assumed share",
         value: som,
         display: formatMarketCurrency(som),
         example: derivedExample,
@@ -130,7 +130,7 @@ export function marketSummary(args: MarketInputs) {
         example: icpExample,
       },
       {
-        label: "Year 1 share of SAM",
+        label: shareExample ? "Example Year 1 share of SAM" : "Your assumed Year 1 share of SAM",
         display:
           share.toLocaleString("en-US", { maximumFractionDigits: 10 }) + "%",
         example: shareExample,
@@ -161,7 +161,7 @@ export function marketSummary(args: MarketInputs) {
       "Cross-check the company count against at least two sources.",
       "Validate annual contract value against recent closed deals.",
       "Confirm the ICP match rate with customer analysis.",
-      "Check the Year 1 share against the deals your team can close.",
+      "The Year 1 share is an assumption, not evidence of attainability. Check it against the deals your team can close.",
     ],
     sourceNote: escapeText(
       String(
