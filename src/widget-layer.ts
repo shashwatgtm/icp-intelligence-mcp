@@ -1,3 +1,4 @@
+import { widgetOutputSchema } from "./widget-output-schema.ts";
 import { BUILD_PROFILE } from './build-profile.ts';
 import { marketSummary } from "./tam-summary.ts";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -26,6 +27,7 @@ export function attachWidgets(server: Server): void {
             Object.prototype.hasOwnProperty.call(selected, t.name)
               ? {
                   ...t,
+                  ...(t.name === "tam_sam_som_calculator" ? { outputSchema: widgetOutputSchema(BUILD_PROFILE.payload) } : {}),
                   _meta: {
                     ...t._meta,
                     ui: {
