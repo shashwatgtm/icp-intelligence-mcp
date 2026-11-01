@@ -1601,6 +1601,7 @@ ${SUGGESTED}
       
       // Format numbers
       const formatCurrency = (num: number) => {
+        if (BUILD_PROFILE.profile !== "current" && num < 1000 && Number(num.toFixed(2)) >= 1000) return "$1K";
         // Run 15 R15-32 (D38): separators, and never an exponent however large the figure
         if (num >= 1000000000) return `$${(num / 1000000000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
         // Run 19 (backlog B16-17, display only): a figure that rounds up to 1000 of a unit moves to the next unit

@@ -9,6 +9,7 @@ export type MarketInputs = {
   [key: string]: unknown;
 };
 export function formatMarketCurrency(num: number): string {
+  if (num < 1000 && Number(num.toFixed(2)) >= 1000) return "$1K";
   if (num >= 1000000000)
     return `$${(num / 1000000000).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
   const oneDec = (x: number) =>

@@ -4,6 +4,8 @@ exports.formatMarketCurrency = formatMarketCurrency;
 exports.marketSummary = marketSummary;
 const escape_inputs_ts_1 = require("./escape-inputs.js");
 function formatMarketCurrency(num) {
+    if (num < 1000 && Number(num.toFixed(2)) >= 1000)
+        return "$1K";
     if (num >= 1000000000)
         return `$${(num / 1000000000).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
     const oneDec = (x) => (Math.round(Number((x * 10).toPrecision(12))) / 10).toFixed(1);
