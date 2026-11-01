@@ -310,7 +310,7 @@ test("gap analysis: 'B2B SaaS and software' is related to 'SaaS'; a page claim i
   assert.doesNotMatch(b.text, /companies outside Fortune 500|\*\*Size\*\*: companies outside/);
   assert.match(b.text, /Platform leader is one of the roles usual in software, testing and QA tools \(Platform Engineering Lead\)/);
 });
-test("roles: a person is in one place in the buyer group; any other chief officer is budget or sign-off, not a day-to-day user", async () => {
+test("roles: a person is in one place in the buyer group; F19 known fault: an unfamiliar chief title does not establish budget authority", async () => {
   const q = await call("buyer_group_analyzer", { product_category: "AI platform and investment strategies", company: "Quantara AI", typical_champion: "portfolio manager", known_stakeholders: ["CIO", "risk teams", "compliance committees"] });
   ok(q);
   assert.doesNotMatch(q.text, /### End User[^\n]*\n\*\*Role\*\*: Portfolio Manager/);
@@ -318,7 +318,7 @@ test("roles: a person is in one place in the buyer group; any other chief office
   assert.match(q.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: risk teams/);
   const t = await call("buyer_group_analyzer", { product_category: "managed SD-WAN for branch offices", company: "Branchwire", typical_champion: "IT Infrastructure Head", known_stakeholders: ["CIO", "IT Infrastructure Head", "Chief Commercial Officer"] });
   assert.doesNotMatch(t.text, /### End User[^\n]*\n\*\*Role\*\*: Chief Commercial Officer/);
-  assert.match(t.text, /Chief Commercial Officer \(budget or sign-off\)/);
+  assert.match(t.text, /Authority unconfirmed[^\n]*Chief Commercial Officer/);
 });
 test("evolution tracker: CIO is not listed as missing when the ICP names the CIO in investment management; every segment line has its own words", async () => {
   const r = await call("icp_evolution_tracker", { company: "Quantara AI", product_category: "AI platform and investment strategies (Quantara Edge from Quantara AI)",
@@ -335,7 +335,7 @@ test("interview: a partner quote is attributed to a partner by the input's own l
   const r = await call("icp_interview_synthesizer", { product_category: "modernization engineering services", company: "Pathwise", interview_notes: [{ customer: "BFSI", role: "CIO", pain_points: ["slow modernization"],
     value_realized: ["CIO of a US energy firm: a cloud based ERP was needed within 60 days and Pathwise came through (customer quote)", "Microsoft's CVP thanks Pathwise as a global partner (partner quote)"] }] });
   ok(r);
-  assert.match(r.text, /> \(Partner[^\n]*written in value_realized/);
+  assert.match(r.text, /> \(Partner[^\n]*written in value realized/);
   assert.match(r.text, /> "a cloud based ERP was needed within 60 days and Pathwise came through"\s*\n> \(Customer: CIO of a US energy firm; written/);
   assert.doesNotMatch(r.text, /> \(Customer[^\n]*Microsoft/);
 });
@@ -353,7 +353,7 @@ test("lookalike: filters are built from clean industry terms; the Google keyword
   assert.doesNotMatch(long.text, /\.\.\."/);
   for (const t of [r, long, await call("lookalike_signal_generator", { company: "Pathwise", product_category: "recurring billing and revenue infrastructure", champion_titles: ["CFO"] })]) assert.doesNotMatch(t.text, /### Sector notes: [^\n]*\n\s*\n\s*(?:###|---|\*\*)/);
 });
-test("scoring evidence: CFO is found in a statement that names a CFO; a group word is never found inside one title; the 'already a criterion' line agrees with the evidence", async () => {
+test("scoring evidence: CFO is found in a statement that names a CFO; a group word is never found inside one title; F10 known fault: a customer quote is not a directional closed-deal correlation", async () => {
   const r = await call("icp_scoring_model", { product_category: "spend management software", company: "Spendrill",
     success_correlation: "Sula Vineyards CFO on the home page: the tool cut a 60 day cycle to 10 days (customer quote); Nivea Sr. Sales Automation Manager: helped us grow our top line (customer quote)",
     scoring_criteria: [{ criterion: "Buyer or champion role", importance: "important", values: ["CFO", "managers", "employees"] }, { criterion: "Segment", importance: "critical", values: ["Retail", "Banks"] }] });
@@ -361,7 +361,8 @@ test("scoring evidence: CFO is found in a statement that names a CFO; a group wo
   assert.match(r.text, /Buyer or champion role, "CFO": named in "Sula Vineyards CFO/);
   assert.doesNotMatch(r.text, /"managers": named in/);
   assert.doesNotMatch(r.text, /No statement names these yet[^\n]*: [^\n]*"CFO"/);
-  assert.match(r.text, /already a criterion: \*\*Buyer or champion role\*\*/);
+  assert.match(r.text, /direction of this pattern is not clear/);
+  assert.doesNotMatch(r.text, /make (?:it|them) critical/);
   assert.match(r.text, /- "Sula Vineyards CFO[^\n]*": a customer statement/);
   assert.doesNotMatch(r.text, /already a criterion: [^\n]*\*\*Segment\*\*/);
 });

@@ -144,7 +144,7 @@ test("missing inputs are named once, at the end, with what each would change", a
   const out = await call({ current_customers: "Customers: banks and insurers", ideal_icp: "mid-size banks with the CFO as the buyer, who face manual reconciliation" });
   assert.equal((out.match(/To sharpen this, give:/g) || []).length, 1);
   const t = tail(out);
-  assert.match(t, /target_metrics|target figures|current_metrics|current figures/i);
+  assert.match(t, /target metrics|target figures|current metrics|current figures/i);
   assert.match(t, /\(it would change/i);
   assert.doesNotMatch(out.slice(0, out.indexOf("To sharpen this, give:")), /current_metrics|target_metrics|business_model|product_category/, "a request for an input appears before the closing list");
   noRepeats(out); noPlaceholders(out); noBlockquoteOfInputs(out);

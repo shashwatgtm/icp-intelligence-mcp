@@ -100,7 +100,7 @@ test("missing inputs are named once at the end with what they would change; noth
   const none = await call({});
   assert.equal((none.match(/To sharpen this, give:/g) || []).length, 1);
   const t = none.slice(none.lastIndexOf("To sharpen this, give:"));
-  assert.match(t, /scoring_criteria/);
+  assert.match(t, /scoring criteria/);
   assert.match(t, /\(it would change/i);
   assert.match(none, /example model, not calculated from your data/);
   noRepeats(none); noPlaceholders(none);

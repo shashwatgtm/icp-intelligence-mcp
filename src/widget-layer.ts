@@ -1,5 +1,5 @@
 import { widgetTextSchema } from "./widget-text-schema.ts";
-import { composeResources } from "./resource-handlers.js";
+import { composeResources } from "./resource-handlers.ts";
 import { WIDGET_ORIGIN } from "./widget-origin.ts";
 import { widgetOutputSchema } from "./widget-output-schema.ts";
 import { BUILD_PROFILE } from './build-profile.ts';

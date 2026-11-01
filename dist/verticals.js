@@ -1,21 +1,4 @@
 "use strict";
-// Sector knowledge for the nine verticals Shashwat Ghosh serves (run 19, owner decision D80; rule B82).
-// One data file, shared by every tool in this server, so the owner can read and correct it in one place.
-// The verticals and their order come from work/market.json in the owner's project (logistics tech, fintech, SaaS,
-// vertical SaaS, AI native, ITeS, telecom, software, cybersecurity).
-// Rule B82: this file holds vocabulary, buyer roles, buying committees, typical objections, business models, sales
-// motions, the metrics each sector watches and what a good proof point looks like. It holds NO statistic, market size,
-// benchmark figure or named-company fact. Where a tool needs a number, it uses the user's own figure or a labelled example.
-//
-// How the sector is read (run 20, owner decision D92): the SELLER's own words decide (what it sells, its category, its
-// product description); the BUYER's words (target customer, industry, role) are used only when the seller's words name no
-// sector. One unmistakable word is enough ("match" below); broad words ("weak" below) only help a sector that already has a
-// strong word. A security tool sold to banks is cybersecurity; software sold to telecom operators is not telecom.
-//
-// Run 20 round 2: the AI native entry is neutral about what the AI does (its roles, measures, objections and proof shape fit
-// any function). The support-automation notes live in AI_SUPPORT_PROFILE and are used only when the seller's own text names
-// support, tickets, a help desk, a contact centre or a service desk (aiUseCase). A seller that manages money gets
-// INVESTMENT_PROFILE through profileFor(vertical, model, ...texts), whatever sector it was read in.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BUYER_CONTEXTS = exports.SAAS_ONLY = exports.MODEL_TRADES = exports.SECTOR_MODEL = exports.MODEL_NAME = exports.BUSINESS_MODELS = exports.BUYER_LENS = exports.BILLING_PROFILE = exports.INVESTMENT_PROFILE = exports.AI_SUPPORT_PROFILE = exports.SUBTYPES = exports.VERTICALS = void 0;
 exports.aiUseCase = aiUseCase;
@@ -26,6 +9,7 @@ exports.detectVertical = detectVertical;
 exports.buyerLens = buyerLens;
 exports.detectModel = detectModel;
 exports.buyerContextFor = buyerContextFor;
+const text_signals_ts_1 = require("./text-signals.js");
 exports.VERTICALS = [
     {
         id: 'logistics-tech', name: 'logistics tech',
@@ -2210,6 +2194,8 @@ function firstIn(whole, words) {
 /** The sector read, with the words that decided it and where they came from ('seller' or 'buyer'). */
 function explainSector(...args) {
     const { seller, buyer, context, role } = sides(args);
+    if ((0, text_signals_ts_1.sellerSectorLabel)(seller).state === 'negated')
+        return { vertical: null, source: null, strong: [], weak: [] };
     // The product category noun decides when it comes BEFORE the first strong word of a different sector ("customer service software with AI agents"); otherwise the usual reading stands.
     const pk = pick(seller), cat = categoryPick(seller, [sellerWhole(args), buyer].join(' \n '));
     let s = cat && (!pk || (cat.v.id !== pk.v.id && (cat.first <= pk.first || pk.strong.every((w) => BUZZ.test(w))))) ? cat : pk;
@@ -2243,6 +2229,12 @@ function explainSector(...args) {
         const ai = scan(AI_ANY, sellerWhole(args));
         if (ai.length)
             return { vertical: AI_NATIVE, source: 'seller', strong: ai, weak: s.weak };
+    }
+    const explicitLabel = (0, text_signals_ts_1.sellerSectorLabel)(seller);
+    if (explicitLabel.id && !s) {
+        const lv = exports.VERTICALS.find(v => v.id === explicitLabel.id);
+        if (lv)
+            s = { v: lv, strong: [explicitLabel.evidence], weak: [], score: 1, first: 0 };
     }
     if (s)
         return { vertical: forUseCase(s.v, args), source: 'seller', strong: s.strong, weak: s.weak };

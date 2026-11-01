@@ -63,7 +63,7 @@ test("with no wins, losses or changes the draft still reads, says what is missin
   const t = await call({ current_icp: BUILD.current_icp, company: "Alder Works", time_period: "Q4 2026" });
   assert.match(t, /## Draft ICP for Q4 2026/);
   assert.doesNotMatch(t, /\[[^\]]*\]|\{[^}]*\}|\(to fill in\)|TBD/);
-  assert.equal((t.match(/add recent_wins/g) || []).length, 1);
+  assert.equal((t.match(/add recent wins/g) || []).length, 1);
 });
 
 test("no long or short dashes in the answer", async () => {

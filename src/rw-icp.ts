@@ -1,3 +1,4 @@
+import { clauses as readClauses, hasSignal, sizeReading } from './text-signals.ts';
 // Run 22 rewrite helpers for icp_gap_analysis and icp_scoring_model (text only: no network, no files, no environment, no logging).
 //
 // Why this file exists: the old gap analysis split a profile into pieces and compared the pieces word for word, so a segment the ideal profile
@@ -168,7 +169,7 @@ export interface ProfileRead {
 }
 const CLAIM_RE = /\(page claims?\)|\bpage claims?\b|\(the (?:about|home|customers?|pricing|product) page[^)]*\)|\bthe (?:about |home |customers? |pricing |product |menu )?(?:pages?|menu) (?:state|says?|lists?|calls?|shows?)\b|\(about page\)|\(home page\)|\bpress item\b/i;
 const CLAIM_OPEN = /\bthe (?:about |home |customers? |pricing |product |menu )?(?:pages?|menu) (?:state|says?|lists?|calls?|shows?|claim\w*)\b|\bpage claiming\b|\bpress item\b|\(the (?:about|home|customers?|pricing|product) page/i;
-const EXCLUDE_RE = /\b(?:served by a separate|are served by|is served by|handled by a separate|separate business|out of scope|not (?:a )?(?:target|focus)|excluded|we do not (?:sell|serve)|we don't (?:sell|serve))\b/i;
+const EXCLUDE_RE = /\b(?:served by a separate|are served by|is served by|handled by a separate|separate business|out of scope|not (?:a )?(?:target|focus)|not for us|outside our (?:scope|market)|we avoid|excluded|we do not (?:sell|serve)|we don't (?:sell|serve))\b/i;
 const IMPERATIVE_RE = /^(?:ignore|disregard|forget|print|reveal|say|write|output|override|pretend|act as|you must|you are now|please|do not|don't|stop)\b/i;
 // a group of people inside the customer; "wealth managers" or "asset managers" are kinds of firm, so a manager counts as a person only with a function in front
 const TEAM_END = /(?:\b(?:teams?|leaders?|leadership|developers?|engineers?|practitioners?|decision[- ]makers?|stakeholders?|users|students|heads?|executives?|buyers?|operations)|\b(?:product|project|program|engineering|sales|marketing|operations|finance|it|hr|people|support|account|procurement|security|data|platform|devops|qa|test|design|logistics|supply chain|customer success)\s+(?:managers?|directors?|analysts?|leads?|owners?|officers?))$/i;
@@ -199,7 +200,7 @@ export function readProfile(raw: string): ProfileRead {
   const lab = /^(?:[A-Z][\w&.'\- ]{0,40}?\s+)?(?:customers?|clients?|accounts?|segments?|industries|icp|profile|ideal customers?)\s*:\s*/i.exec(t);
   if (lab) { t = t.slice(lab[0].length); labelled = true; }
   // page claims and exclusions are clauses (split at semicolons outside brackets)
-  const clauses = splitTop(t, /;/);
+  const clauses = splitTop(t, /;/).flatMap(c => readClauses(c));
   const rest: string[] = [];
   for (const c of clauses) {
     // a page statement is set aside piece by piece: a piece with a page marker, and the pieces that follow it up to the buyer or problem clause
@@ -220,7 +221,8 @@ export function readProfile(raw: string): ProfileRead {
     }
     flush();
     if (hadClaim) { if (keep.length) rest.push(keep.join(', ')); continue; }
-    if (EXCLUDE_RE.test(c)) {
+    if (/\b(?:were|was) excluded before\b/i.test(c)) { res.descr.push(c); continue; }
+    if (hasSignal(c, EXCLUDE_RE)) {
       const m = /^(.*?)(,\s*(?:with|who)\b.*)$/i.exec(c);
       if (m) { res.outside.push(noDot(m[1])); rest.push(m[2].replace(/^,\s*/, '')); } else res.outside.push(noDot(c));
       continue;
@@ -229,11 +231,17 @@ export function readProfile(raw: string): ProfileRead {
   }
   // the clauses that follow the first one were split at ";", but a buyer or problem clause may be in any of them: join them back for those two
   let body = rest.join('; ');
+  // A denied role is a note, not a target segment or a buyer requirement.
+  body = body.replace(/\b(?:where|with)\s+(.{2,80}?)\s+(?:is|are)\s+(?:never|not)\s+involved\b/gi, m => { res.descr.push(m); return ''; });
   // the buyer clause
+  const signing = /\bwhere\s+(?:the\s+)?(.{2,80}?)\s+signs?\s+(?:the\s+)?(?:contract|purchase|order)\b/gi;
+  for (const m of body.matchAll(signing)) if (hasSignal(body, /signs?\s+(?:the\s+)?(?:contract|purchase|order)/i)) res.roles.push(...splitRoles(m[1]));
+  body = body.replace(signing, '');
   for (const m of [...body.matchAll(/(?:,\s*)?\bwith\s+((?:(?!\bwith\b).){2,200}?)\s+as\s+(?:the\s+)?(?:buyers?|champions?|sponsors?|decision[- ]makers?|economic buyers?)\b/gi)]) res.roles.push(...splitRoles(m[1]));
   body = body.replace(/(?:,\s*)?\bwith\s+(?:(?!\bwith\b).){2,200}?\s+as\s+(?:the\s+)?(?:buyers?|champions?|sponsors?|decision[- ]makers?|economic buyers?)\b/gi, '');
   for (const m of [...body.matchAll(/\b(?:buyers?|champions?|economic buyers?|sponsors?)\s*:\s*(.+?)(?=;|\.\s+[A-Z]|$)/gi)]) res.roles.push(...splitRoles(m[1]));
   body = body.replace(/\b(?:buyers?|champions?|economic buyers?|sponsors?)\s*:\s*.+?(?=;|\.\s+[A-Z]|$)/gi, '');
+  res.roles = res.roles.filter(r => hasSignal(text, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i')));
   if (res.roles.length) { res.roleSource = 'buyer'; res.roleNotes = res.roles.filter((r) => /\([^)]+\)\s*$/.test(r)); }
   else {
     // no buyer clause: a job title mentioned in the text ("with a finance controller") is read as a role mentioned
@@ -242,9 +250,10 @@ export function readProfile(raw: string): ProfileRead {
   }
   // the problem clause runs to the end
   const pm = /(?:,\s*)?\b(?:who|that|which)\s+(?:currently\s+)?(?:face|facing|faces|struggle|struggling|struggles|suffer|suffering|suffers|lose|lack|lacks)\b\s*(?:with |from |:)?\s*(.+)$/i.exec(body)
+    ?? /(?:,\s*)?\bwhose (?:biggest worry|main concern) is\s+(.+)$/i.exec(body)
     ?? /(?:,\s*)?\b(?:problems?|pain points?|challenges?)\s*:\s*(.+)$/i.exec(body);
   if (pm) {
-    res.problems.push(...splitTop(pm[1], /;/).map((x) => noDot(x)).filter(Boolean));
+    res.problems.push(...splitTop(pm[1], /;/).map((x) => noDot(x)).filter(x => x && !/^(?:no|not|without)\b/i.test(x)));
     body = body.slice(0, pm.index).trim();
   }
   body = body.replace(/[,;\s]+$/, '');
@@ -256,7 +265,7 @@ export function readProfile(raw: string): ProfileRead {
   const listForm = labelled && /,/.test(body) && /;/.test(body);
   const targets = (listForm ? [body] : tgtClauses).flatMap((t) => sentenceSplit(t));
   for (const tc of targets) readTarget(tc, res, listForm || labelled);
-  return finish(res);
+  res.sizes = res.sizes.filter(x => sizeReading(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i')).state === 'affirmed'); return finish(res);
 }
 
 function finish(res: ProfileRead): ProfileRead {
@@ -274,7 +283,7 @@ function titlesIn(text: string): string[] {
   for (const m of t.matchAll(/\bGM-[A-Za-z]+\b/g)) out.push(m[0]);
   for (const m of t.matchAll(/\b(?:Chief [A-Z][A-Za-z]+(?: [A-Z][A-Za-z]+){0,2}|(?:Head|Director|VP|Vice President|Manager|Lead) of [A-Z][A-Za-z-]+(?: [A-Z][A-Za-z-]*){0,3})\b/g)) out.push(m[0]);
   for (const m of t.matchAll(/\b(?:finance|financial|operations|sales|marketing|security|network|procurement|engineering|supply chain|it|hr|data|platform|revenue|product|customer success) (?:controller|director|manager|head|lead|officer|analyst)\b/gi)) out.push(m[0]);
-  return [...new Set(out)].filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
+  return [...new Set(out)].filter(r => hasSignal(t,new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i'))).filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
 }
 
 function readTarget(clause: string, res: ProfileRead, listForm: boolean): void {
@@ -662,18 +671,18 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
   const ask: string[] = [];
   if (d.onlyOneSide.length) ask.push(`the missing side of ${listText(d.onlyOneSide)} (it would change which metrics get a gap and a priority; today they are not compared)`);
   if (d.notGivenAtAll.length && d.anyMetric) ask.push(`${listText(d.notGivenAtAll)}, current and target (it would change the gap table and the causes to check)`);
-  if (!d.anyMetric) ask.push('current_metrics and target_metrics with avg_acv, avg_sales_cycle, win_rate, churn_rate and nps (it would change the whole metric section, which is empty now)');
-  if (!cur.roles.length && idl.roles.length) ask.push('the title that signed in your last won deals, in current_customers (it would change the buyer check from a question to a comparison)');
-  if (!cur.problems.length && idl.problems.length) ask.push('why your current customers bought, in current_customers (it would change the problem check from a question to a comparison)');
+  if (!d.anyMetric) ask.push('current metrics and target metrics with average annual contract value, average sales cycle, win rate, churn rate and nps (it would change the whole metric section, which is empty now)');
+  if (!cur.roles.length && idl.roles.length) ask.push('the title that signed in your last won deals, in current customers (it would change the buyer check from a question to a comparison)');
+  if (!cur.problems.length && idl.problems.length) ask.push('why your current customers bought, in current customers (it would change the problem check from a question to a comparison)');
   const wordSizes = idl.sizes.filter((s) => !/\d/.test(s) && !idl.allSizes);
   if (wordSizes.length) ask.push(`a number behind ${listText(wordSizes.map((s) => quote(s)))}, such as the smallest employee count among your best customers (it would change the size criterion from a word to a number you can disqualify on)`);
-  if (!idl.roles.length) ask.push('the role that signs and the role that champions, in ideal_icp (it would change the buyer check and the disqualifiers)');
-  if (!idl.problems.length) ask.push('the problem your best customers had before they bought, in ideal_icp (it would change the problem criterion)');
-  if (!d.productGiven && !d.sectorName) ask.push('product_category, saying what you sell (it would change the sector notes and the role check, which are empty now)');
-  if (!d.modelGiven) ask.push('business_model (it would change the wording of the pricing action and the unit of the deal value)');
+  if (!idl.roles.length) ask.push('the role that signs and the role that champions, in ideal icp (it would change the buyer check and the disqualifiers)');
+  if (!idl.problems.length) ask.push('the problem your best customers had before they bought, in ideal icp (it would change the problem criterion)');
+  if (!d.productGiven && !d.sectorName) ask.push('product category, saying what you sell (it would change the sector notes and the role check, which are empty now)');
+  if (!d.modelGiven) ask.push('how you charge (it would change the wording of the pricing action and the unit of the deal value)');
   if (!d.company) ask.push('company (it would put your company name on this analysis)');
   if (ask.length) push(`To sharpen this, give:`, ...ask.slice(0, 7).map((x) => `- ${x}`), '');
-  push('**Next Step**: Use `icp_evolution_tracker` to monitor ICP changes over time', '', 'Suggested timings, lengths and counts: adjust them to your own.');
+  push('**Next Step**: Use `ICP Evolution Tracker` to monitor ICP changes over time', '', 'Suggested timings, lengths and counts: adjust them to your own.');
   void NOT_ASKED;
   return L.join('\n').replace(/\n{3,}/g, '\n\n') + '\n';
 }

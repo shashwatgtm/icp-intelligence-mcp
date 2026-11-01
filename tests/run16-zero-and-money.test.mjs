@@ -100,7 +100,7 @@ test("D45: a weight given as 0 is used as 0 and the D41 tiers follow the new sum
 test("D45: all four weights 0 are refused in plain words", async () => {
   const r = await call("account_prioritization", { accounts: [ACC({})], prioritization_weights: { fit: 0, intent: 0, relationship: 0, timing: 0 } });
   assert.equal(r.isError, true);
-  assert.equal(r.text, "Invalid input for account_prioritization: at least one weight must be more than 0.");
+  assert.equal(r.text, "Invalid input for Account Prioritization: at least one weight must be more than 0.");
 });
 
 test("D45: icp_gap_analysis rates given as 0 are used as 0 (standing check; already true in run 15)", async () => {

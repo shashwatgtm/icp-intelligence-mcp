@@ -45,7 +45,7 @@ test("D38: counts that round to 0 from a positive value say so", async () => {
 // Run 19 R19-35 (D80): the only text changes since 1.2.11 in these two answers; every figure is unchanged.
 // Run 20 round 1 (quality): two label changes more, both text only: the segment line (the segment name does not say what you sell) and
 // the ACV line names the unit (annual contract value). Every figure is unchanged.
-const run19 = (t, segment) => t.replace(/^(## Market: [^\n]*\n)/m, `$1\n- **Company**: not given (add the company input to name your company or product in this answer)\n\n*Sector notes: none. This calculator takes a market segment, not a product; give product_category to the other ICP tools for notes that fit what you sell.*\n`)
+const run19 = (t, segment) => t.replace(/^(## Market: [^\n]*\n)/m, `$1\n- **Company**: not given (add the company input to name your company or product in this answer)\n\n*Sector notes: none. This calculator takes a market segment, not a product; give product category to the other ICP tools for notes that fit what you sell.*\n`)
   .replace("(at 33% win rate)", "(SOM × 3, a 1 in 3 win rate)")
   .replace(segment[0], segment[1]).replace(segment[0].toLowerCase(), segment[1].toLowerCase());
 test("D38: ordinary inputs keep every figure of version 1.2.11 (run 19: only the labels named here change)", async () => {

@@ -116,4 +116,4 @@ Later years assume your market share doubles each year.
 > 
 > *Figures calculated from your inputs.*
 
-**Next Step**: Use `lookalike_signal_generator` to create targeting criteria
+**Next Step**: Use `Lookalike Signal Generator` to create targeting criteria

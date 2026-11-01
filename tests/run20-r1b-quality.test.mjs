@@ -134,7 +134,7 @@ test("buyer_group_analyzer: a champion you did not name is shown as the sector's
 test("buyer_group_analyzer: an unclear product says what input would fill each seat, with no bracket", async () => {
   const r = await call("buyer_group_analyzer", { product_category: "our thing" });
   clean(r, "buyer group");
-  assert.match(r.text, /add typical_champion/);
+  assert.match(r.text, /add typical champion/);
   assert.match(r.text, /not named in your stakeholders \(ask your champion who holds the budget\)/);
   assert.doesNotMatch(r.text, /Only if true and provable|Fill in:/);
 });
@@ -187,8 +187,8 @@ test("lookalike_signal_generator: no US startup defaults; what is missing is nam
   assert.doesNotMatch(r.text, /Salesforce|HubSpot|United States|51-200|201-500|Series A|New leadership hire|Funding round/);
   assert.match(r.text, /Current job title: "CFO" OR "Head of Treasury"/);
   assert.match(r.text, /Not job titles, so not in the title search: finance teams, managers, employees, HR/);
-  assert.match(r.text, /Company Sizes\*\*: not supplied \(add icp_firmographics\.company_sizes/);
-  assert.match(r.text, /Not supplied, so left out of the searches: company_sizes, locations, icp_technographics, buying_triggers/);
+  assert.match(r.text, /Company Sizes\*\*: not supplied \(add icp firmographics\.company sizes/);
+  assert.match(r.text, /Not supplied, so left out of the searches: company sizes, locations, icp technographics, buying triggers/);
   assert.match(r.text, /No buying triggers were given/);
 });
 test("lookalike_signal_generator: search words fit how the seller sells (a connectivity provider is not searched as software)", async () => {
@@ -292,7 +292,7 @@ test("icp_interview_synthesizer: separate interviews are counted as k of n; quot
   assert.match(r.text, /> "We spent a week matching card spends"/);
   assert.doesNotMatch(r.text, /all 3 interview notes carry the same/);
   const none = await call("icp_interview_synthesizer", { interview_notes: [mk(1, "COO", "Late deliveries")] });
-  assert.match(none.text, /No key_quotes were given and none of your statements is marked as a customer quote/);
+  assert.match(none.text, /No key quotes were given and none of your statements is marked as a customer quote/);
   assert.match(none.text, /No triggers captured|Audit finding/);
 });
 test("icp_interview_synthesizer: with no product the template line names the top pain, not a bracket", async () => {

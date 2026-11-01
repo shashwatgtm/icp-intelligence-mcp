@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.attachWidgets = attachWidgets;
 const widget_text_schema_ts_1 = require("./widget-text-schema.js");
-const resource_handlers_js_1 = require("./resource-handlers.js");
+const resource_handlers_ts_1 = require("./resource-handlers.js");
 const widget_origin_ts_1 = require("./widget-origin.js");
 const widget_output_schema_ts_1 = require("./widget-output-schema.js");
 const build_profile_ts_1 = require("./build-profile.js");
@@ -105,6 +105,6 @@ function attachWidgets(server) {
             ],
         };
     };
-    (0, resource_handlers_js_1.composeResources)(server, listWidgets, readWidget);
+    (0, resource_handlers_ts_1.composeResources)(server, listWidgets, readWidget);
 }
 //# sourceMappingURL=widget-layer.js.map

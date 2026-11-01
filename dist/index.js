@@ -7,6 +7,11 @@ const conversation_guidance_ts_1 = require("./conversation-guidance.js");
 const build_profile_ts_1 = require("./build-profile.js");
 const reserve_tools_ts_1 = require("./reserve-tools.js");
 const widget_layer_ts_1 = require("./widget-layer.js");
+const text_signals_ts_1 = require("./text-signals.js");
+const decision_limits_ts_1 = require("./decision-limits.js");
+const text_signals_ts_2 = require("./text-signals.js");
+const text_signals_ts_3 = require("./text-signals.js");
+const text_signals_ts_4 = require("./text-signals.js");
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
@@ -345,8 +350,8 @@ function readContext(explicitModel, input) {
     const via = read.source === 'context' ? ' (from the deal details: your own description names no sector)'
         : read.source === 'role' ? ' (from the buyer job titles: your own description names no sector)'
             : read.source === 'buyer' ? ' (from the buyer\'s industry: your own description names no sector, so describe what you sell for notes that fit it)' : '';
-    const sector = vp ? `read from your inputs as ${vp.name}${via}` : 'not clear from what you sell (describe your product, for example in product_category, for sector notes)';
-    const modelText = model ? `${verticals_ts_1.MODEL_NAME[model]} (${how === 'input' ? 'from business_model' : how === 'sector' ? 'the usual model in this sector, assumed; set business_model to change it' : 'read from your inputs; set business_model to change it'})` : `not clear from your inputs; set business_model (${verticals_ts_1.BUSINESS_MODELS.join(', ')}) for advice that fits it`;
+    const sector = vp ? `read from your inputs as ${vp.name}${via}` : 'not clear from what you sell (describe your product, for example in product category, for sector notes)';
+    const modelText = model ? `${verticals_ts_1.MODEL_NAME[model]} (${how === 'input' ? 'from your answer' : how === 'sector' ? 'the usual model in this sector, assumed; confirm how you charge' : 'read from your inputs; confirm how you charge'})` : `not clear from your inputs; describe how you charge (${verticals_ts_1.BUSINESS_MODELS.join(', ')}) for advice that fits it`;
     return { v: vp, model, via, line: `*Sector: ${sector}. Business model: ${modelText}.*` };
 }
 // Job titles are weak evidence of what the seller sells ("Director of Transportation Data Operations" is a logistics title in a
@@ -411,7 +416,7 @@ function rankByUserWords(items, text, primary, secondary) {
 }
 // The sector only, for tools whose advice does not depend on the business model.
 function sectorLine(v, via = '') {
-    return v ? `*Sector: read from your inputs as ${v.name}${via}.*` : '*Sector: not clear from what you sell (describe your product, for example in product_category, for sector notes).*';
+    return v ? `*Sector: read from your inputs as ${v.name}${via}.*` : '*Sector: not clear from what you sell (describe your product, for example in product category, for sector notes).*';
 }
 // Sector notes: the buying committee, what the sector measures, its usual objections and a proof point (no figures, rule B82).
 function sectorNotes(v, what = ['committee', 'metrics', 'proof'], label = '') {
@@ -441,6 +446,9 @@ function sectorNotes(v, what = ['committee', 'metrics', 'proof'], label = '') {
 }
 // The answer pattern for one objection typed by the user: the sector's pattern when it matches, else a pattern by kind.
 function answerFor(text, v) {
+    const clearance = (0, text_signals_ts_1.clearanceAdvice)(text);
+    if (clearance)
+        return clearance;
     const t = text.toLowerCase();
     if (v) {
         for (const o of v.objections) {
@@ -508,7 +516,7 @@ const SIZE_WORD = /\b(?:mid-?size[d]?|mid-?market|medium(?:-sized)?|large(?:r)?|
 function sizeWordsIn(text) {
     const found = String(text).match(SIZE_WORD) || [];
     const seen = new Set();
-    return found.map((x) => x.replace(/^(enterprise|startup|smb|msme|sme)s$/i, '$1')).filter((x) => { const k = x.toLowerCase(); if (seen.has(k))
+    return found.filter(x => (0, text_signals_ts_1.sizeReading)(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')).state === 'affirmed').map((x) => x.replace(/^(enterprise|startup|smb|msme|sme)s$/i, '$1')).filter((x) => { const k = x.toLowerCase(); if (seen.has(k))
         return false; seen.add(k); return true; });
 }
 // Job titles named in a text (as typed). A capitalised phrase with a title word, or an acronym such as CFO or CISO.
@@ -526,7 +534,7 @@ function rolesIn(text) {
     // a title written in lower case ("a finance controller", "head of supply chain")
     for (const m of t.matchAll(/\b(?:(?:finance|financial|operations|sales|marketing|security|network|procurement|engineering|supply chain|it|hr|data|platform|revenue) (?:controller|director|manager|head|lead|officer|analyst)|head of [a-z]+(?: [a-z]+){0,2}|vp (?:of )?[a-z]+)\b/gi))
         out.push(m[0].trim());
-    return [...new Set(out)].filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
+    return [...new Set(out)].filter(r => (0, text_signals_ts_4.hasSignal)(t, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
 }
 // Is this one item a job title (as in champion_titles), and not a group of people ("finance teams", "managers", "employees")?
 function isTitleItem(item) {
@@ -768,7 +776,7 @@ const tools = {
         },
         execute: (args) => {
             // Run 19 D80: no preset category; what is not given is said plainly.
-            const category = args.product_category ? args.product_category.trim() : 'not given (add product_category)';
+            const category = args.product_category ? args.product_category.trim() : 'not given (add product category)';
             const custs = args.customers || [];
             const ctx = readContext(args.business_model, {
                 seller: [productWords(args.product_category, args.company)],
@@ -912,7 +920,7 @@ ${sectorChecks}${notes ? `${notes}\n\n` : ''}---
 
 ${gaps.length ? gaps.join('\n') : 'None: every field this analysis reads was supplied for at least one customer.'}
 
-**Next Step**: Use \`icp_scoring_model\` to create a qualification scorecard
+**Next Step**: Use \`ICP Scoring Model\` to create a qualification scorecard
 `;
             }
             // If text description provided, extract patterns
@@ -921,14 +929,14 @@ ${gaps.length ? gaps.join('\n') : 'None: every field this analysis reads was sup
                 const desc = text.toLowerCase();
                 // Run 19 D80: sizes are the employee ranges typed; the size words are read only when no range is typed.
                 const typedSizes = sizesIn(text);
-                const sizeWord = desc.includes('enterprise') ? 'Enterprise (1000+)' :
-                    desc.includes('mid-market') || desc.includes('mid market') || desc.includes('mid-size') || desc.includes('midsize') ? 'Mid-market (100-1000)' :
-                        desc.includes('smb') || desc.includes('small') ? 'SMB (10-100)' :
-                            desc.includes('startup') ? 'Startup/Early-stage' : 'Mixed sizes';
+                const sizeWord = (0, text_signals_ts_4.signal)(text, 'enterprise').state === 'affirmed' ? 'Enterprise (1000+)' :
+                    (0, text_signals_ts_4.hasSignal)(text, /mid-market|mid market|mid-size|midsize/i, 'midmarket') ? 'Mid-market (100-1000)' :
+                        (0, text_signals_ts_4.signal)(text, 'small').state === 'affirmed' ? 'SMB (10-100)' :
+                            (0, text_signals_ts_4.hasSignal)(text, /startup/i) ? 'Startup/Early-stage' : 'Mixed sizes';
                 const size = typedSizes.length ? andList(typedSizes) : sizeWord;
-                const stageTyped = (0, escape_inputs_ts_1.escapePiece)([...new Set((text.match(/\bseries [a-d]\b/gi) || []).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', '));
-                const stage = stageTyped || (desc.includes('public') ? 'Public companies' : 'not stated in your text');
-                const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => desc.includes(r.toLowerCase()));
+                const stageTyped = (0, escape_inputs_ts_1.escapePiece)([...new Set((text.match(/\bseries [a-d]\b/gi) || []).filter(x => (0, text_signals_ts_4.hasSignal)(text, new RegExp(x, 'i'))).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', '));
+                const stage = stageTyped || ((0, text_signals_ts_4.hasSignal)(text, /public/i) ? 'Public companies' : 'not stated in your text');
+                const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => (0, text_signals_ts_4.hasSignal)(text, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')));
                 return `# ICP Pattern Analysis (from Description)
 
 - ${companyLine(args.company)}
@@ -970,10 +978,10 @@ ${EXAMPLES}
       "industry": "Manufacturing",
       "size": "300-1000 employees",
       "acv": 24000,
-      "sales_cycle_days": 60,
-      "tech_stack": ["SAP"],
-      "buying_trigger": "Audit finding",
-      "champion_title": "Finance Controller"
+      "sales cycle days": 60,
+      "tech stack": ["SAP"],
+      "buying trigger": "Audit finding",
+      "champion title": "Finance Controller"
     }
   ]
 }
@@ -998,10 +1006,10 @@ ${EXAMPLES}
       "industry": "Manufacturing",
       "size": "300-1000 employees",
       "acv": 24000,
-      "sales_cycle_days": 60,
-      "tech_stack": ["SAP"],
-      "buying_trigger": "Audit finding",
-      "champion_title": "Finance Controller"
+      "sales cycle days": 60,
+      "tech stack": ["SAP"],
+      "buying trigger": "Audit finding",
+      "champion title": "Finance Controller"
     }
   ]
 }
@@ -1011,7 +1019,7 @@ ${EXAMPLES}
 ${EXAMPLES}
 \`\`\`json
 {
-  "customer_descriptions": "Our best customers are mid-size manufacturers with 300 to 3,000 employees. They run SAP and the finance controller becomes our champion."
+  "customer descriptions": "Our best customers are mid-size manufacturers with 300 to 3,000 employees. They run SAP and the finance controller becomes our champion."
 }
 \`\`\`
 
@@ -1039,6 +1047,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
                     },
                     description: 'Criteria for scoring with importance levels'
                 },
+                correlation_direction: { type: 'string', enum: ['positive', 'negative', 'unknown'], description: 'Optional confirmed direction of the success pattern. Ask the user whether the named values correlate with better or worse outcomes before filling this. Overrides word reading; unknown withholds a top-points recommendation.' },
                 success_correlation: {
                     type: 'string',
                     description: 'What correlates with success? (e.g., "deals with VP Sales champion close 2x faster")'
@@ -1051,8 +1060,23 @@ This tool will analyze patterns across your customers to identify your ideal pro
             }
         },
         execute: (args) => {
-            const category = args.product_category ? args.product_category.trim() : 'your product (product_category not given)';
+            const category = args.product_category ? args.product_category.trim() : 'your product (product category not given)';
             const correlations = args.success_correlation || '';
+            const directionOf = (text) => args.correlation_direction || (0, text_signals_ts_4.correlationFact)(text);
+            const adversePattern = directionOf(correlations) === 'negative';
+            if (adversePattern)
+                return `# ICP Scoring Model
+
+## Scoring model held: negative outcome pattern
+
+Read: ${q(correlations)}.
+
+The stated pattern is negative. Do not award positive fit points from it. No points, qualification tier or outreach priority are assigned until the direction and affected values have been checked against closed-won and closed-lost deals.
+
+Criteria supplied: ${(args.scoring_criteria || []).map(c => `${c.criterion}: ${(c.values || []).join(', ')}`).join('; ') || 'none'}.
+
+Confirm which values predict worse outcomes, the comparison group and the observation period. Rebuild the scoring model from that evidence; a role name alone is not proof of good fit.
+`;
             const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, correlations], buyer: (args.scoring_criteria || []).flatMap(c => [c.criterion, ...(c.values || [])]) });
             // Default scoring model if no criteria provided
             const defaultCriteria = [
@@ -1111,7 +1135,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const namedBy = () => criteria.filter(c => nameMatched(c) || proofHits.some(h => h.criterion === c.criterion));
             const corrLine = () => {
                 const m = namedBy();
-                return !correlations ? '' : m.length
+                return !correlations ? '' : adversePattern ? 'The stated pattern is negative. Do not award top fit points for it; validate the named values as possible risk signals against closed deals.' : directionOf(correlations) === 'unknown' ? 'The direction of this pattern is not clear. Confirm whether it predicts better or worse outcomes before changing qualification points.' : m.length
                     ? `This pattern is already a criterion: ${andList(m.map(c => `**${c.criterion}**`))}. If it holds in your closed deals, make ${m.length === 1 ? 'it' : 'them'} critical.`
                     : 'This pattern is not yet one of your criteria: add it as a criterion if it holds in your closed deals.';
             };
@@ -1137,9 +1161,9 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const valueOf = (c) => c.values;
             const proofHits = proofItems.length ? criteria.flatMap(c => valueOf(c).flatMap(val => {
                 // a plain shared word is the strict match; another word for the same kind of thing (spirits for beverage) also names a value
-                const items = proofItems.filter(it => sharesWord(val, it));
+                const items = proofItems.filter(it => (!args.correlation_direction || args.correlation_direction === 'positive') && directionOf(it) !== 'negative' && sharesWord(val, it));
                 if (!items.length && !/\b(?:leaders?|managers?|heads?|directors?|officers?|teams?|developers?|engineers?|owners?|founders?|analysts?|roles?)\b/i.test(val)) {
-                    const alias = proofItems.filter(it => (0, rw_icp_ts_1.aliasNamed)(val, it));
+                    const alias = proofItems.filter(it => (!args.correlation_direction || args.correlation_direction === 'positive') && directionOf(it) !== 'negative' && (0, rw_icp_ts_1.aliasNamed)(val, it));
                     if (alias.length)
                         return [{ criterion: c.criterion, value: val, item: alias[0] }];
                 }
@@ -1149,7 +1173,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const notFound = proofItems.length ? criteria.flatMap(c => c.values.filter(val => !hitKeys.has(`${c.criterion}|${val}`) && !nameMatched(c)).map(val => ({ criterion: c.criterion, value: val }))).filter(x => x.value.length <= 80) : [];
             // Host review 30 Oct 2026: a note that no evidence exists, or a hypothesis, is said to be one before any other reading
             // ("Hypothesis only: named owners may improve adoption" was read as a page claim because of the word "named").
-            const proofKind = (t) => /^\s*(?:no|not)\b[^;]{0,40}\b(?:measured|data|correlation|evidence|results?|proof)\b|\b(?:not|none) (?:yet )?(?:measured|supplied|given|available|tested|proven)\b/i.test(t) ? 'a note that no evidence is given yet, so it cannot score anything'
+            const proofKind = (t) => directionOf(t) === 'negative' ? 'a negative pattern: test it as a risk, not as positive qualification evidence' : /^\s*(?:no|not)\b[^;]{0,40}\b(?:measured|data|correlation|evidence|results?|proof)\b|\b(?:not|none) (?:yet )?(?:measured|supplied|given|available|tested|proven)\b/i.test(t) ? 'a note that no evidence is given yet, so it cannot score anything'
                 : /\b(?:hypothes[ie]s|assum(?:e|ed|ption)|untested|we think|we believe|may|might|could)\b/i.test(t) ? 'a hypothesis to test in your closed deals, not evidence yet'
                     : /\((?:customer|partner|analyst|client) quote\)|customer words/i.test(t) ? 'a customer statement' : /page claim|case study|story title|story headline|headline|ebook|home page|award|recogni|leader|gartner|forrester|named(?! (?:process |account |deal |budget )?(?:owners?|champions?|contacts?|sponsors?|persons?|buyers?)\b)|featured/i.test(t) ? 'a page claim or recognition, not a closed-deal result' : /customer quote|customer words|quote/i.test(t) ? 'a customer statement' : 'a result as you gave it';
             const longValues = criteria.flatMap(c => c.values.filter(v2 => v2.length > LONG_VALUE).map(v2 => ({ criterion: c.criterion, value: v2 })));
@@ -1174,20 +1198,20 @@ This tool will analyze patterns across your customers to identify your ideal pro
             const noValues = userGiven ? criteria.filter(c => !(args.scoring_criteria || []).find(x => (x.criterion || '') === c.criterion)?.values?.length).map(c => c.criterion) : [];
             const askFor = [];
             if (!userGiven)
-                askFor.push('scoring_criteria, each with an importance and the values you score (it would change the whole model: the criteria, weights and points above are an example, not yours)');
+                askFor.push('scoring criteria, each with an importance and the values you score (it would change the whole model: the criteria, weights and points above are an example, not yours)');
             if (noValues.length)
                 askFor.push(`the values you score for ${andList(noValues)} (it would change the scorecard, which is empty for ${noValues.length === 1 ? 'it' : 'them'})`);
             if (!correlations.trim())
-                askFor.push('success_correlation, what your best customers have in common (it would change which values the evidence says to score highest)');
+                askFor.push('success correlation, what your best customers have in common (it would change which values the evidence says to score highest)');
             if (!(args.product_category && args.product_category.trim()))
-                askFor.push('product_category, what you sell (it would change the sector notes, the fit signals and the wording of the tier actions)');
+                askFor.push('product category, what you sell (it would change the sector notes, the fit signals and the wording of the tier actions)');
             if (!(typeof args.company === 'string' && args.company.trim()))
                 askFor.push('company (it would put your company name on the model)');
             // the sector line: said plainly when the product text you gave names no sector this server has notes for
             const productGiven = !!(args.product_category && args.product_category.trim());
             const sectorText = vv ? sectorLine(vv, ctx.via) : productGiven
                 ? '*Sector: the product text you gave names none of the sectors this server has notes for, so there are no sector notes, fit signals or objections below. The points, weights and tiers do not depend on it.*'
-                : sectorLine(null).replace(/ \(describe your product, for example in product_category, for sector notes\)/, '');
+                : sectorLine(null).replace(/ \(describe your product, for example in product category, for sector notes\)/, '');
             return `# ICP Scoring Model
 
 ## Scoring Framework for ${category}
@@ -1259,7 +1283,7 @@ ${proofItems.length ? `## Evidence in Your Success Pattern
 
 Each statement you gave, and what it can do for the model:
 ${proofItems.map(it => `- ${q(shortText(it, 600))}: ${proofKind(it)}`).join('\n')}
-${proofHits.length ? `\n**Where your evidence names a value you score** (consider giving it the top points, then check it against your closed deals):\n${proofHits.slice(0, 6).map(h => { const c = criteria.find(x => x.criterion === h.criterion); return `- ${h.criterion}, ${q(c ? plainLabel(c, h.value) : h.value)}: named in ${q(shortText(h.item, 400))}${(() => { const w = (0, rw_icp_ts_1.matchWords)(h.value, h.item); return w.length ? ` (matching word${w.length > 1 ? 's' : ''}: ${w.join(', ')})` : ''; })()}`; }).join('\n')}\n` : '\nNone of your criterion values is named in these statements, so the evidence does not yet tell you which value to score highest.\n'}${notFound.length ? `\n**No statement names these yet** (that does not mean they are absent; check them against your closed deals): ${notFound.slice(0, 8).map(x => `${q(x.value)} (${x.criterion})`).join('; ')}.\n` : ''}
+${proofHits.length ? `\n**Where your evidence names a value you score** (confirm its direction and check it against your closed deals before assigning points):\n${proofHits.slice(0, 6).map(h => { const c = criteria.find(x => x.criterion === h.criterion); return `- ${h.criterion}, ${q(c ? plainLabel(c, h.value) : h.value)}: named in ${q(shortText(h.item, 400))}${(() => { const w = (0, rw_icp_ts_1.matchWords)(h.value, h.item); return w.length ? ` (matching word${w.length > 1 ? 's' : ''}: ${w.join(', ')})` : ''; })()}`; }).join('\n')}\n` : '\nNone of your criterion values is named in these statements, so the evidence does not yet tell you which value to score highest.\n'}${notFound.length ? `\n**No statement names these yet** (that does not mean they are absent; check them against your closed deals): ${notFound.slice(0, 8).map(x => `${q(x.value)} (${x.criterion})`).join('; ')}.\n` : ''}
 Use page claims and recognition as messaging, not as scoring evidence: score only what you can see in your closed-won and closed-lost deals.
 
 ---
@@ -1301,7 +1325,7 @@ Add these fields to your CRM to improve scoring over time:
 | Trigger Event | Text | Identify timing signals |
 | Competitor | Picklist | Track displacement success |
 
-${notes ? `${notes}\n\n` : ''}${askFor.length ? `To sharpen this, give:\n${askFor.map(x => `- ${x}`).join('\n')}\n\n` : ''}**Next Step**: Use \`buyer_group_analyzer\` to map decision-making dynamics
+${notes ? `${notes}\n\n` : ''}${askFor.length ? `To sharpen this, give:\n${askFor.map(x => `- ${x}`).join('\n')}\n\n` : ''}**Next Step**: Use \`Buyer Group Analyzer\` to map decision-making dynamics
 
 ${SUGGESTED}
 `;
@@ -1330,8 +1354,9 @@ ${SUGGESTED}
                 known_stakeholders: {
                     type: 'array',
                     items: { type: 'string' },
-                    description: 'Roles you know are involved'
+                    description: 'Roles you know are involved. A title suggests a role, not confirmed authority. Confirm who owns this purchase budget.'
                 },
+                confirmed_budget_owner: { type: 'string', description: 'Optional confirmed fact: the person or role who owns the budget for this purchase. Ask the user; do not infer from title. Overrides candidate ordering.' },
                 typical_champion: {
                     type: 'string',
                     description: 'Your typical champion role'
@@ -1343,8 +1368,8 @@ ${SUGGESTED}
         },
         execute: (args) => {
             // Run 19 D80: no default deal size, company size or champion in place of an input that was not given (rule B81).
-            const dealSize = args.deal_size ? args.deal_size.trim() : 'not given (add deal_size)';
-            const companySize = args.target_company_size ? args.target_company_size.trim() : 'not given (add target_company_size)';
+            const dealSize = args.deal_size ? args.deal_size.trim() : 'not given (add deal size)';
+            const companySize = args.target_company_size ? args.target_company_size.trim() : 'not given (add target company size)';
             const stakeholders = (args.known_stakeholders || []).map(x => String(x).trim()).filter(Boolean);
             const ctx = readContext(args.business_model, { seller: [productWords(args.product_category, args.company)], context: [args.company], role: agreedRoles([args.typical_champion, ...stakeholders]) });
             const v = ctx.v;
@@ -1391,13 +1416,13 @@ ${SUGGESTED}
             const hm3 = hv.bv ? andList(hv.bv.metrics.slice(0, 3)) : '';
             const qv = horizontal ? hv.bv : v;
             const buyingGroup = v && seat ? {
-                champion: { role: pick('champion', 'not given (add typical_champion)'), concern: horizontal ? (hv.bv ? `In ${hv.name} the usual measures are ${hm3}; ask which of them they are held to` : 'Ask them in discovery what they are measured on today') : `Owns ${m3} day to day, so the pain is theirs`, message: horizontal ? (hv.bv ? `Show the effect on ${hv.bv.metrics[0]} or another measure they already track, with the kind of proof ${hv.name} trust (${lower1(stripEnd(hv.bv.proofShape))}).` : 'Show the effect on one number they already track, with proof from a customer like them.') : `Lead with ${v.metrics[0]}: show the effect on their own numbers, with the kind of proof this sector trusts (${lower1(stripEnd(v.proofShape))}).`, label: 'Message angle' },
+                champion: { role: pick('champion', 'not given (add typical champion)'), concern: horizontal ? (hv.bv ? `In ${hv.name} the usual measures are ${hm3}; ask which of them they are held to` : 'Ask them in discovery what they are measured on today') : `Owns ${m3} day to day, so the pain is theirs`, message: horizontal ? (hv.bv ? `Show the effect on ${hv.bv.metrics[0]} or another measure they already track, with the kind of proof ${hv.name} trust (${lower1(stripEnd(hv.bv.proofShape))}).` : 'Show the effect on one number they already track, with proof from a customer like them.') : `Lead with ${v.metrics[0]}: show the effect on their own numbers, with the kind of proof this sector trusts (${lower1(stripEnd(v.proofShape))}).`, label: 'Message angle' },
                 economic: { role: pick('economic', 'not named in your stakeholders (ask your champion who holds the budget)'), concern: (horizontal ? (hv.bv ? `Whether ${andList(hv.bv.metrics.slice(0, 2))} move enough to justify the spend and the risk of change` : 'Return on the spend and the risk of change') : `Whether ${m2} move enough to justify the spend and the risk of change`) + (objEcon ? `. Likely objection: ${lowerCommonWords(objEcon.objection)}` : ''), message: (horizontal ? (hv.bv ? `Tie the spend to ${hv.bv.metrics[0]} and to the risk of staying as they are, and bring proof from a buyer like them.` : 'Tie the spend to one business result and to the cost of staying as they are, with proof from a buyer like them.') : `Tie the spend to ${v.metrics[0]} and to the risk of staying as they are, and bring proof from a buyer like them.`) + (objEcon ? ` If it comes up: ${objEcon.response}` : ''), label: 'Message angle' },
                 technical: { role: pick('technical', 'not named in your stakeholders (ask your champion who evaluates it technically)'), concern: objTech ? `Likely objection: ${lowerCommonWords(objTech.objection)}` : ctx.model === 'services' ? 'Access, security and how the transition is run' : ctx.model === 'connectivity' ? 'Network design and the risk of the cut-over' : 'Integration and upkeep', message: objTech ? objTech.response : ctx.model === 'services' ? 'Show the transition plan, the access model and who from your team works on their systems.' : ctx.model === 'connectivity' ? 'Share the network design and a wave plan with a fallback link and a rollback rule for each wave.' : 'Name the systems involved and who on each side owns the integration.', label: 'How to answer' },
                 user: { role: pick('user', 'not named in your stakeholders (ask who uses it every day)'), concern: objUser ? `Likely objection: ${lowerCommonWords(objUser.objection)}` : ctx.model === 'services' ? 'How the service works for them every day' : 'Ease of use in the daily workflow', message: objUser ? objUser.response : ctx.model === 'services' ? 'Show the service through their eyes: who they call, how fast they get an answer and what is reported to their leadership.' : 'Show the daily workflow through their eyes and agree a small pilot with the people who will use it.', label: 'How to answer' },
                 blocker: { role: pick('blocker', 'not named in your stakeholders (ask who reviews it: procurement, legal, security or audit)'), concern: objBlock ? `Likely objection: ${lowerCommonWords(objBlock.objection)}` : 'Risk and compliance', message: objBlock ? objBlock.response : 'Bring the evidence they will ask for before they ask for it.', label: 'How to answer' },
             } : {
-                champion: { role: 'not given (add typical_champion)', concern: 'Ask them in discovery what they are measured on today', message: 'Say how your product changes what they are measured on, using a result you can prove. Add product_category or typical_champion and this answer is built from your sector.', label: 'Message angle' },
+                champion: { role: 'not given (add typical champion)', concern: 'Ask them in discovery what they are measured on today', message: 'Say how your product changes what they are measured on, using a result you can prove. Add product category or typical champion and this answer is built from your sector.', label: 'Message angle' },
                 economic: { role: 'not named in your stakeholders (ask your champion who holds the budget)', concern: 'Return on the spend and the risk of change', message: 'Tie the spend to one business result and to the cost of staying as they are, with proof from a similar buyer.', label: 'Message angle' },
                 technical: { role: 'not named in your stakeholders (ask your champion who evaluates it technically)', concern: 'Integration and upkeep', message: 'Name the systems involved and who on each side owns the integration.', label: 'How to answer' },
                 user: { role: 'not named in your stakeholders (ask who uses it every day)', concern: 'Ease of use in the daily workflow', message: 'Show the daily workflow through their eyes and agree a small pilot with them.', label: 'How to answer' },
@@ -1410,27 +1435,30 @@ ${SUGGESTED}
             if (typedChampion)
                 buyingGroup.champion.role = typedChampion;
             const kindOf = (t) => {
+                if (/\b(?:not|no|without)\b[^.;]{0,35}\b(?:budget|authority|sign.off|approv)/i.test(t))
+                    return 'unknown';
                 if (v && v.id === 'cybersecurity' && /\bCISO\b|chief information security/i.test(t))
                     return 'economic';
                 if (/procurement|legal|compliance|audit|\brisk\b|vendor management|purchasing/i.test(t))
                     return 'blocker';
                 if (!(v && v.id === 'cybersecurity') && /\bCISO\b|security|privacy/i.test(t) && !/\b(CTO|engineer|architect|devops)\b/i.test(t))
                     return 'blocker'; // outside a security product the security lead reviews
-                if (/\b(CFO|CEO|COO|CIO|CRO|CMO|MD|VP|SVP|EVP)\b|vice president|chief (?:financial|executive|operating|information officer|revenue|marketing)|managing director|president|founder|business unit head|national sales head/i.test(t) && !/chief information security/i.test(t))
+                if (/\b(CFO|CEO|COO|CIO|CRO|CMO|MD|VP|SVP|EVP)\b|vice president|chief (?:financial|executive|operating|information officer|revenue|marketing)|managing director|executive director|general manager|president|founder|business unit head|national sales head/i.test(t) && !/chief information security/i.test(t))
                     return 'economic';
                 if (/\bchief\b[^,]*\bofficer\b/i.test(t) && !/technolog|security/i.test(t))
-                    return 'economic'; // any other chief officer (commercial, risk ...) holds budget or sign-off, he is not a day-to-day user
-                if (/\b(IT|CTO|CISO|QA)\b|chief technology|chief information security|engineer|architect|devops|platform|security|infrastructure|network|data|technical/i.test(t))
+                    return 'unknown'; // An unfamiliar chief title alone does not establish purchase authority.
+                if (/\b(IT|CTO|CISO|QA)\b|chief technology|chief information security|engineer|architect|devops|platform|security|infrastructure|network|data|technolog|digital|technical/i.test(t))
                     return 'technical';
                 return 'user';
             };
             const others = stakeholders.filter(x => x.toLowerCase() !== buyingGroup.champion.role.toLowerCase());
-            const placed = { economic: [], technical: [], blocker: [], user: [] };
+            const placed = { economic: [], technical: [], blocker: [], user: [], unknown: [] };
             for (const x of others)
                 placed[kindOf(x)].push(x);
             // A job title fills a seat before a group of people ("Director IT" before "enterprise developers").
             for (const k of Object.keys(placed))
                 placed[k] = [...placed[k].filter(isTitleItem), ...placed[k].filter(x => !isTitleItem(x))];
+            placed.economic.sort((a, b) => a.localeCompare(b));
             // 26 Oct 2026: a sector role the user typed (as champion or any stakeholder) is never "not in your list". Across seats the title must be
             // the same once case, acronyms and a plural are set aside ("CISO" is the "Chief Information Security Officer"); sameRole is too loose
             // there ("VP Engineering" would be the "Engineering Manager"). sameRole also drops two-letter words such as IT, so the same-level heads
@@ -1461,7 +1489,12 @@ ${SUGGESTED}
             }
             if (typedChampion && seat && !horizontal && !sameRole(typedChampion, seat.champion) && !stakeholders.some(x => sameRole(x, seat.champion)) && !typedAnywhere(seat.champion))
                 sectorDefaults.push(`${seat.champion} (champion)`);
-            const extra = ['economic', 'technical', 'blocker', 'user'].flatMap(k => placed[k].slice(1).map(x => `${x} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`));
+            const budgetCandidates = placed.economic;
+            if (args.confirmed_budget_owner?.trim())
+                buyingGroup.economic.role = args.confirmed_budget_owner.trim() + ' (budget authority confirmed in your answer)';
+            else if (budgetCandidates.length > 1)
+                buyingGroup.economic.role = 'not confirmed; candidates from your stakeholder list: ' + budgetCandidates.join('; ') + '. Confirm who owns this purchase budget; list order does not establish authority';
+            const extra = ['economic', 'technical', 'blocker', 'user'].filter(k => k !== 'economic' || budgetCandidates.length < 2).flatMap(k => placed[k].slice(1).map(x => `${x} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`));
             const technicalSteps = ctx.model === 'connectivity' ? ['Offer a site survey and a small set of pilot sites', 'Share the network design and the cut-over plan', 'Offer a technical session with your network team', 'Answer the security questionnaire before it is asked']
                 : ctx.model === 'services' ? ['Share the transition plan and the team model', 'Agree the SLA and the reports up front', 'Offer a session with the delivery lead', 'Answer the security questionnaire before it is asked']
                     : ctx.model === 'saas' ? ['Provide sandbox/POC access', 'Share integration documentation', 'Offer technical deep-dive call', 'Address security questionnaire proactively']
@@ -1481,13 +1514,15 @@ ${strategy.map(x => `- ${x}`).join('\n')}
             const mapGroup = { economic: { role: mapRole(buyingGroup.economic.role) }, champion: { role: mapRole(buyingGroup.champion.role) }, technical: { role: mapRole(buyingGroup.technical.role) }, user: { role: mapRole(buyingGroup.user.role) }, blocker: { role: mapRole(buyingGroup.blocker.role) } };
             return `# Buyer Group Analysis
 
+${placed.unknown.length ? `**Authority unconfirmed:** ${placed.unknown.join('; ')}. Their role in this purchase is not established; ask who owns the budget and who must approve. They are not assigned a decision seat from title alone.\n` : ''}
+
 ## Deal Context
 - ${companyLine(args.company)}
 - **Product**: ${args.product_category}
 - **Deal Size**: ${dealSize}
 - **Target Company**: ${companySize}
 - **Known Stakeholders**: ${stakeholders.length ? (0, escape_inputs_ts_1.escapePiece)(stakeholders.join(', ')) : 'Not specified'}
-- **Champion you named**: ${typedChampion || 'not given (add typical_champion)'}
+- **Champion you named**: ${typedChampion || 'not given (add typical champion)'}
 
 ${ctx.line}
 
@@ -1555,7 +1590,7 @@ ${qv ? `4. "${qv.discovery[1]}"\n` : ''}
 1. "Which reviews must this pass, how long do they take, and what do you need from us before they start?"
 2. ${objBlock ? `"Has '${lowerCommonWords(objBlock.objection)}' come up on similar purchases, and how was it settled?"` : '"What has stopped similar purchases at the review stage before?"'}
 
-${qv && moreQs.length ? `### More ${horizontal ? hv.name || qv.name : qv.name} questions\n${moreQs.map((x, i) => `${i + 1}. "${x}"`).join('\n')}\n\n` : ''}**Next Step**: Use \`tam_sam_som_calculator\` to size your market
+${qv && moreQs.length ? `### More ${horizontal ? hv.name || qv.name : qv.name} questions\n${moreQs.map((x, i) => `${i + 1}. "${x}"`).join('\n')}\n\n` : ''}**Next Step**: Use \`TAM SAM SOM Calculator\` to size your market
 
 ${SUGGESTED}
 `;
@@ -1625,8 +1660,6 @@ ${SUGGESTED}
             const targetDeals = Math.round(som / acv);
             // Format numbers
             const formatCurrency = (num) => {
-                if (build_profile_ts_1.BUILD_PROFILE.profile !== "current" && num < 1000 && Number(num.toFixed(2)) >= 1000)
-                    return "$1K";
                 // Run 15 R15-32 (D38): separators, and never an exponent however large the figure
                 if (num >= 1000000000)
                     return `$${(num / 1000000000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}B`;
@@ -1664,7 +1697,7 @@ ${SUGGESTED}
 
 - ${companyLine(args.company)}
 
-${ctx.v ? (args.product_category ? ctx.line : `*Sector: read from your inputs as ${ctx.v.name}.*`) : '*Sector notes: none. This calculator takes a market segment, not a product; give product_category to the other ICP tools for notes that fit what you sell.*'}
+${ctx.v ? (args.product_category ? ctx.line : `*Sector: read from your inputs as ${ctx.v.name}.*`) : '*Sector notes: none. This calculator takes a market segment, not a product; give product category to the other ICP tools for notes that fit what you sell.*'}
 
 ---
 
@@ -1738,7 +1771,7 @@ ${somEx ? `Values computed with a preset rate you did not supply are examples.\n
 ### Year 1 Target
 - **Revenue Goal**: ${formatCurrency(som)}${somEx}
 - **Deals Needed**: ${countText(targetDeals, som / acv, '~')} closed customers${somEx}
-- **Monthly Target**: ${countText(Math.ceil(targetDeals / 12), som / acv, '~')} deals/month${somEx}
+- **Monthly Target**: ${countText(Math.ceil(targetDeals / 12), som / acv, '~')} ${Math.ceil(targetDeals / 12) === 1 ? 'deal' : 'deals'}/month${somEx}
 - **Pipeline Required**: ${formatCurrency(som * 3)} (SOM × 3, a 1 in 3 win rate) ${EXAMPLE}
 
 ### Growth Path
@@ -1780,7 +1813,7 @@ Later years assume your market share doubles each year.
 > 
 > *Figures calculated from your inputs${somEx ? ', plus the preset rates marked as examples above' : ''}${args.data_sources ? `. Data sources you named: ${args.data_sources}` : ''}.*
 
-${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'proof'], args.product_category, args.segment_name)}\n- **Counting companies in this sector:** count only companies where the roles above exist and the problem is measured (${andList(sideM.slice(0, 2))}).\n\n` : ''}**Next Step**: Use \`lookalike_signal_generator\` to create targeting criteria
+${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'proof'], args.product_category, args.segment_name)}\n- **Counting companies in this sector:** count only companies where the roles above exist and the problem is measured (${andList(sideM.slice(0, 2))}).\n\n` : ''}**Next Step**: Use \`Lookalike Signal Generator\` to create targeting criteria
 `;
         }
     },
@@ -1880,20 +1913,22 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
                     ...(tech || []).map(t => `${t.toLowerCase()} integration`)])];
             // Run 19 D80 (problem 3): every trigger typed gets its own signal, chosen by its words.
             const signalFor = (t) => {
+                if ((0, text_signals_ts_2.buyingConstraint)(t).state === 'affirmed')
+                    return ['Confirm financial and purchasing status with the account owner', 'Purchase constraint: hold buying-intent scoring; this is not evidence of budget or urgency', 'Confirm authority and available budget before outreach'];
                 const x = t.toLowerCase();
-                if (/hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/.test(x))
+                if ((0, text_signals_ts_4.hasSignal)(x, /hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/, 'hiring'))
                     return [`A new ${titles[0] || 'leader'} or a related leader joined in the last 90 days`, 'New leaders review tools and processes early', 'LinkedIn alerts, ZoomInfo job changes'];
-                if (/fund|series|raise|raised|investment|ipo|listing/.test(x))
+                if ((0, text_signals_ts_4.hasSignal)(x, /fund|series|raise|raised|investment|ipo|listing/, 'funding'))
                     return [`Funding or listing news${stages ? ` at the stages you target (${stages.join(', ')})` : ''}`, 'New budget is allocated for scaling', 'Crunchbase alerts, news alerts, LinkedIn'];
-                if (/audit|compliance|regulat|breach|incident|finding/.test(x))
+                if ((0, text_signals_ts_4.hasSignal)(x, /audit|compliance|regulat|breach|incident|finding/, 'security'))
                     return ['Audit findings, regulatory notices or incidents made public, and hiring for audit, risk or compliance roles', 'A finding sets a deadline and a budget owner', 'News alerts, annual reports and filings, job posts'];
-                if (/migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/.test(x))
+                if ((0, text_signals_ts_4.hasSignal)(x, /migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/, 'migration'))
                     return ['Job posts and announcements that mention the new system or the migration', 'A system change reopens the processes around it', 'Job posting alerts, technographic change data, news alerts'];
-                if (/expan|new office|new market|branch|site|hiring|grow/.test(x))
+                if ((0, text_signals_ts_4.hasSignal)(x, /expan|new office|new market|branch|site|hiring|grow/, 'growth'))
                     return ['New offices, markets, branches or a hiring surge', 'Existing processes strain as the company grows', 'Job posting velocity, news alerts'];
-                if (/miss|target|loss|cost|margin|delay|outage|churn/.test(x))
+                if ((0, text_signals_ts_4.hasSignal)(x, /miss|target|loss|cost|margin|delay|outage|churn/, 'shortfall'))
                     return ['Results, statements or job posts that mention the problem', 'A missed target creates urgency and an owner', 'Earnings and news alerts, leadership posts on LinkedIn'];
-                return ['News, job posts or posts by your champion titles that mention it', 'Your team named this as a reason to buy', 'News alerts and job posting alerts on the exact words'];
+                return ['An unconfirmed event from your notes', 'Buying intent is not established; confirm the event, an active need and purchase authority before using it as a trigger', 'Check the source with the account owner; do not infer budget or urgency from the label'];
             };
             // A long trigger (a sentence from a page) is shown in full once, in the summary; headings use its first clause.
             const trigHead = (t) => cap(clauseHead(t, 90));
@@ -1906,7 +1941,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
 
 **Company Search**:
 \`\`\`
-${[industries ? `Industry: ${industries.join(' OR ')}` : '', sizes ? `Company headcount: ${sizes.join(' OR ')}` : '', locations ? `Headquarters: ${locations.join(' OR ')}` : '', tech ? `Technologies used: ${tech.join(' OR ')}` : ''].filter(Boolean).join('\n') || 'No firmographic input given: add icp_firmographics (industries, company_sizes, locations) to fill this search'}
+${[industries ? `Industry: ${industries.join(' OR ')}` : '', sizes ? `Company headcount: ${sizes.join(' OR ')}` : '', locations ? `Headquarters: ${locations.join(' OR ')}` : '', tech ? `Technologies used: ${tech.join(' OR ')}` : ''].filter(Boolean).join('\n') || 'No firmographic input given: add icp firmographics (industries, company sizes, locations) to fill this search'}
 \`\`\`
 
 **Lead Search**:
@@ -1930,9 +1965,9 @@ ${groups.length ? `\nNot job titles, so not in the title search: ${groups.join('
 ### Custom Intent Audiences
 **Keywords to target** (people searching for what you sell):
 \`\`\`
-${keywords.length ? (0, escape_inputs_ts_1.escapePiece)(keywords.map(k => `"${k}"`).join('\n')) : 'No product_category and no sector read: add product_category (what you sell) for search keywords about your product'}
+${keywords.length ? (0, escape_inputs_ts_1.escapePiece)(keywords.map(k => `"${k}"`).join('\n')) : 'No product category and no sector read: add product category (what you sell) for search keywords about your product'}
 \`\`\`
-${product ? '' : 'Add product_category (what you sell) for search keywords about your product: this tool does not guess it.\n'}${keywordWords.length ? `The keywords after the first one are the sector's own words with "${suffix}" added: test each in the Keyword Planner and drop what does not fit how you sell.\n` : ''}
+${product ? '' : 'Add product category (what you sell) for search keywords about your product: this tool does not guess it.\n'}${keywordWords.length ? `The keywords after the first one are the sector's own words with "${suffix}" added: test each in the Keyword Planner and drop what does not fit how you sell.\n` : ''}
 ### Custom Audience: Website Visitors
 Target visitors to the sites of the competitors your buyers compare you with (add their addresses).
 
@@ -1948,7 +1983,7 @@ ${JSON.stringify({ firmographics: { ...(industries ? { industry: industries } : 
 
 ### Intent Topic Keywords
 \`\`\`
-${[...new Set([...(searchProduct && !(phraseFirst && productPhrases.length) ? [searchProduct.replace(/ \.\.\.$/, '')] : []), ...(phraseFirst || keywordWords.length === 0 ? productPhrases.slice(0, 3) : []), ...(vocabOk ? v.vocabulary.slice(0, 5) : []), ...(tech || [])])].join('\n') || 'Add product_category for intent topics'}
+${[...new Set([...(searchProduct && !(phraseFirst && productPhrases.length) ? [searchProduct.replace(/ \.\.\.$/, '')] : []), ...(phraseFirst || keywordWords.length === 0 ? productPhrases.slice(0, 3) : []), ...(vocabOk ? v.vocabulary.slice(0, 5) : []), ...(tech || [])])].join('\n') || 'Add product category for intent topics'}
 \`\`\`
 
 ### Buying Stage Indicators
@@ -2005,18 +2040,18 @@ ${stages ? `- Funding or listing news at your stages: ${stages.join(', ')}\n` : 
             return `# Lookalike Signal & Targeting Criteria
 
 - ${companyLine(args.company)}
-- **What you sell**: ${product || 'not given (add product_category for search keywords)'}
+- **What you sell**: ${product || 'not given (add product category for search keywords)'}
 
 ${sectorLine(v, ctx.via)}
 
 ## ICP Summary
-- **Industries**: ${industriesTyped ? industriesTyped.join(industriesTyped.some(i => i.includes(',')) ? '; ' : ', ') : 'not supplied (add icp_firmographics.industries)'}
-- **Company Sizes**: ${sizes ? sizes.join(', ') : 'not supplied (add icp_firmographics.company_sizes, for example employee ranges of your best customers)'}
-- **Locations**: ${locations ? locations.join(', ') : 'not supplied (add icp_firmographics.locations)'}
+- **Industries**: ${industriesTyped ? industriesTyped.join(industriesTyped.some(i => i.includes(',')) ? '; ' : ', ') : 'not supplied (add icp firmographics.industries)'}
+- **Company Sizes**: ${sizes ? sizes.join(', ') : 'not supplied (add icp firmographics.company sizes, for example employee ranges of your best customers)'}
+- **Locations**: ${locations ? locations.join(', ') : 'not supplied (add icp firmographics.locations)'}
 - **Funding Stages**: ${stages ? stages.join(', ') : 'not supplied'}
-- **Technologies**: ${tech ? tech.join(', ') : `not supplied (add icp_technographics: the systems your buyers run that your product connects to${sysList ? `; in ${v.name} these are usually ${sysList}` : ''})`}
+- **Technologies**: ${tech ? tech.join(', ') : `not supplied (add icp technographics: the systems your buyers run that your product connects to${sysList ? `; in ${v.name} these are usually ${sysList}` : ''})`}
 - **Champion Titles**: ${titles.join(', ')}${groups.length ? ` (groups, not titles: ${groups.join(', ')})` : ''}
-- **Buying Triggers**: ${triggers ? triggers.join('; ') : 'not supplied (add buying_triggers: the events that make a buyer start looking)'}
+- **Buying Triggers**: ${triggers ? triggers.join('; ') : 'not supplied (add buying triggers: the events that make a buyer start looking)'}
 ${v && !isHorizontal(v) ? `- **Other roles in ${/^[aeiou]/i.test(v.name) ? 'an' : 'a'} ${v.name} buying group** (not in your input): ${v.buyerRoles.filter(r => !titles.some(t => sameRole(aliasRole(t, v), r))).join(', ')}\n` : ''}
 ${wanted.length ? `Sections shown: the platforms you asked for (${args.platforms.join(', ')}).\n` : ''}
 ---
@@ -2033,7 +2068,7 @@ ${triggers ? triggers.map(t => {
 **Signal**: ${signal}
 **Why it matters**: ${why}
 **How to track**: ${how}`;
-            }).join('\n\n') : `No buying triggers were given, so no trigger-specific signals are written: this tool does not assume them. One signal that fits any B2B purchase (general, not from your input): a new ${titles[0] || 'leader'} or a related leader in the last 90 days, tracked with LinkedIn alerts or ZoomInfo job changes. Add buying_triggers for signals that fit your buyers.${v ? ` In ${v.name}, deals usually run like this, which tells you when to search: ${v.salesMotion}` : ''}`}
+            }).join('\n\n') : `No buying triggers were given, so no trigger-specific signals are written: this tool does not assume them. One signal that fits any B2B purchase (general, not from your input): a new ${titles[0] || 'leader'} or a related leader in the last 90 days, tracked with LinkedIn alerts or ZoomInfo job changes. Add buying triggers for signals that fit your buyers.${v ? ` In ${v.name}, deals usually run like this, which tells you when to search: ${v.salesMotion}` : ''}`}
 
 ${v ? `${sectorNotes(v, ['metrics', 'vocabulary', 'proof'])}\n\n` : ''}---
 
@@ -2051,10 +2086,10 @@ ${needs.length ? `To execute these searches, you need:
 ${needs.map((x, i) => `${i + 1}. ${x}`).join('\n')}
 
 ` : ''}${missing.length
-                ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`
+                ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.map(text_signals_ts_3.readerLabel).join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`
                 : 'The criteria above are built from your inputs and ready to copy/paste into each platform.'}
 
-**Next Step**: Use \`account_prioritization\` to rank accounts for outreach
+**Next Step**: Use \`Account Prioritization\` to rank accounts for outreach
 
 ${SUGGESTED}
 `;
@@ -2077,10 +2112,10 @@ ${SUGGESTED}
                             fit_score: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100. Left out, 50 is used' },
                             intent_signals: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100 (0 scores zero). Left out, 50 is used' },
                             relationship: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100, based on existing connections. Left out, 50 is used' },
-                            timing: { type: 'string', description: 'now, soon, later or unknown (now 100 points, soon 70, later 40; unknown, left out or any other word 50)' }
+                            timing: { type: 'string', description: 'Buying horizon: now, soon, later or unknown (100, 70, 40 and 50 points respectively). Equivalent phrases are read by clause; denied or conflicting horizons remain unknown. Confirm the horizon with the user.' }
                         }
                     },
-                    description: 'List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)'
+                    description: 'List of accounts to prioritize. Each account: name, fit score (0 to 100), intent signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)'
                 },
                 prioritization_weights: {
                     type: 'object',
@@ -2116,14 +2151,7 @@ ${SUGGESTED}
             const wEx = (given) => (noWeights || has(given)) ? '' : ` ${EXAMPLE}`;
             // If accounts provided, score them
             if (args.accounts && args.accounts.length > 0) {
-                const timingScore = (timing) => {
-                    switch (timing?.toLowerCase()) {
-                        case 'now': return 100;
-                        case 'soon': return 70;
-                        case 'later': return 40;
-                        default: return 50;
-                    }
-                };
+                const timingScore = (timing) => (0, text_signals_ts_4.timingFact)(timing).score;
                 // D41 (run 15): the tier cut-offs are 80%, 60% and 40% of the highest possible score W, the sum of the four weights
                 // (ceil in integer-safe form; with the default weights W = 100 they are 80, 60 and 40, as before).
                 const W = Number((weights.fit + weights.intent + weights.relationship + weights.timing).toPrecision(12)); // run 20: 33.3 + 33.3 + 33.3 + 0.1 is 100, not 99.99999999999999
@@ -2207,7 +2235,7 @@ ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default wei
 Your scores are shown as given (to one decimal at most); ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'} (now 100, soon 70, later 40, unknown 50 points). (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
 |------|---------|-----|--------|--------------|--------|-----------|------|
-${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${cleanNum1(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${cleanNum1(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${cleanNum1(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
+${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${cleanNum1(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${cleanNum1(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${cleanNum1(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${(0, text_signals_ts_4.timingFact)(a.timing).state === 'affirmed' ? '' : '; fact was not clear'}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
 
 ---
 
@@ -2250,7 +2278,7 @@ ${sv ? `How deals run in ${sv.name}: ${sv.salesMotion}\n${isHorizontal(sv) ? '' 
 - **Recommended action**: ${nextStep(a)}
 `).join('')}
 
-**Next Step**: Use \`icp_gap_analysis\` to compare current vs ideal customers
+**Next Step**: Use \`ICP Gap Analysis\` to compare current vs ideal customers
 
 ${SUGGESTED}
 `;
@@ -2285,7 +2313,7 @@ ${EXAMPLES}
 
 ## How to Use
 
-Provide accounts in this format (the accounts and scores below are examples; the tool reads name, fit_score, intent_signals, relationship and timing):
+Provide accounts in this format (the accounts and scores below are examples; the tool reads name, fit score, intent signals, relationship and timing):
 
 ${EXAMPLES}
 \`\`\`json
@@ -2293,15 +2321,15 @@ ${EXAMPLES}
   "accounts": [
     {
       "name": "Example Manufacturing Co",
-      "fit_score": 85,
-      "intent_signals": 70,
+      "fit score": 85,
+      "intent signals": 70,
       "relationship": 60,
       "timing": "now"
     },
     {
       "name": "Example IT Services Co",
-      "fit_score": 75,
-      "intent_signals": 90,
+      "fit score": 75,
+      "intent signals": 90,
       "relationship": 40,
       "timing": "soon"
     }
@@ -2443,7 +2471,7 @@ ${SUGGESTED}
             const acvOnly = sectorV;
             // the shared sector line, without its requests for inputs (the missing inputs are named once, at the end of the answer)
             const productGivenText = !!(args.product_category && args.product_category.trim());
-            const contextLine0 = ctx.line.replace(ctx.v ? ctx.v.name : '\u0000', vv ? vv.name : '\u0000').replace(/ \(describe your product, for example in product_category, for sector notes\)/, '').replace(/; set business_model \([^)]*\) for advice that fits it/, '').replace(/; set business_model to change it/g, '').replace(/, so describe what you sell for notes that fit it/, '');
+            const contextLine0 = ctx.line.replace(ctx.v ? ctx.v.name : '\u0000', vv ? vv.name : '\u0000').replace(/ \(describe your product, for example in product category, for sector notes\)/, '').replace(/; set business_model \([^)]*\) for advice that fits it/, '').replace(/; set business_model to change it/g, '').replace(/, so describe what you sell for notes that fit it/, '');
             const contextLine = !ctx.v && productGivenText ? contextLine0.replace('Sector: not clear from what you sell.', 'Sector: the product text you gave names none of the sectors this server has notes for, so there are no sector notes or role checks below.') : contextLine0;
             const targetAcv = pairs.acv[1];
             const sectorNotesText = vv ? sideNotes(vv, ['committee', 'metrics', 'vocabulary', 'proof'], ctx0.idl.roles, ctx0.cur.roles, args.product_category) : '';
@@ -2530,18 +2558,22 @@ ${SUGGESTED}
             const icpWords = new Set(args.current_icp.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3));
             const isNew = (t) => t.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3 && !['with', 'where', 'that', 'they', 'them', 'from', 'more', 'most', 'deals', 'deal', 'customers', 'customer', 'buyers', 'buyer', 'wanted', 'wanting', 'lost', 'won'].includes(w)).some(w => !icpWords.has(w));
             const items = (t) => (t || '').split(/\n|;/).map(x => x.trim().replace(/^[-*•]\s*/, '')).filter(Boolean);
-            const wins = items(args.recent_wins), losses = items(args.recent_losses), changes = items(args.market_changes);
-            const lossKind = (t) => /price|cheaper|cost|budget|expensive|free/i.test(t) ? 'lost on price: check whether these buyers had the budget your ICP assumes'
-                : /bundle|one vendor|single vendor|suite|all-in-one|erp-only|together/i.test(t) ? 'lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP'
-                    : /competitor|incumbent|already/i.test(t) ? 'lost to an existing or competing tool: check what made the switch too hard'
-                        : /timing|priority|later|freeze/i.test(t) ? 'lost on timing: check for a trigger before you qualify'
-                            : 'check whether these buyers should have been qualified out earlier';
+            const allWins = items(args.recent_wins), allLosses = items(args.recent_losses), changes = items(args.market_changes);
+            const itemKey = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+            const conflicts = allWins.filter(w => allLosses.some(l => itemKey(w) === itemKey(l)));
+            const wins = allWins.filter(w => !conflicts.includes(w)), losses = allLosses.filter(l => !conflicts.some(w => itemKey(w) === itemKey(l)));
+            const scopeChanges = changes.filter(c => (0, text_signals_ts_3.scopeDisposition)(c).state === 'affirmed');
+            const lossKind = (t) => (0, text_signals_ts_4.hasSignal)(t, /price|cheaper|cost|budget|expensive|free/i, 'price') ? 'lost on price: check whether these buyers had the budget your ICP assumes'
+                : (0, text_signals_ts_4.hasSignal)(t, /bundle|one vendor|single vendor|suite|all-in-one|erp-only|together/i, 'bundle') ? 'lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP'
+                    : (0, text_signals_ts_4.hasSignal)(t, /competitor|incumbent|already/i, 'incumbent') ? 'lost to an existing or competing tool: check what made the switch too hard'
+                        : (0, text_signals_ts_4.hasSignal)(t, /timing|priority|later|freeze/i, 'timing') ? 'lost on timing: check for a trigger before you qualify'
+                            : 'loss cause is not clear; ask for the deciding reason before creating a disqualifier';
             const winLines = wins.map(w => isNew(w)
                 ? `- **Candidate addition**: ${q(shortText(w, 200))}: this is not in your current ICP; test adding it if these deals closed faster or larger than your average`
                 : `- **Confirms your ICP**: ${q(shortText(w, 200))}: it matches your current ICP, so keep it`);
             const lossLines = losses.map(l => `- **Candidate disqualifier**: ${q(shortText(l, 200))}: ${lossKind(l)}`);
             const changeLines = changes.map(c => `- **Implication to check**: ${q(shortText(c, 200))}: check which segments of your ICP this moves toward you or away from you, and update the qualifying questions`);
-            const firstChange = wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew), 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
+            const firstChange = scopeChanges.length ? 'Reconcile the changed selling scope before testing an ICP addition' : conflicts.length ? 'Reconcile the conflicting win and loss outcomes before changing the ICP' : wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew), 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
             // Run 20 round 1 (quality): with or without wins and losses, your current ICP is read in parts and each part gets a test to run in
             // your CRM; the sector adds the roles and loss reasons to look for. Nothing is invented: every part is your own words.
             const partLines = [];
@@ -2571,6 +2603,22 @@ ${SUGGESTED}
             } : null;
             const { bv: sideV, name: sideName } = buyerSide(v, prof.roles, args.current_icp, args.product_category);
             const roleAdds = sideV ? sideV.buyerRoles.filter(r => ![...prof.roles].some(n => sameRole(aliasRole(n, sideV), r))).slice(0, 4) : [];
+            // Run 42c: with no wins and no losses given, the review is a short plan for what to collect, from whom and which signals to tag, in the seller's own words and the sector's.
+            const noDataPlan = (!wins.length && !losses.length) ? (() => {
+                const what = args.product_category ? `what ${q(clauseHead(args.product_category, 80))} is bought for` : 'what you sell';
+                const from = [...(roles.length ? roles.slice(0, 2) : (sideV ? sideV.buyerRoles.slice(0, 2) : []))];
+                const sig = vRanked ? vRanked.metrics.slice(0, 3) : [];
+                const tags = vRanked ? vRanked.objections.slice(0, 3).map(o => lowerCommonWords(o.objection)) : [];
+                const segList = segs.length ? andList(segs.slice(0, 3)) : 'each customer group in your ICP';
+                return `## Next Step Plan (no wins or losses were given)
+
+1. **Collect**: for ${segList}, the deals closed (won and lost) in the last two quarters: ACV, sales cycle, who signed, and the reason given for the result. Write each loss reason in the buyer's words, next to ${what}.
+2. **Ask**: ${from.length ? `${andList(from)} at three customers you won and three you lost, and ask what they were comparing and what finally decided it.` : 'the buyer at three customers you won and three you lost, and ask what they were comparing and what finally decided it.'}
+3. **Tag**: ${sig.length ? `how the deals moved ${andList(sig)}` : 'the measure each buyer said they were held to'}${tags.length ? `, and tag losses with ${andList(tags)} where they apply` : ''}.
+4. **Then rerun this tool** with recent wins, recent losses and market changes filled from steps 1 to 3.
+
+`;
+            })() : '';
             return `# ICP Evolution Analysis
 
 - ${companyLine(args.company)}
@@ -2588,19 +2636,20 @@ This review reads your notes against your current ICP and states candidate chang
 
 ## Win/Loss Pattern Analysis
 
+${conflicts.length ? `**Conflicting outcomes:** the same observation appears in both wins and losses: ${conflicts.map(x => q(x)).join('; ')}. Confirm which deals and outcomes it describes; it is held out of additions and disqualifiers.\n` : ''}${scopeChanges.length ? `**Selling scope changed:** ${scopeChanges.map(x => q(x)).join('; ')}. Reconcile which products and segments you still serve before adding from historical wins.\n` : ''}
 ### Recent Wins
-${wins.length ? winLines.join('\n') : '- No win data provided: add recent_wins to find possible additions'}
+${wins.length ? winLines.join('\n') : '- No win data provided: add recent wins to find possible additions'}
 
 ### Recent Losses
-${losses.length ? lossLines.join('\n') : '- No loss data provided: add recent_losses to find possible disqualifiers'}
+${losses.length ? lossLines.join('\n') : '- No loss data provided: add recent losses to find possible disqualifiers'}
 
 ---
 
 ## Market Change Impact
 
-${changes.length ? changeLines.join('\n') : '- No market changes provided: add market_changes to assess the impact on your ICP'}
+${changes.length ? changeLines.join('\n') : '- No market changes provided: add market changes to assess the impact on your ICP'}
 
-## Your Current ICP, Part by Part
+${noDataPlan}## Your Current ICP, Part by Part
 
 ${partLines.length ? `${partLines.join('\n')}\n` : 'Your current ICP text did not split into segments, size, buyer role or problem. Write it in those parts (for example "mid-size banks, 500 to 2,000 employees, CFO as buyer, who face manual reconciliation") to get a test for each part.\n'}${roleAdds.length ? `\n**Roles usual in ${sideName} that your ICP does not name**: ${andList(roleAdds)}. Check whether they sign or evaluate in the deals you won or lost; if they do, the ICP should name them.\n` : ''}${vRanked ? `\n**Loss reasons to tag in your CRM** (the objections ${vRanked.name} buyers raise): ${vRanked.objections.map(o => lowerCommonWords(o.objection)).join('; ')}. Count each over the period you are reviewing; a reason that rises is a change to your ICP or your qualification.\n` : ''}
 ${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.roles, args.current_icp, args.product_category)}\n\n` : ''}---
@@ -2611,7 +2660,7 @@ ${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.r
 
 - **Your ICP as written**: ${q(shortText(args.current_icp, 700))}
 - **Segments to keep until the data says otherwise**: ${segs.length ? andList(segs.slice(0, 6)) : 'your ICP text did not split into segments (see above)'}${profSizes.length ? `; size: ${andList(profSizes.map(x => clauseHead(x, 60)))}` : ''}.
-${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
+${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${scopeChanges.length ? 'held until the changed selling scope is confirmed' : wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
 - **Qualify out on trial**: ${losses.length ? andList(losses.slice(0, 3).map(l => q(shortText(l, 140)))) + ' (' + andList([...new Set(losses.slice(0, 3).map(l => lossKind(l).split(':')[0]))]) + ')' : 'nothing yet, because no losses were given'}.
 - **First change to test**: ${firstChange}.
 - **Check against the market**: ${changes.length ? andList(changes.slice(0, 3).map(c => q(shortText(c, 140)))) + ': which of your segments does it move toward you or away from you?' : 'no market change was given.'}
@@ -2620,7 +2669,7 @@ ${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4)
 
 For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the deals you won and lost, the ACV and the sales cycle, and the churn and renewals. ${roles.length ? `For ${andList(roles.slice(0, 3))}: the deals where they were involved against the deals where they were not.` : ''} Put the answers next to the draft above and change a line only where the numbers say so.
 
-**Next Step**: Use \`icp_interview_synthesizer\` to extract patterns from customer interviews
+**Next Step**: Use \`ICP Interview Synthesizer\` to extract patterns from customer interviews
 `;
         }
     },
@@ -2674,7 +2723,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
                 // as a customer quote belongs under Key Quotes. Counts read "2 of 3 interviews", and notes that repeat one text say so.
                 const isQuestion = (t) => /\?\s*$/.test(t.trim());
                 const quoteLike = (t) => /\((?:customer|partner|analyst|client) quote\)|\b(?:customer|partner|client) quote\b|\bcustomer words\b|^["“]/i.test(t);
-                const claimLike = (t) => !quoteLike(t) && /page claim|case study|story title|success story|ebook|home page|\baward|recogni[sz]|\blisted\b|ranking|named a\b|leader in|featured in|\(case study\)|magic quadrant|frost radar/i.test(t);
+                const claimLike = (t) => !quoteLike(t) && /page claim|case study|story title|success story|ebook|home page|\baward|recogni[sz]|\blisted\b|ranking|named a\b|leader in|featured in|\(case study\)|magic quadrant|frost radar|^(?:a )?(?:quote|testimonial)s? (?:from|by)\b|\btestimonial\b/i.test(t);
                 const unquote = (t) => t.replace(/\s*\((?:customer|partner|analyst|client) quote\)\s*$/i, '').replace(/^customer (?:quote|words):\s*/i, '').replace(/^["“](.*)["”]$/, '$1').trim();
                 // Host review 30 Oct 2026: "Not measured", "None yet", "Unknown" or "N/A" in a field says nothing was captured; it is not a pain,
                 // a trigger or an outcome to lead with, so it is left out of the counts and named once under "Read this first".
@@ -2736,7 +2785,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
                 const readFirst = [
                     gaps.length ? `${gaps.length === 1 ? 'One entry says' : `${gaps.length} entries say`} nothing was captured, so ${gaps.length === 1 ? 'it is' : 'they are'} left out of the counts below: ${andList([...new Set(gaps)])}. Ask about ${gaps.length === 1 ? 'it' : 'them'} in the next interview.` : '',
                     sameAcross ? `All ${n} interview notes carry the same pain points, questions and value statements, so every count below is ${n} of ${n} by repetition. Treat them as one source until you add notes from separate interviews.` : '',
-                    asked.length ? `${plural(asked.length, 'item')} in pain_points ${asked.length === 1 ? 'is a question a buyer asked' : 'are questions buyers asked'} (listed apart, not counted as pain points).` : '',
+                    asked.length ? `${plural(asked.length, 'item')} in pain points ${asked.length === 1 ? 'is a question a buyer asked' : 'are questions buyers asked'} (listed apart, not counted as pain points).` : '',
                     claims.length ? `${plural(claims.length, 'value statement')} read${claims.length === 1 ? 's' : ''} like a page claim, award or case study title rather than an outcome a customer told you (listed apart; confirm ${claims.length === 1 ? 'it' : 'them'} with customers before you lead with ${claims.length === 1 ? 'it' : 'them'}).` : '',
                 ].filter(Boolean);
                 return `# Customer Interview Synthesis
@@ -2759,13 +2808,13 @@ ${topPains.length > 0 ? topPains.map(([pain, count], i) => `${i + 1}. **${shortT
 **ICP Implication**: Target customers experiencing these pain points
 ${asked.length ? `\n### Questions Buyers Asked (not counted as pain points)\n${asked.map(([t, k]) => `- ${q(shortText(t, 200))} (${of(k)}): ${questionAnswer(t)}`).join('\n')}\n` : ''}${allObjections.length ? `\n### Objections heard\n${allObjections.map(o => `- ${q(o)}: ${answerFor(o, v)}`).join('\n')}\n` : ''}
 ### Top Buying Triggers
-${topTriggers.length > 0 ? topTriggers.map(([trigger, count], i) => `${i + 1}. **${trigger}**: ${of(count)}`).join('\n') : '- No triggers captured. Ask each customer: "What changed that made you start looking?" and record the answer as buying_triggers.'}
+${topTriggers.length > 0 ? topTriggers.map(([trigger, count], i) => `${i + 1}. **${trigger}**: ${of(count)}`).join('\n') : '- No triggers captured. Ask each customer: "What changed that made you start looking?" and record the answer as buying triggers.'}
 
 **ICP Implication**: Time outreach around these events
 
 ### Value Realized (Post-Purchase)
-${results.length > 0 ? results.map(([value, count], i) => `${i + 1}. **${shortText(value, 300)}**: ${of(count)}`).join('\n') : '- No outcomes captured as results. Ask each customer what changed for them, in their own words, and record it as value_realized.'}
-${claims.length ? `\n**Claims and recognition in your notes** (not outcomes a customer reported to you; use them as proof points only after a customer confirms them):\n${claims.map(([value, count]) => `- ${shortText(value, 300)} (${of(count)})`).join('\n')}\n` : ''}
+${results.length > 0 ? results.map(([value, count], i) => `${i + 1}. **${shortText(value, 300)}**: ${of(count)}`).join('\n') : '- No outcomes captured as results. Ask each customer what changed for them, in their own words, and record it as value realized.'}
+${claims.length ? `\n**Claims and recognition in your notes** (seller claims and testimonials: statements from the seller's own pages, quotes from the seller's customers or awards, not outcomes a customer reported to you in an interview; use them as proof points only after a customer confirms them):\n${claims.map(([value, count]) => `- ${shortText(value, 300)} (${of(count)})`).join('\n')}\n` : ''}
 **ICP Implication**: ${results.length ? 'Lead with these outcomes in messaging' : 'Collect customer outcomes before you lead with value in messaging'}
 
 ### Champion Roles
@@ -2780,8 +2829,8 @@ ${tieNote(topRoles, 'role')}
 ${allQuotes.length ? allQuotes.slice(0, 5).map((qt, i) => `
 ### Quote ${i + 1}
 > "${qt.quote}"
-> (${qt.role || 'Customer'}${qt.customer ? (qt.from ? `: ${qt.customer}` : ` at ${qt.customer}`) : ''}${qt.from ? `; written in ${qt.from}, marked as a customer quote` : ''})
-`).join('\n') : 'No key_quotes were given and none of your statements is marked as a customer quote, so none are shown. Quotes are never written for you: add key_quotes, word for word, from your interviews.'}
+> (${qt.role || 'Customer'}${qt.customer ? (qt.from ? `: ${qt.customer}` : ` at ${qt.customer}`) : ''}${qt.from ? `; written in ${(0, text_signals_ts_3.readerLabel)(qt.from)}, marked as a customer quote` : ''})
+`).join('\n') : 'No key quotes were given and none of your statements is marked as a customer quote, so none are shown. Quotes are never written for you: add key quotes, word for word, from your interviews.'}
 
 ---
 
@@ -2831,24 +2880,24 @@ For better analysis, structure your interviews in this format. Example only, not
 ${EXAMPLES}
 \`\`\`json
 {
-  "interview_notes": [
+  "interview notes": [
     {
       "customer": "Example Manufacturing Co",
       "role": "Finance Controller",
-      "key_quotes": [
+      "key quotes": [
         "We spent the first week of every month matching card spends by hand",
         "The old process could not keep up with our branches"
       ],
-      "pain_points": [
+      "pain points": [
         "Slow month-end close",
         "Manual reconciliation",
         "Late expense claims"
       ],
-      "buying_triggers": [
+      "buying triggers": [
         "New CFO hire",
         "Audit finding"
       ],
-      "value_realized": [
+      "value realized": [
         "Close 5 days faster",
         "Fewer policy breaches"
       ]
@@ -2895,14 +2944,14 @@ Provide interview data in this format:
 ## Structured Notes
 \`\`\`json
 {
-  "interview_notes": [
+  "interview notes": [
     {
       "customer": "Company Name",
       "role": "Job Title",
-      "key_quotes": ["Quote 1", "Quote 2"],
-      "pain_points": ["Pain 1", "Pain 2"],
-      "buying_triggers": ["Trigger 1", "Trigger 2"],
-      "value_realized": ["Value 1", "Value 2"]
+      "key quotes": ["Quote 1", "Quote 2"],
+      "pain points": ["Pain 1", "Pain 2"],
+      "buying triggers": ["Trigger 1", "Trigger 2"],
+      "value realized": ["Value 1", "Value 2"]
     }
   ]
 }
@@ -2995,7 +3044,7 @@ const ONE_AMOUNT = {};
 function checkRequiredInputs(name, args) {
     const tool = tools[name];
     if (!tool) {
-        return `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(name))}. Available tools: ${Object.keys(tools).join(', ')}.`;
+        return `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(name))}. Available tools: ${Object.keys(tools).map(text_signals_ts_3.readerLabel).join(', ')}.`;
     }
     const required = tool.inputSchema.required ?? [];
     // Run 16 R16-10 (rule B52): a required text (a string with no fixed list of choices) that is empty or only whitespace counts as missing.
@@ -3003,7 +3052,7 @@ function checkRequiredInputs(name, args) {
     const blankText = (key) => typeof args?.[key] === "string" && args[key].trim() === "" && props[key]?.type === "string" && !Array.isArray(props[key]?.enum);
     const missing = required.filter((key) => args?.[key] === undefined || args?.[key] === null || blankText(key));
     if (missing.length > 0) {
-        return `Missing required input for ${name}: ${missing.join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and call the tool again.`;
+        return `Missing required input for ${(0, text_signals_ts_3.readerLabel)(name)}: ${missing.map(text_signals_ts_3.readerLabel).join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and try again.${name === 'tam_sam_som_calculator' && missing.includes('average_contract_value') ? ' This calculator takes US dollars (USD) only. Supply the annual contract value in USD using a conversion you choose; no exchange rate is assumed.' : ''}`;
     }
     // Decision N2 (run 6) and run 7: schema limits at any depth, choices, money text and single amounts.
     const problems = [];
@@ -3052,9 +3101,13 @@ function checkRequiredInputs(name, args) {
         }
     }
     if (problems.length > 0) {
-        return `Invalid input for ${name}: ${problems.join("; ")}.`;
+        return `Invalid input for ${(0, text_signals_ts_3.readerLabel)(name)}: ${problems.map(text_signals_ts_3.readerIssue).join("; ")}.`;
     }
     return null;
+}
+for (const [name, tool] of Object.entries(tools)) {
+    Object.assign(tool.inputSchema.properties, (0, decision_limits_ts_1.decisionInputs)(name));
+    tool.description += (0, decision_limits_ts_1.decisionHelp)(name);
 }
 function createServer() {
     const server = new index_js_1.Server({ name: exports.SERVER_NAME, version: exports.SERVER_VERSION }, { capabilities: { tools: {} }, ...(build_profile_ts_1.BUILD_PROFILE.profile !== "current" ? { instructions: conversation_guidance_ts_1.CONVERSATION_INSTRUCTIONS } : {}) });
@@ -3080,13 +3133,14 @@ function createServer() {
             return {
                 content: [{
                         type: 'text',
-                        text: `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(toolName))}. Available tools: ${Object.keys(tools).join(', ')}`
+                        text: `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(toolName))}. Available tools: ${Object.keys(tools).map(text_signals_ts_3.readerLabel).join(', ')}`
                     }],
                 isError: true
             };
         }
         try {
-            const result = tool.execute(safeArgs);
+            const limit = (0, decision_limits_ts_1.decisionLimit)(String(toolName), safeArgs);
+            const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs);
             return {
                 content: [{ type: 'text', text: result }]
             };
@@ -3095,7 +3149,7 @@ function createServer() {
             return {
                 content: [{
                         type: 'text',
-                        text: `Error executing ${(0, escape_inputs_ts_1.escapeText)(String(toolName))}: ${error instanceof Error ? error.message : 'Unknown error'}`
+                        text: `Could not complete ${(0, text_signals_ts_3.readerLabel)((0, escape_inputs_ts_1.escapeText)(String(toolName)))}: ${error instanceof Error ? error.message : 'Unknown error'}`
                     }],
                 isError: true
             };
