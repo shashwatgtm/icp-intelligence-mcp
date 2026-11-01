@@ -168,9 +168,23 @@ const GTM_INDUSTRY_TOOLS=["pmf_scorecard", "launch_commander", "customer_intervi
 /** EPIC rules retain the documented trigger floor, with clause evidence and optional confirmed facts. */
 export function epicReading(text:string, floor:RegExp, kind:string, typed?:unknown):SignalReading {
  if(['present','none','unknown'].includes(String(typed)))return {state:typed==='present'?'affirmed':typed==='none'?'negated':'unclear',evidence:['Confirmed '+kind.replace(/_/g,' ')+': '+typed],matched:[]};
- const all=clauses(text).map(c=>{const r=readSignal(c,floor,SIGNALS[kind]);
-  if(kind==='ai_search'&&/\b(?:organic (?:traffic|search)|seo leads?)\b.{0,20}\b(?:not|never|isn't|aren't)\b.{0,15}(?:drop|declin|down|fall|collaps)/i.test(c))return {...r,state:'negated' as SignalState};
-  return r;
+ const all=clauses(text).map(original=>{
+  const c=normalized(original).replace(/\b(isn't|aren't|wasn't|weren't|doesn't|don't|hasn't|haven't|won't)\b/gi,m=>({"isn't":"is not","aren't":"are not","wasn't":"was not","weren't":"were not","doesn't":"does not","don't":"do not","hasn't":"has not","haven't":"have not","won't":"will not"}[m.toLowerCase()]!));
+  const relation:Record<string,RegExp>={
+   leaky:/\b(?:sign(?:ing)?|land(?:ing)?|win(?:ning)?|recruit(?:ing)?|attract(?:ing)?|bring(?:ing)? in|add(?:ing)?|convert(?:ing)?)\b.{0,55}\b(?:new|fresh|first[- ]time|additional)\s+(?:paying\s+)?(?:accounts?|customers?|buyers?|purchasers?|clients?|subscribers?|users?)\b|\b(?:new|fresh|first[- ]time)\s+(?:accounts?|customers?|buyers?|clients?|subscribers?)\b.{0,35}\b(?:needed|wanted|growth|target)\b/i,
+   ai_search:/\b(?:assistants?|answer (?:boxes|engines)|generative (?:answers?|search)|AI (?:answers?|overviews?|search)|chatgpt|LLMs?)\b.{0,100}\b(?:replac\w* (?:our )?(?:search )?(?:clicks?|click[- ]throughs?|visits?)|without (?:ever )?(?:clicking|visiting)|never (?:click|visit)|fewer (?:clicks|visits)|lost (?:clicks|visits)|(?:reduce|reduced|reducing|cut|cuts|lowered|lowering|eroded|eroding|diverted|diverting|displaced|displacing) (?:our )?(?:organic |search |site |website )?(?:visits|traffic|clicks|leads))\b|\b(?:visits|clicks|traffic|leads)\b.{0,35}\b(?:fell|falling|declin\w*|dropp\w*|lost|down)\b.{0,60}\b(?:assistants?|answer (?:boxes|engines)|generative (?:answers?|search)|AI (?:answers?|search|overviews?)|chatgpt|LLMs?)\b/i,
+   upmarket:/\b(?:hybrid|mixed|blended|dual)\s+(?:GTM |sales |selling |growth )?motion\b|\b(?:self[- ]serve|product[- ]led|PLG|free trial|freemium)\b.{0,90}\b(?:then|plus|alongside|together with|followed by|combined with|and)\b.{0,65}\b(?:sales[- ]led|account[- ]led|account managers?|account executives?|assisted (?:sales|expansion)|ABM|enterprise (?:sales|expansion))\b|\b(?:sales[- ]led|account[- ]led|account managers?|ABM)\b.{0,60}\b(?:alongside|plus|and|combined with)\b.{0,50}\b(?:self[- ]serve|product[- ]led|PLG|freemium)\b/i
+  };
+  const r=readSignal(c,new RegExp(floor.source+'|'+(SIGNALS[kind]?.source||'(?!)'),'i'),relation[kind]);
+  if(r.state==='absent')return r;
+  // A named destination can be explicitly excluded after a long subject phrase.
+  const exclusion=kind==='upmarket'&&(/\b(?:rather than|instead of|avoid(?:ing)?|reject(?:ing)?|rule(?:d)? out)\b.{0,45}\b(?:enterprise|upmarket|larger accounts|hybrid|mixed|sales[- ]led|account[- ]led)\b/i.test(c)||/\b(?:enterprise|upmarket|larger accounts|hybrid|mixed|sales[- ]led|account[- ]led)\b.{0,80}\b(?:not (?:enter|pursue|target|serve|adopt|combine|use)|never (?:enter|pursue|target|serve|adopt|combine|use)|ruled out|excluded|off the table)\b/i.test(c));
+  const noDisruption=kind==='ai_search'&&/\b(?:organic (?:traffic|search)|seo leads?|AI (?:search|answers?|overviews?)|assistants?|answer (?:boxes|engines)|generative (?:answers?|search))\b.{0,65}\b(?:not|never)\b.{0,25}(?:drop|declin|down|fall|collaps|reduc|replac|cut|lower|erod|divert|displac)/i.test(c);
+  const deniedPair=kind==='upmarket'&&/\b(?:self[- ]serve|product[- ]led|PLG|free trial|freemium)\b.{0,65}\b(?:not|never|without|no)\b.{0,25}\b(?:sales[- ]led|account[- ]led|account managers?|account executives?|assisted expansion|ABM|enterprise expansion)\b/i.test(c);
+  if(exclusion||noDisruption||deniedPair)return {state:'negated' as SignalState,evidence:[original],matched:r.matched};
+  // Merely mentioning a possibility does not establish a challenge or a chosen motion.
+  if(/\b(?:might|may|could|perhaps|maybe|considering|not sure|unclear|if we|whether)\b/i.test(c))return {state:'unclear' as SignalState,evidence:[original],matched:r.matched};
+  return {...r,evidence:r.evidence.length?[original]:[]};
  });
  const states=all.map(r=>r.state);return {state:states.includes('affirmed')&&states.includes('negated')?'unclear':states.includes('affirmed')?'affirmed':states.includes('unclear')?'unclear':states.includes('negated')?'negated':'absent',evidence:[...new Set(all.flatMap(r=>r.evidence))],matched:[...new Set(all.flatMap(r=>r.matched))]};
 }
