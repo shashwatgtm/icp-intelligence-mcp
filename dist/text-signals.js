@@ -5,6 +5,7 @@ exports.clauses = clauses;
 exports.readSignal = readSignal;
 exports.hasSignal = hasSignal;
 exports.signal = signal;
+exports.adverseResult = adverseResult;
 exports.evidenceLine = evidenceLine;
 exports.confirmedMatches = confirmedMatches;
 exports.timingFact = timingFact;
@@ -19,6 +20,15 @@ exports.claimRisk = claimRisk;
 exports.outcomeReading = outcomeReading;
 exports.contactDeclined = contactDeclined;
 exports.claimOwnerConflict = claimOwnerConflict;
+exports.launchGoalReading = launchGoalReading;
+exports.securityIncident = securityIncident;
+exports.illustrativeProof = illustrativeProof;
+exports.scopeDisposition = scopeDisposition;
+exports.statedGoalCount = statedGoalCount;
+exports.buyingConstraint = buyingConstraint;
+exports.objectionKind = objectionKind;
+exports.quotedPassages = quotedPassages;
+exports.launchFollowup = launchFollowup;
 exports.SIGNALS = {
     'a named role, title or team': /\b(?:head of (?:growth|revenue|marketing|sales|operations|security)|person in charge|business lead)\b/i,
     'an owner or responsible party': /\b(?:accountable for|answerable for|takes responsibility|person in charge)\b/i,
@@ -56,7 +66,7 @@ exports.SIGNALS = {
     champion: /\b(?:champion|internal advocate|sponsor|person driving the purchase)\b/i,
     departed: /\b(?:champion left|sponsor left|key contact left|champion departed|sponsor departed|advocate resigned|contact resigned)\b/i,
     positive_result: /\b(?:improv\w*|saved?|reduc\w*|cut|cuts|faster|fewer|a fifth of the time|half the time|time fell|costs? fell|collections (?:rose|grew)|revenue (?:rose|grew))\b/i,
-    adverse_result: /\b(?:(?:costs?|errors?|delays?|churn|losses?|tickets?) (?:rose|grew|increased|doubled)|(?:revenue|collections|retention|sales) (?:fell|dropped|declined)|lost money|worse than before|no (?:customer|client|user).*improvement|cancelled|canceled|refund)\b/i,
+    adverse_result: /\b(?:(?:costs?|errors?|delays?|churn|losses?|tickets?) (?:rose|grew|increased|doubled)|(?:revenue|collections|retention|sales) (?:fell|dropped|declined)|lost money|worse than before|results worsened|asked for (?:their |the )?money back|no (?:customer|client|user).*improvement|cancelled|canceled|refund)\b/i,
     team_finance: /\b(?:people who keep our books|close each period|match payments to bills)\b/i,
     team_security: /\b(?:people who guard our systems|defend against intrusions|protect our records from attackers)\b/i,
     team_sales: /\b(?:people who win new accounts|people who carry a quota|turn prospects into paying customers)\b/i,
@@ -137,7 +147,21 @@ function readSignal(text, floor, additional) {
     return { state, evidence: [...new Set([...affirmed, ...negative, ...unclear])], matched: [...new Set(matched)] };
 }
 function hasSignal(text, floor, kind) { return readSignal(text, floor, kind ? exports.SIGNALS[kind] : undefined).state === 'affirmed'; }
-function signal(text, kind) { return readSignal(text, exports.SIGNALS[kind] ?? /(?!)/); }
+function signal(text, kind) {
+    if (kind === 'adverse_result')
+        return adverseResult(text);
+    return readSignal(text, exports.SIGNALS[kind] ?? /(?!)/);
+}
+/** A refund approval workflow is a product capability, not a refund requested by a dissatisfied customer. */
+function adverseResult(text) {
+    const floor = exports.SIGNALS.adverse_result;
+    const readings = clauses(text).map(c => {
+        const workflow = /\b(?:approv(?:e|es|al)|authori[sz](?:e|es|ation))\s+(?:(?:of|for)\s+)?(?:every|each|all)\s+refunds?\b/i.test(c);
+        return readSignal(c, workflow ? new RegExp(floor.source.replace('|refund)', ')'), floor.flags) : floor);
+    });
+    const states = readings.map(r => r.state), positive = states.includes('affirmed'), negative = states.includes('negated');
+    return { state: positive && negative ? 'unclear' : positive ? 'affirmed' : states.includes('unclear') ? 'unclear' : negative ? 'negated' : 'absent', evidence: readings.flatMap(r => r.evidence), matched: readings.flatMap(r => r.matched) };
+}
 function evidenceLine(label, reading) { return `${label}: ${reading.state === 'affirmed' ? 'stated' : reading.state === 'negated' ? 'negated' : 'fact was not clear'}${reading.evidence.length ? `; read "${reading.evidence.join('"; "')}"` : ''}.`; }
 function confirmedMatches(text, floor, additional) { const r = readSignal(text, floor, additional); return r.state === 'affirmed' ? r.matched : []; }
 /** Timing is a stated buying horizon. Contradictory or denied horizons stay at the documented unknown score. */
@@ -240,5 +264,72 @@ function claimOwnerConflict(text, alternatives, ownProduct) {
     const normal = (x) => x.toLowerCase().replace(/\\([\s\S])/g, '$1').replace(/^["']|["']$/g, '').trim();
     const t = normal(text), own = normal(ownProduct);
     return alternatives.some(x => { const alt = normal(x.split('(')[0]); return alt.length >= 3 && alt !== own && t.startsWith(alt) && /^[\s:,.]/.test(t.slice(alt.length)); });
+}
+/** These labels classify stated goals, not achieved business results. */
+function launchGoalReading(text) {
+    const groups = [
+        ['Pipeline', /\bpipeline\b|qualified (?:opportunities|deals)[^.;]{0,35}(?:worth|value)|potential contract value/i],
+        ['Revenue', /\brevenue\b|\bclosed\b|\barr\b|\bmrr\b|bookings?|deal value|signed (?:contracts|deals)|money collected/i],
+        ['Engagement', /meeting|demo|sign-?up|trial|\bleads?\b|registr|attend|click|\bctr\b|opportunit|\bcalls?\b|inquir|enquir|workshop|survey|assessment|buying conversations/i],
+        ['Awareness', /view|impression|visit|traffic|reach|download|follower|aware|become known/i],
+        ['Adoption', /activat|usage|active user|adopt|conversion|retention|rollout|renew|reference|go-?live|live sites?|pilot|people using it/i]
+    ];
+    const readings = groups.map(([kind, re]) => ({ kind, reading: readSignal(text, re) }));
+    // A pipeline amount is not booked revenue; a dollar sign alone does not settle the measure.
+    const pipeline = readings.find(x => x.kind === 'Pipeline' && x.reading.state === 'affirmed');
+    if (pipeline)
+        return { kind: 'Pipeline', evidence: text, state: 'affirmed' };
+    const found = readings.find(x => x.reading.state === 'affirmed');
+    if (found)
+        return { kind: found.kind, evidence: text, state: 'affirmed' };
+    return { kind: 'Other', evidence: text, state: readings.some(x => x.reading.state === 'negated') ? 'negated' : 'unclear' };
+}
+function securityIncident(text) { return readSignal(text, /breach|security|hack|exposure/i, exports.SIGNALS.security); }
+function illustrativeProof(text) { return readSignal(text, /\b(?:illustrative|hypothetical|fictional|made[- ]up|not (?:an? )?(?:actual|real|customer) (?:result|outcome)|example (?:only|figure|scenario)|for illustration|assumed saving)\b/i); }
+function scopeDisposition(text) { return readSignal(text, /\b(?:business|division|business unit)[^.;]{0,50}\b(?:was|has been|is) (?:sold|divested|closed)|\bwe (?:have )?(?:divested|sold|closed)[^.;]{0,35}\b(?:business|division)|\bno longer (?:sell|offer|serve)\b/i); }
+function statedGoalCount(text) {
+    const numbers = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, fifteen: 15, twenty: 20, thirty: 30, forty: 40, fifty: 50 };
+    const units = '(pilot sites?|deals?|meetings?|pilots?|sites?|customers?|clients?|demos?|workshops?|surveys?|accounts?|opportunities|sign-?ups?|calls?|trials?|partners?|references?)';
+    const forward = new RegExp('(?:^|[^\\w$.,])(\\d[\\d,]*|' + Object.keys(numbers).join('|') + ')\\s+((?:[a-z-]+\\s+){0,3}?)' + units + '\\b', 'i');
+    const reverse = new RegExp('\\b' + units + '\\s*:\\s*(\\d[\\d,]*)\\b', 'i');
+    const m = forward.exec(text), r = !m ? reverse.exec(text) : null;
+    if (!m && !r)
+        return null;
+    if (readSignal(text, m ? forward : reverse).state !== 'affirmed')
+        return null;
+    const typed = m ? m[1] : r[2], unit = m ? m[3] : r[1];
+    let count = /^\d/.test(typed) ? parseInt(typed.replace(/,/g, ''), 10) : numbers[typed.toLowerCase()];
+    if (m && /^dozen\b/i.test(m[2]))
+        count *= 12;
+    return { count, unit, phrase: m ? `${typed} ${m[2]}${unit}`.replace(/\s+/g, ' ').trim() : `${typed} ${unit}` };
+}
+function buyingConstraint(text) { return readSignal(text, /\b(?:bankrupt(?:cy)?|insolvent|insolvency|no (?:purchase|buying|procurement) budget|unable to (?:pay|buy|purchase))\b/i); }
+/** Same clause reading for a spoken response and its approach. Question syntax alone is not a stated concern. */
+function objectionKind(text, named = false) {
+    const o = text.toLowerCase(), on = (r, extra) => readSignal(text, r, extra).state === 'affirmed';
+    const asksHow = /^\s*(?:how (?:does|do|is|are)|why (?:do|does|is|are)|what (?:is|are|does|do)|what's)\b/.test(o) && !on(/\b(compared?|cheaper|better|than|versus|vs|competitors?|alternatives?|expensive)\b/i);
+    if (asksHow && on(/\b(price|prices|pricing|cost|costs|charges?|rates?|fees?)\b/i))
+        return 'explain';
+    if (on(/\b(price|prices|pricing|expensive|cost|costs|budget|cheaper|cheap|charges?|rates?|fees?)\b/i, exports.SIGNALS.price))
+        return 'price';
+    if (named || on(/\b(differ\w*|different|versus|vs|compared? (?:to|with)|instead of|why (?:\w+ ){0,3}over|better than|competitors?|alternatives?|other (?:vendors?|options?|tools?)|rivals?)\b/i))
+        return 'comparison';
+    if (on(/\b(timing|not ready|ready|later|next year|not now|right now|this quarter)\b/i, exports.SIGNALS.timing))
+        return 'timing';
+    if (on(/security|privacy|compliance|data protection/i, exports.SIGNALS.security))
+        return 'security';
+    if (/^\s*(?:how (?:does|do)|what (?:is|are|does|do)|what's)\b/.test(o) && !/\b(long|quickly|fast|take to|easy|easily|support|integrate|different)\b/.test(o))
+        return 'explain';
+    if (on(/\b(features?|can't|cannot|doesn't|does it|do you|does .* support|missing|lack|lacks|lacking|support|how long|how quickly|how fast|take to|get(?:ting)? started|how easy)\b/i, exports.SIGNALS.feature) || /^\s*(?:does|do|can|is|are|will)\b/.test(o))
+        return 'capability';
+    if (on(/\b(risk|risky|trust|new|proven|unproven)\b/i))
+        return 'risk';
+    return 'other';
+}
+/** Preserve the text and delimiters of straight or typographic double-quoted passages. */
+function quotedPassages(text) { return text.match(/"[^"\n]+"|“[^”\n]+”/g) || []; }
+function launchFollowup(goals, fallback) {
+    const tasks = { Pipeline: 'Inspect qualified opportunities separately from signed revenue', Revenue: 'Check signed contracts and the revenue period with finance', Engagement: 'Assign invitations and review completed qualified meetings', Awareness: 'Inspect reach within the intended audience', Adoption: 'Review activation against agreed completion criteria' };
+    return [...new Set(goals.map(g => tasks[launchGoalReading(g).kind]).filter(Boolean))].join('; ') || fallback;
 }
 //# sourceMappingURL=text-signals.js.map

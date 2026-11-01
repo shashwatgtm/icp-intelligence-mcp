@@ -5,6 +5,7 @@ exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
 const text_signals_ts_1 = require("./text-signals.js");
 const text_signals_ts_2 = require("./text-signals.js");
+const text_signals_ts_3 = require("./text-signals.js");
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
@@ -506,7 +507,7 @@ const SIZE_WORD = /\b(?:mid-?size[d]?|mid-?market|medium(?:-sized)?|large(?:r)?|
 function sizeWordsIn(text) {
     const found = String(text).match(SIZE_WORD) || [];
     const seen = new Set();
-    return found.filter(x => (0, text_signals_ts_2.hasSignal)(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).map((x) => x.replace(/^(enterprise|startup|smb|msme|sme)s$/i, '$1')).filter((x) => { const k = x.toLowerCase(); if (seen.has(k))
+    return found.filter(x => (0, text_signals_ts_3.hasSignal)(text, new RegExp(x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).map((x) => x.replace(/^(enterprise|startup|smb|msme|sme)s$/i, '$1')).filter((x) => { const k = x.toLowerCase(); if (seen.has(k))
         return false; seen.add(k); return true; });
 }
 // Job titles named in a text (as typed). A capitalised phrase with a title word, or an acronym such as CFO or CISO.
@@ -524,7 +525,7 @@ function rolesIn(text) {
     // a title written in lower case ("a finance controller", "head of supply chain")
     for (const m of t.matchAll(/\b(?:(?:finance|financial|operations|sales|marketing|security|network|procurement|engineering|supply chain|it|hr|data|platform|revenue) (?:controller|director|manager|head|lead|officer|analyst)|head of [a-z]+(?: [a-z]+){0,2}|vp (?:of )?[a-z]+)\b/gi))
         out.push(m[0].trim());
-    return [...new Set(out)].filter(r => (0, text_signals_ts_2.hasSignal)(t, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
+    return [...new Set(out)].filter(r => (0, text_signals_ts_3.hasSignal)(t, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))).filter((r) => !out.some((o) => o !== r && o.includes(r) && o.length > r.length));
 }
 // Is this one item a job title (as in champion_titles), and not a group of people ("finance teams", "managers", "employees")?
 function isTitleItem(item) {
@@ -919,14 +920,14 @@ ${gaps.length ? gaps.join('\n') : 'None: every field this analysis reads was sup
                 const desc = text.toLowerCase();
                 // Run 19 D80: sizes are the employee ranges typed; the size words are read only when no range is typed.
                 const typedSizes = sizesIn(text);
-                const sizeWord = (0, text_signals_ts_2.signal)(text, 'enterprise').state === 'affirmed' ? 'Enterprise (1000+)' :
-                    (0, text_signals_ts_2.hasSignal)(text, /mid-market|mid market|mid-size|midsize/i, 'midmarket') ? 'Mid-market (100-1000)' :
-                        (0, text_signals_ts_2.signal)(text, 'small').state === 'affirmed' ? 'SMB (10-100)' :
-                            (0, text_signals_ts_2.hasSignal)(text, /startup/i) ? 'Startup/Early-stage' : 'Mixed sizes';
+                const sizeWord = (0, text_signals_ts_3.signal)(text, 'enterprise').state === 'affirmed' ? 'Enterprise (1000+)' :
+                    (0, text_signals_ts_3.hasSignal)(text, /mid-market|mid market|mid-size|midsize/i, 'midmarket') ? 'Mid-market (100-1000)' :
+                        (0, text_signals_ts_3.signal)(text, 'small').state === 'affirmed' ? 'SMB (10-100)' :
+                            (0, text_signals_ts_3.hasSignal)(text, /startup/i) ? 'Startup/Early-stage' : 'Mixed sizes';
                 const size = typedSizes.length ? andList(typedSizes) : sizeWord;
-                const stageTyped = (0, escape_inputs_ts_1.escapePiece)([...new Set((text.match(/\bseries [a-d]\b/gi) || []).filter(x => (0, text_signals_ts_2.hasSignal)(text, new RegExp(x, 'i'))).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', '));
-                const stage = stageTyped || ((0, text_signals_ts_2.hasSignal)(text, /public/i) ? 'Public companies' : 'not stated in your text');
-                const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => (0, text_signals_ts_2.hasSignal)(text, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')));
+                const stageTyped = (0, escape_inputs_ts_1.escapePiece)([...new Set((text.match(/\bseries [a-d]\b/gi) || []).filter(x => (0, text_signals_ts_3.hasSignal)(text, new RegExp(x, 'i'))).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', '));
+                const stage = stageTyped || ((0, text_signals_ts_3.hasSignal)(text, /public/i) ? 'Public companies' : 'not stated in your text');
+                const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => (0, text_signals_ts_3.hasSignal)(text, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')));
                 return `# ICP Pattern Analysis (from Description)
 
 - ${companyLine(args.company)}
@@ -1052,8 +1053,21 @@ This tool will analyze patterns across your customers to identify your ideal pro
         execute: (args) => {
             const category = args.product_category ? args.product_category.trim() : 'your product (product category not given)';
             const correlations = args.success_correlation || '';
-            const directionOf = (text) => args.correlation_direction || (0, text_signals_ts_2.correlationFact)(text);
+            const directionOf = (text) => args.correlation_direction || (0, text_signals_ts_3.correlationFact)(text);
             const adversePattern = directionOf(correlations) === 'negative';
+            if (adversePattern)
+                return `# ICP Scoring Model
+
+## Scoring model held: negative outcome pattern
+
+Read: ${q(correlations)}.
+
+The stated pattern is negative. Do not award positive fit points from it. No points, qualification tier or outreach priority are assigned until the direction and affected values have been checked against closed-won and closed-lost deals.
+
+Criteria supplied: ${(args.scoring_criteria || []).map(c => `${c.criterion}: ${(c.values || []).join(', ')}`).join('; ') || 'none'}.
+
+Confirm which values predict worse outcomes, the comparison group and the observation period. Rebuild the scoring model from that evidence; a role name alone is not proof of good fit.
+`;
             const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, correlations], buyer: (args.scoring_criteria || []).flatMap(c => [c.criterion, ...(c.values || [])]) });
             // Default scoring model if no criteria provided
             const defaultCriteria = [
@@ -1890,20 +1904,22 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
                     ...(tech || []).map(t => `${t.toLowerCase()} integration`)])];
             // Run 19 D80 (problem 3): every trigger typed gets its own signal, chosen by its words.
             const signalFor = (t) => {
+                if ((0, text_signals_ts_1.buyingConstraint)(t).state === 'affirmed')
+                    return ['Confirm financial and purchasing status with the account owner', 'Purchase constraint: hold buying-intent scoring; this is not evidence of budget or urgency', 'Confirm authority and available budget before outreach'];
                 const x = t.toLowerCase();
-                if ((0, text_signals_ts_2.hasSignal)(x, /hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/, 'hiring'))
+                if ((0, text_signals_ts_3.hasSignal)(x, /hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/, 'hiring'))
                     return [`A new ${titles[0] || 'leader'} or a related leader joined in the last 90 days`, 'New leaders review tools and processes early', 'LinkedIn alerts, ZoomInfo job changes'];
-                if ((0, text_signals_ts_2.hasSignal)(x, /fund|series|raise|raised|investment|ipo|listing/, 'funding'))
+                if ((0, text_signals_ts_3.hasSignal)(x, /fund|series|raise|raised|investment|ipo|listing/, 'funding'))
                     return [`Funding or listing news${stages ? ` at the stages you target (${stages.join(', ')})` : ''}`, 'New budget is allocated for scaling', 'Crunchbase alerts, news alerts, LinkedIn'];
-                if ((0, text_signals_ts_2.hasSignal)(x, /audit|compliance|regulat|breach|incident|finding/, 'security'))
+                if ((0, text_signals_ts_3.hasSignal)(x, /audit|compliance|regulat|breach|incident|finding/, 'security'))
                     return ['Audit findings, regulatory notices or incidents made public, and hiring for audit, risk or compliance roles', 'A finding sets a deadline and a budget owner', 'News alerts, annual reports and filings, job posts'];
-                if ((0, text_signals_ts_2.hasSignal)(x, /migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/, 'migration'))
+                if ((0, text_signals_ts_3.hasSignal)(x, /migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/, 'migration'))
                     return ['Job posts and announcements that mention the new system or the migration', 'A system change reopens the processes around it', 'Job posting alerts, technographic change data, news alerts'];
-                if ((0, text_signals_ts_2.hasSignal)(x, /expan|new office|new market|branch|site|hiring|grow/, 'growth'))
+                if ((0, text_signals_ts_3.hasSignal)(x, /expan|new office|new market|branch|site|hiring|grow/, 'growth'))
                     return ['New offices, markets, branches or a hiring surge', 'Existing processes strain as the company grows', 'Job posting velocity, news alerts'];
-                if ((0, text_signals_ts_2.hasSignal)(x, /miss|target|loss|cost|margin|delay|outage|churn/, 'shortfall'))
+                if ((0, text_signals_ts_3.hasSignal)(x, /miss|target|loss|cost|margin|delay|outage|churn/, 'shortfall'))
                     return ['Results, statements or job posts that mention the problem', 'A missed target creates urgency and an owner', 'Earnings and news alerts, leadership posts on LinkedIn'];
-                return ['News, job posts or posts by your champion titles that mention it', 'Your team named this as a reason to buy', 'News alerts and job posting alerts on the exact words'];
+                return ['An unconfirmed event from your notes', 'Buying intent is not established; confirm the event, an active need and purchase authority before using it as a trigger', 'Check the source with the account owner; do not infer budget or urgency from the label'];
             };
             // A long trigger (a sentence from a page) is shown in full once, in the summary; headings use its first clause.
             const trigHead = (t) => cap(clauseHead(t, 90));
@@ -2061,7 +2077,7 @@ ${needs.length ? `To execute these searches, you need:
 ${needs.map((x, i) => `${i + 1}. ${x}`).join('\n')}
 
 ` : ''}${missing.length
-                ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.map(text_signals_ts_1.readerLabel).join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`
+                ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.map(text_signals_ts_2.readerLabel).join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`
                 : 'The criteria above are built from your inputs and ready to copy/paste into each platform.'}
 
 **Next Step**: Use \`Account Prioritization\` to rank accounts for outreach
@@ -2126,7 +2142,7 @@ ${SUGGESTED}
             const wEx = (given) => (noWeights || has(given)) ? '' : ` ${EXAMPLE}`;
             // If accounts provided, score them
             if (args.accounts && args.accounts.length > 0) {
-                const timingScore = (timing) => (0, text_signals_ts_2.timingFact)(timing).score;
+                const timingScore = (timing) => (0, text_signals_ts_3.timingFact)(timing).score;
                 // D41 (run 15): the tier cut-offs are 80%, 60% and 40% of the highest possible score W, the sum of the four weights
                 // (ceil in integer-safe form; with the default weights W = 100 they are 80, 60 and 40, as before).
                 const W = Number((weights.fit + weights.intent + weights.relationship + weights.timing).toPrecision(12)); // run 20: 33.3 + 33.3 + 33.3 + 0.1 is 100, not 99.99999999999999
@@ -2210,7 +2226,7 @@ ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default wei
 Your scores are shown as given (to one decimal at most); ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'} (now 100, soon 70, later 40, unknown 50 points). (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
 |------|---------|-----|--------|--------------|--------|-----------|------|
-${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${cleanNum1(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${cleanNum1(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${cleanNum1(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${(0, text_signals_ts_2.timingFact)(a.timing).state === 'affirmed' ? '' : '; fact was not clear'}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
+${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${cleanNum1(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${cleanNum1(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${cleanNum1(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${(0, text_signals_ts_3.timingFact)(a.timing).state === 'affirmed' ? '' : '; fact was not clear'}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
 
 ---
 
@@ -2533,18 +2549,22 @@ ${SUGGESTED}
             const icpWords = new Set(args.current_icp.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3));
             const isNew = (t) => t.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3 && !['with', 'where', 'that', 'they', 'them', 'from', 'more', 'most', 'deals', 'deal', 'customers', 'customer', 'buyers', 'buyer', 'wanted', 'wanting', 'lost', 'won'].includes(w)).some(w => !icpWords.has(w));
             const items = (t) => (t || '').split(/\n|;/).map(x => x.trim().replace(/^[-*•]\s*/, '')).filter(Boolean);
-            const wins = items(args.recent_wins), losses = items(args.recent_losses), changes = items(args.market_changes);
-            const lossKind = (t) => /price|cheaper|cost|budget|expensive|free/i.test(t) ? 'lost on price: check whether these buyers had the budget your ICP assumes'
-                : /bundle|one vendor|single vendor|suite|all-in-one|erp-only|together/i.test(t) ? 'lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP'
-                    : /competitor|incumbent|already/i.test(t) ? 'lost to an existing or competing tool: check what made the switch too hard'
-                        : /timing|priority|later|freeze/i.test(t) ? 'lost on timing: check for a trigger before you qualify'
-                            : 'check whether these buyers should have been qualified out earlier';
+            const allWins = items(args.recent_wins), allLosses = items(args.recent_losses), changes = items(args.market_changes);
+            const itemKey = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+            const conflicts = allWins.filter(w => allLosses.some(l => itemKey(w) === itemKey(l)));
+            const wins = allWins.filter(w => !conflicts.includes(w)), losses = allLosses.filter(l => !conflicts.some(w => itemKey(w) === itemKey(l)));
+            const scopeChanges = changes.filter(c => (0, text_signals_ts_2.scopeDisposition)(c).state === 'affirmed');
+            const lossKind = (t) => (0, text_signals_ts_3.hasSignal)(t, /price|cheaper|cost|budget|expensive|free/i, 'price') ? 'lost on price: check whether these buyers had the budget your ICP assumes'
+                : (0, text_signals_ts_3.hasSignal)(t, /bundle|one vendor|single vendor|suite|all-in-one|erp-only|together/i, 'bundle') ? 'lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP'
+                    : (0, text_signals_ts_3.hasSignal)(t, /competitor|incumbent|already/i, 'incumbent') ? 'lost to an existing or competing tool: check what made the switch too hard'
+                        : (0, text_signals_ts_3.hasSignal)(t, /timing|priority|later|freeze/i, 'timing') ? 'lost on timing: check for a trigger before you qualify'
+                            : 'loss cause is not clear; ask for the deciding reason before creating a disqualifier';
             const winLines = wins.map(w => isNew(w)
                 ? `- **Candidate addition**: ${q(shortText(w, 200))}: this is not in your current ICP; test adding it if these deals closed faster or larger than your average`
                 : `- **Confirms your ICP**: ${q(shortText(w, 200))}: it matches your current ICP, so keep it`);
             const lossLines = losses.map(l => `- **Candidate disqualifier**: ${q(shortText(l, 200))}: ${lossKind(l)}`);
             const changeLines = changes.map(c => `- **Implication to check**: ${q(shortText(c, 200))}: check which segments of your ICP this moves toward you or away from you, and update the qualifying questions`);
-            const firstChange = wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew), 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
+            const firstChange = scopeChanges.length ? 'Reconcile the changed selling scope before testing an ICP addition' : conflicts.length ? 'Reconcile the conflicting win and loss outcomes before changing the ICP' : wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew), 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
             // Run 20 round 1 (quality): with or without wins and losses, your current ICP is read in parts and each part gets a test to run in
             // your CRM; the sector adds the roles and loss reasons to look for. Nothing is invented: every part is your own words.
             const partLines = [];
@@ -2607,6 +2627,7 @@ This review reads your notes against your current ICP and states candidate chang
 
 ## Win/Loss Pattern Analysis
 
+${conflicts.length ? `**Conflicting outcomes:** the same observation appears in both wins and losses: ${conflicts.map(x => q(x)).join('; ')}. Confirm which deals and outcomes it describes; it is held out of additions and disqualifiers.\n` : ''}${scopeChanges.length ? `**Selling scope changed:** ${scopeChanges.map(x => q(x)).join('; ')}. Reconcile which products and segments you still serve before adding from historical wins.\n` : ''}
 ### Recent Wins
 ${wins.length ? winLines.join('\n') : '- No win data provided: add recent wins to find possible additions'}
 
@@ -2630,7 +2651,7 @@ ${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.r
 
 - **Your ICP as written**: ${q(shortText(args.current_icp, 700))}
 - **Segments to keep until the data says otherwise**: ${segs.length ? andList(segs.slice(0, 6)) : 'your ICP text did not split into segments (see above)'}${profSizes.length ? `; size: ${andList(profSizes.map(x => clauseHead(x, 60)))}` : ''}.
-${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
+${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${scopeChanges.length ? 'held until the changed selling scope is confirmed' : wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
 - **Qualify out on trial**: ${losses.length ? andList(losses.slice(0, 3).map(l => q(shortText(l, 140)))) + ' (' + andList([...new Set(losses.slice(0, 3).map(l => lossKind(l).split(':')[0]))]) + ')' : 'nothing yet, because no losses were given'}.
 - **First change to test**: ${firstChange}.
 - **Check against the market**: ${changes.length ? andList(changes.slice(0, 3).map(c => q(shortText(c, 140)))) + ': which of your segments does it move toward you or away from you?' : 'no market change was given.'}
@@ -2799,7 +2820,7 @@ ${tieNote(topRoles, 'role')}
 ${allQuotes.length ? allQuotes.slice(0, 5).map((qt, i) => `
 ### Quote ${i + 1}
 > "${qt.quote}"
-> (${qt.role || 'Customer'}${qt.customer ? (qt.from ? `: ${qt.customer}` : ` at ${qt.customer}`) : ''}${qt.from ? `; written in ${(0, text_signals_ts_1.readerLabel)(qt.from)}, marked as a customer quote` : ''})
+> (${qt.role || 'Customer'}${qt.customer ? (qt.from ? `: ${qt.customer}` : ` at ${qt.customer}`) : ''}${qt.from ? `; written in ${(0, text_signals_ts_2.readerLabel)(qt.from)}, marked as a customer quote` : ''})
 `).join('\n') : 'No key quotes were given and none of your statements is marked as a customer quote, so none are shown. Quotes are never written for you: add key quotes, word for word, from your interviews.'}
 
 ---
@@ -3014,7 +3035,7 @@ const ONE_AMOUNT = {};
 function checkRequiredInputs(name, args) {
     const tool = tools[name];
     if (!tool) {
-        return `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(name))}. Available tools: ${Object.keys(tools).map(text_signals_ts_1.readerLabel).join(', ')}.`;
+        return `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(name))}. Available tools: ${Object.keys(tools).map(text_signals_ts_2.readerLabel).join(', ')}.`;
     }
     const required = tool.inputSchema.required ?? [];
     // Run 16 R16-10 (rule B52): a required text (a string with no fixed list of choices) that is empty or only whitespace counts as missing.
@@ -3022,7 +3043,7 @@ function checkRequiredInputs(name, args) {
     const blankText = (key) => typeof args?.[key] === "string" && args[key].trim() === "" && props[key]?.type === "string" && !Array.isArray(props[key]?.enum);
     const missing = required.filter((key) => args?.[key] === undefined || args?.[key] === null || blankText(key));
     if (missing.length > 0) {
-        return `Missing required input for ${(0, text_signals_ts_1.readerLabel)(name)}: ${missing.map(text_signals_ts_1.readerLabel).join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and try again.${name === 'tam_sam_som_calculator' && missing.includes('average_contract_value') ? ' This calculator takes US dollars (USD) only. Supply the annual contract value in USD using a conversion you choose; no exchange rate is assumed.' : ''}`;
+        return `Missing required input for ${(0, text_signals_ts_2.readerLabel)(name)}: ${missing.map(text_signals_ts_2.readerLabel).join(', ')}. Provide ${missing.length === 1 ? 'it' : 'them'} and try again.${name === 'tam_sam_som_calculator' && missing.includes('average_contract_value') ? ' This calculator takes US dollars (USD) only. Supply the annual contract value in USD using a conversion you choose; no exchange rate is assumed.' : ''}`;
     }
     // Decision N2 (run 6) and run 7: schema limits at any depth, choices, money text and single amounts.
     const problems = [];
@@ -3071,7 +3092,7 @@ function checkRequiredInputs(name, args) {
         }
     }
     if (problems.length > 0) {
-        return `Invalid input for ${(0, text_signals_ts_1.readerLabel)(name)}: ${problems.map(text_signals_ts_1.readerIssue).join("; ")}.`;
+        return `Invalid input for ${(0, text_signals_ts_2.readerLabel)(name)}: ${problems.map(text_signals_ts_2.readerIssue).join("; ")}.`;
     }
     return null;
 }
@@ -3095,7 +3116,7 @@ function createServer() {
             return {
                 content: [{
                         type: 'text',
-                        text: `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(toolName))}. Available tools: ${Object.keys(tools).map(text_signals_ts_1.readerLabel).join(', ')}`
+                        text: `Unknown tool: ${(0, escape_inputs_ts_1.escapeText)(String(toolName))}. Available tools: ${Object.keys(tools).map(text_signals_ts_2.readerLabel).join(', ')}`
                     }],
                 isError: true
             };
@@ -3110,7 +3131,7 @@ function createServer() {
             return {
                 content: [{
                         type: 'text',
-                        text: `Could not complete ${(0, text_signals_ts_1.readerLabel)((0, escape_inputs_ts_1.escapeText)(String(toolName)))}: ${error instanceof Error ? error.message : 'Unknown error'}`
+                        text: `Could not complete ${(0, text_signals_ts_2.readerLabel)((0, escape_inputs_ts_1.escapeText)(String(toolName)))}: ${error instanceof Error ? error.message : 'Unknown error'}`
                     }],
                 isError: true
             };

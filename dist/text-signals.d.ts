@@ -12,6 +12,8 @@ export declare function clauses(text: string): string[];
 export declare function readSignal(text: string, floor: RegExp, additional?: RegExp): SignalReading;
 export declare function hasSignal(text: string, floor: RegExp, kind?: string): boolean;
 export declare function signal(text: string, kind: string): SignalReading;
+/** A refund approval workflow is a product capability, not a refund requested by a dissatisfied customer. */
+export declare function adverseResult(text: string): SignalReading;
 export declare function evidenceLine(label: string, reading: SignalReading): string;
 export declare function confirmedMatches(text: string, floor: RegExp, additional?: RegExp): string[];
 /** Timing is a stated buying horizon. Contradictory or denied horizons stay at the documented unknown score. */
@@ -47,4 +49,25 @@ export declare function claimRisk(text: string): {
 export declare function outcomeReading(text: string): SignalReading;
 export declare function contactDeclined(text: string, typed?: unknown): SignalReading;
 export declare function claimOwnerConflict(text: string, alternatives: string[], ownProduct: string): boolean;
+/** These labels classify stated goals, not achieved business results. */
+export declare function launchGoalReading(text: string): {
+    kind: string;
+    evidence: string;
+    state: SignalState;
+};
+export declare function securityIncident(text: string): SignalReading;
+export declare function illustrativeProof(text: string): SignalReading;
+export declare function scopeDisposition(text: string): SignalReading;
+export declare function statedGoalCount(text: string): {
+    count: number;
+    phrase: string;
+    unit: string;
+} | null;
+export declare function buyingConstraint(text: string): SignalReading;
+export type ObjectionKind = 'price' | 'comparison' | 'timing' | 'capability' | 'explain' | 'risk' | 'security' | 'other';
+/** Same clause reading for a spoken response and its approach. Question syntax alone is not a stated concern. */
+export declare function objectionKind(text: string, named?: boolean): ObjectionKind;
+/** Preserve the text and delimiters of straight or typographic double-quoted passages. */
+export declare function quotedPassages(text: string): string[];
+export declare function launchFollowup(goals: string[], fallback: string): string;
 //# sourceMappingURL=text-signals.d.ts.map

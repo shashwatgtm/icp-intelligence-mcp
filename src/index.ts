@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { readerLabel, readerIssue, claimRisk, outcomeReading } from './text-signals.ts';
+import { buyingConstraint } from './text-signals.ts';
+import { readerLabel, readerIssue, claimRisk, outcomeReading, scopeDisposition } from './text-signals.ts';
 import { hasSignal, signal, timingFact, correlationFact } from './text-signals.ts';
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -1024,6 +1025,19 @@ This tool will analyze patterns across your customers to identify your ideal pro
       const correlations = args.success_correlation || '';
       const directionOf = (text:string) => args.correlation_direction || correlationFact(text);
       const adversePattern = directionOf(correlations) === 'negative';
+      if(adversePattern)return `# ICP Scoring Model
+
+## Scoring model held: negative outcome pattern
+
+Read: ${q(correlations)}.
+
+The stated pattern is negative. Do not award positive fit points from it. No points, qualification tier or outreach priority are assigned until the direction and affected values have been checked against closed-won and closed-lost deals.
+
+Criteria supplied: ${(args.scoring_criteria||[]).map(c=>`${c.criterion}: ${(c.values||[]).join(', ')}`).join('; ')||'none'}.
+
+Confirm which values predict worse outcomes, the comparison group and the observation period. Rebuild the scoring model from that evidence; a role name alone is not proof of good fit.
+`;
+
       const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, correlations], buyer: (args.scoring_criteria || []).flatMap(c => [c.criterion, ...(c.values || [])]) });
       
       // Default scoring model if no criteria provided
@@ -1876,6 +1890,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
         ...(tech || []).map(t => `${t.toLowerCase()} integration`)])];
       // Run 19 D80 (problem 3): every trigger typed gets its own signal, chosen by its words.
       const signalFor = (t: string): [string, string, string] => {
+        if(buyingConstraint(t).state==='affirmed')return ['Confirm financial and purchasing status with the account owner', 'Purchase constraint: hold buying-intent scoring; this is not evidence of budget or urgency', 'Confirm authority and available budget before outreach'];
         const x = t.toLowerCase();
         if (hasSignal(x, /hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/, 'hiring')) return [`A new ${titles[0] || 'leader'} or a related leader joined in the last 90 days`, 'New leaders review tools and processes early', 'LinkedIn alerts, ZoomInfo job changes'];
         if (hasSignal(x, /fund|series|raise|raised|investment|ipo|listing/, 'funding')) return [`Funding or listing news${stages ? ` at the stages you target (${stages.join(', ')})` : ''}`, 'New budget is allocated for scaling', 'Crunchbase alerts, news alerts, LinkedIn'];
@@ -1883,7 +1898,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
         if (hasSignal(x, /migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/, 'migration')) return ['Job posts and announcements that mention the new system or the migration', 'A system change reopens the processes around it', 'Job posting alerts, technographic change data, news alerts'];
         if (hasSignal(x, /expan|new office|new market|branch|site|hiring|grow/, 'growth')) return ['New offices, markets, branches or a hiring surge', 'Existing processes strain as the company grows', 'Job posting velocity, news alerts'];
         if (hasSignal(x, /miss|target|loss|cost|margin|delay|outage|churn/, 'shortfall')) return ['Results, statements or job posts that mention the problem', 'A missed target creates urgency and an owner', 'Earnings and news alerts, leadership posts on LinkedIn'];
-        return ['News, job posts or posts by your champion titles that mention it', 'Your team named this as a reason to buy', 'News alerts and job posting alerts on the exact words'];
+        return ['An unconfirmed event from your notes', 'Buying intent is not established; confirm the event, an active need and purchase authority before using it as a trigger', 'Check the source with the account owner; do not infer budget or urgency from the label'];
       };
       // A long trigger (a sentence from a page) is shown in full once, in the summary; headings use its first clause.
       const trigHead = (t: string) => cap(clauseHead(t, 90));
@@ -2556,18 +2571,22 @@ ${SUGGESTED}
       const icpWords = new Set(args.current_icp.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3));
       const isNew = (t: string) => t.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3 && !['with', 'where', 'that', 'they', 'them', 'from', 'more', 'most', 'deals', 'deal', 'customers', 'customer', 'buyers', 'buyer', 'wanted', 'wanting', 'lost', 'won'].includes(w)).some(w => !icpWords.has(w));
       const items = (t?: string) => (t || '').split(/\n|;/).map(x => x.trim().replace(/^[-*•]\s*/, '')).filter(Boolean);
-      const wins = items(args.recent_wins), losses = items(args.recent_losses), changes = items(args.market_changes);
-      const lossKind = (t: string) => /price|cheaper|cost|budget|expensive|free/i.test(t) ? 'lost on price: check whether these buyers had the budget your ICP assumes'
-        : /bundle|one vendor|single vendor|suite|all-in-one|erp-only|together/i.test(t) ? 'lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP'
-        : /competitor|incumbent|already/i.test(t) ? 'lost to an existing or competing tool: check what made the switch too hard'
-        : /timing|priority|later|freeze/i.test(t) ? 'lost on timing: check for a trigger before you qualify'
-        : 'check whether these buyers should have been qualified out earlier';
+      const allWins = items(args.recent_wins), allLosses = items(args.recent_losses), changes = items(args.market_changes);
+      const itemKey = (x:string)=>x.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+      const conflicts = allWins.filter(w=>allLosses.some(l=>itemKey(w)===itemKey(l)));
+      const wins = allWins.filter(w=>!conflicts.includes(w)), losses = allLosses.filter(l=>!conflicts.some(w=>itemKey(w)===itemKey(l)));
+      const scopeChanges = changes.filter(c=>scopeDisposition(c).state==='affirmed');
+      const lossKind = (t: string) => hasSignal(t,/price|cheaper|cost|budget|expensive|free/i,'price') ? 'lost on price: check whether these buyers had the budget your ICP assumes'
+        : hasSignal(t,/bundle|one vendor|single vendor|suite|all-in-one|erp-only|together/i,'bundle') ? 'lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP'
+        : hasSignal(t,/competitor|incumbent|already/i,'incumbent') ? 'lost to an existing or competing tool: check what made the switch too hard'
+        : hasSignal(t,/timing|priority|later|freeze/i,'timing') ? 'lost on timing: check for a trigger before you qualify'
+        : 'loss cause is not clear; ask for the deciding reason before creating a disqualifier';
       const winLines = wins.map(w => isNew(w)
         ? `- **Candidate addition**: ${q(shortText(w, 200))}: this is not in your current ICP; test adding it if these deals closed faster or larger than your average`
         : `- **Confirms your ICP**: ${q(shortText(w, 200))}: it matches your current ICP, so keep it`);
       const lossLines = losses.map(l => `- **Candidate disqualifier**: ${q(shortText(l, 200))}: ${lossKind(l)}`);
       const changeLines = changes.map(c => `- **Implication to check**: ${q(shortText(c, 200))}: check which segments of your ICP this moves toward you or away from you, and update the qualifying questions`);
-      const firstChange = wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew)!, 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
+      const firstChange = scopeChanges.length ? 'Reconcile the changed selling scope before testing an ICP addition' : conflicts.length ? 'Reconcile the conflicting win and loss outcomes before changing the ICP' : wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew)!, 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
       // Run 20 round 1 (quality): with or without wins and losses, your current ICP is read in parts and each part gets a test to run in
       // your CRM; the sector adds the roles and loss reasons to look for. Nothing is invented: every part is your own words.
       const partLines: string[] = [];
@@ -2630,6 +2649,7 @@ This review reads your notes against your current ICP and states candidate chang
 
 ## Win/Loss Pattern Analysis
 
+${conflicts.length ? `**Conflicting outcomes:** the same observation appears in both wins and losses: ${conflicts.map(x=>q(x)).join('; ')}. Confirm which deals and outcomes it describes; it is held out of additions and disqualifiers.\n` : ''}${scopeChanges.length ? `**Selling scope changed:** ${scopeChanges.map(x=>q(x)).join('; ')}. Reconcile which products and segments you still serve before adding from historical wins.\n` : ''}
 ### Recent Wins
 ${wins.length ? winLines.join('\n') : '- No win data provided: add recent wins to find possible additions'}
 
@@ -2653,7 +2673,7 @@ ${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.r
 
 - **Your ICP as written**: ${q(shortText(args.current_icp, 700))}
 - **Segments to keep until the data says otherwise**: ${segs.length ? andList(segs.slice(0, 6)) : 'your ICP text did not split into segments (see above)'}${profSizes.length ? `; size: ${andList(profSizes.map(x => clauseHead(x, 60)))}` : ''}.
-${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
+${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${scopeChanges.length ? 'held until the changed selling scope is confirmed' : wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
 - **Qualify out on trial**: ${losses.length ? andList(losses.slice(0, 3).map(l => q(shortText(l, 140)))) + ' (' + andList([...new Set(losses.slice(0, 3).map(l => lossKind(l).split(':')[0]))]) + ')' : 'nothing yet, because no losses were given'}.
 - **First change to test**: ${firstChange}.
 - **Check against the market**: ${changes.length ? andList(changes.slice(0, 3).map(c => q(shortText(c, 140)))) + ': which of your segments does it move toward you or away from you?' : 'no market change was given.'}
