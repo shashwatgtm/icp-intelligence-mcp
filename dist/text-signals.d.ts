@@ -70,4 +70,8 @@ export declare function objectionKind(text: string, named?: boolean): ObjectionK
 /** Preserve the text and delimiters of straight or typographic double-quoted passages. */
 export declare function quotedPassages(text: string): string[];
 export declare function launchFollowup(goals: string[], fallback: string): string;
+export declare function clearanceBlocker(text: string): SignalReading;
+export declare function blockerReading(text: string): SignalReading;
+/** Shared advice for an explicitly stated approval predicate, not a topic word. */
+export declare function clearanceAdvice(text: string): string | null;
 //# sourceMappingURL=text-signals.d.ts.map

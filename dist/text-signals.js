@@ -29,6 +29,9 @@ exports.buyingConstraint = buyingConstraint;
 exports.objectionKind = objectionKind;
 exports.quotedPassages = quotedPassages;
 exports.launchFollowup = launchFollowup;
+exports.clearanceBlocker = clearanceBlocker;
+exports.blockerReading = blockerReading;
+exports.clearanceAdvice = clearanceAdvice;
 exports.SIGNALS = {
     'a named role, title or team': /\b(?:head of (?:growth|revenue|marketing|sales|operations|security)|person in charge|business lead)\b/i,
     'an owner or responsible party': /\b(?:accountable for|answerable for|takes responsibility|person in charge)\b/i,
@@ -331,5 +334,56 @@ function quotedPassages(text) { return text.match(/"[^"\n]+"|“[^”\n]+”/g) 
 function launchFollowup(goals, fallback) {
     const tasks = { Pipeline: 'Inspect qualified opportunities separately from signed revenue', Revenue: 'Check signed contracts and the revenue period with finance', Engagement: 'Assign invitations and review completed qualified meetings', Awareness: 'Inspect reach within the intended audience', Adoption: 'Review activation against agreed completion criteria' };
     return [...new Set(goals.map(g => tasks[launchGoalReading(g).kind]).filter(Boolean))].join('; ') || fallback;
+}
+/** Approval is a positive clearance; its negation is a blocker, not the absence of one.
+ * Resolve the predicate before looking for topic words such as legal or security.
+ */
+const CLEARANCE_VERBS = /\b(?:approv(?:e[ds]?|al)|clear(?:ed|ance)?|authori[sz](?:e[ds]?|ation)|sign(?:ed)?[ -]off|consent(?:ed)?|endors(?:e[ds]?|ement)|ratif(?:y|ied|ication)|accept(?:ed|ance)?|permit(?:ted)?|permission|green[ -](?:lit|light(?:ed)?)|pass(?:ed|ing)? (?:the |a )?review|complet(?:e[ds]?|ion of) (?:the )?review|go[ -]ahead)\b/i;
+function clearanceBlocker(text) {
+    const source = normalized(text).replace(/\b(hasn't|haven't|hadn't|isn't|aren't|wasn't|weren't|didn't|doesn't|don't)\b/gi, m => ({ "hasn't": "has not", "haven't": "have not", "hadn't": "had not", "isn't": "is not", "aren't": "are not", "wasn't": "was not", "weren't": "were not", "didn't": "did not", "doesn't": "does not", "don't": "do not" }[m.toLowerCase()] || m));
+    if (!CLEARANCE_VERBS.test(source))
+        return { state: 'absent', evidence: [], matched: [] };
+    if (/\b(?:until|once|when|after)\b/i.test(source))
+        return { state: /\b(?:cannot|can't|waiting|awaiting|blocked|pending|held up)\b/i.test(source) ? 'affirmed' : 'unclear', evidence: [text], matched: ['clearance is a future condition'] };
+    // Do not let an uncertain future clearance establish a present approval or refusal.
+    if (/\b(?:might|may|could|perhaps|maybe|unclear|not sure|if|whether)\b/i.test(source))
+        return { state: 'unclear', evidence: [text], matched: [] };
+    const negative = /\b(?:not|never|no|without|neither|nor)\b(?:\W+\w+){0,5}\W*(?:approv\w*|clear\w*|authori[sz]\w*|sign(?:ed)?[ -]off|consent\w*|endors\w*|ratif\w*|accept\w*|permit\w*|permission|green[ -](?:lit|light)|pass\w*\s+(?:the |a )?review|complet\w*\s+(?:the )?review|giv\w*|gave|go[ -]ahead)\b/i;
+    const outstanding = /\b(?:pending|outstanding|awaited|withheld|refused|rejected|denied|declined|not (?:yet )?(?:received|obtained|granted|complete|given)|still (?:needed|required)|except)\b/i;
+    const waived = /\b(?:waiv(?:e[ds]?|er)|not (?:needed|required|necessary)|no longer (?:needed|required))\b/i;
+    if (waived.test(source) && !negative.test(source))
+        return { state: 'negated', evidence: [text], matched: ['clearance requirement waived'] };
+    if (/\bnot\s+(?:yet\s+)?(?:refused|rejected|denied|withheld|declined)\b/i.test(source))
+        return { state: 'unclear', evidence: [text], matched: [] };
+    const passiveNegative = /\b(?:approval|clearance|authorization|permission|consent|review|sign[ -]off)[^.;]{0,30}\bnot\b[^.;]{0,15}\b(?:granted|received|obtained|given|complete|completed|passed)\b/i.test(source);
+    if (negative.test(source) || passiveNegative || readSignal(source, outstanding).state === 'affirmed')
+        return { state: 'affirmed', evidence: [text], matched: ['clearance not obtained'] };
+    const done = /\b(?:approved|cleared|authori[sz]ed|signed[ -]off|consented|endorsed|ratified|accepted|permitted|green[ -](?:lit|lighted)|passed (?:the |a )?review|completed (?:the )?review|(?:permission|approval|clearance|consent|go[ -]ahead|sign[ -]off)[^.;]{0,25}(?:received|obtained|granted|given)|granted permission|given (?:the )?go[ -]ahead|gave (?:the )?go[ -]ahead)\b/i;
+    return { state: done.test(source) ? 'negated' : 'absent', evidence: [text], matched: done.test(source) ? ['clearance completed'] : [] };
+}
+function blockerReading(text) {
+    const readings = clauses(text).map(c => {
+        if (/\b(?:nothing|nobody|no one)[^.;]{0,15}\b(?:block\w*|stand\w* in the way|prevent\w*)/i.test(c))
+            return { state: 'negated', evidence: [c], matched: [] };
+        const clearance = clearanceBlocker(c);
+        if (clearance.state !== 'absent')
+            return clearance;
+        return readSignal(c, new RegExp(exports.SIGNALS.blocker.source + '|' + exports.SIGNALS.price.source, 'i'), /\b(price|cost|budget|security|legal|procurement|approval|data|integration|offline)\b/i);
+    });
+    // One uncleared gate remains a blocker even if other parties have approved.
+    const state = readings.some(r => r.state === 'affirmed') ? 'affirmed' : readings.some(r => r.state === 'unclear') ? 'unclear' : readings.some(r => r.state === 'negated') ? 'negated' : 'absent';
+    return { state, evidence: [...new Set(readings.flatMap(r => r.evidence))], matched: [...new Set(readings.flatMap(r => r.matched))] };
+}
+/** Shared advice for an explicitly stated approval predicate, not a topic word. */
+function clearanceAdvice(text) {
+    const readings = clauses(text).map(clearanceBlocker);
+    if (!readings.some(r => r.state !== 'absent'))
+        return null;
+    const r = blockerReading(text);
+    if (r.state === 'negated')
+        return 'Clearance reported complete: do not treat the named approvals as unresolved blockers. Confirm the scope and record of that clearance. Sentence read: "' + text + '".';
+    if (r.state === 'affirmed')
+        return 'Clearance or another blocker remains outstanding: identify the required reviewer and the unresolved requirement before advancing the purchase. Sentence read: "' + text + '".';
+    return 'Clearance is not clear from this sentence. Confirm whether the required reviewers have approved before treating it as cleared or blocked. Sentence read: "' + text + '".';
 }
 //# sourceMappingURL=text-signals.js.map

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { clearanceAdvice } from './text-signals.ts';
 import { decisionInputs, decisionHelp, decisionLimit } from './decision-limits.ts';
 import { buyingConstraint } from './text-signals.ts';
 import { readerLabel, readerIssue, claimRisk, outcomeReading, scopeDisposition } from './text-signals.ts';
@@ -422,6 +423,7 @@ function sectorNotes(v: Vertical | null, what: Array<'committee' | 'roles' | 'me
 }
 // The answer pattern for one objection typed by the user: the sector's pattern when it matches, else a pattern by kind.
 function answerFor(text: string, v: Vertical | null): string {
+  const clearance = clearanceAdvice(text); if (clearance) return clearance;
   const t = text.toLowerCase();
   if (v) {
     for (const o of v.objections) {
