@@ -150,15 +150,19 @@ function icpReview(a) {
         if (r.status === "missing")
             continue;
         const b = (a.bases ?? []).find((x) => x.metric === r.metric);
-        if (!b?.current_basis?.trim() ||
-            b.current_basis.trim().toLowerCase() !==
-                b.target_basis?.trim().toLowerCase()) {
+        const currentBasis = b?.current_basis?.trim().toLowerCase(), targetBasis = b?.target_basis?.trim().toLowerCase();
+        r.basisConfirmed = Boolean(currentBasis && targetBasis && currentBasis === targetBasis);
+        if (currentBasis && targetBasis && currentBasis !== targetBasis) {
             r.status = "basis unconfirmed";
-            r.text = "not compared: confirm matching period, definition and units";
+            r.text =
+                "not compared: supplied bases conflict; confirm period, definition and units";
             r.band = "not compared";
             r.ranked = false;
             r.gap = null;
             r.met = false;
+        }
+        else if (!r.basisConfirmed) {
+            r.text += "; basis not confirmed";
         }
     }
     const ranked = gaps.rows.filter((r) => r.ranked), max = Math.max(...ranked.map((r) => r.gap)), ties = ranked.filter((r) => r.gap === max).map((r) => r.metric);
@@ -230,8 +234,13 @@ function icpReview(a) {
                 ? ["Supply the current customer description."]
                 : []),
             ...gaps.rows
-                .filter((r) => ["missing", "basis unconfirmed"].includes(r.status))
-                .map((r) => "Confirm " + r.name + " current value, target and matching basis."),
+                .filter((r) => ["missing", "basis unconfirmed"].includes(r.status) ||
+                !r.basisConfirmed)
+                .map((r) => r.status === "missing"
+                ? "Supply the missing " + r.name + " value or target."
+                : "Confirm the " +
+                    r.name +
+                    " period, definition and units; the supplied values are retained."),
             ...(evidence.length
                 ? []
                 : ["Supply dated win, loss or market-change notes."]),
@@ -343,6 +352,7 @@ const vals = {
         data: r,
         limitations: [
             "Default priority bands are example starting points, not benchmarks. NPS points are never ranked with percentage gaps.",
+            "Missing bases do not block arithmetic; these rows say basis not confirmed. Explicitly conflicting bases are not compared.",
             "Comparison classes and proposed wording are supplied by the conversational caller after reading whole quotes. Matching text does not verify its truth.",
             "One evidence item opens a question; even multiple items remain a hypothesis requiring the supplied test and disproof. No CRM change is made.",
             "Marginal counts provide bounds only; an exact intersection needs record-level data.",

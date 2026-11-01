@@ -120,13 +120,16 @@ function pmfCheck(a) {
         if (["missing", "no target", "not applicable"].includes(r.status))
             continue;
         const b = bases.find((b) => b.metric === r.dimension);
-        if (!b?.value_basis?.trim() ||
-            !b?.target_basis?.trim() ||
-            b.value_basis.trim().toLowerCase() !== b.target_basis.trim().toLowerCase()) {
+        const valueBasis = b?.value_basis?.trim().toLowerCase(), targetBasis = b?.target_basis?.trim().toLowerCase();
+        r.basisConfirmed = Boolean(valueBasis && targetBasis && valueBasis === targetBasis);
+        if (valueBasis && targetBasis && valueBasis !== targetBasis) {
             r.status = "basis unconfirmed";
             r.text =
-                "not scored: confirm identical value and target definitions, period and units";
+                "not scored: supplied value and target bases conflict; confirm definitions, period and units";
             r.gap = null;
+        }
+        else if (!r.basisConfirmed) {
+            r.text += "; basis not confirmed";
         }
     }
     const scored = rows.filter((r) => ["met", "behind", "n/a"].includes(r.status)), met = rows.filter((r) => r.status === "met"), ranked = rows.filter((r) => r.status === "behind" && r.gap !== null), top = Math.max(...ranked.map((r) => r.gap)), ties = ranked.filter((r) => r.gap === top).map((r) => r.dimension);
@@ -161,7 +164,7 @@ const values = {
     retention: (0, reserve_common_ts_1.num)(0, 1000),
     activation: (0, reserve_common_ts_1.num)(0, 100),
 };
-(0, reserve_common_ts_1.define)("pmf_target_check", "Compare PMF dimensions only against supplied own targets on confirmed matching bases. No benchmark or fit-stage verdict. NPS is points and is never ranked with percentage gaps.", (0, reserve_common_ts_1.object)({
+(0, reserve_common_ts_1.define)("pmf_target_check", "Compare PMF dimensions only against supplied own targets with each metric basis labelled confirmed or not confirmed. No benchmark or fit-stage verdict. NPS is points and is never ranked with percentage gaps.", (0, reserve_common_ts_1.object)({
     business_model: (0, reserve_common_ts_1.choice)("saas", "services", "connectivity", "transactions", "marketplace", "hardware_software", "investment"),
     metrics: (0, reserve_common_ts_1.object)({ ...values, ltv: (0, reserve_common_ts_1.num)(), cac: (0, reserve_common_ts_1.num)() }, []),
     targets: (0, reserve_common_ts_1.object)(values, []),
@@ -189,7 +192,7 @@ const values = {
             "NPS: reported in points separately",
             "Next: " +
                 (r.scored
-                    ? "Check the weakest dimension against your own data."
+                    ? "Confirm metric definitions, periods and units, then check the weakest dimension against your own data."
                     : "Supply your targets and confirm matching metric bases."),
         ],
         sections: [
@@ -230,7 +233,7 @@ const values = {
         data: r,
         limitations: [
             "Every target is supplied by you. No published benchmark or fit-stage label is used.",
-            "Matching basis strings are caller confirmation, not independent verification. Conflicting periods or units are never compared.",
+            "Missing bases do not block arithmetic; each such row is labelled basis not confirmed. Matching strings are caller confirmation, not verification. Explicitly conflicting periods or units are not compared.",
             "Feedback classification is supplied by the conversational caller after reading the whole quote, not inferred from keyword matching.",
             ...(r.caution ? [r.caution] : []),
         ],

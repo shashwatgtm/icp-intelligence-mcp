@@ -146,15 +146,18 @@ export function pmfCheck(a: Row) {
   for (const r of rows) {
     if (["missing", "no target", "not applicable"].includes(r.status)) continue;
     const b = bases.find((b: Row) => b.metric === r.dimension);
-    if (
-      !b?.value_basis?.trim() ||
-      !b?.target_basis?.trim() ||
-      b.value_basis.trim().toLowerCase() !== b.target_basis.trim().toLowerCase()
-    ) {
+    const valueBasis = b?.value_basis?.trim().toLowerCase(),
+      targetBasis = b?.target_basis?.trim().toLowerCase();
+    r.basisConfirmed = Boolean(
+      valueBasis && targetBasis && valueBasis === targetBasis,
+    );
+    if (valueBasis && targetBasis && valueBasis !== targetBasis) {
       r.status = "basis unconfirmed";
       r.text =
-        "not scored: confirm identical value and target definitions, period and units";
+        "not scored: supplied value and target bases conflict; confirm definitions, period and units";
       r.gap = null;
+    } else if (!r.basisConfirmed) {
+      r.text += "; basis not confirmed";
     }
   }
   const scored = rows.filter((r) =>
@@ -199,7 +202,7 @@ const values = {
 };
 define(
   "pmf_target_check",
-  "Compare PMF dimensions only against supplied own targets on confirmed matching bases. No benchmark or fit-stage verdict. NPS is points and is never ranked with percentage gaps.",
+  "Compare PMF dimensions only against supplied own targets with each metric basis labelled confirmed or not confirmed. No benchmark or fit-stage verdict. NPS is points and is never ranked with percentage gaps.",
   object(
     {
       business_model: choice(
@@ -258,7 +261,7 @@ define(
         "NPS: reported in points separately",
         "Next: " +
           (r.scored
-            ? "Check the weakest dimension against your own data."
+            ? "Confirm metric definitions, periods and units, then check the weakest dimension against your own data."
             : "Supply your targets and confirm matching metric bases."),
       ],
       sections: [
@@ -299,7 +302,7 @@ define(
       data: r,
       limitations: [
         "Every target is supplied by you. No published benchmark or fit-stage label is used.",
-        "Matching basis strings are caller confirmation, not independent verification. Conflicting periods or units are never compared.",
+        "Missing bases do not block arithmetic; each such row is labelled basis not confirmed. Matching strings are caller confirmation, not verification. Explicitly conflicting periods or units are not compared.",
         "Feedback classification is supplied by the conversational caller after reading the whole quote, not inferred from keyword matching.",
         ...(r.caution ? [r.caution] : []),
       ],
