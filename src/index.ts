@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { hasSignal, signal } from './text-signals.ts';
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -875,14 +876,14 @@ ${gaps.length ? gaps.join('\n') : 'None: every field this analysis reads was sup
         const desc = text.toLowerCase();
         // Run 19 D80: sizes are the employee ranges typed; the size words are read only when no range is typed.
         const typedSizes = sizesIn(text);
-        const sizeWord = desc.includes('enterprise') ? 'Enterprise (1000+)' :
-                desc.includes('mid-market') || desc.includes('mid market') || desc.includes('mid-size') || desc.includes('midsize') ? 'Mid-market (100-1000)' :
-                desc.includes('smb') || desc.includes('small') ? 'SMB (10-100)' :
-                desc.includes('startup') ? 'Startup/Early-stage' : 'Mixed sizes';
+        const sizeWord = signal(text, 'enterprise').state === 'affirmed' ? 'Enterprise (1000+)' :
+                hasSignal(text, /mid-market|mid market|mid-size|midsize/i, 'midmarket') ? 'Mid-market (100-1000)' :
+                signal(text, 'small').state === 'affirmed' ? 'SMB (10-100)' :
+                hasSignal(text, /startup/i) ? 'Startup/Early-stage' : 'Mixed sizes';
         const size = typedSizes.length ? andList(typedSizes) : sizeWord;
         const stageTyped = escapePiece([...new Set((text.match(/\bseries [a-d]\b/gi) || []).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', '));
-        const stage = stageTyped || (desc.includes('public') ? 'Public companies' : 'not stated in your text');
-        const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => desc.includes(r.toLowerCase()));
+        const stage = stageTyped || (hasSignal(text, /public/i) ? 'Public companies' : 'not stated in your text');
+        const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => hasSignal(text, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')));
         return `# ICP Pattern Analysis (from Description)
 
 - ${companyLine(args.company)}

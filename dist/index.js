@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
+const text_signals_ts_1 = require("./text-signals.js");
 const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
@@ -917,14 +918,14 @@ ${gaps.length ? gaps.join('\n') : 'None: every field this analysis reads was sup
                 const desc = text.toLowerCase();
                 // Run 19 D80: sizes are the employee ranges typed; the size words are read only when no range is typed.
                 const typedSizes = sizesIn(text);
-                const sizeWord = desc.includes('enterprise') ? 'Enterprise (1000+)' :
-                    desc.includes('mid-market') || desc.includes('mid market') || desc.includes('mid-size') || desc.includes('midsize') ? 'Mid-market (100-1000)' :
-                        desc.includes('smb') || desc.includes('small') ? 'SMB (10-100)' :
-                            desc.includes('startup') ? 'Startup/Early-stage' : 'Mixed sizes';
+                const sizeWord = (0, text_signals_ts_1.signal)(text, 'enterprise').state === 'affirmed' ? 'Enterprise (1000+)' :
+                    (0, text_signals_ts_1.hasSignal)(text, /mid-market|mid market|mid-size|midsize/i, 'midmarket') ? 'Mid-market (100-1000)' :
+                        (0, text_signals_ts_1.signal)(text, 'small').state === 'affirmed' ? 'SMB (10-100)' :
+                            (0, text_signals_ts_1.hasSignal)(text, /startup/i) ? 'Startup/Early-stage' : 'Mixed sizes';
                 const size = typedSizes.length ? andList(typedSizes) : sizeWord;
                 const stageTyped = (0, escape_inputs_ts_1.escapePiece)([...new Set((text.match(/\bseries [a-d]\b/gi) || []).map(m => 'Series ' + m.slice(-1).toUpperCase()))].join(', '));
-                const stage = stageTyped || (desc.includes('public') ? 'Public companies' : 'not stated in your text');
-                const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => desc.includes(r.toLowerCase()));
+                const stage = stageTyped || ((0, text_signals_ts_1.hasSignal)(text, /public/i) ? 'Public companies' : 'not stated in your text');
+                const roles = (ctx.v ? ctx.v.buyerRoles : []).filter(r => (0, text_signals_ts_1.hasSignal)(text, new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')));
                 return `# ICP Pattern Analysis (from Description)
 
 - ${companyLine(args.company)}

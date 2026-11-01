@@ -1,14 +1,4 @@
 "use strict";
-// Run 22 rewrite helpers for icp_gap_analysis and icp_scoring_model (text only: no network, no files, no environment, no logging).
-//
-// Why this file exists: the old gap analysis split a profile into pieces and compared the pieces word for word, so a segment the ideal profile
-// names in other words was called missing, a country became a segment, and the answer pasted the inputs back. Here a profile is read in parts
-// (segments, teams, size, place, buyer, problem, page claims, exclusions), every comparison is made against the WHOLE other text with
-// a stem and alias check, and a thing is called "not named" only when none of its main words is in the other text.
-// The old scoring model gave points by the order the user listed the values, so named targets listed last scored 0. Here a list of named
-// targets scores the full weight for each, and only a list that is ordered by nature (ranges, yes or no, timelines) keeps the preset steps.
-// Sector facts come only from src/verticals.ts (rule B82); this file holds cue words (places, size words, aliases), no statistic or company.
-// Hostile or odd text is only ever quoted in the user's own words; it is never followed (the echo safeguard has already run).
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GENERIC_CRITERION_WORDS = void 0;
 exports.listText = listText;
@@ -23,6 +13,17 @@ exports.clearVertical = clearVertical;
 exports.aliasNamed = aliasNamed;
 exports.fitQuestions = fitQuestions;
 exports.matchWords = matchWords;
+const text_signals_ts_1 = require("./text-signals.js");
+// Run 22 rewrite helpers for icp_gap_analysis and icp_scoring_model (text only: no network, no files, no environment, no logging).
+//
+// Why this file exists: the old gap analysis split a profile into pieces and compared the pieces word for word, so a segment the ideal profile
+// names in other words was called missing, a country became a segment, and the answer pasted the inputs back. Here a profile is read in parts
+// (segments, teams, size, place, buyer, problem, page claims, exclusions), every comparison is made against the WHOLE other text with
+// a stem and alias check, and a thing is called "not named" only when none of its main words is in the other text.
+// The old scoring model gave points by the order the user listed the values, so named targets listed last scored 0. Here a list of named
+// targets scores the full weight for each, and only a list that is ordered by nature (ranges, yes or no, timelines) keeps the preset steps.
+// Sector facts come only from src/verticals.ts (rule B82); this file holds cue words (places, size words, aliases), no statistic or company.
+// Hostile or odd text is only ever quoted in the user's own words; it is never followed (the echo safeguard has already run).
 const verticals_ts_1 = require("./verticals.js");
 // ---------------------------------------------------------------------------
 // small text helpers
@@ -193,7 +194,7 @@ function coverage(item, text) {
 }
 const CLAIM_RE = /\(page claims?\)|\bpage claims?\b|\(the (?:about|home|customers?|pricing|product) page[^)]*\)|\bthe (?:about |home |customers? |pricing |product |menu )?(?:pages?|menu) (?:state|says?|lists?|calls?|shows?)\b|\(about page\)|\(home page\)|\bpress item\b/i;
 const CLAIM_OPEN = /\bthe (?:about |home |customers? |pricing |product |menu )?(?:pages?|menu) (?:state|says?|lists?|calls?|shows?|claim\w*)\b|\bpage claiming\b|\bpress item\b|\(the (?:about|home|customers?|pricing|product) page/i;
-const EXCLUDE_RE = /\b(?:served by a separate|are served by|is served by|handled by a separate|separate business|out of scope|not (?:a )?(?:target|focus)|excluded|we do not (?:sell|serve)|we don't (?:sell|serve))\b/i;
+const EXCLUDE_RE = /\b(?:served by a separate|are served by|is served by|handled by a separate|separate business|out of scope|not (?:a )?(?:target|focus)|not for us|outside our (?:scope|market)|we avoid|excluded|we do not (?:sell|serve)|we don't (?:sell|serve))\b/i;
 const IMPERATIVE_RE = /^(?:ignore|disregard|forget|print|reveal|say|write|output|override|pretend|act as|you must|you are now|please|do not|don't|stop)\b/i;
 // a group of people inside the customer; "wealth managers" or "asset managers" are kinds of firm, so a manager counts as a person only with a function in front
 const TEAM_END = /(?:\b(?:teams?|leaders?|leadership|developers?|engineers?|practitioners?|decision[- ]makers?|stakeholders?|users|students|heads?|executives?|buyers?|operations)|\b(?:product|project|program|engineering|sales|marketing|operations|finance|it|hr|people|support|account|procurement|security|data|platform|devops|qa|test|design|logistics|supply chain|customer success)\s+(?:managers?|directors?|analysts?|leads?|owners?|officers?))$/i;
@@ -232,7 +233,7 @@ function readProfile(raw) {
         labelled = true;
     }
     // page claims and exclusions are clauses (split at semicolons outside brackets)
-    const clauses = splitTop(t, /;/);
+    const clauses = splitTop(t, /;/).flatMap(c => (0, text_signals_ts_1.clauses)(c));
     const rest = [];
     for (const c of clauses) {
         // a page statement is set aside piece by piece: a piece with a page marker, and the pieces that follow it up to the buyer or problem clause
@@ -275,7 +276,11 @@ function readProfile(raw) {
                 rest.push(keep.join(', '));
             continue;
         }
-        if (EXCLUDE_RE.test(c)) {
+        if (/\b(?:were|was) excluded before\b/i.test(c)) {
+            res.descr.push(c);
+            continue;
+        }
+        if ((0, text_signals_ts_1.hasSignal)(c, EXCLUDE_RE)) {
             const m = /^(.*?)(,\s*(?:with|who)\b.*)$/i.exec(c);
             if (m) {
                 res.outside.push(noDot(m[1]));

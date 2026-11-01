@@ -1,3 +1,4 @@
+import { clauses as readClauses, hasSignal } from './text-signals.ts';
 // Run 22 rewrite helpers for icp_gap_analysis and icp_scoring_model (text only: no network, no files, no environment, no logging).
 //
 // Why this file exists: the old gap analysis split a profile into pieces and compared the pieces word for word, so a segment the ideal profile
@@ -168,7 +169,7 @@ export interface ProfileRead {
 }
 const CLAIM_RE = /\(page claims?\)|\bpage claims?\b|\(the (?:about|home|customers?|pricing|product) page[^)]*\)|\bthe (?:about |home |customers? |pricing |product |menu )?(?:pages?|menu) (?:state|says?|lists?|calls?|shows?)\b|\(about page\)|\(home page\)|\bpress item\b/i;
 const CLAIM_OPEN = /\bthe (?:about |home |customers? |pricing |product |menu )?(?:pages?|menu) (?:state|says?|lists?|calls?|shows?|claim\w*)\b|\bpage claiming\b|\bpress item\b|\(the (?:about|home|customers?|pricing|product) page/i;
-const EXCLUDE_RE = /\b(?:served by a separate|are served by|is served by|handled by a separate|separate business|out of scope|not (?:a )?(?:target|focus)|excluded|we do not (?:sell|serve)|we don't (?:sell|serve))\b/i;
+const EXCLUDE_RE = /\b(?:served by a separate|are served by|is served by|handled by a separate|separate business|out of scope|not (?:a )?(?:target|focus)|not for us|outside our (?:scope|market)|we avoid|excluded|we do not (?:sell|serve)|we don't (?:sell|serve))\b/i;
 const IMPERATIVE_RE = /^(?:ignore|disregard|forget|print|reveal|say|write|output|override|pretend|act as|you must|you are now|please|do not|don't|stop)\b/i;
 // a group of people inside the customer; "wealth managers" or "asset managers" are kinds of firm, so a manager counts as a person only with a function in front
 const TEAM_END = /(?:\b(?:teams?|leaders?|leadership|developers?|engineers?|practitioners?|decision[- ]makers?|stakeholders?|users|students|heads?|executives?|buyers?|operations)|\b(?:product|project|program|engineering|sales|marketing|operations|finance|it|hr|people|support|account|procurement|security|data|platform|devops|qa|test|design|logistics|supply chain|customer success)\s+(?:managers?|directors?|analysts?|leads?|owners?|officers?))$/i;
@@ -199,7 +200,7 @@ export function readProfile(raw: string): ProfileRead {
   const lab = /^(?:[A-Z][\w&.'\- ]{0,40}?\s+)?(?:customers?|clients?|accounts?|segments?|industries|icp|profile|ideal customers?)\s*:\s*/i.exec(t);
   if (lab) { t = t.slice(lab[0].length); labelled = true; }
   // page claims and exclusions are clauses (split at semicolons outside brackets)
-  const clauses = splitTop(t, /;/);
+  const clauses = splitTop(t, /;/).flatMap(c => readClauses(c));
   const rest: string[] = [];
   for (const c of clauses) {
     // a page statement is set aside piece by piece: a piece with a page marker, and the pieces that follow it up to the buyer or problem clause
@@ -220,7 +221,8 @@ export function readProfile(raw: string): ProfileRead {
     }
     flush();
     if (hadClaim) { if (keep.length) rest.push(keep.join(', ')); continue; }
-    if (EXCLUDE_RE.test(c)) {
+    if (/\b(?:were|was) excluded before\b/i.test(c)) { res.descr.push(c); continue; }
+    if (hasSignal(c, EXCLUDE_RE)) {
       const m = /^(.*?)(,\s*(?:with|who)\b.*)$/i.exec(c);
       if (m) { res.outside.push(noDot(m[1])); rest.push(m[2].replace(/^,\s*/, '')); } else res.outside.push(noDot(c));
       continue;
