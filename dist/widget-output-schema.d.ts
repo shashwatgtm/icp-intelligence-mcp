@@ -8,9 +8,6 @@ export declare function widgetOutputSchema(payload: "meta" | "full"): {
         title?: {
             type: string;
         } | undefined;
-        plainText?: {
-            type: string;
-        } | undefined;
         sections?: {
             type: string;
             items: {
@@ -20,6 +17,9 @@ export declare function widgetOutputSchema(payload: "meta" | "full"): {
         presentation?: {
             type: string;
         } | undefined;
+        plainText: {
+            type: string;
+        };
         marketSizing: {
             oneOf: ({
                 type: string;

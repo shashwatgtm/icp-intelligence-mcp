@@ -1,3 +1,4 @@
+import { widgetTextSchema } from "./widget-text-schema.ts";
 import { composeResources } from "./resource-handlers.js";
 import { WIDGET_ORIGIN } from "./widget-origin.ts";
 import { widgetOutputSchema } from "./widget-output-schema.ts";
@@ -29,7 +30,7 @@ export function attachWidgets(server: Server): void {
             Object.prototype.hasOwnProperty.call(selected, t.name)
               ? {
                   ...t,
-                  ...(t.name === "tam_sam_som_calculator" ? { outputSchema: widgetOutputSchema(BUILD_PROFILE.payload) } : {}),
+                  outputSchema: t.name === "tam_sam_som_calculator" ? widgetOutputSchema(BUILD_PROFILE.payload) : widgetTextSchema(t.outputSchema),
                   _meta: {
                     ...t._meta,
                     ui: {
@@ -57,20 +58,20 @@ export function attachWidgets(server: Server): void {
           .join("\n");
         if (typeof text === "string") {
           const display: any = { ...result.structuredContent, ...widgetPayload(request.params.name, WIDGETS[request.params.name], text) };
-          const facts: any = {};
+          const facts: any = { plainText: text };
           const summary = request.params.name === 'tam_sam_som_calculator' ? marketSummary(request.params.arguments) : null;
           if (summary) display.marketSizing = summary;
           if (summary?.kind === 'market-sizing') facts.marketSizing = { kind: summary.kind, figures: summary.figures, targets: summary.targets, rates: summary.rates };
           else if (summary) facts.marketSizing = summary;
 
           if (BUILD_PROFILE.payload === 'full') return { ...result, structuredContent: display };
-          // Display data and caller context are delivered only to the component.
+          // Rich display data stays in the component; every host also gets the full text.
           if (display.marketSizing) {
             const { toolArgumentsEncoded, ...summary } = display.marketSizing;
             display.marketSizing = summary;
           }
           const { structuredContent, ...plain } = result;
-          return { ...plain, ...(Object.keys(facts).length ? { structuredContent: facts } : {}), _meta: { ...result._meta, ...display, toolArguments: request.params.arguments } };
+          return { ...plain, structuredContent: facts, _meta: { ...result._meta, ...display, toolArguments: request.params.arguments } };
         }
       }
       return result;

@@ -22,9 +22,9 @@ function widgetOutputSchema(payload) {
         }, additionalProperties: false,
     };
     return {
-        type: "object", required: ["marketSizing"],
-        properties: { marketSizing: { oneOf: [summary, unavailable] },
-            ...(payload === "full" ? { tool: text, title: text, plainText: text, sections: { type: "array", items: { type: "object" } }, presentation: text } : {}),
+        type: "object", required: ["marketSizing", "plainText"],
+        properties: { plainText: text, marketSizing: { oneOf: [summary, unavailable] },
+            ...(payload === "full" ? { tool: text, title: text, sections: { type: "array", items: { type: "object" } }, presentation: text } : {}),
         }, additionalProperties: false,
     };
 }

@@ -20,9 +20,9 @@ export function widgetOutputSchema(payload: "meta" | "full") {
     }, additionalProperties: false,
   };
   return {
-    type: "object" as const, required: ["marketSizing"],
-    properties: { marketSizing: { oneOf: [summary, unavailable] },
-      ...(payload === "full" ? {tool:text,title:text,plainText:text,sections:{type:"array",items:{type:"object"}},presentation:text} : {}),
+    type: "object" as const, required: ["marketSizing", "plainText"],
+    properties: { plainText: text, marketSizing: { oneOf: [summary, unavailable] },
+      ...(payload === "full" ? {tool:text,title:text,sections:{type:"array",items:{type:"object"}},presentation:text} : {}),
     }, additionalProperties: false,
   };
 }
