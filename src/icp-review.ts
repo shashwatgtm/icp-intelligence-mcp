@@ -235,6 +235,8 @@ export function icpReview(a: Row) {
       });
       return {
         ...h,
+        owner: (() => { const m=h.test.match(/(?:^|[;\n.])\s*(?:owner|accountable person)\s*:\s*([^;\n.]+)/i); return m && !/^(?:unknown|unassigned|not (?:yet )?assigned|none)$/i.test(m[1].trim()) ? m[1].trim() : "Unknown; name the person accountable for the test"; })(),
+        reviewDate: (() => { const m=h.test.match(/(?:^|[;\n.])\s*(?:review date|review on)\s*:\s*(\d{4}-\d{2}-\d{2})(?=$|[;\n.])/i); if(m)requireDate(m[1],"Hypothesis review date");return m?.[1] ?? null; })(),
         evidenceCount: support.length,
         evidence: support,
         status:
@@ -243,9 +245,9 @@ export function icpReview(a: Row) {
             : "HYPOTHESIS_TO_TEST",
         draftMark: support.length < 2 ? "Question" : h.proposed_mark,
       };
-    })
-    .sort((x: Row, y: Row) => y.evidenceCount - x.evidenceCount);
+    });
   return {
+    firstTest: hs.find((h: Row) => h.evidenceCount > 0) ?? null,
     originalIcp: a.icp,
     reviewDate: a.as_of,
     comparisons: comparisons.map((c: Row) => ({
@@ -381,27 +383,13 @@ define(
       title: "ICP evidence review",
       summary: [
         "Review: existing ICP, as supplied",
-        "Compared metrics: " + r.metricGaps.compared,
-        "Largest percentage gap: " +
-          (r.metricGaps.largest_ties.length
-            ? r.metricGaps.largest_ties.join(" and ") + " (tied)"
-            : (r.metricGaps.largest ?? "Not established")),
-        "Next: test the evidence-linked hypotheses before changing targeting",
+        "First supplied evidence linked hypothesis: " + (r.firstTest?.change ?? "Unknown; supply a hypothesis and its evidence"),
+        "Disproof: " + (r.firstTest?.disproof ?? "Unknown; state what would contradict the hypothesis"),
+        "Accountable owner: " + (r.firstTest?.owner ?? "Unknown"),
+        "Review date: " + (r.firstTest?.reviewDate ?? "Unknown; agree a date in the test plan"),
+        "Next: confirm this test commitment before changing targeting. Numerical metric gaps are observations, not a targeting priority.",
       ],
       sections: [
-        {
-          heading: "Metric gaps",
-          table: {
-            headers: ["Metric", "Today", "Target", "Gap", "Priority source"],
-            rows: r.metricGaps.rows.map((x) => [
-              x.name,
-              x.current,
-              x.target,
-              x.text,
-              x.band + "; " + x.band_source,
-            ]),
-          },
-        },
         {
           heading: "Hypotheses",
           table: {
@@ -411,6 +399,8 @@ define(
               "Status",
               "Test",
               "Disproof",
+              "Accountable owner",
+              "Review date",
             ],
             rows: r.hypotheses.map((x: Row) => [
               x.change,
@@ -418,6 +408,21 @@ define(
               x.status,
               x.test,
               x.disproof,
+              x.owner,
+              x.reviewDate ?? "Unknown; agree in the test plan",
+            ]),
+          },
+        },
+        {
+          heading: "Metric gap observations",
+          table: {
+            headers: ["Metric", "Today", "Target", "Gap", "Illustrative band source"],
+            rows: r.metricGaps.rows.map((x) => [
+              x.name,
+              x.current,
+              x.target,
+              x.text,
+              x.band + "; " + x.band_source,
             ]),
           },
         },
@@ -438,7 +443,7 @@ define(
       ],
       data: r,
       limitations: [
-        "Default priority bands are example starting points, not benchmarks. NPS points are never ranked with percentage gaps.",
+        "Default priority bands are illustrative example starting points, not benchmarks or business priorities. The largest numerical gap does not select targeting. NPS points are never ranked with percentage gaps.",
         "Missing bases do not block arithmetic; these rows say basis not confirmed. Explicitly conflicting bases are not compared.",
         "Comparison classes and proposed wording are supplied by the conversational caller after reading whole quotes. Matching text does not verify its truth.",
         "One evidence item opens a question; even multiple items remain a hypothesis requiring the supplied test and disproof. No CRM change is made.",

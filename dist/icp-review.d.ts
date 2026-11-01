@@ -6,6 +6,7 @@ export declare function icpGaps(a: Row): {
     compared: number;
 };
 export declare function icpReview(a: Row): {
+    firstTest: any;
     originalIcp: any;
     reviewDate: any;
     comparisons: any;
