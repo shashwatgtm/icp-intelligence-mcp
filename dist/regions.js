@@ -1,0 +1,3732 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.REGION_GENERATION = exports.REGION_TAXONOMY = exports.REGION_SOURCES = exports.REGION_DATA = exports.REGION_CHOICES = void 0;
+exports.REGION_CHOICES = [
+    {
+        "id": "india",
+        "name": "India"
+    },
+    {
+        "id": "southeast-asia",
+        "name": "Southeast Asia"
+    },
+    {
+        "id": "middle-east",
+        "name": "Middle East"
+    },
+    {
+        "id": "uk",
+        "name": "UK"
+    },
+    {
+        "id": "western-europe",
+        "name": "Western Europe"
+    },
+    {
+        "id": "north-america",
+        "name": "North America"
+    }
+];
+exports.REGION_DATA = [
+    {
+        "schema_version": "1.0.0",
+        "region_id": "india",
+        "region_name": "India",
+        "review_status": "draft",
+        "updated_at": "2026-11-03",
+        "scope_note": "Draft for owner review. India only. Each rule is conditional on entity, activity and commencement. IFSC financial activities require their own scope check. Questions are discovery prompts, not claims about all Indian buyers. No payment term, language preference or purchasing habit is assumed.",
+        "reader_hints": {
+            "aliases": [
+                "India"
+            ],
+            "countries": [
+                {
+                    "code": "IN",
+                    "name": "India",
+                    "aliases": [
+                        "India",
+                        "Bharat"
+                    ],
+                    "cities": [
+                        "Bengaluru",
+                        "Bangalore",
+                        "Mumbai",
+                        "New Delhi",
+                        "Chennai",
+                        "Hyderabad",
+                        "Pune"
+                    ],
+                    "currencies": [
+                        "INR",
+                        "Indian rupee"
+                    ],
+                    "regulators": [
+                        "Reserve Bank of India",
+                        "RBI",
+                        "Securities and Exchange Board of India",
+                        "SEBI",
+                        "Insurance Regulatory and Development Authority of India",
+                        "IRDAI",
+                        "Telecom Regulatory Authority of India",
+                        "TRAI"
+                    ]
+                }
+            ]
+        },
+        "defaults": {
+            "decision_approvers": [
+                {
+                    "text": "Who owns the budget, security review, data permissions and final purchase approval for this Indian buyer?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "IN"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "sector_regulator": [],
+            "procurement_payment": [
+                {
+                    "text": "What purchase order, invoice acceptance, currency and payment terms has this buyer actually agreed?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "IN"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "data_privacy": [
+                {
+                    "text": "India: the Digital Personal Data Protection Rules, 2025 have staged commencement. Have the privacy owner map each proposed obligation to its effective date before promising compliance.",
+                    "kind": "legal",
+                    "source_ids": [
+                        "I:IN-DPDP"
+                    ],
+                    "jurisdictions": [
+                        "IN"
+                    ],
+                    "applies_when": "For processing in scope of the Digital Personal Data Protection Act, 2023. Do not treat later commencing rules as already effective."
+                }
+            ],
+            "buyer_language": [
+                {
+                    "text": "Which languages must the Indian buying team and end users understand in the proposal, notices and support?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "IN"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "proof": [
+                {
+                    "text": "Which workflow, sample data and acceptance evidence will the buyer approve before a wider rollout?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "IN"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "objections": [
+                {
+                    "text": "Which unresolved data access, integration, support or contract issue could prevent this purchase?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "IN"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "sales_motion": [
+                {
+                    "text": "Who will own a limited evaluation, its acceptance decision and the next purchase step?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "IN"
+                    ],
+                    "applies_when": ""
+                }
+            ]
+        },
+        "verticals": [
+            {
+                "vertical_id": "logistics-tech",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: Rule 138 of the Central Goods and Services Tax Rules, 2017 links qualifying goods movements to an e way bill workflow. Establish whether the consignor, consignee or transporter owns the record.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-EWB"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Only for goods movements within the rule, subject to exemptions and current central and state requirements. Selling logistics software does not itself make the vendor the transporter."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "Can the operator demonstrate the handoff from shipment documents to the transport record, including corrections and responsibility for exceptions?",
+                            "kind": "question",
+                            "source_ids": [],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": ""
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [
+                        {
+                            "text": "For a commercial bank in scope, the 2025 outsourcing directions retain responsibility with its board and senior management and require an approved outsourcing policy.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-RBI-OUTSOURCE"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "For the banks and outsourcing arrangements covered by the Reserve Bank of India (Commercial Banks: Managing Risks in Outsourcing) Directions, 2025."
+                        }
+                    ],
+                    "sector_regulator": [
+                        {
+                            "text": "India: identify the financial activity and the buyer's regulated entity category before selecting an RBI outsourcing instrument.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-RBI-OUTSOURCE"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "This source covers specified commercial banks. It excludes small finance banks, local area banks, payments banks and regional rural banks; do not apply it to those entities or NBFCs."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "Ask the bank to confirm whether the proposed IT service is material outsourcing and which risk review and approval evidence it requires.",
+                            "kind": "question",
+                            "source_ids": [],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "For the proposed bank service only."
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "defaults",
+                "inheritance_note": "Reviewed: no validated sector override beyond the country defaults. This is not a finding that no sector law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "ai-native",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "India's AI Governance Guidelines recommend accountable and understandable systems. Use an evaluation showing failure handling, human responsibility and risks in the intended Indian use case.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-AI"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Government guidance for AI development or deployment in India. These recommendations do not establish mandatory certification."
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "ites",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: DoT's Revised Guidelines for Other Service Providers address the defined OSP activity. Check whether the service is voice based BPO before applying that framework.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-OSP"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Only a service within the OSP definition; not every IT outsourcing engagement."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "telecom",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: DoT opened the authorisation and licence migration route under the Telecommunications Act, 2023 in June 2026. Confirm the service category and current authorisation with the operator.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-DOT"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "For providing a telecommunications service or migrating an existing licence; do not assume operator authorisation applies to a software supplier."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "cybersecurity",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: CERT In's directions under section 70B of the Information Technology Act, 2000 include incident reporting and contact requirements. Agree who classifies and reports applicable incidents.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-CERT"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "For entities and incidents within the directions and accompanying FAQs. An alert alone is not evidence of a reportable breach."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "Ask for a demonstration of relevant event logs, reliable timestamps and the escalation path that supports the customer's CERT In duties.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-CERT"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Only where the customer and service fall within the directions; this is suggested evidence, not a compliance certificate."
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "defaults",
+                "inheritance_note": "Reviewed: no validated sector override beyond the country defaults. This is not a finding that no sector law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "defaults",
+                "inheritance_note": "Reviewed: no validated sector override beyond the country defaults. This is not a finding that no sector law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            }
+        ],
+        "subtypes": [
+            {
+                "subtype_id": "freight-visibility",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "freight-marketplace",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "seller-shipping",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "last-mile",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "warehousing",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "transport-management",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "payments-banking",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: the Payment and Settlement Systems Act, 2007 places payment system authorisation with RBI, subject to statutory exceptions. Separate the system operator from its software supplier.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-PSS"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "For operating a payment system in the Act's scope. IFSC activities require the separate statutory boundary check."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "core-banking",
+                "vertical_id": "fintech",
+                "status": "inherited",
+                "inherits_from": "fintech",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "lending",
+                "vertical_id": "fintech",
+                "status": "waiting_for_source",
+                "inherits_from": "fintech",
+                "inheritance_note": "Keep the parent notes only within their scope. Do not extend commercial bank directions to every lender.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": [
+                    "Verify the current entity specific digital lending instrument on a primary source before adding digital lending obligations."
+                ]
+            },
+            {
+                "subtype_id": "wealth-investment",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: SEBI lists distinct regulations for investment advisers, research analysts, brokers, funds and portfolio managers. Identify the actual service before choosing the applicable instrument.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-SEBI"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "For securities activity within SEBI scope. A software vendor is not automatically a licensed financial intermediary."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "spend-expense",
+                "vertical_id": "fintech",
+                "status": "inherited",
+                "inherits_from": "fintech",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "insurance",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: the Insurance Regulatory and Development Authority Act, 1999 assigns insurance supervision to IRDAI. Identify the insurer or intermediary role before mapping obligations.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-IRDAI"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "For insurance activities in scope; check the IFSC exclusion and the current product specific instrument."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "customer-service",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "crm-marketing",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "collaboration",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "product-growth",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "construction",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "property-management",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "field-services",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "fmcg-retail-execution",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "industry-hr-payroll",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "hotel-lodging",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "retail-restaurant-ops",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "agents-copilots",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "voice-language-models",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "enterprise-search",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "it-services",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "bpo-cx",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "digital-engineering",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "data-services",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "operators-connectivity",
+                "vertical_id": "telecom",
+                "status": "inherited",
+                "inherits_from": "telecom",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "cpaas-messaging",
+                "vertical_id": "telecom",
+                "status": "specific",
+                "inherits_from": "telecom",
+                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: TRAI's Telecom Commercial Communications Customer Preference Regulations, 2018 address registered senders and customer preference and consent. Map the intended commercial messaging route before launch.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-TRAI"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "For commercial communications within the telecom framework; verify the current consolidated rules and amendments."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "telecom-software",
+                "vertical_id": "telecom",
+                "status": "inherited",
+                "inherits_from": "telecom",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "business-voice-ucaas",
+                "vertical_id": "telecom",
+                "status": "inherited",
+                "inherits_from": "telecom",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "developer-platform",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "data-infrastructure",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "observability",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "testing",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "dev-tools",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "cloud-security",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "identity-security",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "email-security",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "awareness-training",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "appsec",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "mobile-appsec",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "soc-services",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "endpoint-network",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "document-ai",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "ai-video",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "engineering-talent",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "product-management",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "digital-adoption",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "pentest",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "attack-surface-dast",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "process-orchestration",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "open-source-support",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "iot-connectivity",
+                "vertical_id": "telecom",
+                "status": "inherited",
+                "inherits_from": "telecom",
+                "inheritance_note": "Reviewed: no validated country difference beyond the parent cell for this subtype. Inherit the parent; this is not a finding that no additional law applies.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            }
+        ]
+    },
+    {
+        "schema_version": "1.0.0",
+        "region_id": "uk",
+        "region_name": "UK",
+        "review_status": "draft",
+        "updated_at": "2026-11-03",
+        "scope_note": "United Kingdom only. Check the relevant UK nation for devolved procurement and transport rules. Country selection does not establish that a buyer or product is regulated. Draft for owner review.",
+        "reader_hints": {
+            "aliases": [
+                "UK",
+                "United Kingdom"
+            ],
+            "countries": [
+                {
+                    "code": "GB",
+                    "name": "United Kingdom",
+                    "aliases": [
+                        "UK",
+                        "United Kingdom",
+                        "Britain",
+                        "Great Britain",
+                        "England",
+                        "Scotland",
+                        "Wales",
+                        "Northern Ireland"
+                    ],
+                    "cities": [
+                        "London",
+                        "Manchester",
+                        "Birmingham",
+                        "Edinburgh",
+                        "Cardiff",
+                        "Belfast"
+                    ],
+                    "currencies": [
+                        "GBP",
+                        "pound sterling"
+                    ],
+                    "regulators": [
+                        "Financial Conduct Authority",
+                        "Prudential Regulation Authority",
+                        "Ofcom",
+                        "Information Commissioner's Office"
+                    ]
+                }
+            ]
+        },
+        "defaults": {
+            "decision_approvers": [
+                {
+                    "text": "Who owns the budget, accepts the operational risk and approves the handling of personal data for this UK purchase?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "GB"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "sector_regulator": [],
+            "procurement_payment": [
+                {
+                    "text": "Is this a public tender, a framework purchase or a private contract, and what are the agreed invoice currency, acceptance steps and payment terms?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "GB"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "data_privacy": [
+                {
+                    "text": "For UK GDPR processing on a controller's behalf, prepare the Article 28 contract, subprocessor approvals and data return or deletion terms before exchanging personal data.",
+                    "kind": "legal",
+                    "source_ids": [
+                        "J:UK-ICO-CONTRACT"
+                    ],
+                    "jurisdictions": [
+                        "GB"
+                    ],
+                    "applies_when": "Where UK GDPR applies and the supplier is a processor; first establish the parties' actual roles."
+                }
+            ],
+            "buyer_language": [
+                {
+                    "text": "Which language and terminology does the buying team require for the proposal, training and support?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "GB"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "proof": [
+                {
+                    "text": "What buyer approved evidence and acceptance test will show that this purchase solves the stated problem?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "GB"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "objections": [
+                {
+                    "text": "Which unresolved issue could stop approval: security, implementation effort, accountability, contract terms or proof of value?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "GB"
+                    ],
+                    "applies_when": ""
+                }
+            ],
+            "sales_motion": [
+                {
+                    "text": "Who must agree the pilot scope, success criteria and route to a paid contract before work starts?",
+                    "kind": "question",
+                    "source_ids": [],
+                    "jurisdictions": [
+                        "GB"
+                    ],
+                    "applies_when": ""
+                }
+            ]
+        },
+        "verticals": [
+            {
+                "vertical_id": "logistics-tech",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "For a covered road transport operation, demonstrate how scheduling and record exports help the operator meet the drivers' hours and tachograph duties described by DVSA.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-DVSA-HOURS"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "Confirm vehicle, route and exemptions first. The cited guidance must not be assumed to establish Northern Ireland requirements."
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "FCA SYSC outsourcing requirements vary by firm and function. Classify the arrangement with the regulated buyer; a standard software purchase is not automatically outsourcing.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-FCA-OUTSOURCE"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For UK firms within the relevant FCA rules; test the service against the applicable outsourcing definition."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "Where the service is outsourced, show the buyer its dependencies, security controls and exit approach. The regulated firm retains responsibility for managing third party risk.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-FCA-OUTSOURCE"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For arrangements within the buyer's applicable FCA outsourcing and risk management obligations."
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "defaults",
+                "inheritance_note": "Reviewed against the sourced UK defaults. No distinct sector override has been validated; use defaults. This is not a finding that the sector has no additional obligations.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "ai-native",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [
+                        {
+                            "text": "Use the ICO AI guidance to examine risks to individuals when UK personal data enters an AI workflow. Distinguish legal duties from recommended practice; the guidance is under review and is not a statutory code.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-ICO-AI"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For AI processing within UK data protection scope; verify current guidance before relying on a particular automated decision rule."
+                        }
+                    ],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "defaults",
+                "inheritance_note": "Reviewed against the sourced UK defaults. No distinct sector override has been validated; use defaults. This is not a finding that the sector has no additional obligations.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "telecom",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Ofcom's General Conditions of Entitlement operate under the Communications Act 2003. Identify the network or service being supplied and the providers covered by each relevant condition.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-OFCOM-GC"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For provision of UK electronic communications networks or services; supplying software to an operator does not by itself establish provider status."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "cybersecurity",
+                "status": "specific",
+                "inherits_from": "defaults",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [
+                        {
+                            "text": "For a qualifying public contract, map the tender's security evidence to PPN 014. It allows Cyber Essentials, Cyber Essentials Plus or equivalent controls; it does not impose certification on every UK purchase.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-CABINET-CYBER"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "Only for the bodies and contract risks identified in PPN 014. Confirm the actual tender and procurement commencement date."
+                        }
+                    ],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "defaults",
+                "inheritance_note": "Reviewed against the sourced UK defaults. No distinct sector override has been validated; use defaults. This is not a finding that the sector has no additional obligations.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "defaults",
+                "inheritance_note": "Reviewed against the sourced UK defaults. No distinct sector override has been validated; use defaults. This is not a finding that the sector has no additional obligations.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            }
+        ],
+        "subtypes": [
+            {
+                "subtype_id": "freight-visibility",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "freight-marketplace",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "seller-shipping",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "last-mile",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "warehousing",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "transport-management",
+                "vertical_id": "logistics-tech",
+                "status": "inherited",
+                "inherits_from": "logistics-tech",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "payments-banking",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Separate payment services from electronic money issuance. The FCA explains authorisation and registration under the Payment Services Regulations 2017 and Electronic Money Regulations 2011, with exclusions and existing provider exceptions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-FCA-PAYMENTS"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "Where the firm's own activities fall within UK payment or electronic money regulation; an API supplier is not automatically a regulated provider."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "core-banking",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "A new UK bank applies to the Prudential Regulation Authority. Establish whether the prospect is the regulated institution or its technology supplier before assigning banking approval work.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-PRA-AUTH"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "Where the activity involves establishing a bank; this is not a licence requirement for ordinary core banking software supply."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "lending",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "For regulated consumer lending, the FCA expects evidence showing how credit risk, affordability and customers in financial difficulty are handled. Demonstrate the relevant decision and escalation workflow.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-FCA-CREDIT"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For consumer credit activities within the FCA's authorisation scope; do not extend automatically to all commercial credit or software vendors."
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "wealth-investment",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Use the FCA application category for the actual consumer investment activity, such as financial advice, wealth management, stockbroking or operating an investment platform.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-FCA-WEALTH"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "Where the firm's own UK investment activity requires authorisation; a software product label does not determine permission."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "spend-expense",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "If an expense product also executes payments or issues electronic money, assess those activities against the Payment Services Regulations 2017 or Electronic Money Regulations 2011 before promising a regulated service.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-FCA-PAYMENTS"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "Only where the actual service includes an in scope payment or electronic money activity; expense record keeping alone does not establish that scope."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "insurance",
+                "vertical_id": "fintech",
+                "status": "specific",
+                "inherits_from": "fintech",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Distinguish an insurer from an insurance intermediary. New insurers apply to the Prudential Regulation Authority; the FCA lists a separate authorisation route for general insurance intermediaries.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-PRA-AUTH",
+                                "J:UK-FCA-WEALTH"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For authorisation of the relevant UK insurance business; do not treat an insurer's software supplier as the insurer."
+                        }
+                    ],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "customer-service",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "crm-marketing",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "collaboration",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "product-growth",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "construction",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "property-management",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "field-services",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "fmcg-retail-execution",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "industry-hr-payroll",
+                "vertical_id": "vertical-saas",
+                "status": "specific",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "For UK PAYE payroll, demonstrate the Full Payment Submission sent to HM Revenue and Customs on or before payday, with a controlled correction process.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-HMRC-PAYROLL"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For employers reporting PAYE payroll; check permitted reporting exceptions for the actual circumstances."
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "hotel-lodging",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "retail-restaurant-ops",
+                "vertical_id": "vertical-saas",
+                "status": "inherited",
+                "inherits_from": "vertical-saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "agents-copilots",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "voice-language-models",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "enterprise-search",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "it-services",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "bpo-cx",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "digital-engineering",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "data-services",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "operators-connectivity",
+                "vertical_id": "telecom",
+                "status": "inherited",
+                "inherits_from": "telecom",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "cpaas-messaging",
+                "vertical_id": "telecom",
+                "status": "inherited",
+                "inherits_from": "telecom",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "telecom-software",
+                "vertical_id": "telecom",
+                "status": "inherited",
+                "inherits_from": "telecom",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "business-voice-ucaas",
+                "vertical_id": "telecom",
+                "status": "specific",
+                "inherits_from": "telecom",
+                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [
+                        {
+                            "text": "For a covered UK voice service, test emergency access and caller location handling against Ofcom General Condition A3 rather than presenting ordinary call availability as sufficient.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-OFCOM-GC"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "Only for providers and services within the condition's scope; confirm the service classification."
+                        }
+                    ],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "developer-platform",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "data-infrastructure",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "observability",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "testing",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "dev-tools",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "cloud-security",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "identity-security",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "email-security",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "awareness-training",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "appsec",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "mobile-appsec",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "soc-services",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "endpoint-network",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "document-ai",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "ai-video",
+                "vertical_id": "ai-native",
+                "status": "inherited",
+                "inherits_from": "ai-native",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "engineering-talent",
+                "vertical_id": "ites",
+                "status": "inherited",
+                "inherits_from": "ites",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "product-management",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "digital-adoption",
+                "vertical_id": "saas",
+                "status": "inherited",
+                "inherits_from": "saas",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "pentest",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "attack-surface-dast",
+                "vertical_id": "cybersecurity",
+                "status": "inherited",
+                "inherits_from": "cybersecurity",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "process-orchestration",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "open-source-support",
+                "vertical_id": "software",
+                "status": "inherited",
+                "inherits_from": "software",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            },
+            {
+                "subtype_id": "iot-connectivity",
+                "vertical_id": "telecom",
+                "status": "inherited",
+                "inherits_from": "telecom",
+                "inheritance_note": "No validated UK difference beyond the parent vertical and defaults; inherit those notes. This is not a complete regulatory assessment of the buyer.",
+                "context": {
+                    "decision_approvers": [],
+                    "sector_regulator": [],
+                    "procurement_payment": [],
+                    "data_privacy": [],
+                    "buyer_language": [],
+                    "proof": [],
+                    "objections": [],
+                    "sales_motion": []
+                },
+                "pending_topics": []
+            }
+        ]
+    }
+];
+exports.REGION_SOURCES = {
+    "I:IN-AI": {
+        "source_id": "I:IN-AI",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "India AI Governance Guidelines",
+        "publisher": "Press Information Bureau",
+        "url": "https://www.pib.gov.in/Pressreleaseshare.aspx?PRID=2228315&lang=2&reg=48",
+        "publication_date": "2026-02-15",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Government guidance on accountability, understandable design, risk assessment and voluntary measures.",
+        "limitations": "Policy guidance is not a blanket certification or new licence. Binding sector laws remain separate."
+    },
+    "I:IN-CERT": {
+        "source_id": "I:IN-CERT",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Frequently Asked Questions on Cyber Security Directions of 28 April 2022",
+        "publisher": "Indian Computer Emergency Response Team",
+        "url": "https://www.cert-in.org.in/PDF/FAQs_on_CyberSecurityDirections_May2022.pdf",
+        "publication_date": "2022-05-18",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "FAQ 29 to 40: incident contact, reporting, logging and time synchronisation.",
+        "limitations": "FAQ publication date confirmed by PIB release of 18 May 2022. Read with directions; do not infer that every incident or every security product is within each provision."
+    },
+    "I:IN-DOT": {
+        "source_id": "I:IN-DOT",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Telecommunication service authorisations and licence migration",
+        "publisher": "Department of Telecommunications via Press Information Bureau",
+        "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2277786&lang=1&reg=3",
+        "publication_date": "2026-06-25",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Authorisation portal under Telecommunications Act, 2023; new rules notified in June 2026.",
+        "limitations": "Announcement supports the authorisation route only. Service specific eligibility must be checked in current rules."
+    },
+    "I:IN-DPDP": {
+        "source_id": "I:IN-DPDP",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Digital Personal Data Protection Rules, 2025",
+        "publisher": "Ministry of Electronics and Information Technology",
+        "url": "https://www.meity.gov.in/static/uploads/2025/11/53450e6e5dc0bfa85ebd78686cadad39.pdf",
+        "publication_date": "2025-11-13",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Rule 1 provides staged commencement.",
+        "limitations": "Gazette dated 13 November; ministry listing published 14 November 2025. Most operational rules have later commencement. Do not describe the full regime as already operative."
+    },
+    "I:IN-EWB": {
+        "source_id": "I:IN-EWB",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "E Way Bill System FAQs",
+        "publisher": "Goods and Services Tax e Way Bill System",
+        "url": "https://docs.ewaybillgst.gov.in/html/faq.html",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Rule 138 context, consignor, consignee and transporter responsibilities and required documents.",
+        "limitations": "No reliable publication date. Some portal instructions are visibly old. Used only for workflow ownership; no thresholds, validity distance or current API rules asserted."
+    },
+    "I:IN-IRDAI": {
+        "source_id": "I:IN-IRDAI",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Insurance Regulatory and Development Authority Act, 1999",
+        "publisher": "Government of India",
+        "url": "https://www.indiacode.nic.in/bitstream/123456789/1893/1/A1999_41.pdf",
+        "publication_date": "1999-12-29",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Section 14 insurance supervision; section 23A IFSC exclusion.",
+        "limitations": "Used only for regulator boundary. Product specific current regulations require separate checks."
+    },
+    "I:IN-OSP": {
+        "source_id": "I:IN-OSP",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Revised Guidelines for Other Service Providers",
+        "publisher": "Department of Telecommunications",
+        "url": "https://www.dot.gov.in/static/uploads/2025/08/4e6e21029dc45f42b4e1e57e6300fa72.pdf",
+        "publication_date": "2021-06-23",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "OSP scope, voice based BPO services and architecture and security conditions.",
+        "limitations": "Do not treat every IT service or software vendor as an OSP. Verify later changes for the actual service."
+    },
+    "I:IN-PSS": {
+        "source_id": "I:IN-PSS",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Payment and Settlement Systems Act, 2007",
+        "publisher": "Government of India",
+        "url": "https://financialservices.gov.in/sites/default/files/Act-Policies/2026-01/Payment-and-Settlement-Systems-Act_2007.pdf",
+        "publication_date": "2007-12-20",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Sections 4 and 34B: payment system authorisation and IFSC boundary.",
+        "limitations": "Check statutory exceptions and IFSC scope. Does not establish that selling payment software is operating a payment system."
+    },
+    "I:IN-RBI-OUTSOURCE": {
+        "source_id": "I:IN-RBI-OUTSOURCE",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Reserve Bank of India (Commercial Banks: Managing Risks in Outsourcing) Directions, 2025",
+        "publisher": "Reserve Bank of India",
+        "url": "https://pdicai.org/Docs/RBI-DOR-2025-26-171_512202515451570.pdf",
+        "publication_date": "2025-11-28",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Paragraphs 3 to 5, 9, 10, 53 and 57: entity scope, material IT outsourcing and governance.",
+        "limitations": "Original RBI instrument hosted by ICAI. Direct RBI URL could not be retrieved. This text excludes several bank categories. Check amendments before release."
+    },
+    "I:IN-SEBI": {
+        "source_id": "I:IN-SEBI",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Updated list of SEBI regulations",
+        "publisher": "Securities and Exchange Board of India",
+        "url": "https://sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=2&smid=0&ssid=3",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Separate instruments for advisers, research analysts, brokers, portfolio managers and funds.",
+        "limitations": "Live index has no single publication date. Identifies instruments only; does not validate licensing requirements or every underlying rule."
+    },
+    "I:IN-TRAI": {
+        "source_id": "I:IN-TRAI",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "TRAI strengthens consumer protection with amendments to TCCCPR, 2018",
+        "publisher": "Ministry of Communications via Press Information Bureau",
+        "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2102413&lang=2&reg=48",
+        "publication_date": "2025-02-12",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Commercial communications framework: registered entities, preferences and consent.",
+        "limitations": "Announcement rather than consolidated regulations. No detailed number series or timing requirement asserted."
+    },
+    "J:UK-CABINET-CYBER": {
+        "source_id": "J:UK-CABINET-CYBER",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "PPN 014: Cyber essentials scheme",
+        "publisher": "Cabinet Office",
+        "url": "https://www.gov.uk/government/publications/ppn-014-cyber-essentials-scheme/ppn-014-cyber-essentials-scheme-html",
+        "publication_date": "2025-02-17",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Risk based Cyber Essentials or equivalent evidence for specified public contracts",
+        "limitations": "Applies to stated central government and NHS bodies and qualifying contracts, not all UK procurement. No blanket certification requirement."
+    },
+    "J:UK-DVSA-HOURS": {
+        "source_id": "J:UK-DVSA-HOURS",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "Drivers' hours and tachographs: responsibilities of vehicle operators",
+        "publisher": "Driver and Vehicle Standards Agency",
+        "url": "https://www.gov.uk/guidance/drivers-hours-goods-vehicles/5-responsibilities-of-vehicle-operators",
+        "publication_date": "2016-02-23",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Operator responsibilities for scheduling, tachograph data and records",
+        "limitations": "Updated 2026-07-01. Confirm vehicle, route, exemptions and Great Britain versus Northern Ireland scope before use."
+    },
+    "J:UK-FCA-CREDIT": {
+        "source_id": "J:UK-FCA-CREDIT",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "Apply to become a consumer credit lender or hirer",
+        "publisher": "Financial Conduct Authority",
+        "url": "https://www.fca.org.uk/firms/authorisation/consumer-credit-lenders-hirers",
+        "publication_date": "2023-11-15",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Consumer credit permissions and evidence of creditworthiness and affordability processes",
+        "limitations": "Updated 2024-09-17. Consumer activity scope; do not apply automatically to commercial lending."
+    },
+    "J:UK-FCA-OUTSOURCE": {
+        "source_id": "J:UK-FCA-OUTSOURCE",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "Outsourcing and operational resilience",
+        "publisher": "Financial Conduct Authority",
+        "url": "https://www.fca.org.uk/firms/outsourcing-and-operational-resilience",
+        "publication_date": "2020-01-09",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "FCA SYSC outsourcing scope and continuing accountability of regulated firms",
+        "limitations": "Updated 2026-07-14. Future reporting rules from 2027 are not treated as current. Buying standard software is not automatically outsourcing."
+    },
+    "J:UK-FCA-PAYMENTS": {
+        "source_id": "J:UK-FCA-PAYMENTS",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "Payment Services Regulations 2017 and Electronic Money Regulations 2011",
+        "publisher": "Financial Conduct Authority",
+        "url": "https://www.fca.org.uk/firms/payment-services-regulations-e-money-regulations",
+        "publication_date": "2015-10-21",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Payment and electronic money activities, authorisation or registration and exclusions",
+        "limitations": "Updated 2025-12-17. Technical suppliers are not automatically payment institutions."
+    },
+    "J:UK-FCA-WEALTH": {
+        "source_id": "J:UK-FCA-WEALTH",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "Authorisation",
+        "publisher": "Financial Conduct Authority",
+        "url": "https://www.fca.org.uk/firms/authorisation",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Separate application categories for consumer investment firms and insurance intermediaries",
+        "limitations": "Publication date not established. Directory supports regulator routing, not a complete account of permissions or exemptions."
+    },
+    "J:UK-HMRC-PAYROLL": {
+        "source_id": "J:UK-HMRC-PAYROLL",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "Running payroll: Reporting to HMRC: FPS",
+        "publisher": "HM Revenue and Customs",
+        "url": "https://www.gov.uk/running-payroll/reporting-to-hmrc",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Full Payment Submission reporting on or before payday",
+        "limitations": "Publication date not shown. PAYE payroll and reporting exceptions must be checked for the employer."
+    },
+    "J:UK-ICO-AI": {
+        "source_id": "J:UK-ICO-AI",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "About this guidance: AI and data protection",
+        "publisher": "Information Commissioner's Office",
+        "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/about-this-guidance/",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "AI processing personal data, risk assessment and distinction between law and good practice",
+        "limitations": "No reliable publication date shown. Guidance is under review following the Data (Use and Access) Act; it is not a statutory code."
+    },
+    "J:UK-ICO-CONTRACT": {
+        "source_id": "J:UK-ICO-CONTRACT",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "Contracts",
+        "publisher": "Information Commissioner's Office",
+        "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/accountability-and-governance/guide-to-accountability-and-governance/contracts/",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "UK GDPR controller and processor contracts, subprocessor authorisation, deletion and audits",
+        "limitations": "Publication date not reliably shown. Primary source text retrieved in search; direct fetch returned 403. Applies only to controller and processor processing within UK GDPR scope."
+    },
+    "J:UK-OFCOM-GC": {
+        "source_id": "J:UK-OFCOM-GC",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "General Conditions of Entitlement",
+        "publisher": "Ofcom",
+        "url": "https://www.ofcom.org.uk/phones-and-broadband/accessibility/general-conditions-of-entitlement",
+        "publication_date": "2023-08-16",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Communications Act 2003 framework, condition specific scope, voice availability and number porting",
+        "limitations": "Updated 2026-04-08. Each condition has its own regulated provider definition; not all software sellers are communications providers."
+    },
+    "J:UK-PRA-AUTH": {
+        "source_id": "J:UK-PRA-AUTH",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "New firm authorisation",
+        "publisher": "Bank of England",
+        "url": "https://www.bankofengland.co.uk/prudential-regulation/Authorisations/new-firm-authorisation",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "PRA application route for banks, credit unions, insurers and Lloyd's managing agents",
+        "limitations": "Publication date not shown. Not a claim that software providers need a banking or insurance authorisation."
+    }
+};
+exports.REGION_TAXONOMY = {
+    "schema_version": "1.0.0",
+    "source_repository": "shashwatgtm/icp-intelligence-mcp",
+    "source_commit": "01998942dbda8d265f1c951c0b926bc044da9b4c",
+    "requested_subtype_count": 48,
+    "observed_subtype_count": 57,
+    "verticals": [
+        {
+            "id": "logistics-tech",
+            "name": "logistics tech"
+        },
+        {
+            "id": "fintech",
+            "name": "fintech"
+        },
+        {
+            "id": "vertical-saas",
+            "name": "vertical SaaS"
+        },
+        {
+            "id": "ai-native",
+            "name": "AI native"
+        },
+        {
+            "id": "ites",
+            "name": "ITeS"
+        },
+        {
+            "id": "telecom",
+            "name": "telecom"
+        },
+        {
+            "id": "cybersecurity",
+            "name": "cybersecurity"
+        },
+        {
+            "id": "software",
+            "name": "software"
+        },
+        {
+            "id": "saas",
+            "name": "SaaS"
+        }
+    ],
+    "subtypes": [
+        {
+            "id": "freight-visibility",
+            "vertical_id": "logistics-tech",
+            "name": "freight visibility"
+        },
+        {
+            "id": "freight-marketplace",
+            "vertical_id": "logistics-tech",
+            "name": "freight marketplaces"
+        },
+        {
+            "id": "seller-shipping",
+            "vertical_id": "logistics-tech",
+            "name": "shipping for online sellers"
+        },
+        {
+            "id": "last-mile",
+            "vertical_id": "logistics-tech",
+            "name": "last mile delivery"
+        },
+        {
+            "id": "warehousing",
+            "vertical_id": "logistics-tech",
+            "name": "warehousing and fulfilment"
+        },
+        {
+            "id": "transport-management",
+            "vertical_id": "logistics-tech",
+            "name": "transport and fleet management"
+        },
+        {
+            "id": "payments-banking",
+            "vertical_id": "fintech",
+            "name": "payments and banking APIs"
+        },
+        {
+            "id": "core-banking",
+            "vertical_id": "fintech",
+            "name": "core banking and lending platforms"
+        },
+        {
+            "id": "lending",
+            "vertical_id": "fintech",
+            "name": "lending and credit data"
+        },
+        {
+            "id": "wealth-investment",
+            "vertical_id": "fintech",
+            "name": "wealth and investment"
+        },
+        {
+            "id": "spend-expense",
+            "vertical_id": "fintech",
+            "name": "spend and expense"
+        },
+        {
+            "id": "insurance",
+            "vertical_id": "fintech",
+            "name": "insurance"
+        },
+        {
+            "id": "customer-service",
+            "vertical_id": "saas",
+            "name": "customer service software"
+        },
+        {
+            "id": "crm-marketing",
+            "vertical_id": "saas",
+            "name": "CRM and marketing"
+        },
+        {
+            "id": "collaboration",
+            "vertical_id": "saas",
+            "name": "collaboration and work management"
+        },
+        {
+            "id": "product-growth",
+            "vertical_id": "saas",
+            "name": "product analytics and customer success"
+        },
+        {
+            "id": "construction",
+            "vertical_id": "vertical-saas",
+            "name": "construction management"
+        },
+        {
+            "id": "property-management",
+            "vertical_id": "vertical-saas",
+            "name": "property management"
+        },
+        {
+            "id": "field-services",
+            "vertical_id": "vertical-saas",
+            "name": "field and home services"
+        },
+        {
+            "id": "fmcg-retail-execution",
+            "vertical_id": "vertical-saas",
+            "name": "FMCG retail execution"
+        },
+        {
+            "id": "industry-hr-payroll",
+            "vertical_id": "vertical-saas",
+            "name": "HR and payroll built for one industry"
+        },
+        {
+            "id": "hotel-lodging",
+            "vertical_id": "vertical-saas",
+            "name": "hotels and lodging operations"
+        },
+        {
+            "id": "retail-restaurant-ops",
+            "vertical_id": "vertical-saas",
+            "name": "retail, restaurant and distribution operations"
+        },
+        {
+            "id": "agents-copilots",
+            "vertical_id": "ai-native",
+            "name": "AI agents and copilots for a business function"
+        },
+        {
+            "id": "voice-language-models",
+            "vertical_id": "ai-native",
+            "name": "voice and language models"
+        },
+        {
+            "id": "enterprise-search",
+            "vertical_id": "ai-native",
+            "name": "enterprise search and work assistants"
+        },
+        {
+            "id": "it-services",
+            "vertical_id": "ites",
+            "name": "IT services and application services"
+        },
+        {
+            "id": "bpo-cx",
+            "vertical_id": "ites",
+            "name": "BPO and customer experience outsourcing"
+        },
+        {
+            "id": "digital-engineering",
+            "vertical_id": "ites",
+            "name": "digital engineering and product engineering"
+        },
+        {
+            "id": "data-services",
+            "vertical_id": "ites",
+            "name": "data and analytics services"
+        },
+        {
+            "id": "operators-connectivity",
+            "vertical_id": "telecom",
+            "name": "operators and enterprise connectivity"
+        },
+        {
+            "id": "cpaas-messaging",
+            "vertical_id": "telecom",
+            "name": "CPaaS and messaging"
+        },
+        {
+            "id": "telecom-software",
+            "vertical_id": "telecom",
+            "name": "software and clearing services sold to operators"
+        },
+        {
+            "id": "business-voice-ucaas",
+            "vertical_id": "telecom",
+            "name": "business voice and unified communications"
+        },
+        {
+            "id": "developer-platform",
+            "vertical_id": "software",
+            "name": "developer platforms and DevOps"
+        },
+        {
+            "id": "data-infrastructure",
+            "vertical_id": "software",
+            "name": "managed data infrastructure"
+        },
+        {
+            "id": "observability",
+            "vertical_id": "software",
+            "name": "observability and application monitoring"
+        },
+        {
+            "id": "testing",
+            "vertical_id": "software",
+            "name": "testing and QA tools"
+        },
+        {
+            "id": "dev-tools",
+            "vertical_id": "software",
+            "name": "containers and developer environments"
+        },
+        {
+            "id": "cloud-security",
+            "vertical_id": "cybersecurity",
+            "name": "cloud security"
+        },
+        {
+            "id": "identity-security",
+            "vertical_id": "cybersecurity",
+            "name": "identity and access"
+        },
+        {
+            "id": "email-security",
+            "vertical_id": "cybersecurity",
+            "name": "email security"
+        },
+        {
+            "id": "awareness-training",
+            "vertical_id": "cybersecurity",
+            "name": "security awareness and human risk"
+        },
+        {
+            "id": "appsec",
+            "vertical_id": "cybersecurity",
+            "name": "application and developer security"
+        },
+        {
+            "id": "mobile-appsec",
+            "vertical_id": "cybersecurity",
+            "name": "mobile application security"
+        },
+        {
+            "id": "soc-services",
+            "vertical_id": "cybersecurity",
+            "name": "managed detection and SOC services"
+        },
+        {
+            "id": "endpoint-network",
+            "vertical_id": "cybersecurity",
+            "name": "endpoint and network security"
+        },
+        {
+            "id": "document-ai",
+            "vertical_id": "ai-native",
+            "name": "document AI and intelligent document processing"
+        },
+        {
+            "id": "ai-video",
+            "vertical_id": "ai-native",
+            "name": "AI video for training and communications"
+        },
+        {
+            "id": "engineering-talent",
+            "vertical_id": "ites",
+            "name": "engineering talent and team augmentation"
+        },
+        {
+            "id": "product-management",
+            "vertical_id": "saas",
+            "name": "product management software"
+        },
+        {
+            "id": "digital-adoption",
+            "vertical_id": "saas",
+            "name": "digital adoption platforms"
+        },
+        {
+            "id": "pentest",
+            "vertical_id": "cybersecurity",
+            "name": "penetration testing and offensive security"
+        },
+        {
+            "id": "attack-surface-dast",
+            "vertical_id": "cybersecurity",
+            "name": "external attack surface and dynamic testing"
+        },
+        {
+            "id": "process-orchestration",
+            "vertical_id": "software",
+            "name": "process orchestration and workflow engines"
+        },
+        {
+            "id": "open-source-support",
+            "vertical_id": "software",
+            "name": "open source software support and services"
+        },
+        {
+            "id": "iot-connectivity",
+            "vertical_id": "telecom",
+            "name": "IoT connectivity"
+        }
+    ]
+};
+exports.REGION_GENERATION = {
+    "schema_version": "1.0.0",
+    "data_sha256": "2cc121075ce6b02f6ae0cb70254150bf6a1199a88db917aef66ff2a50ba84669",
+    "missing_regions": [
+        "southeast-asia",
+        "middle-east",
+        "western-europe",
+        "north-america"
+    ],
+    "complete": false,
+    "coverage": {
+        "india": {
+            "verticals": {
+                "expected": 9,
+                "specific": 6,
+                "inherited": 3,
+                "waiting_for_source": 0,
+                "missing": 0,
+                "duplicate": 0
+            },
+            "subtypes": {
+                "expected": 57,
+                "specific": 4,
+                "inherited": 52,
+                "waiting_for_source": 1,
+                "missing": 0,
+                "duplicate": 0
+            }
+        },
+        "southeast-asia": {
+            "verticals": {
+                "expected": 9,
+                "specific": 0,
+                "inherited": 0,
+                "waiting_for_source": 0,
+                "missing": 9,
+                "duplicate": 0
+            },
+            "subtypes": {
+                "expected": 57,
+                "specific": 0,
+                "inherited": 0,
+                "waiting_for_source": 0,
+                "missing": 57,
+                "duplicate": 0
+            }
+        },
+        "middle-east": {
+            "verticals": {
+                "expected": 9,
+                "specific": 0,
+                "inherited": 0,
+                "waiting_for_source": 0,
+                "missing": 9,
+                "duplicate": 0
+            },
+            "subtypes": {
+                "expected": 57,
+                "specific": 0,
+                "inherited": 0,
+                "waiting_for_source": 0,
+                "missing": 57,
+                "duplicate": 0
+            }
+        },
+        "uk": {
+            "verticals": {
+                "expected": 9,
+                "specific": 5,
+                "inherited": 4,
+                "waiting_for_source": 0,
+                "missing": 0,
+                "duplicate": 0
+            },
+            "subtypes": {
+                "expected": 57,
+                "specific": 8,
+                "inherited": 49,
+                "waiting_for_source": 0,
+                "missing": 0,
+                "duplicate": 0
+            }
+        },
+        "western-europe": {
+            "verticals": {
+                "expected": 9,
+                "specific": 0,
+                "inherited": 0,
+                "waiting_for_source": 0,
+                "missing": 9,
+                "duplicate": 0
+            },
+            "subtypes": {
+                "expected": 57,
+                "specific": 0,
+                "inherited": 0,
+                "waiting_for_source": 0,
+                "missing": 57,
+                "duplicate": 0
+            }
+        },
+        "north-america": {
+            "verticals": {
+                "expected": 9,
+                "specific": 0,
+                "inherited": 0,
+                "waiting_for_source": 0,
+                "missing": 9,
+                "duplicate": 0
+            },
+            "subtypes": {
+                "expected": 57,
+                "specific": 0,
+                "inherited": 0,
+                "waiting_for_source": 0,
+                "missing": 57,
+                "duplicate": 0
+            }
+        }
+    }
+};
+//# sourceMappingURL=regions.js.map

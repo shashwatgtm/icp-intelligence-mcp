@@ -6,6 +6,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { NO_REGION_SUFFIX } from "../src/region-reader.ts";
 
 const { default: handler } = await import(new URL("../netlify/functions/mcp.mjs", import.meta.url));
 let nextId = 1;
@@ -59,11 +60,11 @@ test("D38: ordinary inputs keep every figure of version 1.2.11 (run 19: only the
   const ord = run19(fixture("tam-ordinary-1.2.11.md"), ["Clinic groups", "Mid-size manufacturers"])
     .replace("2. **ACV assumption**: Based on current pricing, may increase with enterprise deals", "2. **ACV**: $24,000, your input, read as annual contract value; check it against your last closed deals in this segment")
     .replace("4. **Market share**: 2.0% is conservative for Year 1", "4. **Market share**: 2.0% of SAM in Year 1 means ~30 new customers; check that number against the deals your team closed last year");
-  assert.equal(await call({ total_potential_companies: 5000, average_contract_value: 24000, icp_percentage: 30, year1_market_share_target: 2, segment_name: "Mid-size manufacturers" }), assumedShare(ord, "2.0%", true));
+  assert.equal(await call({ total_potential_companies: 5000, average_contract_value: 24000, icp_percentage: 30, year1_market_share_target: 2, segment_name: "Mid-size manufacturers" }), assumedShare(ord, "2.0%", true) + NO_REGION_SUFFIX);
   // run 16 D47: a figure in thousands shows one decimal when it is not a whole thousand; these are the only changes
   const d47 = run19(fixture("tam-small-1.2.11.md"), ["Target Market", "Target Market"]).replaceAll("$3K", "$3.2K").replace("       $3.2K               ", "       $3.2K             ")
     .replace("**Pipeline Required**: $10K", "**Pipeline Required**: $9.7K").replace("| $6K |", "| $6.5K |")
     .replace("2. **ACV assumption**: Based on current pricing, may increase with enterprise deals", "2. **ACV**: $900, your input, read as annual contract value; check it against your last closed deals in this segment")
     .replace("4. **Market share**: 3.0% (Example figure: replace with your own) is conservative for Year 1", "4. **Market share**: 3.0% (Example figure: replace with your own) of SAM in Year 1 means ~4 new customers; check that number against the deals your team closed last year");
-  assert.equal(await call({ total_potential_companies: 400, average_contract_value: 900 }), assumedShare(d47, "3.0%", false));
+  assert.equal(await call({ total_potential_companies: 400, average_contract_value: 900 }), assumedShare(d47, "3.0%", false) + NO_REGION_SUFFIX);
 });

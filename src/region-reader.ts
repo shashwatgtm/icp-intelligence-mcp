@@ -1,0 +1,170 @@
+import {REGION_CHOICES,REGION_DATA,REGION_SOURCES,REGION_TAXONOMY,type RegionId,type RegionNote,type RegionContext,type ContextField} from './regions.ts';
+import {explainSector} from './verticals.ts';
+
+export const NO_REGION_SUFFIX='\n\nRegion context: Which region applies: India, Southeast Asia, Middle East, UK, Western Europe or North America? Add it to your description and rerun.';
+export interface RegionMatch {region_id:RegionId;countries:string[];jurisdictions:string[];evidence:string[];vertical_id:string|null;subtype_id:string|null}
+export interface RegionReading {regions:RegionMatch[];unresolved_hints:string[]}
+interface Clue {region:RegionId;country?:string;value:string;kind:'region'|'country'|'city'|'currency'|'regulator'}
+interface Fragments {seller:string[];market:string[];buyer:string[]}
+const SELLER=new Set(['product_feature','product_context','positioning_statement','document_content','potential_crises','your_sector','industry','product_category','product_description','your_product','category','company_description','offering','what_you_sell','product','sector']);
+const MARKET=new Set(['target_segments','seller_market','target_market','target_regions','region','regions','geography','geographies','country','countries','city','cities','currency','currencies','regulator','regulators','market_name','market','markets','segment_name']);
+const BUYER=new Set(['target_customer','target_customers','target_audience','target_company_type','customer_descriptions','current_customers','current_icp','ideal_icp','icp_firmographics','firmographics','customers','accounts','segments','potential_segments','industry','industries','location','locations']);
+const IGNORE=new Set(['company','company_name','name','customer','account','role','champion_title','typical_champion','known_stakeholders','competitors','competitor_weaknesses','tech_stack','data_sources','evidence','quotes','key_quotes','customer_metrics','proof_points']);
+const keyOf=(key:string)=>key.toLowerCase().replace(/[ -]+/g,'_');
+/** Traverse only supplied context, never company identities, rival evidence or quotations. */
+function fragments(args:unknown):Fragments {
+ const out:Fragments={seller:[],market:[],buyer:[]};
+ const visit=(value:unknown,group:keyof Fragments|null=null,depth=0):void=>{
+  if(depth>12)return;
+  if(typeof value==='string'){
+   const v=value.trim();if(!v)return;
+   if(/^[\[{]/.test(v)){try{visit(JSON.parse(v),group,depth+1);return;}catch{/* plain text */}}
+   if(group)out[group].push(v);
+  }else if(Array.isArray(value))value.forEach(v=>visit(v,group,depth+1));
+  else if(value&&typeof value==='object')for(const [key,v]of Object.entries(value)){
+   const k=keyOf(key);if(IGNORE.has(k))continue;
+   if(SELLER.has(k))visit(v,group==='buyer'?'buyer':'seller',depth+1);
+   else if(MARKET.has(k))visit(v,group==='buyer'?'buyer':'market',depth+1);
+   else if(BUYER.has(k))visit(v,'buyer',depth+1);
+  }
+ };visit(args);return out;
+}
+const COUNTRY_SEEDS:[RegionId,string,string[]][]=[
+ ['india','IN',['India','Indian market']],
+ ['southeast-asia','SG',['Singapore']],['southeast-asia','ID',['Indonesia']],['southeast-asia','MY',['Malaysia']],['southeast-asia','TH',['Thailand']],['southeast-asia','VN',['Vietnam']],['southeast-asia','PH',['Philippines']],
+ ['middle-east','AE',['United Arab Emirates','UAE']],['middle-east','SA',['Saudi Arabia']],['middle-east','QA',['Qatar']],['middle-east','BH',['Bahrain']],['middle-east','OM',['Oman']],['middle-east','KW',['Kuwait']],
+ ['uk','GB',['United Kingdom','UK','Britain']],
+ ['western-europe','DE',['Germany','German market']],['western-europe','FR',['France']],['western-europe','NL',['Netherlands']],['western-europe','BE',['Belgium']],['western-europe','AT',['Austria']],['western-europe','CH',['Switzerland']],['western-europe','LU',['Luxembourg']],['western-europe','LI',['Liechtenstein']],
+ ['north-america','US',['United States','USA']],['north-america','CA',['Canada']],['north-america','MX',['Mexico']]
+];
+// Seeds make the named region reader usable before sourced data lands. They are only geography,
+// never legal applicability. Authored country hints extend this list without replacing it.
+const EXTRA_SEEDS:[RegionId,string,string,Clue['kind']][]=[
+ ['india','IN','Bengaluru','city'],['india','IN','Bangalore','city'],['india','IN','Mumbai','city'],['india','IN','New Delhi','city'],['india','IN','INR','currency'],['india','IN','Indian rupee','currency'],['india','IN','Reserve Bank of India','regulator'],['india','IN','RBI','regulator'],
+ ['southeast-asia','SG','SGD','currency'],['southeast-asia','SG','Singapore dollar','currency'],['southeast-asia','SG','Monetary Authority of Singapore','regulator'],['southeast-asia','SG','MAS','regulator'],['southeast-asia','ID','Jakarta','city'],['southeast-asia','TH','Bangkok','city'],
+ ['middle-east','AE','Dubai','city'],['middle-east','AE','Abu Dhabi','city'],['middle-east','AE','AED','currency'],['middle-east','SA','Riyadh','city'],['middle-east','SA','SAR','currency'],['middle-east','SA','Saudi Central Bank','regulator'],
+ ['uk','GB','London','city'],['uk','GB','GBP','currency'],['uk','GB','pound sterling','currency'],['uk','GB','Financial Conduct Authority','regulator'],['uk','GB','FCA','regulator'],
+ ['western-europe','DE','Berlin','city'],['western-europe','DE','Munich','city'],['western-europe','DE','BaFin','regulator'],['western-europe','NL','Amsterdam','city'],
+ ['north-america','CA','CAD','currency'],['north-america','CA','Canadian dollar','currency'],['north-america','CA','Toronto','city'],['north-america','US','New York','city'],['north-america','US','San Francisco','city']
+];
+const AMBIGUOUS=/\b(?:USD|EUR|euro|euros|dollars?|Paris|Birmingham|Cambridge|Manchester|Georgia|SEC|APAC|EMEA|Europe|European Union)\b|[$€]/i;
+function clues():Clue[]{
+ const all:Clue[]=REGION_CHOICES.map(r=>({region:r.id,value:r.name,kind:'region'}));
+ for(const [region,value] of [['southeast-asia','South East Asia'],['southeast-asia','South-East Asia'],['middle-east','Middle Eastern market'],['western-europe','Western European market'],['north-america','North American market']] as [RegionId,string][])all.push({region,value,kind:'region'});
+ for(const [region,country,names]of COUNTRY_SEEDS)for(const value of names)all.push({region,country,value,kind:'country'});
+ for(const [region,country,value,kind]of EXTRA_SEEDS)all.push({region,country,value,kind});
+ for(const r of REGION_DATA){for(const value of r.reader_hints.aliases)all.push({region:r.region_id,value,kind:'region'});for(const c of r.reader_hints.countries){for(const value of [c.name,...c.aliases])all.push({region:r.region_id,country:c.code,value,kind:'country'});for(const kind of ['city','currency','regulator'] as const){const values=kind==='city'?c.cities:kind==='currency'?c.currencies:c.regulators;for(const value of values)all.push({region:r.region_id,country:c.code,value,kind});}}}
+ const seen=new Set<string>();return all.filter(c=>{const key=[c.region,c.country,c.value.toLowerCase(),c.kind].join('|');if(seen.has(key))return false;seen.add(key);return true;}).sort((a,b)=>b.value.length-a.value.length);
+}
+function normalize(text:string):string{
+ return text.normalize('NFKC').replace(/[’]/g,"'").replace(/\bU\.S\.(?:A\.)?/g,'United States').replace(/\bU\.K\./gi,'United Kingdom').replace(/\bUS\b/g,'United States').replace(/\b(don't|doesn't|didn't|isn't|aren't|wasn't|weren't|won't|can't|haven't|hasn't)\b/gi,m=>({"don't":'do not',"doesn't":'does not',"didn't":'did not',"isn't":'is not',"aren't":'are not',"wasn't":'was not',"weren't":'were not',"won't":'will not',"can't":'cannot',"haven't":'have not',"hasn't":'has not'}[m.toLowerCase()]||m));
+}
+const escaped=(s:string)=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function pattern(c:Clue):RegExp {
+ // Short all capital abbreviations are case sensitive: "us" and "in" are ordinary words.
+ const flags=/^[A-Z]{2,4}$/.test(c.value)?'g':'gi';return new RegExp('(?<![\\p{L}\\p{N}_])'+escaped(c.value)+'(?![\\p{L}\\p{N}_])',flags+'u');
+}
+type Polarity='yes'|'no'|'unclear';
+function polarity(clause:string,start:number,end:number,all:Clue[]):Polarity{
+ const prefix=clause.slice(0,start).replace(/\bnot only\b/gi,''),suffix=clause.slice(end);
+ const before=prefix.split(/[,;]|\b(?:but|however|whereas|while)\b/i).at(-1)||'';
+ const after=suffix.split(/[,;]|\b(?:and|but|however|whereas|while)\b/i)[0];
+ if(/\b(?:not|never|no|neither|nor|without|except|excluding|exclude|outside|avoid|left|exited|formerly|previously|historically|used to|no longer|stopped|ceased|cannot)\b/i.test(before))return'no';
+ if(/^\s*(?:(?:is|are|was|were|has been|have been)\s+)?(?:not|no longer|excluded|out of scope|off limits)\b/i.test(after))return'no';
+ let tail=suffix;for(const c of all)tail=tail.replace(pattern(c),'PLACE');
+ if(/^\s*(?:(?:,|and|or)\s*PLACE\s*)+(?:are|were)\s+(?:not|excluded|out of scope)\b/i.test(tail))return'no';
+ if(/\?|\b(?:may|might|could|perhaps|maybe|whether|consider(?:ing)?|uncertain|unsure|if|hypothetical|example|competitors?|rivals?)\b/i.test(before)||/\?|\b(?:uncertain|unconfirmed|not confirmed)\b/i.test(after))return'unclear';
+ if(/^\s*(?:should|would|can)\s+(?:we|our)\b/i.test(clause))return'unclear';
+ return'yes';
+}
+interface Scan {found:{clue:Clue;state:Polarity;evidence:string}[];unresolved:string[]}
+function scan(texts:string[],all:Clue[]):Scan {
+ const found:Scan['found']=[],unresolved:string[]=[];
+ for(const text of texts)for(const clause of normalize(text).match(/[^.!?\n]+[.!?]?/g)||[]){
+  const hits:{clue:Clue;start:number;end:number}[]=[];
+  for(const clue of all)for(const m of clause.matchAll(pattern(clue)))hits.push({clue,start:m.index!,end:m.index!+m[0].length});
+  const detailed=hits.filter(h=>h.clue.kind!=='region');
+  for(const hit of hits){
+   // A regional alias inside a country name must not bypass a negated country.
+   if(hit.clue.kind==='region'&&detailed.some(h=>h.start<=hit.start&&h.end>=hit.end))continue;
+   if(['city','currency','regulator'].includes(hit.clue.kind)&&AMBIGUOUS.test(hit.clue.value)){unresolved.push(hit.clue.value);continue;}
+   const state=polarity(clause,hit.start,hit.end,all);
+   const competing=hits.filter(h=>h.start===hit.start&&h.end===hit.end&&h.clue.region!==hit.clue.region);
+   if(competing.length){unresolved.push(hit.clue.value);continue;}
+   found.push({clue:hit.clue,state,evidence:clause.trim()});
+  }
+  if(!hits.length&&AMBIGUOUS.test(clause))unresolved.push(clause.match(AMBIGUOUS)![0]);
+ }
+ return{found,unresolved};
+}
+/** Explicit selling destinations outrank a seller's headquarters or incidental location. */
+function marketText(text:string):string {
+ const m=normalize(text).match(/\b(?:sell(?:ing|s)?|sold|expand(?:ing)?|enter(?:ing)?|target(?:ing)?|serv(?:e|ing))\s+(?:(?:products?|software|services?)\s+)?(?:in(?:to)?|to|across)\s+(.+)/i);
+ const qualifier=m?normalize(text).slice(0,m.index).match(/\b(?:not|never|no longer|formerly|previously|historically|may|might|could|perhaps|maybe|considering|should we|would we|can we)[^,;.!?]*$/i)?.[0]||'':'';
+ return m?qualifier+m[0]:text.replace(/\b(?:based|headquartered|located|founded)\s+in\s+[^,;.]+/gi,'');
+}
+const US_STATES:Record<string,string>={Alabama:'AL',Alaska:'AK',Arizona:'AZ',Arkansas:'AR',California:'CA',Colorado:'CO',Connecticut:'CT',Delaware:'DE',Florida:'FL',Georgia:'GA',Hawaii:'HI',Idaho:'ID',Illinois:'IL',Indiana:'IN',Iowa:'IA',Kansas:'KS',Kentucky:'KY',Louisiana:'LA',Maine:'ME',Maryland:'MD',Massachusetts:'MA',Michigan:'MI',Minnesota:'MN',Mississippi:'MS',Missouri:'MO',Montana:'MT',Nebraska:'NE',Nevada:'NV','New Hampshire':'NH','New Jersey':'NJ','New Mexico':'NM','New York':'NY','North Carolina':'NC','North Dakota':'ND',Ohio:'OH',Oklahoma:'OK',Oregon:'OR',Pennsylvania:'PA','Rhode Island':'RI','South Carolina':'SC','South Dakota':'SD',Tennessee:'TN',Texas:'TX',Utah:'UT',Vermont:'VT',Virginia:'VA',Washington:'WA','West Virginia':'WV',Wisconsin:'WI',Wyoming:'WY'};
+export function readRegionContext(args:unknown):RegionReading {
+ const f=fragments(args),all=clues();
+ const explicit=scan(f.market,all),seller=scan(f.seller.map(marketText),all);
+ // Customer location alone is not evidence that the seller is selling there.
+ // A dedicated market field wins over incidental locations in the description.
+ const chosen=explicit.found.length||explicit.unresolved.length?explicit:seller;
+ const sector=explainSector({seller:f.seller,buyer:f.buyer});
+ const v=sector.source==='seller'?sector.vertical:null;
+ const subtype=v?.subtype?REGION_TAXONOMY.subtypes.find(s=>s.id===v.subtype||s.name===v.subtype)?.id||null:null;
+ const regions:RegionMatch[]=[];
+ for(const r of REGION_CHOICES){
+  const mentions=chosen.found.filter(m=>m.clue.region===r.id);
+  if(mentions.some(m=>m.clue.kind==='region'&&m.state!=='yes'))continue;
+  const affirmative=mentions.filter(m=>m.state==='yes'&&!mentions.some(n=>n.clue.country===m.clue.country&&n.state!=='yes'));
+  if(!affirmative.length)continue;
+  const countries=[...new Set(affirmative.map(m=>m.clue.country).filter((x):x is string=>Boolean(x)))];
+  // One entry per country keeps two countries in the same region from sharing notes.
+  for(const country of countries.length?countries:[null]){
+   const evidence=[...new Set(affirmative.filter(m=>!country||m.clue.country===country).map(m=>m.evidence))];
+   const jurisdictions=country?[country]:[];
+   if(country==='US')for(const [name,code] of Object.entries(US_STATES)){
+    if(evidence.some(e=>new RegExp('\\b'+escaped(name)+'\\b','i').test(e))&&name!=='Georgia')jurisdictions.push('US-'+code);
+   }
+   regions.push({region_id:r.id,countries:country?[country]:[],jurisdictions,evidence,vertical_id:v?.id||null,subtype_id:subtype});
+  }
+ }
+ return{regions,unresolved_hints:[...new Set(chosen.unresolved)]};
+}
+const LABELS:Record<ContextField,string>={decision_approvers:'Who decides and approves',sector_regulator:'Sector rules to check',procurement_payment:'Procurement and payment',data_privacy:'Data and privacy',buyer_language:'Buyer language',proof:'Proof to prepare',objections:'Objections to test',sales_motion:'Sales motion'};
+const EU_COUNTRIES=new Set(['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE']);
+function applies(n:RegionNote,match:RegionMatch):boolean{return !n.jurisdictions.length||n.jurisdictions.some(j=>match.jurisdictions.includes(j)||(j==='EU'&&match.countries.some(c=>EU_COUNTRIES.has(c))));}
+function renderNote(n:RegionNote,countries:string[]):string {
+ const countryScope='';
+ const condition=n.applies_when?' Check scope: '+n.applies_when:'';
+ const sources=n.source_ids.map(id=>REGION_SOURCES[id]).filter(Boolean).map(s=>`${s.title}: <${s.url}> (source checked ${s.accessed_date})`).join('; ');
+ return countryScope+n.text+condition+(sources?' Source: '+sources+'.':'');
+}
+export function regionNotes(args:unknown):string {
+ const reading=readRegionContext(args);if(!reading.regions.length)return NO_REGION_SUFFIX;
+ const out=['','','## Region and industry context','','Draft for owner review. These checks use the market context in your description. They do not change the scores or market arithmetic above.'];
+ for(const match of reading.regions){
+  const choice=REGION_CHOICES.find(x=>x.id===match.region_id)!;
+  const data=REGION_DATA.find(x=>x.region_id===match.region_id);
+  const country=match.countries[0];
+  const countryName=data?.reader_hints.countries.find(c=>c.code===country)?.name||COUNTRY_SEEDS.find(c=>c[1]===country)?.[2][0];
+  out.push('',`### ${choice.name}${countryName&&countryName!==choice.name?' · '+countryName:''}`);
+  if(!country)out.push('Which buyer country applies? Country specific rules are omitted until you name it.');
+  if(!data){out.push('Regional industry notes are awaiting source review. Confirm the buyer country and approval requirements before using regional advice.');continue;}
+  const vertical=data.verticals.find(x=>x.vertical_id===match.vertical_id),subtype=match.subtype_id?data.subtypes.find(x=>x.subtype_id===match.subtype_id):undefined;
+  let shown=0;
+  const levels:RegionContext[]=[data.defaults,...(vertical?[vertical.context]:[]),...(subtype?[subtype.context]:[])];
+  for(const field of Object.keys(LABELS) as ContextField[]){
+   const seen=new Set<string>(),notes=levels.flatMap(c=>c[field]).filter(n=>{const key=JSON.stringify(n);if(seen.has(key)||!applies(n,match))return false;seen.add(key);return true;});
+   shown+=notes.length;
+   if(notes.length)out.push('',LABELS[field]+':',...notes.map(n=>renderNote(n,match.countries)));
+  }
+  if(!shown)out.push('No sourced note is available for this market and industry combination. No other country has been substituted.');
+  if(!match.vertical_id)out.push('Describe what you sell to add the matching industry and subtype checks.');
+  const pending=[...(vertical?.pending_topics||[]),...(subtype?.pending_topics||[])];
+  if(pending.length)out.push('Still awaiting a source: '+[...new Set(pending)].join('; ')+'. No conclusion is drawn on these topics.');
+  out.push('Next action: The account owner confirms the buyer country and contracting entity. Procurement confirms the order and payment steps. The relevant risk or privacy reviewer records the applicable rules and missing proof. Revisit this when the market, entity or data flow changes.');
+ }
+ return out.join('\n');
+}
