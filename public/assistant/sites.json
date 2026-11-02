@@ -1,0 +1,43 @@
+{
+  "sites": {
+    "craft-gtm.gtmhelix.com": {
+      "repository": "craft-gtm-mcp",
+      "name": "CRAFT GTM",
+      "mcp": "https://craft-gtm.gtmhelix.com/mcp",
+      "guide": "https://craft-gtm.gtmhelix.com/connect/"
+    },
+    "craft-content.gtmhelix.com": {
+      "repository": "craft-content-mcp",
+      "name": "CRAFT Content",
+      "mcp": "https://craft-content.gtmhelix.com/mcp",
+      "guide": "https://craft-content.gtmhelix.com/connect/"
+    },
+    "revenue-enablement.gtmhelix.com": {
+      "repository": "revenue-enablement-mcp",
+      "name": "Revenue Enablement",
+      "mcp": "https://revenue-enablement.gtmhelix.com/mcp",
+      "guide": "https://revenue-enablement.gtmhelix.com/connect/"
+    },
+    "impact.gtmhelix.com": {
+      "repository": "impact-mcp",
+      "name": "IMPACT",
+      "mcp": "https://impact.gtmhelix.com/mcp",
+      "guide": "https://impact.gtmhelix.com/connect/"
+    },
+    "icp-intelligence.gtmhelix.com": {
+      "repository": "icp-intelligence-mcp",
+      "name": "ICP Intelligence",
+      "mcp": "https://icp-intelligence.gtmhelix.com/mcp",
+      "guide": "https://icp-intelligence.gtmhelix.com/connect/"
+    },
+    "gtmalpha.gtmhelix.com": {
+      "repository": "gtm-alpha-secure",
+      "name": "GTM Alpha",
+      "mcp": "https://gtmalpha.gtmhelix.com/mcp",
+      "guide": "https://gtmalpha.gtmhelix.com/connect/",
+      "held": true
+    }
+  },
+  "suite": "https://github.com/shashwatgtm/helix-gtm-suite",
+  "suite_source_commit": "9e9a16e308e7a9efb936e40e91e129cef0ed8b28"
+}

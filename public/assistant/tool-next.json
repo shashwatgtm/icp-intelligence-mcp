@@ -1,0 +1,1016 @@
+{
+  "tools": [
+    {
+      "tool": "pmf_scorecard",
+      "questions": [
+        "Which retention and unit economics figures do I need?",
+        "How should I read a fit score when data is missing?"
+      ],
+      "next_tool": "customer_interview_kit",
+      "why": "Test the weakest fit assumption with customer interviews.",
+      "repository": "craft-gtm-mcp",
+      "slug": "pmf-scorecard",
+      "title": "PMF Scorecard",
+      "job": "Score your product-market fit",
+      "url": "https://craft-gtm.gtmhelix.com/tools/pmf-scorecard/",
+      "source_page": "public/tools/pmf-scorecard/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-gtm",
+      "next": {
+        "tool": "customer_interview_kit",
+        "title": "Customer Interview Kit",
+        "url": "https://craft-gtm.gtmhelix.com/tools/customer-interview-kit/"
+      }
+    },
+    {
+      "tool": "launch_commander",
+      "questions": [
+        "How do I turn the release date and goals into a launch timeline?",
+        "Which launch risks need an owner before we commit?"
+      ],
+      "next_tool": "craft_content_improver",
+      "why": "Review the launch copy once the plan and message are settled.",
+      "repository": "craft-gtm-mcp",
+      "slug": "launch-commander",
+      "title": "Launch Commander",
+      "job": "Build a launch plan with a timeline",
+      "url": "https://craft-gtm.gtmhelix.com/tools/launch-commander/",
+      "source_page": "public/tools/launch-commander/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-gtm",
+      "next": {
+        "tool": "craft_content_improver",
+        "title": "Craft Content Improver",
+        "url": "https://craft-content.gtmhelix.com/tools/craft-content-improver/"
+      }
+    },
+    {
+      "tool": "customer_interview_kit",
+      "questions": [
+        "How do I adapt the interview to the buyer's role?",
+        "Which questions test why customers stay or leave without leading them?"
+      ],
+      "next_tool": "icp_interview_synthesizer",
+      "why": "Use the interview notes to identify customer patterns.",
+      "repository": "craft-gtm-mcp",
+      "slug": "customer-interview-kit",
+      "title": "Customer Interview Kit",
+      "job": "Prepare a guide for your customer interviews",
+      "url": "https://craft-gtm.gtmhelix.com/tools/customer-interview-kit/",
+      "source_page": "public/tools/customer-interview-kit/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-gtm",
+      "next": {
+        "tool": "icp_interview_synthesizer",
+        "title": "ICP Interview Synthesizer",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/"
+      }
+    },
+    {
+      "tool": "retention_playbook",
+      "questions": [
+        "How should I separate observed churn from an assumed cause?",
+        "Which evidence should I collect before choosing a retention action?"
+      ],
+      "next_tool": "customer_interview_kit",
+      "why": "Test the suspected churn cause with the customer.",
+      "repository": "craft-gtm-mcp",
+      "slug": "retention-playbook",
+      "title": "Retention Playbook",
+      "job": "Get retention strategies for each churn reason",
+      "url": "https://craft-gtm.gtmhelix.com/tools/retention-playbook/",
+      "source_page": "public/tools/retention-playbook/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-gtm",
+      "next": {
+        "tool": "customer_interview_kit",
+        "title": "Customer Interview Kit",
+        "url": "https://craft-gtm.gtmhelix.com/tools/customer-interview-kit/"
+      }
+    },
+    {
+      "tool": "partner_architect",
+      "questions": [
+        "What goals and deal economics should shape the partner model?",
+        "Which partner responsibilities and approvals remain unconfirmed?"
+      ],
+      "next_tool": "launch_commander",
+      "why": "Turn the agreed partner offer into a dated launch plan.",
+      "repository": "craft-gtm-mcp",
+      "slug": "partner-architect",
+      "title": "Partner Architect",
+      "job": "Design your partner program",
+      "url": "https://craft-gtm.gtmhelix.com/tools/partner-architect/",
+      "source_page": "public/tools/partner-architect/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-gtm",
+      "next": {
+        "tool": "launch_commander",
+        "title": "Launch Commander",
+        "url": "https://craft-gtm.gtmhelix.com/tools/launch-commander/"
+      }
+    },
+    {
+      "tool": "crisis_planner",
+      "questions": [
+        "Which facts and customer risks belong in this crisis plan?",
+        "How should I assign response and communication owners?"
+      ],
+      "next_tool": "craft_content_improver",
+      "why": "Check the response draft for clarity after facts are confirmed.",
+      "repository": "craft-gtm-mcp",
+      "slug": "crisis-planner",
+      "title": "Crisis Planner",
+      "job": "Write a playbook for each crisis",
+      "url": "https://craft-gtm.gtmhelix.com/tools/crisis-planner/",
+      "source_page": "public/tools/crisis-planner/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-gtm",
+      "next": {
+        "tool": "craft_content_improver",
+        "title": "Craft Content Improver",
+        "url": "https://craft-content.gtmhelix.com/tools/craft-content-improver/"
+      }
+    },
+    {
+      "tool": "competitive_intel",
+      "questions": [
+        "Which customer evidence belongs in each competitor battle card?",
+        "How do I distinguish a competitor claim from verified proof?"
+      ],
+      "next_tool": "competitive_trap_setter",
+      "why": "Turn the comparison into fair buyer discovery questions.",
+      "repository": "craft-gtm-mcp",
+      "slug": "competitive-intel",
+      "title": "Competitive Intel",
+      "job": "Build a battle card for each competitor",
+      "url": "https://craft-gtm.gtmhelix.com/tools/competitive-intel/",
+      "source_page": "public/tools/competitive-intel/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-gtm",
+      "next": {
+        "tool": "competitive_trap_setter",
+        "title": "Competitive Trap Setter",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/competitive-trap-setter/"
+      }
+    },
+    {
+      "tool": "craft_gtm_analyzer",
+      "questions": [
+        "What GTM document should I provide for a CRAFT review?",
+        "How do I turn the highest priority gap into a practical next step?"
+      ],
+      "next_tool": "launch_commander",
+      "why": "Put the agreed GTM action into a timeline with owners.",
+      "repository": "craft-gtm-mcp",
+      "slug": "craft-gtm-analyzer",
+      "title": "Craft GTM Analyzer",
+      "job": "Score your GTM document against CRAFT",
+      "url": "https://craft-gtm.gtmhelix.com/tools/craft-gtm-analyzer/",
+      "source_page": "public/tools/craft-gtm-analyzer/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-gtm",
+      "next": {
+        "tool": "launch_commander",
+        "title": "Launch Commander",
+        "url": "https://craft-gtm.gtmhelix.com/tools/launch-commander/"
+      }
+    },
+    {
+      "tool": "case_study_generator",
+      "questions": [
+        "Which measured results and customer permissions do I need?",
+        "How do I separate the challenge, solution and proven result?"
+      ],
+      "next_tool": "content_repurposer",
+      "why": "Adapt an approved customer story into other formats.",
+      "repository": "craft-content-mcp",
+      "slug": "case-study-generator",
+      "title": "Case Study Generator",
+      "job": "Turn a customer story into a case study",
+      "url": "https://craft-content.gtmhelix.com/tools/case-study-generator/",
+      "source_page": "public/tools/case-study-generator/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-content",
+      "next": {
+        "tool": "content_repurposer",
+        "title": "Content Repurposer",
+        "url": "https://craft-content.gtmhelix.com/tools/content-repurposer/"
+      }
+    },
+    {
+      "tool": "newsletter_builder",
+      "questions": [
+        "What reader action should the newsletter lead to?",
+        "How should I choose subject lines without inventing a result?"
+      ],
+      "next_tool": "craft_content_improver",
+      "why": "Review the newsletter draft against its purpose.",
+      "repository": "craft-content-mcp",
+      "slug": "newsletter-builder",
+      "title": "Newsletter Builder",
+      "job": "Build a newsletter with subject lines to test",
+      "url": "https://craft-content.gtmhelix.com/tools/newsletter-builder/",
+      "source_page": "public/tools/newsletter-builder/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-content",
+      "next": {
+        "tool": "craft_content_improver",
+        "title": "Craft Content Improver",
+        "url": "https://craft-content.gtmhelix.com/tools/craft-content-improver/"
+      }
+    },
+    {
+      "tool": "webinar_script",
+      "questions": [
+        "How should I divide the supplied webinar time?",
+        "What worked example and audience exercise should I provide?"
+      ],
+      "next_tool": "content_repurposer",
+      "why": "Reuse the approved webinar content in follow up formats.",
+      "repository": "craft-content-mcp",
+      "slug": "webinar-script",
+      "title": "Webinar Script",
+      "job": "Script your webinar with timings",
+      "url": "https://craft-content.gtmhelix.com/tools/webinar-script/",
+      "source_page": "public/tools/webinar-script/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-content",
+      "next": {
+        "tool": "content_repurposer",
+        "title": "Content Repurposer",
+        "url": "https://craft-content.gtmhelix.com/tools/content-repurposer/"
+      }
+    },
+    {
+      "tool": "content_repurposer",
+      "questions": [
+        "Which parts of the original content should survive every format?",
+        "How do I preserve the source and reader action when repurposing?"
+      ],
+      "next_tool": "craft_content_improver",
+      "why": "Check each adapted piece for clarity and goal alignment.",
+      "repository": "craft-content-mcp",
+      "slug": "content-repurposer",
+      "title": "Content Repurposer",
+      "job": "Turn source content into multiple formats",
+      "url": "https://craft-content.gtmhelix.com/tools/content-repurposer/",
+      "source_page": "public/tools/content-repurposer/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-content",
+      "next": {
+        "tool": "craft_content_improver",
+        "title": "Craft Content Improver",
+        "url": "https://craft-content.gtmhelix.com/tools/craft-content-improver/"
+      }
+    },
+    {
+      "tool": "thought_leadership_series",
+      "questions": [
+        "How do I turn my own viewpoint into a coherent article series?",
+        "What evidence should support the claims in each article?"
+      ],
+      "next_tool": "content_repurposer",
+      "why": "Adapt the finished articles for the distribution channels.",
+      "repository": "craft-content-mcp",
+      "slug": "thought-leadership-series",
+      "title": "Thought Leadership Series",
+      "job": "Draft a thought leadership article series",
+      "url": "https://craft-content.gtmhelix.com/tools/thought-leadership-series/",
+      "source_page": "public/tools/thought-leadership-series/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-content",
+      "next": {
+        "tool": "content_repurposer",
+        "title": "Content Repurposer",
+        "url": "https://craft-content.gtmhelix.com/tools/content-repurposer/"
+      }
+    },
+    {
+      "tool": "testimonial_capture",
+      "questions": [
+        "What customer permission is needed before publishing a quote?",
+        "Which interview questions capture a specific customer outcome?"
+      ],
+      "next_tool": "case_study_generator",
+      "why": "Develop the approved quote and measured result into a fuller story.",
+      "repository": "craft-content-mcp",
+      "slug": "testimonial-capture",
+      "title": "Testimonial Capture",
+      "job": "Write testimonial requests and interview questions",
+      "url": "https://craft-content.gtmhelix.com/tools/testimonial-capture/",
+      "source_page": "public/tools/testimonial-capture/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-content",
+      "next": {
+        "tool": "case_study_generator",
+        "title": "Case Study Generator",
+        "url": "https://craft-content.gtmhelix.com/tools/case-study-generator/"
+      }
+    },
+    {
+      "tool": "sales_enablement_content",
+      "questions": [
+        "Which buyer problem and proof points belong in the pitch?",
+        "How do I adapt the value proposition to the sales stage?"
+      ],
+      "next_tool": "demo_script_builder",
+      "why": "Demonstrate the agreed value with a buyer specific scenario.",
+      "repository": "craft-content-mcp",
+      "slug": "sales-enablement-content",
+      "title": "Sales Enablement Content",
+      "job": "Write value propositions and a pitch script",
+      "url": "https://craft-content.gtmhelix.com/tools/sales-enablement-content/",
+      "source_page": "public/tools/sales-enablement-content/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-content",
+      "next": {
+        "tool": "demo_script_builder",
+        "title": "Demo Script Builder",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/demo-script-builder/"
+      }
+    },
+    {
+      "tool": "craft_content_improver",
+      "questions": [
+        "How do I judge this draft against its intended purpose?",
+        "Which suggested edits are facts to verify rather than wording fixes?"
+      ],
+      "next_tool": "content_repurposer",
+      "why": "Adapt the corrected source after its claims are checked.",
+      "repository": "craft-content-mcp",
+      "slug": "craft-content-improver",
+      "title": "Craft Content Improver",
+      "job": "Score and improve your content draft",
+      "url": "https://craft-content.gtmhelix.com/tools/craft-content-improver/",
+      "source_page": "public/tools/craft-content-improver/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#craft-content",
+      "next": {
+        "tool": "content_repurposer",
+        "title": "Content Repurposer",
+        "url": "https://craft-content.gtmhelix.com/tools/content-repurposer/"
+      }
+    },
+    {
+      "tool": "impact_get_framework",
+      "questions": [
+        "Which IMPACT phase fits the positioning decision I face?",
+        "What inputs does that phase require before I start?"
+      ],
+      "next_tool": "impact_full_audit",
+      "why": "Check which positioning inputs are still missing.",
+      "repository": "impact-mcp",
+      "slug": "impact-get-framework",
+      "title": "IMPACT Get Framework",
+      "job": "Get the IMPACT method, phase by phase",
+      "url": "https://impact.gtmhelix.com/tools/impact-get-framework/",
+      "source_page": "public/tools/impact-get-framework/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#impact",
+      "next": {
+        "tool": "impact_full_audit",
+        "title": "IMPACT Full Audit",
+        "url": "https://impact.gtmhelix.com/tools/impact-full-audit/"
+      }
+    },
+    {
+      "tool": "impact_identify_champions",
+      "questions": [
+        "What evidence confirms a champion rather than a likely job title?",
+        "How do I distinguish the champion from the economic buyer?"
+      ],
+      "next_tool": "buyer_group_analyzer",
+      "why": "Map the other people who influence the buying decision.",
+      "repository": "impact-mcp",
+      "slug": "impact-identify-champions",
+      "title": "IMPACT Identify Champions",
+      "job": "Find your likely champion and economic buyer",
+      "url": "https://impact.gtmhelix.com/tools/impact-identify-champions/",
+      "source_page": "public/tools/impact-identify-champions/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#impact",
+      "next": {
+        "tool": "buyer_group_analyzer",
+        "title": "Buyer Group Analyzer",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/"
+      }
+    },
+    {
+      "tool": "impact_map_alternatives",
+      "questions": [
+        "Which alternatives does the buyer actually compare us with?",
+        "What proof is needed before claiming positioning whitespace?"
+      ],
+      "next_tool": "impact_pinpoint_value",
+      "why": "Translate the evidenced difference into customer value.",
+      "repository": "impact-mcp",
+      "slug": "impact-map-alternatives",
+      "title": "IMPACT Map Alternatives",
+      "job": "Map your alternatives and find positioning whitespace",
+      "url": "https://impact.gtmhelix.com/tools/impact-map-alternatives/",
+      "source_page": "public/tools/impact-map-alternatives/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#impact",
+      "next": {
+        "tool": "impact_pinpoint_value",
+        "title": "IMPACT Pinpoint Value",
+        "url": "https://impact.gtmhelix.com/tools/impact-pinpoint-value/"
+      }
+    },
+    {
+      "tool": "impact_pinpoint_value",
+      "questions": [
+        "Which customer outcome and proof points support our value claim?",
+        "How do I label a value hypothesis when proof is missing?"
+      ],
+      "next_tool": "impact_craft_message",
+      "why": "Turn the supported value into a positioning message.",
+      "repository": "impact-mcp",
+      "slug": "impact-pinpoint-value",
+      "title": "IMPACT Pinpoint Value",
+      "job": "Pinpoint your value proposition and proof points",
+      "url": "https://impact.gtmhelix.com/tools/impact-pinpoint-value/",
+      "source_page": "public/tools/impact-pinpoint-value/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#impact",
+      "next": {
+        "tool": "impact_craft_message",
+        "title": "IMPACT Craft Message",
+        "url": "https://impact.gtmhelix.com/tools/impact-craft-message/"
+      }
+    },
+    {
+      "tool": "impact_anchor_market",
+      "questions": [
+        "What makes a segment a suitable first market for our product?",
+        "How should I compare segment fit without treating a score as proof?"
+      ],
+      "next_tool": "tam_sam_som_calculator",
+      "why": "Check the size of the chosen market using your own figures.",
+      "repository": "impact-mcp",
+      "slug": "impact-anchor-market",
+      "title": "IMPACT Anchor Market",
+      "job": "Select your beachhead market",
+      "url": "https://impact.gtmhelix.com/tools/impact-anchor-market/",
+      "source_page": "public/tools/impact-anchor-market/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#impact",
+      "next": {
+        "tool": "tam_sam_som_calculator",
+        "title": "TAM SAM SOM Calculator",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/"
+      }
+    },
+    {
+      "tool": "impact_craft_message",
+      "questions": [
+        "Which target customer, benefit and difference should the message name?",
+        "How do I test the message without overstating the proof?"
+      ],
+      "next_tool": "impact_translate_execution",
+      "why": "Adapt the agreed positioning to the channels you use.",
+      "repository": "impact-mcp",
+      "slug": "impact-craft-message",
+      "title": "IMPACT Craft Message",
+      "job": "Build your positioning statement and message hierarchy",
+      "url": "https://impact.gtmhelix.com/tools/impact-craft-message/",
+      "source_page": "public/tools/impact-craft-message/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#impact",
+      "next": {
+        "tool": "impact_translate_execution",
+        "title": "IMPACT Translate Execution",
+        "url": "https://impact.gtmhelix.com/tools/impact-translate-execution/"
+      }
+    },
+    {
+      "tool": "impact_translate_execution",
+      "questions": [
+        "How should the same positioning change across website, email and sales deck?",
+        "Which channel draft should I validate with buyers first?"
+      ],
+      "next_tool": "craft_content_improver",
+      "why": "Review the channel draft for clarity and evidence.",
+      "repository": "impact-mcp",
+      "slug": "impact-translate-execution",
+      "title": "IMPACT Translate Execution",
+      "job": "Adapt your positioning for each channel",
+      "url": "https://impact.gtmhelix.com/tools/impact-translate-execution/",
+      "source_page": "public/tools/impact-translate-execution/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#impact",
+      "next": {
+        "tool": "craft_content_improver",
+        "title": "Craft Content Improver",
+        "url": "https://craft-content.gtmhelix.com/tools/craft-content-improver/"
+      }
+    },
+    {
+      "tool": "impact_full_audit",
+      "questions": [
+        "What does an input completeness score say and not say about positioning?",
+        "Which missing proof or buyer detail should I resolve first?"
+      ],
+      "next_tool": "impact_pinpoint_value",
+      "why": "Resolve the customer value and evidence before expanding the message.",
+      "repository": "impact-mcp",
+      "slug": "impact-full-audit",
+      "title": "IMPACT Full Audit",
+      "job": "Score how complete your positioning inputs are",
+      "url": "https://impact.gtmhelix.com/tools/impact-full-audit/",
+      "source_page": "public/tools/impact-full-audit/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#impact",
+      "next": {
+        "tool": "impact_pinpoint_value",
+        "title": "IMPACT Pinpoint Value",
+        "url": "https://impact.gtmhelix.com/tools/impact-pinpoint-value/"
+      }
+    },
+    {
+      "tool": "icp_deep_dive",
+      "questions": [
+        "Which facts about our best customers reveal useful patterns?",
+        "How do I keep a customer pattern separate from an assumption?"
+      ],
+      "next_tool": "icp_scoring_model",
+      "why": "Turn the reviewed customer criteria into a scoring template.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "icp-deep-dive",
+      "title": "ICP Deep Dive",
+      "job": "Find the patterns your best customers share",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/",
+      "source_page": "public/tools/icp-deep-dive/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "icp_scoring_model",
+        "title": "ICP Scoring Model",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/"
+      }
+    },
+    {
+      "tool": "icp_scoring_model",
+      "questions": [
+        "How should I choose criteria and explain their weights?",
+        "How should missing values affect qualification tiers?"
+      ],
+      "next_tool": "account_prioritization",
+      "why": "Apply agreed criteria to a real account shortlist.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "icp-scoring-model",
+      "title": "ICP Scoring Model",
+      "job": "Create a lead qualification scoring template",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/",
+      "source_page": "public/tools/icp-scoring-model/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "account_prioritization",
+        "title": "Account Prioritization",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/"
+      }
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "questions": [
+        "Which buying roles and influence evidence should I supply?",
+        "How do I distinguish confirmed authority from a likely role?"
+      ],
+      "next_tool": "discovery_question_bank",
+      "why": "Ask the questions needed to confirm buying roles and decisions.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "buyer-group-analyzer",
+      "title": "Buyer Group Analyzer",
+      "job": "Map your buying group and its influence",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/",
+      "source_page": "public/tools/buyer-group-analyzer/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "discovery_question_bank",
+        "title": "Discovery Question Bank",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/discovery-question-bank/"
+      }
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "questions": [
+        "Which company count and contract value should I use?",
+        "How do I explain TAM, SAM and SOM assumptions without presenting a forecast?"
+      ],
+      "next_tool": "account_prioritization",
+      "why": "Turn the reachable market into a prioritised account list.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "tam-sam-som-calculator",
+      "title": "TAM SAM SOM Calculator",
+      "job": "Calculate TAM, SAM and SOM bottom-up",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/",
+      "source_page": "public/tools/tam-sam-som-calculator/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "account_prioritization",
+        "title": "Account Prioritization",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/"
+      }
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "questions": [
+        "Which champion titles and company signals should guide targeting?",
+        "How should I validate a platform filter before using it?"
+      ],
+      "next_tool": "account_prioritization",
+      "why": "Review the resulting accounts before committing outreach.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "lookalike-signal-generator",
+      "title": "Lookalike Signal Generator",
+      "job": "Generate targeting criteria for each platform",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/lookalike-signal-generator/",
+      "source_page": "public/tools/lookalike-signal-generator/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "account_prioritization",
+        "title": "Account Prioritization",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/"
+      }
+    },
+    {
+      "tool": "account_prioritization",
+      "questions": [
+        "How do missing fit, intent or timing facts affect the ranking?",
+        "Which missing account evidence should I collect first?"
+      ],
+      "next_tool": "account_plan_builder",
+      "why": "Build an action plan for the accounts you select.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "account-prioritization",
+      "title": "Account Prioritization",
+      "job": "Rank and prioritize your accounts",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/",
+      "source_page": "public/tools/account-prioritization/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "account_plan_builder",
+        "title": "Account Plan Builder",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/account-plan-builder/"
+      }
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "questions": [
+        "How should I compare the current customer base with our intended ICP?",
+        "Which gap needs evidence before we change qualification?"
+      ],
+      "next_tool": "icp_evolution_tracker",
+      "why": "Review proposed ICP changes against wins, losses and market evidence.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "icp-gap-analysis",
+      "title": "ICP Gap Analysis",
+      "job": "Find gaps between your customers and ICP",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/icp-gap-analysis/",
+      "source_page": "public/tools/icp-gap-analysis/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "icp_evolution_tracker",
+        "title": "ICP Evolution Tracker",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/"
+      }
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "questions": [
+        "Which wins, losses or market changes justify an ICP review?",
+        "What would disprove a proposed change to our customer profile?"
+      ],
+      "next_tool": "icp_scoring_model",
+      "why": "Update qualification criteria only after the change is supported.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "icp-evolution-tracker",
+      "title": "ICP Evolution Tracker",
+      "job": "Review how your ICP should evolve",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/",
+      "source_page": "public/tools/icp-evolution-tracker/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "icp_scoring_model",
+        "title": "ICP Scoring Model",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/"
+      }
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "questions": [
+        "Which interview notes preserve the customer's own words?",
+        "How do I separate recurring pain and buying triggers from a single quote?"
+      ],
+      "next_tool": "icp_evolution_tracker",
+      "why": "Review whether the interview findings justify an ICP change.",
+      "repository": "icp-intelligence-mcp",
+      "slug": "icp-interview-synthesizer",
+      "title": "ICP Interview Synthesizer",
+      "job": "Extract ICP patterns from customer interviews",
+      "url": "https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/",
+      "source_page": "public/tools/icp-interview-synthesizer/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "next": {
+        "tool": "icp_evolution_tracker",
+        "title": "ICP Evolution Tracker",
+        "url": "https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/"
+      }
+    },
+    {
+      "tool": "account_plan_builder",
+      "questions": [
+        "Which account contacts, products and evidence should I provide?",
+        "Which research gap blocks the next account action?"
+      ],
+      "next_tool": "discovery_question_bank",
+      "why": "Prepare questions that close the account's evidence gaps.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "account-plan-builder",
+      "title": "Account Plan Builder",
+      "job": "Build a strategic account plan",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/account-plan-builder/",
+      "source_page": "public/tools/account-plan-builder/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "discovery_question_bank",
+        "title": "Discovery Question Bank",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/discovery-question-bank/"
+      }
+    },
+    {
+      "tool": "deal_strategy_coach",
+      "questions": [
+        "Which deal stage and confirmed blockers should I supply?",
+        "How do I identify the next buyer decision instead of relying on a score?"
+      ],
+      "next_tool": "mutual_action_plan_generator",
+      "why": "Turn the confirmed decision path into shared milestones.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "deal-strategy-coach",
+      "title": "Deal Strategy Coach",
+      "job": "Get a strategy for your deal's stage",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/deal-strategy-coach/",
+      "source_page": "public/tools/deal-strategy-coach/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "mutual_action_plan_generator",
+        "title": "Mutual Action Plan Generator",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/mutual-action-plan-generator/"
+      }
+    },
+    {
+      "tool": "discovery_question_bank",
+      "questions": [
+        "Which framework fits the decision I need to understand?",
+        "How do I prioritise unanswered questions for this buying stage?"
+      ],
+      "next_tool": "deal_strategy_coach",
+      "why": "Use the discovery answers to review the deal's next step.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "discovery-question-bank",
+      "title": "Discovery Question Bank",
+      "job": "Get discovery questions for your framework",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/discovery-question-bank/",
+      "source_page": "public/tools/discovery-question-bank/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "deal_strategy_coach",
+        "title": "Deal Strategy Coach",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/deal-strategy-coach/"
+      }
+    },
+    {
+      "tool": "roi_business_case_builder",
+      "questions": [
+        "Which customer figures and price are needed for a defensible business case?",
+        "How should I read the assumptions and sensitivity range?"
+      ],
+      "next_tool": "champion_enablement_kit",
+      "why": "Help the internal supporter explain the supported business case.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "roi-business-case-builder",
+      "title": "ROI Business Case Builder",
+      "job": "Build an ROI business case template",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/roi-business-case-builder/",
+      "source_page": "public/tools/roi-business-case-builder/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "champion_enablement_kit",
+        "title": "Champion Enablement Kit",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/champion-enablement-kit/"
+      }
+    },
+    {
+      "tool": "mutual_action_plan_generator",
+      "questions": [
+        "Which buyer milestones and owners must precede the close date?",
+        "How do I distinguish agreed dates from proposed dates?"
+      ],
+      "next_tool": "deal_strategy_coach",
+      "why": "Reassess the deal when a milestone or approval changes.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "mutual-action-plan-generator",
+      "title": "Mutual Action Plan Generator",
+      "job": "Build a close plan with milestones and owners",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/mutual-action-plan-generator/",
+      "source_page": "public/tools/mutual-action-plan-generator/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "deal_strategy_coach",
+        "title": "Deal Strategy Coach",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/deal-strategy-coach/"
+      }
+    },
+    {
+      "tool": "win_loss_analyzer",
+      "questions": [
+        "Which deal outcome and buyer evidence should I supply?",
+        "How do I separate a possible loss reason from a confirmed one?"
+      ],
+      "next_tool": "competitive_intel",
+      "why": "Update competitor comparisons with the verified deal evidence.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "win-loss-analyzer",
+      "title": "Win Loss Analyzer",
+      "job": "Structure a win/loss review of your deals",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/win-loss-analyzer/",
+      "source_page": "public/tools/win-loss-analyzer/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "competitive_intel",
+        "title": "Competitive Intel",
+        "url": "https://craft-gtm.gtmhelix.com/tools/competitive-intel/"
+      }
+    },
+    {
+      "tool": "proposal_section_writer",
+      "questions": [
+        "Which proposal section and buyer decision should I focus on?",
+        "How should I label unconfirmed risks, owners and proof?"
+      ],
+      "next_tool": "champion_enablement_kit",
+      "why": "Prepare the internal supporter to explain the proposal.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "proposal-section-writer",
+      "title": "Proposal Section Writer",
+      "job": "Write a proposal section for your buyer",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/proposal-section-writer/",
+      "source_page": "public/tools/proposal-section-writer/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "champion_enablement_kit",
+        "title": "Champion Enablement Kit",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/champion-enablement-kit/"
+      }
+    },
+    {
+      "tool": "email_sequence_generator",
+      "questions": [
+        "Which buyer role and purpose should guide this sequence?",
+        "How do I keep each follow up grounded in the supplied facts?"
+      ],
+      "next_tool": "craft_content_improver",
+      "why": "Check the email copy before anyone sends it.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "email-sequence-generator",
+      "title": "Email Sequence Generator",
+      "job": "Generate a multi-touch email sequence",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/email-sequence-generator/",
+      "source_page": "public/tools/email-sequence-generator/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "craft_content_improver",
+        "title": "Craft Content Improver",
+        "url": "https://craft-content.gtmhelix.com/tools/craft-content-improver/"
+      }
+    },
+    {
+      "tool": "demo_script_builder",
+      "questions": [
+        "Which buyer outcomes and must show scenarios belong in the demo?",
+        "How do I agree a pass condition before the timed script?"
+      ],
+      "next_tool": "mutual_action_plan_generator",
+      "why": "Record the decision and next milestones after the demo.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "demo-script-builder",
+      "title": "Demo Script Builder",
+      "job": "Create an outcome-focused demo script",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/demo-script-builder/",
+      "source_page": "public/tools/demo-script-builder/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "mutual_action_plan_generator",
+        "title": "Mutual Action Plan Generator",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/mutual-action-plan-generator/"
+      }
+    },
+    {
+      "tool": "pricing_negotiation_guide",
+      "questions": [
+        "Which pricing objection and approved boundaries should I supply?",
+        "How do I distinguish a price issue from missing value evidence?"
+      ],
+      "next_tool": "roi_business_case_builder",
+      "why": "Test the value case before offering a concession.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "pricing-negotiation-guide",
+      "title": "Pricing Negotiation Guide",
+      "job": "Defend your pricing in a negotiation",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/pricing-negotiation-guide/",
+      "source_page": "public/tools/pricing-negotiation-guide/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "roi_business_case_builder",
+        "title": "ROI Business Case Builder",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/roi-business-case-builder/"
+      }
+    },
+    {
+      "tool": "champion_enablement_kit",
+      "questions": [
+        "What evidence does our internal supporter need for this decision?",
+        "Which budget or authority gaps must stay unconfirmed?"
+      ],
+      "next_tool": "mutual_action_plan_generator",
+      "why": "Agree the remaining buyer decisions and owners.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "champion-enablement-kit",
+      "title": "Champion Enablement Kit",
+      "job": "Create internal selling tools for your champion",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/champion-enablement-kit/",
+      "source_page": "public/tools/champion-enablement-kit/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "mutual_action_plan_generator",
+        "title": "Mutual Action Plan Generator",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/mutual-action-plan-generator/"
+      }
+    },
+    {
+      "tool": "competitive_trap_setter",
+      "questions": [
+        "Which competitor and buyer concern should the questions address?",
+        "How do I ask fair questions without unsupported competitor claims?"
+      ],
+      "next_tool": "discovery_question_bank",
+      "why": "Place the comparison questions in a broader discovery conversation.",
+      "repository": "revenue-enablement-mcp",
+      "slug": "competitive-trap-setter",
+      "title": "Competitive Trap Setter",
+      "job": "Plan landmine questions for your main competitor",
+      "url": "https://revenue-enablement.gtmhelix.com/tools/competitive-trap-setter/",
+      "source_page": "public/tools/competitive-trap-setter/index.html",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "next": {
+        "tool": "discovery_question_bank",
+        "title": "Discovery Question Bank",
+        "url": "https://revenue-enablement.gtmhelix.com/tools/discovery-question-bank/"
+      }
+    },
+    {
+      "tool": "gtm_consultation",
+      "questions": [
+        "Which company facts determine the EPIC lead motion?",
+        "How should I read a preliminary recommendation with missing inputs?"
+      ],
+      "next_tool": "generate_roadmap",
+      "why": "Turn the selected motion into a timed action plan.",
+      "repository": "gtm-alpha-secure",
+      "slug": "gtm-consultation",
+      "title": "Free EPIC audit",
+      "job": "Free EPIC audit",
+      "url": "https://gtmalpha.gtmhelix.com/consultation",
+      "source_page": "tools hub GTM Alpha job table and existing MCP definitions",
+      "job_table": "https://tools.gtmhelix.com/tools/#gtm-alpha",
+      "held": true,
+      "next": {
+        "tool": "generate_roadmap",
+        "title": "GTM Roadmap",
+        "url": "https://gtmalpha.gtmhelix.com/connect/"
+      }
+    },
+    {
+      "tool": "epic_audit",
+      "questions": [
+        "Which inputs change each EPIC motion score?",
+        "What do the motion scores leave for the team to decide?"
+      ],
+      "next_tool": "generate_roadmap",
+      "why": "Translate the selected motion into the next planning period.",
+      "repository": "gtm-alpha-secure",
+      "slug": "epic-audit",
+      "title": "EPIC scores",
+      "job": "EPIC scores",
+      "url": "https://gtmalpha.gtmhelix.com/connect/",
+      "source_page": "tools hub GTM Alpha job table and existing MCP definitions",
+      "job_table": "https://tools.gtmhelix.com/tools/#gtm-alpha",
+      "held": true,
+      "next": {
+        "tool": "generate_roadmap",
+        "title": "GTM Roadmap",
+        "url": "https://gtmalpha.gtmhelix.com/connect/"
+      }
+    },
+    {
+      "tool": "generate_roadmap",
+      "questions": [
+        "How should the selected motion shape a 30, 60 or 90 day plan?",
+        "Which steps depend on our business model and capacity?"
+      ],
+      "next_tool": "launch_commander",
+      "why": "Assign dates and owners to the agreed launch work.",
+      "repository": "gtm-alpha-secure",
+      "slug": "generate-roadmap",
+      "title": "GTM Roadmap",
+      "job": "GTM Roadmap",
+      "url": "https://gtmalpha.gtmhelix.com/connect/",
+      "source_page": "tools hub GTM Alpha job table and existing MCP definitions",
+      "job_table": "https://tools.gtmhelix.com/tools/#gtm-alpha",
+      "held": true,
+      "next": {
+        "tool": "launch_commander",
+        "title": "Launch Commander",
+        "url": "https://craft-gtm.gtmhelix.com/tools/launch-commander/"
+      }
+    }
+  ],
+  "basis": "Existing tool pages and tools.gtmhelix.com/tools/ job tables. Next tool links are editorial recommendations for review, not automatic calls."
+}
