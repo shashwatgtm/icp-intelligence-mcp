@@ -341,7 +341,9 @@ function companyLine(company) {
 function readContext(explicitModel, input) {
     const read0 = (0, verticals_ts_1.explainSector)(input);
     const read = read0.source === 'buyer' ? { vertical: null, source: null, strong: [], weak: [] } : read0;
-    const m = (0, verticals_ts_1.detectModel)(explicitModel, input);
+    let m = (0, verticals_ts_1.detectModel)(explicitModel, input);
+    if (m.how === 'sector')
+        m = { model: null, how: 'unknown' };
     // The sector's usual model is assumed only when the sector comes from what the user sells; a sector read from the buyer's side
     // says nothing about how the seller charges.
     const model = m.how === 'sector' && read.source !== 'seller' ? null : m.model;
@@ -352,8 +354,8 @@ function readContext(explicitModel, input) {
         : read.source === 'role' ? ' (from the buyer job titles: your own description names no sector)'
             : read.source === 'buyer' ? ' (from the buyer\'s industry: your own description names no sector, so describe what you sell for notes that fit it)' : '';
     const sector = vp ? `read from your inputs as ${vp.name}${via}` : 'not clear from what you sell (describe your product, for example in product category, for sector notes)';
-    const modelText = model ? `${verticals_ts_1.MODEL_NAME[model]} (${how === 'input' ? 'from your answer' : how === 'sector' ? 'the usual model in this sector, assumed; confirm how you charge' : 'read from your inputs; confirm how you charge'})` : `not clear from your inputs; describe how you charge (${verticals_ts_1.BUSINESS_MODELS.join(', ')}) for advice that fits it`;
-    return { v: vp, model, via, line: `*Sector: ${sector}. Business model: ${modelText}.*` };
+    const modelText = model ? `${verticals_ts_1.MODEL_NAME[model]} (${how === 'input' ? 'from your answer' : how === 'sector' ? 'the usual model in this sector, assumed; confirm how you charge' : 'read from your inputs; confirm how you charge'})` : `not stated. Tell us how you charge and the plan will adjust`;
+    return { v: vp, model, via, line: `*Sector: ${sector}. Business model: ${modelText}.*${!model ? "\n\nBilling dependent steps are conditional: trials, seats and recurring renewals require a subscription; a statement of work requires a services contract; site or link commitments require connectivity billing. Confirm the applicable choice before using those steps." : ""}` };
 }
 // Job titles are weak evidence of what the seller sells ("Director of Transportation Data Operations" is a logistics title in a
 // business services firm). They are passed to the reader only when two or more titles name the same sector on their own.
@@ -1517,7 +1519,7 @@ ${SUGGESTED}
 **Role**: ${buyingGroup[key].role}${extraNote}
 **Evidence**: ${evidenceFor(key)}
 **Validation question**: ${roleQuestions[key]}
-**Concern to verify with this person**: ${buyingGroup[key].concern}
+**Check to own**: The account owner should ask ${buyingGroup[key].role || key} to name the acceptance condition for ${args.product_category || "this purchase"} before the next buyer meeting, then record the supporting evidence and who can approve it.
 **${buyingGroup[key].label}**: ${buyingGroup[key].message}
 
 **Strategy**:

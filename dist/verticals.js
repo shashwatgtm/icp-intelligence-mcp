@@ -2339,7 +2339,7 @@ function statedBilling(text, model) {
     const evidence = {
         saas: /\b(?:subscriptions?|per[- ]seat|per[- ]user|monthly (?:fee|plan)|annual licen[cs]es?|recurring monthly fee)\b/i,
         services: /\b(?:per[- ](?:fte|ticket|hour)|retainers?|statements? of work|time and materials|project fees?)\b/i,
-        connectivity: /\b(?:per[- ](?:site|link|circuit|sim)|leased lines?|bandwidth charges?)\b/i,
+        connectivity: /\b(?:per[- ](?:site|link|circuit|sim)|bandwidth charges?)\b/i,
         transactions: /\b(?:per[- ]transaction|transaction fees?|interchange fees?)\b/i,
         marketplace: /\b(?:take rate|charges? (?:a )?commission|takes? (?:a )?(?:commission|cut|percentage))\b/i,
         hardware_software: /\b(?:sells?|ships?|manufactures?)\b[^.;]{0,40}\b(?:devices?|sensors?|hardware|terminals?)\b/i,
@@ -2358,8 +2358,10 @@ function detectModel(explicit, ...args) {
     if (nonRecurringBilling(billingText))
         return { model: null, how: 'unknown' };
     const billingModel = exports.BUSINESS_MODELS.find(m => statedBilling(billingText, m));
-    if (billingModel)
-        return { model: billingModel, how: 'read' };
+    if (billingModel) {
+        const service = /\b(?:contact cent(?:re|er) operator|open[- ]source software support|outsourcing|staff augmentation)\b/i.test(billingText);
+        return { model: billingModel === 'saas' && service ? 'services' : billingModel, how: 'read' };
+    }
     if (nonRecurringBilling(seller))
         return { model: null, how: 'unknown' };
     const read = modelFromSeller(seller);

@@ -8,11 +8,13 @@ export function asksForSoftware(value: unknown): boolean {
  return texts.some(text => text.split(/(?<=[.!?])\s+|\n/).some(sentence => {
   if (/\b(?:not asking|do not recommend|don't recommend|no software recommendations|do not choose|don't choose)\b/i.test(sentence)) return false;
   if (!category.test(sentence)) return false;
+  if (/\b(?:which|what) (?:buyer|customer|audience|team|role|persona|people|employee)s?\b/i.test(sentence)) return false;
+  if (!/\?|^\s*(?:please )?(?:recommend|suggest|shortlist|choose|decide|pick|compare)\b/i.test(sentence)) return false;
   return /\b(?:which|what)\b[^.!?]{0,100}\b(?:use|buy|purchase|choose|select|adopt|best|fits?|recommend)\b/i.test(sentence)
    || /\b(?:recommend|suggest|shortlist)\b[^.!?]{0,80}\b(?:software|tools?|apps?|platforms?|vendors?|CRM|ERP|SIEM)\b/i.test(sentence)
    || /\b(?:should|shall|can) (?:I|we|our team)\b[^.!?]{0,30}\b(?:buy|use|choose|adopt|switch to)\b/i.test(sentence)
    || /\b(?:choose|decide|pick) between\b/i.test(sentence)
    || /\b(?:best|better)\b[^.!?]{0,35}\b(?:software|tool|platform|vendor|CRM|ERP)\b/i.test(sentence)
-   || /\bcompare\b[^.!?]{0,100}\b(?:buy|purchase|choose|select)\b/i.test(sentence);
+   || /^\s*compare\b[^.!?]{0,100}\b(?:buy|purchase|choose|select)\b/i.test(sentence);
  }));
 }
