@@ -1447,6 +1447,17 @@ ${SUGGESTED}
                     return 'blocker';
                 if (!(v && v.id === 'cybersecurity') && /\bCISO\b|security|privacy/i.test(t) && !/\b(CTO|engineer|architect|devops)\b/i.test(t))
                     return 'blocker'; // outside a security product the security lead reviews
+                // CIO is a technical hypothesis unless this sector uses it for its budget seat.
+                // Keep investment CIO distinct and never turn a denied technical responsibility into coverage.
+                if (/\bCIO\b|\bchief information officer\b/i.test(t)) {
+                    const technicalResponsibility = /\btechnical (?:evaluation|acceptance|review|responsibility)\b/i;
+                    if (technicalResponsibility.test(t) && !(0, text_signals_ts_4.hasSignal)(t, technicalResponsibility))
+                        return 'unknown';
+                    const investmentCio = /^CIO$/i.test(t.trim()) && (/^Chief Investment Officer$/i.test(aliasRole(t, v)) || (/\b(?:portfolio manager|head of manager research)\b/i.test(typedChampion) && /\b(?:investment management|asset managers?|fund managers?|wealth managers?)\b/i.test(args.product_category)));
+                    if (investmentCio || /^Chief Information Officer$/i.test(seat?.economic || ''))
+                        return 'economic';
+                    return 'technical';
+                }
                 if (/\b(CFO|CEO|COO|CIO|CRO|CMO|MD|VP|SVP|EVP)\b|vice president|chief (?:financial|executive|operating|information officer|revenue|marketing)|managing director|executive director|general manager|president|founder|business unit head|national sales head/i.test(t) && !/chief information security/i.test(t))
                     return 'economic';
                 if (/\bchief\b[^,]*\bofficer\b/i.test(t) && !/technolog|security/i.test(t))
