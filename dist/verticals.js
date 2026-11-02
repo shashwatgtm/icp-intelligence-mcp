@@ -1800,7 +1800,17 @@ function candidates(text, minWords) {
     const out = [];
     for (const id of ORDER) {
         const v = exports.VERTICALS.find((x) => x.id === id);
-        const strong = scan(v.match, text);
+        const strong = scan(v.match, text).filter(word => v.id !== 'saas' || !/^subscriptions?$/.test(word) || (0, text_signals_ts_1.readSignal)(text, /\bsubscriptions?\b/i).state === 'affirmed');
+        // Equivalent charging sentences must not change the sector of an otherwise
+        // generic software offer. A recurring fee alone is not software evidence.
+        // Keep denied or conflicting billing statements out of this positive signal.
+        if (v.id === 'saas' && (0, text_signals_ts_1.readSignal)(text, /\bsoftware\b/i).state === 'affirmed') {
+            const recurring = (0, text_signals_ts_1.readSignal)(text, /\b(?:recurring monthly fees?|monthly fees?|per[- ]user|per[- ]seat|for each user)\b/i);
+            if (recurring.state === 'affirmed')
+                for (const word of recurring.matched)
+                    if (!strong.includes(word))
+                        strong.push(word);
+        }
         if (!strong.length)
             continue; // broad words alone never name a sector
         const weak = scan(v.weak, text).filter((w) => !strong.some((s) => s.split(' ').includes(w)));
