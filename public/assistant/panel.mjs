@@ -58,10 +58,34 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
  const baseMode=()=>alphaPage&&path==='/integration'?'D':path==='/about/'||path==='/about'?'B':/^\/(?:connect|connectors|plugins)(?:\/|$)/.test(path)||(/^\/tools\/?$/.test(path)&&origin.includes('tools.gtmhelix.com'))?'D':toolPath?'E':'A';
  function chooseRole(role){setRole(role);roleNote.textContent=getRole()&&!ROLES.includes(getRole())?'Your role: '+getRole():'';roleNote.hidden=!roleNote.textContent;for(const b of roleButtons)b.setAttribute('aria-pressed',String(b.textContent===getRole()));update();updatePagePrompts();}
  function updatePagePrompts(){for(const quote of document.querySelectorAll('[aria-labelledby="ai-h"] blockquote')){if(!quote.dataset.helixBase)quote.dataset.helixBase=quote.textContent.replace(/^(?:I am a (?:Founder|CEO|CMO|CRO|Demand generation head|Marketing team member|Customer Success professional|Sales\/AE)\.|My role is not stated\. Ask me for my role first\.)\s*/,'');quote.textContent=roleLine(getRole())+'\n'+quote.dataset.helixBase;}}
+
+ function readerCheck(){
+  const role=getRole();
+  const roles={
+   'Founder':'Choose the customer assumption you need to test. Before committing, check what evidence would make you abandon it.',
+   'CEO':'Choose the resource decision you need to make. Before committing budget, check capacity and the condition that would stop the plan.',
+   'CMO':'Choose the audience or claim you need to validate. Before briefing a campaign, check the customer evidence behind it.',
+   'CRO':'Choose the buyer decision you need to advance. Before forecasting it, check the buyer approver and acceptance condition.',
+   'Demand generation head':'Choose the account or audience selection you need to test. Before expanding outreach, check a reviewed sample against the actual result.'
+  };
+  let check=roles[role]||'Choose your role and the decision you need to make. A tool result should separate supplied facts, assumptions and the next evidence check.';
+  if(mode==='D')check=(role?role+': ':'')+'After setup, run a tool with facts you can verify. Check that its answer identifies missing evidence before using it for a business decision.';
+  if(mode==='B')check=(roles[role]||'Bring the decision, current evidence and constraint to the consultation.')+' Ask for an owned next check and what would change the recommendation.';
+  if(hasResult()){
+   const lines=String(result.text||'').split('\n');
+   const owned=lines.find(line=>role&&line.startsWith(role+':'));
+   if(owned)check=owned;
+   else check=(role?role+': ':'')+'Check the supplied result against the original inputs. Identify the unproved assumption and who must verify it before acting.';
+   const at=lines.findIndex(line=>/^## Reading the answer/.test(line));
+   const reading=at>=0?lines.slice(at+1).find(line=>line.trim()&&!line.startsWith('#')):'';
+   if(reading)footer.querySelector('.answer-note').textContent=reading;
+  }
+  roleNote.textContent=check;roleNote.hidden=false;
+ }
  function update(){
   const q=mode==='D'?`${pluginPage||app==='Gemini CLI'||app==='Antigravity'?'How do I install and use the Helix skills package':'How do I connect '+(selectedSite?.name||'a Helix connector')} in ${app}? ${question.value.trim()}`:question.value.trim();
   current=buildHandoff(q,{}, {host:answerHosts()[0],role:getRole(),page:pageURL,tool:mode==='E'?(tool?.tool||tool?.title||document.querySelector('h1')?.textContent):undefined,inputs:hasResult()?briefInputs(result.inputs):undefined,result:hasResult()?result.text:undefined});
-  link.href=mode==='E'&&!hasResult()?'#'+(form?.id||'tool-form'):current.url;prompt.value=current.prompt;status.textContent='';manualOpen.hidden=true;routeCopy();
+  link.href=mode==='E'&&!hasResult()?'#'+(form?.id||'tool-form'):current.url;prompt.value=current.prompt;status.textContent='';manualOpen.hidden=true;routeCopy();readerCheck();
  }
 
  const suite='https://github.com/shashwatgtm/helix-gtm-suite';

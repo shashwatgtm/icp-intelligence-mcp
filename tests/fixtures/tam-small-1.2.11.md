@@ -119,3 +119,22 @@ Later years assume your market share doubles each year.
 > *Figures calculated from your inputs, plus the preset rates marked as examples above.*
 
 **Next Step**: Use `Lookalike Signal Generator` to create targeting criteria
+
+
+## Reading the answer
+
+The revenue figures are the result of the account, price, fit and share assumptions. They are not a demand forecast. The conclusion needs review if new evidence changes a dated account list, supportable annual price, fit evidence and achievable share.
+
+## Decisions by role
+
+Proposed owners. Confirm the named person before acting.
+
+Founder: identify which missing fact could reverse the market investment before accepting the recommendation.
+
+CEO: set the resource limit and stop condition for the market investment before committing budget.
+
+CMO: check whether the audience and claim in the market investment are supported by the supplied customer evidence before briefing the team.
+
+CRO: validate a dated account list, supportable annual price, fit evidence and achievable share with the relevant buyer or account owner before changing sales priorities.
+
+Demand generation head: compare the next account sample with the market investment before expanding outreach.

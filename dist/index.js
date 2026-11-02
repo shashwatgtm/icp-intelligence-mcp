@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
+const reader_actions_ts_1 = require("./reader-actions.js");
 const verticals_ts_1 = require("./verticals.js");
 const software_policy_ts_1 = require("./software-policy.js");
 const conversation_guidance_ts_1 = require("./conversation-guidance.js");
@@ -1267,20 +1268,19 @@ The bands are 80%, 60% and 40% of your maximum score of ${maxScore} points.${vv 
 
 ## Qualification Scorecard Template
 
-### Account: _______________
-### Date: _______________
+No account has been supplied for scoring. The revenue operations owner should record the account and review date before applying these rules.
 
 ${criteria.map(c => `
 **${c.criterion}** (Max: ${c.weight} pts)
 ${c.values.length ? withPoints(c).map((v) => `☐ ${v}`).join('\n') : '☐ no values supplied: add the values you score'}
-Score: ___ / ${c.weight}
+Score not calculated for ${c.criterion}: confirm the account evidence before assigning up to ${c.weight} points.
 `).join('\n')}
 
 ---
 
-**TOTAL SCORE**: ___ / ${criteria.reduce((sum, c) => sum + c.weight, 0)} ${EXAMPLE}
+**Maximum possible score**: ${criteria.reduce((sum, c) => sum + c.weight, 0)} points. No account total has been calculated.
 
-**TIER**: ☐ A (Hot)  ☐ B (Warm)  ☐ C (Developing)  ☐ D (Unqualified)
+**Tier**: Not assigned. The account owner must supply evidence for each scored criterion before using a tier.
 
 ---
 ${proofItems.length ? `## Evidence in Your Success Pattern
@@ -1968,7 +1968,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
 
 **Company Search**:
 \`\`\`
-${[industries ? `Industry: ${industries.join(' OR ')}` : '', employeeSizes ? `Company headcount: ${employeeSizes.join(' OR ')}` : '', locations ? `Headquarters: ${locations.join(' OR ')}` : '', tech ? `Technologies used: ${tech.join(' OR ')}` : ''].filter(Boolean).join('\n') || 'No firmographic input given: add icp firmographics (industries, company sizes, locations) to fill this search'}
+${[industries ? `Industry: ${industries.join(' OR ')}` : '', employeeSizes ? `Company headcount: ${employeeSizes.join(' OR ')}` : '', locations ? `Headquarters: ${locations.join(' OR ')}` : '', tech ? `Technologies used: ${tech.join(' OR ')}` : ''].filter(Boolean).join('\n') || 'Company attributes are missing. The account owner should confirm industries, employee ranges and serviceable locations before running this search.'}
 \`\`\`
 
 **Lead Search**:
@@ -2004,9 +2004,7 @@ ${vocabOk ? `Pick the in-market category your existing advertising account offer
                 sections.push(`## Intent criteria
 
 ### Account Fit Criteria
-\`\`\`json
-${JSON.stringify({ firmographics: { ...(industries ? { industry: industries } : {}), ...(employeeSizes ? { employee_range: employeeSizes } : {}), ...(locations ? { geography: locations } : {}) }, ...(tech ? { technographics: { technologies_used: tech } } : {}) }, null, 2)}
-\`\`\`
+${[industries ? `Industries: ${industries.join('; ')}` : '', employeeSizes ? `Employee ranges: ${employeeSizes.join('; ')}` : '', locations ? `Locations: ${locations.join('; ')}` : '', tech ? `Systems to confirm: ${tech.join('; ')}` : ''].filter(Boolean).join('\n\n') || 'Account attributes are not supplied. The account owner should verify the industries, employee ranges and locations of successful customers before treating any company as a fit.'}
 
 ### Intent Topic Keywords
 \`\`\`
@@ -2072,11 +2070,11 @@ ${stages ? `- Funding or listing news at your stages: ${stages.join(', ')}\n` : 
 ${sectorLine(v, ctx.via)}
 
 ## ICP Summary
-- **Industries**: ${industriesTyped ? industriesTyped.join(industriesTyped.some(i => i.includes(',')) ? '; ' : ', ') : 'not supplied (add icp firmographics.industries)'}
-- **Company Sizes**: ${sizes ? sizes.join(', ') : 'not supplied (add icp firmographics.company sizes, for example employee ranges of your best customers)'}
-- **Locations**: ${locations ? locations.join(', ') : 'not supplied (add icp firmographics.locations)'}
+- **Industries**: ${industriesTyped ? industriesTyped.join(industriesTyped.some(i => i.includes(',')) ? '; ' : ', ') : 'Not supplied. Ask the account owner for the industries represented by successful customers.'}
+- **Company Sizes**: ${sizes ? sizes.join(', ') : 'Not supplied. Ask the account owner for employee ranges from successful customers.'}
+- **Locations**: ${locations ? locations.join(', ') : 'Not supplied. Confirm which locations the team can serve.'}
 - **Funding Stages**: ${stages ? stages.join(', ') : 'not supplied'}
-- **Technologies**: ${tech ? tech.join(', ') : `not supplied (add icp technographics: the systems your buyers run that your product connects to${sysList ? `; in ${v.name} these are usually ${sysList}` : ''})`}
+- **Technologies**: ${tech ? tech.join(', ') : `Not supplied. Confirm the systems buyers run and the connections the product supports${sysList ? `; possible systems to confirm in ${v.name}: ${sysList}` : ''}.`}
 - **Champion Titles**: ${titles.join(', ')}${groups.length ? ` (groups, not titles: ${groups.join(', ')})` : ''}
 - **Buying Triggers**: ${triggers ? triggers.join('; ') : 'not supplied (add buying triggers: the events that make a buyer start looking)'}
 ${v && !isHorizontal(v) ? `- **Other roles in ${/^[aeiou]/i.test(v.name) ? 'an' : 'a'} ${v.name} buying group** (not in your input): ${v.buyerRoles.filter(r => !titles.some(t => sameRole(aliasRole(t, v), r))).join(', ')}\n` : ''}
@@ -3206,7 +3204,7 @@ function createServer() {
             const limit = (0, decision_limits_ts_1.decisionLimit)(String(toolName), safeArgs);
             const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs);
             return {
-                content: [{ type: 'text', text: result }]
+                content: [{ type: 'text', text: (0, reader_actions_ts_1.withReadingGuide)(toolName, result, safeArgs) }]
             };
         }
         catch (error) {

@@ -187,7 +187,7 @@ test("lookalike_signal_generator: no US startup defaults; what is missing is nam
   assert.doesNotMatch(r.text, /Salesforce|HubSpot|United States|51-200|201-500|Series A|New leadership hire|Funding round/);
   assert.match(r.text, /Current job title: "CFO" OR "Head of Treasury"/);
   assert.match(r.text, /Not job titles, so not in the title search: finance teams, managers, employees, HR/);
-  assert.match(r.text, /Company Sizes\*\*: not supplied \(add icp firmographics\.company sizes/);
+  assert.match(r.text, /Company Sizes\*\*: Not supplied\. Ask the account owner for employee ranges/);
   assert.match(r.text, /Not supplied, so left out of the searches: company sizes, locations, icp technographics, buying triggers/);
   assert.match(r.text, /No buying triggers were given/);
 });
