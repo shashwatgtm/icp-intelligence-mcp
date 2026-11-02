@@ -68,12 +68,17 @@ function pattern(c:Clue):RegExp {
 type Polarity='yes'|'no'|'unclear';
 function polarity(clause:string,start:number,end:number,all:Clue[]):Polarity{
  const prefix=clause.slice(0,start).replace(/\bnot only\b/gi,''),suffix=clause.slice(end);
- const before=prefix.split(/[,;]|\b(?:but|however|whereas|while)\b/i).at(-1)||'';
+ // Commas inside product or country lists retain polarity. A new seller clause resets it.
+ const before=prefix.split(/;|\b(?:but|however|whereas|while)\b|(?:,\s*|\band\s+)(?=(?:we|our company|our business)\s+(?:do|sell|serve|target|are|may|might|could)\b)/i).at(-1)||'';
  const after=suffix.split(/[,;]|\b(?:and|but|however|whereas|while)\b/i)[0];
  if(/\b(?:not|never|no|neither|nor|without|except|excluding|exclude|outside|avoid|left|exited|formerly|previously|historically|used to|no longer|stopped|ceased|cannot)\b/i.test(before))return'no';
  if(/^\s*(?:(?:is|are|was|were|has been|have been)\s+)?(?:not|no longer|excluded|out of scope|off limits)\b/i.test(after))return'no';
  let tail=suffix;for(const c of all)tail=tail.replace(pattern(c),'PLACE');
- if(/^\s*(?:(?:,|and|or)\s*PLACE\s*)+(?:are|were)\s+(?:not|excluded|out of scope)\b/i.test(tail))return'no';
+ const listTail=tail.replace(/^\s*(?:(?:,\s*(?:and\s+|or\s+)?|and\s+|or\s+)PLACE\s*)+/i,'');
+ if(listTail!==tail){
+  if(/^\s*(?:(?:is|are|was|were|have been|has been)\s+)?(?:not|excluded|out of scope|off limits|(?:our|a|the|their)\s+(?:previous|former|historical|competitor|rival)|previous|former|historical|competitor|rival)\b/i.test(listTail))return'no';
+  if(/^\s*(?:could|might|may|would|is being considered|are being considered|is not confirmed|are not confirmed)\b/i.test(listTail))return'unclear';
+ }
  if(/\?|\b(?:may|might|could|perhaps|maybe|whether|consider(?:ing)?|uncertain|unsure|if|hypothetical|example|competitors?|rivals?)\b/i.test(before)||/\?|\b(?:uncertain|unconfirmed|not confirmed)\b/i.test(after))return'unclear';
  if(/^\s*(?:(?:is|are|was|were|has been|have been)\s+)?(?:(?:our|a|the|their)\s+)?(?:previous|former|historical|competitor|rival)\b/i.test(after))return'no';
  if(/^\s*(?:could|might|may|would|is being considered|is not confirmed)\b/i.test(after))return'unclear';
@@ -114,7 +119,9 @@ function marketText(text:string):string {
   const m=sentence.match(/\b(?:sell(?:ing|s)?|sold|expand(?:s|ing)?|enter(?:s|ing)?|target(?:s|ing)?|serv(?:es?|ing))\b/i);
   if(m){
    const qualifier=sentence.slice(0,m.index).match(/\b(?:not|never|no longer|formerly|previously|historically|may|might|could|perhaps|maybe|considering|should we|would we|can we|competitor|rival)[^,;.!?]*$/i)?.[0]||'';
-   return qualifier+sentence.slice(m.index);
+   // A source office following from is not a selling destination, in either order.
+   const destination=sentence.slice(m.index).replace(/\bfrom\s+[^.;!?]*?(?=\s+(?:to|into)\s+|[.;!?]|$)/gi,'');
+   return qualifier+destination;
   }
   return sentence.replace(/\b(?:our|the)\s+(?:company|business|product|brand)(?:'s)?\s+name\s+(?:is|:)\s+[^,;.]+/gi,'').replace(/\b(?:based|headquartered|located|founded)\s+in\s+[^,;.]+/gi,'');
  }).join(' ');
@@ -127,7 +134,12 @@ export function readRegionContext(args:unknown):RegionReading {
  // A dedicated market field wins over incidental locations in the description.
  const chosen=explicit.found.length||explicit.unresolved.length?explicit:seller;
  const sector=explainSector({seller:f.seller,buyer:f.buyer});
- const v=sector.source==='seller'?sector.vertical:null;
+ const inferred=sector.source==='seller'?sector.vertical:null;
+ // The existing reviewed selector fixes the vertical, never an inferred sub industry.
+ const selected=args&&typeof args==='object'&&!Array.isArray(args)?(args as Record<string,unknown>).your_sector:undefined;
+ const selectedId=typeof selected==='string'?selected.replace(/_/g,'-'):null;
+ const validSelection=selected==='other'||REGION_TAXONOMY.verticals.some(v=>v.id===selectedId);
+ const v=validSelection?(selected==='other'?null:inferred?.id===selectedId?inferred:{id:selectedId!,subtype:undefined}):inferred;
  const subtype=v?.subtype?REGION_TAXONOMY.subtypes.find(s=>s.id===v.subtype||s.name===v.subtype)?.id||null:null;
  const regions:RegionMatch[]=[];
  for(const r of REGION_CHOICES){

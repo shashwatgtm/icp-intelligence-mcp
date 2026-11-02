@@ -111,3 +111,52 @@ for(const [description,expected] of [
  ['Our Singapore competitor serves banks in the UK.',[]],
  ['Our Singapore vendor may target banks in the UK.',[]],
 ])test(description,()=>assert.deepEqual(readRegionContext({product_description:description}).regions.map(r=>r.region_id),expected));
+
+// Explicit sector selection must agree with the core tool.
+{
+const input={product_description:'Cybersecurity threat detection software sold in India'};
+for(const v of REGION_TAXONOMY.verticals)test(`explicit sector ${v.id} wins`,()=>{
+ const match=readRegionContext({...input,your_sector:v.id.replaceAll('-','_')}).regions[0];
+ assert.equal(match.vertical_id,v.id);
+ if(v.id!=='cybersecurity')assert.equal(match.subtype_id,null);
+});
+test('explicit other keeps regional industry neutral',()=>{
+ const match=readRegionContext({...input,your_sector:'other'}).regions[0];
+ assert.equal(match.vertical_id,null);assert.equal(match.subtype_id,null);
+ assert.doesNotMatch(regionNotes({...input,your_sector:'other'}),/Industry: Cybersecurity/);
+});
+for(const value of [undefined,null,42,'unknown',{},['fintech']])test(`invalid selector ${JSON.stringify(value)} preserves inference`,()=>{
+ assert.equal(readRegionContext({...input,your_sector:value}).regions[0].vertical_id,'cybersecurity');
+});
+test('buyer nested selector cannot override seller choice',()=>{
+ assert.equal(readRegionContext({...input,target_customer:{your_sector:'fintech'}}).regions[0].vertical_id,'cybersecurity');
+});
+test('matching choice preserves evidenced subtype',()=>{
+ const args={product_description:'Lending origination software sold in India'};
+ const inferred=readRegionContext(args).regions[0];
+ assert.equal(inferred.vertical_id,'fintech');
+ assert.equal(readRegionContext({...args,your_sector:'fintech'}).regions[0].subtype_id,inferred.subtype_id);
+});
+
+}
+
+// M021 to M029, Lane I comma scope and Lane K office destination findings.
+for(const [description,expected] of [
+ ['We do not sell banking, lending or payments software in India. We sell lending software in Singapore.',['SG']],
+ ['We do not sell core banking software in Singapore, Indonesia or Malaysia. We sell in India.',['IN']],
+ ['We sell lending software in India. A competitor sells banking, lending and payments software in Singapore.',['IN']],
+ ['We sell lending software in Singapore. India, Thailand and Malaysia were our previous markets.',['SG']],
+ ['We serve India from Singapore with payment software.',['IN']],
+ ['We sell payment software into the United Kingdom from India.',['GB']],
+ ['We sell payment software from India into the United Kingdom.',['GB']],
+ ['We may sell banking, lending and payments software in India. We sell in Singapore.',['SG']],
+ ['We formerly sold banking, lending and payments software in India. We sell in Singapore.',['SG']],
+ ['We sell in India, Singapore and Malaysia.',['IN','MY','SG']],
+ ['We do not sell in India, but we sell in Singapore.',['SG']],
+ ['We do not sell in India, we sell in Singapore.',['SG']],
+ ['We do not sell in India and we sell in Singapore.',['SG']],
+ ['India, Thailand and Malaysia could be next year. We sell in Singapore.',['SG']],
+ ['India, Thailand and Malaysia are competitor markets. We sell in Singapore.',['SG']],
+ ['We sell in Singapore and India, not Malaysia.',['IN','SG']],
+ ['We sell in Singapore, not India or Malaysia.',['SG']],
+])test(description,()=>assert.deepEqual(readRegionContext({product_description:description}).regions.flatMap(r=>r.countries).sort(),expected));
