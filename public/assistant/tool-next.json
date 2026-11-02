@@ -960,11 +960,10 @@
       "url": "https://gtmalpha.gtmhelix.com/consultation",
       "source_page": "tools hub GTM Alpha job table and existing MCP definitions",
       "job_table": "https://tools.gtmhelix.com/tools/#gtm-alpha",
-      "held": true,
       "next": {
         "tool": "generate_roadmap",
         "title": "GTM Roadmap",
-        "url": "https://gtmalpha.gtmhelix.com/connect/"
+        "url": "https://gtmalpha.gtmhelix.com/integration"
       }
     },
     {
@@ -979,14 +978,13 @@
       "slug": "epic-audit",
       "title": "EPIC scores",
       "job": "EPIC scores",
-      "url": "https://gtmalpha.gtmhelix.com/connect/",
+      "url": "https://gtmalpha.gtmhelix.com/integration",
       "source_page": "tools hub GTM Alpha job table and existing MCP definitions",
       "job_table": "https://tools.gtmhelix.com/tools/#gtm-alpha",
-      "held": true,
       "next": {
         "tool": "generate_roadmap",
         "title": "GTM Roadmap",
-        "url": "https://gtmalpha.gtmhelix.com/connect/"
+        "url": "https://gtmalpha.gtmhelix.com/integration"
       }
     },
     {
@@ -1001,10 +999,9 @@
       "slug": "generate-roadmap",
       "title": "GTM Roadmap",
       "job": "GTM Roadmap",
-      "url": "https://gtmalpha.gtmhelix.com/connect/",
+      "url": "https://gtmalpha.gtmhelix.com/integration",
       "source_page": "tools hub GTM Alpha job table and existing MCP definitions",
       "job_table": "https://tools.gtmhelix.com/tools/#gtm-alpha",
-      "held": true,
       "next": {
         "tool": "launch_commander",
         "title": "Launch Commander",

@@ -1,8 +1,9 @@
 import {buildHandoff, ROLES, getRole, setRole, roleLine, GEMINI_URL} from './handoff.mjs';
 
 const excluded = path => /^\/(?:assistant|ai-trendwatch|lets-get-started|contact|contact-us|forms?|thank-you|thanks|error|404|500)(?:[/.]|$)/i.test(path) || /\/(?:thank-you|subscribed|success|error)(?:\/|$)/i.test(path);
-const path = location.pathname.replace(/\/index\.html$/, '/');
-const toolPath = /^\/tools\/[^/]+\/?$/.test(path);
+const alphaPage = /^https:\/\/gtmalpha\.gtmhelix\.com(?:\/|$)/.test(document.querySelector('link[rel="canonical"]')?.href || location.href);
+const path = location.pathname.replace(/\/index\.html$/, '/').replace(alphaPage ? /^\/(consultation|integration)(?:\.html|\/)?$/ : /$^/, '/$1');
+const toolPath = /^\/tools\/[^/]+\/?$/.test(path) || (alphaPage && path === '/consultation');
 if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (toolPath || !document.querySelector('main form:not([role="search"])'))) {
  const node=(tag,text='',attrs={})=>{const el=document.createElement(tag);el.textContent=text;for(const [k,v]of Object.entries(attrs))el.setAttribute(k,v);return el;};
  const host=node('div','',{id:'helix-assistant-launcher'});host.hidden=true;
@@ -33,7 +34,7 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
  const answerHosts=()=>pluginPage?['claude','gemini']:(sites[new URL(origin).hostname]?.hosts||(/^(?:icp-intelligence|gtmalpha)\./.test(new URL(origin).hostname)?['claude','gemini']:['chatgpt']));
  let lastAnswerApp='';
  function routeCopy(chosen){const dual=answerHosts()[0]==='claude';const name=chosen||(dual?'Claude':'ChatGPT');lastAnswerApp=name;link.textContent=dual?'Get your answer in Claude':'Get your answer in ChatGPT';gemini.hidden=!dual;shortened.textContent='Your question was shortened for the link. Add remaining detail in '+name+'.';footer.querySelector('.answer-note').textContent='In '+name+', check the assumptions before acting on the recommendation.';privacyText.textContent=dual?'Your role and question stay only in this page’s memory. Choosing '+name+' copies the prompt to your clipboard and opens '+name+'. '+(name==='Claude'?'The prompt is also included in the link URL sent to Claude. ':'')+'Paste and send it in your own account. We do not send it to a Helix server.':'Your role and question stay only in this page’s memory. Opening ChatGPT sends the prompt in the link URL to OpenAI; Send starts the conversation. You can copy it instead.';}
- const baseMode=()=>path==='/about/'||path==='/about'?'B':/^\/(?:connect|connectors|plugins)(?:\/|$)/.test(path)||(/^\/tools\/?$/.test(path)&&origin.includes('tools.gtmhelix.com'))?'D':toolPath?'E':sectionVisible?'D':'A';
+ const baseMode=()=>alphaPage&&path==='/integration'?'D':path==='/about/'||path==='/about'?'B':/^\/(?:connect|connectors|plugins)(?:\/|$)/.test(path)||(/^\/tools\/?$/.test(path)&&origin.includes('tools.gtmhelix.com'))?'D':toolPath?'E':sectionVisible?'D':'A';
  function chooseRole(role){setRole(role);roleNote.textContent=getRole()&&!ROLES.includes(getRole())?'Your role: '+getRole():'';roleNote.hidden=!roleNote.textContent;for(const b of roleButtons)b.setAttribute('aria-pressed',String(b.textContent===getRole()));update();updatePagePrompts();}
  function updatePagePrompts(){for(const quote of document.querySelectorAll('[aria-labelledby="ai-h"] blockquote')){if(!quote.dataset.helixBase)quote.dataset.helixBase=quote.textContent.replace(/^(?:I am a (?:Founder|CEO|CMO|CRO|Demand generation head|Marketing team member|Customer Success professional|Sales\/AE)\.|My role is not stated\. Ask me for my role first\.)\s*/,'');quote.textContent=roleLine(getRole())+'\n'+quote.dataset.helixBase;}}
  function update(){

@@ -51,8 +51,7 @@
       "repository": "gtm-alpha-secure",
       "name": "GTM Alpha",
       "mcp": "https://gtmalpha.gtmhelix.com/mcp",
-      "guide": "https://gtmalpha.gtmhelix.com/connect/",
-      "held": true,
+      "guide": "https://gtmalpha.gtmhelix.com/integration",
       "hosts": [
         "claude",
         "gemini"
