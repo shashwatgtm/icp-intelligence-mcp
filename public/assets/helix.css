@@ -631,3 +631,17 @@ footer.hx-footer, .ft { background: var(--rose-mid); color: var(--ink); margin: 
 }
 /* code inside a window: the window is the frame (no second border) */
 .win pre.hx11-in-win, .win-body > pre { border: 0; margin: 0; box-shadow: none; }
+
+/* Round 4: native FAQ controls work without JavaScript; answers remain in the HTML. */
+main details.hx-faq-item > summary,main .hx-qa details > summary {list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;min-height:44px}
+main details.hx-faq-item > summary::-webkit-details-marker,main .hx-qa details > summary::-webkit-details-marker {display:none}
+main details.hx-faq-item > summary::after,main .hx-qa details > summary::after {content:'+';font:600 24px/1 Arial,sans-serif;flex:none}
+main details[open].hx-faq-item > summary::after,main .hx-qa details[open] > summary::after {transform:rotate(45deg)}
+main details.hx-faq-item[open] .faq-answer {display:block}
+main .hx-app-routes {max-width:var(--maxw,1280px);margin:24px auto;padding:0 var(--gut,24px);font-size:14px;line-height:1.5}
+main section {min-width:0;max-width:100%;box-sizing:border-box}
+main pre {max-width:100%;overflow:auto}
+
+main .hx-app-section {width:calc(100% - 2 * var(--gut,24px));max-width:var(--maxw,1280px);margin-left:auto;margin-right:auto}
+main .faq details > summary::after,main .hx-qa details > summary::after {content:"+"}
+main .faq details[open] > summary::after,main .hx-qa details[open] > summary::after {content:"+";transform:rotate(45deg)}

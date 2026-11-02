@@ -12,7 +12,7 @@
 - Local npm package: @shashwatgtmalpha/icp-intelligence-mcp
 - Source code: https://github.com/shashwatgtm/icp-intelligence-mcp
 - Built by: Shashwat Ghosh, Helix GTM Consulting (https://www.gtmexpert.com)
-- All connectors and Claude plugins: https://tools.gtmhelix.com/
+- All connectors and Helix skills packages: https://tools.gtmhelix.com/
 
 ## Tools
 

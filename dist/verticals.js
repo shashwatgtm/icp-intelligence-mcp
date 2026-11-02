@@ -2337,7 +2337,7 @@ function modelFromSeller(seller) {
 // Product and sector nouns do not establish how the seller is paid.
 function statedBilling(text, model) {
     const evidence = {
-        saas: /\b(?:subscriptions?|per[- ]seat|per[- ]user|monthly (?:fee|plan)|annual licen[cs]es?|recurring monthly fee)\b/i,
+        saas: /\b(?:saas|software as a service|subscriptions?|per[- ]seat|per[- ]user|monthly (?:fee|plan)|annual licen[cs]es?|recurring monthly fee)\b/i,
         services: /\b(?:per[- ](?:fte|ticket|hour)|retainers?|statements? of work|time and materials|project fees?)\b/i,
         connectivity: /\b(?:per[- ](?:site|link|circuit|sim)|bandwidth charges?)\b/i,
         transactions: /\b(?:per[- ]transaction|transaction fees?|interchange fees?)\b/i,

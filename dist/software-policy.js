@@ -21,7 +21,7 @@ function asksForSoftware(value) {
             return false;
         if (/\b(?:which|what) (?:buyer|customer|audience|team|role|persona|people|employee)s?\b/i.test(sentence))
             return false;
-        if (!/\?|^\s*(?:please )?(?:recommend|suggest|shortlist|choose|decide|pick|compare)\b/i.test(sentence))
+        if (!/\?|^\s*(?:please )?(?:recommend|suggest|shortlist|choose|decide|pick|compare|which|what|should|shall|can)\b/i.test(sentence))
             return false;
         return /\b(?:which|what)\b[^.!?]{0,100}\b(?:use|buy|purchase|choose|select|adopt|best|fits?|recommend)\b/i.test(sentence)
             || /\b(?:recommend|suggest|shortlist)\b[^.!?]{0,80}\b(?:software|tools?|apps?|platforms?|vendors?|CRM|ERP|SIEM)\b/i.test(sentence)
