@@ -93,6 +93,7 @@ export type BusinessModel = 'saas' | 'services' | 'connectivity' | 'transactions
 export declare const BUSINESS_MODELS: BusinessModel[];
 export declare const MODEL_NAME: Record<BusinessModel, string>;
 export declare const SECTOR_MODEL: Record<VerticalId, BusinessModel>;
+export declare function nonRecurringBilling(text: string): boolean;
 export declare function detectModel(explicit: unknown, ...args: unknown[]): {
     model: BusinessModel | null;
     how: 'input' | 'read' | 'sector' | 'unknown';

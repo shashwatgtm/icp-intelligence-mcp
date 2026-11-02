@@ -1516,7 +1516,7 @@ ${SUGGESTED}
 **Role**: ${buyingGroup[key].role}${extraNote}
 **Evidence**: ${evidenceFor(key)}
 **Validation question**: ${roleQuestions[key]}
-**Their Concern**: ${buyingGroup[key].concern}
+**Concern to verify with this person**: ${buyingGroup[key].concern}
 **${buyingGroup[key].label}**: ${buyingGroup[key].message}
 
 **Strategy**:
@@ -2874,7 +2874,7 @@ ${topTriggers.length > 0 ? topTriggers.map(([trigger, count], i) => `${i + 1}. *
 ### Value Realized (Post-Purchase)
 ${results.length > 0 ? results.map(([value, count], i) => `${i + 1}. **${shortText(value, 300)}**: ${of(count)}`).join('\n') : '- No outcomes captured as results. Ask each customer what changed for them, in their own words, and record it as value realized.'}
 ${claims.length ? `\n**Claims and recognition in your notes** (seller claims and testimonials: statements from the seller's own pages, quotes from the seller's customers or awards, not outcomes a customer reported to you in an interview; use them as proof points only after a customer confirms them):\n${claims.map(([value, count]) => `- ${shortText(value, 300)} (${of(count)})`).join('\n')}\n` : ''}
-**ICP Implication**: ${results.length ? 'Lead with these outcomes in messaging' : 'Collect customer outcomes before you lead with value in messaging'}
+**ICP Implication**: ${results.length ? 'Treat these as reported claims to verify. Do not lead with an unmeasured or unconfirmed outcome; obtain its source, scope and date first' : 'Collect customer outcomes before you lead with value in messaging'}
 
 ### Champion Roles
 ${topRoles.length > 0 ? topRoles.map(([role, count], i) => `${i + 1}. **${role}**: ${of(count)}`).join('\n') : '- No roles captured'}

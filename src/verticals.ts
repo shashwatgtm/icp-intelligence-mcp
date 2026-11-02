@@ -1,4 +1,4 @@
-import { sellerSectorLabel } from './text-signals.ts';
+import { sellerSectorLabel, readSignal } from './text-signals.ts';
 // Sector knowledge for the nine verticals Shashwat Ghosh serves (run 19, owner decision D80; rule B82).
 // One data file, shared by every tool in this server, so the owner can read and correct it in one place.
 // The verticals and their order come from work/market.json in the owner's project (logistics tech, fintech, SaaS,
@@ -2332,12 +2332,33 @@ export const SECTOR_MODEL: Record<VerticalId, BusinessModel> = {
 /** The business model: the explicit input when given, else read from the SELLER's words, else the sector's usual model, else
  * null. Give plain texts or { seller: [...], buyer: [...] } as for detectVertical. */
 function modelFromSeller(seller: string): BusinessModel | null {
-  for (const { model, re, not } of MODEL_MATCH) if (re.test(seller) && !(not && not.test(seller))) return model;
+  for (const { model, re, not } of MODEL_MATCH) if (readSignal(seller, re).state === 'affirmed' && !(not && readSignal(seller, not).state === 'affirmed')) return model;
   return null;
+}
+// Product and sector nouns do not establish how the seller is paid.
+function statedBilling(text: string, model: BusinessModel): boolean {
+  const evidence: Record<BusinessModel, RegExp> = {
+    saas: /\b(?:subscriptions?|per[- ]seat|per[- ]user|monthly (?:fee|plan)|annual licen[cs]es?|recurring monthly fee)\b/i,
+    services: /\b(?:per[- ](?:fte|ticket|hour)|retainers?|statements? of work|time and materials|project fees?)\b/i,
+    connectivity: /\b(?:per[- ](?:site|link|circuit|sim)|leased lines?|bandwidth charges?)\b/i,
+    transactions: /\b(?:per[- ]transaction|transaction fees?|interchange fees?)\b/i,
+    marketplace: /\b(?:take rate|charges? (?:a )?commission|takes? (?:a )?(?:commission|cut|percentage))\b/i,
+    hardware_software: /\b(?:sells?|ships?|manufactures?)\b[^.;]{0,40}\b(?:devices?|sensors?|hardware|terminals?)\b/i,
+    investment: /\b(?:performance fees?|fees? on assets|assets under management|aum)\b/i,
+  };
+  return readSignal(text, evidence[model]).state === 'affirmed';
+}
+export function nonRecurringBilling(text: string): boolean {
+  return readSignal(text, /\b(?:perpetual licen[cs]e|one[- ]time (?:payment|fee)|pay once)\b/i).state === 'affirmed';
 }
 export function detectModel(explicit: unknown, ...args: unknown[]): { model: BusinessModel | null; how: 'input' | 'read' | 'sector' | 'unknown' } {
   if (typeof explicit === 'string' && (BUSINESS_MODELS as string[]).includes(explicit)) return { model: explicit as BusinessModel, how: 'input' };
   const { seller } = sides(args);   // the seller's words only: what the buyer's side says about its own money is not the seller's model
+  const billingText = args.flatMap(x => typeof x === 'string' ? [x] : x && typeof x === 'object' && 'seller' in x ? ((x as ReaderInput).seller || []) : []).filter(x => typeof x === 'string').join(' . ');
+  if (nonRecurringBilling(billingText)) return { model: null, how: 'unknown' };
+  const billingModel = BUSINESS_MODELS.find(m => statedBilling(billingText, m));
+  if (billingModel) return { model: billingModel, how: 'read' };
+  if (nonRecurringBilling(seller)) return { model: null, how: 'unknown' };
   const read = modelFromSeller(seller);
   // The usual model is that of the sector finally chosen (after the AI label is set aside). A services firm that mentions a platform,
   // an app or software ("Brightfield Software", "business services on a digital platform") sells services unless its own words say
@@ -2347,7 +2368,7 @@ export function detectModel(explicit: unknown, ...args: unknown[]): { model: Bus
   const st = v?.subtype ? SUBTYPES.find((x) => x.id === v.subtype) : undefined;
   // A sub-type with its own usual model (a marketplace, a messaging or payments API) beats the generic software reading unless the seller says subscription, SaaS, per seat, per user or licence.
   if (st?.model && read === 'saas' && (st.model === 'marketplace' || !/\b(?:saas|software|subscriptions?|per seat|per user|licen[cs]es?)\b/i.test(seller))) return { model: st.model, how: 'sector' };
-  if (read) return { model: read, how: 'read' };
+  if (read) return { model: read, how: statedBilling(seller, read) ? 'read' : 'sector' };
   if (v) return { model: st?.model ?? SECTOR_MODEL[v.id], how: 'sector' };
   return { model: null, how: 'unknown' };
 }

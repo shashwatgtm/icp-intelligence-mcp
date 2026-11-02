@@ -7,6 +7,7 @@ exports.profileFor = profileFor;
 exports.explainSector = explainSector;
 exports.detectVertical = detectVertical;
 exports.buyerLens = buyerLens;
+exports.nonRecurringBilling = nonRecurringBilling;
 exports.detectModel = detectModel;
 exports.buyerContextFor = buyerContextFor;
 const text_signals_ts_1 = require("./text-signals.js");
@@ -2329,14 +2330,38 @@ exports.SECTOR_MODEL = {
  * null. Give plain texts or { seller: [...], buyer: [...] } as for detectVertical. */
 function modelFromSeller(seller) {
     for (const { model, re, not } of MODEL_MATCH)
-        if (re.test(seller) && !(not && not.test(seller)))
+        if ((0, text_signals_ts_1.readSignal)(seller, re).state === 'affirmed' && !(not && (0, text_signals_ts_1.readSignal)(seller, not).state === 'affirmed'))
             return model;
     return null;
+}
+// Product and sector nouns do not establish how the seller is paid.
+function statedBilling(text, model) {
+    const evidence = {
+        saas: /\b(?:subscriptions?|per[- ]seat|per[- ]user|monthly (?:fee|plan)|annual licen[cs]es?|recurring monthly fee)\b/i,
+        services: /\b(?:per[- ](?:fte|ticket|hour)|retainers?|statements? of work|time and materials|project fees?)\b/i,
+        connectivity: /\b(?:per[- ](?:site|link|circuit|sim)|leased lines?|bandwidth charges?)\b/i,
+        transactions: /\b(?:per[- ]transaction|transaction fees?|interchange fees?)\b/i,
+        marketplace: /\b(?:take rate|charges? (?:a )?commission|takes? (?:a )?(?:commission|cut|percentage))\b/i,
+        hardware_software: /\b(?:sells?|ships?|manufactures?)\b[^.;]{0,40}\b(?:devices?|sensors?|hardware|terminals?)\b/i,
+        investment: /\b(?:performance fees?|fees? on assets|assets under management|aum)\b/i,
+    };
+    return (0, text_signals_ts_1.readSignal)(text, evidence[model]).state === 'affirmed';
+}
+function nonRecurringBilling(text) {
+    return (0, text_signals_ts_1.readSignal)(text, /\b(?:perpetual licen[cs]e|one[- ]time (?:payment|fee)|pay once)\b/i).state === 'affirmed';
 }
 function detectModel(explicit, ...args) {
     if (typeof explicit === 'string' && exports.BUSINESS_MODELS.includes(explicit))
         return { model: explicit, how: 'input' };
     const { seller } = sides(args); // the seller's words only: what the buyer's side says about its own money is not the seller's model
+    const billingText = args.flatMap(x => typeof x === 'string' ? [x] : x && typeof x === 'object' && 'seller' in x ? (x.seller || []) : []).filter(x => typeof x === 'string').join(' . ');
+    if (nonRecurringBilling(billingText))
+        return { model: null, how: 'unknown' };
+    const billingModel = exports.BUSINESS_MODELS.find(m => statedBilling(billingText, m));
+    if (billingModel)
+        return { model: billingModel, how: 'read' };
+    if (nonRecurringBilling(seller))
+        return { model: null, how: 'unknown' };
     const read = modelFromSeller(seller);
     // The usual model is that of the sector finally chosen (after the AI label is set aside). A services firm that mentions a platform,
     // an app or software ("Brightfield Software", "business services on a digital platform") sells services unless its own words say
@@ -2349,7 +2374,7 @@ function detectModel(explicit, ...args) {
     if (st?.model && read === 'saas' && (st.model === 'marketplace' || !/\b(?:saas|software|subscriptions?|per seat|per user|licen[cs]es?)\b/i.test(seller)))
         return { model: st.model, how: 'sector' };
     if (read)
-        return { model: read, how: 'read' };
+        return { model: read, how: statedBilling(seller, read) ? 'read' : 'sector' };
     if (v)
         return { model: st?.model ?? exports.SECTOR_MODEL[v.id], how: 'sector' };
     return { model: null, how: 'unknown' };
