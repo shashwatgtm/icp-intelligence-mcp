@@ -122,7 +122,7 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
   body.replaceChildren();topics.replaceChildren();next.replaceChildren();
   if(mode==='D'){body.append(roles);if(pluginPage)body.append(label,question);body.append(connect);connection();}
   else if(mode==='A'){body.append(roles,topics);for(const [text,url]of general)topics.append(node('a',text,{href:url}));}
-  else if(mode==='B'){body.append(node('p','Bring the decision, the evidence you have and the part your team cannot settle.'));}
+  else if(mode==='B'){body.append(roles,node('p','Bring the decision, the evidence you have and the part your team cannot settle.'));}
   else {body.append(roles);if(hasResult()){body.append(label,question,topics);for(const q of (tool?.questions||['What does this result support?','What should I check before acting?'])){const b=node('button',q,{type:'button'});b.addEventListener('click',()=>{question.value=q;update();});topics.append(b);}if(tool?.next)next.append(node('h3','Next tool'),node('a',tool.next.title,{href:tool.next.url}),node('p',tool.why));}else body.append(node('p','Enter your own inputs and run the tool. Then take its actual result into your own chat.'));}
   update();
  }
@@ -136,7 +136,7 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
   }
   const hostName=name==='Gemini'?'gemini':answerHosts()[0];const destination=buildHandoff(question.value.trim()||(mode==='D'?`Help me install the Helix skills package in ${app}.`:undefined),{}, {host:hostName,role:getRole(),page:pageURL,tool:mode==='E'?(tool?.tool||tool?.title):undefined,inputs:hasResult()?briefInputs(result.inputs):undefined,result:hasResult()?result.text:undefined});
   if(!destination.copyRequired)return;
-  event.preventDefault();routeCopy(name);prompt.value=destination.prompt;
+  event.preventDefault();routeCopy(name);readerCheck();prompt.value=destination.prompt;
   try{await navigator.clipboard.writeText(destination.prompt);status.textContent=destination.truncated?'Full prompt copied. Paste it if it is not already there. The link contains a short request to paste the full text.':'Prompt copied. Paste it if it is not already there.';window.open(destination.url,'_blank','noopener,noreferrer');}
   catch{privacy.open=true;manualOpen.textContent='Open '+name+' after copying';manualOpen.href=destination.url;manualOpen.hidden=false;prompt.focus();prompt.select();status.textContent='Copy was unavailable. Select and copy the full prompt below, then open '+name+'.';}
  }

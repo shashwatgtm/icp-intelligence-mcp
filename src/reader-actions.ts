@@ -59,7 +59,7 @@ export function readingGuide(name: string, result: string, args: Record<string,u
   const g = GUIDES[name];
   if (!g || !result || /^(?:Error|Invalid|Missing required|No contact|Contact declined)/i.test(result)) return '';
   const [kind, meaning, evidence, decision] = g;
-  const held = /^# .*\bheld\b|Use not approved|publication is not approved|Not proved yet/i.test(result);
+  const held = /^# .*\bheld\b|^Use not approved|^Publication is not approved|^## Overall Score:[^\n]*\(NOT PROVED YET\)/im.test(result);
   const status = held ? ' Keep the stated hold in place; this guidance does not override it.' : '';
   let roles = kind === 'publish' ? [
     `Founder: check the central claim against the supplied evidence before endorsing ${decision}.`,

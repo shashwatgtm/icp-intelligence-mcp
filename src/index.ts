@@ -1690,7 +1690,7 @@ ${SUGGESTED}
 
 - ${companyLine(args.company)}
 
-${ctx.v ? (args.product_category ? ctx.line : `*Sector: read from your inputs as ${ctx.v.name}.*`) : '*Sector notes: none. This calculator takes a market segment, not a product; give product category to the other ICP tools for notes that fit what you sell.*'}
+${args.product_category ? ctx.line : ctx.v ? `*Sector: read from your inputs as ${ctx.v.name}.*` : '*Sector notes: none. This calculator takes a market segment, not a product; give product category to the other ICP tools for notes that fit what you sell.*'}
 
 ---
 
