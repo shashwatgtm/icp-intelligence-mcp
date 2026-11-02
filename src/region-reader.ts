@@ -111,7 +111,7 @@ function marketText(text:string):string {
   // A buyer buying from a vendor names the destination before the vendor's office.
   const purchase=sentence.match(/\bbuy(?:ing|s)?\b[^.;!?]*?\bfrom\b/i);
   if(purchase)return sentence.slice(0,purchase.index!+purchase[0].lastIndexOf('from'));
-  const m=sentence.match(/\b(?:sell(?:ing|s)?|sold|expand(?:ing)?|enter(?:ing)?|target(?:ing)?|serv(?:e|ing))\b(?:\s+[\w'-]+){0,8}?\s+(?:in(?:to)?|to|across)\s+/i);
+  const m=sentence.match(/\b(?:sell(?:ing|s)?|sold|expand(?:s|ing)?|enter(?:s|ing)?|target(?:s|ing)?|serv(?:es?|ing))\b/i);
   if(m){
    const qualifier=sentence.slice(0,m.index).match(/\b(?:not|never|no longer|formerly|previously|historically|may|might|could|perhaps|maybe|considering|should we|would we|can we|competitor|rival)[^,;.!?]*$/i)?.[0]||'';
    return qualifier+sentence.slice(m.index);

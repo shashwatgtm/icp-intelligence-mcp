@@ -99,3 +99,15 @@ for(const [id,input] of [['M005','We sell lending software in the United States 
 test('M006: New York exclusion preserves affirmative California',()=>withScopeFixture(()=>{
  const match=readRegionContext(seller('We sell lending software in California, United States, not New York.')).regions[0];assert.deepEqual(match.jurisdictions,['US','US-CA']);
 }));
+
+// Additional seller destination wording found during Lane G review.
+for(const [description,expected] of [
+ ['A Singapore vendor serves banks in the UK.',['uk']],
+ ['Singapore based lending software serving London banks.',['uk']],
+ ['A Singapore vendor targets banks in the UK.',['uk']],
+ ['A Singapore vendor is targeting London banks.',['uk']],
+ ['We are based in India and sell a complete lending operations platform with application review and decision records and repayment tracking into the UK.',['uk']],
+ ['Our Singapore office does not serve UK banks.',[]],
+ ['Our Singapore competitor serves banks in the UK.',[]],
+ ['Our Singapore vendor may target banks in the UK.',[]],
+])test(description,()=>assert.deepEqual(readRegionContext({product_description:description}).regions.map(r=>r.region_id),expected));
