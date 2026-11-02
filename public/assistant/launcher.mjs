@@ -10,14 +10,15 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
  const panel=node('section','',{class:'panel',id:'helix-panel',role:'dialog','aria-labelledby':'helix-heading'});panel.hidden=true;
  const header=node('div','',{class:'heading'}),heading=node('h2','What are you trying to work out?',{id:'helix-heading'}),close=node('button','Close',{type:'button',class:'close','aria-label':'Close assistant'});header.append(heading,close);
  const body=node('div','',{class:'panel-body'}),roles=node('div','',{class:'roles',role:'group','aria-label':'Your role'});
- const roleButtons=ROLES.map(role=>{const b=node('button',role,{type:'button','aria-pressed':'false'});b.addEventListener('click',()=>chooseRole(role));roles.append(b);return b;});
+ const roleNote=node('span','',{class:'role-note'});
+ const roleButtons=ROLES.map(role=>{const b=node('button',role,{type:'button','aria-pressed':'false'});b.addEventListener('click',()=>chooseRole(role));roles.append(b);return b;});roles.append(roleNote);
  const question=node('textarea','',{id:'helix-question',rows:'2',maxlength:'10000',placeholder:'What decision do you need to make?'}),label=node('label','Your question',{for:'helix-question'}),topics=node('div','',{class:'topics','aria-label':'Questions for this page'});
  const next=node('section','',{class:'next'}),connect=node('section','',{class:'connect'});
  const footer=node('div','',{class:'panel-actions'}),link=node('a','Get your full answer in ChatGPT',{class:'primary',target:'_blank',rel:'noopener noreferrer'}),consult=node('a','Consult with Shashwat',{class:'primary consult',href:'https://gtmhelix.com/lets-get-started/'}),copy=node('button','Copy prompt',{type:'button',class:'secondary'});
  const privacy=node('details','',{class:'privacy'});privacy.append(node('summary','Privacy and prompt'),node('p','The assistant keeps your role and question only in this page’s memory. Opening ChatGPT sends the prompt in the link URL to OpenAI; Send starts the conversation. You can copy it instead.',{class:'note'}));
  const prompt=node('textarea','',{id:'helix-prompt',readonly:'',rows:'5','aria-label':'Prepared prompt'});privacy.append(prompt);
  const status=node('p','',{role:'status','aria-live':'polite',class:'status'}),shortened=node('p','Your question was shortened for the link. Add remaining detail in ChatGPT.',{class:'note'});shortened.hidden=true;
- const extras=node('div','',{class:'extras'});extras.append(copy,privacy);footer.append(link,consult,extras,status,shortened);consult.hidden=true;
+ const extras=node('div','',{class:'extras'});extras.append(copy,privacy);footer.append(link,consult,node('p','In ChatGPT, check the assumptions before acting on the recommendation.',{class:'note answer-note'}),extras,status,shortened);consult.hidden=true;
  panel.append(header,body,footer);
  const launcher=node('button','Ask Helix',{type:'button',class:'launcher','aria-controls':'helix-panel','aria-expanded':'false','aria-haspopup':'dialog'}),row=node('div','',{class:'launcher-row'});row.append(launcher);root.append(panel,row);
  const general=[['Size a market','How should I size the market for my B2B offer?'],['Sharpen positioning','How can I sharpen our positioning so buyers understand why to choose us?'],['Check product-market fit','How can I check whether we have product-market fit?'],['Plan a renewal','How should I plan an upcoming customer renewal?']];
@@ -26,8 +27,8 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
  try{const canonical=new URL(document.querySelector('link[rel="canonical"]')?.href);if(/(^|\.)gtmhelix\.com$/.test(canonical.hostname))origin=canonical.origin;}catch{}
  const pageURL=origin+path;
  const baseMode=()=>path==='/about/'||path==='/about'?'B':/^\/(?:connect|connectors|plugins)(?:\/|$)/.test(path)||(/^\/tools\/?$/.test(path)&&origin.includes('tools.gtmhelix.com'))?'D':toolPath?'E':sectionVisible?'D':'A';
- function chooseRole(role){setRole(role);for(const b of roleButtons)b.setAttribute('aria-pressed',String(b.textContent===getRole()));update();updatePagePrompts();}
- function updatePagePrompts(){for(const quote of document.querySelectorAll('[aria-labelledby="ai-h"] blockquote')){if(!quote.dataset.helixBase)quote.dataset.helixBase=quote.textContent.replace(/^(?:I am a (?:Founder|CEO|CMO|CRO|Demand generation head)\.|My role is not stated\. Ask me for my role first\.)\s*/,'');quote.textContent=roleLine(getRole())+'\n'+quote.dataset.helixBase;}}
+ function chooseRole(role){setRole(role);roleNote.textContent=getRole()&&!ROLES.includes(getRole())?'Your role: '+getRole():'';roleNote.hidden=!roleNote.textContent;for(const b of roleButtons)b.setAttribute('aria-pressed',String(b.textContent===getRole()));update();updatePagePrompts();}
+ function updatePagePrompts(){for(const quote of document.querySelectorAll('[aria-labelledby="ai-h"] blockquote')){if(!quote.dataset.helixBase)quote.dataset.helixBase=quote.textContent.replace(/^(?:I am a (?:Founder|CEO|CMO|CRO|Demand generation head|Marketing team member|Customer Success professional|Sales\/AE)\.|My role is not stated\. Ask me for my role first\.)\s*/,'');quote.textContent=roleLine(getRole())+'\n'+quote.dataset.helixBase;}}
  function update(){
   const q=mode==='D'?`How do I connect ${selectedSite?.name||'a Helix connector or skills package'} in ${app}?`:question.value.trim()||(mode==='E'?`Help me use ${tool?.title||document.querySelector('h1')?.textContent||'the tool on this page'}.`:undefined);
   current=buildHandoff(q,{}, {role:getRole(),page:pageURL,tool:mode==='E'?tool?.title:undefined});link.href=current.url;prompt.value=current.prompt;shortened.hidden=!current.truncated;status.textContent='';
@@ -35,22 +36,25 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
  const suite='https://github.com/shashwatgtm/helix-gtm-suite';
  const appSelect=node('select','',{id:'helix-app','aria-label':'Which app do you use?'});
  for(const name of ['Claude','ChatGPT','Gemini CLI','Antigravity','Cursor','VS Code','Windsurf'])appSelect.append(node('option',name,{value:name}));
+ const copyCommand=node('button','Copy setup command',{type:'button',class:'secondary'});
  const siteSelect=node('select','',{id:'helix-connector','aria-label':'Choose a connector'}),steps=node('p','',{class:'steps'}),address=node('code','',{class:'address'}),command=node('pre','',{class:'command'}),copyAddress=node('button','Copy MCP address',{type:'button',class:'secondary'}),setup=node('a','See setup guide',{class:'setup',target:'_blank',rel:'noopener noreferrer'}),skillsNote=node('p','',{class:'note'});
- connect.append(appSelect,siteSelect,steps,address,copyAddress,command,setup,skillsNote);
+ connect.append(appSelect,siteSelect,steps,command,copyCommand,setup,address,copyAddress,skillsNote);
  function connection(){
-  app=appSelect.value;const mcp=selectedSite?.mcp;address.textContent=mcp||'Choose a connector to see its MCP address.';copyAddress.hidden=!mcp;command.hidden=true;command.textContent='';setup.href=selectedSite?.guide||'https://tools.gtmhelix.com/connectors/';
+  app=appSelect.value;const packageRoute=app==='Gemini CLI'||app==='Antigravity';siteSelect.hidden=Boolean(sites[new URL(origin).hostname])||packageRoute;const mcp=selectedSite?.mcp;address.hidden=packageRoute&&!mcp;address.textContent=mcp||'Choose a connector to see its MCP address.';copyAddress.hidden=!mcp;command.hidden=true;command.textContent='';setup.href=selectedSite?.guide||'https://tools.gtmhelix.com/connectors/';
   const key=selectedSite?.repository?.replace(/-mcp$/,'')||'helix';
   if(app==='Gemini CLI'||app==='Antigravity'){
-   steps.textContent='Install the Helix GTM Suite package using the command documented in its README. This is the package route, not a claim that pasting an MCP address installs skills.';
+   steps.textContent='Install the Helix GTM Suite skills package with this command:';
    command.hidden=false;command.textContent=app==='Gemini CLI'?`gemini extensions install ${suite}`:`agy plugin install ${suite}`;setup.href=suite;copyAddress.textContent='Copy MCP address';
   } else if(!mcp){steps.textContent='Choose the connector you want, then follow its documented setup. For skills installed from GitHub, use the package setup guide.';setup.href=suite;}
-  else if(selectedSite?.held){steps.textContent='See setup guide for this connector. Its files were not changed in this run.';}
+  else if(selectedSite?.held){steps.textContent='See setup guide for this connector’s available installation routes.';}
   else if(app==='Claude'){steps.textContent=`In Claude, open Customize, then Connectors, select + and Add custom connector. Name it ${selectedSite.name}, paste this MCP address and leave sign in fields empty.`;}
   else if(app==='ChatGPT'){steps.textContent='In ChatGPT settings, open the apps or connectors section. Enable developer mode if your plan requires it, create a connector with this URL and no authentication, then enable it in a chat. Menu names and availability depend on your plan.';}
   else {const configs={Cursor:['~/.cursor/mcp.json or .cursor/mcp.json',{mcpServers:{[key]:{url:mcp}}}], 'VS Code':['.vscode/mcp.json',{servers:{[key]:{type:'http',url:mcp}}}],Windsurf:['~/.codeium/windsurf/mcp_config.json',{mcpServers:{[key]:{serverUrl:mcp}}}]};const [file,value]=configs[app];steps.textContent='Add this configuration in '+file+'. See the connector setup page for the full context.';command.hidden=false;command.textContent=JSON.stringify(value,null,2);}
+  copyCommand.hidden=command.hidden;copyCommand.textContent=packageRoute?'Copy setup command':'Copy configuration';
   skillsNote.textContent='Connectors: Claude, ChatGPT, Cursor, VS Code and Windsurf. Skills package: Claude Code, ChatGPT, Gemini CLI, Antigravity, Cursor and VS Code; also available through skills.sh.';
   update();
  }
+ copyCommand.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(command.textContent);status.textContent='Setup copied.';}catch{status.textContent='Select and copy the setup text above.';const range=document.createRange();range.selectNodeContents(command);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);}});
  appSelect.addEventListener('change',connection);siteSelect.addEventListener('change',()=>{selectedSite=sites[siteSelect.value]||null;connection();});
  copyAddress.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(selectedSite.mcp);status.textContent='MCP address copied.';}catch{status.textContent='Select and copy the MCP address above.';const range=document.createRange();range.selectNodeContents(address);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);}});
  function render(){
@@ -63,7 +67,7 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
  copy.addEventListener('click',async()=>{const value=current.prompt;try{await navigator.clipboard.writeText(value);status.textContent='Prompt copied. Paste it into your own ChatGPT.';}catch{privacy.open=true;prompt.focus();prompt.select();status.textContent='Select and copy the prompt below.';}});
  function open(value){panel.hidden=!value;launcher.setAttribute('aria-expanded',String(value));if(value){body.scrollTop=0;close.focus({preventScroll:true});}else launcher.focus({preventScroll:true});position();}
  launcher.addEventListener('click',()=>open(panel.hidden));close.addEventListener('click',()=>open(false));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden){e.preventDefault();open(false);}});
- const roleNames={founder:'Founder',ceo:'CEO',cmo:'CMO',cro:'CRO',demandgen:'Demand generation head','demand-generation-head':'Demand generation head'};
+ const roleNames={founder:'Founder',ceo:'CEO',cmo:'CMO',cro:'CRO',demandgen:'Demand generation head','demand-generation-head':'Demand generation head',team:'Marketing team member',cs:'Customer Success professional',sales:'Sales/AE'};
  document.addEventListener('click',e=>{const chip=e.target.closest?.('[data-role]');if(chip&&roleNames[chip.dataset.role])chooseRole(roleNames[chip.dataset.role]);});
  for(const chip of document.querySelectorAll('[data-role][aria-pressed="true"]'))if(roleNames[chip.dataset.role])setRole(roleNames[chip.dataset.role]);
  let frame=null,banner;const resized=new ResizeObserver(()=>schedule());

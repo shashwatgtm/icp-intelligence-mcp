@@ -518,7 +518,7 @@
       "job": "Find the patterns your best customers share",
       "url": "https://icp-intelligence.gtmhelix.com/tools/icp-deep-dive/",
       "source_page": "public/tools/icp-deep-dive/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "icp_scoring_model",
         "title": "ICP Scoring Model",
@@ -539,7 +539,7 @@
       "job": "Create a lead qualification scoring template",
       "url": "https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/",
       "source_page": "public/tools/icp-scoring-model/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "account_prioritization",
         "title": "Account Prioritization",
@@ -560,7 +560,7 @@
       "job": "Map your buying group and its influence",
       "url": "https://icp-intelligence.gtmhelix.com/tools/buyer-group-analyzer/",
       "source_page": "public/tools/buyer-group-analyzer/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "discovery_question_bank",
         "title": "Discovery Question Bank",
@@ -581,7 +581,7 @@
       "job": "Calculate TAM, SAM and SOM bottom-up",
       "url": "https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/",
       "source_page": "public/tools/tam-sam-som-calculator/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "account_prioritization",
         "title": "Account Prioritization",
@@ -602,7 +602,7 @@
       "job": "Generate targeting criteria for each platform",
       "url": "https://icp-intelligence.gtmhelix.com/tools/lookalike-signal-generator/",
       "source_page": "public/tools/lookalike-signal-generator/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "account_prioritization",
         "title": "Account Prioritization",
@@ -623,7 +623,7 @@
       "job": "Rank and prioritize your accounts",
       "url": "https://icp-intelligence.gtmhelix.com/tools/account-prioritization/",
       "source_page": "public/tools/account-prioritization/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "account_plan_builder",
         "title": "Account Plan Builder",
@@ -644,7 +644,7 @@
       "job": "Find gaps between your customers and ICP",
       "url": "https://icp-intelligence.gtmhelix.com/tools/icp-gap-analysis/",
       "source_page": "public/tools/icp-gap-analysis/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "icp_evolution_tracker",
         "title": "ICP Evolution Tracker",
@@ -665,7 +665,7 @@
       "job": "Review how your ICP should evolve",
       "url": "https://icp-intelligence.gtmhelix.com/tools/icp-evolution-tracker/",
       "source_page": "public/tools/icp-evolution-tracker/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "icp_scoring_model",
         "title": "ICP Scoring Model",
@@ -686,7 +686,7 @@
       "job": "Extract ICP patterns from customer interviews",
       "url": "https://icp-intelligence.gtmhelix.com/tools/icp-interview-synthesizer/",
       "source_page": "public/tools/icp-interview-synthesizer/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#icp-intelligence",
+      "job_table": "https://tools.gtmhelix.com/tools/#icp",
       "next": {
         "tool": "icp_evolution_tracker",
         "title": "ICP Evolution Tracker",
@@ -707,7 +707,7 @@
       "job": "Build a strategic account plan",
       "url": "https://revenue-enablement.gtmhelix.com/tools/account-plan-builder/",
       "source_page": "public/tools/account-plan-builder/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "discovery_question_bank",
         "title": "Discovery Question Bank",
@@ -728,7 +728,7 @@
       "job": "Get a strategy for your deal's stage",
       "url": "https://revenue-enablement.gtmhelix.com/tools/deal-strategy-coach/",
       "source_page": "public/tools/deal-strategy-coach/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "mutual_action_plan_generator",
         "title": "Mutual Action Plan Generator",
@@ -749,7 +749,7 @@
       "job": "Get discovery questions for your framework",
       "url": "https://revenue-enablement.gtmhelix.com/tools/discovery-question-bank/",
       "source_page": "public/tools/discovery-question-bank/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "deal_strategy_coach",
         "title": "Deal Strategy Coach",
@@ -770,7 +770,7 @@
       "job": "Build an ROI business case template",
       "url": "https://revenue-enablement.gtmhelix.com/tools/roi-business-case-builder/",
       "source_page": "public/tools/roi-business-case-builder/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "champion_enablement_kit",
         "title": "Champion Enablement Kit",
@@ -791,7 +791,7 @@
       "job": "Build a close plan with milestones and owners",
       "url": "https://revenue-enablement.gtmhelix.com/tools/mutual-action-plan-generator/",
       "source_page": "public/tools/mutual-action-plan-generator/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "deal_strategy_coach",
         "title": "Deal Strategy Coach",
@@ -812,7 +812,7 @@
       "job": "Structure a win/loss review of your deals",
       "url": "https://revenue-enablement.gtmhelix.com/tools/win-loss-analyzer/",
       "source_page": "public/tools/win-loss-analyzer/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "competitive_intel",
         "title": "Competitive Intel",
@@ -833,7 +833,7 @@
       "job": "Write a proposal section for your buyer",
       "url": "https://revenue-enablement.gtmhelix.com/tools/proposal-section-writer/",
       "source_page": "public/tools/proposal-section-writer/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "champion_enablement_kit",
         "title": "Champion Enablement Kit",
@@ -854,7 +854,7 @@
       "job": "Generate a multi-touch email sequence",
       "url": "https://revenue-enablement.gtmhelix.com/tools/email-sequence-generator/",
       "source_page": "public/tools/email-sequence-generator/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "craft_content_improver",
         "title": "Craft Content Improver",
@@ -875,7 +875,7 @@
       "job": "Create an outcome-focused demo script",
       "url": "https://revenue-enablement.gtmhelix.com/tools/demo-script-builder/",
       "source_page": "public/tools/demo-script-builder/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "mutual_action_plan_generator",
         "title": "Mutual Action Plan Generator",
@@ -896,7 +896,7 @@
       "job": "Defend your pricing in a negotiation",
       "url": "https://revenue-enablement.gtmhelix.com/tools/pricing-negotiation-guide/",
       "source_page": "public/tools/pricing-negotiation-guide/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "roi_business_case_builder",
         "title": "ROI Business Case Builder",
@@ -917,7 +917,7 @@
       "job": "Create internal selling tools for your champion",
       "url": "https://revenue-enablement.gtmhelix.com/tools/champion-enablement-kit/",
       "source_page": "public/tools/champion-enablement-kit/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "mutual_action_plan_generator",
         "title": "Mutual Action Plan Generator",
@@ -938,7 +938,7 @@
       "job": "Plan landmine questions for your main competitor",
       "url": "https://revenue-enablement.gtmhelix.com/tools/competitive-trap-setter/",
       "source_page": "public/tools/competitive-trap-setter/index.html",
-      "job_table": "https://tools.gtmhelix.com/tools/#revenue-enablement",
+      "job_table": "https://tools.gtmhelix.com/tools/#revenue",
       "next": {
         "tool": "discovery_question_bank",
         "title": "Discovery Question Bank",
