@@ -4,8 +4,10 @@ import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
 import {readFileSync,existsSync} from 'node:fs';
 const root=resolve(process.env.REGION_TEST_REPO||(existsSync('src/region-reader.ts')?'.':'icp'));
-const {readRegionContext,regionNotes,NO_REGION_SUFFIX}=await import(pathToFileURL(resolve(root,'src/region-reader.ts')));
-const {REGION_CHOICES,REGION_TAXONOMY}=await import(pathToFileURL(resolve(root,'src/regions.ts')));
+const mode=JSON.parse(readFileSync(resolve(root,'package.json'),'utf8')).type==='module'?'dist':'src';
+const modulePath=name=>resolve(root,mode,name+(mode==='dist'?'.js':'.ts'));
+const {readRegionContext,regionNotes,NO_REGION_SUFFIX}=await import(pathToFileURL(modulePath('region-reader')));
+const {REGION_CHOICES,REGION_TAXONOMY}=await import(pathToFileURL(modulePath('regions')));
 const ids=args=>readRegionContext(args).regions.map(r=>r.region_id);
 const seller=text=>({product_description:text});
 for(const r of REGION_CHOICES){
@@ -31,7 +33,7 @@ test('names, quotes and rival claims cannot become region evidence',()=>assert.d
 for(const clue of ['USD','EUR','Paris','Birmingham','Cambridge','Georgia','SEC','APAC','EMEA','Europe'])test(`ambiguous ${clue} requires clarification`,()=>assert.deepEqual(ids(seller(`We sell in ${clue}`)),[]));
 test('pronoun us is not a country',()=>assert.deepEqual(ids(seller('Customers pay us for software')),[]));
 test('structured JSON strings keep the same reading',()=>assert.deepEqual(ids(JSON.stringify(seller('Payment software in India'))),['india']));
-const {SUBTYPES}=await import(pathToFileURL(resolve(root,'src/verticals.ts')));
+const {SUBTYPES}=await import(pathToFileURL(modulePath('verticals')));
 const fixture=JSON.parse(readFileSync(resolve(root,'tests/fixtures/run21-subtype-table.json'),'utf8'));
 for(const row of fixture.rows.filter(r=>r.subtype&&r.subtype!=='billing-revenue'))test(`subtype ${row.id} remains ${row.subtype}`,()=>{
  const match=readRegionContext({product_description:row.text,seller_market:'India'}).regions[0];
@@ -45,7 +47,7 @@ test('destination wins over seller headquarters',()=>assert.deepEqual(ids(seller
 test('market field wins over product location',()=>assert.deepEqual(ids({product_description:'Payment software in India',target_market:'UK'}),['uk']));
 test('London market reads as UK',()=>assert.deepEqual(ids(seller('Payment software selling to London banks')),['uk']));
 test('two countries in one region remain separate',()=>assert.deepEqual(readRegionContext(seller('Payment software selling in Singapore and Indonesia')).regions.map(r=>r.countries),[['SG'],['ID']]));
-const {REGION_DATA}=await import(pathToFileURL(resolve(root,'src/regions.ts')));
+const {REGION_DATA}=await import(pathToFileURL(modulePath('regions')));
 const fields=['decision_approvers','sector_regulator','procurement_payment','data_privacy','buyer_language','proof','objections','sales_motion'];
 function withScopeFixture(fn){
  const empty=()=>Object.fromEntries(fields.map(f=>[f,[]]));
@@ -77,4 +79,23 @@ test('US national input does not receive a California rule',()=>withScopeFixture
 }));
 test('California input gets applicable state and national notes only',()=>withScopeFixture(()=>{
  const output=regionNotes(seller('Payment software sold in California, United States'));assert.match(output,/US_CHECK/);assert.match(output,/US_CALIFORNIA_CHECK/);assert.doesNotMatch(output,/CANADA_CHECK/);
+}));
+for(const [id,input,expected] of [
+ ['M001','We are based in India and sell lending software into the UK.',['uk']],
+ ['M002','A London bank is buying our lending software from our Singapore office.',['uk']],
+ ['M003','We sell lending software in India; Singapore is a competitor location.',['india']],
+ ['M004','We sell lending software in India. Our company name is London Cloud.',['india']],
+ ['M006','We sell lending software in California, United States, not New York.',['north-america']],
+ ['M007','We sell lending software in California.',['north-america']],
+ ['M009','We sell lending software in India. A customer said "Singapore is next".',['india']],
+ ['M010','We sell lending software in the UK. India was our previous market.',['uk']],
+ ['M011','We sell lending software in India. Singapore could be next year.',['india']],
+ ['J001','We sell lending software in London, Ontario, Canada.',['north-america']],
+ ['J002','We sell lending software in New Mexico, United States.',['north-america']],
+])test(`Independent finding ${id}`,()=>assert.deepEqual(ids(seller(input)),expected));
+for(const [id,input] of [['M005','We sell lending software in the United States except California.'],['M008','We sell lending software in the United States, but not in California.']])test(`Independent finding ${id}: state exclusions`,()=>withScopeFixture(()=>{
+ const output=regionNotes(seller(input));assert.match(output,/US_CHECK/);assert.doesNotMatch(output,/US_CALIFORNIA_CHECK/);
+}));
+test('M006: New York exclusion preserves affirmative California',()=>withScopeFixture(()=>{
+ const match=readRegionContext(seller('We sell lending software in California, United States, not New York.')).regions[0];assert.deepEqual(match.jurisdictions,['US','US-CA']);
 }));

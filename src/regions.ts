@@ -1519,6 +1519,3354 @@ export const REGION_DATA: readonly RegionData[] = [
   },
   {
     "schema_version": "1.0.0",
+    "region_id": "southeast-asia",
+    "region_name": "Southeast Asia",
+    "review_status": "draft",
+    "updated_at": "2026-11-03",
+    "scope_note": "Draft for owner review. Country notes currently cover Singapore, Indonesia, Malaysia, Thailand, Viet Nam and the Philippines to the extent sourced below. They do not establish complete legal coverage. Brunei, Cambodia, Laos, Myanmar and Timor Leste are recognised but await country sources. A broad regional request needs a country before country law can be selected. Questions do not assert local buying habits.",
+    "reader_hints": {
+      "aliases": [
+        "Southeast Asia",
+        "South East Asia"
+      ],
+      "countries": [
+        {
+          "code": "SG",
+          "name": "Singapore",
+          "aliases": [],
+          "cities": [],
+          "currencies": [
+            "SGD",
+            "Singapore dollar"
+          ],
+          "regulators": [
+            "Monetary Authority of Singapore"
+          ]
+        },
+        {
+          "code": "ID",
+          "name": "Indonesia",
+          "aliases": [],
+          "cities": [
+            "Jakarta",
+            "Surabaya"
+          ],
+          "currencies": [
+            "IDR",
+            "Indonesian rupiah"
+          ],
+          "regulators": [
+            "Bank Indonesia",
+            "Otoritas Jasa Keuangan"
+          ]
+        },
+        {
+          "code": "MY",
+          "name": "Malaysia",
+          "aliases": [],
+          "cities": [
+            "Kuala Lumpur"
+          ],
+          "currencies": [
+            "MYR",
+            "Malaysian ringgit"
+          ],
+          "regulators": [
+            "Bank Negara Malaysia"
+          ]
+        },
+        {
+          "code": "TH",
+          "name": "Thailand",
+          "aliases": [],
+          "cities": [
+            "Bangkok"
+          ],
+          "currencies": [
+            "THB",
+            "Thai baht"
+          ],
+          "regulators": [
+            "Bank of Thailand"
+          ]
+        },
+        {
+          "code": "VN",
+          "name": "Viet Nam",
+          "aliases": [
+            "Vietnam"
+          ],
+          "cities": [
+            "Hanoi",
+            "Ho Chi Minh City"
+          ],
+          "currencies": [
+            "VND",
+            "Vietnamese dong"
+          ],
+          "regulators": []
+        },
+        {
+          "code": "PH",
+          "name": "Philippines",
+          "aliases": [
+            "the Philippines"
+          ],
+          "cities": [
+            "Manila",
+            "Cebu"
+          ],
+          "currencies": [
+            "PHP",
+            "Philippine peso"
+          ],
+          "regulators": [
+            "Bangko Sentral ng Pilipinas"
+          ]
+        },
+        {
+          "code": "BN",
+          "name": "Brunei",
+          "aliases": [
+            "Brunei Darussalam"
+          ],
+          "cities": [
+            "Bandar Seri Begawan"
+          ],
+          "currencies": [
+            "BND"
+          ],
+          "regulators": []
+        },
+        {
+          "code": "KH",
+          "name": "Cambodia",
+          "aliases": [],
+          "cities": [
+            "Phnom Penh"
+          ],
+          "currencies": [
+            "KHR"
+          ],
+          "regulators": []
+        },
+        {
+          "code": "LA",
+          "name": "Laos",
+          "aliases": [
+            "Lao PDR"
+          ],
+          "cities": [
+            "Vientiane"
+          ],
+          "currencies": [
+            "LAK"
+          ],
+          "regulators": []
+        },
+        {
+          "code": "MM",
+          "name": "Myanmar",
+          "aliases": [],
+          "cities": [
+            "Yangon",
+            "Naypyidaw"
+          ],
+          "currencies": [
+            "MMK"
+          ],
+          "regulators": []
+        },
+        {
+          "code": "TL",
+          "name": "Timor Leste",
+          "aliases": [
+            "Timor-Leste",
+            "East Timor"
+          ],
+          "cities": [
+            "Dili"
+          ],
+          "currencies": [],
+          "regulators": []
+        }
+      ]
+    },
+    "defaults": {
+      "decision_approvers": [
+        {
+          "text": "Which named country and contracting entity are in scope, and who approves budget, risk and the purchase?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "sector_regulator": [],
+      "procurement_payment": [
+        {
+          "text": "What currency, purchase order, invoice acceptance and payment terms has this buyer confirmed?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "data_privacy": [
+        {
+          "text": "Singapore: the Personal Data Protection Act requires appropriate protection and retention controls and comparable protection for overseas transfers. Map where personal data goes and who controls it.",
+          "kind": "legal",
+          "source_ids": [
+            "I:SG-PDPA"
+          ],
+          "jurisdictions": [
+            "SG"
+          ],
+          "applies_when": "For organisations and processing in the Act's scope, subject to applicable exclusions and transfer regulations."
+        },
+        {
+          "text": "Indonesia: check the proposed processing against Law No. 27 of 2022 on Personal Data Protection before agreeing data access and transfer terms.",
+          "kind": "legal",
+          "source_ids": [
+            "I:ID-PDP"
+          ],
+          "jurisdictions": [
+            "ID"
+          ],
+          "applies_when": "For processing within the Indonesian law's scope. Detailed implementing requirements must be checked for the actual data flow."
+        },
+        {
+          "text": "Malaysia: the Personal Data Protection Act 2010 applies to personal data in commercial transactions within its scope; federal and state governments are excluded.",
+          "kind": "legal",
+          "source_ids": [
+            "I:MY-PDPA"
+          ],
+          "jurisdictions": [
+            "MY"
+          ],
+          "applies_when": "Check establishment, processing location and statutory exclusions. Read the Act with its amendments."
+        },
+        {
+          "text": "Philippines: Republic Act 10173, the Data Privacy Act of 2012, sets lawful processing and security requirements. Identify the personal information controller and processor roles.",
+          "kind": "legal",
+          "source_ids": [
+            "I:PH-DPA"
+          ],
+          "jurisdictions": [
+            "PH"
+          ],
+          "applies_when": "For processing in the Act's scope, with separate treatment for sensitive personal information and statutory exceptions."
+        },
+        {
+          "text": "Thailand: use the Personal Data Protection Act B.E. 2562 (2019) for the local privacy scope review. Confirm the controller, processor and proposed data use.",
+          "kind": "legal",
+          "source_ids": [
+            "I:TH-PDPA"
+          ],
+          "jurisdictions": [
+            "TH"
+          ],
+          "applies_when": "For Thai processing in scope; this note does not determine the lawful basis or transfer mechanism."
+        },
+        {
+          "text": "Viet Nam: the Law on Personal Data Protection took effect on 1 January 2026. Review the current law and implementing rules before finalising data handling terms.",
+          "kind": "legal",
+          "source_ids": [
+            "I:VN-PDP"
+          ],
+          "jurisdictions": [
+            "VN"
+          ],
+          "applies_when": "For processing in scope of the Vietnamese regime. An older decree alone is not a complete current review."
+        }
+      ],
+      "buyer_language": [
+        {
+          "text": "Which languages do the buying team, users and required notices need?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "proof": [
+        {
+          "text": "What sample workflow and acceptance evidence will the buyer approve?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "objections": [
+        {
+          "text": "Which data access, integration, support or contract issue could block the purchase?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "sales_motion": [
+        {
+          "text": "Who owns the evaluation, acceptance decision and next purchase step?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ]
+    },
+    "verticals": [
+      {
+        "vertical_id": "logistics-tech",
+        "status": "waiting_for_source",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Singapore: import permits use the Singapore Customs TradeNet process. Confirm whether the importer submits the declaration or appoints a declaring agent.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SG-CUSTOMS"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "For goods imported into Singapore within the applicable permit requirements. A logistics software vendor is not automatically the declaring agent."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete sector source checks for countries without an applicable note; never substitute a neighbouring country's rule."
+        ]
+      },
+      {
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [
+            {
+              "text": "Ask the institution which outsourcing governance and risk approval process applies, and which evidence the supplier must provide.",
+              "kind": "question",
+              "source_ids": [],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "For the proposed Singapore financial institution engagement."
+            }
+          ],
+          "sector_regulator": [
+            {
+              "text": "Singapore: MAS distinguishes bank outsourcing notices and guidance from guidance for other financial institutions. Classify the buyer before choosing the review.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SG-OUTSOURCE"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "For a financial institution and outsourcing arrangement within the relevant MAS instrument; a consultation is not a final rule."
+            },
+            {
+              "text": "Indonesia: OJK supervises banking, insurance, financing and capital market activities within its remit. Select the activity before requesting its compliance evidence.",
+              "kind": "legal",
+              "source_ids": [
+                "I:ID-OJK"
+              ],
+              "jurisdictions": [
+                "ID"
+              ],
+              "applies_when": "For an OJK supervised entity or activity. Payment system matters require the separately scoped payment note."
+            },
+            {
+              "text": "Malaysia: Bank Negara Malaysia supervises banking and insurance and takaful institutions under its remit. Confirm the buyer's category.",
+              "kind": "legal",
+              "source_ids": [
+                "I:MY-BNM"
+              ],
+              "jurisdictions": [
+                "MY"
+              ],
+              "applies_when": "For institutions within BNM supervision; do not extend this to all lenders or securities activities."
+            },
+            {
+              "text": "Philippines: BSP supervises banks and other institutions within its remit and oversees payment systems. Confirm whether the actual buyer is BSP supervised.",
+              "kind": "legal",
+              "source_ids": [
+                "I:PH-BSP"
+              ],
+              "jurisdictions": [
+                "PH"
+              ],
+              "applies_when": "Only for BSP supervised entities and activities."
+            },
+            {
+              "text": "Thailand: the Bank of Thailand supervises financial institutions and has payment system responsibilities. Confirm the institution and product before selecting requirements.",
+              "kind": "legal",
+              "source_ids": [
+                "I:TH-BOT"
+              ],
+              "jurisdictions": [
+                "TH"
+              ],
+              "applies_when": "Only for the Bank of Thailand's actual supervisory scope."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete sector source checks for countries without an applicable note; never substitute a neighbouring country's rule."
+        ]
+      },
+      {
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "ai-native",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "Singapore's Model AI Governance Framework for Agentic AI recommends human accountability and controls on agent actions. Show approval boundaries and failure handling in the evaluation.",
+              "kind": "operating",
+              "source_ids": [
+                "I:SG-AI"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "Guidance for agentic AI deployment, not a certification or general software licence."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "telecom",
+        "status": "waiting_for_source",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Singapore: IMDA's Services Based Operations licence covers defined telecommunications service operations. Confirm whether the seller operates a service or supplies software to an operator.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SG-TELECOM"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "Only for the activity within the relevant Singapore licensing category."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete sector source checks for countries without an applicable note; never substitute a neighbouring country's rule."
+        ]
+      },
+      {
+        "vertical_id": "cybersecurity",
+        "status": "waiting_for_source",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Singapore: the Cybersecurity Act licensing framework covers penetration testing and managed security operations centre monitoring services. Check the exact service scope.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SG-CYBER"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "For licensable services under the Act. Do not classify every cybersecurity product as a licensed service."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete sector source checks for countries without an applicable note; never substitute a neighbouring country's rule."
+        ]
+      },
+      {
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      }
+    ],
+    "subtypes": [
+      {
+        "subtype_id": "freight-visibility",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "freight-marketplace",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "seller-shipping",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "last-mile",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "warehousing",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "transport-management",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "payments-banking",
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "fintech",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Singapore: the Payment Services Act 2019 regulates defined payment services and exemptions. Map the actual money flow and service before choosing the MAS licence category.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SG-PAYMENTS"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "For a payment service within the Act, not every supplier of payment software."
+            },
+            {
+              "text": "Indonesia: Bank Indonesia's PBI 10 of 2025 and PADG 32 of 2025 govern the payment system industry from 31 March 2026. Map the provider and supporting party roles.",
+              "kind": "legal",
+              "source_ids": [
+                "I:ID-PAYMENTS"
+              ],
+              "jurisdictions": [
+                "ID"
+              ],
+              "applies_when": "For the payment activity and entities in scope; no licence or exemption is inferred."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete this activity's country coverage beyond the explicitly sourced notes."
+        ]
+      },
+      {
+        "subtype_id": "core-banking",
+        "vertical_id": "fintech",
+        "status": "inherited",
+        "inherits_from": "fintech",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "lending",
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "fintech",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Singapore: licensed moneylenders fall under the Ministry of Law Registry of Moneylenders. Its rules include physical identity verification and do not allow a fully online loan transaction.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SG-LENDING"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "Only licensed moneylenders under that regime; do not apply this condition to bank lending."
+            },
+            {
+              "text": "Indonesia: POJK 40 of 2024 addresses technology based joint funding services. Establish whether the platform is an intermediary in that regime before mapping OJK requirements.",
+              "kind": "legal",
+              "source_ids": [
+                "I:ID-LENDING"
+              ],
+              "jurisdictions": [
+                "ID"
+              ],
+              "applies_when": "For LPBBTI activity only, not all lending or credit data software."
+            },
+            {
+              "text": "Philippines: lending companies under the Lending Company Regulation Act, RA 9474, need the SEC authority for that business. Distinguish this entity from a BSP supervised bank.",
+              "kind": "legal",
+              "source_ids": [
+                "I:PH-LENDING"
+              ],
+              "jurisdictions": [
+                "PH"
+              ],
+              "applies_when": "Only companies within RA 9474; software supply alone does not establish that activity."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete this activity's country coverage beyond the explicitly sourced notes."
+        ]
+      },
+      {
+        "subtype_id": "wealth-investment",
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "fintech",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Singapore: regulated financial advice under the Financial Advisers Act 2001 requires the relevant MAS licence unless exempt. Separate advice from general information or software supply.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SG-ADVISERS"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "For the actual regulated activity and applicable exemptions."
+            },
+            {
+              "text": "Indonesia: OJK supervises capital market activities in its remit. Identify the investment service and regulated entity.",
+              "kind": "legal",
+              "source_ids": [
+                "I:ID-OJK"
+              ],
+              "jurisdictions": [
+                "ID"
+              ],
+              "applies_when": "For capital market activities in Indonesia within OJK's authority."
+            },
+            {
+              "text": "Malaysia: Securities Commission Malaysia regulates capital market services under the Capital Markets and Services Act 2007. Map the actual regulated activity.",
+              "kind": "legal",
+              "source_ids": [
+                "I:MY-SC"
+              ],
+              "jurisdictions": [
+                "MY"
+              ],
+              "applies_when": "For capital market entities and services within that Act."
+            },
+            {
+              "text": "Thailand: the Securities and Exchange Commission supervises the Thai capital market. Establish the investment activity and regulated entity before selecting obligations.",
+              "kind": "legal",
+              "source_ids": [
+                "I:TH-SEC"
+              ],
+              "jurisdictions": [
+                "TH"
+              ],
+              "applies_when": "For capital market activities within the Thai SEC's remit."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete this activity's country coverage beyond the explicitly sourced notes."
+        ]
+      },
+      {
+        "subtype_id": "spend-expense",
+        "vertical_id": "fintech",
+        "status": "inherited",
+        "inherits_from": "fintech",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "insurance",
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "fintech",
+        "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Singapore: MAS is the responsible agency for the Insurance Act 1966. Identify whether the buyer is an insurer, insurance intermediary or another service provider.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SG-INSURANCE"
+              ],
+              "jurisdictions": [
+                "SG"
+              ],
+              "applies_when": "For insurance business and entities within the Act; no licence conclusion for a software vendor."
+            },
+            {
+              "text": "Indonesia: OJK's remit includes insurance. Have the insurer or intermediary identify the current instrument for its activity.",
+              "kind": "legal",
+              "source_ids": [
+                "I:ID-OJK"
+              ],
+              "jurisdictions": [
+                "ID"
+              ],
+              "applies_when": "For insurance entities under OJK supervision."
+            },
+            {
+              "text": "Malaysia: Bank Negara Malaysia's insurance and takaful supervision covers the institutions within its remit. Confirm the insurance or takaful entity before the compliance review.",
+              "kind": "legal",
+              "source_ids": [
+                "I:MY-BNM"
+              ],
+              "jurisdictions": [
+                "MY"
+              ],
+              "applies_when": "For the applicable BNM supervised institution."
+            },
+            {
+              "text": "Philippines: the Insurance Commission supervises insurance under the Insurance Code. Start the review with the insurer or intermediary's actual role.",
+              "kind": "legal",
+              "source_ids": [
+                "I:PH-INSURANCE"
+              ],
+              "jurisdictions": [
+                "PH"
+              ],
+              "applies_when": "For insurance activity within the Commission's remit."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete this activity's country coverage beyond the explicitly sourced notes."
+        ]
+      },
+      {
+        "subtype_id": "customer-service",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "crm-marketing",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "collaboration",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "product-growth",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "construction",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "property-management",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "field-services",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "fmcg-retail-execution",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "industry-hr-payroll",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "hotel-lodging",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "retail-restaurant-ops",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "agents-copilots",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "voice-language-models",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "enterprise-search",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "it-services",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "bpo-cx",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "digital-engineering",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "data-services",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "operators-connectivity",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "cpaas-messaging",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "telecom-software",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "business-voice-ucaas",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "developer-platform",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "data-infrastructure",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "observability",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "testing",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "dev-tools",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "cloud-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "identity-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "email-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "awareness-training",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "appsec",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "mobile-appsec",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "soc-services",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "endpoint-network",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "document-ai",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "ai-video",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "engineering-talent",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "product-management",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "digital-adoption",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "pentest",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "attack-surface-dast",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "process-orchestration",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "open-source-support",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "iot-connectivity",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional subtype or sector override was established in the sourced countries. Inherit only notes for the named country. Unsourced countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0.0",
+    "region_id": "middle-east",
+    "region_name": "Middle East",
+    "review_status": "draft",
+    "updated_at": "2026-11-03",
+    "scope_note": "Draft for owner review. Sourced notes currently cover the UAE and Saudi Arabia only. Qatar, Bahrain, Oman and Kuwait are recognised but awaiting local sources. No Gulf wide regulatory or buying habit claim is made. UAE federal, DIFC and ADGM scopes must be distinguished; a city alone does not select a financial free zone. Other Middle East jurisdictions are not covered by this draft and must never inherit either country's law.",
+    "reader_hints": {
+      "aliases": [
+        "Middle East",
+        "Gulf",
+        "GCC"
+      ],
+      "countries": [
+        {
+          "code": "AE",
+          "name": "United Arab Emirates",
+          "aliases": [
+            "UAE"
+          ],
+          "cities": [
+            "Dubai",
+            "Abu Dhabi",
+            "Sharjah"
+          ],
+          "currencies": [
+            "AED",
+            "UAE dirham"
+          ],
+          "regulators": [
+            "Central Bank of the United Arab Emirates",
+            "CBUAE",
+            "Dubai Financial Services Authority",
+            "DFSA",
+            "Financial Services Regulatory Authority",
+            "FSRA",
+            "Telecommunications and Digital Government Regulatory Authority",
+            "TDRA"
+          ]
+        },
+        {
+          "code": "SA",
+          "name": "Saudi Arabia",
+          "aliases": [
+            "Kingdom of Saudi Arabia",
+            "KSA"
+          ],
+          "cities": [
+            "Riyadh",
+            "Jeddah",
+            "Dammam"
+          ],
+          "currencies": [
+            "SAR",
+            "Saudi riyal"
+          ],
+          "regulators": [
+            "Saudi Central Bank",
+            "SAMA",
+            "Saudi Data and AI Authority",
+            "SDAIA",
+            "Zakat Tax and Customs Authority",
+            "ZATCA"
+          ]
+        },
+        {
+          "code": "QA",
+          "name": "Qatar",
+          "aliases": [],
+          "cities": [
+            "Doha"
+          ],
+          "currencies": [
+            "QAR",
+            "Qatari riyal"
+          ],
+          "regulators": []
+        },
+        {
+          "code": "BH",
+          "name": "Bahrain",
+          "aliases": [],
+          "cities": [
+            "Manama"
+          ],
+          "currencies": [
+            "BHD",
+            "Bahraini dinar"
+          ],
+          "regulators": []
+        },
+        {
+          "code": "OM",
+          "name": "Oman",
+          "aliases": [],
+          "cities": [
+            "Muscat"
+          ],
+          "currencies": [
+            "OMR",
+            "Omani rial"
+          ],
+          "regulators": []
+        },
+        {
+          "code": "KW",
+          "name": "Kuwait",
+          "aliases": [],
+          "cities": [
+            "Kuwait City"
+          ],
+          "currencies": [
+            "KWD",
+            "Kuwaiti dinar"
+          ],
+          "regulators": []
+        }
+      ]
+    },
+    "defaults": {
+      "decision_approvers": [
+        {
+          "text": "Which country, legal entity and activity are in scope, and who approves budget, risk and the purchase?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "sector_regulator": [],
+      "procurement_payment": [
+        {
+          "text": "UAE: electronic invoicing is being implemented in phases. Have the finance owner establish the entity's applicable implementation and preparation dates from the current FTA notice.",
+          "kind": "legal",
+          "source_ids": [
+            "I:AE-INVOICE"
+          ],
+          "jurisdictions": [
+            "AE"
+          ],
+          "applies_when": "For persons and transactions subject to the electronic invoicing regime. Do not assume every business already has the same deadline."
+        },
+        {
+          "text": "Saudi Arabia: ZATCA distinguishes invoice generation requirements from integration requirements introduced in notified waves. Ask finance which phase and notice apply.",
+          "kind": "legal",
+          "source_ids": [
+            "I:SA-INVOICE"
+          ],
+          "jurisdictions": [
+            "SA"
+          ],
+          "applies_when": "For taxpayers and invoices within the electronic invoicing rules; nonresident and other exclusions require checking."
+        }
+      ],
+      "data_privacy": [
+        {
+          "text": "UAE: Federal Decree Law 45 of 2021 on personal data has exclusions, including certain sector data and free zones with their own privacy laws. Identify the entity, data and legal regime before choosing controls.",
+          "kind": "legal",
+          "source_ids": [
+            "I:AE-PDPL"
+          ],
+          "jurisdictions": [
+            "AE"
+          ],
+          "applies_when": "Apply only after checking Article 2 exclusions and the relevant implementation instruments. Do not infer DIFC or ADGM from a city name."
+        },
+        {
+          "text": "Saudi Arabia: the Personal Data Protection Law and the Regulation on Personal Data Transfer outside the Kingdom require an applicable transfer basis and protection review. Map overseas processing before agreeing the contract.",
+          "kind": "legal",
+          "source_ids": [
+            "I:SA-TRANSFER"
+          ],
+          "jurisdictions": [
+            "SA"
+          ],
+          "applies_when": "For personal data transfers within the Saudi regime. This is not a blanket requirement to keep every type of data in Saudi Arabia."
+        }
+      ],
+      "buyer_language": [
+        {
+          "text": "Which languages must the buying team, users, contract and notices support?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "proof": [
+        {
+          "text": "What sample workflow and acceptance evidence will the buyer approve?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "objections": [
+        {
+          "text": "Which hosting, access, integration, support or contract issue could block this purchase?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "sales_motion": [
+        {
+          "text": "Who owns the evaluation, acceptance decision and next purchase step?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ]
+    },
+    "verticals": [
+      {
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "UAE: Federal Decree Law 6 of 2025 covers CBUAE licensed financial activities. Confirm the entity and whether a financial free zone regime applies before selecting obligations.",
+              "kind": "legal",
+              "source_ids": [
+                "I:AE-CBUAE"
+              ],
+              "jurisdictions": [
+                "AE"
+              ],
+              "applies_when": "For financial institutions and activities within the federal law; do not assume every UAE buyer is in its scope."
+            },
+            {
+              "text": "If the activity is conducted in or from DIFC, check the Dubai Financial Services Authority regime with the contracting entity.",
+              "kind": "legal",
+              "source_ids": [
+                "I:AE-DFSA"
+              ],
+              "jurisdictions": [
+                "AE"
+              ],
+              "applies_when": "DIFC financial activity only. Dubai city alone does not establish this scope."
+            },
+            {
+              "text": "If the financial activity is in ADGM, check the Financial Services Regulatory Authority regime with the contracting entity.",
+              "kind": "legal",
+              "source_ids": [
+                "I:AE-FSRA"
+              ],
+              "jurisdictions": [
+                "AE"
+              ],
+              "applies_when": "ADGM financial activity only. Abu Dhabi city alone does not establish this scope."
+            },
+            {
+              "text": "Saudi Arabia: the Saudi Central Bank Law gives SAMA supervisory powers over financial institutions within relevant sector laws. Identify the activity and actual regulated entity.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SA-SAMA"
+              ],
+              "jurisdictions": [
+                "SA"
+              ],
+              "applies_when": "For financial institutions in SAMA's remit. Insurance and securities activities have separate subtype checks."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete country source coverage outside the explicitly sourced notes."
+        ]
+      },
+      {
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "telecom",
+        "status": "waiting_for_source",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "UAE: TDRA issues licences for public telecommunications networks and services under the Telecommunications Law. Distinguish operating the service from supplying an operator.",
+              "kind": "legal",
+              "source_ids": [
+                "I:AE-TELECOM"
+              ],
+              "jurisdictions": [
+                "AE"
+              ],
+              "applies_when": "For activities requiring TDRA authorisation, not every telecom software supplier."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete country source coverage outside the explicitly sourced notes."
+        ]
+      },
+      {
+        "vertical_id": "cybersecurity",
+        "status": "waiting_for_source",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Saudi Arabia: NCA publishes Essential Cybersecurity Controls ECC 2 2024. Ask the buyer which entity and system scope applies before mapping the proposed controls.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SA-ECC"
+              ],
+              "jurisdictions": [
+                "SA"
+              ],
+              "applies_when": "For an entity and system within the controls' scope. This note does not claim every private buyer is subject to every NCA control."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete country source coverage outside the explicitly sourced notes."
+        ]
+      },
+      {
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "saas",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Saudi Arabia: CST's Cloud Computing Service Provisioning Regulations replace the older Cloud Computing Regulatory Framework. Check whether the offered service is within that regime.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SA-CLOUD"
+              ],
+              "jurisdictions": [
+                "SA"
+              ],
+              "applies_when": "Only if the actual service is covered by the cloud regulations; do not infer registration solely from the SaaS label."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      }
+    ],
+    "subtypes": [
+      {
+        "subtype_id": "freight-visibility",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "freight-marketplace",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "seller-shipping",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "last-mile",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "warehousing",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "transport-management",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "payments-banking",
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "fintech",
+        "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "UAE: the CBUAE law lists payment, stored value and related licensed financial activities. Map the money flow and provider role before selecting the licensing route.",
+              "kind": "legal",
+              "source_ids": [
+                "I:AE-CBUAE"
+              ],
+              "jurisdictions": [
+                "AE"
+              ],
+              "applies_when": "For activities within Article 61 and applicable regulations, subject to financial free zone scope."
+            },
+            {
+              "text": "Saudi Arabia: Article 7 of the Law of Payments and Payment Services assigns payment oversight and licensing powers to SAMA. Identify the operator or provider role.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SA-PAYMENTS"
+              ],
+              "jurisdictions": [
+                "SA"
+              ],
+              "applies_when": "For payment systems and services in the law's scope."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete this activity's sources for Qatar, Bahrain, Oman and Kuwait."
+        ]
+      },
+      {
+        "subtype_id": "core-banking",
+        "vertical_id": "fintech",
+        "status": "inherited",
+        "inherits_from": "fintech",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "lending",
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "fintech",
+        "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+        "context": {
+          "decision_approvers": [
+            {
+              "text": "Saudi Arabia: SAMA's finance company compliance and internal audit principles address board and executive responsibilities. Ask the finance company to name its accountable reviewers.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SA-FINANCE"
+              ],
+              "jurisdictions": [
+                "SA"
+              ],
+              "applies_when": "For finance and real estate refinance companies within the named principles."
+            }
+          ],
+          "sector_regulator": [
+            {
+              "text": "UAE: credit and funding facilities are licensed activities under the CBUAE law. Confirm the lender's entity and jurisdiction before choosing the approval path.",
+              "kind": "legal",
+              "source_ids": [
+                "I:AE-CBUAE"
+              ],
+              "jurisdictions": [
+                "AE"
+              ],
+              "applies_when": "For activities within the federal law; do not apply this as a licence requirement for all lending software."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete this activity's sources for Qatar, Bahrain, Oman and Kuwait."
+        ]
+      },
+      {
+        "subtype_id": "wealth-investment",
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "fintech",
+        "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "UAE: Federal Decree Law 32 of 2025 establishes the Capital Market Authority framework. Confirm whether the activity is under this regime or a financial free zone regulator.",
+              "kind": "legal",
+              "source_ids": [
+                "I:AE-CMA"
+              ],
+              "jurisdictions": [
+                "AE"
+              ],
+              "applies_when": "For UAE capital market activities in the federal authority's remit; separate DIFC and ADGM scope must be checked."
+            },
+            {
+              "text": "Saudi Arabia: the Capital Market Authority regulates securities activities under the Capital Market Law. Identify the investment service and entity before selecting obligations.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SA-CMA"
+              ],
+              "jurisdictions": [
+                "SA"
+              ],
+              "applies_when": "For Saudi capital market activity. This is the Saudi authority."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete this activity's sources for Qatar, Bahrain, Oman and Kuwait."
+        ]
+      },
+      {
+        "subtype_id": "spend-expense",
+        "vertical_id": "fintech",
+        "status": "inherited",
+        "inherits_from": "fintech",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "insurance",
+        "vertical_id": "fintech",
+        "status": "waiting_for_source",
+        "inherits_from": "fintech",
+        "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "UAE: the CBUAE law includes insurance and reinsurance activities. Establish whether the insurer is under the federal regime or a financial free zone regime.",
+              "kind": "legal",
+              "source_ids": [
+                "I:AE-CBUAE"
+              ],
+              "jurisdictions": [
+                "AE"
+              ],
+              "applies_when": "For the insurance activity and entity in scope; separate DIFC and ADGM conditions remain conditional."
+            },
+            {
+              "text": "Saudi Arabia: the Insurance Authority is the insurance regulator and sets insurance licensing requirements. Use the insurer or intermediary's current regulatory category.",
+              "kind": "legal",
+              "source_ids": [
+                "I:SA-INSURANCE"
+              ],
+              "jurisdictions": [
+                "SA"
+              ],
+              "applies_when": "For insurance activity in Saudi Arabia within the Authority's remit."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": [
+          "Complete this activity's sources for Qatar, Bahrain, Oman and Kuwait."
+        ]
+      },
+      {
+        "subtype_id": "customer-service",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "crm-marketing",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "collaboration",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "product-growth",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "construction",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "property-management",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "field-services",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "fmcg-retail-execution",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "industry-hr-payroll",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "hotel-lodging",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "retail-restaurant-ops",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "agents-copilots",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "voice-language-models",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "enterprise-search",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "it-services",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "bpo-cx",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "digital-engineering",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "data-services",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "operators-connectivity",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "cpaas-messaging",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "telecom-software",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "business-voice-ucaas",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "developer-platform",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "data-infrastructure",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "observability",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "testing",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "dev-tools",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "cloud-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "identity-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "email-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "awareness-training",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "appsec",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "mobile-appsec",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "soc-services",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "endpoint-network",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "document-ai",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "ai-video",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "engineering-talent",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "product-management",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "digital-adoption",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "pentest",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "attack-surface-dast",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "process-orchestration",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "open-source-support",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "iot-connectivity",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated additional override was established for this cell in the sourced countries. Inherit only notes for the named country; other countries remain outside factual coverage.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0.0",
     "region_id": "uk",
     "region_name": "UK",
     "review_status": "draft",
@@ -2998,9 +6346,3582 @@ export const REGION_DATA: readonly RegionData[] = [
         "pending_topics": []
       }
     ]
+  },
+  {
+    "schema_version": "1.0.0",
+    "region_id": "western-europe",
+    "region_name": "Western Europe",
+    "review_status": "draft",
+    "updated_at": "2026-11-03",
+    "scope_note": "This draft covers Austria, Belgium, France, Germany, Liechtenstein, Luxembourg, Monaco, the Netherlands and Switzerland. The UK has its own file. This is a declared country scope, not a claim that all European markets are covered. EU provisions are attached only to the listed EU countries when that territorial scope is sourced. Liechtenstein, Monaco and Switzerland receive separately sourced notes. No country is a regional default. Draft for owner review.",
+    "reader_hints": {
+      "aliases": [
+        "Western Europe"
+      ],
+      "countries": [
+        {
+          "code": "AT",
+          "name": "Austria",
+          "aliases": [
+            "Austria",
+            "Österreich"
+          ],
+          "cities": [
+            "Vienna"
+          ],
+          "currencies": [],
+          "regulators": [
+            "Finanzmarktaufsicht"
+          ]
+        },
+        {
+          "code": "BE",
+          "name": "Belgium",
+          "aliases": [
+            "Belgium",
+            "Belgique",
+            "België"
+          ],
+          "cities": [
+            "Brussels"
+          ],
+          "currencies": [],
+          "regulators": [
+            "National Bank of Belgium"
+          ]
+        },
+        {
+          "code": "FR",
+          "name": "France",
+          "aliases": [
+            "France"
+          ],
+          "cities": [
+            "Paris",
+            "Lyon"
+          ],
+          "currencies": [],
+          "regulators": [
+            "Autorité de contrôle prudentiel et de résolution",
+            "Arcep"
+          ]
+        },
+        {
+          "code": "DE",
+          "name": "Germany",
+          "aliases": [
+            "Germany",
+            "Deutschland"
+          ],
+          "cities": [
+            "Berlin",
+            "Frankfurt",
+            "Munich"
+          ],
+          "currencies": [],
+          "regulators": [
+            "BaFin",
+            "Bundesnetzagentur"
+          ]
+        },
+        {
+          "code": "LI",
+          "name": "Liechtenstein",
+          "aliases": [
+            "Liechtenstein"
+          ],
+          "cities": [
+            "Vaduz"
+          ],
+          "currencies": [],
+          "regulators": [
+            "Financial Market Authority Liechtenstein"
+          ]
+        },
+        {
+          "code": "LU",
+          "name": "Luxembourg",
+          "aliases": [
+            "Luxembourg"
+          ],
+          "cities": [],
+          "currencies": [],
+          "regulators": [
+            "Commission de Surveillance du Secteur Financier"
+          ]
+        },
+        {
+          "code": "MC",
+          "name": "Monaco",
+          "aliases": [
+            "Monaco"
+          ],
+          "cities": [],
+          "currencies": [],
+          "regulators": [
+            "Commission de Contrôle des Activités Financières"
+          ]
+        },
+        {
+          "code": "NL",
+          "name": "Netherlands",
+          "aliases": [
+            "Netherlands",
+            "Nederland"
+          ],
+          "cities": [
+            "Amsterdam",
+            "Rotterdam"
+          ],
+          "currencies": [],
+          "regulators": [
+            "De Nederlandsche Bank"
+          ]
+        },
+        {
+          "code": "CH",
+          "name": "Switzerland",
+          "aliases": [
+            "Switzerland",
+            "Schweiz",
+            "Suisse",
+            "Svizzera"
+          ],
+          "cities": [
+            "Zurich",
+            "Geneva",
+            "Bern"
+          ],
+          "currencies": [],
+          "regulators": [
+            "FINMA",
+            "Federal Data Protection and Information Commissioner"
+          ]
+        }
+      ]
+    },
+    "defaults": {
+      "decision_approvers": [
+        {
+          "text": "Which country and legal entity will buy, and who approves the budget, operational risk and data processing?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "sector_regulator": [],
+      "procurement_payment": [
+        {
+          "text": "What tender or contracting route, invoice currency, acceptance process and payment terms has this buyer specified?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "data_privacy": [
+        {
+          "text": "For the listed EU countries, establish controller and processor roles under the General Data Protection Regulation. Put the processing contract and written subprocessor authorisation in place before personal data is shared.",
+          "kind": "legal",
+          "source_ids": [
+            "J:EU-GDPR"
+          ],
+          "jurisdictions": [
+            "AT",
+            "BE",
+            "FR",
+            "DE",
+            "LU",
+            "NL"
+          ],
+          "applies_when": "Only for processing within GDPR territorial and material scope; determine the parties' roles for each processing purpose."
+        },
+        {
+          "text": "Switzerland: under Article 9 of the Federal Act on Data Protection, check processor instructions, confidentiality and security, and obtain controller approval before further outsourcing.",
+          "kind": "legal",
+          "source_ids": [
+            "J:CH-FADP"
+          ],
+          "jurisdictions": [
+            "CH"
+          ],
+          "applies_when": "For processing within Swiss FADP scope. Separately check the countries of processing and any cross border disclosure."
+        },
+        {
+          "text": "Liechtenstein: the Datenschutzstelle explains that an Article 28 GDPR contract must define the processing and the controller's and processor's respective duties.",
+          "kind": "legal",
+          "source_ids": [
+            "J:LI-GDPR"
+          ],
+          "jurisdictions": [
+            "LI"
+          ],
+          "applies_when": "For a controller and processor relationship subject to GDPR in Liechtenstein; this does not establish the scope of other EU instruments."
+        },
+        {
+          "text": "Monaco: Article 26 of Loi n° 1.565 du 3 décembre 2024 requires a written processor contract specifying the processing and the parties' obligations.",
+          "kind": "legal",
+          "source_ids": [
+            "J:MC-APDP"
+          ],
+          "jurisdictions": [
+            "MC"
+          ],
+          "applies_when": "For personal data processing subject to Monaco's law and a genuine controller and processor relationship."
+        }
+      ],
+      "buyer_language": [
+        {
+          "text": "Which language does each country's buying team require for the proposal, implementation, evidence and support?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "proof": [
+        {
+          "text": "Which buyer approved workflow and acceptance test would demonstrate value in the named country?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "objections": [
+        {
+          "text": "Which unresolved requirement could stop approval in this country, and whose evidence will settle it?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "sales_motion": [
+        {
+          "text": "Who owns the local pilot and the decision to proceed to a paid contract?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ]
+    },
+    "verticals": [
+      {
+        "vertical_id": "logistics-tech",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "In the listed EU countries, test the road operator's workflow against Regulation (EC) No 561/2006, including the relevant vehicle and route scope and any national derogation.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-ROAD"
+              ],
+              "jurisdictions": [
+                "AT",
+                "BE",
+                "FR",
+                "DE",
+                "LU",
+                "NL"
+              ],
+              "applies_when": "For covered road transport operations, not every logistics software workflow. Confirm the national exception rather than importing another country's."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [
+            {
+              "text": "DORA requires the financial entity to assess ICT provider risk before contracting. Identify the buyer's accountable risk reviewer and supply evidence for that assessment.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-DORA"
+              ],
+              "jurisdictions": [
+                "AT",
+                "BE",
+                "FR",
+                "DE",
+                "LU",
+                "NL"
+              ],
+              "applies_when": "For the covered entity's third party ICT risk process; this does not classify every supplier as a designated critical provider."
+            }
+          ],
+          "sector_regulator": [
+            {
+              "text": "Switzerland: FINMA has different authorisation routes for banking, securities, insurance and asset management. Start with the actual financial activity and legal entity.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CH-FINMA"
+              ],
+              "jurisdictions": [
+                "CH"
+              ],
+              "applies_when": "Where Swiss financial market law requires a permit, registration or other authorisation; ordinary technology supply alone does not establish that requirement."
+            },
+            {
+              "text": "Liechtenstein: the Financial Market Authority lists separate licensing routes for banks, investment firms, payment institutions and electronic money institutions. Confirm the activity before using a route.",
+              "kind": "legal",
+              "source_ids": [
+                "J:LI-FMA"
+              ],
+              "jurisdictions": [
+                "LI"
+              ],
+              "applies_when": "For an institution undertaking the relevant regulated activity in Liechtenstein, not solely a technology supplier."
+            },
+            {
+              "text": "Monaco: financial activities under Act No. 1.338 require the relevant CCAF authorisation and a separate government business approval. Credit institution status also involves ACPR authorisation.",
+              "kind": "legal",
+              "source_ids": [
+                "J:MC-CCAF"
+              ],
+              "jurisdictions": [
+                "MC"
+              ],
+              "applies_when": "Only for the financial activities and institutions covered by the cited formalities; do not extend this route to every fintech business."
+            }
+          ],
+          "procurement_payment": [
+            {
+              "text": "For an EU financial entity within Regulation (EU) 2022/2554, DORA, prepare the ICT service description, processing locations, subcontracting terms and exit evidence needed for the buyer's contract review.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-DORA"
+              ],
+              "jurisdictions": [
+                "AT",
+                "BE",
+                "FR",
+                "DE",
+                "LU",
+                "NL"
+              ],
+              "applies_when": "For financial entities and ICT arrangements within DORA scope; identify whether a critical or important function is supported."
+            }
+          ],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "Reviewed against the country scoped defaults. No separately validated sector addition; inherit only defaults applicable to the named country. This is not an exhaustive regulatory inventory.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "ai-native",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "For the listed EU markets, classify the provider or deployer role under the AI Act and demonstrate the Article 50 transparency measures that apply to the actual system.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-AI"
+              ],
+              "jurisdictions": [
+                "AT",
+                "BE",
+                "FR",
+                "DE",
+                "LU",
+                "NL"
+              ],
+              "applies_when": "For AI systems within the Act's scope. Check the relevant paragraph, exceptions and transition before stating a duty or date."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "Reviewed against the country scoped defaults. No separately validated sector addition; inherit only defaults applicable to the named country. This is not an exhaustive regulatory inventory.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "telecom",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Germany: section 5 Telekommunikationsgesetz requires notification of covered public networks and publicly available services to Bundesnetzagentur. Number independent interpersonal telecommunications services are excluded from this notification.",
+              "kind": "legal",
+              "source_ids": [
+                "J:DE-TKG"
+              ],
+              "jurisdictions": [
+                "DE"
+              ],
+              "applies_when": "For the actual provider and service within section 5; other obligations can still apply to excluded services."
+            },
+            {
+              "text": "France: Ordonnance n° 2021-650 removed the prior operator declaration under CPCE Article L.33-1. Arcep says operator status still follows the actual activity.",
+              "kind": "legal",
+              "source_ids": [
+                "J:FR-TELECOM"
+              ],
+              "jurisdictions": [
+                "FR"
+              ],
+              "applies_when": "For the prior declaration addressed by Arcep; this does not remove numbering, emergency access or other applicable duties."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "cybersecurity",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "For an EU buyer, assess Directive (EU) 2022/2555, NIS2, through the named country's implementation and the buyer's entity category. The Commission's transposition tracker is not a substitute for the applicable national instrument.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-NIS2"
+              ],
+              "jurisdictions": [
+                "AT",
+                "BE",
+                "FR",
+                "DE",
+                "LU",
+                "NL"
+              ],
+              "applies_when": "Where NIS2 may cover the entity; do not assume a uniform national filing route or deadline."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "Switzerland: the Information Security Act and Cybersecurity Ordinance require reporting of qualifying cyberattacks by covered critical infrastructure operators. Show how detection evidence reaches the buyer's reporting owner.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CH-CYBER"
+              ],
+              "jurisdictions": [
+                "CH"
+              ],
+              "applies_when": "Only for covered entities and incidents after checking ordinance exemptions; a security supplier is not automatically the reporting entity."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "Reviewed against the country scoped defaults. No separately validated sector addition; inherit only defaults applicable to the named country. This is not an exhaustive regulatory inventory.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "Reviewed against the country scoped defaults. No separately validated sector addition; inherit only defaults applicable to the named country. This is not an exhaustive regulatory inventory.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      }
+    ],
+    "subtypes": [
+      {
+        "subtype_id": "freight-visibility",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "freight-marketplace",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "seller-shipping",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "last-mile",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "warehousing",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "transport-management",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "payments-banking",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Under Directive (EU) 2015/2366, PSD2, national authorities authorise payment institutions. Use the EBA register to locate the entity and then verify the national authorisation and services.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-PSD2"
+              ],
+              "jurisdictions": [
+                "AT",
+                "BE",
+                "FR",
+                "DE",
+                "LU",
+                "NL"
+              ],
+              "applies_when": "For covered payment or electronic money institutions; the EBA register itself confers no legal rights."
+            },
+            {
+              "text": "Germany: the Zahlungsdiensteaufsichtsgesetz provides BaFin authorisation routes for payment institutions and electronic money institutions. Confirm the actual activity and exclusions.",
+              "kind": "legal",
+              "source_ids": [
+                "J:DE-PAYMENTS"
+              ],
+              "jurisdictions": [
+                "DE"
+              ],
+              "applies_when": "For the activities and institutions within ZAG; do not infer payment institution status from supplying an API."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "core-banking",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Austria: the ECB lists Finanzmarktaufsicht as the national competent banking supervisor. Confirm the bank's supervisory route before assigning approval evidence.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-BANK-SUPERVISORS"
+              ],
+              "jurisdictions": [
+                "AT"
+              ],
+              "applies_when": "For banking supervision in the Single Supervisory Mechanism; not an investment, insurance or general software regulator mapping."
+            },
+            {
+              "text": "Belgium: the ECB lists National Bank of Belgium as the national competent banking supervisor. Confirm the bank's supervisory route before assigning approval evidence.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-BANK-SUPERVISORS"
+              ],
+              "jurisdictions": [
+                "BE"
+              ],
+              "applies_when": "For banking supervision in the Single Supervisory Mechanism; not an investment, insurance or general software regulator mapping."
+            },
+            {
+              "text": "France: the ECB lists Autorité de contrôle prudentiel et de résolution as the national competent banking supervisor. Confirm the bank's supervisory route before assigning approval evidence.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-BANK-SUPERVISORS"
+              ],
+              "jurisdictions": [
+                "FR"
+              ],
+              "applies_when": "For banking supervision in the Single Supervisory Mechanism; not an investment, insurance or general software regulator mapping."
+            },
+            {
+              "text": "Germany: the ECB lists BaFin as the national competent banking supervisor. Confirm the bank's supervisory route before assigning approval evidence.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-BANK-SUPERVISORS"
+              ],
+              "jurisdictions": [
+                "DE"
+              ],
+              "applies_when": "For banking supervision in the Single Supervisory Mechanism; not an investment, insurance or general software regulator mapping."
+            },
+            {
+              "text": "Luxembourg: the ECB lists Commission de Surveillance du Secteur Financier as the national competent banking supervisor. Confirm the bank's supervisory route before assigning approval evidence.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-BANK-SUPERVISORS"
+              ],
+              "jurisdictions": [
+                "LU"
+              ],
+              "applies_when": "For banking supervision in the Single Supervisory Mechanism; not an investment, insurance or general software regulator mapping."
+            },
+            {
+              "text": "Netherlands: the ECB lists De Nederlandsche Bank as the national competent banking supervisor. Confirm the bank's supervisory route before assigning approval evidence.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-BANK-SUPERVISORS"
+              ],
+              "jurisdictions": [
+                "NL"
+              ],
+              "applies_when": "For banking supervision in the Single Supervisory Mechanism; not an investment, insurance or general software regulator mapping."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "lending",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Germany: the Bundesbank explains activity based authorisation under the Kreditwesengesetz. Determine whether the business conducts regulated banking or financial services before assigning a lending permission.",
+              "kind": "legal",
+              "source_ids": [
+                "J:DE-FINTECH"
+              ],
+              "jurisdictions": [
+                "DE"
+              ],
+              "applies_when": "For the business's own regulated activity; technology support for a lender does not alone establish authorisation scope."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "wealth-investment",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "For an EU investment firm, check the national register for the legal entity and authorised investment activities. ESMA's consolidated register points back to national authorities.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-INVEST"
+              ],
+              "jurisdictions": [
+                "AT",
+                "BE",
+                "FR",
+                "DE",
+                "LU",
+                "NL"
+              ],
+              "applies_when": "For regulated investment services; the evidence must match the actual entity and service offered."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "spend-expense",
+        "vertical_id": "fintech",
+        "status": "inherited",
+        "inherits_from": "fintech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "insurance",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Germany: an insurtech carrying on insurance business needs the applicable authorisation under the Versicherungsaufsichtsgesetz. BaFin's guidance ties this to the insurance activity.",
+              "kind": "legal",
+              "source_ids": [
+                "J:DE-INSURANCE"
+              ],
+              "jurisdictions": [
+                "DE"
+              ],
+              "applies_when": "For conducting insurance business, not merely supplying insurance software."
+            },
+            {
+              "text": "France: ACPR's authorisation routes distinguish insurance undertakings from banking institutions. Confirm the prospect's insurance entity and approved activity.",
+              "kind": "legal",
+              "source_ids": [
+                "J:FR-AUTH"
+              ],
+              "jurisdictions": [
+                "FR"
+              ],
+              "applies_when": "For institutions within ACPR's insurance authorisation remit; do not treat a software supplier as an insurer."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "For an EU insurance undertaking, verify authorisation with the relevant national authority. EIOPA states that national registers prevail over conflicting entries in its consolidated register.",
+              "kind": "legal",
+              "source_ids": [
+                "J:EU-INSURANCE"
+              ],
+              "jurisdictions": [
+                "AT",
+                "BE",
+                "FR",
+                "DE",
+                "LU",
+                "NL"
+              ],
+              "applies_when": "For insurance undertakings; do not use the same register as proof of an intermediary's permission."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "customer-service",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "crm-marketing",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "collaboration",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "product-growth",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "construction",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "property-management",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "field-services",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "fmcg-retail-execution",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "industry-hr-payroll",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "hotel-lodging",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "retail-restaurant-ops",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "agents-copilots",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "voice-language-models",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "enterprise-search",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "it-services",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "bpo-cx",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "digital-engineering",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "data-services",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "operators-connectivity",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "cpaas-messaging",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "telecom-software",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "business-voice-ucaas",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "developer-platform",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "data-infrastructure",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "observability",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "testing",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "dev-tools",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "cloud-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "identity-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "email-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "awareness-training",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "appsec",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "mobile-appsec",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "soc-services",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "endpoint-network",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "document-ai",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "ai-video",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "engineering-talent",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "product-management",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "digital-adoption",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "pentest",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "attack-surface-dast",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "process-orchestration",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "open-source-support",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "iot-connectivity",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. Do not borrow another country's note.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      }
+    ]
+  },
+  {
+    "schema_version": "1.0.0",
+    "region_id": "north-america",
+    "region_name": "North America",
+    "review_status": "draft",
+    "updated_at": "2026-11-03",
+    "scope_note": "This draft covers the United States, Canada and Mexico. It is not one legal market. State, province, territory, buyer type and activity must be established where relevant. No US state rule is presented as national, and no US, Canadian or Mexican rule is borrowed by another country. Draft for owner review.",
+    "reader_hints": {
+      "aliases": [
+        "North America"
+      ],
+      "countries": [
+        {
+          "code": "US",
+          "name": "United States",
+          "aliases": [
+            "United States",
+            "United States of America",
+            "USA",
+            "U.S."
+          ],
+          "cities": [
+            "New York",
+            "San Francisco",
+            "Boston",
+            "Chicago",
+            "Austin"
+          ],
+          "currencies": [
+            "USD",
+            "US dollar"
+          ],
+          "regulators": [
+            "Federal Deposit Insurance Corporation",
+            "Office of the Comptroller of the Currency",
+            "Federal Communications Commission",
+            "Securities and Exchange Commission",
+            "FinCEN"
+          ]
+        },
+        {
+          "code": "CA",
+          "name": "Canada",
+          "aliases": [
+            "Canada"
+          ],
+          "cities": [
+            "Toronto",
+            "Vancouver",
+            "Montreal",
+            "Ottawa"
+          ],
+          "currencies": [
+            "CAD",
+            "Canadian dollar"
+          ],
+          "regulators": [
+            "Office of the Superintendent of Financial Institutions",
+            "Bank of Canada",
+            "Canadian Radio-television and Telecommunications Commission"
+          ]
+        },
+        {
+          "code": "MX",
+          "name": "Mexico",
+          "aliases": [
+            "Mexico",
+            "México"
+          ],
+          "cities": [
+            "Mexico City",
+            "Ciudad de México",
+            "Monterrey",
+            "Guadalajara"
+          ],
+          "currencies": [
+            "MXN",
+            "Mexican peso"
+          ],
+          "regulators": [
+            "Comisión Nacional Bancaria y de Valores",
+            "Comisión Nacional de Seguros y Fianzas",
+            "Comisión Reguladora de Telecomunicaciones"
+          ]
+        }
+      ]
+    },
+    "defaults": {
+      "decision_approvers": [
+        {
+          "text": "Which country, state or province and legal entity will buy, and who signs off budget, operational risk and personal data handling?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "sector_regulator": [],
+      "procurement_payment": [
+        {
+          "text": "What procurement route, invoice currency, tax treatment, acceptance terms and payment schedule has this buyer confirmed?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "data_privacy": [
+        {
+          "text": "United States: the FTC's business guidance recommends documenting the personal data held, restricting access, retaining only what is needed and disposing of it safely. Use that evidence to substantiate security claims.",
+          "kind": "operating",
+          "source_ids": [
+            "J:US-FTC-SECURITY"
+          ],
+          "jurisdictions": [
+            "US"
+          ],
+          "applies_when": "Business security guidance, not a certification or a substitute for state, sector and contractual requirements."
+        },
+        {
+          "text": "Canada: under PIPEDA, an organisation remains accountable for personal information sent to a processor and must use contractual or other means to provide comparable protection.",
+          "kind": "legal",
+          "source_ids": [
+            "J:CA-PIPEDA"
+          ],
+          "jurisdictions": [
+            "CA"
+          ],
+          "applies_when": "For processing within PIPEDA scope. The cited guidance excludes public sector transfers and does not replace provincial rules."
+        },
+        {
+          "text": "Canada: establish the province, sector and data flow before selecting privacy requirements. PIPEDA and provincial laws can govern different parts of the same operation.",
+          "kind": "legal",
+          "source_ids": [
+            "J:CA-PROVINCES"
+          ],
+          "jurisdictions": [
+            "CA"
+          ],
+          "applies_when": "Private sector commercial processing; do not present one province's law as the rule for all of Canada."
+        },
+        {
+          "text": "Mexico: use the Ley Federal de Protección de Datos Personales en Posesión de los Particulares to establish the responsible party and processor roles. The law designates Secretaría Anticorrupción y Buen Gobierno as the Secretaría.",
+          "kind": "legal",
+          "source_ids": [
+            "J:MX-PRIVACY"
+          ],
+          "jurisdictions": [
+            "MX"
+          ],
+          "applies_when": "For private sector processing within the law, after checking its exclusions; public sector processing has a different instrument."
+        }
+      ],
+      "buyer_language": [
+        {
+          "text": "Which language does the buying team require for the contract, implementation, evidence and support?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "proof": [
+        {
+          "text": "Which local workflow and buyer approved acceptance test will show that the proposed outcome is achievable?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "objections": [
+        {
+          "text": "Which unresolved approval requirement is most likely to block the purchase, and who can validate the evidence?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ],
+      "sales_motion": [
+        {
+          "text": "Who owns the pilot, its success criteria and the decision to fund the next stage in each market?",
+          "kind": "question",
+          "source_ids": [],
+          "jurisdictions": [],
+          "applies_when": ""
+        }
+      ]
+    },
+    "verticals": [
+      {
+        "vertical_id": "logistics-tech",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Mexico: NOM-087-SCT-2-2017 addresses driving and break times for drivers in federal motor transport services. Confirm that the operator's service is within this scope.",
+              "kind": "legal",
+              "source_ids": [
+                "J:MX-ROAD"
+              ],
+              "jurisdictions": [
+                "MX"
+              ],
+              "applies_when": "For covered federal motor transport services; do not import US or Canadian hours rules."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "United States: for operations covered by 49 CFR Part 395, demonstrate the driver's duty record and electronic logging workflow, including the applicable exceptions.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-ELD"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "For covered US motor carrier operations. Software supply alone does not make the supplier a motor carrier."
+            },
+            {
+              "text": "Canada: for a covered federal motor carrier operation, verify the electronic logging device against the Commercial Vehicle Drivers Hours of Service Regulations and Transport Canada's certification requirement.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CA-ELD"
+              ],
+              "jurisdictions": [
+                "CA"
+              ],
+              "applies_when": "For federally regulated operations after checking exemptions; US compliance alone does not establish Canadian compliance."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [
+            {
+              "text": "Canada: OSFI Guideline B-10 leaves accountability with the federally regulated financial institution. Identify its third party risk owner and match evidence to the arrangement's risk and criticality.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CA-OSFI-B10"
+              ],
+              "jurisdictions": [
+                "CA"
+              ],
+              "applies_when": "Only for federally regulated financial institutions and covered branches, not every provincial financial business."
+            }
+          ],
+          "sector_regulator": [
+            {
+              "text": "Mexico: the Ley para Regular las Instituciones de Tecnología Financiera distinguishes collective financing institutions and electronic payment fund institutions. Confirm the actual activity before selecting the CNBV authorisation route.",
+              "kind": "legal",
+              "source_ids": [
+                "J:MX-FINTECH"
+              ],
+              "jurisdictions": [
+                "MX"
+              ],
+              "applies_when": "For the designated financial institutions and activities covered by the law; a fintech label does not put every software supplier in scope."
+            }
+          ],
+          "procurement_payment": [
+            {
+              "text": "United States: align a bank buyer's evidence review with the OCC, Federal Reserve and FDIC Interagency Guidance on Third Party Relationships. Prepare for due diligence, contract review, monitoring and exit planning.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-BANK-THIRDPARTY"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "For banking organisations supervised by the issuing agencies; expectations depend on the arrangement's risk and complexity."
+            }
+          ],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated sector addition beyond the country scoped defaults. Inherit only notes for the named country; this is not a complete regulatory inventory.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "ai-native",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "United States: if the buyer uses the NIST AI Risk Management Framework, organise evidence around the risks of the actual use case. NIST describes the framework as voluntary.",
+              "kind": "operating",
+              "source_ids": [
+                "J:US-AI-RMF"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "Use only as an agreed assurance framework; do not represent it as a general legal approval or claim it is uniquely applicable to the US."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated sector addition beyond the country scoped defaults. Inherit only notes for the named country; this is not a complete regulatory inventory.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "telecom",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Canada: CRTC registration and the relevant provider obligations depend on the telecommunications service supplied. The CRTC lists specific reseller exemptions; an exemption from registration does not remove all consumer duties.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CA-TELECOM"
+              ],
+              "jurisdictions": [
+                "CA"
+              ],
+              "applies_when": "For Canadian telecommunications provision; establish provider type, services and exemptions before assigning obligations."
+            },
+            {
+              "text": "United States: a covered interconnected voice service must be assessed against the FCC E911 requirements in 47 CFR 9.11. Establish the service classification and geographic scope first.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-E911"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "Only for interconnected VoIP services and calls within the rule's scope; do not extend this to all communications software."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "Mexico: verify the operator's service, territory and authorisation validity in the Comisión Reguladora de Telecomunicaciones public concessions register.",
+              "kind": "legal",
+              "source_ids": [
+                "J:MX-TELECOM"
+              ],
+              "jurisdictions": [
+                "MX"
+              ],
+              "applies_when": "For a relevant concession, permit or authorisation; registry verification does not establish that every telecom software vendor needs one."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "cybersecurity",
+        "status": "specific",
+        "inherits_from": "defaults",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "United States: ask whether the buyer's contract requires the NIST Cybersecurity Framework. NIST says most organisations use it voluntarily; the framework is not itself a regulatory certification.",
+              "kind": "operating",
+              "source_ids": [
+                "J:US-CSF"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "A government or contractual requirement needs its own scope check; do not infer a universal mandate."
+            },
+            {
+              "text": "Canada: the Canadian Centre for Cyber Security's baseline guidance recommends a written incident plan with named responsibilities. Show the buyer how the proposed service fits its response process.",
+              "kind": "operating",
+              "source_ids": [
+                "J:CA-CYBER"
+              ],
+              "jurisdictions": [
+                "CA"
+              ],
+              "applies_when": "Recommended baseline guidance for small and medium organisations; confirm suitability for the buyer's risk rather than asserting certification."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated sector addition beyond the country scoped defaults. Inherit only notes for the named country; this is not a complete regulatory inventory.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "defaults",
+        "inheritance_note": "No validated sector addition beyond the country scoped defaults. Inherit only notes for the named country; this is not a complete regulatory inventory.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      }
+    ],
+    "subtypes": [
+      {
+        "subtype_id": "freight-visibility",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "freight-marketplace",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "seller-shipping",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "last-mile",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "warehousing",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "transport-management",
+        "vertical_id": "logistics-tech",
+        "status": "inherited",
+        "inherits_from": "logistics-tech",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "payments-banking",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "United States: determine whether the actual funds activity makes the entity a money services business under 31 CFR Chapter X. FinCEN registration has exceptions, including a person acting solely as another MSB's agent.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-FINCEN"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "For federal MSB registration scope; this does not settle state licensing, bank charter or other obligations."
+            },
+            {
+              "text": "Mexico: an institution issuing, administering, redeeming or transmitting electronic payment funds can fall within the CNBV electronic payment fund institution category under the Ley para Regular las Instituciones de Tecnología Financiera.",
+              "kind": "legal",
+              "source_ids": [
+                "J:MX-FINTECH"
+              ],
+              "jurisdictions": [
+                "MX"
+              ],
+              "applies_when": "Only where the actual activity matches the statutory category; an API or accounting feature alone is insufficient."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "Canada: a payment service provider within the Retail Payment Activities Act needs the applicable operational risk, incident response and end user funds safeguards. Show how the buyer's framework handles the proposed service.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CA-RPAA"
+              ],
+              "jurisdictions": [
+                "CA"
+              ],
+              "applies_when": "For payment activities and providers within RPAA scope; determine whether funds are held and check exclusions."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "core-banking",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "United States: a bank's use of a third party does not remove its responsibility for safe operations and applicable law. Provide control and monitoring evidence for the bank's chosen supervisory review.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-BANK-THIRDPARTY"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "For a supervised bank relationship; a core banking platform supplier does not inherit the bank's charter."
+            },
+            {
+              "text": "Canada: OSFI B-10 applies proportionate oversight to a federally regulated institution's third party arrangement. Agree the criticality and continuity evidence with the institution.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CA-OSFI-B10"
+              ],
+              "jurisdictions": [
+                "CA"
+              ],
+              "applies_when": "For institutions within B-10 scope; do not assume provincial institutions have the same supervisory route."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "lending",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "United States: under ECOA Regulation B, 12 CFR 1002.9, required adverse action reasons must identify the principal factors actually used. Demonstrate the explanation workflow for the creditor's applicable notice route.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-REG-B"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "For covered credit decisions and notices; check business credit, incomplete application and other exceptions rather than applying one notice process to every loan."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "wealth-investment",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "United States: an investment adviser may be registered with the SEC or one or more state securities authorities. Verify the entity's actual registration and applicable exceptions before assigning an approval route.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-ADVISERS"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "Investment adviser registration only; not the registration regime for every broker, fund or software supplier."
+            },
+            {
+              "text": "Canada: National Instrument 31-103 and related rules govern dealer and adviser registration through provincial and territorial securities authorities. Verify the category, permitted activity and exemptions.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CA-SECURITIES"
+              ],
+              "jurisdictions": [
+                "CA"
+              ],
+              "applies_when": "For covered securities businesses; the national search does not create a federal securities licence."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "spend-expense",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "Canada: assess any actual retail payment function in an expense product against the Retail Payment Activities Act before promising a payment service.",
+              "kind": "legal",
+              "source_ids": [
+                "J:CA-RPAA"
+              ],
+              "jurisdictions": [
+                "CA"
+              ],
+              "applies_when": "Only if the service performs covered payment functions; expense record keeping alone does not establish RPAA scope."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "insurance",
+        "vertical_id": "fintech",
+        "status": "specific",
+        "inherits_from": "fintech",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [
+            {
+              "text": "United States: insurance regulation is primarily state based. NAIC supports state regulators but does not issue licences, and a model law is not automatically law in any state.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-INSURANCE"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "Identify the relevant state and adopted instrument before attaching a specific insurance or cyber obligation."
+            },
+            {
+              "text": "Mexico: establishing an insurance institution requires the corresponding CNSF authorisation. Keep this approval route separate from CNBV fintech authorisation.",
+              "kind": "legal",
+              "source_ids": [
+                "J:MX-INSURANCE"
+              ],
+              "jurisdictions": [
+                "MX"
+              ],
+              "applies_when": "For establishing an insurance institution; not every insurance intermediary or technology supplier."
+            }
+          ],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [
+            {
+              "text": "Mexico: the CNSF insurance institution application requires the specified documents in Spanish. Prepare the approval evidence in the required language.",
+              "kind": "legal",
+              "source_ids": [
+                "J:MX-INSURANCE"
+              ],
+              "jurisdictions": [
+                "MX"
+              ],
+              "applies_when": "Only for that authorisation application; this does not establish the language preference of every private buyer."
+            }
+          ],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "customer-service",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "crm-marketing",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "collaboration",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "product-growth",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "construction",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "property-management",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "field-services",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "fmcg-retail-execution",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "industry-hr-payroll",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "hotel-lodging",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "retail-restaurant-ops",
+        "vertical_id": "vertical-saas",
+        "status": "inherited",
+        "inherits_from": "vertical-saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "agents-copilots",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "voice-language-models",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "enterprise-search",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "it-services",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "bpo-cx",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "digital-engineering",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "data-services",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "operators-connectivity",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "cpaas-messaging",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "telecom-software",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "business-voice-ucaas",
+        "vertical_id": "telecom",
+        "status": "specific",
+        "inherits_from": "telecom",
+        "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [
+            {
+              "text": "United States: for a covered interconnected VoIP service, test emergency routing, location handling and the required subscriber notice of service limitations under 47 CFR 9.11.",
+              "kind": "legal",
+              "source_ids": [
+                "J:US-E911"
+              ],
+              "jurisdictions": [
+                "US"
+              ],
+              "applies_when": "Match fixed or nonfixed service requirements and the rule's geographic conditions."
+            }
+          ],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "developer-platform",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "data-infrastructure",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "observability",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "testing",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "dev-tools",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "cloud-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "identity-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "email-security",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "awareness-training",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "appsec",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "mobile-appsec",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "soc-services",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "endpoint-network",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "document-ai",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "ai-video",
+        "vertical_id": "ai-native",
+        "status": "inherited",
+        "inherits_from": "ai-native",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "engineering-talent",
+        "vertical_id": "ites",
+        "status": "inherited",
+        "inherits_from": "ites",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "product-management",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "digital-adoption",
+        "vertical_id": "saas",
+        "status": "inherited",
+        "inherits_from": "saas",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "pentest",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "attack-surface-dast",
+        "vertical_id": "cybersecurity",
+        "status": "inherited",
+        "inherits_from": "cybersecurity",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "process-orchestration",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "open-source-support",
+        "vertical_id": "software",
+        "status": "inherited",
+        "inherits_from": "software",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      },
+      {
+        "subtype_id": "iot-connectivity",
+        "vertical_id": "telecom",
+        "status": "inherited",
+        "inherits_from": "telecom",
+        "inheritance_note": "No validated subtype addition beyond the applicable country notes in the parent and defaults. State or provincial rules must not be inferred.",
+        "context": {
+          "decision_approvers": [],
+          "sector_regulator": [],
+          "procurement_payment": [],
+          "data_privacy": [],
+          "buyer_language": [],
+          "proof": [],
+          "objections": [],
+          "sales_motion": []
+        },
+        "pending_topics": []
+      }
+    ]
   }
 ];
 export const REGION_SOURCES: Readonly<Record<string,RegionSource>> = {
+  "I:AE-CBUAE": {
+    "source_id": "I:AE-CBUAE",
+    "region_id": "middle-east",
+    "jurisdiction": "AE",
+    "title": "Federal Decree Law 6 of 2025 regarding the Central Bank, Regulation of Financial Institutions and Activities, and Insurance Business",
+    "publisher": "United Arab Emirates Ministry of Finance",
+    "url": "https://mof.gov.ae/wp-content/uploads/2025/11/Federal-Decree-Law-No.-6-of-2025-Regarding-the-Central-Bank-Regulation-of-Financial-Institutions-and-Activities-and-Insurance-Business.pdf",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Article 61 licensed financial activities includes credit, payments and insurance.",
+    "limitations": "No reliable full publication date on the retrieved page. Exact release date not established from the PDF excerpt. Financial free zone scope and activity exclusions require checking. No licence conclusion for vendors."
+  },
+  "I:AE-CMA": {
+    "source_id": "I:AE-CMA",
+    "region_id": "middle-east",
+    "jurisdiction": "AE",
+    "title": "Federal Decree Law 32 of 2025 regarding Capital Market Authority",
+    "publisher": "UAE Capital Market Authority",
+    "url": "https://legislation.uaecma.gov.ae/en/capital-market-authority-law",
+    "publication_date": "2025-10-14",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "New capital market authority instrument effective 1 January 2026.",
+    "limitations": "Date is official gazette date. Primary indexed entry read; live open timed out. Do not conflate this authority with the Saudi authority of the same English name."
+  },
+  "I:AE-DFSA": {
+    "source_id": "I:AE-DFSA",
+    "region_id": "middle-east",
+    "jurisdiction": "AE",
+    "title": "About the DFSA",
+    "publisher": "Dubai Financial Services Authority",
+    "url": "https://www.dfsa.ae/about-dfsa/who-we-are/the-dfsa",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "DFSA remit for financial services conducted in or from DIFC.",
+    "limitations": "No reliable full publication date on the retrieved page. DIFC only. Dubai city does not establish DIFC jurisdiction."
+  },
+  "I:AE-FSRA": {
+    "source_id": "I:AE-FSRA",
+    "region_id": "middle-east",
+    "jurisdiction": "AE",
+    "title": "Financial Services Regulatory Authority",
+    "publisher": "Abu Dhabi Global Market",
+    "url": "https://www.adgm.com/financial-services-regulatory-authority",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "FSRA remit for financial services in ADGM.",
+    "limitations": "No reliable full publication date on the retrieved page. ADGM only. Abu Dhabi city does not establish ADGM jurisdiction."
+  },
+  "I:AE-INVOICE": {
+    "source_id": "I:AE-INVOICE",
+    "region_id": "middle-east",
+    "jurisdiction": "AE",
+    "title": "FTA calls on persons subject to electronic invoicing to comply with deadlines",
+    "publisher": "Federal Tax Authority",
+    "url": "https://tax.gov.ae/en/media.centre/News/federal.tax.authority.calls.on.persons.subject.to.einvoicing.to.comply.wit.the.prescribed.legal.deadlines.and.avoid.administrative.penalties.aspx",
+    "publication_date": "2026-10-25",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Phased electronic invoice implementation and preparatory supplier appointment requirements.",
+    "limitations": "Latest accessed notice differs from older appointment deadline. No thresholds or universal immediate obligation asserted."
+  },
+  "I:AE-PDPL": {
+    "source_id": "I:AE-PDPL",
+    "region_id": "middle-east",
+    "jurisdiction": "AE",
+    "title": "Federal Decree Law 45 of 2021 concerning the Protection of Personal Data",
+    "publisher": "United Arab Emirates Legislation",
+    "url": "https://www.uaelegislation.gov.ae/en/legislations/1972/download",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Article 2 scope and exclusions, including sector data and free zones with their own law.",
+    "limitations": "No reliable full publication date on the retrieved page. Current executive instruments and implementation timing must be checked. No universal federal privacy or residency claim."
+  },
+  "I:AE-TELECOM": {
+    "source_id": "I:AE-TELECOM",
+    "region_id": "middle-east",
+    "jurisdiction": "AE",
+    "title": "Issue licences to provide telecommunication services",
+    "publisher": "Telecommunications and Digital Government Regulatory Authority",
+    "url": "https://tdra.gov.ae/en/Services/issue-licences-to-provide-telecommunication-services",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "TDRA licence requirement for public telecom networks and services within the law.",
+    "limitations": "No reliable full publication date on the retrieved page. Not a requirement for every software vendor supplying an operator."
+  },
+  "I:ID-LENDING": {
+    "source_id": "I:ID-LENDING",
+    "region_id": "southeast-asia",
+    "jurisdiction": "ID",
+    "title": "POJK 40 Tahun 2024 Layanan Pendanaan Bersama Berbasis Teknologi Informasi",
+    "publisher": "Financial Services Authority of Indonesia",
+    "url": "https://ojk.go.id/id/regulasi/Pages/POJK-40-Tahun-2024-Layanan-Pendanaan-Bersama-Berbasis-Teknologi-Informasi.aspx",
+    "publication_date": "2024-12-27",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "OJK framework for technology based joint funding, including intermediary role.",
+    "limitations": "Entry gives effective date. Primary indexed abstract read; live open timed out. Do not extend P2P rules to every lender."
+  },
+  "I:ID-OJK": {
+    "source_id": "I:ID-OJK",
+    "region_id": "southeast-asia",
+    "jurisdiction": "ID",
+    "title": "Task and Functions",
+    "publisher": "Financial Services Authority of Indonesia",
+    "url": "https://ojk.go.id/en/tentang-ojk/Pages/Tugas-dan-Fungsi.aspx",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "OJK regulatory scope in banking, insurance, financing and capital markets.",
+    "limitations": "No reliable full publication date on the retrieved page. Do not infer that OJK replaces Bank Indonesia's payment remit."
+  },
+  "I:ID-PAYMENTS": {
+    "source_id": "I:ID-PAYMENTS",
+    "region_id": "southeast-asia",
+    "jurisdiction": "ID",
+    "title": "Bank Indonesia strengthens structure of payment system industry",
+    "publisher": "Bank Indonesia",
+    "url": "https://www.bi.go.id/en/publikasi/ruang-media/news-release/Pages/sp_281626.aspx",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "PBI 10 of 2025 and PADG 32 of 2025 effective from 31 March 2026.",
+    "limitations": "No reliable full publication date on the retrieved page. Announcement used to identify the current framework and third party risk focus. No financial projection or statistic used."
+  },
+  "I:ID-PDP": {
+    "source_id": "I:ID-PDP",
+    "region_id": "southeast-asia",
+    "jurisdiction": "ID",
+    "title": "Law No. 27 of 2022 on Personal Data Protection",
+    "publisher": "Ministry of Communication and Digital Affairs",
+    "url": "https://jdih.komdigi.go.id/produk_hukum/view/id/832/t/crc32/",
+    "publication_date": "2022-10-17",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Identity and subject of the Indonesian personal data protection law.",
+    "limitations": "Primary indexed law entry read; live open timed out. Detailed transfer mechanisms and implementing rules not asserted."
+  },
   "I:IN-AI": {
     "source_id": "I:IN-AI",
     "region_id": "india",
@@ -3144,6 +10065,851 @@ export const REGION_SOURCES: Readonly<Record<string,RegionSource>> = {
     "claim_scope": "Commercial communications framework: registered entities, preferences and consent.",
     "limitations": "Announcement rather than consolidated regulations. No detailed number series or timing requirement asserted."
   },
+  "I:MY-BNM": {
+    "source_id": "I:MY-BNM",
+    "region_id": "southeast-asia",
+    "jurisdiction": "MY",
+    "title": "Supervision",
+    "publisher": "Bank Negara Malaysia",
+    "url": "https://www.bnm.gov.my/supervision",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Banking and insurance and takaful supervisory responsibilities.",
+    "limitations": "No reliable full publication date on the retrieved page. Does not cover every nonbank lender or every capital market service."
+  },
+  "I:MY-PDPA": {
+    "source_id": "I:MY-PDPA",
+    "region_id": "southeast-asia",
+    "jurisdiction": "MY",
+    "title": "Application and non application of the Personal Data Protection Act",
+    "publisher": "Department of Personal Data Protection Malaysia",
+    "url": "https://www.pdp.gov.my/en/akta/application-and-non-application-of-the-act/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Commercial transaction scope and federal and state government exclusions.",
+    "limitations": "No reliable full publication date on the retrieved page. Used only for scope. Read Act 709 as amended and current commencement instruments before specific obligations."
+  },
+  "I:MY-SC": {
+    "source_id": "I:MY-SC",
+    "region_id": "southeast-asia",
+    "jurisdiction": "MY",
+    "title": "About the Securities Commission Malaysia",
+    "publisher": "Securities Commission Malaysia",
+    "url": "https://www.sc.com.my/about/about/about-the-sc",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Capital market remit and Capital Markets and Services Act 2007.",
+    "limitations": "No reliable full publication date on the retrieved page. Entity and activity licensing must be checked separately."
+  },
+  "I:PH-BSP": {
+    "source_id": "I:PH-BSP",
+    "region_id": "southeast-asia",
+    "jurisdiction": "PH",
+    "title": "Governance of the Bank",
+    "publisher": "Bangko Sentral ng Pilipinas",
+    "url": "https://www.bsp.gov.ph/Pages/AboutTheBank/WhoWeAre/OrganizationAndGovernance/GovernanceOfTheBank.aspx",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Banks, supervised financial institutions and payment system oversight.",
+    "limitations": "No reliable full publication date on the retrieved page. Not all lenders or insurers are BSP regulated."
+  },
+  "I:PH-DPA": {
+    "source_id": "I:PH-DPA",
+    "region_id": "southeast-asia",
+    "jurisdiction": "PH",
+    "title": "Republic Act 10173: Data Privacy Act of 2012",
+    "publisher": "National Privacy Commission",
+    "url": "https://privacy.gov.ph/data-privacy-act/",
+    "publication_date": "2012-08-15",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Sections 11, 12 and 20 on lawful processing and security.",
+    "limitations": "Statutory exclusions, sensitive information rules and current implementing instruments require scope review."
+  },
+  "I:PH-INSURANCE": {
+    "source_id": "I:PH-INSURANCE",
+    "region_id": "southeast-asia",
+    "jurisdiction": "PH",
+    "title": "Mandate, objectives and functions",
+    "publisher": "Insurance Commission Philippines",
+    "url": "https://site.insurance.gov.ph/about/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Insurance Code and Insurance Commission remit.",
+    "limitations": "No reliable full publication date on the retrieved page. Not a licence determination for a software provider."
+  },
+  "I:PH-LENDING": {
+    "source_id": "I:PH-LENDING",
+    "region_id": "southeast-asia",
+    "jurisdiction": "PH",
+    "title": "Frequently asked questions on lending companies",
+    "publisher": "Securities and Exchange Commission Philippines",
+    "url": "https://www.sec.gov.ph/wp-content/uploads/2019/11/2019FAQ_LendingCompanies.pdf",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Lending Company Regulation Act RA 9474 and SEC certificate of authority.",
+    "limitations": "No reliable full publication date on the retrieved page. Undated FAQ. Used only for basic entity boundary; no capital requirement or current platform procedure asserted."
+  },
+  "I:SA-CLOUD": {
+    "source_id": "I:SA-CLOUD",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "Cloud Computing Service Provisioning Regulations and guides decision 506/1445",
+    "publisher": "Communications, Space and Technology Commission",
+    "url": "https://www.cst.gov.sa/en/regulations-and-licenses/decisions/Regulation-1482",
+    "publication_date": "2023-10-08",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Version 4 regulations and version 5 provider guide supersede the older framework.",
+    "limitations": "Used for current instrument naming only. Cloud service classification and registration require separate review."
+  },
+  "I:SA-CMA": {
+    "source_id": "I:SA-CMA",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "Frequently asked questions for implementing regulations",
+    "publisher": "Capital Market Authority Saudi Arabia",
+    "url": "https://cma.gov.sa/en/RulesRegulations/FAQ/Pages/FAQs.aspx",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Saudi CMA powers under the Capital Market Law.",
+    "limitations": "No reliable full publication date on the retrieved page. Do not confuse with the UAE Capital Market Authority."
+  },
+  "I:SA-ECC": {
+    "source_id": "I:SA-ECC",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "Essential Cybersecurity Controls ECC 2 2024",
+    "publisher": "National Cybersecurity Authority",
+    "url": "https://nca.gov.sa/en/regulatory-documents/controls-list/ecc/",
+    "publication_date": "2025-07-31",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Identity and current edition of Essential Cybersecurity Controls.",
+    "limitations": "Date is official page publication. No blanket all private business mandate or detailed control asserted; scope must be established."
+  },
+  "I:SA-FINANCE": {
+    "source_id": "I:SA-FINANCE",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "Compliance and internal audit principles for finance companies",
+    "publisher": "Saudi Central Bank",
+    "url": "https://sama.gov.sa/en-us/mediacenter/news/pages/news-1044.aspx",
+    "publication_date": "2024-10-02",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "SAMA finance company supervision and board and executive responsibilities for compliance and internal audit.",
+    "limitations": "Primary indexed official notice read; live open timed out. Only the named finance and refinance company categories."
+  },
+  "I:SA-INSURANCE": {
+    "source_id": "I:SA-INSURANCE",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "About the Insurance Authority",
+    "publisher": "Insurance Authority Saudi Arabia",
+    "url": "https://www.ia.gov.sa/en/about-ia/about",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Insurance Authority regulation, supervision and licensing remit.",
+    "limitations": "No reliable full publication date on the retrieved page. Do not use the older SAMA insurance supervision attribution. Current product regulations still need scope checks."
+  },
+  "I:SA-INVOICE": {
+    "source_id": "I:SA-INVOICE",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "Electronic invoice rollout phases",
+    "publisher": "Zakat, Tax and Customs Authority",
+    "url": "https://zatca.gov.sa/en/E-Invoicing/Introduction/Pages/Roll-out-phases.aspx",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Generation phase and integration phase; integration is notified by taxpayer waves.",
+    "limitations": "No reliable full publication date on the retrieved page. No universal integration deadline, tax rate or revenue threshold asserted."
+  },
+  "I:SA-PAYMENTS": {
+    "source_id": "I:SA-PAYMENTS",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "Law of Payments and Payment Services: Article 7",
+    "publisher": "Saudi Central Bank",
+    "url": "https://www.rulebook.sama.gov.sa/en/article-7-24",
+    "publication_date": "2021-10-28",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "SAMA payment system and service supervision and licensing powers.",
+    "limitations": "Use with current implementing regulations; no assertion that every software supplier is a payment provider."
+  },
+  "I:SA-SAMA": {
+    "source_id": "I:SA-SAMA",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "Saudi Central Bank Law",
+    "publisher": "Saudi Central Bank",
+    "url": "https://sama.gov.sa/en-US/About/Pages/bank-law.aspx",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Article 4 financial institution and payment supervisory powers.",
+    "limitations": "No reliable full publication date on the retrieved page. Relevant sector laws determine the entity scope. Insurance remit is separately mapped to the Insurance Authority."
+  },
+  "I:SA-TRANSFER": {
+    "source_id": "I:SA-TRANSFER",
+    "region_id": "middle-east",
+    "jurisdiction": "SA",
+    "title": "Regulation on Personal Data Transfer outside the Kingdom",
+    "publisher": "Saudi Data and AI Authority",
+    "url": "https://dgp.sdaia.gov.sa/wps/portal/pdp/knowledgecenter/details/PDPL2/!ut/p/z0/04_Sj9CPykssy0xPLMnMz0vMAfIjo8ziPR1dzTwMgw2MDMOcTA3MjH39TE29jY0MQsz1g1Pz9L30o_ArAppiVOTr7JuuH1WQWJKhm5mXlq8fEeAS4GOkX5DtHg4A45XaIQ!!/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Article 2 requires scope and protection checks for overseas personal data transfers.",
+    "limitations": "No reliable full publication date on the retrieved page. Read with Personal Data Protection Law and implementing regulations; no blanket local hosting requirement inferred."
+  },
+  "I:SG-ADVISERS": {
+    "source_id": "I:SG-ADVISERS",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Financial adviser's licence",
+    "publisher": "Monetary Authority of Singapore",
+    "url": "https://www.mas.gov.sg/regulation/capital-markets/apply-for-licensing-or-registration-of-capital-market-entities/financial-advisers",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Financial Advisers Act 2001 regulated activity and exemption boundary.",
+    "limitations": "No reliable full publication date on the retrieved page. Investment advice is distinct from general financial software."
+  },
+  "I:SG-AI": {
+    "source_id": "I:SG-AI",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Updated Model AI Governance Framework for Agentic AI",
+    "publisher": "Infocomm Media Development Authority",
+    "url": "https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/factsheets/2026/updated-model-ai-governance-framework-for-agentic-ai",
+    "publication_date": "2026-05-20",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Guidance on human accountability and controls for agent deployment.",
+    "limitations": "Primary indexed extract read; live open returned a script challenge. Guidance, not a mandatory certification."
+  },
+  "I:SG-CUSTOMS": {
+    "source_id": "I:SG-CUSTOMS",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Obtain a Customs Import Permit",
+    "publisher": "Singapore Customs",
+    "url": "https://www.customs.gov.sg/doing-business/import-operations/import-procedures/obtain-a-customs-import-permit/",
+    "publication_date": "2026-02-23",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Import permit, Customs account and declaring agent workflow.",
+    "limitations": "Page update date. Exceptions and controlled goods requirements remain activity specific."
+  },
+  "I:SG-CYBER": {
+    "source_id": "I:SG-CYBER",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Cybersecurity Act",
+    "publisher": "Cyber Security Agency of Singapore",
+    "url": "https://www.csa.gov.sg/legislation/cybersecurity-act/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Licensing distinction for penetration testing and managed SOC monitoring.",
+    "limitations": "No reliable full publication date on the retrieved page. Live page used for service scope only. Other cybersecurity obligations and amended designation regimes require separate applicability review."
+  },
+  "I:SG-INSURANCE": {
+    "source_id": "I:SG-INSURANCE",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Sectoral legislation with ownership and control provisions",
+    "publisher": "Office of Significant Investments Review",
+    "url": "https://www.osir.gov.sg/resources/other-legislation/sectoral-legislation/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Insurance Act 1966 and MAS as responsible agency.",
+    "limitations": "No reliable full publication date on the retrieved page. Used to identify regulator and legal instrument, not detailed ownership approval conditions."
+  },
+  "I:SG-LENDING": {
+    "source_id": "I:SG-LENDING",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "List of licensed moneylenders in Singapore",
+    "publisher": "Ministry of Law Registry of Moneylenders",
+    "url": "https://rom.mlaw.gov.sg/information-for-borrowers/list-of-licensed-moneylenders-in-singapore/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Licensed moneylenders: physical identity verification and restrictions on fully online loans.",
+    "limitations": "No reliable full publication date on the retrieved page. This rule is for licensed moneylenders, not every bank or financial institution. No entity names copied."
+  },
+  "I:SG-OUTSOURCE": {
+    "source_id": "I:SG-OUTSOURCE",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Third party risk management",
+    "publisher": "Monetary Authority of Singapore",
+    "url": "https://www.mas.gov.sg/regulation/third-party-risk-management",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "MAS Notice 658 and separate bank and nonbank outsourcing guidance.",
+    "limitations": "No reliable full publication date on the retrieved page. Index last updated 6 March 2026. Distinguish a notice from guidelines and from a consultation; no universal vendor licence inferred."
+  },
+  "I:SG-PAYMENTS": {
+    "source_id": "I:SG-PAYMENTS",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Payments regulation",
+    "publisher": "Monetary Authority of Singapore",
+    "url": "https://www.mas.gov.sg/regulation/payments",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Payment Services Act 2019 activity based licensing and exemptions.",
+    "limitations": "No reliable full publication date on the retrieved page. Does not establish that all payment software suppliers provide a regulated service."
+  },
+  "I:SG-PDPA": {
+    "source_id": "I:SG-PDPA",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Data protection obligations under the Personal Data Protection Act",
+    "publisher": "Personal Data Protection Commission",
+    "url": "https://www.pdpc.gov.sg/-/media/Files/PDPC/PDF-Files/Resource-for-Organisation/Data-Protection-Obligations-under-the-PDPA.ashx?la=en",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Protection, retention and comparable protection for overseas transfers.",
+    "limitations": "No reliable full publication date on the retrieved page. Document states May 2021. Used only for these stable obligations, not its uncommenced data portability item. Check exceptions and current regulations."
+  },
+  "I:SG-TELECOM": {
+    "source_id": "I:SG-TELECOM",
+    "region_id": "southeast-asia",
+    "jurisdiction": "SG",
+    "title": "Services Based Operations licence",
+    "publisher": "Infocomm Media Development Authority",
+    "url": "https://www.imda.gov.sg/regulations-and-licensing-listing/services-based-operations--sbo--licence",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "SBO authorisation for services based telecommunications operations.",
+    "limitations": "No reliable full publication date on the retrieved page. Primary indexed page extract read; live open returned a script challenge. No specific licence conditions asserted."
+  },
+  "I:TH-BOT": {
+    "source_id": "I:TH-BOT",
+    "region_id": "southeast-asia",
+    "jurisdiction": "TH",
+    "title": "Our Roles",
+    "publisher": "Bank of Thailand",
+    "url": "https://www.bot.or.th/en/our-roles.html",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Bank of Thailand banking supervision and payment system role.",
+    "limitations": "No reliable full publication date on the retrieved page. Does not establish oversight of every finance or insurance business."
+  },
+  "I:TH-PDPA": {
+    "source_id": "I:TH-PDPA",
+    "region_id": "southeast-asia",
+    "jurisdiction": "TH",
+    "title": "Personal Data Protection Act B.E. 2562 (2019)",
+    "publisher": "Ministry of Digital Economy and Society Thailand",
+    "url": "https://mdes.go.th/law/128",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Official Thai and English law versions available for applicability review.",
+    "limitations": "No reliable full publication date on the retrieved page. Index identifies law; no specific consent, transfer or reporting deadline asserted."
+  },
+  "I:TH-SEC": {
+    "source_id": "I:TH-SEC",
+    "region_id": "southeast-asia",
+    "jurisdiction": "TH",
+    "title": "Enforcement",
+    "publisher": "Securities and Exchange Commission Thailand",
+    "url": "https://www.sec.or.th/EN/pages/lawandregulations/enforcement.aspx",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Capital market supervision and enforcement.",
+    "limitations": "No reliable full publication date on the retrieved page. Not every wealth related software activity needs the same authorisation."
+  },
+  "I:VN-PDP": {
+    "source_id": "I:VN-PDP",
+    "region_id": "southeast-asia",
+    "jurisdiction": "VN",
+    "title": "Presidential Office announces new laws",
+    "publisher": "Government of Viet Nam",
+    "url": "https://en.baochinhphu.vn/presidential-office-announces-18-new-laws-111250711204559004.htm",
+    "publication_date": "2025-07-11",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Personal data protection law takes effect on 1 January 2026.",
+    "limitations": "Announcement used for commencement only. No penalties or detailed transfer rules reproduced."
+  },
+  "J:CA-CYBER": {
+    "source_id": "J:CA-CYBER",
+    "region_id": "north-america",
+    "jurisdiction": "CA",
+    "title": "Baseline cyber security controls for small and medium organizations",
+    "publisher": "Canadian Centre for Cyber Security",
+    "url": "https://www.cyber.gc.ca/en/guidance/baseline-cyber-security-controls-small-and-medium-organizations",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Risk assessment and incident responsibility in recommended baseline controls",
+    "limitations": "Publication date not reliably established. Voluntary guidance targeted at smaller organisations, not a universal certification requirement."
+  },
+  "J:CA-ELD": {
+    "source_id": "J:CA-ELD",
+    "region_id": "north-america",
+    "jurisdiction": "CA",
+    "title": "Electronic logging devices for commercial drivers and motor carriers",
+    "publisher": "Transport Canada",
+    "url": "https://tc.canada.ca/en/road-transportation/electronic-logging-devices/electronic-logging-devices-commercial-drivers-motor-carriers",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Commercial Vehicle Drivers Hours of Service Regulations and Canadian device certification",
+    "limitations": "Publication date not shown. Federal scope and listed exemptions matter; US compliance alone is not sufficient."
+  },
+  "J:CA-OSFI-B10": {
+    "source_id": "J:CA-OSFI-B10",
+    "region_id": "north-america",
+    "jurisdiction": "CA",
+    "title": "Third Party Risk Management Guideline B-10",
+    "publisher": "Office of the Superintendent of Financial Institutions",
+    "url": "https://www.osfi-bsif.gc.ca/en/guidance/guidance-library/third-party-risk-management-guideline",
+    "publication_date": "2023-04-30",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Proportionate third party oversight and retained accountability at federally regulated financial institutions",
+    "limitations": "Guidance scope is federally regulated institutions and relevant branches, not every Canadian fintech or provincial insurer."
+  },
+  "J:CA-PIPEDA": {
+    "source_id": "J:CA-PIPEDA",
+    "region_id": "north-america",
+    "jurisdiction": "CA",
+    "title": "Guidelines for processing personal data across borders",
+    "publisher": "Office of the Privacy Commissioner of Canada",
+    "url": "https://www.priv.gc.ca/en/privacy-topics/airports-and-borders/gl_dab_090127/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "PIPEDA accountability and comparable protection for outsourced processing",
+    "limitations": "Publication date not reliably established. Does not cover public sector transfers or detailed provincial private sector requirements."
+  },
+  "J:CA-PROVINCES": {
+    "source_id": "J:CA-PROVINCES",
+    "region_id": "north-america",
+    "jurisdiction": "CA",
+    "title": "Provincial laws that may apply instead of PIPEDA",
+    "publisher": "Office of the Privacy Commissioner of Canada",
+    "url": "https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/r_o_p/prov-pipeda",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Federal and provincial privacy scope and cross border processing",
+    "limitations": "Publication date not reliably established. Sector, province and data flow determine applicable law."
+  },
+  "J:CA-RPAA": {
+    "source_id": "J:CA-RPAA",
+    "region_id": "north-america",
+    "jurisdiction": "CA",
+    "title": "Retail payments supervisory framework",
+    "publisher": "Bank of Canada",
+    "url": "https://www.bankofcanada.ca/regulatory-oversight/retail-payments/supervisory-framework/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Retail Payment Activities Act operational risk, incident and safeguarding framework",
+    "limitations": "Publication date not shown. Apply only to payment service providers and activities in scope; check exclusions and funds handling."
+  },
+  "J:CA-SECURITIES": {
+    "source_id": "J:CA-SECURITIES",
+    "region_id": "north-america",
+    "jurisdiction": "CA",
+    "title": "Registration Information",
+    "publisher": "Canadian Securities Administrators",
+    "url": "https://www.securities-administrators.ca/industry-resources/registration-information/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "NI 31-103 and provincial or territorial securities registration",
+    "limitations": "Publication date not shown. Check exemptions, registration category and principal regulator; not a federal securities licence."
+  },
+  "J:CA-TELECOM": {
+    "source_id": "J:CA-TELECOM",
+    "region_id": "north-america",
+    "jurisdiction": "CA",
+    "title": "Responsibilities and Regulatory Obligations for Non Facilities Based Providers",
+    "publisher": "Canadian Radio-television and Telecommunications Commission",
+    "url": "https://crtc.gc.ca/eng/comm/telecom/respnon.htm",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Telecom provider registration, exemptions, emergency duties and BITS licence scope",
+    "limitations": "Publication date not shown. Registration exemptions do not remove all consumer protections."
+  },
+  "J:CH-CYBER": {
+    "source_id": "J:CH-CYBER",
+    "region_id": "western-europe",
+    "jurisdiction": "CH",
+    "title": "Legal basis for the reporting obligation",
+    "publisher": "National Cyber Security Centre",
+    "url": "https://www.bacs.admin.ch/en/legal-basis-for-the-reporting-obligation",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Information Security Act and Cybersecurity Ordinance critical infrastructure incident reporting scope",
+    "limitations": "Publication date not shown. Entity, incident and ordinance exemptions must be checked; not every Swiss company is covered."
+  },
+  "J:CH-FADP": {
+    "source_id": "J:CH-FADP",
+    "region_id": "western-europe",
+    "jurisdiction": "CH",
+    "title": "Outsourcing of data processing",
+    "publisher": "Federal Data Protection and Information Commissioner",
+    "url": "https://www.edoeb.admin.ch/en/outsourcing-of-data-processing",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Article 9 FADP processor controls, confidentiality and consent for further outsourcing",
+    "limitations": "Publication date not shown. Swiss law; cross border disclosure requires a separate assessment."
+  },
+  "J:CH-FINMA": {
+    "source_id": "J:CH-FINMA",
+    "region_id": "western-europe",
+    "jurisdiction": "CH",
+    "title": "Authorisation to operate in the financial market",
+    "publisher": "FINMA",
+    "url": "https://www.finma.ch/en/authorisation/authorisation-overview/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Different authorisation routes for banking, insurance, securities and asset management",
+    "limitations": "Publication date not shown. Activity specific permits, registration or self regulatory organisation routes; no blanket fintech licence."
+  },
+  "J:DE-FINTECH": {
+    "source_id": "J:DE-FINTECH",
+    "region_id": "western-europe",
+    "jurisdiction": "DE",
+    "title": "FinTech technology enabled financial innovation",
+    "publisher": "Deutsche Bundesbank",
+    "url": "https://www.bundesbank.de/en/tasks/financial-supervision/individual-aspects/fintech-622840",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Activity based scope under Banking Act, Investment Institutions Act and Payment Services Oversight Act",
+    "limitations": "Publication date not shown. Fintech is not a separate legal category and not all fintech is regulated."
+  },
+  "J:DE-INSURANCE": {
+    "source_id": "J:DE-INSURANCE",
+    "region_id": "western-europe",
+    "jurisdiction": "DE",
+    "title": "Unterliegen Insurtechs einer Aufsichtspflicht?",
+    "publisher": "BaFin",
+    "url": "https://bafin.de/SharedDocs/FAQs/DE/Fintech/Geschaeftsmodelle/Insurtechs/FAQ_Allgemein/4.html",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Insurance business authorisation under Versicherungsaufsichtsgesetz",
+    "limitations": "Publication date not shown. German primary text. Does not make every insurance technology vendor an insurer."
+  },
+  "J:DE-PAYMENTS": {
+    "source_id": "J:DE-PAYMENTS",
+    "region_id": "western-europe",
+    "jurisdiction": "DE",
+    "title": "Payment institutions and electronic money institutions",
+    "publisher": "Deutsche Bundesbank",
+    "url": "https://www.bundesbank.de/en/tasks/financial-supervision/individual-aspects/payment-institutions-and-e-money-institutions-622962",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "BaFin authorisation under ZAG for covered payment and electronic money institutions",
+    "limitations": "Publication date not shown. Exclusions and actual service model must be checked."
+  },
+  "J:DE-TKG": {
+    "source_id": "J:DE-TKG",
+    "region_id": "western-europe",
+    "jurisdiction": "DE",
+    "title": "Meldepflicht",
+    "publisher": "Bundesnetzagentur",
+    "url": "https://www.bundesnetzagentur.de/DE/Fachthemen/Telekommunikation/Unternehmenspflichten/Meldepflicht/start.html",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Section 5 Telekommunikationsgesetz notification and exclusion for number independent interpersonal services",
+    "limitations": "Publication date not shown. German version supplies the exclusion omitted in the shorter English page."
+  },
+  "J:EU-AI": {
+    "source_id": "J:EU-AI",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "Transparency obligations under Article 50 of the AI Act",
+    "publisher": "European Commission",
+    "url": "https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Provider and deployer roles, transparency duties and limited transition for some existing systems",
+    "limitations": "Publication date not shown. Check the exact paragraph and transition; do not treat all AI obligations as applying on one date."
+  },
+  "J:EU-BANK-SUPERVISORS": {
+    "source_id": "J:EU-BANK-SUPERVISORS",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "National supervisors",
+    "publisher": "European Central Bank",
+    "url": "https://www.bankingsupervision.europa.eu/about/organisation/national-supervisors/html/index.en.html",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Country competent authorities for banking supervision",
+    "limitations": "Publication date not shown. Banking supervision only, not a list of every financial sector regulator."
+  },
+  "J:EU-DORA": {
+    "source_id": "J:EU-DORA",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "Regulation (EU) 2022/2554 on digital operational resilience for the financial sector",
+    "publisher": "European Union",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554",
+    "publication_date": "2022-12-27",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Articles 28 and 30 ICT risk assessment and contractual provisions",
+    "limitations": "Read primary legal text in indexed search. Direct ELI view served a JavaScript challenge. Apply only to financial entities and arrangements within scope; not every technology supplier is directly supervised."
+  },
+  "J:EU-GDPR": {
+    "source_id": "J:EU-GDPR",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "Data controller or data processor",
+    "publisher": "European Data Protection Board",
+    "url": "https://www.edpb.europa.eu/sme/learn-the-basics/data-controller-or-data-processor_en",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "GDPR controller and processor roles, written subprocessor approval and contractual protection",
+    "limitations": "Publication date not shown. Territorial scope and actual processing role must be established."
+  },
+  "J:EU-INSURANCE": {
+    "source_id": "J:EU-INSURANCE",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "Register of Insurance Undertakings",
+    "publisher": "European Insurance and Occupational Pensions Authority",
+    "url": "https://register.eiopa.europa.eu/registers/register-of-insurance-undertakings",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "National authority source of insurance undertaking authorisation and register precedence",
+    "limitations": "Publication date not shown. Undertakings and intermediaries differ; national registers prevail."
+  },
+  "J:EU-INVEST": {
+    "source_id": "J:EU-INVEST",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "Is the firm regulated?",
+    "publisher": "European Securities and Markets Authority",
+    "url": "https://www.esma.europa.eu/investor-corner/is-the-firm-regulated",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "National investment firm registers and authorised activities",
+    "limitations": "Publication date not shown. Check the actual legal entity and service; database inclusion does not replace licence scope review."
+  },
+  "J:EU-NIS2": {
+    "source_id": "J:EU-NIS2",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "NIS2 Directive transposition in EU countries",
+    "publisher": "European Commission",
+    "url": "https://digital-strategy.ec.europa.eu/en/policies/nis-transposition",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "National transposition must be checked for NIS2 implementation",
+    "limitations": "Publication date not established. Tracker is a state of play, not a final finding of national legal compliance."
+  },
+  "J:EU-PSD2": {
+    "source_id": "J:EU-PSD2",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "Register of payment and electronic money institutions under PSD2",
+    "publisher": "European Banking Authority",
+    "url": "https://eba.europa.eu/risk-and-data-analysis/data/registers/payment-institutions-register",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "National authority authorisation under PSD2 and limitations of EBA register",
+    "limitations": "Publication date not shown. Central register has no legal significance; national register controls."
+  },
+  "J:EU-ROAD": {
+    "source_id": "J:EU-ROAD",
+    "region_id": "western-europe",
+    "jurisdiction": "EU",
+    "title": "Driving time and rest periods",
+    "publisher": "European Commission",
+    "url": "https://transport.ec.europa.eu/transport-modes/road/social-provisions/driving-time-and-rest-periods_en",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Regulation (EC) No 561/2006 scope, exceptions and national derogations",
+    "limitations": "Publication date not shown. Vehicle and route scope plus national derogations matter; no blanket rule for all logistics software."
+  },
+  "J:FR-AUTH": {
+    "source_id": "J:FR-AUTH",
+    "region_id": "western-europe",
+    "jurisdiction": "FR",
+    "title": "Authorising undertakings",
+    "publisher": "Autorité de contrôle prudentiel et de résolution",
+    "url": "https://acpr.banque-france.fr/en/nos-missions/authorising-undertakings",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Banking and insurance permissions, ACPR assessment and ECB credit institution decision",
+    "limitations": "Publication date not shown. Different routes by regulated activity; not all French finance is supervised solely by ACPR."
+  },
+  "J:FR-TELECOM": {
+    "source_id": "J:FR-TELECOM",
+    "region_id": "western-europe",
+    "jurisdiction": "FR",
+    "title": "Questions fréquentes for communications operators",
+    "publisher": "Arcep",
+    "url": "https://extranet.arcep.fr/communications-electroniques/questions-frequentes",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Ordonnance n° 2021-650 removed prior declaration under CPCE L.33-1; activity still determines operator status",
+    "limitations": "Publication date not shown. Removal of this declaration does not remove other operator obligations."
+  },
+  "J:LI-FMA": {
+    "source_id": "J:LI-FMA",
+    "region_id": "western-europe",
+    "jurisdiction": "LI",
+    "title": "Financial Institutions Division",
+    "publisher": "Financial Market Authority Liechtenstein",
+    "url": "https://www.fma-li.li/en/financial-intermediaries/financial-institutions-division",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Separate bank, investment, payment and electronic money licensing routes",
+    "limitations": "Publication date not shown. Directory establishes routes, not complete substantive permissions."
+  },
+  "J:LI-GDPR": {
+    "source_id": "J:LI-GDPR",
+    "region_id": "western-europe",
+    "jurisdiction": "LI",
+    "title": "Verantwortlicher",
+    "publisher": "Datenschutzstelle Liechtenstein",
+    "url": "https://www.datenschutzstelle.li/datenschutz/themen-z/verantwortlicher",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Article 28 GDPR controller and processor relationship in Liechtenstein",
+    "limitations": "Publication date not shown. German primary guidance; do not infer applicability of other EU legislation from GDPR."
+  },
+  "J:MC-APDP": {
+    "source_id": "J:MC-APDP",
+    "region_id": "western-europe",
+    "jurisdiction": "MC",
+    "title": "Questions fréquentes",
+    "publisher": "Autorité de Protection des Données Personnelles",
+    "url": "https://apdp.mc/faq/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Article 26 of Loi n° 1.565 du 3 décembre 2024 for written processor contracts",
+    "limitations": "Publication date not shown. Monaco law; not an assertion of EU GDPR territorial coverage."
+  },
+  "J:MC-CCAF": {
+    "source_id": "J:MC-CCAF",
+    "region_id": "western-europe",
+    "jurisdiction": "MC",
+    "title": "Formalities for carrying out a financial activity",
+    "publisher": "Commission de Contrôle des Activités Financières",
+    "url": "https://ccaf.mc/en/authorised-firms/carrying-out-a-financial-activity/formalities/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Act No. 1.338 activity authorisation and separate government and ACPR approvals",
+    "limitations": "Publication date not shown. CCAF financial activity scope, not a general licence for all insurance or payment services."
+  },
+  "J:MX-FINTECH": {
+    "source_id": "J:MX-FINTECH",
+    "region_id": "north-america",
+    "jurisdiction": "MX",
+    "title": "Instituciones de Tecnología Financiera",
+    "publisher": "Comisión Nacional Bancaria y de Valores",
+    "url": "https://www.gob.mx/cnbv/acciones-y-programas/instituciones-de-tecnologia-financiera",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Ley para Regular las Instituciones de Tecnología Financiera covers collective financing and electronic payment fund institutions",
+    "limitations": "Publication date not reliably captured. Scope is designated financial institutions, not all businesses described as fintech."
+  },
+  "J:MX-INSURANCE": {
+    "source_id": "J:MX-INSURANCE",
+    "region_id": "north-america",
+    "jurisdiction": "MX",
+    "title": "Autorización para constituir, organizar y funcionar como Institución de Seguros",
+    "publisher": "Comisión Nacional de Seguros y Fianzas",
+    "url": "https://www.gob.mx/cnsf/acciones-y-programas/autorizacion-para-constituir-organizar-y-funcionar-como-institucion-de-seguros",
+    "publication_date": "2026-06-11",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "CNSF insurance institution authorisation and Spanish application documentation",
+    "limitations": "Applies to establishing an insurance institution, not every intermediary or software supplier."
+  },
+  "J:MX-PRIVACY": {
+    "source_id": "J:MX-PRIVACY",
+    "region_id": "north-america",
+    "jurisdiction": "MX",
+    "title": "Decree issuing the private sector personal data protection law",
+    "publisher": "Diario Oficial de la Federación",
+    "url": "https://sidof.segob.gob.mx/notas/docFuente/5752569",
+    "publication_date": "2025-03-20",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Ley Federal de Protección de Datos Personales en Posesión de los Particulares, role definitions and designated Secretaría",
+    "limitations": "The decree contains multiple laws. Notes refer only to the private sector law in Artículo Tercero; exceptions and subsequent amendments require care."
+  },
+  "J:MX-ROAD": {
+    "source_id": "J:MX-ROAD",
+    "region_id": "north-america",
+    "jurisdiction": "MX",
+    "title": "NOM-087-SCT-2-2017",
+    "publisher": "Secretaría de Economía standards catalogue",
+    "url": "https://platiica.economia.gob.mx/normalizacion/nom-087-sct-2-2017/",
+    "publication_date": "2018-06-28",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Federal motor transport driving and break time standard, listed as current",
+    "limitations": "Catalogue supports identity and scope, not detailed timing claims. Verify the operator's covered activity."
+  },
+  "J:MX-TELECOM": {
+    "source_id": "J:MX-TELECOM",
+    "region_id": "north-america",
+    "jurisdiction": "MX",
+    "title": "Registro Público de Concesiones",
+    "publisher": "Comisión Reguladora de Telecomunicaciones",
+    "url": "https://rpc.crt.gob.mx/vrpc",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Register of concessions, permits and authorisations, service scope and validity",
+    "limitations": "Publication date not shown. Registry supports verification, not a general conclusion that every telecom software supplier needs a concession."
+  },
   "J:UK-CABINET-CYBER": {
     "source_id": "J:UK-CABINET-CYBER",
     "region_id": "uk",
@@ -3286,6 +11052,136 @@ export const REGION_SOURCES: Readonly<Record<string,RegionSource>> = {
     "primary_source": "true",
     "claim_scope": "PRA application route for banks, credit unions, insurers and Lloyd's managing agents",
     "limitations": "Publication date not shown. Not a claim that software providers need a banking or insurance authorisation."
+  },
+  "J:US-ADVISERS": {
+    "source_id": "J:US-ADVISERS",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "Investment Adviser Registration",
+    "publisher": "US Securities and Exchange Commission Investor.gov",
+    "url": "https://www.investor.gov/introduction-investing/getting-started/working-investment-professional/investment-advisers-0",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "SEC versus state registration and exceptions for investment advisers",
+    "limitations": "Publication date not shown. Investment advisers differ from brokers and other financial intermediaries."
+  },
+  "J:US-AI-RMF": {
+    "source_id": "J:US-AI-RMF",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "AI Risk Management Framework",
+    "publisher": "National Institute of Standards and Technology",
+    "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Voluntary AI risk framework and trustworthiness assessment",
+    "limitations": "Webpage publication date not established. Framework release date 2023-01-26. Not a general legal mandate."
+  },
+  "J:US-BANK-THIRDPARTY": {
+    "source_id": "J:US-BANK-THIRDPARTY",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "Interagency Guidance on Third Party Relationships: Risk Management",
+    "publisher": "Federal Deposit Insurance Corporation",
+    "url": "https://www.fdic.gov/news/financial-institution-letters/2023/fil23029.html",
+    "publication_date": "2023-06-06",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "OCC, Federal Reserve and FDIC banking guidance on third party relationship lifecycle",
+    "limitations": "Supervisory guidance, not a new licence or a universal checklist for every nonbank."
+  },
+  "J:US-CSF": {
+    "source_id": "J:US-CSF",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "Frequently Asked Questions about the Cybersecurity Framework",
+    "publisher": "National Institute of Standards and Technology",
+    "url": "https://www.nist.gov/cyberframework/faqs",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Voluntary use for most organisations and distinction from mandatory government or contract requirements",
+    "limitations": "Publication date not shown. NIST is not a regulatory agency; individual obligations need separate evidence."
+  },
+  "J:US-E911": {
+    "source_id": "J:US-E911",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "47 CFR 9.11 E911 Service",
+    "publisher": "Electronic Code of Federal Regulations",
+    "url": "https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-9/subpart-D/section-9.11",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "FCC interconnected VoIP emergency calling and location obligations",
+    "limitations": "Publication date omitted for continuously updated code; latest amendment shown 2026-01-14. Geographic service conditions and fixed versus nonfixed service matter."
+  },
+  "J:US-ELD": {
+    "source_id": "J:US-ELD",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "General Information about the ELD Rule",
+    "publisher": "Federal Motor Carrier Safety Administration",
+    "url": "https://www.fmcsa.dot.gov/hours-service/elds/general-information-about-eld-rule",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "49 CFR Part 395 electronic logging applicability, exceptions and records",
+    "limitations": "Publication date not shown. Applies to covered US operations, including certain foreign domiciled drivers, not all fleet software."
+  },
+  "J:US-FINCEN": {
+    "source_id": "J:US-FINCEN",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "Money Services Business Registration",
+    "publisher": "Financial Crimes Enforcement Network",
+    "url": "https://www.fincen.gov/resources/money-services-business-msb-registration",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "Federal MSB registration scope and agent exception under 31 CFR Chapter X",
+    "limitations": "Publication date not shown. Federal registration is not a determination of state licensing or banking authority."
+  },
+  "J:US-FTC-SECURITY": {
+    "source_id": "J:US-FTC-SECURITY",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "Start with Security: A Guide for Business",
+    "publisher": "Federal Trade Commission",
+    "url": "https://www.ftc.gov/business-guidance/resources/start-security-guide-business",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "FTC business guidance on data inventory, minimisation, protection and disposal",
+    "limitations": "Publication date not reliably established. Guidance derived from cases; individual settlement orders do not apply to every business."
+  },
+  "J:US-INSURANCE": {
+    "source_id": "J:US-INSURANCE",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "Understanding the NAIC: Governance and Accountability",
+    "publisher": "National Association of Insurance Commissioners",
+    "url": "https://content.naic.org/about/understanding-naic-governance-accountability",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "State regulatory authority and the nonbinding nature of NAIC model laws",
+    "limitations": "Publication date not shown. NAIC is a regulatory support body, not a licensing regulator. Check state enactments separately."
+  },
+  "J:US-REG-B": {
+    "source_id": "J:US-REG-B",
+    "region_id": "north-america",
+    "jurisdiction": "US",
+    "title": "12 CFR 1002.9 Notifications",
+    "publisher": "Consumer Financial Protection Bureau",
+    "url": "https://www.consumerfinance.gov/rules-policy/regulations/1002/9/",
+    "publication_date": "",
+    "accessed_date": "2026-11-03",
+    "primary_source": "true",
+    "claim_scope": "ECOA Regulation B adverse action notice and specific reasons requirements",
+    "limitations": "No standalone publication date shown. Direct rule used instead of relying on an older circular. Business credit and other notification exceptions must be checked."
   }
 };
 export const REGION_TAXONOMY: RegionTaxonomy = {
@@ -3622,13 +11518,8 @@ export const REGION_TAXONOMY: RegionTaxonomy = {
 };
 export const REGION_GENERATION: RegionGeneration = {
   "schema_version": "1.0.0",
-  "data_sha256": "2cc121075ce6b02f6ae0cb70254150bf6a1199a88db917aef66ff2a50ba84669",
-  "missing_regions": [
-    "southeast-asia",
-    "middle-east",
-    "western-europe",
-    "north-america"
-  ],
+  "data_sha256": "0aced487a60275f9f99305cc012ca3620e287acc8689f71aae39b4fd097a2107",
+  "missing_regions": [],
   "complete": false,
   "coverage": {
     "india": {
@@ -3652,36 +11543,36 @@ export const REGION_GENERATION: RegionGeneration = {
     "southeast-asia": {
       "verticals": {
         "expected": 9,
-        "specific": 0,
-        "inherited": 0,
-        "waiting_for_source": 0,
-        "missing": 9,
+        "specific": 1,
+        "inherited": 4,
+        "waiting_for_source": 4,
+        "missing": 0,
         "duplicate": 0
       },
       "subtypes": {
         "expected": 57,
         "specific": 0,
-        "inherited": 0,
-        "waiting_for_source": 0,
-        "missing": 57,
+        "inherited": 53,
+        "waiting_for_source": 4,
+        "missing": 0,
         "duplicate": 0
       }
     },
     "middle-east": {
       "verticals": {
         "expected": 9,
-        "specific": 0,
-        "inherited": 0,
-        "waiting_for_source": 0,
-        "missing": 9,
+        "specific": 1,
+        "inherited": 5,
+        "waiting_for_source": 3,
+        "missing": 0,
         "duplicate": 0
       },
       "subtypes": {
         "expected": 57,
         "specific": 0,
-        "inherited": 0,
-        "waiting_for_source": 0,
-        "missing": 57,
+        "inherited": 53,
+        "waiting_for_source": 4,
+        "missing": 0,
         "duplicate": 0
       }
     },
@@ -3706,36 +11597,36 @@ export const REGION_GENERATION: RegionGeneration = {
     "western-europe": {
       "verticals": {
         "expected": 9,
-        "specific": 0,
-        "inherited": 0,
+        "specific": 5,
+        "inherited": 4,
         "waiting_for_source": 0,
-        "missing": 9,
+        "missing": 0,
         "duplicate": 0
       },
       "subtypes": {
         "expected": 57,
-        "specific": 0,
-        "inherited": 0,
+        "specific": 5,
+        "inherited": 52,
         "waiting_for_source": 0,
-        "missing": 57,
+        "missing": 0,
         "duplicate": 0
       }
     },
     "north-america": {
       "verticals": {
         "expected": 9,
-        "specific": 0,
-        "inherited": 0,
+        "specific": 5,
+        "inherited": 4,
         "waiting_for_source": 0,
-        "missing": 9,
+        "missing": 0,
         "duplicate": 0
       },
       "subtypes": {
         "expected": 57,
-        "specific": 0,
-        "inherited": 0,
+        "specific": 7,
+        "inherited": 50,
         "waiting_for_source": 0,
-        "missing": 57,
+        "missing": 0,
         "duplicate": 0
       }
     }
