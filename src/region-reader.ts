@@ -58,7 +58,7 @@ function clues():Clue[]{
  const seen=new Set<string>();return all.filter(c=>{const key=[c.region,c.country,c.value.toLowerCase(),c.kind].join('|');if(seen.has(key))return false;seen.add(key);return true;}).sort((a,b)=>b.value.length-a.value.length);
 }
 function normalize(text:string):string{
- return text.normalize('NFKC').replace(/[’]/g,"'").replace(/\bU\.S\.(?:A\.)?/g,'United States').replace(/\bU\.K\./gi,'United Kingdom').replace(/\bUS\b/g,'United States').replace(/\b(don't|doesn't|didn't|isn't|aren't|wasn't|weren't|won't|can't|haven't|hasn't)\b/gi,m=>({"don't":'do not',"doesn't":'does not',"didn't":'did not',"isn't":'is not',"aren't":'are not',"wasn't":'was not',"weren't":'were not',"won't":'will not',"can't":'cannot',"haven't":'have not',"hasn't":'has not'}[m.toLowerCase()]||m));
+ return text.normalize('NFKC').replace(/[‘’]/g,"'").replace(/\bU\.S\.(?:A\.)?/g,'United States').replace(/\bU\.K\./gi,'United Kingdom').replace(/\bUS\b/g,'United States').replace(/\b(don't|doesn't|didn't|isn't|aren't|wasn't|weren't|won't|can't|haven't|hasn't)\b/gi,m=>({"don't":'do not',"doesn't":'does not',"didn't":'did not',"isn't":'is not',"aren't":'are not',"wasn't":'was not',"weren't":'were not',"won't":'will not',"can't":'cannot',"haven't":'have not',"hasn't":'has not'}[m.toLowerCase()]||m));
 }
 const escaped=(s:string)=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 function pattern(c:Clue):RegExp {
@@ -116,7 +116,7 @@ function scan(texts:string[],all:Clue[]):Scan {
 }
 /** Explicit selling destinations outrank a seller's headquarters or incidental location. */
 function marketText(text:string,all:Clue[]):string {
- const clean=normalize(text).replace(/"[^"\n]*"|“[^”\n]*”/g,'');
+ const clean=normalize(text).replace(/"[^"\n]*"|“[^”\n]*”|(?<![\p{L}\p{N}])'[^\n]*?'(?![\p{L}\p{N}])/gu,'');
  return (clean.match(/[^.!?\n]+[.!?]?/g)||[]).map(sentence=>{
   // A buyer buying from a vendor names the destination before the vendor's office.
   const purchase=sentence.match(/\bbuy(?:ing|s)?\b[^.;!?]*?\bfrom\b/i);
@@ -128,7 +128,14 @@ function marketText(text:string,all:Clue[]):string {
    const places=all.filter(c=>['region','country','city','state'].includes(c.kind)&&(!/^[A-Z]{2,4}$/.test(c.value)||['UK','UAE','USA'].includes(c.value))).map(c=>escaped(c.value)).join('|');
    const place='(?:'+places+')';
    const origin=new RegExp('\\bfrom\\s+(?:(?:our|the|a|an|vendor\'s|seller\'s|company\'s)\\s+)?(?:(?:office|offices|headquarters|base|team|company|vendor|seller)\\s+(?:in|at)\\s+)?'+place+'(?![\\p{L}\\p{N}_])(?:\\s*(?:,|and|or)\\s*'+place+'(?![\\p{L}\\p{N}_]))*(?:\\s+(?:offices?|headquarters|base|team|company|vendor|seller|suppliers?))?','giu');
-   const destination=sentence.slice(m.index).replace(origin,'');
+   const selling=sentence.slice(m.index);
+   const namedDestination=new RegExp('\\b(?:in|into|to|serves?|serving|targets?|targeting)\\s+(?:the\\s+)?'+place+'(?![\\p{L}\\p{N}_])','iu');
+   const destination=selling.replace(/\bfrom\s+[^.;!?]*?(?=\s+(?:to|into)\s+|[.;!?]|$)/gi,(span:string,offset:number,whole:string)=>{
+    origin.lastIndex=0;if(!origin.test(span))return span;
+    // Preserve an entire source postal address when stripping it, not only its first city.
+    if(/^\s+(?:to|into)\s+/i.test(whole.slice(offset+span.length))||namedDestination.test(whole.slice(0,offset)))return '';
+    origin.lastIndex=0;return span.replace(origin,'');
+   });
    return qualifier+destination;
   }
   return sentence.replace(/\b(?:our|the)\s+(?:company|business|product|brand)(?:'s)?\s+name\s+(?:is|:)\s+[^,;.]+/gi,'').replace(/\b(?:based|headquartered|located|founded)\s+in\s+[^,;.]+/gi,'');

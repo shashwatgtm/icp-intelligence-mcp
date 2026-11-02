@@ -160,7 +160,7 @@ exports.REGION_DATA = [
                 "vertical_id": "logistics-tech",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -199,7 +199,7 @@ exports.REGION_DATA = [
                 "vertical_id": "fintech",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -248,28 +248,39 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: for a retail or industry billing workflow supporting input tax credit, preserve the invoice, receipt and matching evidence required by CGST section 16 and rule 36.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-GST-CREDIT",
+                                "I:IN-GST-DOCS"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Registered recipient and eligible supplies only; no promise of credit eligibility."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "ai-native",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -298,7 +309,7 @@ exports.REGION_DATA = [
                 "vertical_id": "ites",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -327,7 +338,7 @@ exports.REGION_DATA = [
                 "vertical_id": "telecom",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -356,7 +367,7 @@ exports.REGION_DATA = [
                 "vertical_id": "cybersecurity",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -395,70 +406,114 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: CERT In guidance asks application owners to assess secure development as well as final audits. Show design controls, source review and security testing evidence.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-APP-SECURE"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Developing or outsourcing applications, especially government projects; guidance rather than product certification."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
-                    "decision_approvers": [],
+                    "decision_approvers": [
+                        {
+                            "text": "India: the procuring government department specifies audit rights, contract period and service terms; STQC audit supports empanelment rather than replacing purchase approval.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-CLOUD-EMPANEL"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "MeitY cloud empanelment guide steps 4 to 6."
+                        }
+                    ],
                     "sector_regulator": [],
-                    "procurement_payment": [],
+                    "procurement_payment": [
+                        {
+                            "text": "India: government cloud procurement should verify the empanelled offering, deployment model and data centre against the MeitY letter; provider name alone is insufficient.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-CLOUD-EMPANEL"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Government procurement using the cloud empanelment programme, not all commercial SaaS."
+                        }
+                    ],
                     "data_privacy": [],
                     "buyer_language": [],
                     "proof": [],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             }
         ],
         "subtypes": [
             {
                 "subtype_id": "freight-visibility",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: connect shipment visibility to the responsible consignor, consignee or transporter record in the e way bill workflow.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-EWB"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Qualifying goods movement; no current threshold or API assertion."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "freight-marketplace",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -469,36 +524,46 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "seller-shipping",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: show the seller shipping handoff from invoice or delivery document to the responsible e way bill party.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-EWB"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Qualifying movement under rule 138; document and responsibility check only."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "last-mile",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -509,16 +574,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "warehousing",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -529,16 +592,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "transport-management",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -549,16 +610,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "payments-banking",
                 "vertical_id": "fintech",
                 "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -617,14 +676,16 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": []
+                "pending_topics": [
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
+                ]
             },
             {
                 "subtype_id": "core-banking",
                 "vertical_id": "fintech",
                 "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Core banking adds the banking licence boundary, bank outsourcing approval and resilience evidence; it is not treated as a generic fintech purchase.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -695,14 +756,16 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": []
+                "pending_topics": [
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
+                ]
             },
             {
                 "subtype_id": "lending",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Keep the parent notes only within their scope. Do not extend commercial bank directions to every lender.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -717,9 +780,33 @@ exports.REGION_DATA = [
                             "applies_when": "Commercial bank lending arrangement within the 2025 outsourcing directions; not an NBFC or other excluded bank category"
                         }
                     ],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "India: the Finance Ministry confirms RBI digital lending rules apply to regulated lenders, their lending service providers and digital lending apps. Identify the actual role.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:IN-DIGITAL-LENDING-2026"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Framework confirmation as of July 2026; detailed current entity directions still need checking."
+                        }
+                    ],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "India: the digital lending framework includes data privacy and grievance controls. Require the regulated lender to map the proposed data flow to its current entity rules.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-DIGITAL-LENDING-2026"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Digital lending arrangement in RBI scope; no unsupported consent or hosting rule asserted."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [
                         {
@@ -738,7 +825,7 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: waiting for RBI Commercial Banks Credit Facilities Directions 2025 and NBFC Credit Facilities Directions 2025 current 2026 versions; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
@@ -746,7 +833,7 @@ exports.REGION_DATA = [
                 "vertical_id": "fintech",
                 "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -816,14 +903,16 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": []
+                "pending_topics": [
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
+                ]
             },
             {
                 "subtype_id": "spend-expense",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Expense capture and tax evidence differ from payment system operation; the remaining approval and regulated activity check is explicit.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -883,7 +972,7 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: waiting for CGST section 16 and rule 36; buyer expense delegation policy; RBI payment authorisation directions if money moves; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
@@ -891,7 +980,7 @@ exports.REGION_DATA = [
                 "vertical_id": "fintech",
                 "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Insurer outsourcing has its own committee, policyholder data and regulator access requirements.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -962,14 +1051,16 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": []
+                "pending_topics": [
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
+                ]
             },
             {
                 "subtype_id": "customer-service",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -980,16 +1071,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "crm-marketing",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1000,16 +1089,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "collaboration",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1020,16 +1107,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "product-growth",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1040,16 +1125,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "construction",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1060,16 +1143,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "property-management",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1080,16 +1161,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "field-services",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1100,16 +1179,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "fmcg-retail-execution",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1120,16 +1197,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "industry-hr-payroll",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1140,16 +1215,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "hotel-lodging",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1160,16 +1233,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "retail-restaurant-ops",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1180,16 +1251,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "agents-copilots",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1200,16 +1269,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "voice-language-models",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1220,16 +1287,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "enterprise-search",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1240,16 +1305,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "it-services",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1260,16 +1323,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "bpo-cx",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1280,16 +1341,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "digital-engineering",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1300,16 +1359,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "data-services",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1320,28 +1377,38 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "operators-connectivity",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: show the operator entity, authorised service category and current DoT permission or migration position before proposing connectivity delivery.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-DOT"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Operating telecom service, not merely supplying software to an operator."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
@@ -1349,7 +1416,7 @@ exports.REGION_DATA = [
                 "vertical_id": "telecom",
                 "status": "specific",
                 "inherits_from": "telecom",
-                "inheritance_note": "Inherit applicable parent notes, then add only the sourced country and activity specific notes below.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -1372,14 +1439,16 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": []
+                "pending_topics": [
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
+                ]
             },
             {
                 "subtype_id": "telecom-software",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1390,16 +1459,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "business-voice-ucaas",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1410,16 +1477,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "developer-platform",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1430,16 +1495,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "data-infrastructure",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1450,16 +1513,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "observability",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1470,16 +1531,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "testing",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1490,16 +1549,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "dev-tools",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1510,138 +1567,220 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "cloud-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: verify the government cloud offering and data centre in the MeitY empanelment letter, then test the agreed security responsibilities.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-CLOUD-EMPANEL"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Government cloud procurement only."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "identity-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: CERT In application guidance supports testing authentication, authorisation and session termination together.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-APP-SECURE"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Application security guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "email-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: test how an email security alert reaches the designated incident contact and the applicable CERT In reporting workflow.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-CERT"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Suggested evaluation for entities within the directions."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "awareness-training",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: audit social engineering exercises should assess agreed staff groups without identifying or penalising individuals. External targets require specific written consent.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-AUDIT-POLICY"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "CERT In audit guidance section 15."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "appsec",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: combine secure development evidence with source review and black box testing under CERT In application guidance.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-APP-SECURE"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Application development and outsourcing guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "mobile-appsec",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: CERT In audit guidance identifies mobile testing standards; define the tested application version and environment in the report.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-AUDIT-POLICY"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Mobile application audit."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "soc-services",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
-                    "decision_approvers": [],
+                    "decision_approvers": [
+                        {
+                            "text": "India: confirm the designated CERT In contact and demonstrate the monitoring to reporting escalation. Outsourcing monitoring does not identify the buyer signatory.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-CERT"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "In-scope incident reporting and contact duties."
+                        }
+                    ],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
@@ -1651,35 +1790,47 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "endpoint-network",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: demonstrate endpoint and network event logging with reliable timestamps against applicable CERT In logging requirements.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-CERT"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "ICT systems within the directions; suggested evidence."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "document-ai",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1690,16 +1841,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "ai-video",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1710,16 +1859,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "engineering-talent",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1730,16 +1877,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "product-management",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1750,16 +1895,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "digital-adoption",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1770,18 +1913,28 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "pentest",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
-                    "decision_approvers": [],
+                    "decision_approvers": [
+                        {
+                            "text": "India: obtain the auditee approval for the audit team and agreed test scope before work; maintain confidential evidence handling.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-AUDIT-POLICY"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "CERT In audit engagement guidance."
+                        }
+                    ],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
@@ -1791,35 +1944,47 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "attack-surface-dast",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "India: an automated scan alone is insufficient audit evidence under CERT In guidance; include manual coverage and documented limitations.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:IN-AUDIT-POLICY"
+                            ],
+                            "jurisdictions": [
+                                "IN"
+                            ],
+                            "applies_when": "Audit assurance, not every standalone scan."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "process-orchestration",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1830,16 +1995,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "open-source-support",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1850,16 +2013,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "iot-connectivity",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -1870,9 +2031,7 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "India: check I:IN-DPDP, I:IN-RBI-OUTSOURCE, I:IN-PSS, I:IN-IRDAI, I:IN-SEBI, I:IN-CERT, I:IN-DOT, I:IN-TRAI, I:IN-EWB, I:IN-AI, I:IN-OSP against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             }
         ]
     },
@@ -2191,9 +2350,9 @@ exports.REGION_DATA = [
         "verticals": [
             {
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -2217,14 +2376,23 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete sector source checks for countries without an applicable note; never substitute a neighbouring country's rule."
+                    "Indonesia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Malaysia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Thailand: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Philippines: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Brunei: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Cambodia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Laos: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Myanmar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Timor Leste: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -2357,43 +2525,54 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete sector source checks for countries without an applicable note; never substitute a neighbouring country's rule."
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: HR and payroll workflows must support Employment Act employee and salary records, including the applicable retention periods.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-EMPLOYMENT-RECORDS"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Employers and employees covered by the Employment Act."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Indonesia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Malaysia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Thailand: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Philippines: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Brunei: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Cambodia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Laos: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Myanmar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Timor Leste: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "ai-native",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -2416,42 +2595,76 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": []
+                "pending_topics": [
+                    "Indonesia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Malaysia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Thailand: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Philippines: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Brunei: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Cambodia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Laos: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Myanmar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Timor Leste: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
+                ]
             },
             {
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Singapore: outsourced personal data processing needs documented responsibilities between the organisation and data intermediary; staff handoffs should follow the agreed processing instructions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-DATA-INTERMEDIARIES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "PDPA processing on behalf of private organisations; government outsourcing has separate requirements."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: use the PDPC lifecycle guide to demonstrate vendor onboarding, incident escalation and an agreed data exit plan.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-DATA-INTERMEDIARIES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Suggested diligence evidence, proportionate to outsourced processing risk."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Indonesia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Malaysia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Thailand: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Philippines: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Brunei: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Cambodia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Laos: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Myanmar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Timor Leste: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -2475,16 +2688,37 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete sector source checks for countries without an applicable note; never substitute a neighbouring country's rule."
+                    "Indonesia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Malaysia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Thailand: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Philippines: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Brunei: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Cambodia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Laos: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Myanmar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Timor Leste: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
-                    "decision_approvers": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Brunei: CII owners assign cybersecurity responsibilities and maintain board and senior management oversight.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:BN-CII-CODE"
+                            ],
+                            "jurisdictions": [
+                                "BN"
+                            ],
+                            "applies_when": "CII code section 3.1."
+                        }
+                    ],
                     "sector_regulator": [
                         {
                             "text": "Singapore: the Cybersecurity Act licensing framework covers penetration testing and managed security operations centre monitoring services. Check the exact service scope.",
@@ -2496,75 +2730,163 @@ exports.REGION_DATA = [
                                 "SG"
                             ],
                             "applies_when": "For licensable services under the Act. Do not classify every cybersecurity product as a licensed service."
+                        },
+                        {
+                            "text": "Malaysia: NACSA licensing under the Cyber Security Act 2024 and its provider regulations covers managed SOC monitoring and penetration testing. Establish the actual service and statutory exclusions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:MY-CYBER-LICENCE"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Only the defined licensable services and territorial scope."
+                        },
+                        {
+                            "text": "Brunei: Cybersecurity Act Chapter 272 regulates critical information infrastructure owners. Confirm CII designation before applying the code.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:BN-CYBER-ACT"
+                            ],
+                            "jurisdictions": [
+                                "BN"
+                            ],
+                            "applies_when": "CII scope only."
                         }
                     ],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Brunei: CII outsourcing contracts address access, protection, incident reporting and audit rights; the owner retains accountability.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:BN-CII-CODE"
+                            ],
+                            "jurisdictions": [
+                                "BN"
+                            ],
+                            "applies_when": "CII code section 3.7."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: check the supplier licence category, service scope and current certification position. The CTM grace period ends on 31 December 2026; the final CSA response does not require DPTM certification.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-CYBER-LICENCE",
+                                "I:SG-CYBER-CONDITIONS"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Licensed cybersecurity services only; verify the current certificate and applicable transition."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete sector source checks for countries without an applicable note; never substitute a neighbouring country's rule."
+                    "Indonesia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Thailand: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Philippines: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Cambodia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Laos: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Myanmar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Timor Leste: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: PDPC guidance recommends testing with synthetic or anonymised data and checking exception paths for personal data leaks before release.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "ICT systems handling personal data; guidance is not a product certificate."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Indonesia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Malaysia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Thailand: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Philippines: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Brunei: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Cambodia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Laos: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Myanmar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Timor Leste: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Singapore: a hosted data intermediary agreement should define processing obligations, overseas protection and the end of service data arrangements.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-DATA-INTERMEDIARIES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data processing under the PDPA; verify transfer arrangements separately."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: demonstrate secure migration and exit checks against the agreed data handling contract.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-DATA-INTERMEDIARIES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Suggested SaaS evaluation evidence from PDPC intermediary guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Indonesia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Malaysia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Thailand: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Viet Nam: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Philippines: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Brunei: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Cambodia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Laos: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Myanmar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Timor Leste: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             }
         ],
@@ -2572,39 +2894,41 @@ exports.REGION_DATA = [
             {
                 "subtype_id": "freight-visibility",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: distinguish a Customs permit status from a carrier arrival estimate and show which declaring party supplied the permit evidence.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-CUSTOMS"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Suggested import workflow evidence; not a guarantee of customs clearance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "freight-marketplace",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -2615,56 +2939,46 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "seller-shipping",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: the importer obtains the Customs permit itself or through its declaring agent; preserve that handoff in seller shipping.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-CUSTOMS"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Import permit workflow, including applicable goods restrictions and exceptions."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "last-mile",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -2675,26 +2989,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "warehousing",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -2705,26 +3007,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "transport-management",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -2735,26 +3025,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "payments-banking",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -2883,25 +3161,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete this activity's country coverage beyond the explicitly sourced notes.",
-                    "Indonesia: waiting for Bank Indonesia PBI 10/2025 and PADG 32/2025; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Malaysia: waiting for Bank Negara Malaysia payment service licensing and Risk Management in Technology policy; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Thailand: waiting for Bank of Thailand Payment Systems Act licensing and technology rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Viet Nam: waiting for State Bank of Viet Nam noncash payment and intermediary licensing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Philippines: waiting for BSP payment system operator and electronic money issuer rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Brunei: waiting for BDCB Payment and Settlement Systems Oversight Act and applicable payment notices; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Cambodia: waiting for National Bank of Cambodia payment service institution licensing Prakas; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Laos: waiting for Bank of the Lao PDR payment service licensing instruments; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Myanmar: waiting for Central Bank of Myanmar mobile financial service and payment regulations; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Timor Leste: waiting for Banco Central de Timor Leste payment service authorisation instruments; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "core-banking",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -3062,26 +3330,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the core-banking activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: waiting for OJK bank technology and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Malaysia: waiting for Bank Negara Malaysia bank licensing Outsourcing and Risk Management in Technology policies; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Thailand: waiting for Bank of Thailand commercial bank licensing and IT risk rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Viet Nam: waiting for State Bank of Viet Nam credit institution licensing and information system safety rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Philippines: waiting for BSP Manual of Regulations for Banks outsourcing and IT rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Brunei: waiting for BDCB Banking Order and bank outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Cambodia: waiting for National Bank of Cambodia banking licence and technology outsourcing Prakas; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Laos: waiting for Bank of the Lao PDR commercial banking and technology outsourcing instruments; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Myanmar: waiting for Central Bank of Myanmar Financial Institutions Law and bank technology rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Timor Leste: waiting for Banco Central de Timor Leste bank licensing and outsourcing instruments; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Indonesia: retrieve and review PADK 1/2026 Annexes I to IV for exact signoff and overseas processing evidence; do not reuse superseded SEOJK 21/2017."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "lending",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -3161,26 +3418,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete this activity's country coverage beyond the explicitly sourced notes.",
-                    "Singapore: waiting for Registry of Moneylenders licence conditions and buyer delegation; MAS bank or finance company regime if applicable; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Indonesia: waiting for OJK POJK 40/2024 LPBBTI implementing and data rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Malaysia: waiting for Bank Negara Malaysia or Ministry of Housing and Local Government lending licensing rules according to entity; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Thailand: waiting for Bank of Thailand lender category licensing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Viet Nam: waiting for State Bank of Viet Nam lender licensing and lending rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Philippines: waiting for SEC lending company authority and online lending rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Brunei: waiting for BDCB finance company or moneylender licensing rules by entity; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Cambodia: waiting for National Bank of Cambodia microfinance or lender licensing Prakas; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Laos: waiting for Bank of the Lao PDR lender licensing instruments; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Myanmar: waiting for Financial Regulatory Department microfinance or Central Bank lender rules by entity; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Timor Leste: waiting for Banco Central de Timor Leste lender category authorisation instruments; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "wealth-investment",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -3284,25 +3530,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete this activity's country coverage beyond the explicitly sourced notes.",
-                    "Indonesia: waiting for OJK capital market licensing and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Malaysia: waiting for Securities Commission Malaysia Licensing Handbook and outsourcing guidelines; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Thailand: waiting for Thai SEC securities licensing and IT standards; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Viet Nam: waiting for State Securities Commission securities licensing and fund management rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Philippines: waiting for SEC securities broker investment adviser and fund permissions; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Brunei: waiting for BDCB Securities Markets Order 2013 and Regulations 2014; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Cambodia: waiting for Securities and Exchange Regulator of Cambodia licence and conduct rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Laos: waiting for Lao Securities Commission securities licence instruments; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Myanmar: waiting for Securities and Exchange Commission of Myanmar securities licence rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Timor Leste: waiting for Banco Central de Timor Leste investment service regulatory perimeter; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "spend-expense",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -3361,25 +3597,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: waiting for IRAS employee expense input tax guidance; buyer delegation policy; MAS payment service perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Indonesia: waiting for Directorate General of Taxes expense and invoice evidence rules; buyer delegation; Bank Indonesia payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Malaysia: waiting for Inland Revenue Board e-Invoice guideline; buyer delegation; Bank Negara payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Thailand: waiting for Thai Revenue Department expense tax invoice rules; buyer delegation; Bank of Thailand payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Viet Nam: waiting for General Department of Taxation electronic invoice rules; buyer delegation; State Bank payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Philippines: waiting for Bureau of Internal Revenue invoice and reimbursement rules; buyer delegation; BSP payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Brunei: waiting for Brunei Revenue Division record evidence rules; buyer delegation; BDCB payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Cambodia: waiting for General Department of Taxation invoice and expense evidence rules; buyer delegation; NBC payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Laos: waiting for Lao Tax Department invoice and expense evidence instruments; buyer delegation; BOL payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Myanmar: waiting for Internal Revenue Department expense and invoice evidence rules; buyer delegation; CBM payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Timor Leste: waiting for Timor Leste Tax Authority expense and invoice evidence rules; buyer delegation; BCTL payment perimeter; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "insurance",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit only applicable parent notes, then add these country and activity specific differences.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -3528,25 +3754,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete this activity's country coverage beyond the explicitly sourced notes.",
-                    "Indonesia: waiting for OJK insurance licensing and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Malaysia: waiting for Bank Negara Malaysia insurer takaful outsourcing and technology policies; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Thailand: waiting for Office of Insurance Commission licensing and IT rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Viet Nam: waiting for Ministry of Finance insurance licensing and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Philippines: waiting for Insurance Commission licensing and outsourcing circulars; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Brunei: waiting for BDCB Insurance Order 2006 and Takaful Order 2008; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Cambodia: waiting for Insurance Regulator of Cambodia licence and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Laos: waiting for Lao Ministry of Finance insurance licence instruments; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Myanmar: waiting for Financial Regulatory Department insurance licence rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Timor Leste: waiting for Banco Central de Timor Leste insurance licensing instruments; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "customer-service",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3557,26 +3773,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "crm-marketing",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3587,26 +3791,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "collaboration",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3617,26 +3809,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "product-growth",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3647,26 +3827,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "construction",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3677,26 +3845,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "property-management",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3707,26 +3863,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "field-services",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3737,26 +3881,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "fmcg-retail-execution",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3767,26 +3899,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "industry-hr-payroll",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3797,26 +3917,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "hotel-lodging",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3827,26 +3935,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "retail-restaurant-ops",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3857,26 +3953,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "agents-copilots",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3887,26 +3971,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "voice-language-models",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3917,26 +3989,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "enterprise-search",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3947,26 +4007,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "it-services",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -3977,26 +4025,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "bpo-cx",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4007,26 +4043,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "digital-engineering",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4037,26 +4061,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "data-services",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4067,59 +4079,73 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "operators-connectivity",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: establish the operating entity and IMDA service licence category; a software supplier is not automatically the licensed service operator.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-TELECOM"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Services Based Operations scope; facilities based operations need their separate route."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "cpaas-messaging",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
-                    "decision_approvers": [],
-                    "sector_regulator": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Singapore: the organisation designates its registry administrator and identifies its participating aggregator; verify the sender belongs to that organisation.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-SMS-REGISTRY"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "SSIR account and sender administration, not buyer purchase delegation."
+                        }
+                    ],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: organisations using SMS Sender IDs for Singapore mobile users must register them with SSIR.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-SMS-REGISTRY"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Sender ID registry scope; messaging consent obligations remain separate."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
@@ -4128,25 +4154,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "telecom-software",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4157,26 +4173,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "business-voice-ucaas",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4187,26 +4191,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "developer-platform",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4217,26 +4209,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "data-infrastructure",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4247,26 +4227,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "observability",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4277,26 +4245,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "testing",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4307,26 +4263,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "dev-tools",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4337,266 +4281,458 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "cloud-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
-                    "decision_approvers": [],
-                    "sector_regulator": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Brunei: planned CII cloud implementation requires owner risk acceptance and Commissioner review.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:BN-CII-CODE"
+                            ],
+                            "jurisdictions": [
+                                "BN"
+                            ],
+                            "applies_when": "CII code section 3.6, including required rectification."
+                        }
+                    ],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: software-only supply falls outside CSRO service licensing; reassess bundled services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Software-only supply."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: PDPC guidance recommends documenting cloud security responsibilities and incident escalation.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data systems; guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "identity-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: software-only supply falls outside CSRO service licensing; reassess bundled services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Software-only supply."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Brunei: CII vendor access must be documented, preapproved, supervised and on site.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:BN-CII-CODE"
+                            ],
+                            "jurisdictions": [
+                                "BN"
+                            ],
+                            "applies_when": "CII code section 5.1.3; verify any applicable exception separately."
+                        },
+                        {
+                            "text": "Singapore: PDPC guidance recommends role based access and reviews when staff change roles.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data systems; guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "email-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: software-only supply falls outside CSRO service licensing; reassess bundled services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Software-only supply."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: PDPC guidance recommends phishing exercises and clear incident reporting processes.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data systems; guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "awareness-training",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: software-only supply falls outside CSRO service licensing; reassess bundled services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Software-only supply."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: PDPC guidance recommends recurring training and checks of staff awareness.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data systems; guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "appsec",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: software-only supply falls outside CSRO service licensing; reassess bundled services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Software-only supply."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: PDPC guidance recommends testing exception paths for personal data exposure.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data systems; guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "mobile-appsec",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: software-only supply falls outside CSRO service licensing; reassess bundled services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Software-only supply."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: PDPC guidance recommends protecting personal data on devices and testing data flows.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data systems; guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "soc-services",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
-                    "decision_approvers": [],
-                    "sector_regulator": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Singapore: the provider names its Key Executive Officer and key officers in the licence application. Ask the customer separately who may authorise the service and purchase.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-CYBER-LICENCE"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Provider accountability is sourced; buyer purchase delegation is not inferred."
+                        },
+                        {
+                            "text": "Malaysia: a company licence application appoints a responsible person and supplies company and qualification evidence. The buyer must identify its own approval delegation.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:MY-CYBER-APPLICATION"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Provider application responsibility only; not a prescribed customer signatory."
+                        }
+                    ],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: managed SOC monitoring is a licensable service under the Cybersecurity Act. Apply through CSRO; a provider offering both licensable services needs each category.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-LICENCE"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Actual licensable service, subject to the related company exception."
+                        },
+                        {
+                            "text": "Malaysia: managed SOC monitoring falls within NACSA provider licensing. Check the service definition and exemptions before relying on a licence conclusion.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:MY-CYBER-LICENCE"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Act 854 and P.U. A 221/2024, including territorial and entity exclusions."
+                        }
+                    ],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Singapore: information obtained through managed SOC monitoring is limited to providing that service; other uses require appropriate written customer consent or a lawful exception.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-CONDITIONS"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Licensed service provider and customer information within condition 3.1(e)."
+                        },
+                        {
+                            "text": "Malaysia: map any personal data in managed SOC monitoring logs or reports to the applicable PDPA processing, security and disclosure duties.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:MY-PDPA"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Personal data and commercial processing within Malaysia PDPA scope; sector duties require separate assessment."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: show the managed SOC monitoring licence, traceable service records and certification scope covering the delivery environment.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Evidence derived from current CSRO guidance; it does not guarantee technical outcomes."
+                        },
+                        {
+                            "text": "Malaysia: provide the NACSA managed SOC monitoring licence and matching qualification and experience evidence; agree the customer evidence access and acceptance process.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:MY-CYBER-LICENCE",
+                                "I:MY-CYBER-APPLICATION"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Licence and provider evidence only, not a universal product certification."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "endpoint-network",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: software-only supply falls outside CSRO service licensing; reassess bundled services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Software-only supply."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: PDPC guidance recommends current endpoint defences and documented malware response.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data systems; guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "document-ai",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4607,26 +4743,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "ai-video",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4637,26 +4761,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "engineering-talent",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4667,26 +4779,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "product-management",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4697,26 +4797,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "digital-adoption",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4727,86 +4815,193 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "pentest",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
-                    "decision_approvers": [],
-                    "sector_regulator": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Singapore: the provider names its Key Executive Officer and key officers in the licence application. Ask the customer separately who may authorise the service and purchase.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-CYBER-LICENCE"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Provider accountability is sourced; buyer purchase delegation is not inferred."
+                        },
+                        {
+                            "text": "Malaysia: a company licence application appoints a responsible person and supplies company and qualification evidence. The buyer must identify its own approval delegation.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:MY-CYBER-APPLICATION"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Provider application responsibility only; not a prescribed customer signatory."
+                        },
+                        {
+                            "text": "Brunei: the CII owner supervises external testing to keep it within scope and avoid disruption.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:BN-CII-CODE"
+                            ],
+                            "jurisdictions": [
+                                "BN"
+                            ],
+                            "applies_when": "CII code section 5.15."
+                        }
+                    ],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: penetration testing is a licensable service under the Cybersecurity Act. Apply through CSRO; a provider offering both licensable services needs each category.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-LICENCE"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Actual licensable service, subject to the related company exception."
+                        },
+                        {
+                            "text": "Malaysia: penetration testing falls within NACSA provider licensing. Check the service definition and exemptions before relying on a licence conclusion.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:MY-CYBER-LICENCE"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Act 854 and P.U. A 221/2024, including territorial and entity exclusions."
+                        }
+                    ],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Singapore: information obtained through penetration testing is limited to providing that service; other uses require appropriate written customer consent or a lawful exception.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-CONDITIONS"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Licensed service provider and customer information within condition 3.1(e)."
+                        },
+                        {
+                            "text": "Malaysia: map any personal data in penetration testing logs or reports to the applicable PDPA processing, security and disclosure duties.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:MY-PDPA"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Personal data and commercial processing within Malaysia PDPA scope; sector duties require separate assessment."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: show the penetration testing licence, traceable service records and certification scope covering the delivery environment.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Evidence derived from current CSRO guidance; it does not guarantee technical outcomes."
+                        },
+                        {
+                            "text": "Malaysia: provide the NACSA penetration testing licence and matching qualification and experience evidence; agree the customer evidence access and acceptance process.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:MY-CYBER-LICENCE",
+                                "I:MY-CYBER-APPLICATION"
+                            ],
+                            "jurisdictions": [
+                                "MY"
+                            ],
+                            "applies_when": "Licence and provider evidence only, not a universal product certification."
+                        },
+                        {
+                            "text": "Brunei: CII testers need recognized certification and providers need recognized accreditation, such as CREST or equivalent.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:BN-CII-CODE"
+                            ],
+                            "jurisdictions": [
+                                "BN"
+                            ],
+                            "applies_when": "CII code section 5.15; not a recommendation of a software vendor."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "attack-surface-dast",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Singapore: software-only supply falls outside CSRO service licensing; reassess bundled services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SG-CYBER-FAQ"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Software-only supply."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Singapore: PDPC guidance recommends periodic web vulnerability assessment after deployment.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SG-ICT-PRACTICES"
+                            ],
+                            "jurisdictions": [
+                                "SG"
+                            ],
+                            "applies_when": "Personal data systems; guidance."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "process-orchestration",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4817,26 +5012,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "open-source-support",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4847,26 +5030,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "iot-connectivity",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -4877,19 +5048,7 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "Singapore: check I:SG-PDPA, I:SG-OUTSOURCE, I:SG-PAYMENTS, I:SG-ADVISERS, I:SG-INSURANCE, I:SG-LENDING, I:SG-CYBER, I:SG-TELECOM, I:SG-CUSTOMS, I:SG-AI against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Indonesia: check I:ID-PDP, I:ID-OJK, I:ID-PAYMENTS, I:ID-LENDING against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Malaysia: check I:MY-PDPA, I:MY-BNM, I:MY-SC against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Thailand: check I:TH-PDPA, I:TH-BOT, I:TH-SEC against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Viet Nam: check I:VN-PDP against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Philippines: check I:PH-DPA, I:PH-BSP, I:PH-LENDING, I:PH-INSURANCE against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Brunei: check I:BN-PDP, I:BN-PDP-COMMENCEMENT, I:BN-BDCB, I:BN-PAYMENTS, I:BN-INSURANCE, I:BN-WEALTH against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Cambodia: check I:KH-NBC against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Laos: check I:LA-BOL against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Myanmar: check I:MM-BANK against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Timor Leste: check I:TL-BCTL against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             }
         ]
     },
@@ -5155,33 +5314,56 @@ exports.REGION_DATA = [
         "verticals": [
             {
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
-                    "decision_approvers": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Saudi Arabia: the importer or exporter authorises its customs broker and defines the delegation scope and duration in Fasah.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-CUSTOMS-AUTH"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Customs delegation only; the software supplier is not automatically the broker."
+                        }
+                    ],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: demonstrate how the shipment workflow preserves the broker licence reference and the importer or exporter authorisation.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-CUSTOMS-AUTH"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Suggested evidence derived from the ZATCA delegation workflow."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the logistics-tech activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the logistics-tech activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the logistics-tech activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the logistics-tech activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the logistics-tech activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the logistics-tech activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "United Arab Emirates: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Qatar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Bahrain: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Oman: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -5282,86 +5464,142 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete country source coverage outside the explicitly sourced notes."
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
-                    "procurement_payment": [],
+                    "procurement_payment": [
+                        {
+                            "text": "Saudi Arabia: retail billing workflows must distinguish invoice generation from ZATCA integration waves; confirm the taxpayer notice before promising readiness.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-INVOICE"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Taxpayers and invoices in scope, subject to applicable phase and exclusions."
+                        }
+                    ],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "UAE: map the industry billing workflow to the FTA electronic invoicing timetable for the actual entity and transaction.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:AE-INVOICE"
+                            ],
+                            "jurisdictions": [
+                                "AE"
+                            ],
+                            "applies_when": "Phased regime; this does not establish a universal immediate deadline."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the vertical-saas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Qatar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Bahrain: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Oman: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
-                    "decision_approvers": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Saudi Arabia: SDAIA ethics guidance calls for the system owner and relevant stakeholders to accept the model after validation before production use.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-AI-ETHICS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "AI Ethics Principles guidance; actual contractual authority remains buyer specific."
+                        }
+                    ],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: demonstrate traceable decisions, privacy assessment and monitoring against the intended use case and the SDAIA principles.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-AI-ETHICS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Evidence suggested from the framework, not a statutory approval certificate."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the ai-native activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the ai-native activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the ai-native activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the ai-native activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the ai-native activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the ai-native activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "United Arab Emirates: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Qatar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Bahrain: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Oman: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "UAE: Article 8 of the federal personal data law describes processor work under controller instructions and a defined processing contract.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:AE-PDPL"
+                            ],
+                            "jurisdictions": [
+                                "AE"
+                            ],
+                            "applies_when": "First confirm Article 2 exclusions, entity regime and applicable executive instruments."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the ites activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Saudi Arabia: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Qatar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Bahrain: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Oman: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -5396,14 +5634,17 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete country source coverage outside the explicitly sourced notes."
+                    "Qatar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Bahrain: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Oman: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -5417,6 +5658,39 @@ exports.REGION_DATA = [
                                 "SA"
                             ],
                             "applies_when": "For an entity and system within the controls' scope. This note does not claim every private buyer is subject to every NCA control."
+                        },
+                        {
+                            "text": "Saudi Arabia: NCA has a dedicated managed SOC licensing framework. Check it separately from general cybersecurity provider registration and any proposed wider licensing framework.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-MSOC-FRAMEWORK"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Managed SOC services in the framework; no claim that a consultation draft is current law."
+                        },
+                        {
+                            "text": "Oman: security assessment and managed security accreditation transferred from MTCIT to the Cyber Defence Centre. Check current CDC procedures.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:OM-CYBER-TRANSFER"
+                            ],
+                            "jurisdictions": [
+                                "OM"
+                            ],
+                            "applies_when": "Services within the transferred accreditation programme."
+                        },
+                        {
+                            "text": "Qatar: NCSA decides NISCF service accreditation. Confirm the relevant service module and required scope.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:QA-CYBER-ACCREDITATION"
+                            ],
+                            "jurisdictions": [
+                                "QA"
+                            ],
+                            "applies_when": "NISCF accreditation only; not a universal provider licence."
                         }
                     ],
                     "procurement_payment": [],
@@ -5427,38 +5701,51 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete country source coverage outside the explicitly sourced notes."
+                    "United Arab Emirates: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Bahrain: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: ECC 1-6-3 requires secure development, tested integration and prelaunch hardening.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope only."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "United Arab Emirates: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Qatar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Bahrain: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Oman: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
                 ]
             },
             {
                 "vertical_id": "saas",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+                "inheritance_note": "Apply only notes for the named jurisdiction and activity. Specific means sourced differences exist; it does not mean every listed country is covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -5481,41 +5768,54 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": []
+                "pending_topics": [
+                    "United Arab Emirates: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Qatar: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Bahrain: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Oman: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule.",
+                    "Kuwait: no direct vertical source in this draft; use applicable country defaults only and state the gap, never another country rule."
+                ]
             }
         ],
         "subtypes": [
             {
                 "subtype_id": "freight-visibility",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: tie customs workflow status to the importer or exporter and its authorised broker, preserving the delegation reference.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-CUSTOMS-AUTH"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Suggested visibility evidence derived from the customs delegation workflow."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the freight-visibility activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "freight-marketplace",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -5526,46 +5826,46 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the freight-marketplace activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "seller-shipping",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: preserve the seller shipping handoff to the importer and the broker authorisation scope and duration.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-CUSTOMS-AUTH"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Suggested customs evidence; shipping software is not itself a brokerage licence."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the seller-shipping activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "last-mile",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -5576,21 +5876,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the last-mile activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "warehousing",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -5601,21 +5894,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the warehousing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "transport-management",
                 "vertical_id": "logistics-tech",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "logistics-tech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -5626,21 +5912,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the transport-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "payments-banking",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -5745,21 +6024,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete activity specific licence and workflow checks beyond the sourced country notes; a general regulator remit does not settle every licence condition",
-                    "United Arab Emirates: waiting for CBUAE Retail Payment Services and Card Schemes Regulation licence and outsourcing clauses; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Saudi Arabia: waiting for SAMA Implementing Regulations of Payments and Payment Services Law data and licence clauses; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Qatar: waiting for Qatar Central Bank payment service regulation licence and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Bahrain: waiting for Central Bank of Bahrain Rulebook Volume 5 payment service provider requirements; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Oman: waiting for Central Bank of Oman National Payment Systems Law and payment provider licensing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Kuwait: waiting for Central Bank of Kuwait Instructions for Regulating Electronic Payment of Funds; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "core-banking",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -5866,20 +6139,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: waiting for CBUAE bank outsourcing regulation and standards; DFSA GEN and ADGM FSRA GEN for free zone scope; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Saudi Arabia: waiting for Banking Control Law and SAMA Rules on Outsourcing; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Qatar: waiting for Qatar Central Bank bank instructions and outsourcing rules; QFCRA if QFC entity; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Bahrain: waiting for Central Bank of Bahrain Rulebook Volumes 1 and 2 bank outsourcing requirements; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Oman: waiting for Central Bank of Oman current Banking Law and Master Circular on Outsourcing and Third Party Risk Management; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Kuwait: waiting for Central Bank of Kuwait bank outsourcing and information security instructions; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "lending",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -5950,21 +6218,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete activity specific licence and workflow checks beyond the sourced country notes; a general regulator remit does not settle every licence condition",
-                    "United Arab Emirates: waiting for CBUAE Finance Companies Regulation outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Saudi Arabia: waiting for SAMA Finance Companies Control Law licensing and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Qatar: waiting for Qatar Central Bank finance company rules; QFCRA if QFC entity; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Bahrain: waiting for Central Bank of Bahrain Rulebook Volume 5 financing company requirements; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Oman: waiting for Central Bank of Oman finance and leasing company authorisation and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Kuwait: waiting for Central Bank of Kuwait finance company and lending licence instructions; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "wealth-investment",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -6021,46 +6283,59 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete activity specific licence and workflow checks beyond the sourced country notes; a general regulator remit does not settle every licence condition",
-                    "United Arab Emirates: waiting for UAE CMA current licensing rulebook; DFSA and ADGM FSRA activity and data rules by jurisdiction; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Saudi Arabia: waiting for Saudi CMA Capital Market Institutions Regulations authorisation outsourcing and client records; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Qatar: waiting for Qatar Financial Markets Authority or QFCRA investment permission and client rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Bahrain: waiting for Central Bank of Bahrain Rulebook Volume 4 investment business requirements; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Oman: waiting for Oman Financial Services Authority securities licence and client asset rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Kuwait: waiting for Kuwait CMA Law 7/2010 executive bylaws licensing outsourcing and client data modules; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "spend-expense",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "UAE: the FTA electronic invoicing timetable depends on the entity and transaction. Expense software should preserve evidence of the applicable phase.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:AE-INVOICE"
+                            ],
+                            "jurisdictions": [
+                                "AE"
+                            ],
+                            "applies_when": "Phased electronic invoicing scope, separate from any payment service authorisation."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: preserve the supplier invoice and taxpayer phase evidence in the expense workflow; ZATCA generation and integration requirements are different.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-INVOICE"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Invoices and taxpayers within the electronic invoicing rules; no automatic deduction entitlement."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: waiting for Federal Tax Authority tax invoice requirements; buyer delegation; CBUAE payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Saudi Arabia: waiting for ZATCA e-invoicing requirements and tax invoice guidance; buyer delegation; SAMA payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Qatar: waiting for General Tax Authority expense evidence rules; buyer delegation; QCB payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Bahrain: waiting for National Bureau for Revenue VAT invoice and input tax guidance; buyer delegation; CBB payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Oman: waiting for Oman Tax Authority VAT invoice and deduction guidance; buyer delegation; CBO payment perimeter; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Kuwait: waiting for Kuwait Ministry of Finance expense record evidence rules; buyer delegation; CBK payment perimeter; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "insurance",
                 "vertical_id": "fintech",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "fintech",
-                "inheritance_note": "Inherit only applicable parent notes and add the country and activity specific differences below.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -6187,21 +6462,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "Complete activity specific licence and workflow checks beyond the sourced country notes; a general regulator remit does not settle every licence condition",
-                    "United Arab Emirates: waiting for CBUAE insurance outsourcing standards and licensing provisions; DFSA or ADGM FSRA if applicable; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Saudi Arabia: waiting for Insurance Authority outsourcing regulation data and internal approval clauses; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Qatar: waiting for Qatar Central Bank insurer rules or QFCRA PINS by entity; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Bahrain: waiting for Central Bank of Bahrain Rulebook Volume 3 insurance requirements; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Oman: waiting for Oman Financial Services Authority insurer and intermediary licence and outsourcing rules; confirm the activity permission, data obligations, approval authority and required proof.",
-                    "Kuwait: waiting for Insurance Regulatory Unit Law 125/2019 executive bylaws outsourcing and data requirements; confirm the activity permission, data obligations, approval authority and required proof."
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "customer-service",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6212,21 +6481,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the customer-service activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "crm-marketing",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6237,21 +6499,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the crm-marketing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "collaboration",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6262,21 +6517,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the collaboration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "product-growth",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6287,21 +6535,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the product-growth activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "construction",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6312,21 +6553,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the construction activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "property-management",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6337,21 +6571,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the property-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "field-services",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6362,21 +6589,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the field-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "fmcg-retail-execution",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6387,21 +6607,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the fmcg-retail-execution activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "industry-hr-payroll",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6412,21 +6625,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the industry-hr-payroll activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "hotel-lodging",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6437,21 +6643,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the hotel-lodging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "retail-restaurant-ops",
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "vertical-saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6462,21 +6661,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the retail-restaurant-ops activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "agents-copilots",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6487,21 +6679,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the agents-copilots activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "voice-language-models",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6512,21 +6697,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the voice-language-models activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "enterprise-search",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6537,21 +6715,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the enterprise-search activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "it-services",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6562,21 +6733,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the it-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "bpo-cx",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6587,21 +6751,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the bpo-cx activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "digital-engineering",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6612,21 +6769,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the digital-engineering activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "data-services",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6637,49 +6787,61 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the data-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "operators-connectivity",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "UAE: demonstrate the TDRA licensed entity and public telecom service scope; a supplier contract does not itself grant the right to operate.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:AE-TELECOM"
+                            ],
+                            "jurisdictions": [
+                                "AE"
+                            ],
+                            "applies_when": "Public telecom networks and services within the law."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the operators-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "cpaas-messaging",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Saudi Arabia: CST decision 484/1443 establishes a separate SMS service framework covering promotional, informational and response messages. Classify the service before checking its conditions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-SMS-RULES"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "SMS service scope; detailed current conditions require review."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
@@ -6688,20 +6850,15 @@ exports.REGION_DATA = [
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the cpaas-messaging activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "telecom-software",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6712,21 +6869,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the telecom-software activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "business-voice-ucaas",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6737,21 +6887,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the business-voice-ucaas activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "developer-platform",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6762,21 +6905,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the developer-platform activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "data-infrastructure",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6787,21 +6923,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the data-infrastructure activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "observability",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6812,21 +6941,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the observability activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "testing",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6837,21 +6959,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the testing activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "dev-tools",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -6862,221 +6977,329 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the dev-tools activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "cloud-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Oman: cloud hosting regulation transferred to TRA. Distinguish hosting from supplying a security tool.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:OM-CYBER-TRANSFER"
+                            ],
+                            "jurisdictions": [
+                                "OM"
+                            ],
+                            "applies_when": "Cloud hosting service; no blanket licensing claim for security software."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: identify whether the cloud service is within CST provisioning regulations before mapping its security evidence.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-CLOUD"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Cloud provider activity; exact registration and customer scope require review."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the cloud-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "identity-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: ECC requires controlled privileges and periodic access review.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope; control 2-2."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the identity-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "email-security",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: ECC requires phishing protection and email domain validation.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope; control 2-4."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the email-security activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "awareness-training",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: ECC requires an approved, periodically reviewed awareness programme.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope; control 1-10."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the awareness-training activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "appsec",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: ECC requires external web application security controls.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope; control 2-15."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "mobile-appsec",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: ECC testing scope includes externally provided smartphone applications.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope; control 2-11."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the mobile-appsec activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "soc-services",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
-                    "decision_approvers": [],
-                    "sector_regulator": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Saudi Arabia: MSOC subcontracting requires a written NCA request and approval before work starts; the main provider retains its obligations.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-MSOC-FRAMEWORK"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Subcontracted managed SOC services under section 7; not a blanket rule for all vendor purchases."
+                        }
+                    ],
+                    "sector_regulator": [
+                        {
+                            "text": "Saudi Arabia: use NCA RFMSOC 1 2024 to establish the managed SOC service licence. A general provider registration is not evidence of that licence.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-MSOC-FRAMEWORK"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Managed SOC services within this framework; exact tier and customer category must be checked."
+                        },
+                        {
+                            "text": "Oman: CDC now handles security service accreditation; an old MTCIT listing does not establish the current route.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:OM-CYBER-TRANSFER"
+                            ],
+                            "jurisdictions": [
+                                "OM"
+                            ],
+                            "applies_when": "Security assessment or managed security service within the programme; current scope remains pending."
+                        }
+                    ],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Saudi Arabia: the MSOC framework requires compliance with applicable NCA controls, including Data Cybersecurity Controls. Establish the applicable data and system scope.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-MSOC-FRAMEWORK"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Section 6.23; no unverified hosting location requirement asserted."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: present the applicable control compliance evidence and any NCA subcontracting approval with the service licence.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:SA-MSOC-FRAMEWORK"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Assurance evidence derived from RFMSOC; tier, staffing and customer approval details remain pending."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the soc-services activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "endpoint-network",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: ECC requires malware protection and patch management.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope; control 2-3."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the endpoint-network activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "document-ai",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7087,21 +7310,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the document-ai activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "ai-video",
                 "vertical_id": "ai-native",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ai-native",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7112,21 +7328,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the ai-video activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "engineering-talent",
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "ites",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7137,21 +7346,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the engineering-talent activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "product-management",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7162,21 +7364,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the product-management activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "digital-adoption",
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "saas",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7187,71 +7382,113 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the digital-adoption activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "pentest",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
-                    "decision_approvers": [],
-                    "sector_regulator": [],
+                    "decision_approvers": [
+                        {
+                            "text": "Qatar: NCSA makes accreditation decisions; the applicant documents governance and delivery responsibilities. Buyer purchase authority remains separate.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:QA-CYBER-ACCREDITATION"
+                            ],
+                            "jurisdictions": [
+                                "QA"
+                            ],
+                            "applies_when": "NISCF application for the relevant service module."
+                        }
+                    ],
+                    "sector_regulator": [
+                        {
+                            "text": "Oman: CDC now handles security service accreditation; an old MTCIT listing does not establish the current route.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:OM-CYBER-TRANSFER"
+                            ],
+                            "jurisdictions": [
+                                "OM"
+                            ],
+                            "applies_when": "Security assessment or managed security service within the programme; current scope remains pending."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Qatar: demonstrate legal operating status, staff capability, risk management, subcontractor oversight and delivery methods for the requested accreditation scope.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "I:QA-CYBER-ACCREDITATION"
+                            ],
+                            "jurisdictions": [
+                                "QA"
+                            ],
+                            "applies_when": "NISCF policy application evidence; penetration testing module details remain pending."
+                        },
+                        {
+                            "text": "Saudi Arabia: ECC requires periodic testing of externally provided services.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope; control 2-11."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the pentest activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "attack-surface-dast",
                 "vertical_id": "cybersecurity",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "cybersecurity",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Apply sourced subtype additions only to the named country and activity; retain applicable parent notes. Other countries are not implied covered.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Saudi Arabia: ECC requires vulnerability classification and risk based remediation.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "I:SA-ECC-CONTROLS"
+                            ],
+                            "jurisdictions": [
+                                "SA"
+                            ],
+                            "applies_when": "Government, government affiliated or private CNI entity within ECC scope; control 2-10."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
                 "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the attack-surface-dast activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
+                    "Specific means scoped additions exist, not a complete licensing or country review. Check the source limitations and the buyer actual approval delegation."
                 ]
             },
             {
                 "subtype_id": "process-orchestration",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7262,21 +7499,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the process-orchestration activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "open-source-support",
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "software",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7287,21 +7517,14 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the open-source-support activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             },
             {
                 "subtype_id": "iot-connectivity",
                 "vertical_id": "telecom",
-                "status": "waiting_for_source",
+                "status": "inherited",
                 "inherits_from": "telecom",
-                "inheritance_note": "Parent notes remain useful context. A source check proving that this cell needs no additional country or activity detail is not complete.",
+                "inheritance_note": "Use the jurisdiction filtered vertical context. No separate subtype override is established in this bounded draft; remaining subtype depth is outside the final owner scope, not proof that no local difference exists.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7312,14 +7535,7 @@ exports.REGION_DATA = [
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "United Arab Emirates: check I:AE-PDPL, I:AE-CBUAE, I:AE-DFSA, I:AE-FSRA, I:AE-CMA, I:AE-TELECOM, I:AE-INVOICE against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Saudi Arabia: check I:SA-TRANSFER, I:SA-SAMA, I:SA-PAYMENTS, I:SA-FINANCE, I:SA-INSURANCE, I:SA-CMA, I:SA-ECC, I:SA-CLOUD, I:SA-INVOICE, I:SA-TELECOM against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Qatar: check I:QA-PDP, I:QA-QCB, I:QA-QFCRA against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Bahrain: check I:BH-PDP, I:BH-CBB against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Oman: check I:OM-PDP, I:OM-BANK, I:OM-FSA against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient",
-                    "Kuwait: check I:KW-PDP, I:KW-PAYMENTS, I:KW-CMA, I:KW-INSURANCE against the iot-connectivity activity; source its authorisation route, data duties, approval owner and required evidence before treating parent context as sufficient"
-                ]
+                "pending_topics": []
             }
         ]
     },
@@ -7457,7 +7673,7 @@ exports.REGION_DATA = [
                 "vertical_id": "logistics-tech",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7486,7 +7702,7 @@ exports.REGION_DATA = [
                 "vertical_id": "fintech",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -7525,28 +7741,38 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Screen the industry workflow for high risk under UK GDPR Article 35. Where required, complete the buyer's DPIA and identify mitigations before processing.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-DPIA"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For likely high risk processing; a sector software label alone does not trigger a DPIA."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "vertical-saas: check FCA Handbook and authorisation guidance; PRA rules; ICO UK GDPR guidance; relevant UK sector authority for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "ai-native",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7573,28 +7799,38 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Outsourced processing staff must be subject to confidentiality duties, with equivalent Article 28 obligations for subprocessors. Document service team access to customer records.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-PROCESSOR-TERMS"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For a UK GDPR processor; assess international transfers separately."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "ites: check FCA Handbook and authorisation guidance; PRA rules; ICO UK GDPR guidance; relevant UK sector authority for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "telecom",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -7623,7 +7859,7 @@ exports.REGION_DATA = [
                 "vertical_id": "cybersecurity",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Parent context remains. The following sourced UK addition applies only within its stated scope.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
@@ -7650,41 +7886,61 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "The voluntary Software Security Code calls for a senior responsible owner and evidence of secure development, build protection, vulnerability handling and customer communication.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "J:UK-SOFTWARE-CODE"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "Recommended software assurance, not universal legal certification."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "software: check FCA Handbook and authorisation guidance; PRA rules; ICO UK GDPR guidance; relevant UK sector authority for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "For hosted SaaS acting as a UK GDPR processor, provide subprocessor authorisation, assistance commitments and an effective end of contract data return or deletion process.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:UK-PROCESSOR-TERMS"
+                            ],
+                            "jurisdictions": [
+                                "GB"
+                            ],
+                            "applies_when": "For the actual processor service; lawful retention and the controller's choice govern exit."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "saas: check FCA Handbook and authorisation guidance; PRA rules; ICO UK GDPR guidance; relevant UK sector authority for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             }
         ],
         "subtypes": [
@@ -9405,10 +9661,33 @@ exports.REGION_DATA = [
                 "vertical_id": "logistics-tech",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "Switzerland: OTR 1 governs covered professional driver records. The competent cantonal authority determines applicability.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CH-ROAD"
+                            ],
+                            "jurisdictions": [
+                                "CH"
+                            ],
+                            "applies_when": "Check vehicle, route and exemptions rather than importing EU scope."
+                        },
+                        {
+                            "text": "Monaco: Article 2 of Ordonnance souveraine no 1.302 requires prior Minister of State authorisation for Monaco public transport or vehicle hire enterprises.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MC-ROAD"
+                            ],
+                            "jurisdictions": [
+                                "MC"
+                            ],
+                            "applies_when": "For activity within the France Monaco transport instrument, not merely a technology supplier."
+                        }
+                    ],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
@@ -9428,6 +9707,17 @@ exports.REGION_DATA = [
                                 "NL"
                             ],
                             "applies_when": "For covered road transport operations, not every logistics software workflow. Confirm the national exception rather than importing another country's."
+                        },
+                        {
+                            "text": "Liechtenstein: covered tachograph operations require driver and vehicle records to be read and archived. Local guidance distinguishes cross border operations and exceptions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:LI-ROAD"
+                            ],
+                            "jurisdictions": [
+                                "LI"
+                            ],
+                            "applies_when": "For vehicles and journeys within the locally stated scope."
                         }
                     ],
                     "objections": [],
@@ -9439,7 +9729,7 @@ exports.REGION_DATA = [
                 "vertical_id": "fintech",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -9522,33 +9812,115 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "Check the industry workflow against GDPR Article 35 and the national authority's DPIA list, including sensitive data, monitoring and significant automated decisions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:EU-DPIA"
+                            ],
+                            "jurisdictions": [
+                                "AT",
+                                "BE",
+                                "FR",
+                                "DE",
+                                "LU",
+                                "NL"
+                            ],
+                            "applies_when": "For likely high risk processing; sector label alone is insufficient."
+                        },
+                        {
+                            "text": "Switzerland: for high risk industry processing, the Article 22 DPIA describes the workflow, risks to individuals and protective measures.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CH-DPIA"
+                            ],
+                            "jurisdictions": [
+                                "CH"
+                            ],
+                            "applies_when": "Where likely high risk is established, not every software deployment."
+                        },
+                        {
+                            "text": "Liechtenstein: Article 35 requires prior assessment for likely high risk processing. Check the industry workflow against Datenschutzstelle criteria and the local list.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:LI-DPIA"
+                            ],
+                            "jurisdictions": [
+                                "LI"
+                            ],
+                            "applies_when": "Where the actual processing is likely high risk."
+                        },
+                        {
+                            "text": "Monaco: assess the industry workflow against Article 35 and Arrete ministeriel 2025-361 criteria, including profiling and significant automated decisions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MC-DPIA"
+                            ],
+                            "jurisdictions": [
+                                "MC"
+                            ],
+                            "applies_when": "Where the law's high risk criteria apply; do not import another country's DPIA list."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "vertical-saas: check National sector authority and privacy authority for AT BE FR DE LI LU MC NL CH; EU law only where applicability is verified for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "ai-native",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Switzerland: the FADP applies to AI processing. FDPIC highlights transparency about purpose, functioning and data sources and a DPIA for high risk use.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CH-AI"
+                            ],
+                            "jurisdictions": [
+                                "CH"
+                            ],
+                            "applies_when": "For AI using personal data in Swiss law scope, not EU AI Act applicability."
+                        },
+                        {
+                            "text": "Liechtenstein: Datenschutzstelle guidance asks AI users to establish supplier roles, training reuse, legal basis, transfers, accuracy, security and individual rights.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "J:LI-AI"
+                            ],
+                            "jurisdictions": [
+                                "LI"
+                            ],
+                            "applies_when": "Guidance for AI personal data use, not blanket product approval."
+                        },
+                        {
+                            "text": "Monaco: Article 19 limits solely automated decisions with legal or similarly significant effects. Check exceptions and required human intervention and contest safeguards.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MC-PRIVACY-LAW"
+                            ],
+                            "jurisdictions": [
+                                "MC"
+                            ],
+                            "applies_when": "For decisions within Article 19, not every AI output."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [
                         {
@@ -9575,28 +9947,76 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "For outsourced IT or business processing, establish whether the service follows customer instructions or decides its own purposes. GDPR roles and subprocessor permissions follow that activity.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:EU-GDPR"
+                            ],
+                            "jurisdictions": [
+                                "AT",
+                                "BE",
+                                "FR",
+                                "DE",
+                                "LU",
+                                "NL"
+                            ],
+                            "applies_when": "For GDPR personal data processing; not every contractor is a processor."
+                        },
+                        {
+                            "text": "Switzerland: outsourcing customer data retains the controller's Article 9 checks. Define service team access, instructions and onward outsourcing permissions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CH-FADP"
+                            ],
+                            "jurisdictions": [
+                                "CH"
+                            ],
+                            "applies_when": "For outsourced personal data within Swiss FADP."
+                        },
+                        {
+                            "text": "Liechtenstein: specify the outsourced processing task and instructions in the Article 28 agreement before service staff handle personal data.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:LI-GDPR"
+                            ],
+                            "jurisdictions": [
+                                "LI"
+                            ],
+                            "applies_when": "For a GDPR controller processor relationship in Liechtenstein."
+                        },
+                        {
+                            "text": "Monaco: the outsourced provider must offer sufficient organisational and technical guarantees and follow documented processing instructions.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MC-APDP"
+                            ],
+                            "jurisdictions": [
+                                "MC"
+                            ],
+                            "applies_when": "For a processor within Loi no 1.565."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "ites: check National sector authority and privacy authority for AT BE FR DE LI LU MC NL CH; EU law only where applicability is verified for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "telecom",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -9726,7 +10146,7 @@ exports.REGION_DATA = [
                 "vertical_id": "cybersecurity",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Use applicable parent notes and these additions only for their named countries and activities.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -9745,6 +10165,17 @@ exports.REGION_DATA = [
                                 "NL"
                             ],
                             "applies_when": "Where NIS2 may cover the entity; do not assume a uniform national filing route or deadline."
+                        },
+                        {
+                            "text": "Liechtenstein: covered financial entities follow DORA; FMA ICT Security Directive 2021/3 remains for supervised entities outside DORA. Establish the buyer's category first.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:LI-DORA"
+                            ],
+                            "jurisdictions": [
+                                "LI"
+                            ],
+                            "applies_when": "For the relevant FMA supervised entity, not every cybersecurity customer."
                         }
                     ],
                     "procurement_payment": [],
@@ -9761,6 +10192,17 @@ exports.REGION_DATA = [
                                 "CH"
                             ],
                             "applies_when": "Only for covered entities and incidents after checking ordinance exemptions; a security supplier is not automatically the reporting entity."
+                        },
+                        {
+                            "text": "Monaco: Article 31 security evidence should address unauthorised access, loss, alteration and recovery and evaluation of the measures.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MC-APDP"
+                            ],
+                            "jurisdictions": [
+                                "MC"
+                            ],
+                            "applies_when": "For covered personal data processing, not a universal security certification."
                         }
                     ],
                     "objections": [],
@@ -9770,41 +10212,140 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "For manufacturers of products with digital elements in CRA scope, Article 14 reporting covers actively exploited vulnerabilities and severe security incidents from September 2026.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:EU-CRA-REPORT"
+                            ],
+                            "jurisdictions": [
+                                "AT",
+                                "BE",
+                                "FR",
+                                "DE",
+                                "LU",
+                                "NL"
+                            ],
+                            "applies_when": "Check product scope and exclusions; standalone SaaS and open source steward obligations are not automatically identical."
+                        }
+                    ],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Switzerland: Article 7 makes the controller plan data protection and limit data through default settings. Demonstrate the relevant application settings.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CH-PRIVACY-DESIGN"
+                            ],
+                            "jurisdictions": [
+                                "CH"
+                            ],
+                            "applies_when": "For FADP personal data processing; do not assign controller duties to a producer without that role."
+                        },
+                        {
+                            "text": "Liechtenstein: where a software service processes customer personal data, establish its Article 28 role and contractual protections. Software sale alone does not establish processor status.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:LI-GDPR"
+                            ],
+                            "jurisdictions": [
+                                "LI"
+                            ],
+                            "applies_when": "For actual GDPR processing on behalf of a controller."
+                        },
+                        {
+                            "text": "Monaco: Article 31 requires risk appropriate security and evaluation of controls. Demonstrate the measures relevant to the application's personal data.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MC-APDP"
+                            ],
+                            "jurisdictions": [
+                                "MC"
+                            ],
+                            "applies_when": "For covered controller or processor activity under Loi no 1.565."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "software: check National sector authority and privacy authority for AT BE FR DE LI LU MC NL CH; EU law only where applicability is verified for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Switzerland: hosted processors need controller approval for further outsourcing and must preserve instructions, confidentiality and security. Show the hosting and support subcontractor chain.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CH-FADP"
+                            ],
+                            "jurisdictions": [
+                                "CH"
+                            ],
+                            "applies_when": "FADP Article 9 scope; cross border disclosure needs a separate assessment."
+                        },
+                        {
+                            "text": "Liechtenstein: an Article 28 agreement defines the hosted processing, duration and controller and processor duties.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:LI-GDPR"
+                            ],
+                            "jurisdictions": [
+                                "LI"
+                            ],
+                            "applies_when": "For a GDPR controller processor relationship in Liechtenstein."
+                        },
+                        {
+                            "text": "Monaco: a hosted processor follows documented instructions under an Article 26 written agreement defining the service, data and parties' duties.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MC-APDP"
+                            ],
+                            "jurisdictions": [
+                                "MC"
+                            ],
+                            "applies_when": "For personal data processing within Loi no 1.565."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "For hosted SaaS in the listed EU countries, show the processor agreement, authorised subprocessor chain and controls enabling the controller's data protection duties.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:EU-GDPR",
+                                "J:EU-PRIVACY-DESIGN"
+                            ],
+                            "jurisdictions": [
+                                "AT",
+                                "BE",
+                                "FR",
+                                "DE",
+                                "LU",
+                                "NL"
+                            ],
+                            "applies_when": "For GDPR processing on a controller's behalf; assess roles per purpose."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "saas: check National sector authority and privacy authority for AT BE FR DE LI LU MC NL CH; EU law only where applicability is verified for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             }
         ],
         "subtypes": [
@@ -12043,7 +12584,7 @@ exports.REGION_DATA = [
                 "vertical_id": "logistics-tech",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -12095,7 +12636,7 @@ exports.REGION_DATA = [
                 "vertical_id": "fintech",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [
                         {
@@ -12146,33 +12687,91 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "vertical-saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [],
+                    "sector_regulator": [
+                        {
+                            "text": "United States: a cloud provider handling ePHI for a HIPAA covered entity or business associate needs the applicable business associate agreement and security risk analysis.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:US-HIPAA-CLOUD"
+                            ],
+                            "jurisdictions": [
+                                "US"
+                            ],
+                            "applies_when": "Healthcare example only for HIPAA relationships and ePHI; not all health apps or every vertical SaaS customer."
+                        }
+                    ],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Canada: PIPEDA safeguards depend on data sensitivity, amount, use and risk. Health or financial workflows need stronger protection appropriate to that assessment.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CA-SAFEGUARDS"
+                            ],
+                            "jurisdictions": [
+                                "CA"
+                            ],
+                            "applies_when": "Where PIPEDA governs; provincial health and private sector laws are not replaced."
+                        },
+                        {
+                            "text": "Mexico: Article 18 requires safeguards reflecting risk and data sensitivity. Assess the actual industry records rather than assume one security level for all sectors.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MX-DATA-SECURITY",
+                                "J:MX-PRIVACY"
+                            ],
+                            "jurisdictions": [
+                                "MX"
+                            ],
+                            "applies_when": "For private sector personal data within the current LFPDPPP, not public sector processing or an AI specific licence."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "vertical-saas: check US federal and applicable state regulator; Canadian federal and applicable provincial regulator; Mexican sector authority and current legislation for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "ai-native",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Canada: OPC AI guidance calls for legal authority, transparency, explainability, privacy safeguards and limits on personal information sharing.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "J:CA-AI-PRIVACY"
+                            ],
+                            "jurisdictions": [
+                                "CA"
+                            ],
+                            "applies_when": "Guidance for applicable Canadian privacy law, not a separate AI licensing regime."
+                        },
+                        {
+                            "text": "Mexico: when model inputs or outputs contain personal data, the 2025 law governs roles, security and confidentiality. An AI label does not establish an exemption.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MX-DATA-SECURITY",
+                                "J:MX-PRIVACY"
+                            ],
+                            "jurisdictions": [
+                                "MX"
+                            ],
+                            "applies_when": "For private sector personal data within the current LFPDPPP, not public sector processing or an AI specific licence."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [
                         {
@@ -12194,28 +12793,62 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "ites",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Mexico: Article 20 confidentiality controls cover people involved in processing and continue after the relationship ends. Address service staff and support access.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MX-DATA-SECURITY",
+                                "J:MX-PRIVACY"
+                            ],
+                            "jurisdictions": [
+                                "MX"
+                            ],
+                            "applies_when": "For private sector personal data within the current LFPDPPP, not public sector processing or an AI specific licence."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "United States: FTC guidance recommends capable service providers, written security requirements and verification during outsourced information handling.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "J:US-FTC-SUPPLIERS"
+                            ],
+                            "jurisdictions": [
+                                "US"
+                            ],
+                            "applies_when": "Business guidance; sector and state obligations need separate scope checks."
+                        },
+                        {
+                            "text": "Canada: demonstrate how outsourced access and processing maintain comparable protection under the PIPEDA organisation's accountability.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CA-PIPEDA"
+                            ],
+                            "jurisdictions": [
+                                "CA"
+                            ],
+                            "applies_when": "For PIPEDA processing; establish province, sector and data flows."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "ites: check US federal and applicable state regulator; Canadian federal and applicable provincial regulator; Mexican sector authority and current legislation for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "telecom",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [
@@ -12267,12 +12900,25 @@ exports.REGION_DATA = [
                 "vertical_id": "cybersecurity",
                 "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Applicable parent notes remain. Add only the following country and activity scoped evidence.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Mexico: Articles 18 and 19 cover risk based safeguards and notice of breaches significantly affecting individuals. Link response evidence to the controller's duties.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MX-DATA-SECURITY",
+                                "J:MX-PRIVACY"
+                            ],
+                            "jurisdictions": [
+                                "MX"
+                            ],
+                            "applies_when": "For private sector personal data within the current LFPDPPP, not public sector processing or an AI specific licence."
+                        }
+                    ],
                     "buyer_language": [],
                     "proof": [
                         {
@@ -12305,41 +12951,109 @@ exports.REGION_DATA = [
             },
             {
                 "vertical_id": "software",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Mexico: Article 18 requires administrative, technical and physical safeguards. Demonstrate application protection against unauthorised use, alteration and loss.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MX-DATA-SECURITY",
+                                "J:MX-PRIVACY"
+                            ],
+                            "jurisdictions": [
+                                "MX"
+                            ],
+                            "applies_when": "For private sector personal data within the current LFPDPPP, not public sector processing or an AI specific licence."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "United States: NIST SSDF 1.1 supports producer and buyer assurance for secure development, software protection and vulnerability response.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "J:US-SSDF"
+                            ],
+                            "jurisdictions": [
+                                "US"
+                            ],
+                            "applies_when": "Recommended framework unless the applicable contract or rule requires it; draft 1.2 is not final."
+                        },
+                        {
+                            "text": "Canada: Cyber Centre joint software guidance recommends evidence of secure design, build protection, maintenance and customer communication.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "J:CA-SOFTWARE-CODE"
+                            ],
+                            "jurisdictions": [
+                                "CA"
+                            ],
+                            "applies_when": "Recommended assurance, not universal statutory certification."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "software: check US federal and applicable state regulator; Canadian federal and applicable provincial regulator; Mexican sector authority and current legislation for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             },
             {
                 "vertical_id": "saas",
-                "status": "waiting_for_source",
+                "status": "specific",
                 "inherits_from": "defaults",
-                "inheritance_note": "Previous inheritance has not passed the source check required by REGIONS-DEPTH.md. Retain only the applicable sourced parent and default notes while the specific check is unfinished.",
+                "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
                     "sector_regulator": [],
                     "procurement_payment": [],
-                    "data_privacy": [],
+                    "data_privacy": [
+                        {
+                            "text": "Canada: hosted personal data within PIPEDA requires comparable protection through contractual or other means while the customer retains accountability.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:CA-PIPEDA"
+                            ],
+                            "jurisdictions": [
+                                "CA"
+                            ],
+                            "applies_when": "PIPEDA scope only; provincial and public sector requirements can differ."
+                        },
+                        {
+                            "text": "Mexico: establish hosted service controller and processor roles under the 2025 private sector data law; security controls must reflect the data and risk.",
+                            "kind": "legal",
+                            "source_ids": [
+                                "J:MX-DATA-SECURITY",
+                                "J:MX-PRIVACY"
+                            ],
+                            "jurisdictions": [
+                                "MX"
+                            ],
+                            "applies_when": "For private sector personal data within the current LFPDPPP, not public sector processing or an AI specific licence."
+                        }
+                    ],
                     "buyer_language": [],
-                    "proof": [],
+                    "proof": [
+                        {
+                            "text": "United States: FTC guidance recommends testing privacy and security features, written provider security expectations and ongoing oversight.",
+                            "kind": "operating",
+                            "source_ids": [
+                                "J:US-FTC-SUPPLIERS"
+                            ],
+                            "jurisdictions": [
+                                "US"
+                            ],
+                            "applies_when": "Business security guidance for the hosted service, not universal certification."
+                        }
+                    ],
                     "objections": [],
                     "sales_motion": []
                 },
-                "pending_topics": [
-                    "saas: check US federal and applicable state regulator; Canadian federal and applicable provincial regulator; Mexican sector authority and current legislation for country specific obligations, approval roles and evidence. No sourced finding of equivalence is recorded."
-                ]
+                "pending_topics": []
             }
         ],
         "subtypes": [
@@ -13798,8 +14512,8 @@ exports.REGION_SOURCES = {
         "publication_date": "2026-10-25",
         "accessed_date": "2026-11-03",
         "primary_source": "true",
-        "claim_scope": "Phased electronic invoice implementation and preparatory supplier appointment requirements.",
-        "limitations": "Latest accessed notice differs from older appointment deadline. No thresholds or universal immediate obligation asserted."
+        "claim_scope": "Phased electronic invoice implementation and preparatory provider designation requirements.",
+        "limitations": "Latest accessed notice differs from the older provider designation deadline. No thresholds or universal immediate obligation asserted."
     },
     "I:AE-PAY-DATA": {
         "source_id": "I:AE-PAY-DATA",
@@ -13837,7 +14551,7 @@ exports.REGION_SOURCES = {
         "publication_date": "",
         "accessed_date": "2026-11-03",
         "primary_source": "true",
-        "claim_scope": "Article 2 scope and exclusions, including sector data and free zones with their own law.",
+        "claim_scope": "Article 2 exclusions and Article 8 controller instructions and processing contract scope.",
         "limitations": "No reliable full publication date on the retrieved page. Current executive instruments and implementation timing must be checked. No universal federal privacy or residency claim."
     },
     "I:AE-TELECOM": {
@@ -13891,6 +14605,32 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "BDCB maintains separate banking finance insurance capital market and payment regulatory categories",
         "limitations": "Undated official current index. It establishes categories, not a licence conclusion for a particular product."
+    },
+    "I:BN-CII-CODE": {
+        "source_id": "I:BN-CII-CODE",
+        "region_id": "southeast-asia",
+        "jurisdiction": "BN",
+        "title": "Cybersecurity Code of Practice for Critical Information Infrastructure 2023",
+        "publisher": "Cyber Security Brunei",
+        "url": "https://www.csb.gov.bn/sites/default/files/downloads/CodeOfPractice/Code_of_Practice_for_Critical_Information_Infrastrcture_(CII)_-_Public_Release.pdf",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "CII governance outsourcing cloud access and penetration testing controls",
+        "limitations": "Public primary PDF sections 3.1 3.6 3.7 5.1 and 5.15 read. Initial release date printed 11/03/2024; full ISO date left blank rather than assuming day order. CII scope only; check designation and compliance date."
+    },
+    "I:BN-CYBER-ACT": {
+        "source_id": "I:BN-CYBER-ACT",
+        "region_id": "southeast-asia",
+        "jurisdiction": "BN",
+        "title": "Cybersecurity Act Chapter 272",
+        "publisher": "Cyber Security Brunei",
+        "url": "https://csb.gov.bn/cybersecurity-act-chapter-272",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Current Act identity and CII oversight scope",
+        "limitations": "Live primary page states 2023 Order became Act in 2024. No full page publication date. Do not extend CII owner requirements to all private software buyers."
     },
     "I:BN-INSURANCE": {
         "source_id": "I:BN-INSURANCE",
@@ -14035,6 +14775,32 @@ exports.REGION_SOURCES = {
         "claim_scope": "Government guidance on accountability, understandable design, risk assessment and voluntary measures.",
         "limitations": "Policy guidance is not a blanket certification or new licence. Binding sector laws remain separate."
     },
+    "I:IN-APP-SECURE": {
+        "source_id": "I:IN-APP-SECURE",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Guidelines for Secure Application Design Development Implementation and Operations",
+        "publisher": "CERT In",
+        "url": "https://www.cert-in.org.in/PDF/Application_Security_Guidelines.pdf",
+        "publication_date": "2024-01-25",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Secure development lifecycle application owner assurance and authentication practices",
+        "limitations": "Primary PDF and dated regulator index read. Guidance especially relevant to government development and outsourcing; not a universal product licence. No vendor recommendation."
+    },
+    "I:IN-AUDIT-POLICY": {
+        "source_id": "I:IN-AUDIT-POLICY",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Comprehensive Cyber Security Audit Policy Guidelines",
+        "publisher": "CERT In",
+        "url": "https://www.cert-in.org.in/Downloader?fileName=CIGU-2025-0002.pdf&pageid=6&type=2",
+        "publication_date": "2025-07-25",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Audit approval confidentiality manual assessment mobile testing and ethical awareness assessment",
+        "limitations": "Primary version 1.0 read, especially sections 8 13 and 15. Audit engagement guidance is not a universal security software licence or an endorsement of a provider."
+    },
     "I:IN-BANK-LAW": {
         "source_id": "I:IN-BANK-LAW",
         "region_id": "india",
@@ -14060,6 +14826,32 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "FAQ 29 to 40: incident contact, reporting, logging and time synchronisation.",
         "limitations": "FAQ publication date confirmed by PIB release of 18 May 2022. Read with directions; do not infer that every incident or every security product is within each provision."
+    },
+    "I:IN-CLOUD-EMPANEL": {
+        "source_id": "I:IN-CLOUD-EMPANEL",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Stepwise Guide on Empanelment of Cloud Service Offerings",
+        "publisher": "Ministry of Electronics and Information Technology",
+        "url": "https://www.meity.gov.in/writereaddata/files/Stepwise%20guide%20on%20empanelment%20process.pdf",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "STQC audit service and location scope of MeitY empanelment and procuring department contract responsibility",
+        "limitations": "Primary advisory guide steps 4 to 6 read. No reliable full issue date. Government cloud procurement scope, not every SaaS vendor. Current empanelment status must be verified."
+    },
+    "I:IN-DIGITAL-LENDING-2026": {
+        "source_id": "I:IN-DIGITAL-LENDING-2026",
+        "region_id": "india",
+        "jurisdiction": "IN",
+        "title": "Government and RBI strengthen digital lending safeguards",
+        "publisher": "Ministry of Finance via Press Information Bureau",
+        "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2287195&lang=2&reg=48",
+        "publication_date": "2026-07-21",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Current ministry confirmation of Digital Lending Directions 2025 and regulated entity LSP and DLA scope",
+        "limitations": "Primary parliamentary reply read. Used for framework and role confirmation only. Current entity specific Credit Facilities Directions and detailed permission and data clauses remain pending."
     },
     "I:IN-DOT": {
         "source_id": "I:IN-DOT",
@@ -14360,6 +15152,32 @@ exports.REGION_SOURCES = {
         "claim_scope": "Customer information disclosure consent evidence and withdrawal when relying on consent",
         "limitations": "Primary PDF read. Scope and permitted statutory disclosures must be checked; consent is not asserted as the only disclosure basis."
     },
+    "I:MY-CYBER-APPLICATION": {
+        "source_id": "I:MY-CYBER-APPLICATION",
+        "region_id": "southeast-asia",
+        "jurisdiction": "MY",
+        "title": "Cyber Security Service Provider licence application guideline",
+        "publisher": "National Cyber Security Agency",
+        "url": "https://www.nacsa.gov.my/application-licensing.php",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Application documents qualification experience and responsible person",
+        "limitations": "Live primary page. Provider application responsible person is not the buyer contract approver; no universal buyer title asserted."
+    },
+    "I:MY-CYBER-LICENCE": {
+        "source_id": "I:MY-CYBER-LICENCE",
+        "region_id": "southeast-asia",
+        "jurisdiction": "MY",
+        "title": "Cyber Security Service Provider Licensing FAQ",
+        "publisher": "National Cyber Security Agency",
+        "url": "https://www.nacsa.gov.my/doc/FAQ%20LICENSING%20SERVICE%20PROVIDER.pdf",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Act 854 and P.U. A 221/2024 service definitions scope exclusions and licence route",
+        "limitations": "Live primary PDF. No reliable full publication date. Do not extend the two licensed service categories to every security software product; check statutory exclusions."
+    },
     "I:MY-E-MONEY": {
         "source_id": "I:MY-E-MONEY",
         "region_id": "southeast-asia",
@@ -14437,6 +15255,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "2025 banking law issued to licensed banks finance leasing money exchange and payment providers",
         "limitations": "Circular confirms new law and continuing compatible instructions. It does not itself establish detailed authorisation requirements for every fintech activity."
+    },
+    "I:OM-CYBER-TRANSFER": {
+        "source_id": "I:OM-CYBER-TRANSFER",
+        "region_id": "middle-east",
+        "jurisdiction": "OM",
+        "title": "Accreditation Program and current authority transfer notices",
+        "publisher": "Ministry of Transport Communications and Information Technology",
+        "url": "https://www.mtcit.gov.om/media-4/projects-initiatives-12/program-89/accreditation-program-381",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Security accreditation transfer to CDC and cloud hosting regulation transfer to TRA",
+        "limitations": "Live primary notice read. Page bears old launch date and current site footer; neither is a verified date of transfer. Linked circular is an image PDF with no extracted text. Current CDC procedures remain pending."
     },
     "I:OM-FSA": {
         "source_id": "I:OM-FSA",
@@ -14516,6 +15347,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "Lending Company Regulation Act RA 9474 and SEC certificate of authority.",
         "limitations": "No reliable full publication date on the retrieved page. Undated FAQ. Used only for basic entity boundary; no capital requirement or current platform procedure asserted."
     },
+    "I:QA-CYBER-ACCREDITATION": {
+        "source_id": "I:QA-CYBER-ACCREDITATION",
+        "region_id": "middle-east",
+        "jurisdiction": "QA",
+        "title": "NISCF General Policy for National Accreditation V1.0",
+        "publisher": "National Cyber Security Agency",
+        "url": "https://ncsa.gov.qa/shared/document_library/94787172324409/33000/8826/1.0~c7786091-54da-4189-9dac-2b356f805517?filename=NCSA-NISCF-ACCR-GPNA-V1.0+%284%29.pdf&mimetype=application%2Fpdf",
+        "publication_date": "2023-09-25",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "NISCF accreditation authority application governance and evidence requirements",
+        "limitations": "Primary PDF text read. Effective 1 January 2024 with re-accreditation transition. Scheme participation is not evidence of a universal trading licence requirement. Current service module and buyer procurement scope still need checks."
+    },
     "I:QA-PDP": {
         "source_id": "I:QA-PDP",
         "region_id": "middle-east",
@@ -14554,6 +15398,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "QFCRA authorises financial services in or from QFC under Law 7 of 2005",
         "limitations": "Official publisher search extract read; live fetch returned a server error. Does not establish which regime a named company uses."
+    },
+    "I:SA-AI-ETHICS": {
+        "source_id": "I:SA-AI-ETHICS",
+        "region_id": "middle-east",
+        "jurisdiction": "SA",
+        "title": "AI Ethics Principles",
+        "publisher": "Saudi Data and AI Authority",
+        "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/ai-principles.pdf",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "AI lifecycle accountability stakeholder acceptance and monitoring",
+        "limitations": "Primary PDF read and current SDAIA regulatory index checked. No reliable full publication date. Presented as framework guidance, not a new statutory licence or guarantee of compliance."
     },
     "I:SA-BANK-LICENCE": {
         "source_id": "I:SA-BANK-LICENCE",
@@ -14607,6 +15464,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "Saudi CMA powers under the Capital Market Law.",
         "limitations": "No reliable full publication date on the retrieved page. Do not confuse with the UAE Capital Market Authority."
     },
+    "I:SA-CUSTOMS-AUTH": {
+        "source_id": "I:SA-CUSTOMS-AUTH",
+        "region_id": "middle-east",
+        "jurisdiction": "SA",
+        "title": "Customs Broker Authorization",
+        "publisher": "Zakat Tax and Customs Authority",
+        "url": "https://www.zatca.gov.sa/en/eServices/Pages/eServices-235.aspx",
+        "publication_date": "2021-07-30",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Importer or exporter delegation to broker with scope duration and licence details",
+        "limitations": "Live primary service page. Published date is service release date. Customs workflow does not mean a freight software supplier itself needs a customs broker licence."
+    },
     "I:SA-ECC": {
         "source_id": "I:SA-ECC",
         "region_id": "middle-east",
@@ -14619,6 +15489,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Identity and current edition of Essential Cybersecurity Controls.",
         "limitations": "Date is official page publication. No blanket all private business mandate or detailed control asserted; scope must be established."
+    },
+    "I:SA-ECC-CONTROLS": {
+        "source_id": "I:SA-ECC-CONTROLS",
+        "region_id": "middle-east",
+        "jurisdiction": "SA",
+        "title": "Essential Cybersecurity Controls ECC 2 2024 full English text",
+        "publisher": "National Cybersecurity Authority",
+        "url": "https://cdn.nca.gov.sa/api/files/public/upload/86e09090-44e4-481f-bc28-355673607654_ECC--2024-EN.pdf",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Scoped technology development and cybersecurity control requirements",
+        "limitations": "Final PDF linked by current NCA ECC page, not the consultation copy. Read applicability and relevant controls before use. No full day of issue in document. Government and critical infrastructure scope is not all private business."
     },
     "I:SA-FIN-OUTSOURCE": {
         "source_id": "I:SA-FIN-OUTSOURCE",
@@ -14698,6 +15581,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "Generation phase and integration phase; integration is notified by taxpayer waves.",
         "limitations": "No reliable full publication date on the retrieved page. No universal integration deadline, tax rate or revenue threshold asserted."
     },
+    "I:SA-MSOC-FRAMEWORK": {
+        "source_id": "I:SA-MSOC-FRAMEWORK",
+        "region_id": "middle-east",
+        "jurisdiction": "SA",
+        "title": "Regulatory Framework for Licensing Managed Security Operations Center Services RFMSOC 1 2024",
+        "publisher": "National Cybersecurity Authority",
+        "url": "https://cdn.nca.gov.sa/api/public/cms/files/8417b9fe-8066-47f5-8282-bb1d6ddbfbf5_rfmsoc-EN.pdf",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "MSOC licensing applicable cyber controls annual compliance evidence and subcontracting approval",
+        "limitations": "Primary indexed provisions 6.23 and 7 read; alternate official PDF confirms identity but has incomplete text extraction. No unsupported data residency or tier customer scope claim. Arabic is authoritative. Not the March 2026 general services consultation draft."
+    },
     "I:SA-PAY-IMPLEMENTING": {
         "source_id": "I:SA-PAY-IMPLEMENTING",
         "region_id": "middle-east",
@@ -14736,6 +15632,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Article 4 financial institution and payment supervisory powers.",
         "limitations": "No reliable full publication date on the retrieved page. Relevant sector laws determine the entity scope. Insurance remit is separately mapped to the Insurance Authority."
+    },
+    "I:SA-SMS-RULES": {
+        "source_id": "I:SA-SMS-RULES",
+        "region_id": "middle-east",
+        "jurisdiction": "SA",
+        "title": "Regulations of the Provision of the Short Messaging Service SMS",
+        "publisher": "Communications Space and Technology Commission",
+        "url": "https://www.cst.gov.sa/en/regulations-and-licenses/regulations/Document-504",
+        "publication_date": "2022-04-20",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Separate SMS service framework under decision 484/1443",
+        "limitations": "Current primary regulation page read. Detailed attached conditions not extracted; only activity framework and scope asserted. No inferred sending hours consent exemption or sender identifier format."
     },
     "I:SA-TELECOM": {
         "source_id": "I:SA-TELECOM",
@@ -14854,6 +15763,71 @@ exports.REGION_SOURCES = {
         "claim_scope": "Licensing distinction for penetration testing and managed SOC monitoring.",
         "limitations": "No reliable full publication date on the retrieved page. Live page used for service scope only. Other cybersecurity obligations and amended designation regimes require separate applicability review."
     },
+    "I:SG-CYBER-CONDITIONS": {
+        "source_id": "I:SG-CYBER-CONDITIONS",
+        "region_id": "southeast-asia",
+        "jurisdiction": "SG",
+        "title": "Closing note and updated cybersecurity licence conditions",
+        "publisher": "Cyber Security Agency of Singapore",
+        "url": "https://www.csa.gov.sg/legislation/consultations/closing-note-to-the-consultation-on-the-licensing-framework-for-cybersecurity-service-providers/",
+        "publication_date": "2026-02-25",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Customer information purpose limitation written consent exceptions and no mandatory DPTM",
+        "limitations": "Final closing note with operative condition text, not a consultation proposal. Standalone conditions PDF returned 404, so scope is cross checked against current CSRO FAQ. DPTM is not a mandatory certification in the final response."
+    },
+    "I:SG-CYBER-FAQ": {
+        "source_id": "I:SG-CYBER-FAQ",
+        "region_id": "southeast-asia",
+        "jurisdiction": "SG",
+        "title": "Cybersecurity service provider licensing FAQ",
+        "publisher": "Cybersecurity Services Regulation Office",
+        "url": "https://www.csro.gov.sg/resources/faq/",
+        "publication_date": "2026-09-29",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Software only boundary licence verification certification scope and service records",
+        "limitations": "Live primary page. Applies to the defined licensed services; software suppliers are not licensed solely because their tools support providers."
+    },
+    "I:SG-CYBER-LICENCE": {
+        "source_id": "I:SG-CYBER-LICENCE",
+        "region_id": "southeast-asia",
+        "jurisdiction": "SG",
+        "title": "Apply for Licence",
+        "publisher": "Cybersecurity Services Regulation Office",
+        "url": "https://www.csro.gov.sg/how-to/apply-for-licence/",
+        "publication_date": "2026-07-30",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Licensable services licence route key officers and CTM certification grace period",
+        "limitations": "Live primary page. Licence application and provider responsibility are distinct from the customer purchase approval. CTM grace runs to 31 December 2026."
+    },
+    "I:SG-DATA-INTERMEDIARIES": {
+        "source_id": "I:SG-DATA-INTERMEDIARIES",
+        "region_id": "southeast-asia",
+        "jurisdiction": "SG",
+        "title": "Guide to Managing Data Intermediaries",
+        "publisher": "Personal Data Protection Commission",
+        "url": "https://www.pdpc.gov.sg/-/media/Files/PDPC/PDF-Files/Other-Guides/Guide-to-Managing-Data-Intermediaries--2020.pdf?la=en",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Outsourced personal data processing contracts governance service and exit management",
+        "limitations": "Primary PDF read. Filename year is not a verified full publication date. Distinguish PDPA duties from recommended operating practices; public agencies use a separate framework."
+    },
+    "I:SG-EMPLOYMENT-RECORDS": {
+        "source_id": "I:SG-EMPLOYMENT-RECORDS",
+        "region_id": "southeast-asia",
+        "jurisdiction": "SG",
+        "title": "Employment records",
+        "publisher": "Ministry of Manpower",
+        "url": "https://www.mom.gov.sg/employment-practices/employment-records",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Employment Act employee and salary records and retention requirements",
+        "limitations": "Current primary page read and checked against section 95 and S148/2016. No page publication date. Applies only to employees covered by the Act; no payroll vendor licensing claim."
+    },
     "I:SG-EXPENSE-GST": {
         "source_id": "I:SG-EXPENSE-GST",
         "region_id": "southeast-asia",
@@ -14866,6 +15840,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Evidence for employee expense input tax claims and business versus private separation",
         "limitations": "Page update date. Other input tax conditions apply. Does not establish eligibility for any particular claim or prescribe the buyer's purchase approver."
+    },
+    "I:SG-ICT-PRACTICES": {
+        "source_id": "I:SG-ICT-PRACTICES",
+        "region_id": "southeast-asia",
+        "jurisdiction": "SG",
+        "title": "Guide to Data Protection Practices for ICT Systems",
+        "publisher": "Personal Data Protection Commission",
+        "url": "https://www.pdpc.gov.sg/-/media/files/pdpc/pdf-files/other-guides/tech-omnibus/guide-to-data-protection-practices-for-ict-systems.pdf",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Data protection design testing and operational assurance practices",
+        "limitations": "Primary PDF read. Regulator guidance index lists July 2026 but this retrieved PDF has no verified full revision date. Recommendations are not a universal software certification requirement."
     },
     "I:SG-INSURANCE": {
         "source_id": "I:SG-INSURANCE",
@@ -14957,6 +15944,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Protection, retention and comparable protection for overseas transfers.",
         "limitations": "No reliable full publication date on the retrieved page. Document states May 2021. Used only for these stable obligations, not its uncommenced data portability item. Check exceptions and current regulations."
+    },
+    "I:SG-SMS-REGISTRY": {
+        "source_id": "I:SG-SMS-REGISTRY",
+        "region_id": "southeast-asia",
+        "jurisdiction": "SG",
+        "title": "Overview of SMS Sender ID Registry",
+        "publisher": "Singapore Network Information Centre",
+        "url": "https://www.sgnic.sg/smsregistry/overview",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Sender ID registration organisation account administration and participating aggregators",
+        "limitations": "Current primary registry operator page read; no full publication date. Scope is SMS Sender IDs used for Singapore mobile users. No price, software recommendation or claim that registration substitutes for messaging consent."
     },
     "I:SG-TELECOM": {
         "source_id": "I:SG-TELECOM",
@@ -15166,6 +16166,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "FSMA supervisory category and investment firm rules",
         "limitations": "Selected English guidance only; no legal detail borrowed from outdated 2013 consolidated law."
     },
+    "J:CA-AI-PRIVACY": {
+        "source_id": "J:CA-AI-PRIVACY",
+        "region_id": "north-america",
+        "jurisdiction": "CA",
+        "title": "AI privacy and your business",
+        "publisher": "OPC",
+        "url": "https://www.priv.gc.ca/en/privacy-topics/technology/artificial-intelligence/ai_business/",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "AI legal authority transparency safeguards and minimisation",
+        "limitations": "Guidance, not AI licence; provincial scope requires checking."
+    },
     "J:CA-CYBER": {
         "source_id": "J:CA-CYBER",
         "region_id": "north-america",
@@ -15257,6 +16270,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "Retail Payment Activities Act operational risk, incident and safeguarding framework",
         "limitations": "Publication date not shown. Apply only to payment service providers and activities in scope; check exclusions and funds handling."
     },
+    "J:CA-SAFEGUARDS": {
+        "source_id": "J:CA-SAFEGUARDS",
+        "region_id": "north-america",
+        "jurisdiction": "CA",
+        "title": "PIPEDA Principle 7 Safeguards",
+        "publisher": "OPC",
+        "url": "https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/p_principle/principles/p_safeguards",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Sensitivity based security controls",
+        "limitations": "PIPEDA scope only; no mandated product."
+    },
     "J:CA-SECURITIES": {
         "source_id": "J:CA-SECURITIES",
         "region_id": "north-america",
@@ -15270,6 +16296,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "NI 31-103 and provincial or territorial securities registration",
         "limitations": "Publication date not shown. Check exemptions, registration category and principal regulator; not a federal securities licence."
     },
+    "J:CA-SOFTWARE-CODE": {
+        "source_id": "J:CA-SOFTWARE-CODE",
+        "region_id": "north-america",
+        "jurisdiction": "CA",
+        "title": "Joint software security code guidance",
+        "publisher": "Canadian Centre for Cyber Security",
+        "url": "https://www.cyber.gc.ca/en/news-events/joint-guidance-software-security-code-practice",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Canadian secure software assurance guidance",
+        "limitations": "Recommended practice, not universal certification."
+    },
     "J:CA-TELECOM": {
         "source_id": "J:CA-TELECOM",
         "region_id": "north-america",
@@ -15282,6 +16321,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Telecom provider registration, exemptions, emergency duties and BITS licence scope",
         "limitations": "Publication date not shown. Registration exemptions do not remove all consumer protections."
+    },
+    "J:CH-AI": {
+        "source_id": "J:CH-AI",
+        "region_id": "western-europe",
+        "jurisdiction": "CH",
+        "title": "AI and data protection",
+        "publisher": "FDPIC",
+        "url": "https://www.edoeb.admin.ch/en/ai-and-data-protection",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "FADP AI transparency and DPIA",
+        "limitations": "Swiss law, not EU AI Act."
     },
     "J:CH-BANK": {
         "source_id": "J:CH-BANK",
@@ -15308,6 +16360,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Information Security Act and Cybersecurity Ordinance critical infrastructure incident reporting scope",
         "limitations": "Publication date not shown. Entity, incident and ordinance exemptions must be checked; not every Swiss company is covered."
+    },
+    "J:CH-DPIA": {
+        "source_id": "J:CH-DPIA",
+        "region_id": "western-europe",
+        "jurisdiction": "CH",
+        "title": "Data protection impact assessment",
+        "publisher": "FDPIC",
+        "url": "https://www.edoeb.admin.ch/en/data-protection-impact-assessment",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "FADP Articles 22 and 23",
+        "limitations": "Potential high risk threshold, not every software project."
     },
     "J:CH-FADP": {
         "source_id": "J:CH-FADP",
@@ -15386,6 +16451,32 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "FinIA authorisation and ongoing supervisory organisation responsibilities",
         "limitations": "No publication date shown. Group supervision exceptions apply."
+    },
+    "J:CH-PRIVACY-DESIGN": {
+        "source_id": "J:CH-PRIVACY-DESIGN",
+        "region_id": "western-europe",
+        "jurisdiction": "CH",
+        "title": "Federal Act on Data Protection",
+        "publisher": "Fedlex",
+        "url": "https://www.fedlex.admin.ch/eli/cc/2022/491/en",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Article 7 design and default",
+        "limitations": "English informational translation; actual processing scope applies."
+    },
+    "J:CH-ROAD": {
+        "source_id": "J:CH-ROAD",
+        "region_id": "western-europe",
+        "jurisdiction": "CH",
+        "title": "Ordonnance sur les chauffeurs OTR 1",
+        "publisher": "Federal Roads Office",
+        "url": "https://www.astra.admin.ch/fr/ordonnance-sur-les-chauffeurs-otr-1",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Professional driver tachograph scope and cantonal enforcement",
+        "limitations": "Check vehicle route and exemptions."
     },
     "J:CH-TELECOM": {
         "source_id": "J:CH-TELECOM",
@@ -15504,6 +16595,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "Country competent authorities for banking supervision",
         "limitations": "Publication date not shown. Banking supervision only, not a list of every financial sector regulator."
     },
+    "J:EU-CRA-REPORT": {
+        "source_id": "J:EU-CRA-REPORT",
+        "region_id": "western-europe",
+        "jurisdiction": "EU",
+        "title": "Cyber Resilience Act reporting obligations",
+        "publisher": "European Commission",
+        "url": "https://digital-strategy.ec.europa.eu/en/policies/cra-reporting",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Article 14 manufacturer vulnerability and incident reporting",
+        "limitations": "Product scope and exceptions apply; open source stewards have later commencement."
+    },
     "J:EU-DORA": {
         "source_id": "J:EU-DORA",
         "region_id": "western-europe",
@@ -15516,6 +16620,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Articles 5 24 28 and 30 management responsibility ICT testing third party risk and contracts",
         "limitations": "Read primary legal text in indexed search. Direct ELI view served a JavaScript challenge. Apply only to financial entities and arrangements within scope; not every technology supplier is directly supervised."
+    },
+    "J:EU-DPIA": {
+        "source_id": "J:EU-DPIA",
+        "region_id": "western-europe",
+        "jurisdiction": "EU",
+        "title": "Be compliant: DPIA",
+        "publisher": "EDPB",
+        "url": "https://www.edpb.europa.eu/sme/be-compliant/be-compliant_en",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "High risk assessment and national lists",
+        "limitations": "Risk specific; check local list and exceptions."
     },
     "J:EU-GDPR": {
         "source_id": "J:EU-GDPR",
@@ -15620,6 +16737,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "National transposition must be checked for NIS2 implementation",
         "limitations": "Publication date not established. Tracker is a state of play, not a final finding of national legal compliance."
+    },
+    "J:EU-PRIVACY-DESIGN": {
+        "source_id": "J:EU-PRIVACY-DESIGN",
+        "region_id": "western-europe",
+        "jurisdiction": "EU",
+        "title": "Guidelines 4/2019 Article 25",
+        "publisher": "EDPB",
+        "url": "https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201904_dataprotection_by_design_and_by_default_v2.0_en.pdf",
+        "publication_date": "2020-10-20",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Controller data protection by design and default duties",
+        "limitations": "Article 25 does not directly address every producer or processor."
     },
     "J:EU-PSD2": {
         "source_id": "J:EU-PSD2",
@@ -15738,6 +16868,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "Investment services ACPR authorisation after AMF programme approval",
         "limitations": "Separate AMF asset management company route must not be conflated."
     },
+    "J:LI-AI": {
+        "source_id": "J:LI-AI",
+        "region_id": "western-europe",
+        "jurisdiction": "LI",
+        "title": "Kunstliche Intelligenz",
+        "publisher": "Datenschutzstelle Liechtenstein",
+        "url": "https://www.datenschutzstelle.li/datenschutz/themen-z/kuenstliche-intelligenz",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "AI roles purpose reuse transfers accuracy security and rights",
+        "limitations": "Guidance not product approval."
+    },
     "J:LI-BANK-FRAMEWORK": {
         "source_id": "J:LI-BANK-FRAMEWORK",
         "region_id": "western-europe",
@@ -15763,6 +16906,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "EEA DORA Implementation Act effective February 2025; entity scope and exceptions",
         "limitations": "English page machine translated; applicability verified separately from EU membership."
+    },
+    "J:LI-DPIA": {
+        "source_id": "J:LI-DPIA",
+        "region_id": "western-europe",
+        "jurisdiction": "LI",
+        "title": "Datenschutz Folgenabschatzung",
+        "publisher": "Datenschutzstelle Liechtenstein",
+        "url": "https://www.datenschutzstelle.li/datenschutz/themen-z/datenschutz-folgenabschaetzung",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Article 35 high risk assessment",
+        "limitations": "Local source verifies Liechtenstein applicability."
     },
     "J:LI-FMA": {
         "source_id": "J:LI-FMA",
@@ -15828,6 +16984,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "FMA licence under ZDG and ZDV; account information only registration",
         "limitations": "Last amended 12 December 2024. Payment activity and exclusions must be established."
+    },
+    "J:LI-ROAD": {
+        "source_id": "J:LI-ROAD",
+        "region_id": "western-europe",
+        "jurisdiction": "LI",
+        "title": "Digitaler Fahrtenschreiber und Tachographenpflicht",
+        "publisher": "Liechtensteinische Landesverwaltung",
+        "url": "https://www.llv.li/de/privatpersonen/mobilitaet-reisen-und-ausland/fuehrerschein/digitaler-fahrtenschreiber-und-tachographenpflicht",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Local tachograph scope and driver records",
+        "limitations": "Cross border and national operations differ."
     },
     "J:LI-TELECOM": {
         "source_id": "J:LI-TELECOM",
@@ -15959,6 +17128,45 @@ exports.REGION_SOURCES = {
         "claim_scope": "Article 10 retains and renumbers telecommunications duties in Ordonnance 7.997; commencement 2026-10-05",
         "limitations": "Only the retained telecommunications remit is used; do not infer broader licence procedures."
     },
+    "J:MC-DPIA": {
+        "source_id": "J:MC-DPIA",
+        "region_id": "western-europe",
+        "jurisdiction": "MC",
+        "title": "Arrete ministeriel 2025-361",
+        "publisher": "Legimonaco",
+        "url": "https://legimonaco.mc/tnc/arrete-ministeriel/2025/07-14-2025-361",
+        "publication_date": "2025-07-14",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "High risk criteria under Article 35",
+        "limitations": "Specific criteria, not blanket software approval."
+    },
+    "J:MC-PRIVACY-LAW": {
+        "source_id": "J:MC-PRIVACY-LAW",
+        "region_id": "western-europe",
+        "jurisdiction": "MC",
+        "title": "Loi no 1.565 du 3 decembre 2024",
+        "publisher": "Legimonaco",
+        "url": "https://legimonaco.mc/tnc/loi/2024/12-03-1.565",
+        "publication_date": "2024-12-03",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Articles 19 and 31 automated decisions and security",
+        "limitations": "Current 27 October 2026 version; criminal justice chapter not applied to ordinary businesses."
+    },
+    "J:MC-ROAD": {
+        "source_id": "J:MC-ROAD",
+        "region_id": "western-europe",
+        "jurisdiction": "MC",
+        "title": "Ordonnance souveraine no 1.302",
+        "publisher": "Legimonaco",
+        "url": "https://legimonaco.mc/tnc/ordonnance/1956/04-11-1.302/",
+        "publication_date": "1956-04-11",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Article 2 transport enterprise authorisation",
+        "limitations": "France Monaco transport instrument, not all logistics software."
+    },
     "J:MC-TELECOM-AUTH": {
         "source_id": "J:MC-TELECOM-AUTH",
         "region_id": "western-europe",
@@ -16010,6 +17218,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Ley de Instituciones de Credito commercial bank authorisation",
         "limitations": "Official search text read; direct fetch timed out. CNBV authorisation requires board agreement and favourable Banco de Mexico opinion."
+    },
+    "J:MX-DATA-SECURITY": {
+        "source_id": "J:MX-DATA-SECURITY",
+        "region_id": "north-america",
+        "jurisdiction": "MX",
+        "title": "Ley Federal de Proteccion de Datos Personales en Posesion de los Particulares",
+        "publisher": "Camara de Diputados",
+        "url": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf",
+        "publication_date": "2025-03-20",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Articles 18 19 20 security breach notice confidentiality",
+        "limitations": "2025 replacement private sector law, not repealed article numbering."
     },
     "J:MX-FINTECH": {
         "source_id": "J:MX-FINTECH",
@@ -16205,6 +17426,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "CONC 5.2A sufficient information, affordability risk and governing body approval of written creditworthiness policies",
         "limitations": "Current official text read through search. Direct HTML requires JavaScript. Consumer credit scope and exceptions apply."
+    },
+    "J:UK-DPIA": {
+        "source_id": "J:UK-DPIA",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "When do we need to do a DPIA",
+        "publisher": "ICO",
+        "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/accountability-and-governance/data-protection-impact-assessments-dpias/when-do-we-need-to-do-a-dpia/",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Article 35 high risk screening",
+        "limitations": "No blanket SaaS DPIA requirement."
     },
     "J:UK-DVSA-HOURS": {
         "source_id": "J:UK-DVSA-HOURS",
@@ -16414,6 +17648,19 @@ exports.REGION_SOURCES = {
         "claim_scope": "Chapters 4, 7 and 10 on accountable senior managers, data classification and tested continuity and exit",
         "limitations": "Current version confirmed on PRA landing page; effective 2024-12-31. March 2026 future version takes effect in March 2027 and is not used."
     },
+    "J:UK-PROCESSOR-TERMS": {
+        "source_id": "J:UK-PROCESSOR-TERMS",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "What needs to be included in the contract",
+        "publisher": "ICO",
+        "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/accountability-and-governance/contracts-and-liabilities-between-controllers-and-processors-multi/what-needs-to-be-included-in-the-contract/",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Article 28 subcontractors confidentiality assistance and exit",
+        "limitations": "Controller processor relationships only."
+    },
     "J:UK-PROD42": {
         "source_id": "J:UK-PROD42",
         "region_id": "uk",
@@ -16426,6 +17673,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "Governing body endorsement, product approval process and audit records",
         "limitations": "Current official chapter as of 2026-11-02. Scope includes manufacturing and relevant lead firm exceptions; not every insurance distributor."
+    },
+    "J:UK-SOFTWARE-CODE": {
+        "source_id": "J:UK-SOFTWARE-CODE",
+        "region_id": "uk",
+        "jurisdiction": "GB",
+        "title": "Software Security Code of Practice",
+        "publisher": "DSIT",
+        "url": "https://www.gov.uk/government/publications/software-security-code-of-practice/software-security-code-of-practice",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Voluntary secure development and responsible owner",
+        "limitations": "Voluntary guidance, updated January 2026."
     },
     "J:US-ADVISERS": {
         "source_id": "J:US-ADVISERS",
@@ -16531,6 +17791,32 @@ exports.REGION_SOURCES = {
         "claim_scope": "FTC business guidance on data inventory, minimisation, protection and disposal",
         "limitations": "Publication date not reliably established. Guidance derived from cases; individual settlement orders do not apply to every business."
     },
+    "J:US-FTC-SUPPLIERS": {
+        "source_id": "J:US-FTC-SUPPLIERS",
+        "region_id": "north-america",
+        "jurisdiction": "US",
+        "title": "Start with Security",
+        "publisher": "FTC",
+        "url": "https://www.ftc.gov/business-guidance/resources/start-security-guide-business",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Provider selection security contracts monitoring feature verification",
+        "limitations": "Guidance from enforcement cases, not universal certification."
+    },
+    "J:US-HIPAA-CLOUD": {
+        "source_id": "J:US-HIPAA-CLOUD",
+        "region_id": "north-america",
+        "jurisdiction": "US",
+        "title": "HIPAA cloud service ePHI guidance",
+        "publisher": "HHS",
+        "url": "https://www.hhs.gov/hipaa/for-professionals/faq/may-a-hipaa-covered-entity-or-business-associate-use-cloud-service-to-store-or-process-ephi/index.html",
+        "publication_date": "",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Business associate agreement and risk analysis",
+        "limitations": "Covered relationships and ePHI only, not all health apps."
+    },
     "J:US-INSURANCE": {
         "source_id": "J:US-INSURANCE",
         "region_id": "north-america",
@@ -16556,6 +17842,19 @@ exports.REGION_SOURCES = {
         "primary_source": "true",
         "claim_scope": "ECOA Regulation B adverse action notice and specific reasons requirements",
         "limitations": "No standalone publication date shown. Direct rule used instead of relying on an older circular. Business credit and other notification exceptions must be checked."
+    },
+    "J:US-SSDF": {
+        "source_id": "J:US-SSDF",
+        "region_id": "north-america",
+        "jurisdiction": "US",
+        "title": "NIST SP 800-218 SSDF 1.1",
+        "publisher": "NIST",
+        "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+        "publication_date": "2022-02-03",
+        "accessed_date": "2026-11-03",
+        "primary_source": "true",
+        "claim_scope": "Software lifecycle and vulnerability assurance",
+        "limitations": "1.1 remains final; 1.2 is draft. Contract mandate needs separate evidence."
     }
 };
 exports.REGION_TAXONOMY = {
@@ -16892,24 +18191,24 @@ exports.REGION_TAXONOMY = {
 };
 exports.REGION_GENERATION = {
     "schema_version": "1.0.0",
-    "data_sha256": "8eb61c62f268f1d3f9f38d9b2a9e68c0d7e0c9072de0afdbed5cb244e65705ae",
+    "data_sha256": "a8ccb8788516ad8bc527fdc3cc053983992f82b571ebfe17088e78adab2a4abf",
     "missing_regions": [],
     "complete": false,
     "coverage": {
         "india": {
             "verticals": {
                 "expected": 9,
-                "specific": 6,
+                "specific": 9,
                 "inherited": 0,
-                "waiting_for_source": 3,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             },
             "subtypes": {
                 "expected": 57,
-                "specific": 5,
-                "inherited": 0,
-                "waiting_for_source": 52,
+                "specific": 20,
+                "inherited": 37,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             }
@@ -16917,17 +18216,17 @@ exports.REGION_GENERATION = {
         "southeast-asia": {
             "verticals": {
                 "expected": 9,
-                "specific": 1,
+                "specific": 9,
                 "inherited": 0,
-                "waiting_for_source": 8,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             },
             "subtypes": {
                 "expected": 57,
-                "specific": 0,
-                "inherited": 0,
-                "waiting_for_source": 57,
+                "specific": 20,
+                "inherited": 37,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             }
@@ -16935,17 +18234,17 @@ exports.REGION_GENERATION = {
         "middle-east": {
             "verticals": {
                 "expected": 9,
-                "specific": 1,
+                "specific": 9,
                 "inherited": 0,
-                "waiting_for_source": 8,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             },
             "subtypes": {
                 "expected": 57,
-                "specific": 0,
-                "inherited": 0,
-                "waiting_for_source": 57,
+                "specific": 20,
+                "inherited": 37,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             }
@@ -16953,9 +18252,9 @@ exports.REGION_GENERATION = {
         "uk": {
             "verticals": {
                 "expected": 9,
-                "specific": 5,
+                "specific": 9,
                 "inherited": 0,
-                "waiting_for_source": 4,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             },
@@ -16971,9 +18270,9 @@ exports.REGION_GENERATION = {
         "western-europe": {
             "verticals": {
                 "expected": 9,
-                "specific": 5,
+                "specific": 9,
                 "inherited": 0,
-                "waiting_for_source": 4,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             },
@@ -16989,9 +18288,9 @@ exports.REGION_GENERATION = {
         "north-america": {
             "verticals": {
                 "expected": 9,
-                "specific": 5,
+                "specific": 9,
                 "inherited": 0,
-                "waiting_for_source": 4,
+                "waiting_for_source": 0,
                 "missing": 0,
                 "duplicate": 0
             },

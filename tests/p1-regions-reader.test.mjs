@@ -186,3 +186,16 @@ for(const row of fixture.rows.filter(r=>r.subtype&&r.subtype!=='billing-revenue'
   for(let run=1;run<3;run++)assert.deepEqual(readRegionContext(args),result);
  }
 });
+
+// Source postal addresses and single quoted evidence retain actor boundaries.
+for(const [text,expected] of [
+ ['We sell software from London, Ontario, Canada into India.',['IN']],
+ ['We sell software in India from our London, Ontario, Canada office.',['IN']],
+ ['We sell software from a vendor in London, Ontario, Canada to India.',['IN']],
+ ["We sell software in India. A customer said 'Singapore is next'.",['IN']],
+ ['We sell software in India. A customer said ‘Singapore is next’.',['IN']],
+ ["We don't sell software in India. We sell in Singapore.",['SG']],
+ ["We sell software for customers' accounts in India.",['IN']],
+ ['We sell software from invoices and forms in India.',['IN']],
+ ['We sell software from Singapore suppliers in India.',['IN']],
+])test(text,()=>assert.deepEqual(readRegionContext({product_description:text}).regions.flatMap(r=>r.countries).sort(),expected));
