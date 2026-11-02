@@ -7,6 +7,7 @@ on:
       - 'src/**'
       - 'dist/**'
       - 'tests/**'
+      - 'scripts/**'
       - '.github/workflows/lane-b-verification.yml'
 permissions:
   contents: read
@@ -21,32 +22,12 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci --ignore-scripts
+      - name: Reproduce the committed build profile
+        run: |
+          node --input-type=module <<'JS'
+          import {execFileSync} from 'node:child_process';
+          import {BUILD_PROFILE as p} from './src/build-profile.ts';
+          execFileSync(process.execPath,['scripts/build-profile.mjs'],{stdio:'inherit',env:{...process.env,HELIX_PROFILE:p.profile,WAVE_PAYLOAD:p.payload,WIDGET_UI_DOMAIN:p.domainEnabled?'on':'off'}});
+          execFileSync('git',['diff','--exit-code','--','src/build-profile.ts','dist'],{stdio:'inherit'});
+          JS
       - run: node --test --test-concurrency=1 tests/*.test.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: lane-b-verification-workspace
-          path: |
-            node_modules/
-            src/
-            dist/
-            tests/
-            netlify/
-            scripts/
-            public/
-            package.json
-            package-lock.json
-            tsconfig.json
-            *.html
-            *.json
-            *.md
-            *.txt
-            *.toml
-            assets/*.css
-            assets/js/
-            assistant/
-            bin/
-            _headers
-            _redirects
-            sample-report/
-          retention-days: 1
