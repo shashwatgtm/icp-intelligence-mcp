@@ -109,7 +109,7 @@ test("buyer_group_analyzer: every sector fills the group from the sector's roles
     clean(r, product_category);
     assert.match(r.text, role, product_category);
     assert.match(r.text, word, product_category);
-    assert.match(r.text, /Likely objection:/);
+    assert.match(r.text, /\*\*Evidence\*\*: Role hypothesis only\./);
     assert.doesNotMatch(r.text, /Department Head|C-Level Sponsor/);
   }
 });

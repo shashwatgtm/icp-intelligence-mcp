@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { billingLine } from './verticals.ts';
 import { asksForSoftware, SOFTWARE_REFERRAL } from './software-policy.ts';
 import { conversationDefinition, CONVERSATION_INSTRUCTIONS } from "./conversation-guidance.ts";
 import { BUILD_PROFILE } from './build-profile.ts';
@@ -350,7 +351,7 @@ function readContext(explicitModel: unknown, input: ReadInput): { v: Vertical | 
     : read.source === 'buyer' ? ' (from the buyer\'s industry: your own description names no sector, so describe what you sell for notes that fit it)' : '';
   const sector = vp ? `read from your inputs as ${vp.name}${via}` : 'not clear from what you sell (describe your product, for example in product category, for sector notes)';
   const modelText = model ? `${MODEL_NAME[model]} (${how === 'input' ? 'from your answer' : how === 'sector' ? 'the usual model in this sector, assumed; confirm how you charge' : 'read from your inputs; confirm how you charge'})` : `not stated. Tell us how you charge and the plan will adjust`;
-  return { v: vp, model, via, line: `*Sector: ${sector}. Business model: ${modelText}.*${!model ? "\n\nBilling dependent steps are conditional: trials, seats and recurring renewals require a subscription; a statement of work requires a services contract; site or link commitments require connectivity billing. Confirm the applicable choice before using those steps." : ""}` };
+  return { v: vp, model, via, line: billingLine(explicitModel, input, `*Sector: ${sector}. Business model: ${modelText}.*${!model ? "\n\nAny priced offer below requires a written quote and buyer agreement." : ""}`) };
 }
 // Job titles are weak evidence of what the seller sells ("Director of Transportation Data Operations" is a logistics title in a
 // business services firm). They are passed to the reader only when two or more titles name the same sector on their own.

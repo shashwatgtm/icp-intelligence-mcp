@@ -100,8 +100,8 @@ test("buyer group: a billing platform sold to a CFO gets finance measures, not a
   assert.doesNotMatch(r.text, /activation|time to value/i);
   assert.doesNotMatch(r.text, /card spends|policy breach|accounts payable|days to close the books/i);   // an expense profile is not a billing buyer's (the billing profile comes with the shared file)
   const t = await call("buyer_group_analyzer", { product_category: "developer testing tools", company: "Cloudmoat", typical_champion: "Platform Engineer", known_stakeholders: ["VP Engineering", "Security Lead", "Software Developer"] });
-  assert.match(t.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: Security Lead\n\*\*Evidence\*\*: [^\n]+\n\*\*Validation question\*\*: [^\n]+\n\*\*Their Concern\*\*: Likely objection: security review/);
-  assert.match(t.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: VP Engineering\n\*\*Evidence\*\*: [^\n]+\n\*\*Validation question\*\*: [^\n]+\n[^\n]*per[- ]user cost/i);
+  assert.match(t.text, /### Potential Blocker[^\n]*\n\*\*Role\*\*: Security Lead\n\*\*Evidence\*\*: [^\n]+\n\*\*Validation question\*\*: [^\n]+\n\*\*Check to own\*\*: The account owner should ask Security Lead[^\n]*before the next buyer meeting/);
+  assert.match(t.text, /### Economic Buyer[^\n]*\n\*\*Role\*\*: VP Engineering\n\*\*Evidence\*\*: [^\n]+\n\*\*Validation question\*\*: [^\n]+\n\*\*Check to own\*\*: The account owner should ask VP Engineering[^\n]*acceptance condition[^\n]*before the next buyer meeting/i);
 });
 
 // ---- (4) deep dive ----
@@ -283,7 +283,7 @@ test("software sellers: keywords come from the nouns of the product text (API pl
   ok(r);
   assert.match(r.text, /"API platform"/);
   assert.match(r.text, /"API lifecycle management"/);
-  const ads = r.text.split("## Google Ads Targeting")[1].split("## 6sense")[0];
+  const ads = r.text.split("## Advertising audience criteria")[1].split("## Intent criteria")[0];
   assert.doesNotMatch(ads, /CI pipeline|test coverage|open-source alternative|SDK software|developer experience software/);
 });
 
@@ -343,10 +343,10 @@ test("lookalike: filters are built from clean industry terms; the Google keyword
   const r = await call("lookalike_signal_generator", { company: "Quantara AI", product_category: "AI platform and investment strategies (Quantara Edge from Quantara AI)", champion_titles: ["portfolio manager", "CIO"],
     icp_firmographics: { industries: ["Asset allocators (pensions, insurers, endowments)", "Investment banks"] } });
   ok(r);
-  const filters = r.text.split("## Google Ads")[0].split("## LinkedIn")[1];
+  const filters = r.text.split("## Advertising audience criteria")[0].split("## Company and lead search criteria")[1];
   assert.doesNotMatch(filters, /\(pensions/);
   assert.match(filters, /Industry: Asset allocators OR pensions OR insurers OR endowments OR Investment banks/);
-  const ads = r.text.split("## Google Ads Targeting")[1].split("## 6sense")[0];
+  const ads = r.text.split("## Advertising audience criteria")[1].split("## Intent criteria")[0];
   assert.match(ads, /"AI platform"/);
   assert.match(ads, /"investment strategies"/);
   const long = await call("lookalike_signal_generator", { company: "Lanehop", product_category: "sales force automation and distributor management software for CPG and FMCG route to market and field teams across many regions of the country", champion_titles: ["Head of Sales"] });

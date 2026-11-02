@@ -10,6 +10,8 @@ exports.buyerLens = buyerLens;
 exports.nonRecurringBilling = nonRecurringBilling;
 exports.detectModel = detectModel;
 exports.buyerContextFor = buyerContextFor;
+exports.billingLine = billingLine;
+exports.detectBilling = detectBilling;
 const text_signals_ts_1 = require("./text-signals.js");
 exports.VERTICALS = [
     {
@@ -2376,7 +2378,7 @@ function detectModel(explicit, ...args) {
     if (st?.model && read === 'saas' && (st.model === 'marketplace' || !/\b(?:saas|software|subscriptions?|per seat|per user|licen[cs]es?)\b/i.test(seller)))
         return { model: st.model, how: 'sector' };
     if (read)
-        return { model: read, how: statedBilling(seller, read) ? 'read' : 'sector' };
+        return { model: read, how: 'read' }; // Offering evidence guides delivery, never the printed charging model.
     if (v)
         return { model: st?.model ?? exports.SECTOR_MODEL[v.id], how: 'sector' };
     return { model: null, how: 'unknown' };
@@ -2475,5 +2477,24 @@ function buyerContextFor(...texts) {
         if (c.match.test(t))
             return c;
     return null;
+}
+/** Keep delivery guidance separate from evidence of how the seller charges. */
+function billingLine(explicit, input, line) {
+    const seller = (input.seller || []).filter((x) => typeof x === 'string').join(' . ');
+    const selected = typeof explicit === 'string' && exports.BUSINESS_MODELS.includes(explicit);
+    const known = selected || (!nonRecurringBilling(seller) && exports.BUSINESS_MODELS.some(m => statedBilling(seller, m)));
+    if (known)
+        return line;
+    return line.replace(/Business model: [^\n]*?\.\*/, 'Business model: not stated. Tell us how you charge and the plan will adjust.*');
+}
+/** Charging evidence only; product category and buyer nouns are insufficient. */
+function detectBilling(explicit, input) {
+    if (typeof explicit === 'string' && exports.BUSINESS_MODELS.includes(explicit))
+        return { model: explicit, how: 'input' };
+    const seller = (input.seller || []).filter((x) => typeof x === 'string').join(' . ');
+    if (nonRecurringBilling(seller))
+        return { model: null, how: 'unknown' };
+    const model = exports.BUSINESS_MODELS.find(m => statedBilling(seller, m));
+    return model ? { model, how: 'read' } : { model: null, how: 'unknown' };
 }
 //# sourceMappingURL=verticals.js.map

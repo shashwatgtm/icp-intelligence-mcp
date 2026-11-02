@@ -2368,7 +2368,7 @@ export function detectModel(explicit: unknown, ...args: unknown[]): { model: Bus
   const st = v?.subtype ? SUBTYPES.find((x) => x.id === v.subtype) : undefined;
   // A sub-type with its own usual model (a marketplace, a messaging or payments API) beats the generic software reading unless the seller says subscription, SaaS, per seat, per user or licence.
   if (st?.model && read === 'saas' && (st.model === 'marketplace' || !/\b(?:saas|software|subscriptions?|per seat|per user|licen[cs]es?)\b/i.test(seller))) return { model: st.model, how: 'sector' };
-  if (read) return { model: read, how: statedBilling(seller, read) ? 'read' : 'sector' };
+  if (read) return { model: read, how: 'read' }; // Offering evidence guides delivery, never the printed charging model.
   if (v) return { model: st?.model ?? SECTOR_MODEL[v.id], how: 'sector' };
   return { model: null, how: 'unknown' };
 }
@@ -2482,4 +2482,22 @@ export function buyerContextFor(...texts: unknown[]): BuyerContext | null {
   if (!t.trim()) return null;
   for (const c of BUYER_CONTEXTS) if (c.match.test(t)) return c;
   return null;
+}
+
+/** Keep delivery guidance separate from evidence of how the seller charges. */
+export function billingLine(explicit: unknown, input: ReaderInput, line: string): string {
+  const seller = (input.seller || []).filter((x): x is string => typeof x === 'string').join(' . ');
+  const selected = typeof explicit === 'string' && (BUSINESS_MODELS as string[]).includes(explicit);
+  const known = selected || (!nonRecurringBilling(seller) && BUSINESS_MODELS.some(m => statedBilling(seller, m)));
+  if (known) return line;
+  return line.replace(/Business model: [^\n]*?\.\*/, 'Business model: not stated. Tell us how you charge and the plan will adjust.*');
+}
+
+/** Charging evidence only; product category and buyer nouns are insufficient. */
+export function detectBilling(explicit: unknown, input: ReaderInput): { model: BusinessModel | null; how: 'input' | 'read' | 'unknown' } {
+  if (typeof explicit === 'string' && (BUSINESS_MODELS as string[]).includes(explicit)) return {model: explicit as BusinessModel, how:'input'};
+  const seller = (input.seller || []).filter((x): x is string => typeof x === 'string').join(' . ');
+  if (nonRecurringBilling(seller)) return {model:null,how:'unknown'};
+  const model = BUSINESS_MODELS.find(m => statedBilling(seller,m));
+  return model ? {model,how:'read'} : {model:null,how:'unknown'};
 }

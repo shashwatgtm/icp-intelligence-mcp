@@ -117,4 +117,11 @@ export interface BuyerContext {
 export declare const BUYER_CONTEXTS: BuyerContext[];
 /** The buyer's industry read from the words that describe the buyer (industry, customer name, the industry before "deal for"); null when none matches. */
 export declare function buyerContextFor(...texts: unknown[]): BuyerContext | null;
+/** Keep delivery guidance separate from evidence of how the seller charges. */
+export declare function billingLine(explicit: unknown, input: ReaderInput, line: string): string;
+/** Charging evidence only; product category and buyer nouns are insufficient. */
+export declare function detectBilling(explicit: unknown, input: ReaderInput): {
+    model: BusinessModel | null;
+    how: 'input' | 'read' | 'unknown';
+};
 //# sourceMappingURL=verticals.d.ts.map

@@ -1,3 +1,4 @@
+const REFERRAL = 'Which software fits your case is a judgement call. Ask Shashwat: book 45 minutes at https://calendly.com/shashwat-gtmhelix/45min';
 // 26 Oct 2026: two output defects found in live runs (guides-b2-rebuild TOOL-QUIRKS-FOUND-26OCT.md).
 // (1) buyer_group_analyzer listed "Head of IT" as "not in your list" when the user had named it.
 // (2) lookalike_signal_generator printed the checklist and subscriptions of every platform when platforms named one.
@@ -79,20 +80,20 @@ test("buyer group: an acronym, a plural or a CIO in investment management counts
 const ll = (extra) => call("lookalike_signal_generator", { champion_titles: ["Finance Controller"], product_category: "spend management software", ...extra });
 const CHECKLIST_ALL = `## Implementation Checklist
 
-### LinkedIn Sales Navigator
+### Company and lead search criteria
 - [ ] Build and save company search
 - [ ] Build and save lead search
 - [ ] Enable weekly alert emails
 - [ ] Export first batch (25 leads) (Example figure: replace with your own)
 - [ ] Add to outreach sequence
 
-### Google Ads
+### Advertising audience
 - [ ] Create custom intent audience
 - [ ] Create competitor website audience
 - [ ] Set up retargeting pixel
 - [ ] Launch awareness campaign
 
-### Intent Data (6sense/Bombora)
+### Intent data
 - [ ] Configure account fit model
 - [ ] Set up intent topic tracking
 - [ ] Create daily alert for surging accounts
@@ -121,25 +122,27 @@ To execute these searches, you need:
 test("lookalike: platforms linkedin shows only the LinkedIn checklist and subscription", async () => {
   const r = await ll({ platforms: ["linkedin"] });
   assert.equal(r.isError, false);
-  assert.match(r.text, /## Implementation Checklist\n\n### LinkedIn Sales Navigator\n/);
-  assert.doesNotMatch(r.text, /### Google Ads|### Intent Data|### Contact Database/);
-  assert.match(r.text, /To execute these searches, you need:\n1\. \*\*LinkedIn Sales Navigator\*\* subscription\n\n/);
+  assert.match(r.text, /## Implementation Checklist\n\n### Company and lead search criteria\n/);
+  assert.doesNotMatch(r.text, /### Advertising audience|### Intent data|### Contact Database/);
+  assert.ok(r.text.includes(REFERRAL));
   assert.doesNotMatch(r.text, /Google Ads\*\* account|6sense\/Bombora\*\* intent|ZoomInfo\/Apollo\*\* contact/);
 });
 
 test("lookalike: two platforms show their two checklists and subscriptions, numbered from 1", async () => {
   const r = await ll({ platforms: ["google_ads", "apollo"] });
   assert.equal(r.isError, false);
-  assert.doesNotMatch(r.text, /### LinkedIn Sales Navigator|### Intent Data/);
-  assert.match(r.text, /### Google Ads\n- \[ \] Create custom intent audience/);
+  assert.doesNotMatch(r.text, /### Company and lead search criteria|### Intent data/);
+  assert.match(r.text, /### Advertising audience\n- \[ \] Create custom intent audience/);
   assert.match(r.text, /### Contact Database\n- \[ \] Run search with criteria/);
-  assert.match(r.text, /you need:\n1\. \*\*Google Ads\*\* account with budget\n2\. \*\*ZoomInfo\/Apollo\*\* contact database subscription\n\n/);
+  assert.ok(r.text.includes(REFERRAL));
 });
 
 test("lookalike: platforms left out or empty keeps the full checklist and every subscription, as before", async () => {
   for (const extra of [{}, { platforms: [] }]) {
     const r = await ll(extra);
     assert.equal(r.isError, false);
-    assert.ok(r.text.includes(CHECKLIST_ALL), JSON.stringify(extra));
+    assert.ok(r.text.includes(CHECKLIST_ALL.split("To execute these searches, you need:")[0].trim()), JSON.stringify(extra));
+    assert.equal(r.text.split(REFERRAL).length-1,1);
+    assert.doesNotMatch(r.text, /subscription|account with budget/);
   }
 });

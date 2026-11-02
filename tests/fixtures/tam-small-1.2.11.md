@@ -92,7 +92,7 @@ Later years assume your market share doubles each year.
 ## Assumptions & Validation
 
 ### Key Assumptions
-1. **Company count accuracy**: Validate with LinkedIn Sales Navigator, industry reports
+1. **Company count accuracy**: Validate against dated company records and industry reports you can inspect. Which software fits your case is a judgement call. Ask Shashwat: book 45 minutes at https://calendly.com/shashwat-gtmhelix/45min
 2. **ACV assumption**: Based on current pricing, may increase with enterprise deals
 3. **ICP match rate**: Not supplied, so a preset example is used; refine with actual data
 4. **Market share**: 3.0% (Example figure: replace with your own) is conservative for Year 1
@@ -104,7 +104,7 @@ Later years assume your market share doubles each year.
 - [ ] Review market share against competitor data
 
 ### How to Get Better Data
-1. **LinkedIn Sales Navigator**: Search with ICP filters, note company count
+1. **Company records already available to you**: Apply the ICP filters and record the count, source and date. Which software fits your case is a judgement call. Ask Shashwat: book 45 minutes at https://calendly.com/shashwat-gtmhelix/45min
 2. **Industry Reports**: Market sizing from industry analyst reports
 3. **Competitor Analysis**: Estimate competitor customer counts
 4. **Customer Interviews**: Ask about market perception

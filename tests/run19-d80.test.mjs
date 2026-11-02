@@ -201,8 +201,8 @@ test("lookalike_signal_generator: minimal input never prints 'Software > Softwar
   common(m, "Cloudmoat");
   assert.doesNotMatch(m.text, /Software > Software/);
   const p = await call("lookalike_signal_generator", { company: "Cloudmoat", champion_titles: ["Cloud Security Lead"], platforms: ["linkedin"] });
-  assert.match(p.text, /## LinkedIn Sales Navigator/);
-  assert.doesNotMatch(p.text, /## Google Ads Targeting/);
+  assert.match(p.text, /## Company and lead search criteria/);
+  assert.doesNotMatch(p.text, /## Advertising audience criteria/);
 });
 
 // account_prioritization

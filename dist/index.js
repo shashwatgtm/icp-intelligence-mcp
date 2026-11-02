@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
+const verticals_ts_1 = require("./verticals.js");
 const software_policy_ts_1 = require("./software-policy.js");
 const conversation_guidance_ts_1 = require("./conversation-guidance.js");
 const build_profile_ts_1 = require("./build-profile.js");
@@ -17,7 +18,7 @@ const index_js_1 = require("@modelcontextprotocol/sdk/server/index.js");
 const stdio_js_1 = require("@modelcontextprotocol/sdk/server/stdio.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 const rw_icp_ts_1 = require("./rw-icp.js");
-const verticals_ts_1 = require("./verticals.js");
+const verticals_ts_2 = require("./verticals.js");
 const escape_inputs_ts_1 = require("./escape-inputs.js");
 // =============================================================================
 // ICP INTELLIGENCE MCP v1.0.0 - Deep ICP Analysis with Pattern Detection
@@ -339,9 +340,9 @@ function companyLine(company) {
 // The buyer's industry says who the customers are, not what the seller sells: a sector read from it alone is not applied (no sector
 // notes or words). Job titles are used only when two or more of them point to the same sector (see agreedRoles).
 function readContext(explicitModel, input) {
-    const read0 = (0, verticals_ts_1.explainSector)(input);
+    const read0 = (0, verticals_ts_2.explainSector)(input);
     const read = read0.source === 'buyer' ? { vertical: null, source: null, strong: [], weak: [] } : read0;
-    let m = (0, verticals_ts_1.detectModel)(explicitModel, input);
+    let m = (0, verticals_ts_2.detectModel)(explicitModel, input);
     if (m.how === 'sector')
         m = { model: null, how: 'unknown' };
     // The sector's usual model is assumed only when the sector comes from what the user sells; a sector read from the buyer's side
@@ -349,20 +350,20 @@ function readContext(explicitModel, input) {
     const model = m.how === 'sector' && read.source !== 'seller' ? null : m.model;
     const how = m.how === 'sector' && read.source !== 'seller' ? 'unknown' : m.how;
     // Round 2: a seller that manages money gets the investment roles and measures (src/verticals.ts profileFor); an AI native support seller the support notes.
-    const vp = (0, verticals_ts_1.profileFor)(read.vertical, model, input);
+    const vp = (0, verticals_ts_2.profileFor)(read.vertical, model, input);
     const via = read.source === 'context' ? ' (from the deal details: your own description names no sector)'
         : read.source === 'role' ? ' (from the buyer job titles: your own description names no sector)'
             : read.source === 'buyer' ? ' (from the buyer\'s industry: your own description names no sector, so describe what you sell for notes that fit it)' : '';
     const sector = vp ? `read from your inputs as ${vp.name}${via}` : 'not clear from what you sell (describe your product, for example in product category, for sector notes)';
-    const modelText = model ? `${verticals_ts_1.MODEL_NAME[model]} (${how === 'input' ? 'from your answer' : how === 'sector' ? 'the usual model in this sector, assumed; confirm how you charge' : 'read from your inputs; confirm how you charge'})` : `not stated. Tell us how you charge and the plan will adjust`;
-    return { v: vp, model, via, line: `*Sector: ${sector}. Business model: ${modelText}.*${!model ? "\n\nBilling dependent steps are conditional: trials, seats and recurring renewals require a subscription; a statement of work requires a services contract; site or link commitments require connectivity billing. Confirm the applicable choice before using those steps." : ""}` };
+    const modelText = model ? `${verticals_ts_2.MODEL_NAME[model]} (${how === 'input' ? 'from your answer' : how === 'sector' ? 'the usual model in this sector, assumed; confirm how you charge' : 'read from your inputs; confirm how you charge'})` : `not stated. Tell us how you charge and the plan will adjust`;
+    return { v: vp, model, via, line: (0, verticals_ts_1.billingLine)(explicitModel, input, `*Sector: ${sector}. Business model: ${modelText}.*${!model ? "\n\nAny priced offer below requires a written quote and buyer agreement." : ""}`) };
 }
 // Job titles are weak evidence of what the seller sells ("Director of Transportation Data Operations" is a logistics title in a
 // business services firm). They are passed to the reader only when two or more titles name the same sector on their own.
 // One title is enough when the buyer's own words (their industries, segments or customer description) also use words of that sector.
 function agreedRoles(titles, corroborate = []) {
     const list = [...new Set(titles.filter((t) => typeof t === 'string' && !!t.trim()))];
-    const each = list.map((t) => ({ t, id: (0, verticals_ts_1.explainSector)({ role: [t] }).vertical?.id }));
+    const each = list.map((t) => ({ t, id: (0, verticals_ts_2.explainSector)({ role: [t] }).vertical?.id }));
     const counts = {};
     each.forEach((e) => { if (e.id)
         counts[e.id] = (counts[e.id] || 0) + 1; });
@@ -370,7 +371,7 @@ function agreedRoles(titles, corroborate = []) {
     if (!best)
         return [];
     const text = corroborate.filter((t) => typeof t === 'string').join(' \n ');
-    const v = verticals_ts_1.VERTICALS.find((x) => x.id === best[0]);
+    const v = verticals_ts_2.VERTICALS.find((x) => x.id === best[0]);
     const backed = !!v && !!text && (new RegExp(v.match.source, 'i').test(text) || new RegExp(v.weak.source, 'i').test(text));
     return best[1] >= 2 || backed ? each.filter((e) => e.id === best[0]).map((e) => e.t) : [];
 }
@@ -383,9 +384,9 @@ const isHorizontal = (v) => !!v && v.id === 'saas' && !/billing/i.test(v.name);
 function buyerFunction(...texts) {
     const t = texts.flat().filter((x) => typeof x === 'string').join(' \n ');
     if (/\b(?:CFO|finance|financial|controller|treasur\w*|portfolio|investment|asset|wealth|accounts payable|billing)\b/i.test(t))
-        return verticals_ts_1.VERTICALS.find((x) => x.id === 'fintech') || null;
+        return verticals_ts_2.VERTICALS.find((x) => x.id === 'fintech') || null;
     if (/\b(?:CISO|security|SOC)\b/i.test(t))
-        return verticals_ts_1.VERTICALS.find((x) => x.id === 'cybersecurity') || null;
+        return verticals_ts_2.VERTICALS.find((x) => x.id === 'cybersecurity') || null;
     return null;
 }
 const functionName = (fv) => (fv.id === 'fintech' ? 'finance buyers' : fv.id === 'cybersecurity' ? 'security buyers' : `${fv.name} buyers`);
@@ -2544,7 +2545,7 @@ ${SUGGESTED}
                 sectorRoles: sectorV ? sectorV.buyerRoles : [],
                 sectorNotes: sectorNotesText,
                 // an objection about seats or a trial is a software subscription objection: the plan leaves it out, because the business model can be read wrongly from the text
-                sectorObjections: vv ? vv.objections.filter(o => !verticals_ts_1.SAAS_ONLY.test(o.objection)).map(o => lowerCommonWords(o.objection)) : [],
+                sectorObjections: vv ? vv.objections.filter(o => !verticals_ts_2.SAAS_ONLY.test(o.objection)).map(o => lowerCommonWords(o.objection)) : [],
                 sectorProof: acvOnly ? acvOnly.proofShape : '',
                 sectorMetrics: acvOnly ? acvOnly.metrics : [],
                 modelKnown: !!ctx.model,
