@@ -39,7 +39,7 @@ function protect(t: string): string {
 }
 const restore = (t: string) => String(t).replace(/\u0003/g, '.').replace(/\u0004/g, ',').replace(/\u0001/g, ';').replace(/\u0002/g, ',');
 // Split on a separator that is not inside a bracket.
-function splitTop(t: string, sep: RegExp): string[] {
+export function splitTop(t: string, sep: RegExp): string[] {
   let depth = 0; let cur = ''; const out: string[] = [];
   const s = protect(t);
   for (let i = 0; i < s.length; i++) {

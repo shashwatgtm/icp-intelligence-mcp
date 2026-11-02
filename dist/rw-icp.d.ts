@@ -1,5 +1,6 @@
 import type { Vertical } from './verticals.ts';
 export declare function listText(items: string[]): string;
+export declare function splitTop(t: string, sep: RegExp): string[];
 export declare function coverageInfo(item: string, text: string): {
     ratio: number;
     direct: number;

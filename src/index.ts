@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { withReadingGuide } from './reader-actions.ts';
+import { evolutionMatch } from './evolution-membership.ts';
 import { billingLine } from './verticals.ts';
 import { asksForSoftware, SOFTWARE_REFERRAL } from './software-policy.ts';
 import { conversationDefinition, CONVERSATION_INSTRUCTIONS } from "./conversation-guidance.ts";
@@ -2639,19 +2640,25 @@ ${SUGGESTED}
       const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, args.recent_wins, args.recent_losses, args.market_changes], role: agreedRoles(prof0.roles, [args.current_icp]), buyer: [args.current_icp] });
       const v = ctx.v;
       const prof = prof0;
+      const comparisonProfile = evolutionMatch(args.current_icp, '');
+      const explicitSigner = comparisonProfile.parts.find(p=>p.name==='signer')?.expected || [];
+      const explicitChampion = comparisonProfile.parts.find(p=>p.name==='champion')?.expected || [];
+      const sourceSegments = explicitSigner.length || explicitChampion.length ? comparisonProfile.parts.find(p=>p.name==='segment')?.expected || prof.segments : prof.segments;
       // Words from the sentence around a list ("from small firms to national builders", "plus owners") are not segments, and a role that is only the first words of another role is the same role.
-      const segs = prof.segments.map((sg) => sg.replace(/;\s*(?:from|plus|including|such as)\b.*$/i, '').trim()).filter((sg) => sg.replace(/[\\]/g, '').trim().length > 3 && !/^(?:from|plus|including|and|or|with|such as|e\.g\.)\b/i.test(sg.trim()));
+      const segs = sourceSegments.map((sg) => sg.replace(/;\s*(?:from|plus|including|such as)\b.*$/i, '').trim()).filter((sg) => sg.replace(/[\\]/g, '').trim().length > 3 && !/^(?:from|plus|including|and|or|with|such as|e\.g\.)\b/i.test(sg.trim()));
       const roles = prof.roles.filter((r, _i, all) => !all.some((o) => o !== r && o.length > r.length && o.toLowerCase().startsWith(r.toLowerCase() + ' ')));
       const profSizes = [...prof.sizes, ...sizesIn(args.current_icp).filter(e => !prof.sizes.some(b => b.toLowerCase().includes(e.toLowerCase())))];
       // Run 19 D80 (problem 3): each win, loss and market change is read against the current ICP and gives one candidate
       // change, quoted in the user's words. A candidate is a hypothesis to check in the CRM, never a finding.
-      const icpWords = new Set(args.current_icp.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3));
-      const isNew = (t: string) => t.toLowerCase().split(/[^a-z0-9-]+/).filter(w => w.length > 3 && !['with', 'where', 'that', 'they', 'them', 'from', 'more', 'most', 'deals', 'deal', 'customers', 'customer', 'buyers', 'buyer', 'wanted', 'wanting', 'lost', 'won'].includes(w)).some(w => !icpWords.has(w));
-      const items = (t?: string) => (t || '').split(/\n|;/).map(x => x.trim().replace(/^[-*•]\s*/, '')).filter(Boolean);
+      const items = (t?: string) => (t || '').split(/\n|;(?!\s*(?:segments?|industries|place|location|country|trigger|signer|champion|buyer|size|problem)\s*:)/i).map(x => x.trim().replace(/^[-*•]\s*/, '')).filter(Boolean);
       const allWins = items(args.recent_wins), allLosses = items(args.recent_losses), changes = items(args.market_changes);
       const itemKey = (x:string)=>x.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
       const conflicts = allWins.filter(w=>allLosses.some(l=>itemKey(w)===itemKey(l)));
       const wins = allWins.filter(w=>!conflicts.includes(w)), losses = allLosses.filter(l=>!conflicts.some(w=>itemKey(w)===itemKey(l)));
+      const winMatches = new Map(wins.map(w=>[w,evolutionMatch(args.current_icp,w)]));
+      const isNew = (t:string) => !!winMatches.get(t)?.different.length;
+      const candidateWins = wins.filter(isNew).sort((a,b)=>a.localeCompare(b));
+      const candidateParts = [...new Set(candidateWins.flatMap(w=>winMatches.get(w)!.different))].sort();
       const scopeChanges = changes.filter(c=>scopeDisposition(c).state==='affirmed');
       const unclearLoss = 'loss cause is not clear; ask for the deciding reason before creating a disqualifier';
       const lossKind = (t: string) => hasSignal(t,/price|cheaper|cost|budget|expensive|free/i,'price') ? 'lost on price: check whether these buyers had the budget your ICP assumes'
@@ -2661,12 +2668,15 @@ ${SUGGESTED}
         : unclearLoss;
       const supportedLosses = losses.filter(l => lossKind(l) !== unclearLoss);
       const unresolvedLosses = losses.filter(l => lossKind(l) === unclearLoss);
-      const winLines = wins.map(w => isNew(w)
-        ? `- **Candidate addition**: ${q(shortText(w, 200))}: this is not in your current ICP; test adding it if these deals closed faster or larger than your average`
-        : `- **Confirms your ICP**: ${q(shortText(w, 200))}: it matches your current ICP, so keep it`);
+      const winLines = wins.map(w => {
+        const m=winMatches.get(w)!;
+        const label=m.different.some(p=>p==='segment'||p==='place')?'Candidate addition':m.different.length?'Candidate change':m.matched.length?'Matches recorded ICP parts':'Match unresolved';
+        const explanation=[m.matched.length?`recorded parts matched: ${andList(m.matched)}`:'no recorded part has been matched',m.different.length?`different recorded parts: ${andList(m.different)}`:'',m.unknown.length?`not recorded or not comparable: ${andList(m.unknown)}`:''].filter(Boolean).join('; ');
+        return `- **${label}**: ${q(shortText(w,200))}: ${explanation}.`;
+      });
       const lossLines = losses.map(l => `- **${lossKind(l) === unclearLoss ? 'Loss reason unresolved' : 'Candidate disqualifier'}**: ${q(shortText(l, 200))}: ${lossKind(l)}`);
       const changeLines = changes.map(c => `- **Implication to check**: ${q(shortText(c, 200))}: check which segments of your ICP this moves toward you or away from you, and update the qualifying questions`);
-      const firstChange = scopeChanges.length ? 'Reconcile the changed selling scope before testing an ICP addition' : conflicts.length ? 'Reconcile the conflicting win and loss outcomes before changing the ICP' : wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew)!, 80))}` : supportedLosses[0] ? `Test qualifying out ${q(shortText(supportedLosses[0], 80))}` : unresolvedLosses.length ? 'Confirm the deciding loss reasons before testing any disqualifier' : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
+      const firstChange = scopeChanges.length ? 'Reconcile the changed selling scope before testing an ICP addition' : conflicts.length ? 'Reconcile the conflicting win and loss outcomes before changing the ICP' : candidateWins.length>1 ? `Compare win rate, ACV and cycle for the proposed changes to ${andList(candidateParts)} before choosing one; input order does not establish priority` : candidateWins[0] ? `Test adding ${q(shortText(candidateWins[0], 80))}` : supportedLosses[0] ? `Test qualifying out ${q(shortText(supportedLosses[0], 80))}` : unresolvedLosses.length ? 'Confirm the deciding loss reasons before testing any disqualifier' : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(segs.slice(0, 4))}` : 'No change suggested yet';
       // Run 20 round 1 (quality): with or without wins and losses, your current ICP is read in parts and each part gets a test to run in
       // your CRM; the sector adds the roles and loss reasons to look for. Nothing is invented: every part is your own words.
       const partLines: string[] = [];
@@ -2674,7 +2684,7 @@ ${SUGGESTED}
         const sub = /\(([^()]+)\)/.exec(sg);
         const base = sg.replace(/\s*\([^()]*\)/, '').trim();
         const parts = sub ? sub[1].split(/[;,]\s*/).filter(Boolean) : [];
-        const role = roles[0];
+        const role = explicitSigner.length ? explicitSigner.find(r=>! /\b(?:unknown|unclear|unconfirmed|not confirmed)\b/i.test(r)) : roles[0];
         const lines = [
           `list every deal you won or lost with ${base} in it this period and compare its win rate with your other segments`,
           `compare the ACV and sales cycle of ${base} with the other segments${role ? `, and check whether ${role} is the one who signs there` : ''}`,
@@ -2732,6 +2742,7 @@ This review reads your notes against your current ICP and states candidate chang
 ${conflicts.length ? `**Conflicting outcomes:** the same observation appears in both wins and losses: ${conflicts.map(x=>q(x)).join('; ')}. Confirm which deals and outcomes it describes; it is held out of additions and disqualifiers.\n` : ''}${scopeChanges.length ? `**Selling scope changed:** ${scopeChanges.map(x=>q(x)).join('; ')}. Reconcile which products and segments you still serve before adding from historical wins.\n` : ''}
 ### Recent Wins
 ${wins.length ? winLines.join('\n') : '- No win data provided: add recent wins to find possible additions'}
+${wins.length ? '\nMatching recorded parts does not establish complete fit. Verify the stated differences and missing evidence before changing the ICP.\n' : ''}
 
 ### Recent Losses
 ${losses.length ? lossLines.join('\n') : '- No loss data provided: add recent losses to find possible disqualifiers'}
@@ -2753,7 +2764,8 @@ ${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.r
 
 - **Your ICP as written**: ${q(shortText(args.current_icp, 700))}
 - **Segments to keep until the data says otherwise**: ${segs.length ? andList(segs.slice(0, 6)) : 'your ICP text did not split into segments (see above)'}${profSizes.length ? `; size: ${andList(profSizes.map(x => clauseHead(x, 60)))}` : ''}.
-${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${scopeChanges.length ? 'held until the changed selling scope is confirmed' : wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
+${explicitSigner.length ? `- **Signer in your ICP**: ${andList(explicitSigner)}. This is a criterion, not signer evidence for a recorded win.\n` : ''}${explicitChampion.length ? `- **Champion in your ICP**: ${andList(explicitChampion)}. Confirm the actual advocate and their actions in each deal.\n` : ''}${!explicitSigner.length&&!explicitChampion.length&&roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${scopeChanges.length ? 'held until the changed selling scope is confirmed' : candidateWins.length ? andList(candidateWins.slice(0, 3).map(w => q(shortText(w, 140)))) + ' (examples shown alphabetically, not ranked; test only the different recorded parts identified above, with comparable outcome evidence)' : wins.length ? 'nothing established: recorded matches do not verify missing ICP criteria' : 'nothing yet, because no wins were given'}.
+${wins.some(w=>!isNew(w))?`- **Recorded matches and unresolved cases**: ${andList(wins.filter(w=>!isNew(w)).map(w=>q(shortText(w,140))))}. Retain the part by part checks above; do not treat missing data as a match.\n`:''}
 - **Qualify out on trial**: ${supportedLosses.length ? andList(supportedLosses.slice(0, 3).map(l => q(shortText(l, 140)))) + ' (' + andList([...new Set(supportedLosses.slice(0, 3).map(l => lossKind(l).split(':')[0]))]) + ')' : losses.length ? 'held: no deciding loss reason has been established' : 'nothing yet, because no losses were given'}.
 ${unresolvedLosses.length ? `- **Loss reasons held for review**: ${andList(unresolvedLosses.map(l => q(shortText(l, 140))))}. Confirm why each buyer decided before proposing an exclusion.\n` : ''}
 - **First change to test**: ${firstChange}.

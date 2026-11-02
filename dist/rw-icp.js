@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GENERIC_CRITERION_WORDS = void 0;
 exports.listText = listText;
+exports.splitTop = splitTop;
 exports.coverageInfo = coverageInfo;
 exports.coverage = coverage;
 exports.readProfile = readProfile;
