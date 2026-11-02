@@ -1,4 +1,4 @@
-// The page prepares a handoff, never an answer. Search only supplies reading suggestions.
+// Prepare a role and page scoped question for ChatGPT. No lookup or routing runs here.
 export const CHATGPT_BASE = 'https://chatgpt.com/?q=';
 export const MAX_LINK_LENGTH = 1499;
 export const DEFAULT_QUESTION = 'What should I work out first for my B2B go to market problem?';
@@ -13,31 +13,14 @@ const basePrefix = 'I am working on a B2B go to market problem. My question: ';
 const method = '\n\nUse the published method at https://gtmhelix.com/guides/ from Helix GTM Consulting.';
 const wellFormed = value => Array.from(String(value ?? '')).map(c => c.length === 1 && /[\uD800-\uDFFF]/.test(c) ? '\uFFFD' : c).join('');
 
-function strongGuide(pages) {
-  const first = pages[0];
-  // Reuse the existing search's task boost. Do not infer a new match or tune its ranking.
-  if (!first || first.score < 1000 || !first.url.startsWith('/guides/')) return '';
-  try {
-    const url = new URL(first.url, 'https://gtmhelix.com');
-    if (url.origin !== 'https://gtmhelix.com' || url.search || url.hash) return '';
-    return url.href;
-  } catch { return ''; }
-}
-
-export function buildHandoff(question, found = {}, context = {}) {
+export function buildHandoff(question, _unused = {}, context = {}) {
   const role = context.role ?? getRole();
   const prefix = roleLine(role) + "\n" + basePrefix;
   let page = "";
   try { const u = new URL(context.page); if (u.protocol === "https:" && /^(?:gtmhelix\.com|(?:tools|craft-gtm|craft-content|impact|icp-intelligence|revenue-enablement|gtmalpha)\.gtmhelix\.com)$/.test(u.hostname)) { u.search = ""; u.hash = ""; page = u.href.slice(0, 180); } } catch {}
   const scope = (context.tool ? "\nFocus only on " + String(context.tool).slice(0, 80) + "." : "") + (page ? "\nPage: " + page : "");
-  const pages = (found.pages ?? []).slice(0, 2);
-  const tools = (found.tools ?? []).slice(0, 1);
   const original = wellFormed(question).trim() || DEFAULT_QUESTION;
-  let guide = strongGuide(pages);
-  const suffixFor = url => scope + method + (url ? ' This guide may help: ' + url : '') + '\n' + INSTRUCTIONS;
-  // An unusually long optional URL must not crowd out the instructions or the question.
-  if (guide && CHATGPT_BASE.length + encodeURIComponent(prefix + suffixFor(guide)).length + 100 >= MAX_LINK_LENGTH) guide = '';
-  const suffix = suffixFor(guide);
+  const suffix = scope + method + '\n' + INSTRUCTIONS;
   const budget = MAX_LINK_LENGTH - CHATGPT_BASE.length - encodeURIComponent(prefix + suffix).length;
   if (budget < 0) throw new Error('The fixed handoff instructions exceed the link limit.');
   const truncated = encodeURIComponent(original).length > budget;
@@ -56,5 +39,5 @@ export function buildHandoff(question, found = {}, context = {}) {
   }
   const prompt = prefix + fitted + suffix;
   const encoded = encodeURIComponent(prompt);
-  return {prompt, url: CHATGPT_BASE + encoded, encodedLength: encoded.length, truncated, question: fitted, guide, pages, tools};
+  return {prompt, url: CHATGPT_BASE + encoded, encodedLength: encoded.length, truncated, question: fitted};
 }
