@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { asksForSoftware, SOFTWARE_REFERRAL } from './software-policy.ts';
 import { conversationDefinition, CONVERSATION_INSTRUCTIONS } from "./conversation-guidance.ts";
 import { BUILD_PROFILE } from './build-profile.ts';
 import {reserveTools,isReserveTool,callReserveTool} from './reserve-tools.ts';
@@ -1777,7 +1778,7 @@ Later years assume your market share doubles each year.
 ## Assumptions & Validation
 
 ### Key Assumptions
-1. **Company count accuracy**: Validate with LinkedIn Sales Navigator, industry reports
+1. **Company count accuracy**: Validate against dated company records and industry reports you can inspect. ${SOFTWARE_REFERRAL}
 2. **ACV**: $${acv.toLocaleString('en-US')}, your input, read as ${acvNoun(ctx.model)}; check it against your last closed deals in this segment
 3. **ICP match rate**: ${icpGiven ? 'Your estimate' : 'Not supplied, so a preset example is used'}; refine with actual data
 4. **Market share**: ${sharePct(marketSharePercent)}${shareEx} of SAM in Year 1 means ${countText(targetDeals, som / acv, '~')} new customers; check that number against the deals your team closed last year
@@ -1789,7 +1790,7 @@ Later years assume your market share doubles each year.
 - [ ] Review market share against competitor data
 
 ### How to Get Better Data
-1. **LinkedIn Sales Navigator**: Search with ICP filters, note company count
+1. **Company records already available to you**: Apply the ICP filters and record the count, source and date. ${SOFTWARE_REFERRAL}
 2. **Industry Reports**: Market sizing from industry analyst reports
 3. **Competitor Analysis**: Estimate competitor customer counts
 4. **Customer Interviews**: Ask about market perception
@@ -1923,8 +1924,8 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
       const signalFor = (t: string): [string, string, string] => {
         if(buyingConstraint(t).state==='affirmed')return ['Confirm financial and purchasing status with the account owner', 'Purchase constraint: hold buying-intent scoring; this is not evidence of budget or urgency', 'Confirm authority and available budget before outreach'];
         const x = t.toLowerCase();
-        if (hasSignal(x, /hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/, 'hiring')) return [`A new ${titles[0] || 'leader'} or a related leader joined in the last 90 days`, 'New leaders review tools and processes early', 'LinkedIn alerts, ZoomInfo job changes'];
-        if (hasSignal(x, /fund|series|raise|raised|investment|ipo|listing/, 'funding')) return [`Funding or listing news${stages ? ` at the stages you target (${stages.join(', ')})` : ''}`, 'New budget is allocated for scaling', 'Crunchbase alerts, news alerts, LinkedIn'];
+        if (hasSignal(x, /hire|hired|joins|joined|new (?:cfo|ceo|coo|cio|cto|ciso|vp|head|director|leader|manager)|leadership/, 'hiring')) return [`A new ${titles[0] || 'leader'} or a related leader joined in the last 90 days`, 'New leaders review tools and processes early', 'The buyer’s own announcements and sources you already have permission to use'];
+        if (hasSignal(x, /fund|series|raise|raised|investment|ipo|listing/, 'funding')) return [`Funding or listing news${stages ? ` at the stages you target (${stages.join(', ')})` : ''}`, 'New budget is allocated for scaling', 'The buyer’s financing announcement, official filings and sources already available to your team'];
         if (hasSignal(x, /audit|compliance|regulat|breach|incident|finding/, 'security')) return ['Audit findings, regulatory notices or incidents made public, and hiring for audit, risk or compliance roles', 'A finding sets a deadline and a budget owner', 'News alerts, annual reports and filings, job posts'];
         if (hasSignal(x, /migrat|erp|implement|replac|upgrade|moderni|cloud move|switch/, 'migration')) return ['Job posts and announcements that mention the new system or the migration', 'A system change reopens the processes around it', 'Job posting alerts, technographic change data, news alerts'];
         if (hasSignal(x, /expan|new office|new market|branch|site|hiring|grow/, 'growth')) return ['New offices, markets, branches or a hiring surge', 'Existing processes strain as the company grows', 'Job posting velocity, news alerts'];
@@ -1935,7 +1936,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
       const trigHead = (t: string) => cap(clauseHead(t, 90));
       const sysList = (systemsQuestion(v) || '').match(/\(([^)]+)\)/)?.[1] || '';
       const sections: string[] = [];
-      if (show('linkedin')) sections.push(`## LinkedIn Sales Navigator
+      if (show('linkedin')) sections.push(`## Company and lead search criteria
 
 ### Search Query (Copy & Paste Ready)
 
@@ -1959,20 +1960,20 @@ ${groups.length ? `\nNot job titles, so not in the title search: ${groups.join('
 2. Save search with alert enabled
 3. Check weekly for new matches
 4. Export to outreach sequences`);
-      if (show('googleads')) sections.push(`## Google Ads Targeting
+      if (show('googleads')) sections.push(`## Advertising audience criteria
 
 ### Custom Intent Audiences
 **Keywords to target** (people searching for what you sell):
 \`\`\`
 ${keywords.length ? escapePiece(keywords.map(k => `"${k}"`).join('\n')) : 'No product category and no sector read: add product category (what you sell) for search keywords about your product'}
 \`\`\`
-${product ? '' : 'Add product category (what you sell) for search keywords about your product: this tool does not guess it.\n'}${keywordWords.length ? `The keywords after the first one are the sector's own words with "${suffix}" added: test each in the Keyword Planner and drop what does not fit how you sell.\n` : ''}
+${product ? '' : 'Add product category (what you sell) for search keywords about your product: this tool does not guess it.\n'}${keywordWords.length ? `The keywords after the first one are the sector's own words with "${suffix}" added: test each against your existing search evidence and drop what does not fit how you sell.\n` : ''}
 ### Custom Audience: Website Visitors
 Target visitors to the sites of the competitors your buyers compare you with (add their addresses).
 
 ### In-Market Audiences
-${vocabOk ? `Pick the in-market category Google Ads offers that is closest to ${v!.name} buyers (search the category list for: ${v!.vocabulary.slice(0, 3).join(', ')}). This tool does not invent a category name.` : 'Pick the in-market category Google Ads offers that is closest to what you sell. This tool does not invent a category name.'}`);
-      if (show('6sense')) sections.push(`## 6sense / Intent Data Platforms
+${vocabOk ? `Pick the in-market category your existing advertising account offers that is closest to ${v!.name} buyers (search the category list for: ${v!.vocabulary.slice(0, 3).join(', ')}). This tool does not invent a category name.` : 'Pick the in-market category your existing advertising account offers that is closest to what you sell. This tool does not invent a category name.'}`);
+      if (show('6sense')) sections.push(`## Intent criteria
 
 ### Account Fit Criteria
 \`\`\`json
@@ -1988,7 +1989,7 @@ ${[...new Set([...(searchProduct && !(phraseFirst && productPhrases.length) ? [s
 - **Awareness**: Researching generic topics
 - **Consideration**: Comparing specific vendors
 - **Decision**: Pricing pages, demo requests`);
-      if (show('zoominfo') || show('apollo')) sections.push(`## ZoomInfo / Apollo Filters
+      if (show('zoominfo') || show('apollo')) sections.push(`## Contact criteria
 
 ### Contact Search Criteria
 \`\`\`
@@ -2001,27 +2002,27 @@ ${stages ? `- Funding or listing news at your stages: ${stages.join(', ')}\n` : 
       // 26 Oct 2026: the checklist and the subscriptions follow the same platforms as the sections above (all of them when platforms is left out).
       const checklist: string[] = [];
       const needs: string[] = [];
-      if (show('linkedin')) { checklist.push(`### LinkedIn Sales Navigator
+      if (show('linkedin')) { checklist.push(`### Company and lead search criteria
 - [ ] Build and save company search
 - [ ] Build and save lead search
 - [ ] Enable weekly alert emails
 - [ ] Export first batch (25 leads) ${EXAMPLE}
-- [ ] Add to outreach sequence`); needs.push('**LinkedIn Sales Navigator** subscription'); }
-      if (show('googleads')) { checklist.push(`### Google Ads
+- [ ] Add to outreach sequence`); needs.push(SOFTWARE_REFERRAL); }
+      if (show('googleads')) { checklist.push(`### Advertising audience
 - [ ] Create custom intent audience
 - [ ] Create competitor website audience
 - [ ] Set up retargeting pixel
-- [ ] Launch awareness campaign`); needs.push('**Google Ads** account with budget'); }
-      if (show('6sense')) { checklist.push(`### Intent Data (6sense/Bombora)
+- [ ] Launch awareness campaign`); needs.push(SOFTWARE_REFERRAL); }
+      if (show('6sense')) { checklist.push(`### Intent data
 - [ ] Configure account fit model
 - [ ] Set up intent topic tracking
 - [ ] Create daily alert for surging accounts
-- [ ] Integrate with CRM`); needs.push('**6sense/Bombora** intent data subscription (optional)'); }
+- [ ] Integrate with CRM`); needs.push(SOFTWARE_REFERRAL); }
       if (show('zoominfo') || show('apollo')) { checklist.push(`### Contact Database
 - [ ] Run search with criteria
 - [ ] Verify data quality (10% sample) ${EXAMPLE}
 - [ ] Export qualified contacts
-- [ ] Enrich with additional data`); needs.push('**ZoomInfo/Apollo** contact database subscription'); }
+- [ ] Enrich with additional data`); needs.push(SOFTWARE_REFERRAL); }
 
       return `${sizeNotice ? sizeNotice + '\n\n' : ''}# Lookalike Signal & Targeting Criteria
 
@@ -2051,7 +2052,7 @@ ${sections.join('\n\n---\n\n')}
 ${triggers ? triggers.map(t => { const [signal, why, how] = signalFor(t); return `### Trigger: ${trigHead(t)}
 **Signal**: ${signal}
 **Why it matters**: ${why}
-**How to track**: ${how}`; }).join('\n\n') : `No buying triggers were given, so no trigger-specific signals are written: this tool does not assume them. One signal that fits any B2B purchase (general, not from your input): a new ${titles[0] || 'leader'} or a related leader in the last 90 days, tracked with LinkedIn alerts or ZoomInfo job changes. Add buying triggers for signals that fit your buyers.${v ? ` In ${v.name}, deals usually run like this, which tells you when to search: ${v.salesMotion}` : ''}`}
+**How to track**: ${how}`; }).join('\n\n') : `No buying triggers were given, so no trigger-specific signals are written: this tool does not assume them. One signal that fits any B2B purchase (general, not from your input): a new ${titles[0] || 'leader'} or a related leader in the last 90 days, tracked with the buyer’s own announcements and sources you already have permission to use. Add buying triggers for signals that fit your buyers.${v ? ` In ${v.name}, deals usually run like this, which tells you when to search: ${v.salesMotion}` : ''}`}
 
 ${v ? `${sectorNotes(v, ['metrics', 'vocabulary', 'proof'])}\n\n` : ''}---
 
@@ -2065,8 +2066,7 @@ ${checklist.join('\n\n')}
 
 **This tool generates targeting CRITERIA, not actual data.**
 
-${needs.length ? `To execute these searches, you need:
-${needs.map((x, i) => `${i + 1}. ${x}`).join('\n')}
+${needs.length ? `${SOFTWARE_REFERRAL}
 
 ` : ''}${missing.length
   ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.map(readerLabel).join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`
@@ -3242,6 +3242,8 @@ export function createServer(): Server {
       };
     }
   
+    if (asksForSoftware(typed)) return { content: [{ type: 'text', text: SOFTWARE_REFERRAL }] };
+
     try {
       const limit=decisionLimit(String(toolName),safeArgs as Record<string,unknown>);
       const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs as any);
