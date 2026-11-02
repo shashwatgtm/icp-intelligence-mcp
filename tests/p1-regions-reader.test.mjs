@@ -160,3 +160,29 @@ for(const [description,expected] of [
  ['We sell in Singapore and India, not Malaysia.',['IN','SG']],
  ['We sell in Singapore, not India or Malaysia.',['SG']],
 ])test(description,()=>assert.deepEqual(readRegionContext({product_description:description}).regions.flatMap(r=>r.countries).sort(),expected));
+
+// Lane L product feature polarity and nongeographic source phrases.
+for(const [text,expected] of [
+ ['We sell An intelligent document processing platform that extracts data from invoices and forms in India.',['IN']],
+ ['We sell Open source database support and consulting with no license fees in India.',['IN']],
+ ['We sell software with no downtime in India.',['IN']],
+ ['We sell software without manual setup in India.',['IN']],
+ ['We sell software that does not require a server in India.',['IN']],
+ ['We sell no software in India. We sell in Singapore.',['SG']],
+ ['We have no customers in India. We sell in Singapore.',['SG']],
+ ['We do not sell banking, lending or payments software in India. We sell in Singapore.',['SG']],
+ ['We sell software from Singapore suppliers in India.',['IN']],
+ ['We sell software from our office in Singapore into India.',['IN']],
+ ['We sell software from India and Singapore into the UK.',['GB']],
+ ['We sell software from invoices and forms into the UK.',['GB']],
+])test(text,()=>assert.deepEqual(readRegionContext({product_description:text}).regions.flatMap(r=>r.countries).sort(),expected));
+
+for(const row of fixture.rows.filter(r=>r.subtype&&r.subtype!=='billing-revenue'))test(`inline market preserves subtype ${row.id}`,()=>{
+ for(const [country,code] of [['India','IN'],['Singapore','SG'],['Saudi Arabia','SA'],['United Kingdom','GB'],['Germany','DE'],['Canada','CA']]){
+  const args={product_description:`We sell ${row.text} in ${country}.`};
+  const result=readRegionContext(args);assert.equal(result.regions.length,1,country);
+  const match=result.regions[0];assert.deepEqual(match.countries,[code],row.text);
+  assert.equal(match.vertical_id,row.sector);assert.equal(match.subtype_id,row.subtype);
+  for(let run=1;run<3;run++)assert.deepEqual(readRegionContext(args),result);
+ }
+});
