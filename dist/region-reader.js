@@ -118,7 +118,7 @@ function polarity(clause, start, end, all) {
     const directExclusion = /\b(?:not|never|no|neither|nor|without|except|excluding|exclude|outside|avoid|left|exited|formerly|previously|historically|used to|no longer|stopped|ceased|cannot)\b\s*(?:(?:in|into|to|for|within|the|market|markets|country|countries|of)\s+)*(?:PLACE\s*(?:(?:,|and|or|nor)\s*)?)*$/i;
     const negatedSelling = /\b(?:not|never|no longer|stopped|ceased|cannot)\s+(?:(?:currently|actively|yet|now|ever|presently|really)\s+)*(?:sell(?:ing|s)?|sold|serv(?:es?|ing)|target(?:s|ing)?|operat(?:e|es|ing)|expand(?:s|ing)?|enter(?:s|ing)?|market(?:s|ing)?|offer(?:s|ing)?|do(?:ing)? business|trade|trading)\b/i;
     const absentSales = /\b(?:(?:no|without)\s+(?:sales?|selling|customers?|buyers?|business|presence|operations?|offices?)|(?:sell(?:ing|s)?|sold|serv(?:es?|ing)|target(?:s|ing)?)\s+no\b|(?:formerly|previously|historically|used to)\b[^;]*\b(?:sell|sold|serve|served|operate|operated))\b/i;
-    if (directExclusion.test(placePrefix) || negatedSelling.test(before) || absentSales.test(before))
+    if (directExclusion.test(placePrefix) || negatedSelling.test(before) || absentSales.test(before) || /\b(?:excluded|excluded from|out of scope|off limits)\s+(?:markets?|countries?|regions?)\s*:/i.test(before))
         return 'no';
     if (/^\s*(?:(?:is|are|was|were|has been|have been)\s+)?(?:not|no longer|excluded|out of scope|off limits)\b/i.test(after))
         return 'no';
@@ -180,7 +180,10 @@ function scan(texts, all) {
 }
 /** Explicit selling destinations outrank a seller's headquarters or incidental location. */
 function marketText(text, all) {
-    const clean = normalize(text).replace(/"[^"\n]*"|“[^”\n]*”|(?<![\p{L}\p{N}])'[^\n]*?'(?![\p{L}\p{N}])/gu, '');
+    const currencies = all.filter(c => c.kind === 'currency').map(c => escaped(c.value)).join('|');
+    // Billing units describe a transaction, not the market where it happens.
+    const billing = new RegExp('\\b(?:invoice|invoices|invoicing|bill|bills|billing)\\s+in\\s+(?:' + currencies + ')(?![\\p{L}\\p{N}_])', 'giu');
+    const clean = normalize(text).replace(/"[^"\n]*"|“[^”\n]*”|(?<![\p{L}\p{N}])'[^\n]*?'(?![\p{L}\p{N}])/gu, '').replace(billing, '');
     return (clean.match(/[^.!?\n]+[.!?]?/g) || []).map(sentence => {
         // A buyer buying from a vendor names the destination before the vendor's office.
         const purchase = sentence.match(/\bbuy(?:ing|s)?\b[^.;!?]*?\bfrom\b/i);
@@ -188,7 +191,7 @@ function marketText(text, all) {
             return sentence.slice(0, purchase.index + purchase[0].lastIndexOf('from'));
         const m = sentence.match(/\b(?:sell(?:ing|s)?|sold|expand(?:s|ing)?|enter(?:s|ing)?|target(?:s|ing)?|serv(?:es?|ing))\b/i);
         if (m) {
-            const qualifier = sentence.slice(0, m.index).match(/\b(?:not|never|no longer|formerly|previously|historically|may|might|could|perhaps|maybe|considering|should we|would we|can we|competitor|rival)[^,;.!?]*$/i)?.[0] || '';
+            const qualifier = sentence.slice(0, m.index).match(/\b(?:not|never|no longer|stopped|ceased|used to|formerly|previously|historically|if|may|might|could|perhaps|maybe|considering|should we|would we|can we|competitor|rival)[^,;.!?]*$/i)?.[0] || '';
             // A source office following from is not a selling destination, in either order.
             const places = all.filter(c => ['region', 'country', 'city', 'state'].includes(c.kind) && (!/^[A-Z]{2,4}$/.test(c.value) || ['UK', 'UAE', 'USA'].includes(c.value))).map(c => escaped(c.value)).join('|');
             const place = '(?:' + places + ')';
@@ -207,6 +210,9 @@ function marketText(text, all) {
             });
             return qualifier + destination;
         }
+        // Identity and reference evidence alone cannot establish a selling destination.
+        if (/\b(?:(?:company|business|product|brand)\s+(?:is\s+)?(?:called|named)|(?:is|was)\s+(?:our|the)\s+(?:company|business|product|brand)\s+name|(?:our|the)\s+(?:reference\s+(?:customer|client)|cloud\s+(?:vendor|provider)|suppliers?)\b)/i.test(sentence))
+            return '';
         return sentence.replace(/\b(?:our|the)\s+(?:company|business|product|brand)(?:'s)?\s+name\s+(?:is|:)\s+[^,;.]+/gi, '').replace(/\b(?:based|headquartered|located|founded)\s+in\s+[^,;.]+/gi, '');
     }).join(' ');
 }

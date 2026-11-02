@@ -10,6 +10,33 @@ const {readRegionContext,regionNotes,NO_REGION_SUFFIX}=await import(pathToFileUR
 const {REGION_CHOICES,REGION_TAXONOMY}=await import(pathToFileURL(modulePath('regions')));
 const ids=args=>readRegionContext(args).regions.map(r=>r.region_id);
 const seller=text=>({product_description:text});
+const jurisdictionIds=args=>readRegionContext(args).regions.flatMap(r=>r.jurisdictions).sort();
+for(const [name,text,want] of [
+ ['M062 exclusion list','We sell lending software in Singapore. Excluded markets: India, Indonesia and Malaysia.',['SG']],
+ ['M063 stopped market','We stopped selling lending software in India. We now sell in Singapore.',['SG']],
+ ['M064 historical contrast','We used to sell lending software in India but now only sell in Singapore.',['SG']],
+ ['M065 conditional market','We sell lending software in Singapore. If we enter India, we will review the rules.',['SG']],
+ ['M066 named company','We sell lending software in India. The company is called Singapore Systems.',['IN']],
+ ['M067 company suffix','Singapore Systems is our company name. We sell lending software in India.',['IN']],
+ ['M068 reference customer','We sell lending software. Our reference customer is a Singapore bank.',[]],
+ ['M069 cloud vendor','We sell lending software. Our cloud vendor is in Singapore.',[]],
+ ['M070 billing currency','We sell lending software in Singapore and invoice in GBP.',['SG']],
+ ['ceased equivalent','We ceased selling lending software in India. We sell in Singapore.',['SG']],
+ ['past opposite','We used to sell lending software in Singapore but now only sell in India.',['IN']],
+ ['conditional opposite','We sell lending software in India. If we enter Singapore, we will review the rules.',['IN']],
+ ['excluded opposite','We sell lending software in India. Excluded countries: Singapore and Indonesia.',['IN']],
+ ['active selling','We sell lending software in India and Singapore.',['IN','SG']],
+ ['reference opposite','We sell lending software to a Singapore bank.',['SG']],
+ ['vendor opposite','We sell cloud software in Singapore.',['SG']],
+ ['market currency retained','We sell lending software in a market using GBP.',['GB']],
+ ['billing preceding market','We invoice in GBP and sell lending software in Singapore.',['SG']],
+ ['billing followed by second market','We sell in Singapore and invoice in GBP but sell in India too.',['IN','SG']],
+ ['billing only','We sell lending software and invoice in GBP.',[]],
+])test(`Market role and tense: ${name}`,()=>{
+ const readings=Array.from({length:3},()=>readRegionContext(seller(text)));
+ assert.deepEqual(jurisdictionIds(seller(text)),want,text);
+ assert.deepEqual(readings[1],readings[0]);assert.deepEqual(readings[2],readings[0]);
+});
 for(const r of REGION_CHOICES){
  test(`${r.name}: affirmative and opposite`,()=>{
   assert.deepEqual(ids(seller(`Payment reconciliation software sold in ${r.name}`)),[r.id]);
