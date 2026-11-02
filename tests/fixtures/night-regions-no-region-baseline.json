@@ -1,0 +1,2740 @@
+{
+  "base_commit": "01998942dbda8d265f1c951c0b926bc044da9b4c",
+  "profile": "current",
+  "tool_list": {
+    "tools": [
+      {
+        "name": "icp_deep_dive",
+        "description": "Analyze customer data to detect ICP patterns (industry, size, deal size, sales cycle, tech stack, triggers, champion roles). Ties are named as ties, the budget is the ACV range seen in your customers, and sector notes are added when your inputs name one of the supported sectors",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "customers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "industry": {
+                    "type": "string"
+                  },
+                  "size": {
+                    "type": "string"
+                  },
+                  "acv": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "sales_cycle_days": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "tech_stack": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "buying_trigger": {
+                    "type": "string"
+                  },
+                  "champion_title": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "List of customer objects with available attributes"
+            },
+            "customer_descriptions": {
+              "type": "string",
+              "description": "Alternative: Describe your best customers in text format"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "What type of product you sell"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            },
+            "business_model": {
+              "type": "string",
+              "enum": [
+                "saas",
+                "services",
+                "connectivity",
+                "transactions",
+                "marketplace",
+                "hardware_software",
+                "investment"
+              ],
+              "description": "Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out"
+            }
+          }
+        },
+        "title": "ICP Deep Dive",
+        "annotations": {
+          "title": "ICP Deep Dive",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "icp_scoring_model",
+        "description": "Create a lead qualification scoring template: criteria with example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust. Your success pattern is matched to your criteria; it does not set the weights. Sector notes are added when your inputs name one of the supported sectors Ask for held-back test counts and the pre-agreed stop rule when a model has been tested.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scoring_criteria": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "criterion": {
+                    "type": "string"
+                  },
+                  "importance": {
+                    "type": "string",
+                    "enum": [
+                      "critical",
+                      "important",
+                      "nice_to_have"
+                    ]
+                  },
+                  "values": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "description": "Criteria for scoring with importance levels"
+            },
+            "correlation_direction": {
+              "type": "string",
+              "enum": [
+                "positive",
+                "negative",
+                "unknown"
+              ],
+              "description": "Optional confirmed direction of the success pattern. Ask the user whether the named values correlate with better or worse outcomes before filling this. Overrides word reading; unknown withholds a top-points recommendation."
+            },
+            "success_correlation": {
+              "type": "string",
+              "description": "What correlates with success? (e.g., \"deals with VP Sales champion close 2x faster\")"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell, as a product category, so the scoring notes use your sector"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            },
+            "held_back_test": {
+              "type": "object",
+              "description": "Optional results on deals held back before tuning. Ask for the counts and the stop rule set before the test. A missed rule holds the scoring model; do not tune on this set.",
+              "properties": {
+                "wins_tested": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "wins_passing": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "non_wins_tested": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "non_wins_passing": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minimum_win_pass_percent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "maximum_non_win_pass_percent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "required": [
+                "wins_tested",
+                "wins_passing",
+                "non_wins_tested",
+                "non_wins_passing",
+                "minimum_win_pass_percent",
+                "maximum_non_win_pass_percent"
+              ]
+            }
+          }
+        },
+        "title": "ICP Scoring Model",
+        "annotations": {
+          "title": "ICP Scoring Model",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "buyer_group_analyzer",
+        "description": "Map the buyer group for a deal: the champion you name, your known stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role's concern and message prompts, an influence map and discovery questions. Sector roles and questions are added when your inputs name one of the supported sectors",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "deal_size": {
+              "type": "string",
+              "description": "ACV range (e.g., \"$50K-100K\")"
+            },
+            "target_company_size": {
+              "type": "string",
+              "description": "Company size (e.g., \"500-1000 employees\")"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "What you sell"
+            },
+            "known_stakeholders": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Roles you know are involved. A title suggests a role, not confirmed authority. Confirm who owns this purchase budget."
+            },
+            "confirmed_budget_owner": {
+              "type": "string",
+              "description": "Optional confirmed fact: the person or role who owns the budget for this purchase. Ask the user; do not infer from title. Overrides candidate ordering."
+            },
+            "typical_champion": {
+              "type": "string",
+              "description": "Your typical champion role"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            },
+            "business_model": {
+              "type": "string",
+              "enum": [
+                "saas",
+                "services",
+                "connectivity",
+                "transactions",
+                "marketplace",
+                "hardware_software",
+                "investment"
+              ],
+              "description": "Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out"
+            }
+          },
+          "required": [
+            "product_category"
+          ]
+        },
+        "title": "Buyer Group Analyzer",
+        "annotations": {
+          "title": "Buyer Group Analyzer",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "tam_sam_som_calculator",
+        "description": "Calculate TAM/SAM/SOM bottom-up from your company count, ACV, ICP match rate and Year 1 share (calculation framework, not a data source). Sector notes are added when your inputs name one of the supported sectors",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "total_potential_companies": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Estimated total companies that could buy (from LinkedIn, industry reports)"
+            },
+            "average_contract_value": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Your average ACV in dollars"
+            },
+            "icp_percentage": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Percentage of those companies that match your ICP, from 0 to 100. Left out, 30 is used and marked as an example"
+            },
+            "year1_market_share_target": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Assumed Year 1 share percentage, from 0 to 100. This is a planning assumption, not evidence of attainable share. Left out, 3 is used and marked as an example"
+            },
+            "data_sources": {
+              "type": "string",
+              "description": "Where you got your numbers (for documentation)"
+            },
+            "segment_name": {
+              "type": "string",
+              "description": "Name of the market segment"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell (for example \"spend management software\"), used for sector notes. The arithmetic does not use it"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          },
+          "required": [
+            "total_potential_companies",
+            "average_contract_value"
+          ]
+        },
+        "title": "TAM SAM SOM Calculator",
+        "annotations": {
+          "title": "TAM SAM SOM Calculator",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "lookalike_signal_generator",
+        "description": "Generate platform-specific targeting criteria and search queries from your firmographics, technographics, champion titles and buying triggers (generates criteria, not data). Each trigger gets its own signal; search keywords come from what you sell and the sector; platforms limits the sections",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "icp_firmographics": {
+              "type": "object",
+              "properties": {
+                "industries": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "company_sizes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "locations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "funding_stages": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Firmographic criteria"
+            },
+            "icp_technographics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Technologies your ICP typically uses"
+            },
+            "champion_titles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Job titles of your champions"
+            },
+            "buying_triggers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Events that trigger buying"
+            },
+            "platforms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell (for example \"spend management software\"), used for search keywords and sector notes"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          },
+          "required": [
+            "champion_titles"
+          ]
+        },
+        "title": "Lookalike Signal Generator",
+        "annotations": {
+          "title": "Lookalike Signal Generator",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "account_prioritization",
+        "description": "Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "accounts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "fit_score": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "0 to 100. Left out, 50 is used"
+                  },
+                  "intent_signals": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "0 to 100 (0 scores zero). Left out, 50 is used"
+                  },
+                  "relationship": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "0 to 100, based on existing connections. Left out, 50 is used"
+                  },
+                  "timing": {
+                    "type": "string",
+                    "description": "Buying horizon: now, soon, later or unknown (100, 70, 40 and 50 points respectively). Equivalent phrases are read by clause; denied or conflicting horizons remain unknown. Confirm the horizon with the user."
+                  }
+                }
+              },
+              "description": "List of accounts to prioritize. Each account: name, fit score (0 to 100), intent signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)"
+            },
+            "prioritization_weights": {
+              "type": "object",
+              "properties": {
+                "fit": {
+                  "type": "number"
+                },
+                "intent": {
+                  "type": "number"
+                },
+                "relationship": {
+                  "type": "number"
+                },
+                "timing": {
+                  "type": "number"
+                }
+              },
+              "description": "Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell (for example \"spend management software\"), used for sector notes. The arithmetic does not use it"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          }
+        },
+        "title": "Account Prioritization",
+        "annotations": {
+          "title": "Account Prioritization",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "icp_gap_analysis",
+        "description": "Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "current_customers": {
+              "type": "string",
+              "description": "Description of your current customer base"
+            },
+            "ideal_icp": {
+              "type": "string",
+              "description": "Description of your ideal customer profile"
+            },
+            "current_metrics": {
+              "type": "object",
+              "properties": {
+                "avg_acv": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "avg_sales_cycle": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "win_rate": {
+                  "type": "number"
+                },
+                "churn_rate": {
+                  "type": "number"
+                },
+                "nps": {
+                  "type": "number"
+                }
+              },
+              "description": "Current performance metrics"
+            },
+            "target_metrics": {
+              "type": "object",
+              "properties": {
+                "avg_acv": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "avg_sales_cycle": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "win_rate": {
+                  "type": "number"
+                },
+                "churn_rate": {
+                  "type": "number"
+                },
+                "nps": {
+                  "type": "number"
+                }
+              },
+              "description": "Target performance metrics"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell, used for sector notes"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            },
+            "business_model": {
+              "type": "string",
+              "enum": [
+                "saas",
+                "services",
+                "connectivity",
+                "transactions",
+                "marketplace",
+                "hardware_software",
+                "investment"
+              ],
+              "description": "Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out"
+            }
+          },
+          "required": [
+            "current_customers",
+            "ideal_icp"
+          ]
+        },
+        "title": "ICP Gap Analysis",
+        "annotations": {
+          "title": "ICP Gap Analysis",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "icp_evolution_tracker",
+        "description": "Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP, states a candidate change for each (an addition to test, a disqualifier to test, an implication to check) and writes a draft of the updated ICP, with the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "current_icp": {
+              "type": "string",
+              "description": "Your current ICP definition"
+            },
+            "recent_wins": {
+              "type": "string",
+              "description": "Description of recent successful customers"
+            },
+            "recent_losses": {
+              "type": "string",
+              "description": "Description of recent lost deals"
+            },
+            "market_changes": {
+              "type": "string",
+              "description": "Recent market or competitive changes"
+            },
+            "time_period": {
+              "type": "string",
+              "description": "Time period you are reviewing, in your own words (for example \"last quarter\")"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell, used for sector notes"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          },
+          "required": [
+            "current_icp"
+          ]
+        },
+        "title": "ICP Evolution Tracker",
+        "annotations": {
+          "title": "ICP Evolution Tracker",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "icp_interview_synthesizer",
+        "description": "Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized and key quotes per interview): pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "interview_notes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "customer": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "key_quotes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pain_points": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "buying_triggers": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "value_realized": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "description": "Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell, used for sector notes"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          }
+        },
+        "title": "ICP Interview Synthesizer",
+        "annotations": {
+          "title": "ICP Interview Synthesizer",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      }
+    ]
+  },
+  "rows": [
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "logistics-tech",
+      "args": {
+        "product_category": "Logistics dispatch planning software",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "8bd588f12bb49368e7792efd4211fc1341560ac4e3b9ca7f282335a75aed1909"
+    },
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "fintech",
+      "args": {
+        "product_category": "Fintech payment reconciliation",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "0ab875d010bcfc6965680dbabcb6dd7038da75cccf1a52d8f80b583235a2d646"
+    },
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "saas",
+      "args": {
+        "product_category": "SaaS subscription management platform",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "55671620e7eea197a880dfdb1602b0b26edf28fcad92a143c0043f51a6dffc6f"
+    },
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "vertical-saas",
+      "args": {
+        "product_category": "Vertical SaaS retail execution software",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "da012efd28f628f96fc5e372b3e479f5bb5a2a07b08da2ab009c803fda2f207d"
+    },
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "ai-native",
+      "args": {
+        "product_category": "AI native document review agents",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "bd1cff11c14102fbe3ce0e82637829bd47879554a5ea7970a118397f62af005b"
+    },
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "ites",
+      "args": {
+        "product_category": "ITeS business process outsourcing services",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "7ec6a14357f960db53b3b4bca65f7d0c33dec0d009853889911fd5d55a312ad7"
+    },
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "telecom",
+      "args": {
+        "product_category": "Telecom network connectivity services",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "a870e6fd26fba639f02a64e85da4b0c3b6b73fdb6852129d275f23e268d08cb1"
+    },
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "software",
+      "args": {
+        "product_category": "API testing and monitoring tool for backend developers",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "7fe7dac0b1a31b33f06989f984f83895b50e4829378f4aff1052c66d11e0ef6d"
+    },
+    {
+      "tool": "icp_deep_dive",
+      "vertical": "cybersecurity",
+      "args": {
+        "product_category": "Cybersecurity threat detection software",
+        "customers": [
+          {
+            "name": "Fleet A",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 24000,
+            "sales_cycle_days": 75,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Second depot opening",
+            "champion_title": "Operations director"
+          },
+          {
+            "name": "Fleet B",
+            "industry": "logistics",
+            "size": "100 to 250 vehicles",
+            "acv": 18000,
+            "sales_cycle_days": 90,
+            "tech_stack": [
+              "Legacy TMS"
+            ],
+            "buying_trigger": "Missed delivery SLA review",
+            "champion_title": "Transport manager"
+          },
+          {
+            "name": "Fleet C",
+            "industry": "logistics",
+            "size": "50 to 100 vehicles",
+            "acv": 12000,
+            "sales_cycle_days": 45,
+            "tech_stack": [
+              "Spreadsheets"
+            ],
+            "buying_trigger": "Dispatcher resignation",
+            "champion_title": "Owner"
+          }
+        ]
+      },
+      "sha256": "7cfb42f9d4c3690c18a4b3eaaa3ec9508df67cc2b55e4abc9fe4e22e925004c5"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "logistics-tech",
+      "args": {
+        "product_category": "Logistics dispatch planning software",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "c3e95b316f91c3710ff572cdf76bdd14c707a23fd911bbe08903ffb1f530a67d"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "fintech",
+      "args": {
+        "product_category": "Fintech payment reconciliation",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "6d0ede0111ae54fe7c8d885d38bdfb7f4248d552395ec1db62da365acadf87dc"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "saas",
+      "args": {
+        "product_category": "SaaS subscription management platform",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "7c632b370a03054e815deff0a368a2e47d7919409684977351916c97750ccda7"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "vertical-saas",
+      "args": {
+        "product_category": "Vertical SaaS retail execution software",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "f8732c3300814385f871f7f2eadba2ec8edbd06621c9d374211e35939aec117b"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "ai-native",
+      "args": {
+        "product_category": "AI native document review agents",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "76a73ee8321d303a07d755eb353b13ba5bb59d4fcedfd3953814db989c6d1198"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "ites",
+      "args": {
+        "product_category": "ITeS business process outsourcing services",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "d6d7fbc885b8ccf7fe550025e0721935add943fbe0281631161186779b32b2b2"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "telecom",
+      "args": {
+        "product_category": "Telecom network connectivity services",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "19085a596c030faec8c7dee6a6a7feb84cb27ef86c9676ca55aeea39ea369ecf"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "software",
+      "args": {
+        "product_category": "API testing and monitoring tool for backend developers",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "145b16354bd94ac06f8b2bc9cd22139a76a85be6dec153862714888f0a9ed031"
+    },
+    {
+      "tool": "icp_scoring_model",
+      "vertical": "cybersecurity",
+      "args": {
+        "product_category": "Cybersecurity threat detection software",
+        "scoring_criteria": [
+          {
+            "criterion": "Unresolved alert backlog",
+            "importance": "critical",
+            "values": [
+              "Over 100 alerts per analyst per day",
+              "No measured backlog"
+            ]
+          },
+          {
+            "criterion": "Security team size",
+            "importance": "important",
+            "values": [
+              "5 to 20 analysts",
+              "1 to 4 analysts"
+            ]
+          }
+        ],
+        "success_correlation": "CRO hypothesis: teams with a measured backlog buy faster. Four wins and three losses have not yet been checked."
+      },
+      "sha256": "846f3a4347db1676ed1cfc6626e5bcedcf49148a03c9e230938c9dd662c84f5e"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "logistics-tech",
+      "args": {
+        "product_category": "Logistics dispatch planning software",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "f8f82e6b62b08eee8a8a81247d617cef15b27d38e16975ea71c89663392db84b"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "fintech",
+      "args": {
+        "product_category": "Fintech payment reconciliation",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "752698c67864bca33db3d8d1e453e325d0c4530a36497f2012a9c9d8b3d25c8d"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "saas",
+      "args": {
+        "product_category": "SaaS subscription management platform",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "b1d92765de777704f1f62d35a6608b378c0fd8c9ccae18ea31145b3b56654fc9"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "vertical-saas",
+      "args": {
+        "product_category": "Vertical SaaS retail execution software",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "6c874b6917dac6856855539751469d42b55c63da25a34cb092dfbfe25f10aeae"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "ai-native",
+      "args": {
+        "product_category": "AI native document review agents",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "e23e34a9aaa58e327ab5e27d4c143c42e90d48e337c696bd8dfff10f8382c095"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "ites",
+      "args": {
+        "product_category": "ITeS business process outsourcing services",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "2c8c61247ba5d5d215d4c92c8f1fdce14f9f9303a67c29b955425e22183ab6ca"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "telecom",
+      "args": {
+        "product_category": "Telecom network connectivity services",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "d490da3175bb46f6a78cd2f2fef36d9e67827dbc49311dca4aac29f4244e7f7f"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "software",
+      "args": {
+        "product_category": "API testing and monitoring tool for backend developers",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "adabb8f5e266d42d6242b65345a10a9c002c8c00db031cc1453aa974ebd01811"
+    },
+    {
+      "tool": "buyer_group_analyzer",
+      "vertical": "cybersecurity",
+      "args": {
+        "product_category": "Cybersecurity threat detection software",
+        "deal_size": "$60000 annual",
+        "target_company_size": "Regional bank with 500 to 2000 employees",
+        "known_stakeholders": [
+          "Finance controller",
+          "Head of IT",
+          "Procurement manager"
+        ],
+        "typical_champion": "Finance controller"
+      },
+      "sha256": "319f8c4a9ca6d75ac07d2261fafe26601323182d2e105cee8088bb46f2220caa"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "logistics-tech",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "Logistics dispatch planning software"
+      },
+      "sha256": "a1091eedf9bb04d9c0c30da927c44d45fe63bebcee971a0172b19364b98c12f4"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "fintech",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "Fintech payment reconciliation"
+      },
+      "sha256": "ec9487083fff280d5251bf3f75be8887d755fc13273362bce779b73646f3ed7e"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "saas",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "SaaS subscription management platform"
+      },
+      "sha256": "d436337ca4fb2bdaa5e1e012d8c81a1b39bb07a86a256a6ffbfc32d56416a793"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "vertical-saas",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "Vertical SaaS retail execution software"
+      },
+      "sha256": "ef5a87154695f508a17c7107b92221ee760b60d55ad2848f344f632c3b80d7e9"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "ai-native",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "AI native document review agents"
+      },
+      "sha256": "cbc4b82ac1b0f7e9ec2ca00589ba10836260b1bcd93bd0371b60dffc38ca1d21"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "ites",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "ITeS business process outsourcing services"
+      },
+      "sha256": "2ee0d512be084bf92e1d713692db5d0baa36631e25c9e04cabf9ba94518a157a"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "telecom",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "Telecom network connectivity services"
+      },
+      "sha256": "e963bf76fb47986f25c1866acaa22926b7961183a24a8a2360ba17b696fdab26"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "software",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "API testing and monitoring tool for backend developers"
+      },
+      "sha256": "e4df738b7c51a752a91f1d3e8db5b468458c31080f883e5d1671c1bddc054618"
+    },
+    {
+      "tool": "tam_sam_som_calculator",
+      "vertical": "cybersecurity",
+      "args": {
+        "total_potential_companies": 2400,
+        "average_contract_value": 12000,
+        "icp_percentage": 25,
+        "year1_market_share_target": 5,
+        "data_sources": "Founder supplied count from a filtered regional fleet list, checked against CRM wins. No external verification.",
+        "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
+        "product_category": "Cybersecurity threat detection software"
+      },
+      "sha256": "6b3723ecd916fd4051e048207977debf4c945acd8b32391407a9520485c85875"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "logistics-tech",
+      "args": {
+        "product_category": "Logistics dispatch planning software",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "257cac5ec43e0a74f8b537da6bd981f47980e168c6ea16c7dcee19c7cce62f70"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "fintech",
+      "args": {
+        "product_category": "Fintech payment reconciliation",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "05642c88d37d13a07827ab258164d45490f72028fc3aa155b116513fd3986697"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "saas",
+      "args": {
+        "product_category": "SaaS subscription management platform",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "82c9fcad223a5189b13a24dfd0c8807e615a717c0d5292768a7e8e0ba56a5a69"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "vertical-saas",
+      "args": {
+        "product_category": "Vertical SaaS retail execution software",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "cd5eea36817c87192211d830379a64cbc57f30a70776f1033ff73031a78d5431"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "ai-native",
+      "args": {
+        "product_category": "AI native document review agents",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "a933e6b12da7dfb059635ecc0a1de5dc009f0bb3117f428ce2b7f4d6235e471a"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "ites",
+      "args": {
+        "product_category": "ITeS business process outsourcing services",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "a1b60bd93f1dcad80c614ede67aa89d7f992552f3326a67abb98e1d5b3b533aa"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "telecom",
+      "args": {
+        "product_category": "Telecom network connectivity services",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "d22a6f7e6a4ebc715b9b27155e853545657e66a86012d905879675ace7bee849"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "software",
+      "args": {
+        "product_category": "API testing and monitoring tool for backend developers",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "986509a61c742e787345f28545d9148c3805105d12351e52ab57bd8deb565772"
+    },
+    {
+      "tool": "lookalike_signal_generator",
+      "vertical": "cybersecurity",
+      "args": {
+        "product_category": "Cybersecurity threat detection software",
+        "champion_titles": [
+          "Finance controller",
+          "Head of reconciliation"
+        ],
+        "buying_triggers": [
+          "New lending product",
+          "Core banking migration"
+        ]
+      },
+      "sha256": "28fb4081bad4bf42881407e0107513427544125c0810984fcc565493ad51a74f"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "logistics-tech",
+      "args": {
+        "product_category": "Logistics dispatch planning software",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "d8a4c7f1a12f2ccd90020694f09fe487cba0ae6c3794aff72777213b9889fc2b"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "fintech",
+      "args": {
+        "product_category": "Fintech payment reconciliation",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "52844afcd109bbd530a8a7c35c8790af8b48307df077662c3e496bee0dc35940"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "saas",
+      "args": {
+        "product_category": "SaaS subscription management platform",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "b12b54329deed0cc200e51964619d07e0e1ee2b146f2b7f41cd96897b2fd118a"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "vertical-saas",
+      "args": {
+        "product_category": "Vertical SaaS retail execution software",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "a637f058011d7260c3a2b8e8b79f8d9e2411819107fa77a0664308db874d4657"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "ai-native",
+      "args": {
+        "product_category": "AI native document review agents",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "1792446b465604518843e669e740ff4243a6c6785b0e3db15802c8e2b17f8835"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "ites",
+      "args": {
+        "product_category": "ITeS business process outsourcing services",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "a87152298027047af559987871d9f3650374b07f403ab20d994877495f373561"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "telecom",
+      "args": {
+        "product_category": "Telecom network connectivity services",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "48bc3f92624d26dff0c162422917f7a18b6a60c5e06caddaebad74de7d0e7e19"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "software",
+      "args": {
+        "product_category": "API testing and monitoring tool for backend developers",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "ae9a81fe19894d405ad82f2700e9211b174a69cce49d45dc85a949913f12012d"
+    },
+    {
+      "tool": "account_prioritization",
+      "vertical": "cybersecurity",
+      "args": {
+        "product_category": "Cybersecurity threat detection software",
+        "accounts": [
+          {
+            "name": "Fintech A",
+            "timing": "later",
+            "fit_score": 90,
+            "intent_signals": 30,
+            "relationship": 20
+          },
+          {
+            "name": "SaaS B",
+            "timing": "now",
+            "fit_score": 55,
+            "intent_signals": 85,
+            "relationship": 80
+          },
+          {
+            "name": "Telecom C",
+            "timing": "soon",
+            "fit_score": 75,
+            "intent_signals": 60,
+            "relationship": 50
+          }
+        ]
+      },
+      "sha256": "bc6acd20cae11659ff02c2fe23bd49f3a1237d756dddc26d4a521534fb5ad9f9"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "logistics-tech",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "Logistics dispatch planning software"
+      },
+      "sha256": "b13300ac88e7c1322a3839580e4499e6545cc4a7c41019b016d3fa1ca44c818d"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "fintech",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "Fintech payment reconciliation"
+      },
+      "sha256": "fab4e74b445968926ad80cc26381d3f78337234e708e75c60d74cd9d5f7e1c37"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "saas",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "SaaS subscription management platform"
+      },
+      "sha256": "1399d7a83882fd28a0aa8a9911fa48274bb2f31256315a4e665c2c5a74ae7d5f"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "vertical-saas",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "Vertical SaaS retail execution software"
+      },
+      "sha256": "cf179ad34b1a3f1eea2dd6693843fcefc08dbc23d9c69d59e54c32d75cccec73"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "ai-native",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "AI native document review agents"
+      },
+      "sha256": "bd229afb8a1aa01bf09e5d086a83da9bee9f3ad8fb06add80973049f9d98ac35"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "ites",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "ITeS business process outsourcing services"
+      },
+      "sha256": "689aa545553ffc36b321db4f1d38195a83ca5836c06bee0bdd31dc889b315af1"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "telecom",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "Telecom network connectivity services"
+      },
+      "sha256": "bd5390ba81bac93d1bd6b3be8fb0c2f41876caadd437113f5b44a207cc0525e7"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "software",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "API testing and monitoring tool for backend developers"
+      },
+      "sha256": "aea0e615e2313bebbeb534a0ef1a71d6f762906b517e6eb4f16d61951192c432"
+    },
+    {
+      "tool": "icp_gap_analysis",
+      "vertical": "cybersecurity",
+      "args": {
+        "current_customers": "Regional ITeS firms with fewer than 100 agents",
+        "ideal_icp": "ITeS firms with 100 to 500 agents and a named quality lead",
+        "current_metrics": {
+          "avg_acv": 18000,
+          "avg_sales_cycle": 95,
+          "win_rate": 22,
+          "churn_rate": 16,
+          "nps": 24
+        },
+        "target_metrics": {
+          "avg_acv": 30000,
+          "avg_sales_cycle": 60,
+          "win_rate": 30,
+          "churn_rate": 9,
+          "nps": 40
+        },
+        "product_category": "Cybersecurity threat detection software"
+      },
+      "sha256": "d1d18b1a66f8cdf162a3002943943c924287d65f7ecf960dae8ee2616cdba3bc"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "logistics-tech",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "Logistics dispatch planning software"
+      },
+      "sha256": "2e9b65cdb122d520f99501167e69cf106fadaaed86f126f32ca36866b77168eb"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "fintech",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "Fintech payment reconciliation"
+      },
+      "sha256": "03d9375163dae7ccf9f9d25fc9ea6b7b938c658823c6ee2319c791025f9c3d5b"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "saas",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "SaaS subscription management platform"
+      },
+      "sha256": "b0a1861ce1e1d13cdf69957e92bca59865c7e65b66f72bb1ac901f44ccca8960"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "vertical-saas",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "Vertical SaaS retail execution software"
+      },
+      "sha256": "9bd7ddefbcf32ffc5f0bfa5b65aa689149337192fd2ae1e5d5e87f26f13b1f26"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "ai-native",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "AI native document review agents"
+      },
+      "sha256": "80bdd5672f8a76a4b408c46b63034046304b229843f8a0ae9b72ecb10ac31b49"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "ites",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "ITeS business process outsourcing services"
+      },
+      "sha256": "f9749d20e1f4c4889cebd393481a078ca459a1c1c521f7074f03ad64b71d3f39"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "telecom",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "Telecom network connectivity services"
+      },
+      "sha256": "05234b60e9a44ae503f002f0250df31f6890bb6cd074e466c2ff114ac09d077e"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "software",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "API testing and monitoring tool for backend developers"
+      },
+      "sha256": "e3bccc8aa1bf87768aba7881be342073e3aea23014e0022eff63e3104cc049ef"
+    },
+    {
+      "tool": "icp_evolution_tracker",
+      "vertical": "cybersecurity",
+      "args": {
+        "current_icp": "CISOs at midmarket cybersecurity teams buying threat exposure software",
+        "recent_wins": "Two SOC managers sponsored $36000 contracts after a security audit.",
+        "recent_losses": "Three CISOs deferred because the remediation team had no capacity.",
+        "market_changes": "A new internal audit requirement was mentioned in two customer calls; no wider trend established.",
+        "time_period": "Q3 2026",
+        "product_category": "Cybersecurity threat detection software"
+      },
+      "sha256": "c50c3718c722807a7c66c6ac6e93ac6b87b891109fe9982919b390633a06fbf9"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "logistics-tech",
+      "args": {
+        "product_category": "Logistics dispatch planning software",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "d92730a25754fcc3591d4ff4c405536831dd2bfe72a8087ee922520497dbdbac"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "fintech",
+      "args": {
+        "product_category": "Fintech payment reconciliation",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "000a089399f0ed9a977b7ada4a415380d1863c6fc97b8300d5140e8b9d3efce0"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "saas",
+      "args": {
+        "product_category": "SaaS subscription management platform",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "5d9890fa6022bf2b78ddaf0fc850fdb3cba416fb03b522d4716926dd007bc96c"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "vertical-saas",
+      "args": {
+        "product_category": "Vertical SaaS retail execution software",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "d8a58abb6660e7a6bcb8c651b5412159424954894e9ab9f5430ceea8fb643152"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "ai-native",
+      "args": {
+        "product_category": "AI native document review agents",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "fa4a685784fd8156b63cb00762af9ea53055c4c126078e36c2cd0295e038efc0"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "ites",
+      "args": {
+        "product_category": "ITeS business process outsourcing services",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "38a051e4e482d8b1f4d7d06627b245f485282594eff205d26d5d308529efa5a1"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "telecom",
+      "args": {
+        "product_category": "Telecom network connectivity services",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "331fda64695f6297e41f039e29f071da20d0409d73000b048a79a06ca6f33c5b"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "software",
+      "args": {
+        "product_category": "API testing and monitoring tool for backend developers",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "98fd2ab0bab2bfd9c14cf7dab0b69dbc81b1a86a156fc7657fa373bd8acee028"
+    },
+    {
+      "tool": "icp_interview_synthesizer",
+      "vertical": "cybersecurity",
+      "args": {
+        "product_category": "Cybersecurity threat detection software",
+        "interview_notes": [
+          {
+            "customer": "Clinic A",
+            "role": "Practice manager",
+            "key_quotes": [
+              "We lose appointments when two receptionists book the same slot."
+            ],
+            "pain_points": [
+              "Double booking"
+            ],
+            "buying_triggers": [
+              "Second clinic opening"
+            ],
+            "value_realized": [
+              "Shared appointment visibility"
+            ]
+          },
+          {
+            "customer": "Clinic B",
+            "role": "Clinic owner",
+            "key_quotes": [
+              "We need fewer no shows, not another calendar."
+            ],
+            "pain_points": [
+              "No shows"
+            ],
+            "buying_triggers": [
+              "Revenue shortfall"
+            ],
+            "value_realized": [
+              "Reminder messages used; no show change not measured"
+            ]
+          }
+        ]
+      },
+      "sha256": "86c2ce3f67b5d154a7afd3d8243b7291f32a0c0ed2342ee53bb97e1d0e155ce3"
+    }
+  ]
+}

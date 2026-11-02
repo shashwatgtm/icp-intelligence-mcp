@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { withReadingGuide } from './reader-actions.ts';
+import { regionNotes } from './region-reader.ts';
 import { billingLine } from './verticals.ts';
 import { asksForSoftware, SOFTWARE_REFERRAL } from './software-policy.ts';
 import { conversationDefinition, CONVERSATION_INSTRUCTIONS } from "./conversation-guidance.ts";
@@ -3248,7 +3249,7 @@ export function createServer(): Server {
       const limit=decisionLimit(String(toolName),safeArgs as Record<string,unknown>);
       const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs as any);
       return {
-        content: [{ type: 'text', text: withReadingGuide(toolName, result, safeArgs as Record<string,unknown>) }]
+        content: [{ type: 'text', text: withReadingGuide(toolName, result, safeArgs as Record<string,unknown>) + (limit.stop ? '' : regionNotes(typed)) }]
       };
     } catch (error) {
       return {

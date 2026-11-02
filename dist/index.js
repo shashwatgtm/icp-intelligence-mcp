@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
 const reader_actions_ts_1 = require("./reader-actions.js");
+const region_reader_ts_1 = require("./region-reader.js");
 const verticals_ts_1 = require("./verticals.js");
 const software_policy_ts_1 = require("./software-policy.js");
 const conversation_guidance_ts_1 = require("./conversation-guidance.js");
@@ -3204,7 +3205,7 @@ function createServer() {
             const limit = (0, decision_limits_ts_1.decisionLimit)(String(toolName), safeArgs);
             const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs);
             return {
-                content: [{ type: 'text', text: (0, reader_actions_ts_1.withReadingGuide)(toolName, result, safeArgs) }]
+                content: [{ type: 'text', text: (0, reader_actions_ts_1.withReadingGuide)(toolName, result, safeArgs) + (limit.stop ? '' : (0, region_reader_ts_1.regionNotes)(typed)) }]
             };
         }
         catch (error) {
