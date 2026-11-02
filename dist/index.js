@@ -2634,17 +2634,20 @@ ${SUGGESTED}
             const conflicts = allWins.filter(w => allLosses.some(l => itemKey(w) === itemKey(l)));
             const wins = allWins.filter(w => !conflicts.includes(w)), losses = allLosses.filter(l => !conflicts.some(w => itemKey(w) === itemKey(l)));
             const scopeChanges = changes.filter(c => (0, text_signals_ts_3.scopeDisposition)(c).state === 'affirmed');
+            const unclearLoss = 'loss cause is not clear; ask for the deciding reason before creating a disqualifier';
             const lossKind = (t) => (0, text_signals_ts_4.hasSignal)(t, /price|cheaper|cost|budget|expensive|free/i, 'price') ? 'lost on price: check whether these buyers had the budget your ICP assumes'
                 : (0, text_signals_ts_4.hasSignal)(t, /bundle|one vendor|single vendor|suite|all-in-one|erp-only|together/i, 'bundle') ? 'lost to a bundled or single-vendor choice: check whether buyers who want one suite belong in your ICP'
                     : (0, text_signals_ts_4.hasSignal)(t, /competitor|incumbent|already/i, 'incumbent') ? 'lost to an existing or competing tool: check what made the switch too hard'
                         : (0, text_signals_ts_4.hasSignal)(t, /timing|priority|later|freeze/i, 'timing') ? 'lost on timing: check for a trigger before you qualify'
-                            : 'loss cause is not clear; ask for the deciding reason before creating a disqualifier';
+                            : unclearLoss;
+            const supportedLosses = losses.filter(l => lossKind(l) !== unclearLoss);
+            const unresolvedLosses = losses.filter(l => lossKind(l) === unclearLoss);
             const winLines = wins.map(w => isNew(w)
                 ? `- **Candidate addition**: ${q(shortText(w, 200))}: this is not in your current ICP; test adding it if these deals closed faster or larger than your average`
                 : `- **Confirms your ICP**: ${q(shortText(w, 200))}: it matches your current ICP, so keep it`);
-            const lossLines = losses.map(l => `- **Candidate disqualifier**: ${q(shortText(l, 200))}: ${lossKind(l)}`);
+            const lossLines = losses.map(l => `- **${lossKind(l) === unclearLoss ? 'Loss reason unresolved' : 'Candidate disqualifier'}**: ${q(shortText(l, 200))}: ${lossKind(l)}`);
             const changeLines = changes.map(c => `- **Implication to check**: ${q(shortText(c, 200))}: check which segments of your ICP this moves toward you or away from you, and update the qualifying questions`);
-            const firstChange = scopeChanges.length ? 'Reconcile the changed selling scope before testing an ICP addition' : conflicts.length ? 'Reconcile the conflicting win and loss outcomes before changing the ICP' : wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew), 80))}` : losses[0] ? `Test qualifying out ${q(shortText(losses[0], 80))}` : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
+            const firstChange = scopeChanges.length ? 'Reconcile the changed selling scope before testing an ICP addition' : conflicts.length ? 'Reconcile the conflicting win and loss outcomes before changing the ICP' : wins.find(isNew) ? `Test adding ${q(shortText(wins.find(isNew), 80))}` : supportedLosses[0] ? `Test qualifying out ${q(shortText(supportedLosses[0], 80))}` : unresolvedLosses.length ? 'Confirm the deciding loss reasons before testing any disqualifier' : segs.length > 1 ? `Compare win rate, ACV and cycle across ${andList(prof.segments.slice(0, 4))}` : 'No change suggested yet';
             // Run 20 round 1 (quality): with or without wins and losses, your current ICP is read in parts and each part gets a test to run in
             // your CRM; the sector adds the roles and loss reasons to look for. Nothing is invented: every part is your own words.
             const partLines = [];
@@ -2732,7 +2735,8 @@ ${vRanked ? `${sideNotes(vRanked, ['committee', 'metrics', 'vocabulary'], prof.r
 - **Your ICP as written**: ${q(shortText(args.current_icp, 700))}
 - **Segments to keep until the data says otherwise**: ${segs.length ? andList(segs.slice(0, 6)) : 'your ICP text did not split into segments (see above)'}${profSizes.length ? `; size: ${andList(profSizes.map(x => clauseHead(x, 60)))}` : ''}.
 ${roles.length ? `- **Who signs and who evaluates**: ${andList(roles.slice(0, 4))}.\n` : ''}${prof.problems.length ? `- **The problem they share**: ${andList(prof.problems.slice(0, 2).map(x => q(clauseHead(x, 100))))}.\n` : ''}- **Add on trial**: ${scopeChanges.length ? 'held until the changed selling scope is confirmed' : wins.some(isNew) ? andList(wins.filter(isNew).slice(0, 3).map(w => q(shortText(w, 140)))) + ' (these wins are not in your ICP text; keep them if they closed faster or larger than your average)' : wins.length ? 'nothing: your wins match the ICP you wrote' : 'nothing yet, because no wins were given'}.
-- **Qualify out on trial**: ${losses.length ? andList(losses.slice(0, 3).map(l => q(shortText(l, 140)))) + ' (' + andList([...new Set(losses.slice(0, 3).map(l => lossKind(l).split(':')[0]))]) + ')' : 'nothing yet, because no losses were given'}.
+- **Qualify out on trial**: ${supportedLosses.length ? andList(supportedLosses.slice(0, 3).map(l => q(shortText(l, 140)))) + ' (' + andList([...new Set(supportedLosses.slice(0, 3).map(l => lossKind(l).split(':')[0]))]) + ')' : losses.length ? 'held: no deciding loss reason has been established' : 'nothing yet, because no losses were given'}.
+${unresolvedLosses.length ? `- **Loss reasons held for review**: ${andList(unresolvedLosses.map(l => q(shortText(l, 140))))}. Confirm why each buyer decided before proposing an exclusion.\n` : ''}
 - **First change to test**: ${firstChange}.
 - **Check against the market**: ${changes.length ? andList(changes.slice(0, 3).map(c => q(shortText(c, 140)))) + ': which of your segments does it move toward you or away from you?' : 'no market change was given.'}
 
