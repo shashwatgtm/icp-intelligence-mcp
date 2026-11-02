@@ -4,40 +4,81 @@
       "repository": "craft-gtm-mcp",
       "name": "CRAFT GTM",
       "mcp": "https://craft-gtm.gtmhelix.com/mcp",
-      "guide": "https://craft-gtm.gtmhelix.com/connect/"
+      "guide": "https://craft-gtm.gtmhelix.com/connect/",
+      "hosts": [
+        "chatgpt"
+      ]
     },
     "craft-content.gtmhelix.com": {
       "repository": "craft-content-mcp",
       "name": "CRAFT Content",
       "mcp": "https://craft-content.gtmhelix.com/mcp",
-      "guide": "https://craft-content.gtmhelix.com/connect/"
+      "guide": "https://craft-content.gtmhelix.com/connect/",
+      "hosts": [
+        "chatgpt"
+      ]
     },
     "revenue-enablement.gtmhelix.com": {
       "repository": "revenue-enablement-mcp",
       "name": "Revenue Enablement",
       "mcp": "https://revenue-enablement.gtmhelix.com/mcp",
-      "guide": "https://revenue-enablement.gtmhelix.com/connect/"
+      "guide": "https://revenue-enablement.gtmhelix.com/connect/",
+      "hosts": [
+        "chatgpt"
+      ]
     },
     "impact.gtmhelix.com": {
       "repository": "impact-mcp",
       "name": "IMPACT",
       "mcp": "https://impact.gtmhelix.com/mcp",
-      "guide": "https://impact.gtmhelix.com/connect/"
+      "guide": "https://impact.gtmhelix.com/connect/",
+      "hosts": [
+        "chatgpt"
+      ]
     },
     "icp-intelligence.gtmhelix.com": {
       "repository": "icp-intelligence-mcp",
       "name": "ICP Intelligence",
       "mcp": "https://icp-intelligence.gtmhelix.com/mcp",
-      "guide": "https://icp-intelligence.gtmhelix.com/connect/"
+      "guide": "https://icp-intelligence.gtmhelix.com/connect/",
+      "hosts": [
+        "claude",
+        "gemini"
+      ],
+      "_hosts_comment": "Move to ChatGPT when the listing is live."
     },
     "gtmalpha.gtmhelix.com": {
       "repository": "gtm-alpha-secure",
       "name": "GTM Alpha",
       "mcp": "https://gtmalpha.gtmhelix.com/mcp",
       "guide": "https://gtmalpha.gtmhelix.com/connect/",
-      "held": true
+      "held": true,
+      "hosts": [
+        "claude",
+        "gemini"
+      ],
+      "_hosts_comment": "Move to ChatGPT when the listing is live."
+    },
+    "gtmhelix.com": {
+      "repository": "gtmhelix-main",
+      "name": "Helix GTM Consulting",
+      "hosts": [
+        "chatgpt"
+      ]
+    },
+    "tools.gtmhelix.com": {
+      "repository": "gtmhelix-tools-hub",
+      "name": "Helix tools",
+      "hosts": [
+        "chatgpt"
+      ]
     }
   },
   "suite": "https://github.com/shashwatgtm/helix-gtm-suite",
-  "suite_source_commit": "9e9a16e308e7a9efb936e40e91e129cef0ed8b28"
+  "suite_source_commit": "9e9a16e308e7a9efb936e40e91e129cef0ed8b28",
+  "plugin_hosts": [
+    "claude",
+    "gemini"
+  ],
+  "_plugin_hosts_comment": "Permanent route. Plugin pages do not use ChatGPT."
 }
