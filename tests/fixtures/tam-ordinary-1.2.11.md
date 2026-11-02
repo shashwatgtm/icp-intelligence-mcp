@@ -121,7 +121,7 @@ Later years assume your market share doubles each year.
 
 ## Reading the answer
 
-The revenue scenario for Mid-size manufacturers uses 5,000 accounts and an annual price of USD 24,000, then applies the displayed fit and share assumptions. It is not evidence that those accounts will buy. The conclusion needs review if new evidence changes a dated and deduplicated account count, observed annual prices, a checked fit sample and capacity to win and serve the assumed share.
+The revenue scenario for Mid-size manufacturers uses 5,000 accounts and an annual price of USD 24,000, then applies the displayed fit and share assumptions. It is not evidence that those accounts will buy. Evidence that could change this conclusion: a dated and deduplicated account count, observed annual prices, a checked fit sample and capacity to win and serve the assumed share.
 
 ## Decisions by role
 

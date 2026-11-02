@@ -8,7 +8,7 @@ for(const c of cases)test('Round 5 reader contract: '+c.tool,async()=>{
  const r=(await response.json()).result;assert.ok(r&&!r.isError);
  const text=r.content.filter(x=>x.type==='text').map(x=>x.text).join('\n');
  assert.match(text,/## Reading the answer/);
- assert.match(text,/The conclusion needs review if|Change scope if/);
+ assert.match(text,/The conclusion needs review if|Change scope if|Evidence that could change this conclusion:/);
  for(const role of ['Founder','CEO','CMO','CRO','Demand generation head'])assert.match(text,new RegExp('(?:^|\\n)'+role+':'));
  assert.doesNotMatch(text,/_{3,}|icp firmographics\.(?:industries|company sizes|locations)|\[(?:Your name|Competitor A|YOUR WHITESPACE|target customer)\]/);
 });

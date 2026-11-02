@@ -111,7 +111,7 @@ export function readingGuide(name: string, result: string, args: Record<string,u
   const contextual=roles.map(line=>caseLabel?line.replace(': ', ': For '+caseLabel+', '):line);
   if(name==='launch_commander')return '\n\n## Reading the answer\n\nThis sequence is proposed. Change scope if the date, capacity or buyer acceptance check changes.\n\n## Decisions by role\n\nFounder: confirm the buyer before choosing launch scope.\nCEO: match owners to capacity before approving the date.\nCMO: verify the launch claim before briefing channels.\nCRO: agree the buyer acceptance check before offering a meeting.\nDemand generation head: check contact volume against channel capacity before outreach.\n';
 
-  return `\n\n## Reading the answer\n\n${caseLabel ? `For ${caseLabel}: ` : ''}${meaning}${status} The conclusion needs review if new evidence changes ${evidence}.\n\n## Decisions by role\n\nProposed owners. Confirm the named person before acting.\n\n${contextual.join('\n\n')}\n`;
+  return `\n\n## Reading the answer\n\n${caseLabel ? `For ${caseLabel}: ` : ''}${meaning}${status} Evidence that could change this conclusion: ${evidence}.\n\n## Decisions by role\n\nProposed owners. Confirm the named person before acting.\n\n${contextual.join('\n\n')}\n`;
 }
 
 export function withReadingGuide(name:string,result:string,args:Record<string,unknown>={}):string {
