@@ -1,3 +1,4 @@
+import {icpReading} from './icp-reader-actions.ts';
 /** Reading guidance is deterministic and does not turn supplied claims into verified facts. */
 type Guide = [string, string, string, string];
 const GUIDES: Record<string, Guide> = {
@@ -58,7 +59,9 @@ export function readingGuide(name: string, result: string, args: Record<string,u
   if(!caseLabel){const match=/\*Sector: (?:read from your inputs as|from your choice:)\s*([^.\n*]+)/.exec(result);if(match)caseLabel=match[1].trim()+' case';}
   const g = GUIDES[name];
   if (!g || !result || /^(?:Error|Invalid|Missing required|No contact|Contact declined)/i.test(result)) return '';
-  const [kind, meaning, evidence, decision] = g;
+  const [kind, defaultMeaning, defaultEvidence, decision] = g;
+  const specific=icpReading(name,args,result);
+  const meaning=specific?.meaning||defaultMeaning, evidence=specific?.evidence||defaultEvidence;
   const held = /^# .*\bheld\b|^Use not approved|^Publication is not approved|^## Overall Score:[^\n]*\(NOT PROVED YET\)/im.test(result);
   const status = held ? ' Keep the stated hold in place; this guidance does not override it.' : '';
   let roles = kind === 'publish' ? [
@@ -80,6 +83,7 @@ export function readingGuide(name: string, result: string, args: Record<string,u
     `CRO: validate ${evidence} with the relevant buyer or account owner before changing sales priorities.`,
     `Demand generation head: compare the next account sample with ${decision} before expanding outreach.`,
   ];
+  if(specific)roles=specific.roles;
   const noPayback=name==='roi_business_case_builder'&&/^\| \*\*Payback Period\*\*[^\n]*No payback/im.test(result);
   const unsupportedClaim=/\(NOT PROVED YET\)|^> Unproved value hypothesis:|^Use not approved/m.test(result);
   const failedScore=name==='icp_scoring_model'&&/^# Scoring decision held/m.test(result);

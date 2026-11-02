@@ -123,18 +123,18 @@ Later years assume your market share doubles each year.
 
 ## Reading the answer
 
-The revenue figures are the result of the account, price, fit and share assumptions. They are not a demand forecast. The conclusion needs review if new evidence changes a dated account list, supportable annual price, fit evidence and achievable share.
+The revenue scenario for the supplied segment uses 400 accounts and an annual price of USD 900, then applies the displayed fit and share assumptions. It is not evidence that those accounts will buy. The conclusion needs review if new evidence changes a dated and deduplicated account count, observed annual prices, a checked fit sample and capacity to win and serve the assumed share.
 
 ## Decisions by role
 
 Proposed owners. Confirm the named person before acting.
 
-Founder: identify which missing fact could reverse the market investment before accepting the recommendation.
+Founder: verify the source and date behind the 400 accounts in the supplied segment before accepting the market boundary; remove duplicate or ineligible accounts.
 
-CEO: set the resource limit and stop condition for the market investment before committing budget.
+CEO: ask sales and delivery to compare the customer requirement at the displayed share assumption with their actual capacity before funding the scenario; record the shortfall or support.
 
-CMO: check whether the audience and claim in the market investment are supported by the supplied customer evidence before briefing the team.
+CMO: label the the displayed fit assumption and the displayed share assumption as assumptions in any market claim before publishing it; retain the account source and limits beside the revenue figure.
 
-CRO: validate a dated account list, supportable annual price, fit evidence and achievable share with the relevant buyer or account owner before changing sales priorities.
+CRO: compare the USD 900 annual price with closed deals in the supplied segment before adopting a revenue target; confirm the period and scope match.
 
-Demand generation head: compare the next account sample with the market investment before expanding outreach.
+Demand generation head: review a separate sample from the 400 listed accounts against the criteria behind the displayed fit assumption before building outreach; record exclusions and the resulting fit rate.

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.readingGuide = readingGuide;
 exports.withReadingGuide = withReadingGuide;
+const icp_reader_actions_ts_1 = require("./icp-reader-actions.js");
 const GUIDES = {
     pmf_scorecard: ['fit', 'The score compares supplied metrics with the selected benchmark. It does not establish product market fit outside that sample.', 'retention, cohort size and the benchmark choice', 'the decision to increase acquisition spending'],
     launch_commander: ['plan', 'This is a proposed launch sequence. A date and a goal do not establish delivery capacity.', 'the launch date, available capacity and buyer acceptance conditions', 'the launch scope'],
@@ -80,7 +81,9 @@ function readingGuide(name, result, args = {}) {
     const g = GUIDES[name];
     if (!g || !result || /^(?:Error|Invalid|Missing required|No contact|Contact declined)/i.test(result))
         return '';
-    const [kind, meaning, evidence, decision] = g;
+    const [kind, defaultMeaning, defaultEvidence, decision] = g;
+    const specific = (0, icp_reader_actions_ts_1.icpReading)(name, args, result);
+    const meaning = specific?.meaning || defaultMeaning, evidence = specific?.evidence || defaultEvidence;
     const held = /^# .*\bheld\b|^Use not approved|^Publication is not approved|^## Overall Score:[^\n]*\(NOT PROVED YET\)/im.test(result);
     const status = held ? ' Keep the stated hold in place; this guidance does not override it.' : '';
     let roles = kind === 'publish' ? [
@@ -102,6 +105,8 @@ function readingGuide(name, result, args = {}) {
         `CRO: validate ${evidence} with the relevant buyer or account owner before changing sales priorities.`,
         `Demand generation head: compare the next account sample with ${decision} before expanding outreach.`,
     ];
+    if (specific)
+        roles = specific.roles;
     const noPayback = name === 'roi_business_case_builder' && /^\| \*\*Payback Period\*\*[^\n]*No payback/im.test(result);
     const unsupportedClaim = /\(NOT PROVED YET\)|^> Unproved value hypothesis:|^Use not approved/m.test(result);
     const failedScore = name === 'icp_scoring_model' && /^# Scoring decision held/m.test(result);
