@@ -7,7 +7,8 @@
       "guide": "https://craft-gtm.gtmhelix.com/connect/",
       "hosts": [
         "chatgpt"
-      ]
+      ],
+      "listing": ""
     },
     "craft-content.gtmhelix.com": {
       "repository": "craft-content-mcp",
@@ -16,7 +17,8 @@
       "guide": "https://craft-content.gtmhelix.com/connect/",
       "hosts": [
         "chatgpt"
-      ]
+      ],
+      "listing": ""
     },
     "revenue-enablement.gtmhelix.com": {
       "repository": "revenue-enablement-mcp",
@@ -25,7 +27,8 @@
       "guide": "https://revenue-enablement.gtmhelix.com/connect/",
       "hosts": [
         "chatgpt"
-      ]
+      ],
+      "listing": ""
     },
     "impact.gtmhelix.com": {
       "repository": "impact-mcp",
@@ -34,7 +37,8 @@
       "guide": "https://impact.gtmhelix.com/connect/",
       "hosts": [
         "chatgpt"
-      ]
+      ],
+      "listing": ""
     },
     "icp-intelligence.gtmhelix.com": {
       "repository": "icp-intelligence-mcp",
@@ -45,7 +49,8 @@
         "claude",
         "gemini"
       ],
-      "_hosts_comment": "Move to ChatGPT when the listing is live."
+      "_hosts_comment": "Move to ChatGPT when the listing is live.",
+      "listing": ""
     },
     "gtmalpha.gtmhelix.com": {
       "repository": "gtm-alpha-secure",
@@ -56,21 +61,24 @@
         "claude",
         "gemini"
       ],
-      "_hosts_comment": "Move to ChatGPT when the listing is live."
+      "_hosts_comment": "Move to ChatGPT when the listing is live.",
+      "listing": ""
     },
     "gtmhelix.com": {
       "repository": "gtmhelix-main",
       "name": "Helix GTM Consulting",
       "hosts": [
         "chatgpt"
-      ]
+      ],
+      "listing": ""
     },
     "tools.gtmhelix.com": {
       "repository": "gtmhelix-tools-hub",
       "name": "Helix tools",
       "hosts": [
         "chatgpt"
-      ]
+      ],
+      "listing": ""
     }
   },
   "suite": "https://github.com/shashwatgtm/helix-gtm-suite",

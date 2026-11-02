@@ -160,9 +160,19 @@
     var section = document.getElementById("result");
     var body = section && section.querySelector("[data-result]");
     var lastText = "";
+    var resultRevision = 0;
+    function clearHandoff() {
+      resultRevision++;
+      form.helixResult = null;
+      document.dispatchEvent(new CustomEvent('helix:result', { detail: null }));
+    }
+    ['input', 'change', 'reset'].forEach(function (name) { form.addEventListener(name, clearHandoff); });
+
     form.addEventListener("submit", function (ev) {
       if (!window.fetch || !section) return;
       ev.preventDefault();
+      clearHandoff();
+      var submittedRevision = resultRevision;
       var c = collect(form);
       if (c.problems.length) { show(section, '<div class="hx-error"><ul>' + c.problems.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ul></div>"); return; }
       var btn = form.querySelector('button[type="submit"]');
@@ -179,6 +189,10 @@
         if (data.ok) {
           lastText = data.text || "";
           show(section, markdown(lastText));
+          if (submittedRevision === resultRevision && lastText.trim()) {
+            form.helixResult = { inputs: JSON.parse(JSON.stringify(c.input)), text: lastText };
+            document.dispatchEvent(new CustomEvent('helix:result', { detail: form.helixResult }));
+          }
           // A2.4: say so when this answer came from the made-up example (R10-16: hidden again as soon as the visitor edits the form)
           var exNote = section.querySelector("[data-example-note]");
           var fromEx = form.getAttribute("data-from-example") === "1";
