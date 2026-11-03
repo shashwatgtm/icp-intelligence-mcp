@@ -226,3 +226,27 @@ for(const [text,expected] of [
  ['We sell software from invoices and forms in India.',['IN']],
  ['We sell software from Singapore suppliers in India.',['IN']],
 ])test(text,()=>assert.deepEqual(readRegionContext({product_description:text}).regions.flatMap(r=>r.countries).sort(),expected));
+
+// Lane P: seller offerings, market exclusions and transaction geography.
+for(const [name,text,expected] of [
+ ['M077 denied first','We do not sell lending software in India. We sell warehouse management software to warehouse operators in Singapore.',[['SG','logistics-tech','warehousing']]],
+ ['M077 denied last','We sell warehouse management software to warehouse operators in Singapore. We do not sell lending software in India.',[['SG','logistics-tech','warehousing']]],
+ ['M078 two offerings','We sell lending software in India. We sell managed SOC services in Singapore.',[['IN','fintech','lending'],['SG','cybersecurity','soc-services']]],
+ ['M078 opposite order','We sell managed SOC services in Singapore. We sell lending software in India.',[['IN','fintech','lending'],['SG','cybersecurity','soc-services']]],
+ ['M087 denied wealth','We do not sell wealth management software in United Arab Emirates. We sell payments software in India.',[['IN','fintech',null]]],
+ ['M087 two fintech products','We sell wealth management software in United Arab Emirates. We sell payments software in India.',[['IN','fintech',null],['AE','fintech','wealth-investment']]],
+ ['M097 inability','We sell lending software in India. We cannot sell in Singapore.',[['IN','fintech','lending']]],
+ ['M098 denomination','We sell lending software in Singapore under contracts denominated in INR.',[['SG','fintech','lending']]],
+ ['M098 receipt account','We sell lending software in Singapore. We receive payments into our India bank account.',[['SG','fintech','lending']]],
+ ['M099 membership','We sell lending software in the UK. The UK is not an EU member.',[['GB','fintech','lending']]],
+])test(`Lane P ${name}`,()=>{
+ const args={product_description:text};
+ const result=readRegionContext(args);
+ const actual=result.regions.map(r=>[r.countries[0],r.vertical_id,r.subtype_id]);
+ assert.deepEqual(actual,expected);
+ for(let i=0;i<2;i++)assert.deepEqual(readRegionContext(args),result);
+});
+test('M086 frozen crisis industry fixes regional vertical',()=>{
+ const match=readRegionContext({industry:'vertical_saas',potential_crises:'We sell HR and payroll built for one industry in India. The potential crisis is a service outage.'}).regions[0];
+ assert.equal(match.vertical_id,'vertical-saas');
+});

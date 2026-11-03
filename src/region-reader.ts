@@ -119,14 +119,14 @@ function marketText(text:string,all:Clue[]):string {
  const currencies=all.filter(c=>c.kind==='currency').map(c=>escaped(c.value)).join('|');
  // Billing units describe a transaction, not the market where it happens.
  const billing=new RegExp('\\b(?:invoice|invoices|invoicing|bill|bills|billing)\\s+in\\s+(?:'+currencies+')(?![\\p{L}\\p{N}_])','giu');
- const clean=normalize(text).replace(/"[^"\n]*"|“[^”\n]*”|(?<![\p{L}\p{N}])'[^\n]*?'(?![\p{L}\p{N}])/gu,'').replace(billing,'');
+ const clean=normalize(text).replace(/\b(?:under\s+)?contracts?\s+(?:denominated|priced)\s+in\s+[^.;!?]+|\b(?:receiv(?:e|ing)\s+(?:our\s+)?payments?\s+into|paid\s+into)\s+[^.;!?]+|\b(?:our|the)\s+[^.;!?]*?bank\s+account\b/gi,'').replace(/"[^"\n]*"|“[^”\n]*”|(?<![\p{L}\p{N}])'[^\n]*?'(?![\p{L}\p{N}])/gu,'').replace(billing,'');
  return (clean.match(/[^.!?\n]+[.!?]?/g)||[]).map(sentence=>{
   // A buyer buying from a vendor names the destination before the vendor's office.
   const purchase=sentence.match(/\bbuy(?:ing|s)?\b[^.;!?]*?\bfrom\b/i);
   if(purchase)return sentence.slice(0,purchase.index!+purchase[0].lastIndexOf('from'));
   const m=sentence.match(/\b(?:sell(?:ing|s)?|sold|expand(?:s|ing)?|enter(?:s|ing)?|target(?:s|ing)?|serv(?:es?|ing))\b/i);
   if(m){
-   const qualifier=sentence.slice(0,m.index).match(/\b(?:not|never|no longer|stopped|ceased|used to|formerly|previously|historically|if|may|might|could|perhaps|maybe|considering|should we|would we|can we|competitor|rival)[^,;.!?]*$/i)?.[0]||'';
+   const qualifier=sentence.slice(0,m.index).match(/\b(?:not|never|no longer|stopped|ceased|used to|formerly|previously|historically|if|may|might|could|cannot|perhaps|maybe|considering|should we|would we|can we|competitor|rival)[^,;.!?]*$/i)?.[0]||'';
    // A source office following from is not a selling destination, in either order.
    const places=all.filter(c=>['region','country','city','state'].includes(c.kind)&&(!/^[A-Z]{2,4}$/.test(c.value)||['UK','UAE','USA'].includes(c.value))).map(c=>escaped(c.value)).join('|');
    const place='(?:'+places+')';
@@ -141,26 +141,34 @@ function marketText(text:string,all:Clue[]):string {
    });
    return qualifier+destination;
   }
+  if(/\b(?:not\s+(?:an?\s+)?(?:EU|European Union)\s+member|(?:EU|European Union)\s+membership)\b/i.test(sentence))return '';
   // Identity and reference evidence alone cannot establish a selling destination.
   if(/\b(?:(?:company|business|product|brand)\s+(?:is\s+)?(?:called|named)|(?:is|was)\s+(?:our|the)\s+(?:company|business|product|brand)\s+name|(?:our|the)\s+(?:reference\s+(?:customer|client)|cloud\s+(?:vendor|provider)|suppliers?)\b)/i.test(sentence))return '';
   return sentence.replace(/\b(?:our|the)\s+(?:company|business|product|brand)(?:'s)?\s+name\s+(?:is|:)\s+[^,;.]+/gi,'').replace(/\b(?:based|headquartered|located|founded)\s+in\s+[^,;.]+/gi,'');
  }).join(' ');
 }
 const US_STATES:Record<string,string>={Alabama:'AL',Alaska:'AK',Arizona:'AZ',Arkansas:'AR',California:'CA',Colorado:'CO',Connecticut:'CT',Delaware:'DE',Florida:'FL',Georgia:'GA',Hawaii:'HI',Idaho:'ID',Illinois:'IL',Indiana:'IN',Iowa:'IA',Kansas:'KS',Kentucky:'KY',Louisiana:'LA',Maine:'ME',Maryland:'MD',Massachusetts:'MA',Michigan:'MI',Minnesota:'MN',Mississippi:'MS',Missouri:'MO',Montana:'MT',Nebraska:'NE',Nevada:'NV','New Hampshire':'NH','New Jersey':'NJ','New Mexico':'NM','New York':'NY','North Carolina':'NC','North Dakota':'ND',Ohio:'OH',Oklahoma:'OK',Oregon:'OR',Pennsylvania:'PA','Rhode Island':'RI','South Carolina':'SC','South Dakota':'SD',Tennessee:'TN',Texas:'TX',Utah:'UT',Vermont:'VT',Virginia:'VA',Washington:'WA','West Virginia':'WV',Wisconsin:'WI',Wyoming:'WY'};
+/** Bind product evidence to its affirmative selling clause, before subtype selection. */
+export function sellerProductForMarket(args:unknown,market?:string):string[] {
+ const all=clues(),f=fragments(args),local:string[]=[],general:string[]=[];
+ for(const text of f.seller)for(const clause of normalize(text).split(/[.!?\n;]+|(?:,\s*|\b(?:but|however|whereas|while|and)\s+)(?=(?:we\s+|(?:now\s+)?sell\b|our\s+(?:company|business)\s+))/i)){
+  if(!clause.trim())continue;
+  if(/\b(?:not|never|cannot|no longer|stopped|ceased|used to|formerly|previously|historically|may|might|could)\s+(?:(?:currently|actively|now|yet|only)\s+)*(?:sell(?:ing|s)?|sold|serve|offer|provide|target|operate)\b|\b(?:competitor|rival)\b|\bif\s+we\b/i.test(clause))continue;
+  const clean=marketText(clause,all),reading=scan([clean],all);
+  const yes=reading.found.filter(m=>m.state==='yes');
+  if(yes.some(m=>market===m.clue.country||market===m.clue.region))local.push(clause);
+  else if(!reading.found.length&&!reading.unresolved.length)general.push(clause);
+ }
+ // General product descriptions can accompany a dedicated market field. Never use
+ // an offering assigned only to another country as the fallback for this market.
+ return local.length?local:general;
+}
 export function readRegionContext(args:unknown):RegionReading {
  const f=fragments(args),all=clues();
  const explicit=scan(f.market,all),seller=scan(f.seller.map(text=>marketText(text,all)),all);
  // Customer location alone is not evidence that the seller is selling there.
  // A dedicated market field wins over incidental locations in the description.
  const chosen=explicit.found.length||explicit.unresolved.length?explicit:seller;
- const sector=explainSector({seller:f.seller,buyer:f.buyer});
- const inferred=sector.source==='seller'?sector.vertical:null;
- // The existing reviewed selector fixes the vertical, never an inferred sub industry.
- const selected=args&&typeof args==='object'&&!Array.isArray(args)?(args as Record<string,unknown>).your_sector:undefined;
- const selectedId=typeof selected==='string'?selected.replace(/_/g,'-'):null;
- const validSelection=selected==='other'||REGION_TAXONOMY.verticals.some(v=>v.id===selectedId);
- const v=validSelection?(selected==='other'?null:inferred?.id===selectedId?inferred:{id:selectedId!,subtype:undefined}):inferred;
- const subtype=v?.subtype?REGION_TAXONOMY.subtypes.find(s=>s.id===v.subtype||s.name===v.subtype)?.id||null:null;
  const regions:RegionMatch[]=[];
  for(const r of REGION_CHOICES){
   const mentions=chosen.found.filter(m=>m.clue.region===r.id);
@@ -174,6 +182,15 @@ export function readRegionContext(args:unknown):RegionReading {
    const states=[...new Set(affirmative.filter(m=>m.clue.country===country&&m.clue.kind==='state').map(m=>m.clue.jurisdiction!))];
    for(const state of states.length?states:[null]){
     const jurisdictions=country?[country,...(state?[state]:[])]:[];
+    const product=sellerProductForMarket(args,country||r.id);
+    const sector=explainSector({seller:product,buyer:f.buyer});
+    const inferred=sector.source==='seller'?sector.vertical:null;
+    const input=args&&typeof args==='object'&&!Array.isArray(args)?args as Record<string,unknown>:{};
+    const selected=input.your_sector??input.industry;
+    const selectedId=typeof selected==='string'?selected.replace(/_/g,'-'):null;
+    const validSelection=selected==='other'||REGION_TAXONOMY.verticals.some(v=>v.id===selectedId);
+    const v=validSelection?(selected==='other'?null:inferred?.id===selectedId?inferred:{id:selectedId!,subtype:undefined}):inferred;
+    const subtype=v?.subtype?REGION_TAXONOMY.subtypes.find(s=>s.id===v.subtype||s.name===v.subtype)?.id||null:null;
     regions.push({region_id:r.id,countries:country?[country]:[],jurisdictions,evidence,vertical_id:v?.id||null,subtype_id:subtype});
    }
   }

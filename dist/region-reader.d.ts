@@ -12,6 +12,8 @@ export interface RegionReading {
     regions: RegionMatch[];
     unresolved_hints: string[];
 }
+/** Bind product evidence to its affirmative selling clause, before subtype selection. */
+export declare function sellerProductForMarket(args: unknown, market?: string): string[];
 export declare function readRegionContext(args: unknown): RegionReading;
 export declare function regionNotes(args: unknown): string;
 //# sourceMappingURL=region-reader.d.ts.map
