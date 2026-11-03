@@ -15,6 +15,9 @@ for(const seed of seeds){
  const field=alpha?(seed.tool==='epic_audit'?'challenge':'gtm_challenge'):revenue?'your_solution':pkg.name.includes('icp-intelligence')?'product_category':fields[seed.tool];
  const args=text=>{const a={...seed.args,[field]:text};delete a.your_sector;if(alpha||seed.tool==='crisis_planner')a.industry='fintech';return a;};
  for(const [id,input,control,headings] of [
+  ['M106 receipts then selling','We receive payments into our India bank account and sell lending software in Singapore.','We sell lending software in Singapore.',['Southeast Asia · Singapore']],
+  ['M107 another denied product','We sell lending software in India. We do not sell payment gateway software in India.','We sell lending software in India.',['India']],
+  ['M107 denied product first','We do not sell payment gateway software in India. We sell lending software in India.','We sell lending software in India.',['India']],
   ['M077 denied offering','We do not sell wealth management software in UAE. We sell payment gateway software in India.','We sell payment gateway software in India.',['India']],
   ['M077 reversed','We sell payment gateway software in India. We do not sell wealth management software in UAE.','We sell payment gateway software in India.',['India']],
   ['M097 inability','We sell lending software in India. We cannot sell in Singapore.','We sell lending software in India.',['India']],

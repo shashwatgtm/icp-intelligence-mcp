@@ -481,7 +481,7 @@ function isObjection(text) {
 }
 // Employee ranges typed in a text ("300 to 3,000 employees", "200-500 employees").
 function sizesIn(text) {
-    return [...new Set((String(text).match(/\b\d[\d,]*\s*(?:to|-|–)\s*\d[\d,]*\s+employees\b|\b(?:under|over|more than|fewer than)\s+\d[\d,]*\s+employees\b|\b\d[\d,]*\+\s+employees\b/gi) || []).map((x) => x.trim()))];
+    return [...new Set((String(text).match(/\b\d[\d,]*\s*(?:to|-|–)\s*\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b|\b(?:under|over|more than|fewer than)\s+\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b|\b\d[\d,]*\+\s+(?:employees?|staff(?: members?)?)\b|\b\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b/gi) || []).map((x) => x.trim()))];
 }
 // ============================================================================
 // Run 20 round 1 (quality, owner decision D92): helpers that read the user's own sentences in parts, so no input is pasted into a
@@ -2878,10 +2878,10 @@ ${results.length > 0 ? results.map(([value, count], i) => `${i + 1}. **${shortTe
 ${claims.length ? `\n**Claims and recognition in your notes** (seller claims and testimonials: statements from the seller's own pages, quotes from the seller's customers or awards, not outcomes a customer reported to you in an interview; use them as proof points only after a customer confirms them):\n${claims.map(([value, count]) => `- ${shortText(value, 300)} (${of(count)})`).join('\n')}\n` : ''}
 **ICP Implication**: ${results.length ? 'Treat these as reported claims to verify. Do not lead with an unmeasured or unconfirmed outcome; obtain its source, scope and date first' : 'Collect customer outcomes before you lead with value in messaging'}
 
-### Champion Roles
+### Interview Roles to Validate
 ${topRoles.length > 0 ? topRoles.map(([role, count], i) => `${i + 1}. **${role}**: ${of(count)}`).join('\n') : '- No roles captured'}
 ${tieNote(topRoles, 'role')}
-**ICP Implication**: Focus outreach on these titles
+**ICP Implication**: These are interview roles, not confirmed champions. Validate advocacy and purchasing authority before assigning a buying role.
 
 ---
 
@@ -2899,7 +2899,7 @@ ${allQuotes.length ? allQuotes.slice(0, 5).map((qt, i) => `
 
 ### Add to ICP
 Based on patterns, your ideal customer:
-${topPains[0] ? `- Experiences: ${q(shortText(topPains[0][0], 300))}\n` : ''}${topTriggers[0] ? `- Is triggered by: ${topTriggers[0][0]}\n` : ''}${topRoles[0] ? (topRoles[1] && topRoles[1][1] === topRoles[0][1] ? `- Champion is one of: ${andList(topRoles.filter(r => r[1] === topRoles[0][1]).map(r => r[0]))} (no single leading role yet)\n` : `- Champion is: ${topRoles[0][0]}\n`) : ''}${results[0] ? `- Seeks outcome: ${shortText(results[0][0], 300)}\n` : ''}
+${topPains[0] ? `- Experiences: ${q(shortText(topPains[0][0], 300))}\n` : ''}${topTriggers[0] ? `- Is triggered by: ${topTriggers[0][0]}\n` : ''}${topRoles[0] ? (topRoles[1] && topRoles[1][1] === topRoles[0][1] ? `- Interview role candidates include: ${andList(topRoles.filter(r => r[1] === topRoles[0][1]).map(r => r[0]))} (no single leading role yet)\n` : `- Interview role to validate: ${topRoles[0][0]}\n`) : ''}${results[0] ? `- Seeks outcome: ${shortText(results[0][0], 300)}\n` : ''}
 ### Messaging Updates
 Based on customer language, update:
 ${topPains[0] ? `- **Pain messaging**: ${q(shortText(topPains[0][0], 300))}\n` : ''}${results[0] ? `- **Value messaging**: ${q(shortText(results[0][0], 300))}\n` : (allQuotes.length ? '- **Value messaging**: none yet as outcomes; the customer statements under Key Quotes are the starting point, once the customer agrees to be quoted\n' : '- **Value messaging**: none yet; your value statements are claims, not customer outcomes\n')}

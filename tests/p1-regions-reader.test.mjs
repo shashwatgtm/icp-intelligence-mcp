@@ -4,8 +4,9 @@ import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
 import {readFileSync,existsSync} from 'node:fs';
 const root=resolve(process.env.REGION_TEST_REPO||(existsSync('src/region-reader.ts')?'.':'icp'));
-const mode=JSON.parse(readFileSync(resolve(root,'package.json'),'utf8')).type==='module'?'dist':'src';
-const modulePath=name=>resolve(root,mode,name+(mode==='dist'?'.js':'.ts'));
+const pkg=JSON.parse(readFileSync(resolve(root,'package.json'),'utf8'));
+const mode=pkg.name.includes('gtm-alpha')?'netlify/lib':pkg.type==='module'?'dist':'src';
+const modulePath=name=>resolve(root,mode,name+(mode==='src'?'.ts':'.js'));
 const {readRegionContext,regionNotes,NO_REGION_SUFFIX}=await import(pathToFileURL(modulePath('region-reader')));
 const {REGION_CHOICES,REGION_TAXONOMY}=await import(pathToFileURL(modulePath('regions')));
 const ids=args=>readRegionContext(args).regions.map(r=>r.region_id);
@@ -249,4 +250,29 @@ for(const [name,text,expected] of [
 test('M086 frozen crisis industry fixes regional vertical',()=>{
  const match=readRegionContext({industry:'vertical_saas',potential_crises:'We sell HR and payroll built for one industry in India. The potential crisis is a service outage.'}).regions[0];
  assert.equal(match.vertical_id,'vertical-saas');
+});
+
+for(const text of ['We sell lending software in Singapore under contracts denominated in INR and we sell managed SOC services in India.','We sell lending software in Singapore and receive payments into our India bank account but we sell managed SOC services in the UK.'])test('Transaction geography preserves later affirmative sales: '+text,()=>{
+ const result=readRegionContext({product_description:text});
+ const expected=text.includes('in the UK')?['GB','SG']:['IN','SG'];assert.deepEqual(result.regions.flatMap(r=>r.countries).sort(),expected);
+});
+
+for(const text of ['We sell lending software in India and managed SOC services in Singapore.','We sell managed SOC services in Singapore and lending software in India.'])test('M078 one sentence keeps country offerings separate: '+text,()=>{
+ assert.deepEqual(readRegionContext({product_description:text}).regions.map(r=>[r.countries[0],r.vertical_id,r.subtype_id]),[['IN','fintech','lending'],['SG','cybersecurity','soc-services']]);
+});
+
+for(const [text,expected] of [
+ ['We receive payments into our India bank account and sell lending software in Singapore.',['SG']],
+ ['We receive payments into our India bank account and we sell lending software in Singapore.',['SG']],
+ ['We sell lending software in India. We do not sell payment gateway software in India.',['IN']],
+ ['We do not sell payment gateway software in India. We sell lending software in India.',['IN']],
+ ['We sell lending software in India and we do not sell payment gateway software in India.',['IN']],
+ ['We sell lending software in India. We do not sell lending software in India.',[]],
+ ['We sell lending software in India. We do not sell in India.',[]],
+ ['We sell lending software in India. Excluded markets: India.',[]],
+])test('M106/M107 offering and transaction boundary: '+text,()=>{
+ const args={product_description:text},result=readRegionContext(args);
+ assert.deepEqual(result.regions.flatMap(r=>r.countries).sort(),expected);
+ if(expected.length)assert.equal(result.regions[0].subtype_id,'lending');
+ assert.deepEqual(readRegionContext(args),result);assert.deepEqual(readRegionContext(args),result);
 });

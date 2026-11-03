@@ -2206,8 +2206,16 @@ function firstIn(whole: string, words: string[]): number {
   return at.length ? Math.min(...at) : Infinity;
 }
 
+
+/** Remove explicitly excluded seller offerings before category and subtype reads. */
+function affirmativeSectorArgs(args:unknown[]):unknown[] {
+ const clean=(text:string)=>{const parts=text.split(/(?<=[.!?])\s+|\n+|;|(?:,\s*|\b(?:but|however|and)\s+)(?=we\s+)/i);const kept=parts.filter(clause=>! /\bwe\s+(?:(?:do(?:es)?\s+not|don['’]t|never|cannot|can['’]t|no longer|stopped|ceased|used to|formerly|previously|may|might|could)\s+)(?:(?:currently|actively|now|yet)\s+)*(?:sell(?:ing|s)?|sold|offer|provide|serve)\b/i.test(clause));return kept.length===parts.length?text:kept.join(' ');};
+ return args.map(arg=>typeof arg==='string'?clean(arg):isReaderInput(arg)?{...arg,seller:texts(arg.seller).map(clean)}:arg);
+}
+
 /** The sector read, with the words that decided it and where they came from ('seller' or 'buyer'). */
 export function explainSector(...args: unknown[]): { vertical: Vertical | null; source: 'seller' | 'context' | 'role' | 'buyer' | null; strong: string[]; weak: string[] } {
+  args=affirmativeSectorArgs(args);
   const { seller, buyer, context, role } = sides(args);
   if (sellerSectorLabel(seller).state === 'negated') return { vertical:null,source:null,strong:[],weak:[] };
   // The product category noun decides when it comes BEFORE the first strong word of a different sector ("customer service software with AI agents"); otherwise the usual reading stands.

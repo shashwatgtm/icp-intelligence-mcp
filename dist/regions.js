@@ -3713,7 +3713,7 @@ exports.REGION_DATA = [
                             "applies_when": "MAS nonbank outsourcing guidelines; a supervisory expectation, not a universal vendor licence."
                         },
                         {
-                            "text": "Malaysia: where the insurer or takaful operator relies on customer consent for disclosure, preserve explicit consent and withdrawal evidence. Statutory permitted disclosures require a separate basis check.",
+                            "text": "Malaysia: licensed insurers and takaful operators must maintain written policies and procedures covering the customer information lifecycle.",
                             "kind": "legal",
                             "source_ids": [
                                 "I:MY-CUSTOMER-DATA"
@@ -3721,7 +3721,7 @@ exports.REGION_DATA = [
                             "jurisdictions": [
                                 "MY"
                             ],
-                            "applies_when": "Customer information within the BNM policy and consent based disclosure scope."
+                            "applies_when": "BNM Management of Customer Information and Permitted Disclosures, issued 31 October 2025: Part B, paragraphs 2.1, 5.2 and 10.6. Part C applies only to its separately defined financial institutions; do not infer insurer consent requirements from it."
                         }
                     ],
                     "buyer_language": [],
@@ -12892,19 +12892,7 @@ exports.REGION_DATA = [
                 "inheritance_note": "Country scoped vertical context supplements the defaults. Apply only notes for the named country and activity.",
                 "context": {
                     "decision_approvers": [],
-                    "sector_regulator": [
-                        {
-                            "text": "United States: a cloud provider handling ePHI for a HIPAA covered entity or business associate needs the applicable business associate agreement and security risk analysis.",
-                            "kind": "legal",
-                            "source_ids": [
-                                "J:US-HIPAA-CLOUD"
-                            ],
-                            "jurisdictions": [
-                                "US"
-                            ],
-                            "applies_when": "Healthcare example only for HIPAA relationships and ePHI; not all health apps or every vertical SaaS customer."
-                        }
-                    ],
+                    "sector_regulator": [],
                     "procurement_payment": [],
                     "data_privacy": [
                         {
@@ -15413,8 +15401,8 @@ exports.REGION_SOURCES = {
         "publication_date": "2025-10-31",
         "accessed_date": "2026-11-03",
         "primary_source": "true",
-        "claim_scope": "Customer information disclosure consent evidence and withdrawal when relying on consent",
-        "limitations": "Primary PDF read. Scope and permitted statutory disclosures must be checked; consent is not asserted as the only disclosure basis."
+        "claim_scope": "Part B customer information lifecycle policies for FSPs; Part C permitted disclosure controls only for defined financial institutions.",
+        "limitations": "Primary PDF checked 3 November 2026. Paragraphs 2.1, 2.2 and 5.2 distinguish FSPs from financial institutions. Insurer and takaful lifecycle policies use Part B paragraph 10.6; do not extend Part C consent conditions to them."
     },
     "I:MY-CYBER-APPLICATION": {
         "source_id": "I:MY-CYBER-APPLICATION",
@@ -18263,19 +18251,6 @@ exports.REGION_SOURCES = {
         "claim_scope": "Provider selection security contracts monitoring feature verification",
         "limitations": "Guidance from enforcement cases, not universal certification."
     },
-    "J:US-HIPAA-CLOUD": {
-        "source_id": "J:US-HIPAA-CLOUD",
-        "region_id": "north-america",
-        "jurisdiction": "US",
-        "title": "HIPAA cloud service ePHI guidance",
-        "publisher": "HHS",
-        "url": "https://www.hhs.gov/hipaa/for-professionals/faq/may-a-hipaa-covered-entity-or-business-associate-use-cloud-service-to-store-or-process-ephi/index.html",
-        "publication_date": "",
-        "accessed_date": "2026-11-03",
-        "primary_source": "true",
-        "claim_scope": "Business associate agreement and risk analysis",
-        "limitations": "Covered relationships and ePHI only, not all health apps."
-    },
     "J:US-INSURANCE": {
         "source_id": "J:US-INSURANCE",
         "region_id": "north-america",
@@ -18663,7 +18638,7 @@ exports.REGION_TAXONOMY = {
 };
 exports.REGION_GENERATION = {
     "schema_version": "1.0.0",
-    "data_sha256": "1b6c258e8f87fe58a4b29b5fc343e78b564f6b309f0735daa225b0998c95175d",
+    "data_sha256": "c2ce0162b3d373ae3d37da14d6ac884a0513c9390cb37425c26e8eb6a4b7ad2c",
     "missing_regions": [],
     "complete": true,
     "coverage": {
