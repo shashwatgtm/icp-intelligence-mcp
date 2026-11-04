@@ -11,7 +11,10 @@ const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 const widget_model_ts_1 = require("./widget-model.js");
 const widget_document_ts_1 = require("./widget-document.js");
 const widget_registry_ts_1 = require("./widget-registry.js");
-const uri = (name) => `ui://helix-wave3-${build_profile_ts_1.BUILD_PROFILE.buildHash}/${name}.html`;
+// Keep the reviewed slice resource address stable while its widget document is unchanged.
+// Production eb9bfebd6fbcae9e84c051424f974d5dc773d018 uses this address; unrelated reader builds must not change tools/list.
+const resourceVersion = build_profile_ts_1.BUILD_PROFILE.profile === "slice" ? "87acf7c673f3" : build_profile_ts_1.BUILD_PROFILE.buildHash;
+const uri = (name) => `ui://helix-wave3-${resourceVersion}/${name}.html`;
 function attachWidgets(server) {
     const selected = build_profile_ts_1.BUILD_PROFILE.profile === "wave" ? widget_registry_ts_1.WIDGETS : Object.fromEntries(Object.entries(widget_registry_ts_1.WIDGETS).filter(([name]) => name === "tam_sam_som_calculator"));
     if (!Object.keys(selected).length)

@@ -1,0 +1,819 @@
+{
+  "production_commit": "eb9bfebd6fbcae9e84c051424f974d5dc773d018",
+  "tools_list": {
+    "tools": [
+      {
+        "name": "icp_deep_dive",
+        "description": "Analyze customer data to detect ICP patterns (industry, size, deal size, sales cycle, tech stack, triggers, champion roles). Ties are named as ties, the budget is the ACV range seen in your customers, and sector notes are added when your inputs name one of the supported sectors",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "customers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "industry": {
+                    "type": "string"
+                  },
+                  "size": {
+                    "type": "string"
+                  },
+                  "acv": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "sales_cycle_days": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "tech_stack": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "buying_trigger": {
+                    "type": "string"
+                  },
+                  "champion_title": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "List of customer objects with available attributes"
+            },
+            "customer_descriptions": {
+              "type": "string",
+              "description": "Alternative: Describe your best customers in text format"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "What type of product you sell"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            },
+            "business_model": {
+              "type": "string",
+              "enum": [
+                "saas",
+                "services",
+                "connectivity",
+                "transactions",
+                "marketplace",
+                "hardware_software",
+                "investment"
+              ],
+              "description": "Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out"
+            }
+          }
+        },
+        "title": "ICP Deep Dive",
+        "annotations": {
+          "title": "ICP Deep Dive",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "icp_scoring_model",
+        "description": "Create a lead qualification scoring template: criteria with example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust. Your success pattern is matched to your criteria; it does not set the weights. Sector notes are added when your inputs name one of the supported sectors Ask for held-back test counts and the pre-agreed stop rule when a model has been tested.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scoring_criteria": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "criterion": {
+                    "type": "string"
+                  },
+                  "importance": {
+                    "type": "string",
+                    "enum": [
+                      "critical",
+                      "important",
+                      "nice_to_have"
+                    ]
+                  },
+                  "values": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "description": "Criteria for scoring with importance levels"
+            },
+            "correlation_direction": {
+              "type": "string",
+              "enum": [
+                "positive",
+                "negative",
+                "unknown"
+              ],
+              "description": "Optional confirmed direction of the success pattern. Ask the user whether the named values correlate with better or worse outcomes before filling this. Overrides word reading; unknown withholds a top-points recommendation."
+            },
+            "success_correlation": {
+              "type": "string",
+              "description": "What correlates with success? (e.g., \"deals with VP Sales champion close 2x faster\")"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell, as a product category, so the scoring notes use your sector"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            },
+            "held_back_test": {
+              "type": "object",
+              "description": "Optional results on deals held back before tuning. Ask for the counts and the stop rule set before the test. A missed rule holds the scoring model; do not tune on this set.",
+              "properties": {
+                "wins_tested": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "wins_passing": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "non_wins_tested": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "non_wins_passing": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "minimum_win_pass_percent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "maximum_non_win_pass_percent": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "required": [
+                "wins_tested",
+                "wins_passing",
+                "non_wins_tested",
+                "non_wins_passing",
+                "minimum_win_pass_percent",
+                "maximum_non_win_pass_percent"
+              ]
+            }
+          }
+        },
+        "title": "ICP Scoring Model",
+        "annotations": {
+          "title": "ICP Scoring Model",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "buyer_group_analyzer",
+        "description": "Map the buyer group for a deal: the champion you name, your known stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role's concern and message prompts, an influence map and discovery questions. Sector roles and questions are added when your inputs name one of the supported sectors",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "deal_size": {
+              "type": "string",
+              "description": "ACV range (e.g., \"$50K-100K\")"
+            },
+            "target_company_size": {
+              "type": "string",
+              "description": "Company size (e.g., \"500-1000 employees\")"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "What you sell"
+            },
+            "known_stakeholders": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Roles you know are involved. A title suggests a role, not confirmed authority. Confirm who owns this purchase budget."
+            },
+            "confirmed_budget_owner": {
+              "type": "string",
+              "description": "Optional confirmed fact: the person or role who owns the budget for this purchase. Ask the user; do not infer from title. Overrides candidate ordering."
+            },
+            "typical_champion": {
+              "type": "string",
+              "description": "Your typical champion role"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            },
+            "business_model": {
+              "type": "string",
+              "enum": [
+                "saas",
+                "services",
+                "connectivity",
+                "transactions",
+                "marketplace",
+                "hardware_software",
+                "investment"
+              ],
+              "description": "Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out"
+            }
+          },
+          "required": [
+            "product_category"
+          ]
+        },
+        "title": "Buyer Group Analyzer",
+        "annotations": {
+          "title": "Buyer Group Analyzer",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "tam_sam_som_calculator",
+        "description": "Use when someone says size my market, market sizing, or how big is my market. Before calling, ask what they sell, how many companies could buy and the annual contract value; never estimate these. Clarify what unlabelled numbers mean. Calculate TAM, SAM and SOM from supplied figures, not market research. Values are displayed in USD only; for rupees ask for a user-confirmed USD amount, never relabel or invent a conversion. Rates use 0 to 100 percentage points: ask whether 0.2 means 0.2% or a fraction meaning 20%. Omitted rates are labelled examples.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "total_potential_companies": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Number of companies that could buy, supplied by the user or a source they identify. Ask if missing; never estimate."
+            },
+            "average_contract_value": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Annual contract value in USD, confirmed by the user. This tool displays dollars only. Do not pass rupees as dollars or invent an exchange rate; ask for a confirmed USD amount."
+            },
+            "icp_percentage": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Percentage of potential companies that match the ideal customer profile, from 0 to 100. A value of 0.2 means 0.2%, not 20%. Clarify fraction notation first; convert an explicitly confirmed fraction to percentage points. Omitted: 30%, labelled as an example."
+            },
+            "year1_market_share_target": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Year 1 share as percentage points from 0 to 100. Clarify fractions: 0.03 means 0.03%, not 3%. Use only a confirmed value; omitted: 3%, labelled as an example."
+            },
+            "data_sources": {
+              "type": "string",
+              "description": "Where you got your numbers (for documentation)"
+            },
+            "segment_name": {
+              "type": "string",
+              "description": "Name of the market segment"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Ask what they sell before calling. Use their words for the product or service; do not invent a category. Used for context, not arithmetic."
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          },
+          "required": [
+            "total_potential_companies",
+            "average_contract_value"
+          ]
+        },
+        "title": "TAM SAM SOM Calculator",
+        "annotations": {
+          "title": "TAM SAM SOM Calculator",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "marketSizing",
+            "plainText"
+          ],
+          "properties": {
+            "plainText": {
+              "type": "string"
+            },
+            "marketSizing": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "figures",
+                    "targets",
+                    "rates"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "market-sizing"
+                    },
+                    "figures": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "key",
+                          "label",
+                          "value",
+                          "display",
+                          "example"
+                        ],
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "example": {
+                            "type": "boolean"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "targets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "label",
+                          "value",
+                          "display",
+                          "example"
+                        ],
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "example": {
+                            "type": "boolean"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "rates": {
+                      "type": "object",
+                      "required": [
+                        "icp",
+                        "share"
+                      ],
+                      "properties": {
+                        "icp": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "share": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "reason"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "unavailable"
+                    },
+                    "reason": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "_meta": {
+          "ui": {
+            "resourceUri": "ui://helix-wave3-87acf7c673f3/tam_sam_som_calculator.html",
+            "visibility": [
+              "model",
+              "app"
+            ]
+          },
+          "openai/outputTemplate": "ui://helix-wave3-87acf7c673f3/tam_sam_som_calculator.html"
+        }
+      },
+      {
+        "name": "lookalike_signal_generator",
+        "description": "Generate platform-specific targeting criteria and search queries from your firmographics, technographics, champion titles and buying triggers (generates criteria, not data). Each trigger gets its own signal; search keywords come from what you sell and the sector; platforms limits the sections",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "icp_firmographics": {
+              "type": "object",
+              "properties": {
+                "industries": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "company_sizes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "locations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "funding_stages": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Firmographic criteria"
+            },
+            "icp_technographics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Technologies your ICP typically uses"
+            },
+            "champion_titles": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Job titles of your champions"
+            },
+            "buying_triggers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Events that trigger buying"
+            },
+            "platforms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell (for example \"spend management software\"), used for search keywords and sector notes"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          },
+          "required": [
+            "champion_titles"
+          ]
+        },
+        "title": "Lookalike Signal Generator",
+        "annotations": {
+          "title": "Lookalike Signal Generator",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "account_prioritization",
+        "description": "Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "accounts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "fit_score": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "0 to 100. Left out, 50 is used"
+                  },
+                  "intent_signals": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "0 to 100 (0 scores zero). Left out, 50 is used"
+                  },
+                  "relationship": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "0 to 100, based on existing connections. Left out, 50 is used"
+                  },
+                  "timing": {
+                    "type": "string",
+                    "description": "Buying horizon: now, soon, later or unknown (100, 70, 40 and 50 points respectively). Equivalent phrases are read by clause; denied or conflicting horizons remain unknown. Confirm the horizon with the user."
+                  }
+                }
+              },
+              "description": "List of accounts to prioritize. Each account: name, fit score (0 to 100), intent signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)"
+            },
+            "prioritization_weights": {
+              "type": "object",
+              "properties": {
+                "fit": {
+                  "type": "number"
+                },
+                "intent": {
+                  "type": "number"
+                },
+                "relationship": {
+                  "type": "number"
+                },
+                "timing": {
+                  "type": "number"
+                }
+              },
+              "description": "Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell (for example \"spend management software\"), used for sector notes. The arithmetic does not use it"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          }
+        },
+        "title": "Account Prioritization",
+        "annotations": {
+          "title": "Account Prioritization",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "icp_gap_analysis",
+        "description": "Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "current_customers": {
+              "type": "string",
+              "description": "Description of your current customer base"
+            },
+            "ideal_icp": {
+              "type": "string",
+              "description": "Description of your ideal customer profile"
+            },
+            "current_metrics": {
+              "type": "object",
+              "properties": {
+                "avg_acv": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "avg_sales_cycle": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "win_rate": {
+                  "type": "number"
+                },
+                "churn_rate": {
+                  "type": "number"
+                },
+                "nps": {
+                  "type": "number"
+                }
+              },
+              "description": "Current performance metrics"
+            },
+            "target_metrics": {
+              "type": "object",
+              "properties": {
+                "avg_acv": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "avg_sales_cycle": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "win_rate": {
+                  "type": "number"
+                },
+                "churn_rate": {
+                  "type": "number"
+                },
+                "nps": {
+                  "type": "number"
+                }
+              },
+              "description": "Target performance metrics"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell, used for sector notes"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            },
+            "business_model": {
+              "type": "string",
+              "enum": [
+                "saas",
+                "services",
+                "connectivity",
+                "transactions",
+                "marketplace",
+                "hardware_software",
+                "investment"
+              ],
+              "description": "Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out"
+            }
+          },
+          "required": [
+            "current_customers",
+            "ideal_icp"
+          ]
+        },
+        "title": "ICP Gap Analysis",
+        "annotations": {
+          "title": "ICP Gap Analysis",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "icp_evolution_tracker",
+        "description": "Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP, states a candidate change for each (an addition to test, a disqualifier to test, an implication to check) and writes a draft of the updated ICP, with the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "current_icp": {
+              "type": "string",
+              "description": "Your current ICP definition"
+            },
+            "recent_wins": {
+              "type": "string",
+              "description": "Description of recent successful customers"
+            },
+            "recent_losses": {
+              "type": "string",
+              "description": "Description of recent lost deals"
+            },
+            "market_changes": {
+              "type": "string",
+              "description": "Recent market or competitive changes"
+            },
+            "time_period": {
+              "type": "string",
+              "description": "Time period you are reviewing, in your own words (for example \"last quarter\")"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell, used for sector notes"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          },
+          "required": [
+            "current_icp"
+          ]
+        },
+        "title": "ICP Evolution Tracker",
+        "annotations": {
+          "title": "ICP Evolution Tracker",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      },
+      {
+        "name": "icp_interview_synthesizer",
+        "description": "Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized and key quotes per interview): pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "interview_notes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "customer": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "key_quotes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pain_points": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "buying_triggers": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "value_realized": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "description": "Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze"
+            },
+            "product_category": {
+              "type": "string",
+              "description": "Optional: what you sell, used for sector notes"
+            },
+            "company": {
+              "type": "string",
+              "description": "Optional: your company or product name, so the answer can name it"
+            }
+          }
+        },
+        "title": "ICP Interview Synthesizer",
+        "annotations": {
+          "title": "ICP Interview Synthesizer",
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        }
+      }
+    ]
+  }
+}

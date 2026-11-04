@@ -1,0 +1,27 @@
+name: Release tools verification
+on:
+  push:
+    branches: [release/tools-20261104]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      HELIX_PROFILE: slice
+      WAVE_PAYLOAD: meta
+      WIDGET_UI_DOMAIN: 'on'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Build exactly with the production profile
+        run: npm run build
+      - name: Confirm committed production build
+        run: git diff --exit-code -- src/build-profile.ts dist
+      - name: Run every existing test without changing assertions
+        run: node --test --test-concurrency=1 tests/*.test.mjs
