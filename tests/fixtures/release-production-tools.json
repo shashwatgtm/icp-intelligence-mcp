@@ -439,13 +439,13 @@
         },
         "_meta": {
           "ui": {
-            "resourceUri": "ui://helix-wave3-87acf7c673f3/tam_sam_som_calculator.html",
+            "resourceUri": "ui://helix-wave3-5a0e3e66b85b/tam_sam_som_calculator.html",
             "visibility": [
               "model",
               "app"
             ]
           },
-          "openai/outputTemplate": "ui://helix-wave3-87acf7c673f3/tam_sam_som_calculator.html"
+          "openai/outputTemplate": "ui://helix-wave3-5a0e3e66b85b/tam_sam_som_calculator.html"
         }
       },
       {
