@@ -688,7 +688,7 @@ const tools = {
   // Tool 1: ICP Deep Dive - Pattern Detection from Customer Data
   // ---------------------------------------------------------------------------
   icp_deep_dive: {
-    description: 'Analyze customer data to detect ICP patterns (industry, size, deal size, sales cycle, tech stack, triggers, champion roles). Ties are named as ties, the budget is the ACV range seen in your customers, and sector notes are added when your inputs name one of the supported sectors',
+    description: 'Helps you decide which customers to go after next. You give your best customers, as a list (industry, size, contract value, sales cycle, tech stack, buying trigger, champion title) or in your own words. You get the patterns they share, with ties named as ties, the budget shown as the contract value range seen in your customers, recommendations, and sector notes when your inputs name a supported sector. It works only from what you give and looks nothing up.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -995,7 +995,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
   // Tool 2: ICP Scoring Model - Auto-Weighted Qualification
   // ---------------------------------------------------------------------------
   icp_scoring_model: {
-    description: 'Create a lead qualification scoring template: criteria with example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust. Your success pattern is matched to your criteria; it does not set the weights. Sector notes are added when your inputs name one of the supported sectors',
+    description: 'Helps you decide which leads are worth a seller\'s time. You give the criteria that matter, how important each one is and, if you know it, what goes with success. You get a lead scoring template: example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust, with sector notes when your inputs name a supported sector. Your success pattern is matched to your criteria; it does not set the weights.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1299,7 +1299,7 @@ ${SUGGESTED}
   // Tool 3: Buyer Group Analyzer - Decision Dynamics Mapping
   // ---------------------------------------------------------------------------
   buyer_group_analyzer: {
-    description: 'Map the buyer group for a deal: the champion you name, your known stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role\'s concern and message prompts, an influence map and discovery questions. Sector roles and questions are added when your inputs name one of the supported sectors',
+    description: 'Helps you decide who else must agree before a deal can close. You give what you sell, the deal size, the company size, your champion and any stakeholders you know. You get a buying group map with your stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role\'s concern and message prompts, an influence map and discovery questions, with sector roles and questions when your inputs name a supported sector. Roles from titles are hypotheses to confirm.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1595,7 +1595,7 @@ ${SUGGESTED}
   // Tool 4: TAM/SAM/SOM Calculator - Bottom-Up Market Sizing
   // ---------------------------------------------------------------------------
   tam_sam_som_calculator: {
-    description: 'Calculate TAM/SAM/SOM bottom-up from your company count, ACV, ICP match rate and Year 1 share (calculation framework, not a data source). Sector notes are added when your inputs name one of the supported sectors',
+    description: 'Helps you decide how big your market is, counted bottom up. You give how many companies could buy and your annual contract value in dollars, plus your ICP match rate and year 1 share if you have them. You get TAM, SAM and SOM with the arithmetic and assumptions shown and a summary for an investor deck. It is a calculator, not a data source: a rate you leave out is filled with a labelled example, and sector notes are added when your inputs name a supported sector.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1826,7 +1826,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
   // Tool 5: Lookalike Signal Generator - Platform-Specific Targeting Criteria
   // ---------------------------------------------------------------------------
   lookalike_signal_generator: {
-    description: 'Generate platform-specific targeting criteria and search queries from your firmographics, technographics, champion titles and buying triggers (generates criteria, not data). Each trigger gets its own signal; search keywords come from what you sell and the sector; platforms limits the sections',
+    description: 'Helps you decide how to find more accounts like your best ones. You give your ICP\'s company profile, technologies, champion titles and buying triggers, and optionally what you sell and the platforms you use. You get targeting criteria and search queries for each platform, one signal for each trigger, and search keywords from what you sell and the sector. It writes criteria, not data: it finds no companies or contacts.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -2094,7 +2094,7 @@ ${SUGGESTED}
   // Tool 6: Account Prioritization - Multi-Dimensional Ranking
   // ---------------------------------------------------------------------------
   account_prioritization: {
-    description: 'Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points',
+    description: 'Helps you decide which accounts to work first. You give your accounts with fit, intent and relationship scores from 0 to 100 and a timing, plus optional weights. You get a ranked list from a weighted score, with a tier for each account, the points its timing earned and the factor that added the most points.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -2425,7 +2425,7 @@ ${SUGGESTED}
   // Tool 7: ICP Gap Analysis - Current vs Ideal
   // ---------------------------------------------------------------------------
   icp_gap_analysis: {
-    description: 'Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors',
+    description: 'Helps you decide whether you are selling to the customers you meant to. You give your current customer base, your ideal customer profile and, if you have them, current and target metrics. You get what the ideal profile has that the current base lacks, metric gaps from your own figures, causes to check and actions that fit your business model, with sector notes when your inputs name a supported sector.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -2595,7 +2595,7 @@ ${SUGGESTED}
   // Tool 8: ICP Evolution Tracker - Dynamic ICP Monitoring
   // ---------------------------------------------------------------------------
   icp_evolution_tracker: {
-    description: 'Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP, states a candidate change for each (an addition to test, a disqualifier to test, an implication to check) and writes a draft of the updated ICP, with the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM',
+    description: 'Helps you decide whether your ICP should change after recent wins and losses. You give your current ICP, recent wins, recent losses and market changes. You get a candidate change for each (an addition to test, a disqualifier to test, an implication to check), a draft of the updated ICP, the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -2785,7 +2785,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
   // Tool 9: ICP Interview Synthesizer - Pattern Extraction from Interviews
   // ---------------------------------------------------------------------------
   icp_interview_synthesizer: {
-    description: 'Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized and key quotes per interview): pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed.',
+    description: 'Helps you decide what your customer interviews mean for your ICP. You give structured notes, one per interview: the customer, the role, pain points, buying triggers, value realized and key quotes. You get the pain points, objections, buying triggers, value realized and champion roles across the interviews, quotes kept word for word, discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed.',
     inputSchema: {
       type: 'object',
       properties: {
