@@ -220,19 +220,19 @@
     <div class="crop"><span class="cm tl" aria-hidden="true"></span><span class="cm tr" aria-hidden="true"></span><span class="cm bl" aria-hidden="true"></span><span class="cm br" aria-hidden="true"></span><h1 id="h1">ICP Intelligence docs</h1></div>
     <p class="hx-for"><b>For</b> developers and marketing operations teams. <b>The decision:</b> how to call ICP Intelligence from your own code or assistant.</p>
     <div class="hx-hero-text"><div class="hx10-split-text">
-      <p class="sub">The MCP address, the REST API behind the web forms, and every field of all 9 tools.</p>
+      <p class="sub">This page covers the MCP address, the REST API behind the web forms and every input field of all 9 tools.</p>
       <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-11-02">2 November 2026</time></p>
     </div></div>
   </div>
 </section>
 
 <div class="hx-body">
-<section class="hx-section hx-wash-top" aria-labelledby="try-h"><h2 id="try-h">Try these prompts</h2><div class="hx-panel"><ol><li>Use ICP Intelligence to do a deep dive on these customers for our spend management software: mid-size manufacturers with 300 to 3,000 employees and large field sales teams, IT services firms with heavy travel spend, distributors with many branches.</li><li>Calculate TAM, SAM and SOM with ICP Intelligence: 9,000 potential companies, average contract value $24,000, 25% fit our ICP, year-one share target 1%.</li><li>Map the buyer group for spend management software with ICP Intelligence. Deal size $24,000 ACV, target company size 300 to 3,000 employees, typical champion Finance Controller.</li></ol></div></section>
+<section class="hx-section hx-wash-top" aria-labelledby="try-h"><h2 id="try-h">Try these prompts</h2><div class="hx-panel"><ol><li>Use ICP Intelligence to do a deep dive on these customers for our spend management software: mid-size manufacturers with 300 to 3,000 employees and large field sales teams, IT services firms with heavy travel spend, distributors with many branches.</li><li>Calculate TAM, SAM and SOM with ICP Intelligence: 9,000 potential companies, average contract value $24,000, 25% fit our ICP, year one share target 1%.</li><li>Map the buyer group for spend management software with ICP Intelligence. Deal size $24,000 ACV, target company size 300 to 3,000 employees, typical champion Finance Controller.</li></ol></div></section>
 <section class="hx-section" aria-labelledby="mcp-h">
   <h2 id="mcp-h">MCP server</h2>
   <ul class="hx-prose">
     <li>Address: <code>https://icp-intelligence.gtmhelix.com/mcp</code> (Streamable HTTP, stateless, JSON responses). GET returns 405 by design.</li>
-    <li>Authentication: none. Every tool is marked read-only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
+    <li>Authentication: none. Every tool is marked read only (<code>readOnlyHint: true</code>, <code>destructiveHint: false</code>) and has a title.</li>
     <li>Rate limit: 300 requests per minute per IP address. Server: <code>icp-intelligence-mcp</code> version 1.2.26.</li>
     <li>Limits: 262,144 bytes per call; text fields up to 4,000 characters, except the document field <code>customer_descriptions</code> (ICP Deep Dive), which takes up to 100,000; one call per request (no batches). A call over a limit is refused before the tool runs.</li>
     <li>Local use: <code>npx -y @shashwatgtmalpha/icp-intelligence-mcp</code> runs these tools over stdio (npm can lag behind this site until a new version is published).</li>
@@ -247,7 +247,7 @@
   -d '{&quot;input&quot;: {&quot;customer_descriptions&quot;: &quot;Mid-size manufacturers with 300 to 3,000 employees and large field sales teams; the finance controller buys and the pain is a slow month-end close. Also IT services firms with heavy travel spend, and distributors with many branches.&quot;, &quot;product_category&quot;: &quot;spend management software&quot;}}'</pre></div></div>
   <ul class="hx-prose">
     <li>Errors: 400 with <code>errors</code> (missing or invalid fields), 404 for an unknown tool, 405 for methods other than POST, 413 above 32,000 bytes, 422 when the tool itself refuses the input (<code>ok</code> is false and <code>error</code> holds the tool's message), 429 when the rate limit is reached, 500 if the tool fails.</li>
-    <li>Limits: 30 requests per minute per IP address; the whole request up to 32,000 bytes; top-level text fields up to 6,000 characters and top-level lists up to 50 items.</li>
+    <li>Limits: 30 requests per minute per IP address; the whole request up to 32,000 bytes; top level text fields up to 6,000 characters and top level lists up to 50 items.</li>
     <li>Forms without JavaScript post <code>application/x-www-form-urlencoded</code> and get an HTML page back.</li>
     <li>Inputs and answers are not stored, and the input is not logged (see <a href="/privacy/">Privacy</a>).</li>
   </ul>
@@ -291,7 +291,7 @@
 <section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
   <h3 id="d-icp-deep-dive">ICP Deep Dive</h3>
   <p><code>icp_deep_dive</code></p>
-  <p class="hx-prose">Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior. <a href="/tools/icp-deep-dive/">Open the form</a>.</p>
+  <p class="hx-prose">Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior. <a href="/tools/icp-deep-dive/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>customers</code></td><td>list of objects</td><td>no</td><td></td><td>List of customer objects with available attributes</td></tr>
 <tr><td><code>customer_descriptions</code></td><td>string</td><td>no</td><td></td><td>Alternative: Describe your best customers in text format</td></tr>
@@ -303,7 +303,7 @@
 <section class="hx-section hx-wash" id="icp-scoring-model" aria-labelledby="d-icp-scoring-model">
   <h3 id="d-icp-scoring-model">ICP Scoring Model</h3>
   <p><code>icp_scoring_model</code></p>
-  <p class="hx-prose">Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights. <a href="/tools/icp-scoring-model/">Open the form</a>.</p>
+  <p class="hx-prose">Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights. <a href="/tools/icp-scoring-model/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>scoring_criteria</code></td><td>list of objects</td><td>no</td><td></td><td>Criteria for scoring with importance levels</td></tr>
 <tr><td><code>success_correlation</code></td><td>string</td><td>no</td><td></td><td>What correlates with success? (e.g., &quot;deals with VP Sales champion close 2x faster&quot;)</td></tr>
@@ -314,7 +314,7 @@
 <section class="hx-section" id="buyer-group-analyzer" aria-labelledby="d-buyer-group-analyzer">
   <h3 id="d-buyer-group-analyzer">Buyer Group Analyzer</h3>
   <p><code>buyer_group_analyzer</code></p>
-  <p class="hx-prose">Map buyer group dynamics, influence relationships, and decision-making process. <a href="/tools/buyer-group-analyzer/">Open the form</a>.</p>
+  <p class="hx-prose">Map buyer group dynamics, influence relationships, and decision-making process. <a href="/tools/buyer-group-analyzer/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>deal_size</code></td><td>string</td><td>no</td><td></td><td>ACV range (e.g., &quot;$50K-100K&quot;)</td></tr>
 <tr><td><code>target_company_size</code></td><td>string</td><td>no</td><td></td><td>Company size (e.g., &quot;500-1000 employees&quot;)</td></tr>
@@ -328,7 +328,7 @@
 <section class="hx-section hx-wash" id="tam-sam-som-calculator" aria-labelledby="d-tam-sam-som-calculator">
   <h3 id="d-tam-sam-som-calculator">TAM SAM SOM Calculator</h3>
   <p><code>tam_sam_som_calculator</code></p>
-  <p class="hx-prose">Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source). <a href="/tools/tam-sam-som-calculator/">Open the form</a>.</p>
+  <p class="hx-prose">Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source). <a href="/tools/tam-sam-som-calculator/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>total_potential_companies</code></td><td>number (0 or more)</td><td>yes</td><td></td><td>Estimated total companies that could buy (from LinkedIn, industry reports)</td></tr>
 <tr><td><code>average_contract_value</code></td><td>number (more than 0)</td><td>yes</td><td></td><td>Your average ACV in dollars</td></tr>
@@ -343,7 +343,7 @@
 <section class="hx-section" id="lookalike-signal-generator" aria-labelledby="d-lookalike-signal-generator">
   <h3 id="d-lookalike-signal-generator">Lookalike Signal Generator</h3>
   <p><code>lookalike_signal_generator</code></p>
-  <p class="hx-prose">Generate platform-specific targeting criteria and search queries (generates criteria, not data). <a href="/tools/lookalike-signal-generator/">Open the form</a>.</p>
+  <p class="hx-prose">Generate platform-specific targeting criteria and search queries (generates criteria, not data). <a href="/tools/lookalike-signal-generator/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>icp_firmographics</code></td><td>object</td><td>no</td><td></td><td>Firmographic criteria</td></tr>
 <tr><td><code>icp_technographics</code></td><td>list of strings</td><td>no</td><td></td><td>Technologies your ICP typically uses</td></tr>
@@ -357,7 +357,7 @@
 <section class="hx-section hx-wash" id="account-prioritization" aria-labelledby="d-account-prioritization">
   <h3 id="d-account-prioritization">Account Prioritization</h3>
   <p><code>account_prioritization</code></p>
-  <p class="hx-prose">Rank and prioritize accounts using multi-dimensional scoring. <a href="/tools/account-prioritization/">Open the form</a>.</p>
+  <p class="hx-prose">Rank and prioritize accounts using multi-dimensional scoring. <a href="/tools/account-prioritization/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>accounts</code></td><td>list of objects</td><td>no</td><td></td><td>List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)</td></tr>
 <tr><td><code>prioritization_weights</code></td><td>object</td><td>no</td><td></td><td>Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100</td></tr>
@@ -368,7 +368,7 @@
 <section class="hx-section" id="icp-gap-analysis" aria-labelledby="d-icp-gap-analysis">
   <h3 id="d-icp-gap-analysis">ICP Gap Analysis</h3>
   <p><code>icp_gap_analysis</code></p>
-  <p class="hx-prose">Analyze gaps between current customer base and ideal ICP. <a href="/tools/icp-gap-analysis/">Open the form</a>.</p>
+  <p class="hx-prose">Analyze gaps between current customer base and ideal ICP. <a href="/tools/icp-gap-analysis/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>current_customers</code></td><td>string</td><td>yes</td><td></td><td>Description of your current customer base</td></tr>
 <tr><td><code>ideal_icp</code></td><td>string</td><td>yes</td><td></td><td>Description of your ideal customer profile</td></tr>
@@ -382,7 +382,7 @@
 <section class="hx-section hx-wash" id="icp-evolution-tracker" aria-labelledby="d-icp-evolution-tracker">
   <h3 id="d-icp-evolution-tracker">ICP Evolution Tracker</h3>
   <p><code>icp_evolution_tracker</code></p>
-  <p class="hx-prose">Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text. <a href="/tools/icp-evolution-tracker/">Open the form</a>.</p>
+  <p class="hx-prose">Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text. <a href="/tools/icp-evolution-tracker/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>current_icp</code></td><td>string</td><td>yes</td><td></td><td>Your current ICP definition</td></tr>
 <tr><td><code>recent_wins</code></td><td>string</td><td>no</td><td></td><td>Description of recent successful customers</td></tr>
@@ -396,7 +396,7 @@
 <section class="hx-section" id="icp-interview-synthesizer" aria-labelledby="d-icp-interview-synthesizer">
   <h3 id="d-icp-interview-synthesizer">ICP Interview Synthesizer</h3>
   <p><code>icp_interview_synthesizer</code></p>
-  <p class="hx-prose">Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized, key quotes). It does not take full transcripts. <a href="/tools/icp-interview-synthesizer/">Open the form</a>.</p>
+  <p class="hx-prose">Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized, key quotes). It does not take full transcripts. <a href="/tools/icp-interview-synthesizer/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>interview_notes</code></td><td>list of objects</td><td>no</td><td></td><td>Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze</td></tr>
 <tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell, used for sector notes</td></tr>
@@ -405,7 +405,7 @@
 </section>
 </div>
 
-<section class="hx-section hx-app-section hx-wash" aria-labelledby="helix-apps-heading"><h2 id="helix-apps-heading">Choose your app</h2><p>Run a Helix tool in your browser, then take the result to ChatGPT, Claude or Gemini. Connectors work with supported plans in Claude, ChatGPT, Cursor, VS Code and Windsurf. The Helix GTM Suite skills package supports Claude Code, Gemini CLI, Antigravity, Cursor and VS Code, and is available through skills.sh. Individual plugin installation steps below or on their pages remain specific to that plugin.</p><p><a href="https://tools.gtmhelix.com/connectors/">Connector setup guides</a> · <a href="https://github.com/shashwatgtm/helix-gtm-suite">Skills package setup guide</a> · <a href="https://skills.sh/shashwatgtm/helix-gtm-suite">Find the skills on skills.sh</a></p></section>
+<section class="hx-section hx-app-section hx-wash" aria-labelledby="helix-apps-heading"><h2 id="helix-apps-heading">Choose your app</h2><p>Run a Helix tool in your browser, then take the result to ChatGPT, Claude or Gemini. Connectors work with supported plans in Claude, ChatGPT, Cursor, VS Code and Windsurf. The Helix GTM Suite skills package supports Claude Code, Gemini CLI, Antigravity, Cursor and VS Code, and is available through skills.sh. Each plugin has its own installation steps, below or on its own page.</p><p><a href="https://tools.gtmhelix.com/connectors/">Connector setup guides</a> · <a href="https://github.com/shashwatgtm/helix-gtm-suite">Skills package setup guide</a> · <a href="https://skills.sh/shashwatgtm/helix-gtm-suite">Find the skills on skills.sh</a></p></section>
 </main>
 <footer class="hx-footer">
         <div class="hx-wrap">
@@ -413,7 +413,7 @@
             <div class="hx-footer-grid">
                 <div>
                     <a class="hx-lockup hx-lock2" href="/" aria-label="ICP Intelligence, by Helix GTM, home"><span class="hx9-mark" aria-hidden="true">h</span><span class="hx-lock-t"><span class="hx-lock-b">Helix GTM</span><span class="hx-lock-s">ICP Intelligence</span></span></a>
-                    <p>Ideal customer profile tools for B2B go-to-market teams.</p>
+                    <p>Ideal customer profile tools for B2B go to market teams.</p>
                     <a href="https://www.linkedin.com/in/shashwatghosh-ai-b2b-gtm-fractionalcmo/">LinkedIn</a>
                     <a href="https://x.com/Shashwat_Ghosh">X (Twitter)</a>
                 </div>
