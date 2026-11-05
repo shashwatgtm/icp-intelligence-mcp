@@ -36,9 +36,12 @@ test('RTM39 punctuation, brackets, casing and invisible characters never make a 
  assert.equal(isPlaceholder('\u200b[NoNe YeT]\ufeff'),true);
 });
 test('RTM39 denials do not become authority, names or advocacy',async()=>{
- const {isDenial,missingEvidence}=await import(moduleURL);
- for(const v of denials){assert.equal(isDenial(v),true,v);assert.match(missingEvidence({confirmed_budget_owner:v}),/No budget authority or champion advocacy is confirmed/);}
+ const {isDenial,missingEvidence,guardInputs}=await import(moduleURL);
+ for(const v of denials){assert.equal(isDenial(v),true,v);assert.match(missingEvidence({confirmed_budget_owner:v}),/These entries deny confirmation/);}
  for(const v of ['champion confirmed','CFO approved the budget','no delays in budget approval','Priya is champion and introduced the CFO'])assert.equal(isDenial(v),false,v);
+ const negative=guardInputs({blockers:'Budget approval pending.',known_requirements:'CFO has not approved a budget',confirmed_budget_owner:'CFO unknown'});
+ assert.equal(negative.args.blockers,'Budget approval pending.');assert.equal(negative.args.known_requirements,'CFO has not approved a budget');assert.equal(negative.args.confirmed_budget_owner,undefined);
+ assert.doesNotMatch(negative.notice,/No budget authority or champion advocacy is confirmed/);
 });
 test('RTM39 supplied object keys cannot introduce an inherited budget owner',async()=>{
  const {guardInputs}=await import(moduleURL);
@@ -54,6 +57,8 @@ test('RTM04 all absolute claim forms hold copy and specify the evidence needed',
  }
  assert.equal(copyEvidenceReview('email_sequence_generator',{key_value_prop:'One pilot reduced review time by 12%'}),null);
  assert.equal(copyEvidenceReview('email_sequence_generator',{key_value_prop:'A pilot included 100 customers'}),null);
+ assert.equal(copyEvidenceReview('email_sequence_generator',{key_value_prop:'This is not guaranteed. It reduces missed handoffs.'}),null);
+ assert.match(copyEvidenceReview('email_sequence_generator',{key_value_prop:'This is not guaranteed. We stop 100% of attacks.'}),/Absolute claim held out/);
 });
 test('RTM04 customer names require affirmative permission for this endorsement',async()=>{
  const {copyEvidenceReview,hasPublicationPermission}=await import(moduleURL);
@@ -63,15 +68,18 @@ test('RTM04 customer names require affirmative permission for this endorsement',
  const allowed='used by Acme; we have written permission to publish this endorsement in email';
  assert.equal(hasPublicationPermission(allowed),true);assert.equal(copyEvidenceReview('email_sequence_generator',{social_proof:allowed}),null);
  for(const qualifier of ['permission granted','permission is granted','the customer granted us permission to publish in email'])assert.equal(copyEvidenceReview('email_sequence_generator',{social_proof:'used by Acme; '+qualifier}),null);
+ assert.match(copyEvidenceReview('email_sequence_generator',{social_proof:'used by Acme',publication_permission:'We have written permission to publish the Beta endorsement in email.'}),/Named customer/);
+ assert.equal(copyEvidenceReview('email_sequence_generator',{social_proof:'used by Acme',publication_permission:'We have written permission to publish all supplied customer endorsements in email.'}),null);
  assert.equal(copyEvidenceReview('email_sequence_generator',{social_proof:'Customer quote: "I saved two hours in the pilot."'}),null,'a first person pronoun is not a customer name');
 });
 test('RTM04 customer names match complete words and technology is not a named customer',async()=>{
- const {holdBuyerCopy,unapprovedCustomerNames}=await import(moduleURL);
+ const {holdBuyerCopy,unapprovedCustomerNames,copyEvidenceReview}=await import(moduleURL);
  const result=holdBuyerCopy('email_sequence_generator',{social_proof:'used by Wise'},'### Email 1\n\nLikewise, we can discuss your workflow.\n\nOur product is used by Wise.');
  const copy=result.split('## Draft with held statements omitted')[1];
  assert.match(copy,/### Email 1/);assert.match(copy,/Likewise/);assert.doesNotMatch(copy,/\bWise\b/);
  assert.deepEqual(unapprovedCustomerNames({social_proof:'AI saved two hours in the pilot',your_solution:'ReviewMate software'}),[]);
  assert.deepEqual(unapprovedCustomerNames({social_proof:'ReviewMate raised conversion 12%',your_solution:'ReviewMate software'}),[]);
+ assert.equal(copyEvidenceReview('case_study_generator',{customer_name:'Acme',customer_quote:'Acme reduced review time by 12%'}),null);
 });
 let fields=0;
 for(const tool of tools){
@@ -82,7 +90,7 @@ for(const tool of tools){
    for(const value of placeholders){
     const args=structuredClone(base);set(args,path,value);
     const answer=text(await rpc('tools/call',{name:tool.name,arguments:args}));
-    assert.match(answer,/Missing (?:required )?input|not supplied/i,JSON.stringify({value,answer}));
+    assert.match(answer,/Missing (?:required )?input|not supplied|Full mode needs[^\n]+Missing:/i,JSON.stringify({value,answer}));
     const norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,'');
     assert.ok(norm(answer).includes(norm(path.join(''))),`missing field not identified: ${path.join('.')} ${answer}`);
     assert.ok(!/\b(?:Role|Company|Customer|Competitor|In their words)\s*[:.]\s*["(\[]?(?:none(?: yet)?|unknown|tbd|n\/a)\b/i.test(answer),answer);
@@ -96,7 +104,7 @@ for(const tool of tools){
     assert.match(answer,/Unconfirmed input:/,answer);
     const norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,'');
     assert.ok(norm(answer).includes(norm(path.join(''))),answer);
-    assert.match(answer,/No budget authority or champion advocacy is confirmed/);
+    assert.match(answer,/These entries deny confirmation/);
     assert.doesNotMatch(answer,/authority confirmed in your answer|In their words\.\s*["“]?(?:no champion|budget not confirmed|CFO unknown)/i);
    }
   });

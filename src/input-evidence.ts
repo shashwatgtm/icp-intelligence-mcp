@@ -35,12 +35,16 @@ export function missingEvidence(args, schema = {}) {
   visit(args, schema, '');
   if (!missing.length && !denied.length) return null;
   return (missing.length ? 'Missing input: ' + [...new Set(missing)].join(', ') + '. These fields were not supplied. Provide the actual information before using the answer as fact.' : '')
-    + (denied.length ? (missing.length ? '\n\n' : '') + 'Unconfirmed input: ' + [...new Set(denied)].join(', ') + '. The supplied answer denies confirmation. No budget authority or champion advocacy is confirmed. Provide the person, role and observed evidence, or state that it remains unconfirmed.' : '');
+    + (denied.length ? (missing.length ? '\n\n' : '') + 'Unconfirmed input: ' + [...new Set(denied)].join(', ') + '. These entries deny confirmation and cannot establish a person, authority or advocacy. Keep this negative evidence attached. Provide the person, role and observed evidence before confirming these entries.' : '');
 }
 export function guardInputs(args, schema = {}) {
   let stop = false;
   const walk = (value, spec, required, path = []) => {
-    if (typeof value === 'string' && !spec?.enum && (isPlaceholder(value) || fieldDenial(value,path.join('.')))) {
+    // Constraints and source context remain useful negative evidence. Identity
+    // fields and quotations cannot use a denial as a person's name or words.
+    const negativeContext = /^(?:known_stakeholders|blockers|known_requirements|loss_reason|account_notes|budget_context|customer_feedback|deal_details|speakers)$/.test(String(path[0]))
+      || (path[0] === 'economic_buyer' && typeof value === 'string' && /\bnot engaged\b/.test(normal(value)));
+    if (typeof value === 'string' && !spec?.enum && (isPlaceholder(value) || (!negativeContext && fieldDenial(value,path.join('.'))))) {
       if (required) stop = true;
       return undefined;
     }
@@ -65,7 +69,8 @@ export function guardInputs(args, schema = {}) {
 }
 export function hasAbsoluteClaim(value) {
   if (typeof value !== 'string') return false;
-  const raw=value.normalize('NFKC').replace(/[\u200B-\u200D\u2060\uFEFF]/g,'');
+  const raw=value.normalize('NFKC').replace(/[\u200B-\u200D\u2060\uFEFF]/g,'')
+    .replace(/\b(?:not|never)\s+(?:a\s+)?guarantee(?:d|s)?\b|\bno\s+guarantee(?:s)?\b/gi,'');
   return /\b0*100(?:\.0+)?\s*(?:%|percent\b|per\s+cent\b)/i.test(raw)
     || /\b(?:guarantee(?:d|s)?|never fails?|only solution|zero risk|all attacks|100 (?:percent|per cent)|(?:replace|stop|prevent)s? all)\b/i.test(normal(raw));
 }
@@ -87,7 +92,7 @@ export function unapprovedCustomerNames(args) {
     if (/^(?:i|you|we|they|he|she|it|this|that|these|those|the|our|their|customer|customers|teams|users|company|one|anonymous|unnamed)\b/i.test(name)) return;
     if (!explicit && /^(?:AI|API|IT|CRM|ERP|HR|B2B|B2C)$/i.test(name)) return;
     if (!explicit && strings.some(([field,v])=>/^(?:your_solution|your_product|product|product_name|company_name)$/.test(field)&&v.toLowerCase().startsWith(name.toLowerCase()))) return;
-    if (hasPublicationPermission(value) || strings.some(([,v])=>v.includes(name)&&hasPublicationPermission(v))) return;
+    if (hasPublicationPermission(value) || strings.some(([,v])=>hasPublicationPermission(v)&&(v.toLowerCase().includes(name.toLowerCase())||/\b(?:all|every|each) (?:supplied )?customer endorsements?\b/i.test(v)))) return;
     names.add(name);
   };
   const company='([A-Z][A-Za-z0-9&.]*\\b(?: [A-Z][A-Za-z0-9&.]*\\b){0,3})';
@@ -98,7 +103,6 @@ export function unapprovedCustomerNames(args) {
       for(const match of value.matchAll(new RegExp('\\b'+company+'\\s+(?:uses?|said|says|cut|reduced?|increased?|raised?|saved?|achieved?)\\b','g'))) add(match[1],value);
       for(const match of value.matchAll(new RegExp('\\b(?:at|from)\\s+'+company+'(?=[:;]|\\s*\\(|\\s*["“])','g'))) add(match[1],value,true);
     }
-    if (/^customer_(?:name|company)$/.test(field)&&value.trim()) add(value.trim(),value,true);
   }
   return [...names];
 }
@@ -112,7 +116,9 @@ export function copyEvidenceReview(tool, args) {
   };
   collect(args,'');
   const absolute = strings.some(({value}) => hasAbsoluteClaim(value));
-  const unapproved = unapprovedCustomerNames(args).length > 0;
+  // A customer record or a request asking that customer to approve a quote is
+  // not an endorsement to another buyer. Gate third party outreach proof.
+  const unapproved = tool === 'email_sequence_generator' && unapprovedCustomerNames(args).length > 0;
   if (!absolute && !unapproved) return null;
   return '# Copy review before drafting\n\n'
     + (absolute ? 'Absolute claim held out of buyer copy. Supply independently checkable results, the test scope, sample, period, limitations and the source. An unrestricted guarantee needs evidence and approved terms covering every promised case. Use a narrower evidenced claim before drafting.\n\n' : '')
@@ -122,7 +128,7 @@ export function copyEvidenceReview(tool, args) {
 export function holdBuyerCopy(tool, args, text) {
   const review = copyEvidenceReview(tool,args);
   if (!review) return text;
-  const names = unapprovedCustomerNames(args);
+  const names = tool === 'email_sequence_generator' ? unapprovedCustomerNames(args) : [];
   const namePatterns = names.map(name=>new RegExp('(?:^|[^\\p{L}\\p{N}])'+name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?=$|[^\\p{L}\\p{N}])','iu'));
   const held = [];
   const kept = [];
