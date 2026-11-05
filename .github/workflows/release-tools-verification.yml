@@ -1,7 +1,7 @@
 name: Release tools verification
 on:
   push:
-    branches: [release/tools-20261104]
+    branches: [release/tools-20261104, release/tools-20261106]
 permissions:
   contents: read
 jobs:

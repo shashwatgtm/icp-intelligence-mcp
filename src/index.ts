@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { guardInputs, holdBuyerCopy, isPlaceholder, isDenial } from './input-evidence.ts';
 import { withReadingGuide } from './reader-actions.ts';
 import { evolutionMatch } from './evolution-membership.ts';
 import { billingLine } from './verticals.ts';
@@ -1464,7 +1465,7 @@ ${SUGGESTED}
       }
       if (typedChampion && seat && !horizontal && !sameRole(typedChampion, seat.champion) && !stakeholders.some(x => sameRole(x, seat.champion)) && !typedAnywhere(seat.champion)) sectorDefaults.push(`${seat.champion} (champion)`);
       const budgetCandidates = placed.economic;
-      if (args.confirmed_budget_owner?.trim()) buyingGroup.economic.role = args.confirmed_budget_owner.trim() + ' (budget authority confirmed in your answer)';
+      if (args.confirmed_budget_owner?.trim() && !isPlaceholder(args.confirmed_budget_owner) && !isDenial(args.confirmed_budget_owner)) buyingGroup.economic.role = args.confirmed_budget_owner.trim() + ' (budget authority confirmed in your answer)';
       else if (budgetCandidates.length > 1) buyingGroup.economic.role = 'not confirmed; candidates from your stakeholder list: ' + budgetCandidates.join('; ') + '. Confirm who owns this purchase budget; list order does not establish authority';
       const extra = (['economic', 'technical', 'blocker', 'user'] as const).filter(k=>k!=='economic'||budgetCandidates.length<2).flatMap(k => placed[k].slice(1).map(x => `${x} (${k === 'economic' ? 'budget or sign-off' : k === 'technical' ? 'technical evaluation' : k === 'blocker' ? 'review' : 'user'})`));
       const technicalSteps = ctx.model === 'connectivity' ? ['Offer a site survey and a small set of pilot sites', 'Share the network design and the cut-over plan', 'Offer a technical session with your network team', 'Answer the security questionnaire before it is asked']
@@ -1474,7 +1475,7 @@ ${SUGGESTED}
       const championPerson = typedChampion.match(/(?:Contact|Person|Named contact):\s*([^;\n.]+)/i)?.[1]?.trim();
       const advocacy = hasSignal(typedChampion, /\b(?:introduced (?:us|the team) to|advocated (?:for|on behalf of)|presented (?:our|the) (?:case|proposal) to|secured (?:a|the) (?:budget|decision) meeting)\b/i);
       const confirmedChampion = !!championPerson && advocacy;
-      const budgetConfirmed = !!args.confirmed_budget_owner?.trim();
+      const budgetConfirmed = !!args.confirmed_budget_owner?.trim() && !isPlaceholder(args.confirmed_budget_owner) && !isDenial(args.confirmed_budget_owner);
       const roleQuestions = {
         economic: 'Who can approve the spend for this purchase, and what source confirms that authority?',
         champion: 'Who is the named person, and what did they do to advocate internally? Record the observed action and date.',
@@ -3248,11 +3249,13 @@ export function createServer(): Server {
     if(BUILD_PROFILE.profile === "wave" && isReserveTool(request.params.name)) return callReserveTool(request.params.name,request.params.arguments);
     // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
     // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
-    const typed = cleanDeep(request.params.arguments) as Record<string, unknown> | undefined;
+    let typed = cleanDeep(request.params.arguments) as Record<string, unknown> | undefined;
+    const inputEvidence = guardInputs(typed, tools[request.params.name as keyof typeof tools]?.inputSchema);
+    typed = inputEvidence.args as typeof typed;
     const problem = checkRequiredInputs(request.params.name, typed);
     const safeArgs = escapeDeep(typed);
-    if (problem) {
-      return { content: [{ type: 'text', text: problem }], isError: true };
+    if (problem || inputEvidence.stop) {
+      return { content: [{ type: 'text', text: (problem || 'Missing required input. Supply the missing evidence before continuing.') + (inputEvidence.notice ? '\n\n' + inputEvidence.notice : '') }], isError: true };
     }
     const toolName = request.params.name as keyof typeof tools;
     const tool = tools[toolName];
@@ -3270,11 +3273,12 @@ export function createServer(): Server {
     const advice = softwareAdvice(typed);
     if (advice) return { content: [{ type: 'text', text: advice }] };
 
+
     try {
       const limit=decisionLimit(String(toolName),safeArgs as Record<string,unknown>);
       const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs as any);
       return {
-        content: [{ type: 'text', text: withReadingGuide(toolName, result, safeArgs as Record<string,unknown>) }]
+        content: [{ type: 'text', text: inputEvidence.notice + (inputEvidence.notice ? '\n\n' : '') + withReadingGuide(toolName, holdBuyerCopy(toolName, safeArgs, result), safeArgs as Record<string,unknown>) }]
       };
     } catch (error) {
       return {

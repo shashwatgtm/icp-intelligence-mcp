@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
+const input_evidence_ts_1 = require("./input-evidence.js");
 const reader_actions_ts_1 = require("./reader-actions.js");
 const evolution_membership_ts_1 = require("./evolution-membership.js");
 const verticals_ts_1 = require("./verticals.js");
@@ -1506,7 +1507,7 @@ ${SUGGESTED}
             if (typedChampion && seat && !horizontal && !sameRole(typedChampion, seat.champion) && !stakeholders.some(x => sameRole(x, seat.champion)) && !typedAnywhere(seat.champion))
                 sectorDefaults.push(`${seat.champion} (champion)`);
             const budgetCandidates = placed.economic;
-            if (args.confirmed_budget_owner?.trim())
+            if (args.confirmed_budget_owner?.trim() && !(0, input_evidence_ts_1.isPlaceholder)(args.confirmed_budget_owner) && !(0, input_evidence_ts_1.isDenial)(args.confirmed_budget_owner))
                 buyingGroup.economic.role = args.confirmed_budget_owner.trim() + ' (budget authority confirmed in your answer)';
             else if (budgetCandidates.length > 1)
                 buyingGroup.economic.role = 'not confirmed; candidates from your stakeholder list: ' + budgetCandidates.join('; ') + '. Confirm who owns this purchase budget; list order does not establish authority';
@@ -1518,7 +1519,7 @@ ${SUGGESTED}
             const championPerson = typedChampion.match(/(?:Contact|Person|Named contact):\s*([^;\n.]+)/i)?.[1]?.trim();
             const advocacy = (0, text_signals_ts_4.hasSignal)(typedChampion, /\b(?:introduced (?:us|the team) to|advocated (?:for|on behalf of)|presented (?:our|the) (?:case|proposal) to|secured (?:a|the) (?:budget|decision) meeting)\b/i);
             const confirmedChampion = !!championPerson && advocacy;
-            const budgetConfirmed = !!args.confirmed_budget_owner?.trim();
+            const budgetConfirmed = !!args.confirmed_budget_owner?.trim() && !(0, input_evidence_ts_1.isPlaceholder)(args.confirmed_budget_owner) && !(0, input_evidence_ts_1.isDenial)(args.confirmed_budget_owner);
             const roleQuestions = {
                 economic: 'Who can approve the spend for this purchase, and what source confirms that authority?',
                 champion: 'Who is the named person, and what did they do to advocate internally? Record the observed action and date.',
@@ -3208,11 +3209,13 @@ function createServer() {
             return (0, reserve_tools_ts_1.callReserveTool)(request.params.name, request.params.arguments);
         // Run 20 round 1d (D086), the one choke point: every tools/call (stdio, hosted /mcp and /api/tools all come through here)
         // reaches a tool here. Run 40S (D6, safe by design): the input checks read the text as typed (hidden characters removed); then every text is escaped once, so nothing the caller typed can form markup in any answer. The words stay (src/escape-inputs.ts).
-        const typed = (0, escape_inputs_ts_1.cleanDeep)(request.params.arguments);
+        let typed = (0, escape_inputs_ts_1.cleanDeep)(request.params.arguments);
+        const inputEvidence = (0, input_evidence_ts_1.guardInputs)(typed, tools[request.params.name]?.inputSchema);
+        typed = inputEvidence.args;
         const problem = checkRequiredInputs(request.params.name, typed);
         const safeArgs = (0, escape_inputs_ts_1.escapeDeep)(typed);
-        if (problem) {
-            return { content: [{ type: 'text', text: problem }], isError: true };
+        if (problem || inputEvidence.stop) {
+            return { content: [{ type: 'text', text: (problem || 'Missing required input. Supply the missing evidence before continuing.') + (inputEvidence.notice ? '\n\n' + inputEvidence.notice : '') }], isError: true };
         }
         const toolName = request.params.name;
         const tool = tools[toolName];
@@ -3232,7 +3235,7 @@ function createServer() {
             const limit = (0, decision_limits_ts_1.decisionLimit)(String(toolName), safeArgs);
             const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs);
             return {
-                content: [{ type: 'text', text: (0, reader_actions_ts_1.withReadingGuide)(toolName, result, safeArgs) }]
+                content: [{ type: 'text', text: inputEvidence.notice + (inputEvidence.notice ? '\n\n' : '') + (0, reader_actions_ts_1.withReadingGuide)(toolName, (0, input_evidence_ts_1.holdBuyerCopy)(toolName, safeArgs, result), safeArgs) }]
             };
         }
         catch (error) {
