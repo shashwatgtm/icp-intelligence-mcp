@@ -12,6 +12,7 @@ const conversation_guidance_ts_1 = require("./conversation-guidance.js");
 const build_profile_ts_1 = require("./build-profile.js");
 const reserve_tools_ts_1 = require("./reserve-tools.js");
 const widget_layer_ts_1 = require("./widget-layer.js");
+const lane_f_results_ts_1 = require("./lane-f-results.js");
 const text_signals_ts_1 = require("./text-signals.js");
 const decision_limits_ts_1 = require("./decision-limits.js");
 const text_signals_ts_2 = require("./text-signals.js");
@@ -3248,6 +3249,8 @@ function createServer() {
             };
         }
     });
+    // Result widget for Account Prioritization: last, after every safety, reader and widget wrapper (adds _meta only).
+    (0, lane_f_results_ts_1.attachLaneFResults)(server);
     return server;
 }
 // =============================================================================

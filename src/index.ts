@@ -8,6 +8,7 @@ import { conversationDefinition, CONVERSATION_INSTRUCTIONS } from "./conversatio
 import { BUILD_PROFILE } from './build-profile.ts';
 import {reserveTools,isReserveTool,callReserveTool} from './reserve-tools.ts';
 import { attachWidgets } from './widget-layer.ts';
+import { attachLaneFResults } from './lane-f-results.ts';
 import { sizeReading, clearanceAdvice } from './text-signals.ts';
 import { decisionInputs, decisionHelp, decisionLimit } from './decision-limits.ts';
 import { buyingConstraint } from './text-signals.ts';
@@ -3291,6 +3292,8 @@ export function createServer(): Server {
     }
   });
 
+  // Result widget for Account Prioritization: last, after every safety, reader and widget wrapper (adds _meta only).
+  attachLaneFResults(server);
   return server;
 }
 
