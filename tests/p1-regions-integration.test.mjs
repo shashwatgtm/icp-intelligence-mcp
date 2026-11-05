@@ -9,7 +9,8 @@ import {seedCases,verticalCases,regionCases,rpc} from './p1-regions-cases.mjs';
 const baseline=JSON.parse(readFileSync(new URL('./fixtures/p1-regions-no-region-baseline.json',import.meta.url),'utf8'));
 const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const text=r=>r.content.filter(x=>x.type==='text').map(x=>x.text).join('\n');
-const removeQuestion=r=>({...r,content:r.content.map(c=>c.type==='text'&&c.text.endsWith(NO_REGION_SUFFIX)?{...c,text:c.text.slice(0,-NO_REGION_SUFFIX.length)}:c)});
+const stripSuffix=v=>typeof v==='string'?(v.endsWith(NO_REGION_SUFFIX)?v.slice(0,-NO_REGION_SUFFIX.length):v):Array.isArray(v)?v.map(stripSuffix):v&&typeof v==='object'?Object.fromEntries(Object.entries(v).map(([k,x])=>[k,stripSuffix(x)])):v;
+const removeQuestion=r=>stripSuffix({...r,content:r.content});
 const suffix=t=>t.includes('## Region and industry context')?t.slice(t.indexOf('## Region and industry context')):'';
 test('All tool names descriptions schemas annotations and lists stay unchanged',async()=>assert.deepEqual(await rpc(handler,'tools/list'),baseline.tool_list));
 for(const row of baseline.rows)test('No region byte parity and three runs: '+row.tool+' '+row.vertical,async()=>{
