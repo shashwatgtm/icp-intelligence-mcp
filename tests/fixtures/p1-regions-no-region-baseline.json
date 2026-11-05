@@ -250,31 +250,31 @@
       },
       {
         "name": "tam_sam_som_calculator",
-        "description": "Calculate TAM/SAM/SOM bottom-up from your company count, ACV, ICP match rate and Year 1 share (calculation framework, not a data source). Sector notes are added when your inputs name one of the supported sectors",
+        "description": "Use when someone says size my market, market sizing, or how big is my market. Before calling, ask what they sell, how many companies could buy and the annual contract value; never estimate these. Clarify what unlabelled numbers mean. Calculate TAM, SAM and SOM from supplied figures, not market research. Values are displayed in USD only; for rupees ask for a user-confirmed USD amount, never relabel or invent a conversion. Rates use 0 to 100 percentage points: ask whether 0.2 means 0.2% or a fraction meaning 20%. Omitted rates are labelled examples.",
         "inputSchema": {
           "type": "object",
           "properties": {
             "total_potential_companies": {
               "type": "number",
               "minimum": 0,
-              "description": "Estimated total companies that could buy (from LinkedIn, industry reports)"
+              "description": "Number of companies that could buy, supplied by the user or a source they identify. Ask if missing; never estimate."
             },
             "average_contract_value": {
               "type": "number",
               "exclusiveMinimum": 0,
-              "description": "Your average ACV in dollars"
+              "description": "Annual contract value in USD, confirmed by the user. This tool displays dollars only. Do not pass rupees as dollars or invent an exchange rate; ask for a confirmed USD amount."
             },
             "icp_percentage": {
               "type": "number",
               "minimum": 0,
               "maximum": 100,
-              "description": "Percentage of those companies that match your ICP, from 0 to 100. Left out, 30 is used and marked as an example"
+              "description": "Percentage of potential companies that match the ideal customer profile, from 0 to 100. A value of 0.2 means 0.2%, not 20%. Clarify fraction notation first; convert an explicitly confirmed fraction to percentage points. Omitted: 30%, labelled as an example."
             },
             "year1_market_share_target": {
               "type": "number",
               "minimum": 0,
               "maximum": 100,
-              "description": "Assumed Year 1 share percentage, from 0 to 100. This is a planning assumption, not evidence of attainable share. Left out, 3 is used and marked as an example"
+              "description": "Year 1 share as percentage points from 0 to 100. Clarify fractions: 0.03 means 0.03%, not 3%. Use only a confirmed value; omitted: 3%, labelled as an example."
             },
             "data_sources": {
               "type": "string",
@@ -286,7 +286,7 @@
             },
             "product_category": {
               "type": "string",
-              "description": "Optional: what you sell (for example \"spend management software\"), used for sector notes. The arithmetic does not use it"
+              "description": "Ask what they sell before calling. Use their words for the product or service; do not invent a category. Used for context, not arithmetic."
             },
             "company": {
               "type": "string",
@@ -304,6 +304,149 @@
           "readOnlyHint": true,
           "destructiveHint": false,
           "openWorldHint": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "marketSizing",
+            "plainText"
+          ],
+          "properties": {
+            "plainText": {
+              "type": "string"
+            },
+            "marketSizing": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "figures",
+                    "targets",
+                    "rates"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "market-sizing"
+                    },
+                    "figures": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "key",
+                          "label",
+                          "value",
+                          "display",
+                          "example"
+                        ],
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "example": {
+                            "type": "boolean"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "targets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "label",
+                          "value",
+                          "display",
+                          "example"
+                        ],
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "number"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "example": {
+                            "type": "boolean"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "rates": {
+                      "type": "object",
+                      "required": [
+                        "icp",
+                        "share"
+                      ],
+                      "properties": {
+                        "icp": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "share": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "kind",
+                    "reason"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "unavailable"
+                    },
+                    "reason": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "_meta": {
+          "ui": {
+            "resourceUri": "ui://helix-wave3-5a0e3e66b85b/tam_sam_som_calculator.html",
+            "visibility": [
+              "model",
+              "app"
+            ]
+          },
+          "openai/outputTemplate": "ui://helix-wave3-5a0e3e66b85b/tam_sam_som_calculator.html"
         }
       },
       {
@@ -465,6 +608,12 @@
           "readOnlyHint": true,
           "destructiveHint": false,
           "openWorldHint": false
+        },
+        "_meta": {
+          "ui": {
+            "resourceUri": "ui://helix/results/v1.html"
+          },
+          "openai/outputTemplate": "ui://helix/results/v1.html"
         }
       },
       {
@@ -1488,7 +1637,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "Logistics dispatch planning software"
       },
-      "sha256": "a1091eedf9bb04d9c0c30da927c44d45fe63bebcee971a0172b19364b98c12f4"
+      "sha256": "4a94b799e34bb264ea7a15cebc3596b1e963f58bcb3a74ab00afcab4c815ae8b"
     },
     {
       "tool": "tam_sam_som_calculator",
@@ -1502,7 +1651,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "Fintech payment reconciliation"
       },
-      "sha256": "ec9487083fff280d5251bf3f75be8887d755fc13273362bce779b73646f3ed7e"
+      "sha256": "403d580cc4886c8b8267c4cc432290959bedf1a677ee16948ff0a22118e487e1"
     },
     {
       "tool": "tam_sam_som_calculator",
@@ -1516,7 +1665,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "SaaS subscription management platform"
       },
-      "sha256": "d436337ca4fb2bdaa5e1e012d8c81a1b39bb07a86a256a6ffbfc32d56416a793"
+      "sha256": "d3dbc6baccb14399e8a98f5d40c24540bfe2072fc96c6bfc4ebd210820b878ea"
     },
     {
       "tool": "tam_sam_som_calculator",
@@ -1530,7 +1679,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "Vertical SaaS retail execution software"
       },
-      "sha256": "ef5a87154695f508a17c7107b92221ee760b60d55ad2848f344f632c3b80d7e9"
+      "sha256": "ca2882c8c006c56c64233c5d8c5590e72b2b1779ba8372377da7ccbb5d2f55db"
     },
     {
       "tool": "tam_sam_som_calculator",
@@ -1544,7 +1693,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "AI native document review agents"
       },
-      "sha256": "cbc4b82ac1b0f7e9ec2ca00589ba10836260b1bcd93bd0371b60dffc38ca1d21"
+      "sha256": "f79addc3d05cbffefedc89be5ed488791b216f0e2d9a8b8b649c6ed7b52007ff"
     },
     {
       "tool": "tam_sam_som_calculator",
@@ -1558,7 +1707,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "ITeS business process outsourcing services"
       },
-      "sha256": "2ee0d512be084bf92e1d713692db5d0baa36631e25c9e04cabf9ba94518a157a"
+      "sha256": "6c1a373f3c4e393568514dea33474729503515c1e273f10d0083f2878d721e1d"
     },
     {
       "tool": "tam_sam_som_calculator",
@@ -1572,7 +1721,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "Telecom network connectivity services"
       },
-      "sha256": "e963bf76fb47986f25c1866acaa22926b7961183a24a8a2360ba17b696fdab26"
+      "sha256": "e30086ac6511b4b165a41dec117e6c038c88b374c7564abcaf9af12a669bbae3"
     },
     {
       "tool": "tam_sam_som_calculator",
@@ -1586,7 +1735,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "API testing and monitoring tool for backend developers"
       },
-      "sha256": "e4df738b7c51a752a91f1d3e8db5b468458c31080f883e5d1671c1bddc054618"
+      "sha256": "5037fe8198998b3c3deab62b509bd5ec5032047b8312ffc2458eb8f05c76622d"
     },
     {
       "tool": "tam_sam_som_calculator",
@@ -1600,7 +1749,7 @@
         "segment_name": "Regional logistics fleets with 50 to 250 vehicles",
         "product_category": "Cybersecurity threat detection software"
       },
-      "sha256": "6b3723ecd916fd4051e048207977debf4c945acd8b32391407a9520485c85875"
+      "sha256": "73225c22a7160fe5b60b61757e2fedd7453ade8c44b6589646d98cb73d7e3606"
     },
     {
       "tool": "lookalike_signal_generator",
@@ -1775,7 +1924,7 @@
           }
         ]
       },
-      "sha256": "d8a4c7f1a12f2ccd90020694f09fe487cba0ae6c3794aff72777213b9889fc2b"
+      "sha256": "166eceb9559c5eafa63b5490f2ffd77af561248bb0115c8d86b80fa9ba10ea00"
     },
     {
       "tool": "account_prioritization",
@@ -1806,7 +1955,7 @@
           }
         ]
       },
-      "sha256": "52844afcd109bbd530a8a7c35c8790af8b48307df077662c3e496bee0dc35940"
+      "sha256": "00e6161903d59271ea6655d0ec3465a672c2f91d68c7e92ae645456150fa63ce"
     },
     {
       "tool": "account_prioritization",
@@ -1837,7 +1986,7 @@
           }
         ]
       },
-      "sha256": "b12b54329deed0cc200e51964619d07e0e1ee2b146f2b7f41cd96897b2fd118a"
+      "sha256": "3c119542cb4b25f157f473fd947531ca81a2f807a82352466dbfe5ca1c66f29d"
     },
     {
       "tool": "account_prioritization",
@@ -1868,7 +2017,7 @@
           }
         ]
       },
-      "sha256": "a637f058011d7260c3a2b8e8b79f8d9e2411819107fa77a0664308db874d4657"
+      "sha256": "5fcea1fe81e384773f80eed670530204ccac16e36c644349d530c3b86eb29796"
     },
     {
       "tool": "account_prioritization",
@@ -1899,7 +2048,7 @@
           }
         ]
       },
-      "sha256": "1792446b465604518843e669e740ff4243a6c6785b0e3db15802c8e2b17f8835"
+      "sha256": "6ceb81ca9cadc04e6dc70255697549e3a719749896bb0da09feed92b5b60b277"
     },
     {
       "tool": "account_prioritization",
@@ -1930,7 +2079,7 @@
           }
         ]
       },
-      "sha256": "a87152298027047af559987871d9f3650374b07f403ab20d994877495f373561"
+      "sha256": "220ef2b0e2af2121d4eadc30a0d041ab7655daca0609143a2b0d57ada2032441"
     },
     {
       "tool": "account_prioritization",
@@ -1961,7 +2110,7 @@
           }
         ]
       },
-      "sha256": "48bc3f92624d26dff0c162422917f7a18b6a60c5e06caddaebad74de7d0e7e19"
+      "sha256": "7c04905ab37890790ba186860b59a53e0933cc06c872125d1d1ffc42b9a41ade"
     },
     {
       "tool": "account_prioritization",
@@ -1992,7 +2141,7 @@
           }
         ]
       },
-      "sha256": "ae9a81fe19894d405ad82f2700e9211b174a69cce49d45dc85a949913f12012d"
+      "sha256": "b0d0428069d3f41f565da0cb5eb3d7aa76e0cfcae6ccd0bea94f2e847b2557d9"
     },
     {
       "tool": "account_prioritization",
@@ -2023,7 +2172,7 @@
           }
         ]
       },
-      "sha256": "bc6acd20cae11659ff02c2fe23bd49f3a1237d756dddc26d4a521534fb5ad9f9"
+      "sha256": "938d9e3d9eb0b4bd034517bcf5ba3e4ed31b119d44f2a431ad5224e6bb260f33"
     },
     {
       "tool": "icp_gap_analysis",
@@ -2252,7 +2401,7 @@
         "time_period": "Q3 2026",
         "product_category": "Logistics dispatch planning software"
       },
-      "sha256": "2e9b65cdb122d520f99501167e69cf106fadaaed86f126f32ca36866b77168eb"
+      "sha256": "aabd1cddbd1e156399f45bd1f8cab690302be294b64369fb1c54b591d2c6fe3e"
     },
     {
       "tool": "icp_evolution_tracker",
@@ -2265,7 +2414,7 @@
         "time_period": "Q3 2026",
         "product_category": "Fintech payment reconciliation"
       },
-      "sha256": "03d9375163dae7ccf9f9d25fc9ea6b7b938c658823c6ee2319c791025f9c3d5b"
+      "sha256": "ca70dd8a3914f8fc6a67da61e4ac6916e8a1d934d1f27963dac2240ea05afe2d"
     },
     {
       "tool": "icp_evolution_tracker",
@@ -2278,7 +2427,7 @@
         "time_period": "Q3 2026",
         "product_category": "SaaS subscription management platform"
       },
-      "sha256": "b0a1861ce1e1d13cdf69957e92bca59865c7e65b66f72bb1ac901f44ccca8960"
+      "sha256": "503d93a42f9d2efc079f8ed18ec0e858fff935b9d4cbabdbc585c2f96924b660"
     },
     {
       "tool": "icp_evolution_tracker",
@@ -2291,7 +2440,7 @@
         "time_period": "Q3 2026",
         "product_category": "Vertical SaaS retail execution software"
       },
-      "sha256": "9bd7ddefbcf32ffc5f0bfa5b65aa689149337192fd2ae1e5d5e87f26f13b1f26"
+      "sha256": "9bed80ec888c64dedddf7d3050b1e2a3626eeb96dc7d9eb61b2d49e266e94616"
     },
     {
       "tool": "icp_evolution_tracker",
@@ -2304,7 +2453,7 @@
         "time_period": "Q3 2026",
         "product_category": "AI native document review agents"
       },
-      "sha256": "80bdd5672f8a76a4b408c46b63034046304b229843f8a0ae9b72ecb10ac31b49"
+      "sha256": "cb30147f98362063b4a4565cdd6eb8f1ca011de9b11792c16c6e0b61d5e4a1de"
     },
     {
       "tool": "icp_evolution_tracker",
@@ -2317,7 +2466,7 @@
         "time_period": "Q3 2026",
         "product_category": "ITeS business process outsourcing services"
       },
-      "sha256": "f9749d20e1f4c4889cebd393481a078ca459a1c1c521f7074f03ad64b71d3f39"
+      "sha256": "8868f4e751e2ef0927eb1531aed2b922d945106ee2de37611124e5a7d6189a33"
     },
     {
       "tool": "icp_evolution_tracker",
@@ -2330,7 +2479,7 @@
         "time_period": "Q3 2026",
         "product_category": "Telecom network connectivity services"
       },
-      "sha256": "05234b60e9a44ae503f002f0250df31f6890bb6cd074e466c2ff114ac09d077e"
+      "sha256": "e6a083fbf20f9d875839062d9bbffce665ad481df44de3e6084af41a1858b01d"
     },
     {
       "tool": "icp_evolution_tracker",
@@ -2343,7 +2492,7 @@
         "time_period": "Q3 2026",
         "product_category": "API testing and monitoring tool for backend developers"
       },
-      "sha256": "e3bccc8aa1bf87768aba7881be342073e3aea23014e0022eff63e3104cc049ef"
+      "sha256": "853331fd828466f7ce09dda6a240872aaf5f3cd3728fde43dbe62bbfc8227634"
     },
     {
       "tool": "icp_evolution_tracker",
@@ -2356,7 +2505,7 @@
         "time_period": "Q3 2026",
         "product_category": "Cybersecurity threat detection software"
       },
-      "sha256": "c50c3718c722807a7c66c6ac6e93ac6b87b891109fe9982919b390633a06fbf9"
+      "sha256": "87058725d2c63fc982a7f08d5f161226020f5140612f00af1f274645716f2265"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2398,7 +2547,7 @@
           }
         ]
       },
-      "sha256": "9a78979772b55a24905dbaf7871f2f1fda9b322b533d71edcf5d0e4b32ea7673"
+      "sha256": "d92730a25754fcc3591d4ff4c405536831dd2bfe72a8087ee922520497dbdbac"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2440,7 +2589,7 @@
           }
         ]
       },
-      "sha256": "3b5b858b0e9209eaa5a041d566134cce3a13ea2280d3c65675fe5d1887363aea"
+      "sha256": "000a089399f0ed9a977b7ada4a415380d1863c6fc97b8300d5140e8b9d3efce0"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2482,7 +2631,7 @@
           }
         ]
       },
-      "sha256": "d92dabd8bcdbf872d9c622cad472cf35124c33efd1484a870762ae934c42640c"
+      "sha256": "5d9890fa6022bf2b78ddaf0fc850fdb3cba416fb03b522d4716926dd007bc96c"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2524,7 +2673,7 @@
           }
         ]
       },
-      "sha256": "90abda74ee2edb5874a701f3a251186ce47ae153241682fb905210f3a609929a"
+      "sha256": "d8a58abb6660e7a6bcb8c651b5412159424954894e9ab9f5430ceea8fb643152"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2566,7 +2715,7 @@
           }
         ]
       },
-      "sha256": "9937b7be2faaf4144bc7e92897eb9ac92dbdfd2fd57392e244c27eb6e7058c2f"
+      "sha256": "fa4a685784fd8156b63cb00762af9ea53055c4c126078e36c2cd0295e038efc0"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2608,7 +2757,7 @@
           }
         ]
       },
-      "sha256": "3dca503eac31b5fcd055a59fd13bc9df84d804c8d94f5ee742cfb9c12427d3d3"
+      "sha256": "38a051e4e482d8b1f4d7d06627b245f485282594eff205d26d5d308529efa5a1"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2650,7 +2799,7 @@
           }
         ]
       },
-      "sha256": "d25184e9de965f7aeeecae44ea7ce926b194d7dce6ab4cd5344f4e4e476550d1"
+      "sha256": "331fda64695f6297e41f039e29f071da20d0409d73000b048a79a06ca6f33c5b"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2692,7 +2841,7 @@
           }
         ]
       },
-      "sha256": "e7d15f144efab47eef29a2dff9b8df353e95bbbbb790689b283842b6150f2eed"
+      "sha256": "98fd2ab0bab2bfd9c14cf7dab0b69dbc81b1a86a156fc7657fa373bd8acee028"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2734,7 +2883,7 @@
           }
         ]
       },
-      "sha256": "fc7ae0ba34f4133502fb637b93c3bbbf8b71a74e5daecfa009f4101d8014a654"
+      "sha256": "86c2ce3f67b5d154a7afd3d8243b7291f32a0c0ed2342ee53bb97e1d0e155ce3"
     }
   ]
 }

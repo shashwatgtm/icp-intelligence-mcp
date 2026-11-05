@@ -391,13 +391,20 @@ function outsideMarkets(args) {
 const LABELS = { decision_approvers: 'Who decides and approves', sector_regulator: 'Sector rules to check', procurement_payment: 'Procurement and payment', data_privacy: 'Data and privacy', buyer_language: 'Buyer language', proof: 'Proof to prepare', objections: 'Objections to test', sales_motion: 'Sales motion' };
 const EU_COUNTRIES = new Set(['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE']);
 function applies(n, match) { return !n.jurisdictions.length || n.jurisdictions.some(j => match.jurisdictions.includes(j) || (j === 'EU' && match.countries.some(c => EU_COUNTRIES.has(c)))); }
+let printedSources = new Set();
+let printedTexts = new Set();
 function renderNote(n, countries) {
     const countryScope = '';
     const condition = n.applies_when ? ' Check scope: ' + n.applies_when : '';
     const sources = n.source_ids.map(id => regions_ts_1.REGION_SOURCES[id]).filter(Boolean).map(s => `${s.title}: <${s.url}> (source checked ${s.accessed_date})`).join('; ');
-    return countryScope + n.text + condition + (sources ? ' Source: ' + sources + '.' : '');
+    const again = !!sources && printedSources.has(sources);
+    if (sources)
+        printedSources.add(sources);
+    return countryScope + n.text + condition + (sources ? (again ? ' Same source as above.' : ' Source: ' + sources + '.') : '');
 }
 function regionNotes(args) {
+    printedSources = new Set();
+    printedTexts = new Set();
     const reading = readRegionContext(args), outside = outsideMarkets(args);
     if (!reading.regions.length && !outside.length)
         return exports.NO_REGION_SUFFIX;
@@ -424,8 +431,10 @@ function regionNotes(args) {
                 return false; seen.add(key); return true; });
             shown += notes.length;
             sourced += notes.filter(n => n.source_ids.length).length;
-            if (notes.length)
-                out.push('', LABELS[field] + ':', ...notes.map(n => renderNote(n, match.countries)));
+            const fresh = notes.filter(n => { if (printedTexts.has(n.text))
+                return false; printedTexts.add(n.text); return true; });
+            if (fresh.length)
+                out.push('', LABELS[field] + ':', ...fresh.map(n => renderNote(n, match.countries)));
         }
         if (!sourced)
             out.push('No sourced note is available for this market and industry combination. No other country has been substituted.');
@@ -435,8 +444,10 @@ function regionNotes(args) {
         if (pending.length)
             out.push('This regional data file still has source gaps. Confirm the country and activity specific evidence before using it. No conclusion is drawn on unverified topics.');
     }
-    for (const name of outside)
+    outside.forEach((name, i) => { if (i === 0)
         out.push('', `### ${name}`, `${name} is outside the regions we cover today; the advice below is general, not country specific.`, '', ...GENERAL_ADVICE);
+    else
+        out.push('', `### ${name}`, `${name} is outside the regions we cover today; the general advice given above applies here too, and it is not country specific.`); });
     out.push('', 'Next action for each named market: The account owner confirms the buyer country and contracting entity. Procurement confirms the order and payment steps. The relevant risk or privacy reviewer records the applicable rules and missing proof. Revisit this when the market, entity or data flow changes.');
     return out.join('\n');
 }
