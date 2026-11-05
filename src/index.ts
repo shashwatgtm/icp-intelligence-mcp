@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { guardInputs, holdBuyerCopy, isPlaceholder, isDenial } from './input-evidence.ts';
+import {regionNotes} from './region-reader.ts';
 import { withReadingGuide } from './reader-actions.ts';
 import { evolutionMatch } from './evolution-membership.ts';
 import { billingLine } from './verticals.ts';
@@ -453,8 +454,25 @@ function isObjection(text: string): boolean {
   return /^(?:we|we're|our|i|they|it|ai will|this will|that will)\b/i.test(text.trim()) || /\b(already (?:have|has|does|use)|will not|won't|too (?:expensive|costly|risky|slow)|not (?:sure|convinced))\b/i.test(text);
 }
 // Employee ranges typed in a text ("300 to 3,000 employees", "200-500 employees").
+// A count the writer denies ("do not have 500 employees") or marks as unknown, estimated or unconfirmed is not a current count.
+const HEADCOUNT_RE = /\b\d[\d,]*\s*(?:to|-|–)\s*\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b|\b(?:under|over|more than|fewer than)\s+\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b|\b\d[\d,]*\+\s+(?:employees?|staff(?: members?)?)\b|\b\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b/gi;
+const COUNT_DENIAL = /\b(?:not|never|no|without|neither|nor|cannot|excluding|except|isn't|aren't|don't|doesn't|didn't|wasn't|weren't|hasn't|haven't|unable to)\b/i;
+const COUNT_UNCONFIRMED = /\b(?:unconfirmed|unverified|not confirmed|not verified|unknown|not known|unsure|uncertain|estimated|estimate|estimates|guess|guessed|rumou?red|assumed|placeholder|tbd|to be confirmed|to be verified|not yet known|no (?:confirmed )?(?:figure|number|count|data))\b/i;
+const COUNT_NEXT_UNCONFIRMED = /^(?:(?:that|this|the|their|its|these|those)\s+)?(?:figures?|numbers?|counts?|headcounts?|estimates?|sizes?)\b[^.!?;]*\b(?:unconfirmed|unknown|unverified|not confirmed|not known|an estimate|estimated|a guess|uncertain)\b/i;
 function sizesIn(text: string): string[] {
-  return [...new Set((String(text).match(/\b\d[\d,]*\s*(?:to|-|–)\s*\d[\d,]*\s+employees\b|\b(?:under|over|more than|fewer than)\s+\d[\d,]*\s+employees\b|\b\d[\d,]*\+\s+employees\b/gi) || []).map((x) => x.trim()))];
+  const parts = String(text).split(/(?<=[.!?])(?=\s)|[;\n]/);
+  const out: string[] = [];
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
+    const next = (parts[i + 1] || '').trim();
+    if (COUNT_UNCONFIRMED.test(part) || COUNT_NEXT_UNCONFIRMED.test(next)) continue;
+    for (const m of part.matchAll(HEADCOUNT_RE)) {
+      const window = part.slice(0, m.index!).split(/,|(?:^|\s)(?:but|however|whereas|while)\s/i).at(-1) || '';
+      if (COUNT_DENIAL.test(window)) continue;
+      out.push(m[0].trim());
+    }
+  }
+  return [...new Set(out)];
 }
 
 
@@ -2944,12 +2962,12 @@ ${results.length > 0 ? results.map(([value, count], i) =>
 ${claims.length ? `\n**Claims and recognition in your notes** (seller claims and testimonials: statements from the seller's own pages, quotes from the seller's customers or awards, not outcomes a customer reported to you in an interview; use them as proof points only after a customer confirms them):\n${claims.map(([value, count]) => `- ${shortText(value, 300)} (${of(count)})`).join('\n')}\n` : ''}
 **ICP Implication**: ${results.length ? 'Treat these as reported claims to verify. Do not lead with an unmeasured or unconfirmed outcome; obtain its source, scope and date first' : 'Collect customer outcomes before you lead with value in messaging'}
 
-### Champion Roles
+### Interview Roles to Validate
 ${topRoles.length > 0 ? topRoles.map(([role, count], i) =>
   `${i + 1}. **${role}**: ${of(count)}`
 ).join('\n') : '- No roles captured'}
 ${tieNote(topRoles, 'role')}
-**ICP Implication**: Focus outreach on these titles
+**ICP Implication**: These are interview roles, not confirmed champions. Validate advocacy and purchasing authority before assigning a buying role.
 
 ---
 
@@ -2967,7 +2985,7 @@ ${allQuotes.length ? allQuotes.slice(0, 5).map((qt, i) => `
 
 ### Add to ICP
 Based on patterns, your ideal customer:
-${topPains[0] ? `- Experiences: ${q(shortText(topPains[0][0], 300))}\n` : ''}${topTriggers[0] ? `- Is triggered by: ${topTriggers[0][0]}\n` : ''}${topRoles[0] ? (topRoles[1] && topRoles[1][1] === topRoles[0][1] ? `- Champion is one of: ${andList(topRoles.filter(r => r[1] === topRoles[0][1]).map(r => r[0]))} (no single leading role yet)\n` : `- Champion is: ${topRoles[0][0]}\n`) : ''}${results[0] ? `- Seeks outcome: ${shortText(results[0][0], 300)}\n` : ''}
+${topPains[0] ? `- Experiences: ${q(shortText(topPains[0][0], 300))}\n` : ''}${topTriggers[0] ? `- Is triggered by: ${topTriggers[0][0]}\n` : ''}${topRoles[0] ? (topRoles[1] && topRoles[1][1] === topRoles[0][1] ? `- Interview role candidates include: ${andList(topRoles.filter(r => r[1] === topRoles[0][1]).map(r => r[0]))} (no single leading role yet)\n` : `- Interview role to validate: ${topRoles[0][0]}\n`) : ''}${results[0] ? `- Seeks outcome: ${shortText(results[0][0], 300)}\n` : ''}
 ### Messaging Updates
 Based on customer language, update:
 ${topPains[0] ? `- **Pain messaging**: ${q(shortText(topPains[0][0], 300))}\n` : ''}${results[0] ? `- **Value messaging**: ${q(shortText(results[0][0], 300))}\n` : (allQuotes.length ? '- **Value messaging**: none yet as outcomes; the customer statements under Key Quotes are the starting point, once the customer agrees to be quoted\n' : '- **Value messaging**: none yet; your value statements are claims, not customer outcomes\n')}
@@ -3278,7 +3296,7 @@ export function createServer(): Server {
       const limit=decisionLimit(String(toolName),safeArgs as Record<string,unknown>);
       const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs as any);
       return {
-        content: [{ type: 'text', text: inputEvidence.notice + (inputEvidence.notice ? '\n\n' : '') + withReadingGuide(toolName, holdBuyerCopy(toolName, safeArgs, result), safeArgs as Record<string,unknown>) }]
+        content: [{ type: 'text', text: inputEvidence.notice + (inputEvidence.notice ? '\n\n' : '') + withReadingGuide(toolName, holdBuyerCopy(toolName, safeArgs, result), safeArgs as Record<string,unknown>) + (limit.stop ? '' : regionNotes(typed)) }]
       };
     } catch (error) {
       return {
