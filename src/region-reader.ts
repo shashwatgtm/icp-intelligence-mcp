@@ -4,7 +4,7 @@ import {explainSector} from './verticals.ts';
 export const NO_REGION_SUFFIX='\n\nRegion context: Which region applies: India, Southeast Asia, Middle East, UK, Western Europe or North America? Add it to your description and rerun.';
 export interface RegionMatch {region_id:RegionId;countries:string[];jurisdictions:string[];evidence:string[];vertical_id:string|null;subtype_id:string|null}
 export interface RegionReading {regions:RegionMatch[];unresolved_hints:string[]}
-interface Clue {region:RegionId;country?:string;jurisdiction?:string;value:string;kind:'region'|'country'|'city'|'currency'|'regulator'|'state'}
+interface Clue {region:RegionId|'outside';country?:string;jurisdiction?:string;value:string;kind:'region'|'country'|'city'|'currency'|'regulator'|'state'}
 interface Fragments {seller:string[];market:string[];buyer:string[]}
 const SELLER=new Set(['product_feature','product_context','positioning_statement','document_content','potential_crises','your_sector','industry','product_category','product_description','your_product','category','company_description','offering','what_you_sell','product','sector']);
 const MARKET=new Set(['target_segments','seller_market','target_market','target_regions','region','regions','geography','geographies','country','countries','city','cities','currency','currencies','regulator','regulators','market_name','market','markets','segment_name']);
@@ -31,17 +31,38 @@ function fragments(args:unknown):Fragments {
 }
 const COUNTRY_SEEDS:[RegionId,string,string[]][]=[
  ['india','IN',['India','Indian market']],
- ['southeast-asia','SG',['Singapore']],['southeast-asia','ID',['Indonesia']],['southeast-asia','MY',['Malaysia']],['southeast-asia','TH',['Thailand']],['southeast-asia','VN',['Vietnam']],['southeast-asia','PH',['Philippines']],
+ ['southeast-asia','SG',['Singapore']],['southeast-asia','ID',['Indonesia']],['southeast-asia','MY',['Malaysia']],['southeast-asia','PH',['Philippines']],
  ['middle-east','AE',['United Arab Emirates','UAE']],['middle-east','SA',['Saudi Arabia']],['middle-east','QA',['Qatar']],['middle-east','BH',['Bahrain']],['middle-east','OM',['Oman']],['middle-east','KW',['Kuwait']],
  ['uk','GB',['United Kingdom','UK','Britain']],
- ['western-europe','DE',['Germany','German market']],['western-europe','FR',['France']],['western-europe','NL',['Netherlands']],['western-europe','BE',['Belgium']],['western-europe','AT',['Austria']],['western-europe','CH',['Switzerland']],['western-europe','LU',['Luxembourg']],['western-europe','LI',['Liechtenstein']],
- ['north-america','US',['United States','USA']],['north-america','CA',['Canada']],['north-america','MX',['Mexico']]
+ ['western-europe','DE',['Germany','German market']],['western-europe','FR',['France']],['western-europe','NL',['Netherlands']],['western-europe','BE',['Belgium']],['western-europe','AT',['Austria']],['western-europe','CH',['Switzerland']],['western-europe','LU',['Luxembourg']],
+ ['north-america','US',['United States','USA']],['north-america','CA',['Canada']]
 ];
+// Owner scope 5 Nov 2026: these countries are outside the six regions. They stay recognisable as
+// places so lists, denials and past markets parse as before, but they never select a region or notes.
+const OUT_OF_SCOPE:[RegionId,string,string[],string[]][]=[
+ ['north-america','MX',['Mexico','México'],['Mexico City','Ciudad de México','Monterrey','Guadalajara']],
+ ['southeast-asia','TH',['Thailand'],['Bangkok']],['southeast-asia','VN',['Vietnam','Viet Nam'],['Hanoi','Ho Chi Minh City']],
+ ['southeast-asia','BN',['Brunei','Brunei Darussalam'],['Bandar Seri Begawan']],['southeast-asia','KH',['Cambodia'],['Phnom Penh']],
+ ['southeast-asia','LA',['Laos','Lao PDR'],['Vientiane']],['southeast-asia','MM',['Myanmar'],['Yangon','Naypyidaw']],
+ ['southeast-asia','TL',['Timor Leste','Timor-Leste','East Timor'],['Dili']],
+ ['western-europe','LI',['Liechtenstein'],['Vaduz']],['western-europe','MC',['Monaco'],[]]
+];
+// Other countries a seller commonly names. Only unambiguous names are listed; they never select a region.
+const OUTSIDE:[string,string[]][]=[
+ ['JP',['Japan']],['KR',['South Korea']],['AU',['Australia']],['NZ',['New Zealand']],['BR',['Brazil']],['AR',['Argentina']],['CO',['Colombia']],
+ ['ZA',['South Africa']],['NG',['Nigeria']],['KE',['Kenya']],['EG',['Egypt']],['IL',['Israel']],['IE',['Ireland']],['DK',['Denmark']],['PL',['Poland']],
+ ['CZ',['Czechia','Czech Republic']],['HU',['Hungary']],['RO',['Romania']],['IS',['Iceland']],['EE',['Estonia']],['LV',['Latvia']],['LT',['Lithuania']],
+ ['PK',['Pakistan']],['BD',['Bangladesh']],['LK',['Sri Lanka']],['NP',['Nepal']],['HK',['Hong Kong']],['TW',['Taiwan']],['UA',['Ukraine']],['MA',['Morocco']]
+];
+const OUT_OF_SCOPE_CODES=new Set([...OUT_OF_SCOPE.map(x=>x[1]),...OUTSIDE.map(x=>x[0])]);
+const OUTSIDE_NAME=new Map<string,string>([...OUT_OF_SCOPE.map(x=>[x[1],x[2][0]] as [string,string]),...OUTSIDE.map(x=>[x[0],x[1][0]] as [string,string])]);
+// Owner approved wording, 5 Nov 2026, for a named country outside the six regions. General questions only, no country rule.
+const GENERAL_ADVICE=['Who decides and approves:','Which country, legal entity and activity are in scope, and who approves the budget, risk and the purchase?','','Sector rules to check:','Which sector regulator, licence or registration applies to the buyer and to this activity in that country?','','Data and privacy:','Which data protection law and regulator apply to this buyer, and where will its data be processed and stored?','','Procurement and payment:','What procurement route, invoice currency, acceptance terms and payment schedule has this buyer confirmed?','','Proof to prepare:','What sample workflow and acceptance evidence will the buyer approve?'];
 // Seeds make the named region reader usable before sourced data lands. They are only geography,
 // never legal applicability. Authored country hints extend this list without replacing it.
 const EXTRA_SEEDS:[RegionId,string,string,Clue['kind']][]=[
  ['india','IN','Bengaluru','city'],['india','IN','Bangalore','city'],['india','IN','Mumbai','city'],['india','IN','New Delhi','city'],['india','IN','INR','currency'],['india','IN','Indian rupee','currency'],['india','IN','Reserve Bank of India','regulator'],['india','IN','RBI','regulator'],
- ['southeast-asia','SG','SGD','currency'],['southeast-asia','SG','Singapore dollar','currency'],['southeast-asia','SG','Monetary Authority of Singapore','regulator'],['southeast-asia','SG','MAS','regulator'],['southeast-asia','ID','Jakarta','city'],['southeast-asia','TH','Bangkok','city'],
+ ['southeast-asia','SG','SGD','currency'],['southeast-asia','SG','Singapore dollar','currency'],['southeast-asia','SG','Monetary Authority of Singapore','regulator'],['southeast-asia','SG','MAS','regulator'],['southeast-asia','ID','Jakarta','city'],
  ['middle-east','AE','Dubai','city'],['middle-east','AE','Abu Dhabi','city'],['middle-east','AE','AED','currency'],['middle-east','SA','Riyadh','city'],['middle-east','SA','SAR','currency'],['middle-east','SA','Saudi Central Bank','regulator'],
  ['uk','GB','London','city'],['uk','GB','GBP','currency'],['uk','GB','pound sterling','currency'],['uk','GB','Financial Conduct Authority','regulator'],['uk','GB','FCA','regulator'],
  ['western-europe','DE','Berlin','city'],['western-europe','DE','Munich','city'],['western-europe','DE','BaFin','regulator'],['western-europe','NL','Amsterdam','city'],
@@ -53,6 +74,8 @@ function clues():Clue[]{
  for(const [region,value] of [['southeast-asia','South East Asia'],['southeast-asia','South-East Asia'],['middle-east','Middle Eastern market'],['western-europe','Western European market'],['north-america','North American market']] as [RegionId,string][])all.push({region,value,kind:'region'});
  for(const [region,country,names]of COUNTRY_SEEDS)for(const value of names)all.push({region,country,value,kind:'country'});
  for(const [region,country,value,kind]of EXTRA_SEEDS)all.push({region,country,value,kind});
+ for(const [region,country,names,cities]of OUT_OF_SCOPE){for(const value of names)all.push({region,country,value,kind:'country'});for(const value of cities)all.push({region,country,value,kind:'city'});}
+ for(const [country,names]of OUTSIDE)for(const value of names)all.push({region:'outside',country,value,kind:'country'});
  for(const r of REGION_DATA){for(const value of r.reader_hints.aliases)all.push({region:r.region_id,value,kind:'region'});for(const c of r.reader_hints.countries){for(const value of [c.name,...c.aliases])all.push({region:r.region_id,country:c.code,value,kind:'country'});for(const kind of ['city','currency','regulator'] as const){const values=kind==='city'?c.cities:kind==='currency'?c.currencies:c.regulators;for(const value of values)all.push({region:r.region_id,country:c.code,value,kind});}}}
  for(const [value,code] of Object.entries(US_STATES))if(!['Georgia','Washington'].includes(value))all.push({region:'north-america',country:'US',jurisdiction:'US-'+code,value,kind:'state'});
  const seen=new Set<string>();return all.filter(c=>{const key=[c.region,c.country,c.value.toLowerCase(),c.kind].join('|');if(seen.has(key))return false;seen.add(key);return true;}).sort((a,b)=>b.value.length-a.value.length);
@@ -222,7 +245,7 @@ export function sellerProductForMarket(args:unknown,market?:string):string[] {
 export function sellerMarketStates(args:unknown):{country:string|null;region:string;kind:string;state:'yes'|'no'|'unclear'}[] {
  const f=fragments(args),all=clues();
  const seen=scan(f.seller.map(text=>marketText(text,all)),all);
- return seen.found.filter(m=>['country','city','state','region'].includes(m.clue.kind)).map(m=>({country:m.clue.country||null,region:m.clue.region,kind:m.clue.kind,state:m.state}));
+ return seen.found.filter(m=>m.clue.region!=='outside'&&['country','city','state','region'].includes(m.clue.kind)).map(m=>({country:m.clue.country||null,region:m.clue.region,kind:m.clue.kind,state:m.state}));
 }
 export function readRegionContext(args:unknown):RegionReading {
  const f=fragments(args),all=clues();
@@ -234,7 +257,7 @@ export function readRegionContext(args:unknown):RegionReading {
  for(const r of REGION_CHOICES){
   const mentions=chosen.found.filter(m=>m.clue.region===r.id);
   if(mentions.some(m=>m.clue.kind==='region'&&m.state!=='yes'))continue;
-  const affirmative=mentions.filter(m=>m.state==='yes'&&!mentions.some(n=>n.clue.kind==='country'&&n.clue.country===m.clue.country&&n.state!=='yes'&&!distinctOfferings(m.offeringPrefix,n.offeringPrefix)));
+  const affirmative=mentions.filter(m=>m.state==='yes'&&!mentions.some(n=>n.clue.kind==='country'&&n.clue.country===m.clue.country&&n.state!=='yes'&&!distinctOfferings(m.offeringPrefix,n.offeringPrefix))).filter(m=>!m.clue.country||!OUT_OF_SCOPE_CODES.has(m.clue.country));
   if(!affirmative.length)continue;
   const countries=[...new Set(affirmative.map(m=>m.clue.country).filter((x):x is string=>Boolean(x)))];
   // One entry per country keeps two countries in the same region from sharing notes.
@@ -258,6 +281,15 @@ export function readRegionContext(args:unknown):RegionReading {
  }
  return{regions,unresolved_hints:[...new Set(chosen.unresolved)]};
 }
+/** Affirmative selling markets that are outside the six regions, by display name, in order of mention. */
+function outsideMarkets(args:unknown):string[] {
+ const f=fragments(args),all=clues();
+ const explicit=scan(f.market.map(text=>marketText(text,all)),all),seller=scan(f.seller.map(text=>marketText(text,all)),all);
+ const chosen=explicit.found.length||explicit.unresolved.length?explicit:seller;
+ const mentions=chosen.found.filter(m=>m.clue.country&&OUT_OF_SCOPE_CODES.has(m.clue.country));
+ const yes=mentions.filter(m=>m.state==='yes'&&!mentions.some(n=>n.clue.country===m.clue.country&&n.state!=='yes'&&!distinctOfferings(m.offeringPrefix,n.offeringPrefix)));
+ return[...new Set(yes.map(m=>OUTSIDE_NAME.get(m.clue.country!)!))];
+}
 const LABELS:Record<ContextField,string>={decision_approvers:'Who decides and approves',sector_regulator:'Sector rules to check',procurement_payment:'Procurement and payment',data_privacy:'Data and privacy',buyer_language:'Buyer language',proof:'Proof to prepare',objections:'Objections to test',sales_motion:'Sales motion'};
 const EU_COUNTRIES=new Set(['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE']);
 function applies(n:RegionNote,match:RegionMatch):boolean{return !n.jurisdictions.length||n.jurisdictions.some(j=>match.jurisdictions.includes(j)||(j==='EU'&&match.countries.some(c=>EU_COUNTRIES.has(c))));}
@@ -268,7 +300,7 @@ function renderNote(n:RegionNote,countries:string[]):string {
  return countryScope+n.text+condition+(sources?' Source: '+sources+'.':'');
 }
 export function regionNotes(args:unknown):string {
- const reading=readRegionContext(args);if(!reading.regions.length)return NO_REGION_SUFFIX;
+ const reading=readRegionContext(args),outside=outsideMarkets(args);if(!reading.regions.length&&!outside.length)return NO_REGION_SUFFIX;
  const out=['','','## Region and industry context','','Draft for owner review. These checks use the market context in your description. They do not change the scores or market arithmetic above.'];
  for(const match of reading.regions){
   const choice=REGION_CHOICES.find(x=>x.id===match.region_id)!;
@@ -293,6 +325,7 @@ export function regionNotes(args:unknown):string {
   const pending=[...(vertical?.pending_topics||[]),...(subtype?.pending_topics||[])];
   if(pending.length)out.push('This regional data file still has source gaps. Confirm the country and activity specific evidence before using it. No conclusion is drawn on unverified topics.');
  }
+ for(const name of outside)out.push('',`### ${name}`,`${name} is outside the regions we cover today; the advice below is general, not country specific.`,'',...GENERAL_ADVICE);
  out.push('', 'Next action for each named market: The account owner confirms the buyer country and contracting entity. Procurement confirms the order and payment steps. The relevant risk or privacy reviewer records the applicable rules and missing proof. Revisit this when the market, entity or data flow changes.');
  return out.join('\n');
 }

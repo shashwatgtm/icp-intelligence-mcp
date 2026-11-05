@@ -276,3 +276,60 @@ for(const [text,expected] of [
  if(expected.length)assert.equal(result.regions[0].subtype_id,'lending');
  assert.deepEqual(readRegionContext(args),result);assert.deepEqual(readRegionContext(args),result);
 });
+// Owner scope 5 Nov 2026: Mexico, Thailand, Viet Nam, Brunei, Cambodia, Laos, Myanmar, Timor Leste,
+// Monaco and Liechtenstein are out of scope. They never select a region, but they still parse as places.
+for(const [text,expected] of [
+ ['We sell lending software in Mexico.',[]],
+ ['We sell lending software in Mexico City.',[]],
+ ['We sell lending software in Thailand and Singapore.',['SG']],
+ ['We sell lending software in Vietnam.',[]],
+ ['We sell lending software in Monaco and France.',['FR']],
+ ['We sell lending software in Liechtenstein.',[]],
+ ['We sell lending software in Myanmar, Cambodia and Malaysia.',['MY']],
+ ['We sell lending software in New Mexico, United States.',['US']],
+ ['We do not sell lending software in Mexico. We sell lending software in Canada.',['CA']],
+])test('Out of scope country: '+text,()=>{
+ const args={product_description:text},result=readRegionContext(args);
+ assert.deepEqual(result.regions.flatMap(r=>r.countries).sort(),expected);
+ assert.deepEqual(readRegionContext(args),result);
+});// Owner scope 5 Nov 2026: Spain, Italy, Portugal, Greece, Finland, Sweden and Norway join Western Europe.
+for(const [text,expected] of [
+ ['We sell lending software in Spain.',['ES']],
+ ['We sell lending software to banks in Milan.',['IT']],
+ ['We sell lending software in Portugal and Greece.',['GR','PT']],
+ ['We sell lending software in Finland. We do not sell lending software in Sweden.',['FI']],
+ ['We sell lending software in Norway and invoice in SEK.',['NO']],
+])test('Added Western Europe country: '+text,()=>{
+ const args={product_description:text},result=readRegionContext(args);
+ assert.deepEqual(result.regions.flatMap(r=>r.countries).sort(),expected);
+ assert.ok(result.regions.every(r=>r.region_id==='western-europe'));
+ assert.deepEqual(readRegionContext(args),result);
+});
+test('Norway is EEA, not EU: EU only notes are not attached to Norway',()=>{
+ const out=regionNotes({product_description:'We sell core banking software to banks in Norway.'});
+ assert.ok(out.includes('Norway is in the EEA, not the EU'),out);
+ assert.ok(!out.includes('DORA'),out);
+ assert.ok(!out.includes('Single Supervisory Mechanism'),out);
+});
+test('Sweden is outside the euro area banking union: no SSM licence note',()=>{
+ const out=regionNotes({product_description:'We sell core banking software to banks in Sweden.'});
+ assert.ok(!out.includes('Single Supervisory Mechanism'),out);
+ assert.ok(out.includes('DORA'),out);
+});// Owner approved wording (5 Nov 2026) for a named country outside the six regions.
+const OUTSIDE_LINE=name=>`${name} is outside the regions we cover today; the advice below is general, not country specific.`;
+for(const [text,names,regionHeading] of [
+ ['We sell lending software in Mexico.',['Mexico'],null],
+ ['We sell lending software in Japan.',['Japan'],null],
+ ['We sell lending software in Monaco.',['Monaco'],null],
+ ['We sell lending software in Thailand and Singapore.',['Thailand'],'### Southeast Asia · Singapore'],
+ ['We sell lending software in Vietnam.',['Vietnam'],null],
+])test('Outside the covered regions: '+text,()=>{
+ const out=regionNotes(seller(text));
+ assert.notEqual(out,NO_REGION_SUFFIX);
+ for(const name of names){assert.ok(out.includes('### '+name),out);assert.ok(out.includes(OUTSIDE_LINE(name)),out);}
+ if(regionHeading)assert.ok(out.includes(regionHeading),out);
+ assert.ok(!/Source:/.test(out.split(OUTSIDE_LINE(names[0]))[1].split('Next action')[0]),'general advice carries no country source');
+ assert.equal(regionNotes(seller(text)),out);
+});
+for(const text of ['We do not sell lending software in Mexico.','We used to sell lending software in Japan.','Payment reconciliation software. Our competitor is based in Australia.'])
+ test('Outside country not affirmed keeps the fixed region question: '+text,()=>assert.equal(regionNotes(seller(text)),NO_REGION_SUFFIX));

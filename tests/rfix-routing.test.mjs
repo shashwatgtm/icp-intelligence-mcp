@@ -72,7 +72,9 @@ for(const [vi,[vid,prod,sub]] of V.entries()){
   n++;
  }
 }
-test('matrix size',()=>assert.ok(n>=9*31));
+// Owner scope 5 Nov 2026: 28 countries (MX, BN, KH, LA, MM, TL, TH, VN, MC and LI removed;
+// ES, IT, PT, GR, FI, SE and NO added to Western Europe).
+test('matrix size',()=>assert.ok(n>=9*28&&n===9*countries.length));
 // Verbatim M2 findings, plus their reversed, equivalent and negated forms.
 for(const [id,text,want] of [
  ['M077','We sell warehouse management software to warehouse operators in Singapore, but do not sell lending software in India.',[['SG','logistics-tech','warehousing']]],
