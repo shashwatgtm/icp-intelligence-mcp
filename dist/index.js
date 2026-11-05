@@ -3225,8 +3225,9 @@ function createServer() {
                 isError: true
             };
         }
-        if ((0, software_policy_ts_1.asksForSoftware)(typed))
-            return { content: [{ type: 'text', text: software_policy_ts_1.SOFTWARE_REFERRAL }] };
+        const advice = (0, software_policy_ts_1.softwareAdvice)(typed);
+        if (advice)
+            return { content: [{ type: 'text', text: advice }] };
         try {
             const limit = (0, decision_limits_ts_1.decisionLimit)(String(toolName), safeArgs);
             const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs);

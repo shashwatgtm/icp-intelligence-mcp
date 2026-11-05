@@ -253,7 +253,7 @@ export function readProfile(raw: string): ProfileRead {
     ?? /(?:,\s*)?\bwhose (?:biggest worry|main concern) is\s+(.+)$/i.exec(body)
     ?? /(?:,\s*)?\b(?:problems?|pain points?|challenges?)\s*:\s*(.+)$/i.exec(body);
   if (pm) {
-    res.problems.push(...splitTop(pm[1], /;/).map((x) => noDot(x)).filter(x => x && !/^(?:no|not|without)\b/i.test(x)));
+    res.problems.push(...splitTop(pm[1], /;/).map((x) => noDot(x)).filter(x => x && !/^(?:no (?:problems?|pain points?)|not (?:given|supplied|stated))\b/i.test(x)));
     body = body.slice(0, pm.index).trim();
   }
   body = body.replace(/[,;\s]+$/, '');
@@ -449,6 +449,9 @@ const ROLE_STOP = new Set(['head', 'of', 'chief', 'officer', 'director', 'vp', '
 export function gapAnalysis(curText: string, idlText: string, d: GapDeps): string {
   const cur = readProfile(curText);
   const idl = readProfile(idlText);
+  // An explicit problem clause is supplied evidence, including a negated capability.
+  const explicitProblem = /\bwho face (.+)$/i.exec(idlText)?.[1];
+  if(explicitProblem) idl.problems = splitTop(explicitProblem, /;/).map(noDot).filter(Boolean);
   const hyp = cur.hypothetical || idl.hypothetical;
   const curAll = `${curText}`;
   const idlAll = `${idlText}`;
