@@ -12,7 +12,9 @@ const conversation_guidance_ts_1 = require("./conversation-guidance.js");
 const build_profile_ts_1 = require("./build-profile.js");
 const reserve_tools_ts_1 = require("./reserve-tools.js");
 const widget_layer_ts_1 = require("./widget-layer.js");
-const lane_f_results_ts_1 = require("./lane-f-results.js");
+const helix_results_ts_1 = require("./helix-results.js");
+const account_prioritization_ts_1 = require("./account-prioritization.js");
+const widget_origin_ts_1 = require("./widget-origin.js");
 const text_signals_ts_1 = require("./text-signals.js");
 const decision_limits_ts_1 = require("./decision-limits.js");
 const text_signals_ts_2 = require("./text-signals.js");
@@ -42,13 +44,9 @@ function sharePct(fraction) {
     }
     return `${v.toFixed(1)}%`;
 }
-// A percentage typed by the user and printed back: one decimal at most, no trailing ".0" (20 stays 20, 23.456789 prints 23.5).
-function cleanNum1(n) {
-    return (Math.round(n * 10) / 10 + 0).toLocaleString('en-US', { maximumFractionDigits: 1 });
-}
-function cleanPct(n) {
-    return `${cleanNum1(n)}%`;
-}
+// cleanNum1 and cleanPct live in account-prioritization.ts (imported above), so the account text and its widget share them.
+// The result widget reads the model the Account Prioritization text was printed from, keyed by the argument object.
+const accountModels = new WeakMap();
 // A plain number printed back (a sum of weights): float noise removed, two decimals at most.
 function cleanNum(n) {
     return (Math.round(n * 100) / 100 + 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
@@ -1745,7 +1743,7 @@ ${args.product_category ? ctx.line : ctx.v ? `*Sector: read from your inputs as 
 |-------|-------|--------|
 | Total Potential Companies | ${totalCompanies.toLocaleString('en-US')} | ${sources} |
 | Average Contract Value | $${acv.toLocaleString('en-US')} | Your input |
-| ICP Match Rate | ${cleanPct(icpPercent * 100)}${icpEx} | ${icpGiven ? 'Your input' : 'Not supplied'} |
+| ICP Match Rate | ${(0, account_prioritization_ts_1.cleanPct)(icpPercent * 100)}${icpEx} | ${icpGiven ? 'Your input' : 'Not supplied'} |
 | Year 1 Market Share Target | ${sharePct(marketSharePercent)}${shareEx} | ${shareGiven ? 'Your input' : 'Not supplied'} |
 
 ---
@@ -1766,7 +1764,7 @@ TAM = ${totalCompanies.toLocaleString('en-US')} × $${acv.toLocaleString('en-US'
 ### SAM (Serviceable Addressable Market)
 \`\`\`
 SAM = TAM × ICP Match Rate
-SAM = ${formatCurrency(tam)} × ${cleanPct(icpPercent * 100)}${icpEx}
+SAM = ${formatCurrency(tam)} × ${(0, account_prioritization_ts_1.cleanPct)(icpPercent * 100)}${icpEx}
 \`\`\`
 ### **SAM = ${formatCurrency(sam)}**${icpEx}
 
@@ -2174,41 +2172,17 @@ ${SUGGESTED}
         },
         execute: (args) => {
             const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company] });
-            // Default weights
-            const weights = {
-                // Run 16 D45: a weight given as 0 is used as 0; only an omitted or null weight takes its default.
-                fit: args.prioritization_weights?.fit ?? 40,
-                intent: args.prioritization_weights?.intent ?? 30,
-                relationship: args.prioritization_weights?.relationship ?? 15,
-                timing: args.prioritization_weights?.timing ?? 15
-            };
-            // Labels only: a weight the input did not supply is the default (an example figure).
-            const givenWeights = args.prioritization_weights || {};
+            // One shared calculation (src/account-prioritization.ts): this text and the result widget read the same model.
+            const model = (0, account_prioritization_ts_1.computeAccountPrioritization)(args);
+            accountModels.set(args, model);
+            const { weights, givenWeights, noWeights } = model;
             const has = (v) => v !== undefined && v !== null;
-            const noWeights = !(has(givenWeights.fit) || has(givenWeights.intent) || has(givenWeights.relationship) || has(givenWeights.timing));
             const wEx = (given) => (noWeights || has(given)) ? '' : ` ${EXAMPLE}`;
             // If accounts provided, score them
-            if (args.accounts && args.accounts.length > 0) {
-                const timingScore = (timing) => (0, text_signals_ts_4.timingFact)(timing).score;
-                // D41 (run 15): the tier cut-offs are 80%, 60% and 40% of the highest possible score W, the sum of the four weights
-                // (ceil in integer-safe form; with the default weights W = 100 they are 80, 60 and 40, as before).
-                const W = Number((weights.fit + weights.intent + weights.relationship + weights.timing).toPrecision(12)); // run 20: 33.3 + 33.3 + 33.3 + 0.1 is 100, not 99.99999999999999
-                const cut = (p) => Math.ceil((W * p) / 100);
-                const tierA = cut(80), tierB = cut(60), tierC = cut(40);
-                // Unknown signals remain ranges; supplied zero is evidence, never a default.
-                const intervals = args.accounts.map(account => {
-                    const tf = (0, text_signals_ts_4.timingFact)(account.timing || 'unknown');
-                    const values = { fit: account.fit_score, intent: account.intent_signals, relationship: account.relationship, timing: tf.state === 'affirmed' ? tf.score : undefined };
-                    const keys = Object.keys(weights);
-                    const unknown = keys.filter(k => values[k] == null);
-                    const low = keys.reduce((n, k) => n + (values[k] ?? 0) * weights[k] / 100, 0);
-                    const high = low + unknown.reduce((n, k) => n + weights[k], 0);
-                    return { account, values, unknown, low: Math.round(low), high: Math.round(high) };
-                });
-                if (intervals.some(a => a.unknown.length) || intervals.some((a, i) => intervals.some((b, j) => i !== j && a.low === b.low))) {
-                    const overlaps = (a, b) => a.low <= b.high && b.low <= a.high;
-                    const signals = intervals.flatMap(a => a.unknown.filter(k => weights[k] > 0).map(k => ({ account: a.account.name, key: k, swing: weights[k], overlap: intervals.some(b => a !== b && overlaps(a, b)) }))).sort((a, b) => Number(b.overlap) - Number(a.overlap) || b.swing - a.swing);
-                    const next = signals[0];
+            if (model.mode !== 'framework') {
+                const { W, tierA, tierB, tierC } = model;
+                if (model.mode === 'intervals') {
+                    const { intervals, next } = model;
                     return `# Account prioritization: confirm missing signals
 
 ${args.product_category ? ctx.line : ''}
@@ -2223,7 +2197,7 @@ Missing dimensions remain unknown and range from 0 to 100 before weighting. Timi
 
 | Account | Fit | Intent | Relationship | Timing | Possible score | Rank |
 | --- | --- | --- | --- | --- | --- | --- |
-${intervals.map(a => `| ${a.account.name || 'Unknown'} | ${a.values.fit ?? 'Unknown'} | ${a.values.intent ?? 'Unknown'} | ${a.values.relationship ?? 'Unknown'} | ${a.values.timing == null ? (a.account.timing || 'Not supplied') + ' (Unknown)' : a.account.timing + ' (' + a.values.timing + ' pts)'} | ${a.low} to ${a.high} of ${W} | ${intervals.some(b => a !== b && overlaps(a, b)) ? 'Unresolved: overlapping intervals' : 1 + intervals.filter(b => b.low > a.high).length} |`).join('\n')}
+${intervals.map(a => `| ${a.account.name || 'Unknown'} | ${a.values.fit ?? 'Unknown'} | ${a.values.intent ?? 'Unknown'} | ${a.values.relationship ?? 'Unknown'} | ${a.values.timing == null ? (a.account.timing || 'Not supplied') + ' (Unknown)' : a.account.timing + ' (' + a.values.timing + ' pts)'} | ${a.low} to ${a.high} of ${W} | ${a.overlap ? 'Unresolved: overlapping intervals' : a.rank} |`).join('\n')}
 
 ## Next evidence to collect
 ${next ? `Confirm ${next.key} for ${next.account || 'the unnamed account'} first. It has the largest missing weighted contribution among overlapping accounts: up to ${next.swing} points, so it is most able to reverse the order. Keep the source and date with the answer.` : 'No weighted signal is missing. Equal scores do not establish a strict order; agree a buyer relevant tie breaker.'}
@@ -2231,64 +2205,7 @@ ${next ? `Confirm ${next.key} for ${next.account || 'the unnamed account'} first
 No strict rank or outreach tier is assigned where intervals overlap. Confirm the missing evidence before allocating sales effort. Default tier boundaries remain ${tierA}, ${tierB} and ${tierC} of ${W}; these are model choices, not observed purchase likelihood.
 `;
                 }
-                const scoredAccounts = args.accounts.map(account => {
-                    // Run 16 D45: a score given as 0 is used as 0; only an omitted or null score takes the default 50.
-                    const fitScore = account.fit_score ?? 50;
-                    const intentScore = account.intent_signals ?? 50;
-                    const relationshipScore = account.relationship ?? 50;
-                    const timingScoreValue = timingScore(account.timing || 'unknown');
-                    const totalScore = Math.round((fitScore * weights.fit / 100) +
-                        (intentScore * weights.intent / 100) +
-                        (relationshipScore * weights.relationship / 100) +
-                        (timingScoreValue * weights.timing / 100));
-                    return {
-                        name: account.name || 'Unknown',
-                        fit: fitScore,
-                        intent: intentScore,
-                        relationship: relationshipScore,
-                        timing: account.timing || 'unknown',
-                        timingScore: timingScoreValue,
-                        totalScore,
-                        tier: totalScore >= tierA ? 'A' : totalScore >= tierB ? 'B' : totalScore >= tierC ? 'C' : 'D',
-                        // Labels only: the values that fell back to the default because the account did not supply them.
-                        defaults: { fit: account.fit_score == null, intent: account.intent_signals == null, relationship: account.relationship == null, timing: !account.timing }
-                    };
-                });
-                // Sort by total score
-                scoredAccounts.sort((a, b) => b.totalScore - a.totalScore);
-                // Run 19 D80 (problem 5): the reason names the factor that adds the most points, with its arithmetic (the score and tier
-                // are unchanged). The old labels stay as the opening words where they applied; "Balanced scoring" is gone.
-                const reasonFor = (a) => {
-                    const parts = [
-                        { k: 'fit', v: a.fit, w: weights.fit, txt: `fit ${cleanNum1(a.fit)}` },
-                        { k: 'intent', v: a.intent, w: weights.intent, txt: `intent ${cleanNum1(a.intent)}` },
-                        { k: 'relationship', v: a.relationship, w: weights.relationship, txt: `relationship ${cleanNum1(a.relationship)}` },
-                        { k: 'timing', v: a.timingScore, w: weights.timing, txt: `timing ${a.timing} (${a.timingScore} pts)` },
-                    ].map(x => ({ ...x, pts: x.v * x.w / 100 })).filter(x => x.w > 0).sort((x, y) => y.pts - x.pts);
-                    const label = weights.fit > 0 && a.fit >= 80 ? 'Strong ICP fit' : weights.intent > 0 && a.intent >= 80 ? 'High buying intent' : weights.relationship > 0 && a.relationship >= 80 ? 'Strong relationship' : '';
-                    const top = parts[0];
-                    const num = cleanNum1;
-                    const why = top ? `the most points come from ${top.txt.replace(/^(\w+) (\d+)$/, '$1 $2')} × ${cleanPct(top.w)} = ${num(top.pts)} points of ${a.totalScore}` : 'no factor carries weight';
-                    return label ? `${label} (${why})` : why.charAt(0).toUpperCase() + why.slice(1);
-                };
-                // Run 20 round 1: the next step follows the account's own scores and timing, so two accounts in one tier do not get the same line
-                // (the tier decides the base; the weakest factor and the timing decide the focus). No sales-motion words that belong to one
-                // business model (SDR sequences, 24 hour replies) are used.
-                // The weakest of fit, intent and relationship decides the label and the next step, so the two always agree (a score of 60 or more is not a gap).
-                const weakestOf = (a) => {
-                    const w = [['fit', a.fit], ['intent', a.intent], ['relationship', a.relationship]].sort((x, y) => x[1] - y[1])[0];
-                    return w[1] < 60 ? w : ['timing', a.timingScore];
-                };
-                const nextStep = (a) => {
-                    const base = a.tier === 'A' ? 'Personal outreach from the account owner this week' : a.tier === 'B' ? 'A targeted sequence of personal messages this week, through a warm introduction where you have one' : a.tier === 'C' ? 'Nurture with relevant content and watch for a change in intent or timing' : 'Monitor and check again next quarter';
-                    const [wk, wv] = weakestOf(a);
-                    const focus = a.tier === 'C' || a.tier === 'D' ? `the weakest factor is ${([['fit', a.fit], ['intent', a.intent], ['relationship', a.relationship]].sort((x, y) => x[1] - y[1]).map(([k, n]) => `${k} (${cleanNum1(n)})`)[0])}, so spend sales time only when it changes`
-                        : wk === 'fit' ? `fit is ${cleanNum1(wv)}, so confirm the buyer has the problem and the budget before you spend time on a proposal`
-                            : wk === 'relationship' ? `relationship is ${cleanNum1(wv)}, so ask your champion or a mutual contact for an introduction to the budget owner`
-                                : wk === 'intent' ? `intent is ${cleanNum1(wv)}, so share something relevant to their situation and watch who responds`
-                                    : a.timing.toLowerCase() === 'later' ? 'timing is later, so agree a date to revisit rather than push for a decision' : a.timing.toLowerCase() === 'now' ? 'timing is now, so ask for the next two meeting dates' : 'the scores are strong, so verify the timing with the budget owner';
-                    return `${base}; ${focus}`;
-                };
+                const { scoredAccounts } = model;
                 const sv = ctx.v;
                 return `# Account Prioritization Results
 
@@ -2297,10 +2214,10 @@ ${args.product_category ? `\n${ctx.line}\n` : ''}
 ## Scoring Weights
 ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default weights.\n` : ''}| Factor | Weight | Rationale |
 |--------|--------|-----------|
-| **Fit** | ${cleanPct(weights.fit)}${wEx(givenWeights.fit)} | How well they match ICP |
-| **Intent** | ${cleanPct(weights.intent)}${wEx(givenWeights.intent)} | Buying signals detected |
-| **Relationship** | ${cleanPct(weights.relationship)}${wEx(givenWeights.relationship)} | Existing connections |
-| **Timing** | ${cleanPct(weights.timing)}${wEx(givenWeights.timing)} | Urgency/readiness |
+| **Fit** | ${(0, account_prioritization_ts_1.cleanPct)(weights.fit)}${wEx(givenWeights.fit)} | How well they match ICP |
+| **Intent** | ${(0, account_prioritization_ts_1.cleanPct)(weights.intent)}${wEx(givenWeights.intent)} | Buying signals detected |
+| **Relationship** | ${(0, account_prioritization_ts_1.cleanPct)(weights.relationship)}${wEx(givenWeights.relationship)} | Existing connections |
+| **Timing** | ${(0, account_prioritization_ts_1.cleanPct)(weights.timing)}${wEx(givenWeights.timing)} | Urgency/readiness |
 
 ---
 
@@ -2309,7 +2226,7 @@ ${noWeights ? `${EXAMPLES} You supplied no weights, so these are the default wei
 Your scores are shown as given (to one decimal at most); ${noWeights ? 'the weights and timing points are the defaults' : 'the timing points are the defaults'} (now 100, soon 70, later 40, unknown 50 points). (default) marks a value your input did not supply, so the tool used its default.
 | Rank | Account | Fit | Intent | Relationship | Timing | **Score** | Tier |
 |------|---------|-----|--------|--------------|--------|-----------|------|
-${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${cleanNum1(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${cleanNum1(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${cleanNum1(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${(0, text_signals_ts_4.timingFact)(a.timing).state === 'affirmed' ? '' : '; fact was not clear'}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
+${scoredAccounts.map((a, i) => `| ${i + 1} | **${a.name}** | ${(0, account_prioritization_ts_1.cleanNum1)(a.fit)}${a.defaults.fit ? ' (default)' : ''} | ${(0, account_prioritization_ts_1.cleanNum1)(a.intent)}${a.defaults.intent ? ' (default)' : ''} | ${(0, account_prioritization_ts_1.cleanNum1)(a.relationship)}${a.defaults.relationship ? ' (default)' : ''} | ${a.timing} (${a.timingScore} pts)${(0, text_signals_ts_4.timingFact)(a.timing).state === 'affirmed' ? '' : '; fact was not clear'}${a.defaults.timing ? ' (default)' : ''} | **${a.totalScore}** | ${a.tier} |`).join('\n')}
 
 ---
 
@@ -2347,9 +2264,9 @@ ${scoredAccounts.filter(a => a.tier === 'D').map(a => `- **${a.name}** (${a.tota
 
 ${sv ? `How deals run in ${sv.name}: ${sv.salesMotion}\n${isHorizontal(sv) ? '' : `Roles to reach in these accounts: ${andList(sv.buyerRoles)}.\nWords their buyers use: ${sv.vocabulary.join(', ')}.\nA proof point that lands: ${sv.proofShape}\n`}` : ''}${scoredAccounts.slice(0, 5).map((a, i) => `
 ### ${i + 1}. ${a.name} (Tier ${a.tier})
-- **Why prioritized**: ${reasonFor(a)}
-- **Gap to address**: ${weakestOf(a)[0] === 'fit' ? 'Validate fit' : weakestOf(a)[0] === 'intent' ? 'Generate engagement' : weakestOf(a)[0] === 'relationship' ? 'Build relationships' : 'Verify timing'}
-- **Recommended action**: ${nextStep(a)}
+- **Why prioritized**: ${a.reason}
+- **Gap to address**: ${a.weakest[0] === 'fit' ? 'Validate fit' : a.weakest[0] === 'intent' ? 'Generate engagement' : a.weakest[0] === 'relationship' ? 'Build relationships' : 'Verify timing'}
+- **Recommended action**: ${a.nextAction}
 `).join('')}
 
 **Next Step**: Use \`ICP Gap Analysis\` to compare current vs ideal customers
@@ -2526,7 +2443,7 @@ ${SUGGESTED}
             const behind = (g) => g !== 'n/a' && parseFloat(g) > 0;
             const anyMetric = Object.keys(pairs).some(k => pairs[k][0] != null || pairs[k][1] != null);
             const money = (n) => `$${n.toLocaleString('en-US')}`;
-            const fmtV = (k, n) => n == null ? 'not supplied' : k === 'acv' ? money(n) : k === 'cycle' ? `${n} days` : k === 'nps' ? String(n) : cleanPct(n);
+            const fmtV = (k, n) => n == null ? 'not supplied' : k === 'acv' ? money(n) : k === 'cycle' ? `${n} days` : k === 'nps' ? String(n) : (0, account_prioritization_ts_1.cleanPct)(n);
             const metricRow = (k, label, gapText, priority) => `| **${label}** | ${fmtV(k, pairs[k][0])} | ${fmtV(k, pairs[k][1])} | ${has2(k) ? gapText : 'needs both a current and a target value'} | ${has2(k) ? priority : 'Not rated'} |`;
             const rowSpec = [
                 ['acv', 'Avg ACV', upGap(gaps.acv, ''), sev(gaps.acv, 50, 25), behind(gaps.acv)],
@@ -3235,9 +3152,12 @@ function createServer() {
         try {
             const limit = (0, decision_limits_ts_1.decisionLimit)(String(toolName), safeArgs);
             const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs);
-            return {
+            const answer = {
                 content: [{ type: 'text', text: inputEvidence.notice + (inputEvidence.notice ? '\n\n' : '') + (0, reader_actions_ts_1.withReadingGuide)(toolName, (0, input_evidence_ts_1.holdBuyerCopy)(toolName, safeArgs, result), safeArgs) }]
             };
+            // Account Prioritization: the structured result for the widget is the same model object the text above was printed from.
+            const accountModel = toolName === 'account_prioritization' && !limit.stop && safeArgs && typeof safeArgs === 'object' ? accountModels.get(safeArgs) : undefined;
+            return accountModel ? { ...answer, ...(0, account_prioritization_ts_1.accountWidgetResult)(accountModel) } : answer;
         }
         catch (error) {
             return {
@@ -3250,7 +3170,8 @@ function createServer() {
         }
     });
     // Result widget for Account Prioritization: last, after every safety, reader and widget wrapper (adds _meta only).
-    (0, lane_f_results_ts_1.attachLaneFResults)(server);
+    // The widget domain follows the same build switch as the market sizing widget.
+    (0, helix_results_ts_1.attachHelixResults)(server, build_profile_ts_1.BUILD_PROFILE.domainEnabled && widget_origin_ts_1.WIDGET_ORIGIN ? widget_origin_ts_1.WIDGET_ORIGIN : undefined);
     return server;
 }
 // =============================================================================
