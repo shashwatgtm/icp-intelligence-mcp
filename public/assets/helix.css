@@ -645,3 +645,96 @@ main pre {max-width:100%;overflow:auto}
 main .hx-app-section {width:calc(100% - 2 * var(--gut,24px));max-width:var(--maxw,1280px);margin-left:auto;margin-right:auto}
 main .faq details > summary::after,main .hx-qa details > summary::after {content:"+"}
 main .faq details[open] > summary::after,main .hx-qa details[open] > summary::after {content:"+";transform:rotate(45deg)}
+
+/* ==== Helix design pass, 5 November 2026 (owner feedback on the connector drafts) ====
+   Same rules as the approved gtmhelix.com home: the hero's pink to blue wash carried through alternate
+   sections, one spacing rhythm, no widow lines, a bigger home headline, one logo lockup, and one example
+   picture on each app home. Colours are the existing tokens, so dark mode follows them. */
+:root {
+  --hx-wash: linear-gradient(165deg, rgba(248, 218, 221, .45) 0%, rgba(238, 241, 246, .70) 55%, rgba(207, 230, 245, .45) 100%);
+  --hx-wash-top: linear-gradient(180deg, rgba(207, 230, 245, .45) 0, rgba(207, 230, 245, 0) 320px);
+  --hx-gap: clamp(44px, 5.5vw, 88px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hx-wash: linear-gradient(165deg, rgba(58, 15, 26, .55) 0%, rgba(21, 24, 42, .55) 60%, rgba(14, 27, 43, .55) 100%);
+    --hx-wash-top: linear-gradient(180deg, rgba(14, 27, 43, .75) 0, rgba(14, 27, 43, 0) 320px);
+  }
+}
+.hx-wash { background: var(--hx-wash); }
+.hx-wash-top { background: var(--hx-wash-top); }
+
+/* One rhythm: the same space above and below every section */
+main > .sec, main > .hx-section:not(.band-rose), main > section.hx-viz-sec { padding-top: var(--hx-gap); padding-bottom: var(--hx-gap); margin: 0; }
+main > .band-rose { margin-top: 0; }
+main > .band-rose > .hx-wrap, main > .band-rose > .wrap { padding-top: var(--hx-gap); padding-bottom: var(--hx-gap); }
+
+/* No widows */
+main h1, main h2, main h3 { text-wrap: balance; }
+main p, main li { text-wrap: pretty; }
+
+/* Headline impact on each app home, as on gtmhelix.com */
+.hero.hx-apphome { --h1: clamp(46px, 7.6vw, 120px); }
+
+/* One logo: the same lower case h mark everywhere, "Helix GTM" with the site name as a second line */
+.hx-lock2 { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; color: var(--ink); text-decoration: none; text-transform: none; letter-spacing: 0; }
+.hx-lock2 .hx9-mark { flex: none; text-transform: none; }
+.hx-lock2 .hx-lock-t { display: flex; flex-direction: column; gap: 5px; }
+.hx-lock2 .hx-lock-b { font: 600 14px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+.hx-lock2 .hx-lock-s { font: 500 13px/1.1 var(--mono); letter-spacing: .02em; color: var(--muted); }
+.hx-footer .hx-lock2 { color: inherit; }
+.hx-footer .hx-lock2 .hx-lock-s { color: inherit; opacity: .8; }
+
+/* What you get, in one picture: labelled example visuals on each app home (HTML and CSS only) */
+.hx-viz { margin: 8px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: clamp(20px, 3vw, 40px); }
+.hx-viz-p { margin: 0; padding: 18px 20px 20px; border-left: 4px solid var(--rose-mid); background: var(--paper); min-width: 0; }
+.hx-viz-p h3 { margin: 0 0 4px; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.25; }
+.hx-viz-p .hx-viz-in { margin: 0 0 14px; font: 500 13px/1.5 var(--mono); color: var(--muted); }
+.hx-viz-tag { display: inline-block; margin: 0 8px 6px 0; padding: 3px 8px; font: 600 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; background: var(--rose-mid); color: var(--ink); }
+.hx-viz-cap { grid-column: 1 / -1; margin: 0; font: 500 13px/1.5 var(--mono); color: var(--muted); max-width: 90ch; }
+/* funnel */
+.hxv-fun { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.hxv-fun li { margin: 0 auto; padding: 12px 14px; text-align: center; background: var(--signal); color: #FFFFFF; min-width: 0; }
+.hxv-fun .hxv-f1 { width: 100%; } .hxv-fun .hxv-f2 { width: 82%; } .hxv-fun .hxv-f3 { width: 64%; }
+.hxv-fun li:nth-child(2) { background: var(--ox); color: var(--paper); }
+.hxv-fun li:nth-child(3) { background: var(--ink); color: var(--paper); }
+.hxv-fun b { display: block; font: 800 clamp(20px, 2vw, 26px)/1.1 var(--display); }
+.hxv-fun span { display: block; font: 500 13px/1.4 var(--mono); }
+/* bars */
+.hxv-bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.hxv-bars li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: baseline; font-size: 16px; }
+.hxv-bars .lbl { min-width: 0; }
+.hxv-bars .val { font: 700 15px/1.2 var(--mono); }
+.hxv-bars .bar { grid-column: 1 / -1; height: 10px; background: var(--line); position: relative; }
+.hxv-bars .bar i { position: absolute; inset: 0 auto 0 0; background: var(--signal); }
+.hxv-bars li.is-lead .bar i { background: var(--ox); }
+.hxv-bars li.is-na .val { color: var(--muted); font-weight: 500; }
+.hxv-w0 { width: 0; } .hxv-w33 { width: 33.3%; } .hxv-w40 { width: 40%; } .hxv-w50 { width: 50%; } .hxv-w60 { width: 60%; } .hxv-w67 { width: 66.7%; } .hxv-w90 { width: 90%; } .hxv-w100 { width: 100%; }
+.hxv-big { margin: 0 0 12px; font: 800 clamp(26px, 2.6vw, 34px)/1.1 var(--display); }
+/* role map */
+.hxv-roles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.hxv-roles li { padding: 10px 12px; border: 1.5px solid var(--line); background: var(--card, var(--paper)); min-width: 0; }
+.hxv-roles li.is-key { border-color: var(--ox); }
+.hxv-roles .r { display: block; font: 600 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ox); }
+.hxv-roles .t { display: block; margin-top: 4px; font-size: 16px; line-height: 1.3; }
+/* message house */
+.hxv-house { display: grid; gap: 10px; }
+.hxv-house .roof { padding: 14px 16px; background: var(--ink); color: var(--paper); font-size: 17px; line-height: 1.45; }
+.hxv-house .tag { padding: 10px 16px; border: 1.5px solid var(--ox); font: 800 20px/1.25 var(--display); }
+.hxv-house .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.hxv-house .cols div { padding: 10px 12px; border-top: 4px solid var(--signal); background: var(--card, var(--paper)); font-size: 15px; line-height: 1.4; }
+.hxv-house .cols b { display: block; font: 600 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 4px; }
+/* case study card and timeline */
+.hxv-case h4 { margin: 0 0 8px; font: 800 clamp(20px, 2vw, 26px)/1.2 var(--display); }
+.hxv-case dl { margin: 0; display: grid; gap: 8px; }
+.hxv-case dt { font: 600 12px/1.3 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ox); }
+.hxv-case dd { margin: 0; font-size: 16px; line-height: 1.45; }
+.hxv-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: s; }
+.hxv-steps li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 16px; line-height: 1.35; }
+.hxv-steps li::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 30px; height: 30px; background: var(--signal); color: #FFFFFF; font: 700 14px/1 var(--mono); }
+.hxv-steps small { display: block; font: 500 13px/1.4 var(--mono); color: var(--muted); }
+@media (prefers-color-scheme: dark) {
+  .hx-viz-p { background: #1A0E10; border-left-color: #F2AAB3; }
+  .hx-viz-tag { background: #F2AAB3; color: #1A0E10; }
+}
+/* ==== end of design pass ==== */
