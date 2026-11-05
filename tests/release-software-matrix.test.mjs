@@ -48,7 +48,7 @@ for (const [sector, context, gtm, outside] of sectors) for (const [outcome, [cat
   });
 }
 test('all owner GTM categories have booking scope across every vertical', () => {
-  for(const [sector,context] of sectors) for(const category of ['CRM','marketing automation','sales engagement','ABM','intent data','enrichment','revenue intelligence','conversation intelligence','CPQ','customer success platforms','analytics for marketing and sales','marketing analytics','sales analytics','content tools','SEO tools','event tools','webinar tools','partner tools']) {
+  for(const [sector,context] of sectors) for(const category of ['CRM','marketing automation','sales engagement','ABM','intent data','enrichment','revenue intelligence','conversation intelligence','CPQ','customer success platforms','analytics for marketing and sales','analytics for marketing','analytics for sales','marketing analytics','sales analytics','content tools','SEO tools','event tools','webinar tools','partner tools']) {
     assert.equal(classifySoftwareQuestion({sector,context,request:`Which ${category} should we buy?`}),'gtm',category);
   }
 });
@@ -62,7 +62,7 @@ test('named tools and software categories used only as context do not request se
   for(const question of ['What CRM should we buy?', 'What is better for us, Salesforce or HubSpot?', 'What data warehouse would suit us?']) assert.notEqual(classifySoftwareQuestion(question),'none',question);
 });
 test('selection category takes precedence over the field or use case',()=>{
-  for(const q of ['Which CRM should we buy for our cloud security sales team?', 'Should we switch CRM to support our payroll software sales?', 'Is Salesforce better than HubSpot for selling ERP migrations?']) assert.equal(classifySoftwareQuestion(q),'gtm',q);
+  for(const q of ['Which software should we buy for sales analytics?', 'Which CRM should we buy for our cloud security sales team?', 'Should we switch CRM to support our payroll software sales?', 'Is Salesforce better than HubSpot for selling ERP migrations?']) assert.equal(classifySoftwareQuestion(q),'gtm',q);
   for(const q of ['Which data warehouse should we buy for marketing analytics?', 'Which SIEM should we buy to support our CRM team?']) assert.equal(classifySoftwareQuestion(q),'outside',q);
 });
 test('labelled plan risks and buyer objections are evidence; a separate direct request still routes',()=>{

@@ -77,12 +77,12 @@ function classifySoftwareQuestion(value) {
         // Ignore a stack fact before a direct request in the same sentence.
         const start = question.search(/\b(?:which|what|recommend|suggest|shortlist|compare|should (?:I|we)|any suggestions)\b/i);
         const requested = (start >= 0 ? question.slice(start) : question)
-            .replace(/analytics for marketing and sales/gi, 'marketing analytics');
+            .replace(/analytics for (?:marketing and sales|marketing|sales)\b/gi, 'marketing analytics');
         // The category being selected takes precedence over its use case. A CRM
         // for cloud-security sellers is GTM; a warehouse for sales analytics is not.
         const purpose = requested.search(/\b(?:for|to (?:help|reach|manage|track|engage|sell|coordinate|support))\b/i);
         const beforePurpose = purpose >= 0 ? requested.slice(0, purpose) : requested;
-        const target = SOFTWARE.test(beforePurpose) ? beforePurpose : requested;
+        const target = GTM_CATEGORY.test(beforePurpose) || OUTSIDE_CATEGORY.test(beforePurpose) || GTM_PRODUCT.test(beforePurpose) ? beforePurpose : requested;
         if (OUTSIDE_CATEGORY.test(target))
             return 'outside';
         if (GTM_CATEGORY.test(target) || GTM_PRODUCT.test(target))
