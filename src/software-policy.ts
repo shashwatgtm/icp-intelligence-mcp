@@ -18,7 +18,7 @@ function softwareQuestions(value: unknown): string[] {
         // a request from the user to select external software.
         if (!['common_objections','known_objections','competitor_objections','blockers'].includes(field)) {
           if (field === 'account_notes' && typeof text === 'string') visit(text.split(/\bobjections?\s*:/i)[0]);
-          else if (typeof text === 'string') visit(text.replace(/^(?:Risks|Objections):[^\n]*$/gmi,''));
+          else if (typeof text === 'string') visit(text.replace(/\b(?:Risks|Objections):[^\n]*/gmi,''));
           else visit(text);
         }
       }
@@ -27,8 +27,11 @@ function softwareQuestions(value: unknown): string[] {
   visit(value);
   return texts.flatMap(text => text.split(/(?<=[.!?;])\s+|\n/)).filter(sentence => {
     if (!SOFTWARE.test(sentence)) return false;
+    // A labelled differentiation statement is supplied positioning evidence.
+    if (/^\s*What sets (?:it|us|them) apart\s*:/i.test(sentence)) return false;
     if (/\b(?:not asking|do not recommend|don't recommend|do not suggest|don't suggest|no software recommendations|do not choose|don't choose|do not compare|don't compare)\b/i.test(sentence)) return false;
-    if (/\b(?:which|what) (?:buyer|customer(?! success)|audience|team|role|persona|people|employee|metric|KPI|strategy|step|action|message)s?\b/i.test(sentence)) return false;
+    if (/\b(?:which|what) (?:buyer|customer(?! success)|audience|team|role|persona|people|employee|metric|KPI|strategy|step|action|message|campaign|report|dashboard|workflow|field)s?\b/i.test(sentence)) return false;
+    if (/^\s*(?:please\s+)?(?:choose|pick|recommend|suggest|compare)\s+(?:a\s+|the\s+)?(?:(?:go[ -]to[ -]market|GTM)\s+)?(?:motion|strategy|positioning|message)\b/i.test(sentence)) return false;
     // These questions concern the seller's product and its market, even when
     // they mention a named competitor or use words such as "better"/"choose".
     if (/\b(?:how|what|which|who)\b[^.!?]*\b(?:position|market|sell|message|price|differentiate|launch|improve|describe|explain|features?|buyers?|customers?)\b[^.!?]*\b(?:our|my|your) (?:own )?(?:product|solution|offering|software|platform|CRM|ERP|SIEM|TMS|HRIS|CPaaS)\b/i.test(sentence)
@@ -60,9 +63,15 @@ export function classifySoftwareQuestion(value: unknown): 'gtm' | 'outside' | 'n
   for (const question of questions) {
     // Ignore a stack fact before a direct request in the same sentence.
     const start = question.search(/\b(?:which|what|recommend|suggest|shortlist|compare|should (?:I|we)|any suggestions)\b/i);
-    const requested = start >= 0 ? question.slice(start) : question;
-    if (OUTSIDE_CATEGORY.test(requested)) return 'outside';
-    if (GTM_CATEGORY.test(requested) || GTM_PRODUCT.test(requested)) gtm = true;
+    const requested = (start >= 0 ? question.slice(start) : question)
+      .replace(/analytics for marketing and sales/gi, 'marketing analytics');
+    // The category being selected takes precedence over its use case. A CRM
+    // for cloud-security sellers is GTM; a warehouse for sales analytics is not.
+    const purpose = requested.search(/\b(?:for|to (?:help|reach|manage|track|engage|sell|coordinate|support))\b/i);
+    const beforePurpose = purpose >= 0 ? requested.slice(0, purpose) : requested;
+    const target = SOFTWARE.test(beforePurpose) ? beforePurpose : requested;
+    if (OUTSIDE_CATEGORY.test(target)) return 'outside';
+    if (GTM_CATEGORY.test(target) || GTM_PRODUCT.test(target)) gtm = true;
     else return 'outside';
   }
   return gtm ? 'gtm' : 'outside';

@@ -22,7 +22,7 @@ const sectors = [
 ];
 for (const [sector, context, gtm, outside] of sectors) for (const [outcome, [category, a, b]] of [['gtm',gtm],['outside',outside]]) {
   const positives = [
-    `Which ${category} should we buy?`, `Recommend a ${category}.`,
+    `Which ${category} should we buy?`, `Which ${category} should we buy ${context}?`, `Recommend a ${category}.`,
     `Is ${a} better than ${b} for us?`, `Is ${a} worse than ${b} for us?`,
     `Should we switch from our current ${category}?`, `Should we keep our current ${category}?`,
     `Any suggestions on a ${category}?`, `Which ${category}?`, `Which ${category} should we avoid?`,
@@ -32,6 +32,7 @@ for (const [sector, context, gtm, outside] of sectors) for (const [outcome, [cat
   ];
   const negatives = [
     `We switched from ${a} to ${b} last year for our ${category}.`,
+    `Which campaigns should we run in ${a}?`, `Which reports should we read in ${a}?`,
     `We chose the better ${category} last year.`, `Our current ${category} is ${a}.`,
     `Do not recommend a ${category}; explain our existing integration.`,
     `How should we position our product in the ${category} category?`,
@@ -57,10 +58,15 @@ test('all owner outside categories stay outside across every vertical', () => {
   }
 });
 test('named tools and software categories used only as context do not request selection',()=>{
-  for(const question of ['What is CRM?', 'Which metrics should we track in Salesforce?', 'What content should we publish about security software?', 'How does our existing data warehouse work?', 'Which buyer roles use our SIEM?', 'We use HubSpot. What should our campaign message say?']) assert.equal(classifySoftwareQuestion(question),'none',question);
+  for(const question of ['Choose a go to market motion for dispatch planning software sold to regional fleets.', 'Recommend a positioning strategy for our CRM software.', 'What is CRM?', 'Which metrics should we track in Salesforce?', 'What content should we publish about security software?', 'How does our existing data warehouse work?', 'Which buyer roles use our SIEM?', 'We use HubSpot. What should our campaign message say?']) assert.equal(classifySoftwareQuestion(question),'none',question);
   for(const question of ['What CRM should we buy?', 'What is better for us, Salesforce or HubSpot?', 'What data warehouse would suit us?']) assert.notEqual(classifySoftwareQuestion(question),'none',question);
 });
+test('selection category takes precedence over the field or use case',()=>{
+  for(const q of ['Which CRM should we buy for our cloud security sales team?', 'Should we switch CRM to support our payroll software sales?', 'Is Salesforce better than HubSpot for selling ERP migrations?']) assert.equal(classifySoftwareQuestion(q),'gtm',q);
+  for(const q of ['Which data warehouse should we buy for marketing analytics?', 'Which SIEM should we buy to support our CRM team?']) assert.equal(classifySoftwareQuestion(q),'outside',q);
+});
 test('labelled plan risks and buyer objections are evidence; a separate direct request still routes',()=>{
+  assert.equal(classifySoftwareQuestion('What sets it apart: We help buyers choose software using a single platform.'),'none');
   assert.equal(classifySoftwareQuestion({document_content:'Goal: win five pilots.\nRisks: Which CRM should we buy?'}),'none');
   assert.equal(classifySoftwareQuestion({known_objections:'Which SIEM should we buy?',blockers:'Which data warehouse?'}),'none');
   assert.equal(classifySoftwareQuestion({known_objections:'Which SIEM should we buy?',notes:'Which CRM should we buy?'}),'gtm');
