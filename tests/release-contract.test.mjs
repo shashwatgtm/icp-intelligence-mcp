@@ -4,7 +4,9 @@ import {readFileSync,existsSync} from 'node:fs';
 import {spawn} from 'node:child_process';
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/release-production-tools.json',import.meta.url),'utf8'));
 const alpha=existsSync(new URL('../netlify/functions/mcp-sse.js',import.meta.url));
-const expected=JSON.stringify(fixture.tools_list);
+// Result widget (branch feat/widgets-20261105): the widget tool gains _meta, the link to its result view. Every other byte is the pinned contract.
+const WIDGET={tool:'account_prioritization',uri:'ui://helix/results/v1.html'};
+const expected=JSON.stringify({...fixture.tools_list,tools:fixture.tools_list.tools.map(t=>t.name===WIDGET.tool?{...t,_meta:{...t._meta,ui:{...t._meta?.ui,resourceUri:WIDGET.uri},'openai/outputTemplate':WIDGET.uri}}:t)});
 test('complete tools/list bytes equal the pinned reviewed production contract over HTTP',async()=>{
  const {default:handler}=await import(new URL(alpha?'../netlify/functions/mcp-sse.js':'../netlify/functions/mcp.mjs',import.meta.url));
  for(let id=1;id<=3;id++){
