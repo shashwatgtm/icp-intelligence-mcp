@@ -674,7 +674,7 @@ main h1, main h2, main h3 { text-wrap: balance; }
 main p, main li { text-wrap: pretty; }
 
 /* Headline impact on each app home, as on gtmhelix.com */
-.hero.hx-apphome { --h1: clamp(46px, 7.6vw, 120px); }
+.hero.hx-apphome { --h1: var(--h1-home); }
 
 /* One logo: the same lower case h mark everywhere, "Helix GTM" with the site name as a second line */
 .hx-lock2 { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; color: var(--ink); text-decoration: none; text-transform: none; letter-spacing: 0; }
