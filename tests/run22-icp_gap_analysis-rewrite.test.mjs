@@ -1,3 +1,4 @@
+import {pathToFileURL} from "node:url";
 // Run 22 rewrite test (written first): icp_gap_analysis reads the two profiles in parts and answers with a finished analysis.
 // Faults found by the run 21c judges: segments the ideal profile names were listed as "not named in the ideal profile" and proposed for
 // disqualification, a country was listed as a segment, a role was called missing from a sector list that holds it, the inputs were echoed,
@@ -342,8 +343,8 @@ test("round 5: with no targets the figures are read on their own, the product te
 // ---- the pool scenarios through the real builders (private folder; skipped when HELIX_POOL_DIR is not set) ----
 const POOL_DIR = process.env.HELIX_POOL_DIR;
 test("pool scenarios through the real builders: every input used, no wrong claim of a missing segment", { skip: !POOL_DIR }, async () => {
-  const { BUILD20 } = await import(`${POOL_DIR}/run20/eval/builders20.mjs`);
-  const sets = [(await import(`${POOL_DIR}/run20/eval/tuning20.mjs`)).TUNING20, (await import(`${POOL_DIR}/run20/eval/holdout-check20.mjs`)).HOLDOUT_CHECK20, (await import(`${POOL_DIR}/run21/eval/pool.mjs`)).POOL21, (await import(`${POOL_DIR}/run22/eval/pool2.mjs`)).POOL22].flat();
+  const { BUILD20 } = await import(pathToFileURL(`${POOL_DIR}/run20/eval/builders20.mjs`).href);
+  const sets = [(await import(pathToFileURL(`${POOL_DIR}/run20/eval/tuning20.mjs`).href)).TUNING20, (await import(pathToFileURL(`${POOL_DIR}/run20/eval/holdout-check20.mjs`).href)).HOLDOUT_CHECK20, (await import(pathToFileURL(`${POOL_DIR}/run21/eval/pool.mjs`).href)).POOL21, (await import(pathToFileURL(`${POOL_DIR}/run22/eval/pool2.mjs`).href)).POOL22].flat();
   const schema = (await rpc("tools/list", {})).tools.find((t) => t.name === "icp_gap_analysis").inputSchema;
   const stem = (w) => w.toLowerCase().replace(/[^a-z0-9]/g, "").replace(/(?:ing|ers|er|es|s)$/, "");
   let n = 0;

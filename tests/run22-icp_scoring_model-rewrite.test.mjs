@@ -1,3 +1,4 @@
+import {pathToFileURL} from "node:url";
 // Run 22 rewrite test (written first): icp_scoring_model no longer ranks by the order the user listed things.
 // Faults found by the run 21c judges: segments and roles the user named as targets scored 0 because they were listed last, and a criterion text
 // was cut in the middle of a sentence. Weights, tier bands and the labelled-as-examples text stay exactly as before (D80).
@@ -198,8 +199,8 @@ test("round 4: a value is not linked to a statement by a word that only starts l
 
 const POOL_DIR = process.env.HELIX_POOL_DIR;
 test("pool scenarios through the real builders: named targets never score 0 by position, no cut text", { skip: !POOL_DIR }, async () => {
-  const { BUILD20 } = await import(`${POOL_DIR}/run20/eval/builders20.mjs`);
-  const sets = [(await import(`${POOL_DIR}/run20/eval/tuning20.mjs`)).TUNING20, (await import(`${POOL_DIR}/run20/eval/holdout-check20.mjs`)).HOLDOUT_CHECK20, (await import(`${POOL_DIR}/run21/eval/pool.mjs`)).POOL21, (await import(`${POOL_DIR}/run22/eval/pool2.mjs`)).POOL22].flat();
+  const { BUILD20 } = await import(pathToFileURL(`${POOL_DIR}/run20/eval/builders20.mjs`).href);
+  const sets = [(await import(pathToFileURL(`${POOL_DIR}/run20/eval/tuning20.mjs`).href)).TUNING20, (await import(pathToFileURL(`${POOL_DIR}/run20/eval/holdout-check20.mjs`).href)).HOLDOUT_CHECK20, (await import(pathToFileURL(`${POOL_DIR}/run21/eval/pool.mjs`).href)).POOL21, (await import(pathToFileURL(`${POOL_DIR}/run22/eval/pool2.mjs`).href)).POOL22].flat();
   const schema = (await rpc("tools/list", {})).tools.find((t) => t.name === "icp_scoring_model").inputSchema;
   let n = 0;
   for (const sc of sets.filter((s) => !/^T[1-5]$/.test(s.id))) {

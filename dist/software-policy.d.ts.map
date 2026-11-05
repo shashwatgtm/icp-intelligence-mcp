@@ -1,1 +1,1 @@
-{"version":3,"file":"software-policy.d.ts","sourceRoot":"","sources":["../src/software-policy.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,iBAAiB,qIAAqI,CAAC;AAEpK,wBAAgB,eAAe,CAAC,KAAK,EAAE,OAAO,GAAG,OAAO,CAiBvD"}
+{"version":3,"file":"software-policy.d.ts","sourceRoot":"","sources":["../src/software-policy.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,iBAAiB,qIAAqI,CAAC;AAMpK,wBAAgB,eAAe,CAAC,KAAK,EAAE,OAAO,GAAG,OAAO,CAiCvD"}
