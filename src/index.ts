@@ -452,8 +452,25 @@ function isObjection(text: string): boolean {
   return /^(?:we|we're|our|i|they|it|ai will|this will|that will)\b/i.test(text.trim()) || /\b(already (?:have|has|does|use)|will not|won't|too (?:expensive|costly|risky|slow)|not (?:sure|convinced))\b/i.test(text);
 }
 // Employee ranges typed in a text ("300 to 3,000 employees", "200-500 employees").
+// A count the writer denies ("do not have 500 employees") or marks as unknown, estimated or unconfirmed is not a current count.
+const HEADCOUNT_RE = /\b\d[\d,]*\s*(?:to|-|–)\s*\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b|\b(?:under|over|more than|fewer than)\s+\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b|\b\d[\d,]*\+\s+(?:employees?|staff(?: members?)?)\b|\b\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b/gi;
+const COUNT_DENIAL = /\b(?:not|never|no|without|neither|nor|cannot|excluding|except|isn't|aren't|don't|doesn't|didn't|wasn't|weren't|hasn't|haven't|unable to)\b/i;
+const COUNT_UNCONFIRMED = /\b(?:unconfirmed|unverified|not confirmed|not verified|unknown|not known|unsure|uncertain|estimated|estimate|estimates|guess|guessed|rumou?red|assumed|placeholder|tbd|to be confirmed|to be verified|not yet known|no (?:confirmed )?(?:figure|number|count|data))\b/i;
+const COUNT_NEXT_UNCONFIRMED = /^(?:(?:that|this|the|their|its|these|those)\s+)?(?:figures?|numbers?|counts?|headcounts?|estimates?|sizes?)\b[^.!?;]*\b(?:unconfirmed|unknown|unverified|not confirmed|not known|an estimate|estimated|a guess|uncertain)\b/i;
 function sizesIn(text: string): string[] {
-  return [...new Set((String(text).match(/\b\d[\d,]*\s*(?:to|-|–)\s*\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b|\b(?:under|over|more than|fewer than)\s+\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b|\b\d[\d,]*\+\s+(?:employees?|staff(?: members?)?)\b|\b\d[\d,]*\s+(?:employees?|staff(?: members?)?)\b/gi) || []).map((x) => x.trim()))];
+  const parts = String(text).split(/(?<=[.!?])(?=\s)|[;\n]/);
+  const out: string[] = [];
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
+    const next = (parts[i + 1] || '').trim();
+    if (COUNT_UNCONFIRMED.test(part) || COUNT_NEXT_UNCONFIRMED.test(next)) continue;
+    for (const m of part.matchAll(HEADCOUNT_RE)) {
+      const window = part.slice(0, m.index!).split(/,|(?:^|\s)(?:but|however|whereas|while)\s/i).at(-1) || '';
+      if (COUNT_DENIAL.test(window)) continue;
+      out.push(m[0].trim());
+    }
+  }
+  return [...new Set(out)];
 }
 
 

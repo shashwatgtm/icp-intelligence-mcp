@@ -2209,7 +2209,7 @@ function firstIn(whole: string, words: string[]): number {
 
 /** Remove explicitly excluded seller offerings before category and subtype reads. */
 function affirmativeSectorArgs(args:unknown[]):unknown[] {
- const clean=(text:string)=>{const parts=text.split(/(?<=[.!?])\s+|\n+|;|(?:,\s*|\b(?:but|however|and)\s+)(?=we\s+)/i);const kept=parts.filter(clause=>! /\bwe\s+(?:(?:do(?:es)?\s+not|don['’]t|never|cannot|can['’]t|no longer|stopped|ceased|used to|formerly|previously|may|might|could)\s+)(?:(?:currently|actively|now|yet)\s+)*(?:sell(?:ing|s)?|sold|offer|provide|serve)\b/i.test(clause));return kept.length===parts.length?text:kept.join(' ');};
+ const clean=(text:string)=>{const parts=text.split(/(?<=[.!?])\s+|\n+|;|(?:,\s*|\b(?:but|however|and)\s+)(?=(?:(?:we|our company|our business)\s+|(?:do|does|did)\s+not\s+(?:sell|offer|provide|serve)\b))/i);const kept=parts.filter(clause=>! /(?:\b(?:we|our company|our business)\s+|^\s*)(?:(?:(?:do(?:es)?|did|are|is)\s+not|don['’]t|never|cannot|can['’]t|(?:are |is )?unable to|(?:are |is )?not able to|no longer|stopped|ceased|used to|formerly|previously|may|might|could)\s+)(?:(?:currently|actively|now|yet)\s+)*(?:sell(?:ing|s)?|sold|offer|provide|serve)\b/i.test(clause));return kept.length===parts.length?text:kept.join(' ');};
  return args.map(arg=>typeof arg==='string'?clean(arg):isReaderInput(arg)?{...arg,seller:texts(arg.seller).map(clean)}:arg);
 }
 
