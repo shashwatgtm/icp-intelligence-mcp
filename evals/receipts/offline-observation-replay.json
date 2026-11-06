@@ -1,0 +1,131 @@
+{
+  "mode": "offline-observation-replay",
+  "scope": "Saved authorized synthetic responses only. No endpoint runner calls. Failures are findings, not failing harness tests. Repeated source and connector cases are not independent endpoint observations.",
+  "counts": {
+    "pass": 4,
+    "fail": 16,
+    "skip": 0
+  },
+  "receipts": [
+    {
+      "provenance": "authorized prior receipt",
+      "grader": "churn",
+      "status": "pass",
+      "reason": "churn deterministic assertion met"
+    },
+    {
+      "provenance": "authorized prior receipt",
+      "grader": "case-study",
+      "status": "pass",
+      "reason": "case-study deterministic assertion met"
+    },
+    {
+      "provenance": "authorized prior receipt",
+      "grader": "repurpose",
+      "status": "fail",
+      "reason": "repurpose deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "authorized prior receipt caseExtra",
+      "grader": "case-study",
+      "status": "pass",
+      "reason": "case-study deterministic assertion met"
+    },
+    {
+      "provenance": "authorized prior receipt caseFour",
+      "grader": "case-study-four",
+      "status": "fail",
+      "reason": "case-study-four deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "Helix connector observation original",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "Helix connector observation empty",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "Helix connector observation size500",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "Helix connector observation size5000",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "Helix connector observation roi",
+      "grader": "roi",
+      "status": "pass",
+      "reason": "roi deterministic assertion met"
+    },
+    {
+      "provenance": "offline cloud source original",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source empty",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source size500",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source size5000",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source operations-no-size",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source operations-size500",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source operations-size5000",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source neutral-no-size",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source neutral-size500",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    },
+    {
+      "provenance": "offline cloud source neutral-size5000",
+      "grader": "impact",
+      "status": "fail",
+      "reason": "impact deterministic assertion failed; retain finding, do not loosen grader"
+    }
+  ]
+}

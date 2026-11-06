@@ -1,0 +1,179 @@
+{
+  "mode": "current-connector-capture-replay",
+  "scope": "Offline replay of fresh LIVE Helix connector calls. Not evals/run.py HTTP requests. No new calls during replay.",
+  "fixture": "evals/fixtures/fresh-live-20261029.json",
+  "fixture_sha256": "86722e4688e5389d21b73534bf148a4c5207119d24ac07ed3196ed073685fc20",
+  "additional_fixtures": [
+    {
+      "path": "evals/fixtures/pmf-incomplete-evidence-20261029.json",
+      "sha256": "c09beeaf90b7fdb0e80d239b11514dd56abf609e7478548e415de11af9990c3f",
+      "scope": "Historical bad capture, superseded for current selection"
+    },
+    {
+      "path": "evals/fixtures/pmf-fixed-refresh-20261029.json",
+      "sha256": "10f22a66a9dcc38da94f4e8c241522859da6b818a0309071057139a75f4dc24e",
+      "scope": "Current selection for exactly two PMF cases"
+    }
+  ],
+  "counts": {
+    "pass": 14,
+    "fail": 0,
+    "skip": 0
+  },
+  "receipts": [
+    {
+      "case": "pmf_scorecard-review",
+      "tool": "pmf_scorecard",
+      "server": "helix-craft-gtm",
+      "grader": "pmf",
+      "status": "pass",
+      "reason": "Assertions met: rule score is not proof; activation gap is explicit; four dimensions scored; no scaling recommendation with missing activation; measure activation before scaling; input metrics retained",
+      "start_utc": "2026-10-29 13:24:02 UTC",
+      "end_utc": "2026-10-29 13:24:07 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "launch_commander-review",
+      "tool": "launch_commander",
+      "server": "helix-craft-gtm",
+      "grader": "launch",
+      "status": "pass",
+      "reason": "Assertions met: valid dated phases around launch; requested launch date retained; both numeric goals retained; supplied audience retained; four phases present; no completed external action claim",
+      "start_utc": "2026-10-29 13:24:07 UTC",
+      "end_utc": "2026-10-29 13:24:10 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "customer_interview_kit-review",
+      "tool": "customer_interview_kit",
+      "server": "helix-craft-gtm",
+      "grader": "interview",
+      "status": "pass",
+      "reason": "Assertions met: supplied hypotheses remain hypotheses; neutral opening before hypothesis; respondent can reject hypothesis; severity and incident require confirmation; counter-evidence is sought; no obsolete leading confirmation",
+      "start_utc": "2026-10-29 13:24:10 UTC",
+      "end_utc": "2026-10-29 13:24:14 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "retention_playbook-review",
+      "tool": "retention_playbook",
+      "server": "helix-craft-gtm",
+      "grader": "churn",
+      "status": "pass",
+      "reason": "churn deterministic assertion met",
+      "start_utc": "2026-10-29 13:24:14 UTC",
+      "end_utc": "2026-10-29 13:24:17 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "craft_gtm_analyzer-review",
+      "tool": "craft_gtm_analyzer",
+      "server": "helix-craft-gtm",
+      "grader": "plan-review",
+      "status": "pass",
+      "reason": "Assertions met: review is 39 of 50; owner is read from labelled clause; numeric meeting outcome is read; channel asset is read; audience range is retained in Frame; budget is retained in Frame; correct dates are retained in Timeline",
+      "start_utc": "2026-10-29 13:24:17 UTC",
+      "end_utc": "2026-10-29 13:24:20 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "case_study_generator-review",
+      "tool": "case_study_generator",
+      "server": "helix-craft-content",
+      "grader": "case-study",
+      "status": "pass",
+      "reason": "case-study deterministic assertion met",
+      "start_utc": "2026-10-29 13:24:20 UTC",
+      "end_utc": "2026-10-29 13:24:24 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "newsletter_builder-review",
+      "tool": "newsletter_builder",
+      "server": "helix-craft-content",
+      "grader": "newsletter",
+      "status": "pass",
+      "reason": "Assertions met: body has no opening repetition; all supplied key points retained; supplied CTA is the button; synthetic topic retained",
+      "start_utc": "2026-10-29 13:24:24 UTC",
+      "end_utc": "2026-10-29 13:24:28 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "webinar_script-review",
+      "tool": "webinar_script",
+      "server": "helix-craft-content",
+      "grader": "webinar",
+      "status": "pass",
+      "reason": "Assertions met: continuous requested duration; takeaways retained in script; speaker and audience retained; polls included when requested; no added product pitch with none selected",
+      "start_utc": "2026-10-29 13:24:28 UTC",
+      "end_utc": "2026-10-29 13:24:31 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "content_repurposer-review",
+      "tool": "content_repurposer",
+      "server": "helix-craft-content",
+      "grader": "repurpose",
+      "status": "pass",
+      "reason": "repurpose deterministic assertion met",
+      "start_utc": "2026-10-29 13:24:31 UTC",
+      "end_utc": "2026-10-29 13:24:33 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "craft_content_improver-review",
+      "tool": "craft_content_improver",
+      "server": "helix-craft-content",
+      "grader": "content-review",
+      "status": "pass",
+      "reason": "Assertions met: original synthetic copy retained; no fabricated improved text when no edit found; goal and audience retained; missing evidence is flagged; opening does not repeat empty source hook",
+      "start_utc": "2026-10-29 13:24:33 UTC",
+      "end_utc": "2026-10-29 13:24:36 UTC",
+      "provenance": "Fresh LIVE Helix test connector call on 29 October 2026. Not an evals/run.py HTTP call. Exact authorized synthetic review inputs."
+    },
+    {
+      "case": "case-study-four-outcomes",
+      "tool": "case_study_generator",
+      "server": "helix-craft-content",
+      "grader": "case-study-four",
+      "status": "pass",
+      "reason": "case-study-four deterministic assertion met",
+      "start_utc": "2026-10-29 13:24:50 UTC",
+      "end_utc": "2026-10-29 13:24:54 UTC",
+      "provenance": "Fresh LIVE Helix test connector call. Derived synthetic probe. Not an evals/run.py HTTP call."
+    },
+    {
+      "case": "pmf-activation-supplied",
+      "tool": "pmf_scorecard",
+      "server": "helix-craft-gtm",
+      "grader": "pmf",
+      "status": "pass",
+      "reason": "Assertions met: rule score is not proof; supplied activation is read; all five dimensions scored; input metrics retained",
+      "start_utc": "2026-10-29 15:52:56 UTC",
+      "end_utc": "2026-10-29 15:53:01 UTC",
+      "provenance": "Fresh LIVE connected Helix PMF refresh. Exact prior synthetic inputs. Not an evals/run.py HTTP call."
+    },
+    {
+      "case": "pmf-activation-labelled",
+      "tool": "pmf_scorecard",
+      "server": "helix-craft-gtm",
+      "grader": "pmf",
+      "status": "pass",
+      "reason": "Assertions met: rule score is not proof; supplied activation is read; all five dimensions scored; input metrics retained",
+      "start_utc": "2026-10-29 13:25:24 UTC",
+      "end_utc": "2026-10-29 13:25:27 UTC",
+      "provenance": "Fresh LIVE Helix test connector call. Derived labelled activation control. Not an evals/run.py HTTP call."
+    },
+    {
+      "case": "pmf-incomplete-retention-evidence",
+      "tool": "pmf_scorecard",
+      "server": "helix-craft-gtm",
+      "grader": "pmf-incomplete",
+      "status": "pass",
+      "reason": "Assertions met: labelled activation is read; churn and retention gaps are explicit; three of five dimensions scored; rule score is not proof; incomplete evidence caveat is retained; no conflicting scaling action with incomplete evidence",
+      "start_utc": "2026-10-29 15:53:01 UTC",
+      "end_utc": "2026-10-29 15:53:04 UTC",
+      "provenance": "Fresh LIVE connected Helix PMF refresh. Exact prior synthetic inputs. Not an evals/run.py HTTP call."
+    }
+  ]
+}
