@@ -94,10 +94,14 @@ for(const [tool,base,field] of CASES.india.slice(0,1))test(`${tool} ${field}: no
  const t=await call(tool,withText(base,field,'Mid-market manufacturers'));
  assert.ok(t.endsWith(NO_REGION_SUFFIX),t.slice(-400));assert.ok(!t.includes('## Region and industry context'));
 });
-test('Safety net: a named country in any supplied free text field removes the question',()=>{
+test('Safety net: a named country in any supplied free text field removes the question and gives that region',()=>{
  const [,base,field]=CASES.net;
- assert.equal(regionNotes({...base,[field]:'Rollout next quarter in India'}),'');
- assert.equal(regionNotes({...base,[field]:'Rollout next quarter in the United States'}),'');
+ const india=regionNotes({...base,[field]:'Rollout next quarter in India'});
+ assert.ok(india.includes('### India')&&!india.includes(QUESTION),india.slice(0,300));
+ const us=regionNotes({...base,[field]:'Rollout next quarter in the United States'});
+ assert.ok(us.includes('### North America')&&!us.includes(QUESTION),us.slice(0,300));
+ // Claims and proof list offices and partners: they remove the question but never create a market.
+ assert.equal(regionNotes({...base,strengths:'Offices in India and Germany',differentiators:'Customers in Canada'}),'');
 });
 test('Safety net respects negation, tentative wording and ignored keys',()=>{
  const [,base,field]=CASES.net;

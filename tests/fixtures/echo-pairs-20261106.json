@@ -1,0 +1,62 @@
+[
+ {
+  "row": 6,
+  "tool": "lookalike_signal_generator",
+  "base": {
+   "icp_firmographics": {
+    "industries": [
+     "Retail Motor Vehicles"
+    ],
+    "company_sizes": [
+     "100 to 1,000 employees"
+    ],
+    "locations": [
+     "United States"
+    ]
+   },
+   "champion_titles": [
+    "General Manager",
+    "Dealer Principal",
+    "BDC Director"
+   ],
+   "buying_triggers": [
+    "dealer group acquires another rooftop",
+    "new General Manager or BDC Director hired",
+    "job posts for BDC representatives"
+   ],
+   "platforms": [
+    "linkedin"
+   ],
+   "product_category": "AI software for car dealers",
+   "company": "Spyne"
+  },
+  "changed": {
+   "icp_firmographics": {
+    "industries": [
+     "Retail Motor Vehicles"
+    ],
+    "company_sizes": [
+     "1,001 to 5,000 employees"
+    ],
+    "locations": [
+     "United States"
+    ]
+   },
+   "champion_titles": [
+    "General Manager",
+    "Dealer Principal",
+    "BDC Director"
+   ],
+   "buying_triggers": [
+    "dealer group acquires another rooftop",
+    "new General Manager or BDC Director hired",
+    "job posts for BDC representatives"
+   ],
+   "platforms": [
+    "linkedin"
+   ],
+   "product_category": "AI software for car dealers",
+   "company": "Spyne"
+  }
+ }
+]

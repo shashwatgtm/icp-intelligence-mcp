@@ -5,6 +5,7 @@ exports.SERVER_VERSION = exports.SERVER_NAME = void 0;
 exports.createServer = createServer;
 const input_evidence_ts_1 = require("./input-evidence.js");
 const region_reader_ts_1 = require("./region-reader.js");
+const echo_layer_ts_1 = require("./echo-layer.js");
 const reader_actions_ts_1 = require("./reader-actions.js");
 const evolution_membership_ts_1 = require("./evolution-membership.js");
 const verticals_ts_1 = require("./verticals.js");
@@ -3171,7 +3172,7 @@ function createServer() {
             return { content: [{ type: 'text', text: advice }] };
         try {
             const limit = (0, decision_limits_ts_1.decisionLimit)(String(toolName), safeArgs);
-            const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs);
+            const result = limit.stop ? limit.text : limit.text + (0, echo_layer_ts_1.applyEcho)(String(toolName), safeArgs, tool.execute(safeArgs));
             const answer = {
                 content: [{ type: 'text', text: inputEvidence.notice + (inputEvidence.notice ? '\n\n' : '') + (0, reader_actions_ts_1.withReadingGuide)(toolName, (0, input_evidence_ts_1.holdBuyerCopy)(toolName, safeArgs, result), safeArgs) + (limit.stop ? '' : (0, region_reader_ts_1.regionNotes)(typed)) }]
             };

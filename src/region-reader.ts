@@ -5,7 +5,11 @@ export const NO_REGION_SUFFIX='\n\nRegion context: Which region applies: India, 
 export interface RegionMatch {region_id:RegionId;countries:string[];jurisdictions:string[];evidence:string[];vertical_id:string|null;subtype_id:string|null}
 export interface RegionReading {regions:RegionMatch[];unresolved_hints:string[]}
 interface Clue {region:RegionId|'outside';country?:string;jurisdiction?:string;value:string;kind:'region'|'country'|'city'|'currency'|'regulator'|'state'}
-interface Fragments {seller:string[];market:string[];buyer:string[];deal:string[]}
+interface Fragments {seller:string[];market:string[];buyer:string[];deal:string[];any:string[]}
+// Claims and proof list offices, partners and customers. They are never read as a market, not even by the last resort reading.
+// The seller prose keys below are read by the adapters sentence by sentence (a customer quote must not count), so they are not read whole here.
+const CLAIMS=new Set(['your_take','content','source_content','unique_capability']);
+const CLAIM_KEY=/strength|weakness|differenti|proof|metric|claim|quote|testimonial|case_stud|logo|partner|office|award|competit|advantage|achievement|reference|stories|social|evidence/;
 const SELLER=new Set(['product_feature','product_context','positioning_statement','document_content','potential_crises','your_sector','industry','product_category','product_description','your_product','category','company_description','offering','what_you_sell','product','sector',
  'your_solution','solution','problem_solved','key_benefit','key_value_prop','key_value_points','current_products','current_positioning','must_show_features','implementation_approach']);
 // Claims and proof (strengths, differentiators, value props) are not read as markets: they list offices, partners and customers.
@@ -19,7 +23,7 @@ const IGNORE=new Set(['company','company_name','name','customer','account','role
 const keyOf=(key:string)=>key.toLowerCase().replace(/[ -]+/g,'_');
 /** Traverse only supplied context, never company identities, rival evidence or quotations. */
 function fragments(args:unknown):Fragments {
- const out:Fragments={seller:[],market:[],buyer:[],deal:[]};
+ const out:Fragments={seller:[],market:[],buyer:[],deal:[],any:[]};
  const visit=(value:unknown,group:keyof Fragments|null=null,depth=0):void=>{
   if(depth>12)return;
   if(typeof value==='string'){
@@ -33,6 +37,7 @@ function fragments(args:unknown):Fragments {
    else if(MARKET.has(k))visit(v,group==='buyer'?'buyer':'market',depth+1);
    else if(DEAL.has(k))visit(v,group==='buyer'?'buyer':'deal',depth+1);
    else if(BUYER.has(k))visit(v,'buyer',depth+1);
+   else if(!CLAIMS.has(k)&&!CLAIM_KEY.test(k))visit(v,'any',depth+1);
   }
  };visit(args);return out;
 }
@@ -261,9 +266,18 @@ function chooseReading(f:Fragments,all:Clue[]):Scan {
  // A dedicated market field wins over incidental locations in the description.
  if(explicit.found.length||explicit.unresolved.length)return explicit;
  const seller=scan(f.seller.map(text=>marketText(text,all)),all);
- if(seller.found.length||!f.deal.length)return seller;
- const deal=scan(f.deal.map(text=>marketText(text,all)),all);
- return deal.found.length?{found:deal.found,unresolved:[]}:seller;
+ if(seller.found.length)return seller;
+ if(f.deal.length){
+  const deal=scan(f.deal.map(text=>marketText(text,all)),all);
+  if(deal.found.length)return{found:deal.found,unresolved:[]};
+ }
+ // Last resort, the same fields the safety net reads: a country named affirmatively in any other supplied text (not names, people,
+ // rival evidence, quotes or claims) selects its region when no market field, seller text or deal context names one.
+ if(!seller.unresolved.length&&f.any.length){
+  const any=scan(f.any.map(text=>marketText(text,all)),all);
+  if(any.found.length)return{found:any.found,unresolved:[]};
+ }
+ return seller;
 }
 /** True when a supplied string field, other than names, people, rival evidence and quotes, affirmatively names a place. */
 function namesAPlace(args:unknown):boolean {

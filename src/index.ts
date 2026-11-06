@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { guardInputs, holdBuyerCopy, isPlaceholder, isDenial } from './input-evidence.ts';
 import {regionNotes} from './region-reader.ts';
+import {applyEcho} from './echo-layer.ts';
 import { withReadingGuide } from './reader-actions.ts';
 import { evolutionMatch } from './evolution-membership.ts';
 import { billingLine } from './verticals.ts';
@@ -3202,7 +3203,7 @@ export function createServer(): Server {
 
     try {
       const limit=decisionLimit(String(toolName),safeArgs as Record<string,unknown>);
-      const result = limit.stop ? limit.text : limit.text + tool.execute(safeArgs as any);
+      const result = limit.stop ? limit.text : limit.text + applyEcho(String(toolName), safeArgs as Record<string, unknown>, tool.execute(safeArgs as any));
       const answer = {
         content: [{ type: 'text', text: inputEvidence.notice + (inputEvidence.notice ? '\n\n' : '') + withReadingGuide(toolName, holdBuyerCopy(toolName, safeArgs, result), safeArgs as Record<string,unknown>) + (limit.stop ? '' : regionNotes(typed)) }]
       };
