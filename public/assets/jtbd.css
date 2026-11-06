@@ -1,0 +1,16 @@
+/* site/jtbd-20261105: styles for the parts added on 5 November 2026 (who and decision line, where it works,
+   sample answer above the form, buyer moment groups, the "when a tool is not enough" line). Colours and fonts are the
+   existing helix.css tokens; nothing here changes an existing class. */
+.hx-for { margin: 18px 0 0; max-width: 62ch; font-size: var(--lead); line-height: 1.4; color: var(--ink); }
+.hx-for b { color: var(--ox); font-weight: 800; }
+.hx-where { margin: 14px 0 0; max-width: 72ch; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.hx-sample > h2 { margin-bottom: 12px; }
+.hx-sample-note { margin: 0 0 16px; font: 500 13px/1.5 var(--mono); color: var(--muted); max-width: 72ch; }
+.hx-sample-body { border-left: 4px solid var(--signal); padding: 2px 0 2px clamp(14px, 2vw, 22px); max-width: 84ch; }
+.hx-sample-body > :first-child { margin-top: 0; }
+.hx-sample-more { margin: 14px 0 0; font-size: 16px; }
+.hx-notenough { margin: 20px 0 0; max-width: 72ch; font-size: 17px; line-height: 1.5; }
+.hx-moments { display: grid; gap: clamp(28px, 3vw, 44px); }
+.hx-moment > h3 { margin: 0 0 12px; font-size: var(--card); }
+.hx-moment > .tools { background: var(--white); }
+.hx-method p { max-width: 72ch; }
