@@ -9,7 +9,7 @@ interface Fragments {seller:string[];market:string[];buyer:string[];deal:string[
 // Claims and proof list offices, partners and customers. They are never read as a market, not even by the last resort reading.
 // The seller prose keys below are read by the adapters sentence by sentence (a customer quote must not count), so they are not read whole here.
 const CLAIMS=new Set(['your_take','content','source_content','unique_capability']);
-const CLAIM_KEY=/strength|weakness|differenti|proof|metric|claim|quote|testimonial|case_stud|logo|partner|office|award|competit|advantage|achievement|reference|stories|social|evidence/;
+const CLAIM_KEY=/strength|weakness|differenti|proof|metric|claim|quote|testimonial|case_stud|logo|partner|office|award|competit|advantage|achievement|reference|stories|social|evidence|correlat|success|statistic|benchmark|adoption|customer_stor|result/;
 const SELLER=new Set(['product_feature','product_context','positioning_statement','document_content','potential_crises','your_sector','industry','product_category','product_description','your_product','category','company_description','offering','what_you_sell','product','sector',
  'your_solution','solution','problem_solved','key_benefit','key_value_prop','key_value_points','current_products','current_positioning','must_show_features','implementation_approach']);
 // Claims and proof (strengths, differentiators, value props) are not read as markets: they list offices, partners and customers.
