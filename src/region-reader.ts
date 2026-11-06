@@ -5,15 +5,21 @@ export const NO_REGION_SUFFIX='\n\nRegion context: Which region applies: India, 
 export interface RegionMatch {region_id:RegionId;countries:string[];jurisdictions:string[];evidence:string[];vertical_id:string|null;subtype_id:string|null}
 export interface RegionReading {regions:RegionMatch[];unresolved_hints:string[]}
 interface Clue {region:RegionId|'outside';country?:string;jurisdiction?:string;value:string;kind:'region'|'country'|'city'|'currency'|'regulator'|'state'}
-interface Fragments {seller:string[];market:string[];buyer:string[]}
-const SELLER=new Set(['product_feature','product_context','positioning_statement','document_content','potential_crises','your_sector','industry','product_category','product_description','your_product','category','company_description','offering','what_you_sell','product','sector']);
+interface Fragments {seller:string[];market:string[];buyer:string[];deal:string[]}
+const SELLER=new Set(['product_feature','product_context','positioning_statement','document_content','potential_crises','your_sector','industry','product_category','product_description','your_product','category','company_description','offering','what_you_sell','product','sector',
+ 'your_solution','solution','problem_solved','key_benefit','key_value_prop','key_value_points','current_products','current_positioning','must_show_features','implementation_approach']);
+// Claims and proof (strengths, differentiators, value props) are not read as markets: they list offices, partners and customers.
 const MARKET=new Set(['target_segments','seller_market','target_market','target_regions','region','regions','geography','geographies','country','countries','city','cities','currency','currencies','regulator','regulators','market_name','market','markets','segment_name']);
-const BUYER=new Set(['target_customer','target_customers','target_audience','target_company_type','customer_descriptions','current_customers','current_icp','ideal_icp','icp_firmographics','firmographics','customers','accounts','segments','potential_segments','industry','industries','location','locations']);
-const IGNORE=new Set(['company','company_name','name','customer','account','role','champion_title','typical_champion','known_stakeholders','competitors','competitor_weaknesses','tech_stack','data_sources','evidence','quotes','key_quotes','customer_metrics','proof_points']);
+const BUYER=new Set(['target_customer','target_customers','target_audience','target_company_type','customer_descriptions','current_customers','current_icp','ideal_icp','icp_firmographics','firmographics','customers','accounts','segments','potential_segments','industry','industries','location','locations','customer_segment','target_reader','audience','intended_audience','buyer_priorities','recent_wins','recent_losses']);
+// Deal context: text about this prospect, their pain, process, metrics and requirements. A country named here selects the
+// region only when no dedicated market field and no seller description names one, and an unresolved currency sign or
+// "Europe" here never blocks the seller's own markets.
+const DEAL=new Set(['prospect_industry','customer_industry','target_industry','known_pain_points','key_pain_points','specific_pain_point','customer_challenges','challenge','gtm_challenge','customer_pain','customer_need','pain_points','known_metrics','success_metrics','current_metrics','key_outcome','desired_outcome','current_process','known_process_steps','known_requirements','compliance_requirements','buying_trigger','buying_triggers','urgency_drivers','market_changes','deal_details','account_notes','budget_context','gaps_to_fill','goals','results']);
+const IGNORE=new Set(['company','company_name','name','customer','account','role','champion_title','typical_champion','known_stakeholders','competitors','competitor_weaknesses','tech_stack','data_sources','evidence','quotes','key_quotes','customer_metrics','proof_points','customer_name','account_name','customer_company','deal_name','champion_name','champion_role','product_name','buyer_champion','known_contacts','procurement_contact','economic_buyer','technical_evaluators','stakeholders_involved','attendees','speakers','competitor','competitor_won','competitor_price','competitive_threats','competitive_context','competitor_context','competitor_details','competitor_objections','customer_quote','customer_feedback','interview_notes','social_proof','author_background']);
 const keyOf=(key:string)=>key.toLowerCase().replace(/[ -]+/g,'_');
 /** Traverse only supplied context, never company identities, rival evidence or quotations. */
 function fragments(args:unknown):Fragments {
- const out:Fragments={seller:[],market:[],buyer:[]};
+ const out:Fragments={seller:[],market:[],buyer:[],deal:[]};
  const visit=(value:unknown,group:keyof Fragments|null=null,depth=0):void=>{
   if(depth>12)return;
   if(typeof value==='string'){
@@ -25,6 +31,7 @@ function fragments(args:unknown):Fragments {
    const k=keyOf(key);if(IGNORE.has(k))continue;
    if(SELLER.has(k))visit(v,group==='buyer'?'buyer':'seller',depth+1);
    else if(MARKET.has(k))visit(v,group==='buyer'?'buyer':'market',depth+1);
+   else if(DEAL.has(k))visit(v,group==='buyer'?'buyer':'deal',depth+1);
    else if(BUYER.has(k))visit(v,'buyer',depth+1);
   }
  };visit(args);return out;
@@ -247,12 +254,32 @@ export function sellerMarketStates(args:unknown):{country:string|null;region:str
  const seen=scan(f.seller.map(text=>marketText(text,all)),all);
  return seen.found.filter(m=>m.clue.region!=='outside'&&['country','city','state','region'].includes(m.clue.kind)).map(m=>({country:m.clue.country||null,region:m.clue.region,kind:m.clue.kind,state:m.state}));
 }
-export function readRegionContext(args:unknown):RegionReading {
- const f=fragments(args),all=clues();
- const explicit=scan(f.market.map(text=>marketText(text,all)),all),seller=scan(f.seller.map(text=>marketText(text,all)),all);
+/** Dedicated market fields win; then the seller's own description; then deal context, which only counts when it names a place. */
+function chooseReading(f:Fragments,all:Clue[]):Scan {
+ const explicit=scan(f.market.map(text=>marketText(text,all)),all);
  // Customer location alone is not evidence that the seller is selling there.
  // A dedicated market field wins over incidental locations in the description.
- const chosen=explicit.found.length||explicit.unresolved.length?explicit:seller;
+ if(explicit.found.length||explicit.unresolved.length)return explicit;
+ const seller=scan(f.seller.map(text=>marketText(text,all)),all);
+ if(seller.found.length||!f.deal.length)return seller;
+ const deal=scan(f.deal.map(text=>marketText(text,all)),all);
+ return deal.found.length?{found:deal.found,unresolved:[]}:seller;
+}
+/** True when a supplied string field, other than names, people, rival evidence and quotes, affirmatively names a place. */
+function namesAPlace(args:unknown):boolean {
+ const all=clues();let named=false;
+ const visit=(value:unknown,depth=0):void=>{
+  if(named||depth>12)return;
+  if(typeof value==='string'){
+   const v=value.trim();if(!v)return;
+   if(/^[\[{]/.test(v)){try{visit(JSON.parse(v),depth+1);return;}catch{/* plain text */}}
+   named=scan([marketText(v,all)],all).found.some(m=>m.state==='yes'&&['country','region','state','city'].includes(m.clue.kind));
+  }else if(Array.isArray(value))value.forEach(v=>visit(v,depth+1));
+  else if(value&&typeof value==='object')for(const [key,v]of Object.entries(value)){if(!IGNORE.has(keyOf(key)))visit(v,depth+1);}
+ };visit(args);return named;
+}
+export function readRegionContext(args:unknown):RegionReading {
+ const f=fragments(args),all=clues(),chosen=chooseReading(f,all);
  const regions:RegionMatch[]=[];
  for(const r of REGION_CHOICES){
   const mentions=chosen.found.filter(m=>m.clue.region===r.id);
@@ -283,9 +310,7 @@ export function readRegionContext(args:unknown):RegionReading {
 }
 /** Affirmative selling markets that are outside the six regions, by display name, in order of mention. */
 function outsideMarkets(args:unknown):string[] {
- const f=fragments(args),all=clues();
- const explicit=scan(f.market.map(text=>marketText(text,all)),all),seller=scan(f.seller.map(text=>marketText(text,all)),all);
- const chosen=explicit.found.length||explicit.unresolved.length?explicit:seller;
+ const f=fragments(args),all=clues(),chosen=chooseReading(f,all);
  const mentions=chosen.found.filter(m=>m.clue.country&&OUT_OF_SCOPE_CODES.has(m.clue.country));
  const yes=mentions.filter(m=>m.state==='yes'&&!mentions.some(n=>n.clue.country===m.clue.country&&n.state!=='yes'&&!distinctOfferings(m.offeringPrefix,n.offeringPrefix)));
  return[...new Set(yes.map(m=>OUTSIDE_NAME.get(m.clue.country!)!))];
@@ -304,7 +329,7 @@ function renderNote(n:RegionNote,countries:string[]):string {
 }
 export function regionNotes(args:unknown):string {
  printedSources=new Set<string>();printedTexts=new Set<string>();
- const reading=readRegionContext(args),outside=outsideMarkets(args);if(!reading.regions.length&&!outside.length)return NO_REGION_SUFFIX;
+ const reading=readRegionContext(args),outside=outsideMarkets(args);if(!reading.regions.length&&!outside.length)return namesAPlace(args)?'':NO_REGION_SUFFIX;
  const out=['','','## Region and industry context','','Draft for owner review. These checks use the market context in your description. They do not change the scores or market arithmetic above.'];
  for(const match of reading.regions){
   const choice=REGION_CHOICES.find(x=>x.id===match.region_id)!;
