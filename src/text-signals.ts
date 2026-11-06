@@ -152,7 +152,7 @@ export function confirmedMatches(text:string, floor:RegExp, additional?:RegExp):
 export function timingFact(text:string):{score:number;state:SignalState;evidence:string[]} {
  const groups:[number,RegExp][]=[
   [100,/\b(?:now|immediately|ready to (?:buy|start)|this week|without delay|as soon as possible)\b/i],
-  [70,/\b(?:soon|shortly|in the next few weeks|within (?:a|one) month)\b/i],
+  [70,/\b(?:soon|shortly|in the next few weeks|within (?:a|one) month|(?:within |in |by the end of |by end of )?this quarter|by (?:the )?end of (?:the )?quarter)\b/i],
   [40,/\b(?:later|next year|next quarter|postponed|deferred|not until next year)\b/i]
  ];
  const reads=groups.map(([score,re])=>({score,...readSignal(text,re)}));const positive=reads.filter(r=>r.state==='affirmed');

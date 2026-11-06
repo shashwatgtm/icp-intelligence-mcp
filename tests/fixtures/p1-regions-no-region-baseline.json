@@ -5,7 +5,7 @@
     "tools": [
       {
         "name": "icp_deep_dive",
-        "description": "Analyze customer data to detect ICP patterns (industry, size, deal size, sales cycle, tech stack, triggers, champion roles). Ties are named as ties, the budget is the ACV range seen in your customers, and sector notes are added when your inputs name one of the supported sectors",
+        "description": "Helps you decide which customers to go after next. You give your best customers, as a list (industry, size, contract value, sales cycle, tech stack, buying trigger, champion title) or in your own words. You get the patterns they share, with ties named as ties, the budget shown as the contract value range seen in your customers, recommendations, and sector notes when your inputs name a supported sector. It works only from what you give and looks nothing up.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -84,7 +84,7 @@
       },
       {
         "name": "icp_scoring_model",
-        "description": "Create a lead qualification scoring template: criteria with example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust. Your success pattern is matched to your criteria; it does not set the weights. Sector notes are added when your inputs name one of the supported sectors Ask for held-back test counts and the pre-agreed stop rule when a model has been tested.",
+        "description": "Helps you decide which leads are worth a seller's time. You give the criteria that matter, how important each one is and, if you know it, what goes with success. You get a lead scoring template: example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust, with sector notes when your inputs name a supported sector. Your success pattern is matched to your criteria; it does not set the weights. Ask for held-back test counts and the pre-agreed stop rule when a model has been tested.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -187,7 +187,7 @@
       },
       {
         "name": "buyer_group_analyzer",
-        "description": "Map the buyer group for a deal: the champion you name, your known stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role's concern and message prompts, an influence map and discovery questions. Sector roles and questions are added when your inputs name one of the supported sectors",
+        "description": "Helps you decide who else must agree before a deal can close. You give what you sell, the deal size, the company size, your champion and any stakeholders you know. You get a buying group map with your stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role's concern and message prompts, an influence map and discovery questions, with sector roles and questions when your inputs name a supported sector. Roles from titles are hypotheses to confirm.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -250,7 +250,7 @@
       },
       {
         "name": "tam_sam_som_calculator",
-        "description": "Use when someone says size my market, market sizing, or how big is my market. Before calling, ask what they sell, how many companies could buy and the annual contract value; never estimate these. Clarify what unlabelled numbers mean. Calculate TAM, SAM and SOM from supplied figures, not market research. Values are displayed in USD only; for rupees ask for a user-confirmed USD amount, never relabel or invent a conversion. Rates use 0 to 100 percentage points: ask whether 0.2 means 0.2% or a fraction meaning 20%. Omitted rates are labelled examples.",
+        "description": "Helps you decide how big your market is, counted bottom up. Use when someone says size my market, market sizing, or how big is my market. Before calling, ask what they sell, how many companies could buy and the annual contract value; never estimate these. Clarify what unlabelled numbers mean. You get TAM, SAM and SOM calculated from the supplied figures, not market research. Values are displayed in USD only; for rupees ask for a USD amount the user confirms, never relabel or invent a conversion. Rates use 0 to 100 percentage points: ask whether 0.2 means 0.2% or a fraction meaning 20%. Omitted rates are labelled examples.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -451,7 +451,7 @@
       },
       {
         "name": "lookalike_signal_generator",
-        "description": "Generate platform-specific targeting criteria and search queries from your firmographics, technographics, champion titles and buying triggers (generates criteria, not data). Each trigger gets its own signal; search keywords come from what you sell and the sector; platforms limits the sections",
+        "description": "Helps you decide how to find more accounts like your best ones. You give your ICP's company profile, technologies, champion titles and buying triggers, and optionally what you sell and the platforms you use. You get targeting criteria and search queries for each platform, one signal for each trigger, and search keywords from what you sell and the sector. It writes criteria, not data: it finds no companies or contacts.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -536,7 +536,7 @@
       },
       {
         "name": "account_prioritization",
-        "description": "Rank and prioritize accounts by a weighted score of fit, intent, relationship and timing; each account shows the points its timing earned and the factor that added the most points",
+        "description": "Helps you decide which accounts to work first. You give your accounts with fit, intent and relationship scores from 0 to 100 and a timing, plus optional weights. You get a ranked list from a weighted score, with a tier for each account, the points its timing earned and the factor that added the most points.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -618,7 +618,7 @@
       },
       {
         "name": "icp_gap_analysis",
-        "description": "Analyze gaps between your current customer base and your ideal ICP: what the ideal profile has that the current base lacks, metric gaps from your current and target figures, causes to check and actions that fit your business model. Sector notes are added when your inputs name one of the supported sectors",
+        "description": "Helps you decide whether you are selling to the customers you meant to. You give your current customer base, your ideal customer profile and, if you have them, current and target metrics. You get what the ideal profile has that the current base lacks, metric gaps from your own figures, causes to check and actions that fit your business model, with sector notes when your inputs name a supported sector.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -713,7 +713,7 @@
       },
       {
         "name": "icp_evolution_tracker",
-        "description": "Review how your ICP should evolve: reads your recent wins, losses and market changes against your current ICP, states a candidate change for each (an addition to test, a disqualifier to test, an implication to check) and writes a draft of the updated ICP, with the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM",
+        "description": "Helps you decide whether your ICP should change after recent wins and losses. You give your current ICP, recent wins, recent losses and market changes. You get a candidate change for each (an addition to test, a disqualifier to test, an implication to check), a draft of the updated ICP, the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -760,7 +760,7 @@
       },
       {
         "name": "icp_interview_synthesizer",
-        "description": "Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized and key quotes per interview): pain points, objections, buying triggers, value realized, champion roles and quotes kept word for word, with discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed.",
+        "description": "Helps you decide what your customer interviews mean for your ICP. You give structured notes, one per interview: the customer, the role, pain points, buying triggers, value realized and key quotes. You get the pain points, objections, buying triggers, value realized and champion roles across the interviews, quotes kept word for word, discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed.",
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -2547,7 +2547,7 @@
           }
         ]
       },
-      "sha256": "d92730a25754fcc3591d4ff4c405536831dd2bfe72a8087ee922520497dbdbac"
+      "sha256": "9a78979772b55a24905dbaf7871f2f1fda9b322b533d71edcf5d0e4b32ea7673"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2589,7 +2589,7 @@
           }
         ]
       },
-      "sha256": "000a089399f0ed9a977b7ada4a415380d1863c6fc97b8300d5140e8b9d3efce0"
+      "sha256": "3b5b858b0e9209eaa5a041d566134cce3a13ea2280d3c65675fe5d1887363aea"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2631,7 +2631,7 @@
           }
         ]
       },
-      "sha256": "5d9890fa6022bf2b78ddaf0fc850fdb3cba416fb03b522d4716926dd007bc96c"
+      "sha256": "d92dabd8bcdbf872d9c622cad472cf35124c33efd1484a870762ae934c42640c"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2673,7 +2673,7 @@
           }
         ]
       },
-      "sha256": "d8a58abb6660e7a6bcb8c651b5412159424954894e9ab9f5430ceea8fb643152"
+      "sha256": "90abda74ee2edb5874a701f3a251186ce47ae153241682fb905210f3a609929a"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2715,7 +2715,7 @@
           }
         ]
       },
-      "sha256": "fa4a685784fd8156b63cb00762af9ea53055c4c126078e36c2cd0295e038efc0"
+      "sha256": "9937b7be2faaf4144bc7e92897eb9ac92dbdfd2fd57392e244c27eb6e7058c2f"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2757,7 +2757,7 @@
           }
         ]
       },
-      "sha256": "38a051e4e482d8b1f4d7d06627b245f485282594eff205d26d5d308529efa5a1"
+      "sha256": "3dca503eac31b5fcd055a59fd13bc9df84d804c8d94f5ee742cfb9c12427d3d3"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2799,7 +2799,7 @@
           }
         ]
       },
-      "sha256": "331fda64695f6297e41f039e29f071da20d0409d73000b048a79a06ca6f33c5b"
+      "sha256": "d25184e9de965f7aeeecae44ea7ce926b194d7dce6ab4cd5344f4e4e476550d1"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2841,7 +2841,7 @@
           }
         ]
       },
-      "sha256": "98fd2ab0bab2bfd9c14cf7dab0b69dbc81b1a86a156fc7657fa373bd8acee028"
+      "sha256": "e7d15f144efab47eef29a2dff9b8df353e95bbbbb790689b283842b6150f2eed"
     },
     {
       "tool": "icp_interview_synthesizer",
@@ -2883,7 +2883,7 @@
           }
         ]
       },
-      "sha256": "86c2ce3f67b5d154a7afd3d8243b7291f32a0c0ed2342ee53bb97e1d0e155ce3"
+      "sha256": "fc7ae0ba34f4133502fb637b93c3bbbf8b71a74e5daecfa009f4101d8014a654"
     }
   ]
 }
