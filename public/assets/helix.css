@@ -738,3 +738,6 @@ main p, main li { text-wrap: pretty; }
   .hx-viz-tag { background: #F2AAB3; color: #1A0E10; }
 }
 /* ==== end of design pass ==== */
+
+/* Audit fix, 6 Nov 2026: nav, breadcrumb and footer links are 44 px wide tap targets at every width, not only on touch screens */
+.hx9-nav a, .hx9-site a, .hx9-crumbs a, .hx-footer a, .hx-footer-bottom a { min-width: 44px; justify-content: center; }
