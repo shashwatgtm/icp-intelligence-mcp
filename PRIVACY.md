@@ -19,7 +19,7 @@ ICP Intelligence is built and run by Shashwat Ghosh, Helix GTM Consulting. Conta
 - Inputs and answers are not stored: there is no database, file storage or cache for them. Web and MCP answers are sent with `Cache-Control: no-store`.
 - Our code does not log your inputs or the answers.
 - The page does not save what you type in your browser either. It is gone when you close or reload the page.
-- There are no accounts, cookies, advertising or tracking scripts. The only analytics is the usage count below. Fonts are served from this site, so loading a page contacts no one else.
+- There are no accounts or advertising; Google Analytics runs in consent mode and sets no analytics cookies until the visitor selects Accept, Ahrefs Web Analytics sets no cookies, and the choice is kept in the browser (localStorage "helix-consent"). Visit analytics loads 1 second after the page and sends only the page path and the kind of lead (form thank-you page, Calendly click, email click or connect link click), never a form field, an email address, a tool input or a tool answer, in addition to the tool usage count below. Fonts are served from this site.
 
 ## Usage counts
 

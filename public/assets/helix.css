@@ -741,3 +741,6 @@ main p, main li { text-wrap: pretty; }
 
 /* Audit fix, 6 Nov 2026: nav, breadcrumb and footer links are 44 px wide tap targets at every width, not only on touch screens */
 .hx9-nav a, .hx9-site a, .hx9-crumbs a, .hx-footer a, .hx-footer-bottom a { min-width: 44px; justify-content: center; }
+
+/* 7 Nov 2026: owner feedback. The "Choose your app" section lost its side margins because the main > .hx-section rule set margin 0; align its text with the other sections. */
+main > .hx-section.hx-app-section {width:100%;max-width:var(--maxw,1280px);margin-left:auto;margin-right:auto;padding-left:var(--gut,24px);padding-right:var(--gut,24px)}
