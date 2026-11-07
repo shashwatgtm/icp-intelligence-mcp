@@ -281,7 +281,7 @@
 <section class="hx-section" id="icp-deep-dive" aria-labelledby="d-icp-deep-dive">
   <h3 id="d-icp-deep-dive">ICP Deep Dive</h3>
   <p><code>icp_deep_dive</code></p>
-  <p class="hx-prose">Analyze customer data to detect ICP patterns: firmographics, technographics, buying behavior. <a href="/tools/icp-deep-dive/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide which customers to go after next. You give your best customers, as a list (industry, size, contract value, sales cycle, tech stack, buying trigger, champion title) or in your own words. You get the patterns they share, with ties named as ties, the budget shown as the contract value range seen in your customers, recommendations, and sector notes when your inputs name a supported sector. It works only from what you give and looks nothing up. <a href="/tools/icp-deep-dive/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>customers</code></td><td>list of objects</td><td>no</td><td></td><td>List of customer objects with available attributes</td></tr>
 <tr><td><code>customer_descriptions</code></td><td>string</td><td>no</td><td></td><td>Alternative: Describe your best customers in text format</td></tr>
@@ -293,7 +293,7 @@
 <section class="hx-section hx-wash" id="icp-scoring-model" aria-labelledby="d-icp-scoring-model">
   <h3 id="d-icp-scoring-model">ICP Scoring Model</h3>
   <p><code>icp_scoring_model</code></p>
-  <p class="hx-prose">Create a lead qualification scoring template: criteria with example point weights set by importance level, a scorecard and tier bands to adjust. Your success patterns are shown for reference; they do not set the weights. <a href="/tools/icp-scoring-model/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide which leads are worth a seller's time. You give the criteria that matter, how important each one is and, if you know it, what goes with success. You get a lead scoring template: example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust, with sector notes when your inputs name a supported sector. Your success pattern is matched to your criteria; it does not set the weights. <a href="/tools/icp-scoring-model/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>scoring_criteria</code></td><td>list of objects</td><td>no</td><td></td><td>Criteria for scoring with importance levels</td></tr>
 <tr><td><code>success_correlation</code></td><td>string</td><td>no</td><td></td><td>What correlates with success? (e.g., &quot;deals with VP Sales champion close 2x faster&quot;)</td></tr>
@@ -304,7 +304,7 @@
 <section class="hx-section" id="buyer-group-analyzer" aria-labelledby="d-buyer-group-analyzer">
   <h3 id="d-buyer-group-analyzer">Buyer Group Analyzer</h3>
   <p><code>buyer_group_analyzer</code></p>
-  <p class="hx-prose">Map buyer group dynamics, influence relationships, and decision-making process. <a href="/tools/buyer-group-analyzer/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide who else must agree before a deal can close. You give what you sell, the deal size, the company size, your champion and any stakeholders you know. You get a buying group map with your stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role's concern and message prompts, an influence map and discovery questions, with sector roles and questions when your inputs name a supported sector. Roles from titles are hypotheses to confirm. <a href="/tools/buyer-group-analyzer/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>deal_size</code></td><td>string</td><td>no</td><td></td><td>ACV range (e.g., &quot;$50K-100K&quot;)</td></tr>
 <tr><td><code>target_company_size</code></td><td>string</td><td>no</td><td></td><td>Company size (e.g., &quot;500-1000 employees&quot;)</td></tr>
@@ -318,7 +318,7 @@
 <section class="hx-section hx-wash" id="tam-sam-som-calculator" aria-labelledby="d-tam-sam-som-calculator">
   <h3 id="d-tam-sam-som-calculator">TAM SAM SOM Calculator</h3>
   <p><code>tam_sam_som_calculator</code></p>
-  <p class="hx-prose">Calculate TAM/SAM/SOM using bottom-up methodology from your data (calculation framework, not data source). <a href="/tools/tam-sam-som-calculator/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide how big your market is, counted bottom up. You give how many companies could buy and your annual contract value in dollars, plus your ICP match rate and year 1 share if you have them. You get TAM, SAM and SOM with the arithmetic and assumptions shown and a summary for an investor deck. It is a calculator, not a data source: a rate you leave out is filled with a labelled example, and sector notes are added when your inputs name a supported sector. <a href="/tools/tam-sam-som-calculator/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>total_potential_companies</code></td><td>number (0 or more)</td><td>yes</td><td></td><td>Estimated total companies that could buy (from LinkedIn, industry reports)</td></tr>
 <tr><td><code>average_contract_value</code></td><td>number (more than 0)</td><td>yes</td><td></td><td>Your average ACV in dollars</td></tr>
@@ -333,7 +333,7 @@
 <section class="hx-section" id="lookalike-signal-generator" aria-labelledby="d-lookalike-signal-generator">
   <h3 id="d-lookalike-signal-generator">Lookalike Signal Generator</h3>
   <p><code>lookalike_signal_generator</code></p>
-  <p class="hx-prose">Generate platform-specific targeting criteria and search queries (generates criteria, not data). <a href="/tools/lookalike-signal-generator/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide how to find more accounts like your best ones. You give your ICP's company profile, technologies, champion titles and buying triggers, and optionally what you sell and the platforms you use. You get targeting criteria and search queries for each platform, one signal for each trigger, and search keywords from what you sell and the sector. It writes criteria, not data: it finds no companies or contacts. <a href="/tools/lookalike-signal-generator/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>icp_firmographics</code></td><td>object</td><td>no</td><td></td><td>Firmographic criteria</td></tr>
 <tr><td><code>icp_technographics</code></td><td>list of strings</td><td>no</td><td></td><td>Technologies your ICP typically uses</td></tr>
@@ -347,7 +347,7 @@
 <section class="hx-section hx-wash" id="account-prioritization" aria-labelledby="d-account-prioritization">
   <h3 id="d-account-prioritization">Account Prioritization</h3>
   <p><code>account_prioritization</code></p>
-  <p class="hx-prose">Rank and prioritize accounts using multi-dimensional scoring. <a href="/tools/account-prioritization/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide which accounts to work first. You give your accounts with fit, intent and relationship scores from 0 to 100 and a timing, plus optional weights. You get a ranked list from a weighted score, with a tier for each account, the points its timing earned and the factor that added the most points. <a href="/tools/account-prioritization/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>accounts</code></td><td>list of objects</td><td>no</td><td></td><td>List of accounts to prioritize. Each account: name, fit_score (0 to 100), intent_signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)</td></tr>
 <tr><td><code>prioritization_weights</code></td><td>object</td><td>no</td><td></td><td>Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100</td></tr>
@@ -358,7 +358,7 @@
 <section class="hx-section" id="icp-gap-analysis" aria-labelledby="d-icp-gap-analysis">
   <h3 id="d-icp-gap-analysis">ICP Gap Analysis</h3>
   <p><code>icp_gap_analysis</code></p>
-  <p class="hx-prose">Analyze gaps between current customer base and ideal ICP. <a href="/tools/icp-gap-analysis/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide whether you are selling to the customers you meant to. You give your current customer base, your ideal customer profile and, if you have them, current and target metrics. You get what the ideal profile has that the current base lacks, metric gaps from your own figures, causes to check and actions that fit your business model, with sector notes when your inputs name a supported sector. <a href="/tools/icp-gap-analysis/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>current_customers</code></td><td>string</td><td>yes</td><td></td><td>Description of your current customer base</td></tr>
 <tr><td><code>ideal_icp</code></td><td>string</td><td>yes</td><td></td><td>Description of your ideal customer profile</td></tr>
@@ -372,7 +372,7 @@
 <section class="hx-section hx-wash" id="icp-evolution-tracker" aria-labelledby="d-icp-evolution-tracker">
   <h3 id="d-icp-evolution-tracker">ICP Evolution Tracker</h3>
   <p><code>icp_evolution_tracker</code></p>
-  <p class="hx-prose">Checklist for reviewing how your ICP should evolve: shows your recent wins, losses and market changes next to what to check. It does not analyze the text. <a href="/tools/icp-evolution-tracker/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide whether your ICP should change after recent wins and losses. You give your current ICP, recent wins, recent losses and market changes. You get a candidate change for each (an addition to test, a disqualifier to test, an implication to check), a draft of the updated ICP, the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM. <a href="/tools/icp-evolution-tracker/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>current_icp</code></td><td>string</td><td>yes</td><td></td><td>Your current ICP definition</td></tr>
 <tr><td><code>recent_wins</code></td><td>string</td><td>no</td><td></td><td>Description of recent successful customers</td></tr>
@@ -386,7 +386,7 @@
 <section class="hx-section" id="icp-interview-synthesizer" aria-labelledby="d-icp-interview-synthesizer">
   <h3 id="d-icp-interview-synthesizer">ICP Interview Synthesizer</h3>
   <p><code>icp_interview_synthesizer</code></p>
-  <p class="hx-prose">Extract ICP patterns from structured customer interview notes (customer, role, pain points, buying triggers, value realized, key quotes). It does not take full transcripts. <a href="/tools/icp-interview-synthesizer/">See what it does</a>.</p>
+  <p class="hx-prose">Helps you decide what your customer interviews mean for your ICP. You give structured notes, one per interview: the customer, the role, pain points, buying triggers, value realized and key quotes. You get the pain points, objections, buying triggers, value realized and champion roles across the interviews, quotes kept word for word, discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed. <a href="/tools/icp-interview-synthesizer/">See what it does</a>.</p>
   <div class="hx-table"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Allowed values</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>interview_notes</code></td><td>list of objects</td><td>no</td><td></td><td>Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze</td></tr>
 <tr><td><code>product_category</code></td><td>string</td><td>no</td><td></td><td>Optional: what you sell, used for sector notes</td></tr>
