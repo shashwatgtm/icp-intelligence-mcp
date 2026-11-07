@@ -12,7 +12,7 @@
     "start": "node dist/index.js",
     "dev": "tsc --watch",
     "test": "node --test",
-    "check:current-dist": "node scripts/check-current-dist.mjs"
+    "check:current-dist": "WIDGET_TOOL_PROFILE=slice node scripts/check-current-dist.mjs"
   },
   "keywords": [
     "mcp",

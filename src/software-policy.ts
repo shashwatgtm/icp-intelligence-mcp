@@ -20,6 +20,12 @@ function softwareQuestions(value: unknown): string[] {
           if (field === 'account_notes' && typeof text === 'string') visit(text.split(/\bobjections?\s*:/i)[0]);
           else if (typeof text === 'string') visit(text.replace(/\b(?:Risks|Objections):[^\n]*/gmi,''));
           else visit(text);
+        } else if (typeof text === 'string') {
+          for (const s of text.split(/(?<=[.!?;])\s+|\n/)) {
+            if (!/\byour\b/i.test(s) && /\b(?:which|what)\b[^?]*\b(?:should|shall|do|can)\s+(?:we|I|our team)\s+(?:buy|use|choose|adopt|switch|replace)\b|\b(?:should|shall)\s+(?:we|I|our team)\s+(?:buy|use|choose|adopt|switch|replace)\b/i.test(s)) {
+              texts.push(s);
+            }
+          }
         }
       }
     }
@@ -30,7 +36,8 @@ function softwareQuestions(value: unknown): string[] {
     // A labelled differentiation statement is supplied positioning evidence.
     if (/^\s*What sets (?:it|us|them) apart\s*:/i.test(sentence)) return false;
     if (/\b(?:not asking|do not recommend|don't recommend|do not suggest|don't suggest|no software recommendations|do not choose|don't choose|do not compare|don't compare)\b/i.test(sentence)) return false;
-    if (/\b(?:which|what) (?:buyer|customer(?! success)|audience|team|role|persona|people|employee|metric|KPI|strategy|step|action|message|campaign|report|dashboard|workflow|field)s?\b/i.test(sentence)) return false;
+    if (/\b(?:which|what) (?:(?:go[ -]to[ -]market|GTM)\s+)?(?:motion|operational\s+pain|pain|problem|challenge|segment|account|channel|tier|buyer|customer(?! success)|audience|team|role|persona|people|employee|metric|KPI|strategy|step|action|message|campaign|report|dashboard|workflow|field)s?\b/i.test(sentence)) return false;
+    if (/\bhow\s+do\s+we\s+(?:score|prioriti[sz]e|segment|target|qualify|validate|decide\s+which\s+(?:gtm\s+)?motion|compare\s+against\s+manual\s+spreadsheets?)\b/i.test(sentence)) return false;
     if (/^\s*(?:please\s+)?(?:choose|pick|recommend|suggest|compare)\s+(?:a\s+|the\s+)?(?:(?:go[ -]to[ -]market|GTM)\s+)?(?:motion|strategy|positioning|message)\b/i.test(sentence)) return false;
     // These questions concern the seller's product and its market, even when
     // they mention a named competitor or use words such as "better"/"choose".

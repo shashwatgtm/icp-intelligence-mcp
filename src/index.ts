@@ -151,7 +151,7 @@ const KNOWN_NAMES = new Set((
   'Marketo Pardot Gong Intercom Freshworks Oracle SAP Workday ServiceNow Snowflake Tableau Asana Trello Dropbox ' +
   'Apple Amazon AWS Azure Facebook Instagram WhatsApp YouTube Acme Sam ' +
   // Run 11: the company and competitor names in the test inputs and the page examples (run 19: the old example names removed).
-  'Bengaluru Clari Northwind Metricly Spendrill Cloudmoat Lanehop Branchwire Answerloop Shelfwalk'
+  'Bengaluru Clari Northwind Metricly Spendrill Cloudmoat Lanehop Branchwire Answerloop Shelfwalk Chargebee Infosys Airtel SmartBear Postman Mindbody Genpact Seclore Happay Zenoti Locus FarEye Zoho'
 ).split(/\s+/).filter(Boolean));
 function bareWord(word: string): string {
   return word.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, '');
@@ -586,7 +586,7 @@ function parseProfile(text: string): Profile {
   // Round 2: one splitter. Numbers (500,000), abbreviations (Sr.) and "in particular / including" elaborations are never split; the
   // sentences about the figures being hypothetical are dropped; a labelled list ("segments: A, B, C") is split at ", " only, so a
   // segment that holds a semicolon ("Gaming; streaming and entertainment") stays whole.
-  const whole = sentences(String(text).replace(/\s+/g, ' ').trim()).filter((x) => !/\bhypothetical\b/i.test(x)).join('. ');
+  const whole = sentences(String(text).replace(/\s+/g, ' ').trim()).filter((x) => !/^(?:all |the |these )?(?:figures|numbers|metrics|inputs|data|examples?)\b[^;]*\bhypothetical\b/i.test(x.trim())).map((x) => x.replace(/\s*\([^()]*\bhypothetical\b[^()]*\)/gi, '')).join('. ');
   let t = protectText(whole).replace(/^[A-Z][\w&.\- ]{0,40}:\s+/, '');
   const problems: string[] = [];
   // a clause that says what the buyers face or struggle with is the problem; "that need to secure ..." or "that have ..." only describes them, so it is the fallback
@@ -607,6 +607,7 @@ function parseProfile(text: string): Profile {
   const segments: string[] = [...listed]; const sizes: string[] = []; const rest: string[] = []; const claims: string[] = [];
   for (let it of items) {
     it = restoreText(it.replace(/\u0001/g, ';').replace(/\u0002/g, ','));
+    if (/^(?:no|not|without|never|neither|none of)\b|\b(?:excluded|out of scope|not a target|do not sell|don't sell)\b/i.test(it)) continue;
     // "operations leaders at large enterprises in banking and financial services, communications": the industry after "in" starts the list of segments
     const tailM = it.match(/^(.{20,}?)\s+(?:in|across)\s+([A-Za-z][A-Za-z&' -]{2,50})$/i);
     if (tailM && it.split(/\s+/).length > 6 && !/\d/.test(tailM[2]) && tailM[2].split(/\s+/).length <= 5 && !/^(?:the|a|an|particular|general|addition|case|total|this|that)\b/i.test(tailM[2])) { segments.push(tailM[2].trim()); it = tailM[1]; }
@@ -1801,15 +1802,15 @@ Later years assume your market share doubles each year.
 | Year | Market Share | Revenue Target | Customers |
 |------|--------------|----------------|-----------|
 | Year 1 | ${sharePct(marketSharePercent)}${shareEx} | ${formatCurrency(som)}${shareGiven ? somEx : ''} | ${countText(targetDeals, som / acv)} |
-| Year 2 | ${sharePct(marketSharePercent * 2)} ${EXAMPLE} | ${formatCurrency(som * 2)} | ${countText(targetDeals * 2, (som * 2) / acv)} |
-| Year 3 | ${sharePct(marketSharePercent * 4)} ${EXAMPLE} | ${formatCurrency(som * 4)} | ${countText(targetDeals * 4, (som * 4) / acv)} |
+| Year 2 | ${sharePct(Math.min(1, marketSharePercent * 2))} ${EXAMPLE} | ${formatCurrency(sam * Math.min(1, marketSharePercent * 2))} | ${countText(Math.round((sam * Math.min(1, marketSharePercent * 2)) / acv), (sam * Math.min(1, marketSharePercent * 2)) / acv)} |
+| Year 3 | ${sharePct(Math.min(1, marketSharePercent * 4))} ${EXAMPLE} | ${formatCurrency(sam * Math.min(1, marketSharePercent * 4))} | ${countText(Math.round((sam * Math.min(1, marketSharePercent * 4)) / acv), (sam * Math.min(1, marketSharePercent * 4)) / acv)} |
 
 ---
 
 ## Assumptions & Validation
 
 ### Key Assumptions
-1. **Company count accuracy**: Validate against dated company records and industry reports you can inspect. ${SOFTWARE_REFERRAL}
+1. **Company count accuracy**: Validate against dated company records and industry reports you can inspect.
 2. **ACV**: $${acv.toLocaleString('en-US')}, your input, read as ${acvNoun(ctx.model)}; check it against your last closed deals in this segment
 3. **ICP match rate**: ${icpGiven ? 'Your estimate' : 'Not supplied, so a preset example is used'}; refine with actual data
 4. **Market share**: ${sharePct(marketSharePercent)}${shareEx} of SAM in Year 1 means ${countText(targetDeals, som / acv, '~')} new customers; check that number against the deals your team closed last year
@@ -1821,7 +1822,7 @@ Later years assume your market share doubles each year.
 - [ ] Review market share against competitor data
 
 ### How to Get Better Data
-1. **Company records already available to you**: Apply the ICP filters and record the count, source and date. ${SOFTWARE_REFERRAL}
+1. **Company records already available to you**: Apply the ICP filters and record the count, source and date.
 2. **Industry Reports**: Market sizing from industry analyst reports
 3. **Competitor Analysis**: Estimate competitor customer counts
 4. **Customer Interviews**: Ask about market perception
@@ -1945,7 +1946,7 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
       const MEASURE_WORD = /^(?:uptime|sla|delivery sla|latency|accuracy|usage|churn|renewal|expansion|onboarding|activation|governance|transition|steady state|exposure|alert fatigue|automation rate|inference cost|cost per delivery|time to value|net revenue retention|hallucination|data privacy|data residency|policy controls|audit trail|compliance review|approval workflow|ticket backlog|knowledge transfer|service credits|technical debt|test coverage|release frequency|developer experience|reconciliation|month-end close|pilot|case review|accuracy on your own data|cost per case|explainability|guardrails|human in the loop|evaluation set|resolution rate|mean time to \w+|first-attempt delivery|proof of delivery|statement of work|risk register|compliance audit|customer success|misconfiguration|branch sites|site survey|last-mile link|network operations centre)$/i;
       // A software seller's keywords come from the nouns of its own product text ("API platform", "API lifecycle management"), not from the
       // sector's CI and testing words; a SaaS seller's own measures are not search words either.
-      const productPhrases = productWords(args.product_category, args.company).split(/[(),;]|\band\b/i).map(x => x.trim().replace(/^(?:a|an|the|for)\s+/i, '')).filter(x => /^[\w/+.-]+(?: [\w/+.-]+){1,3}$/.test(x) && !/\b(?:from|that|which|described)\b/i.test(x));
+      const productPhrases = productWords(args.product_category, args.company).split(/[(),;]|\band\b/i).map(x => x.trim().replace(/^(?:a|an|the|for)\s+/i, '').replace(/\s+for\s+[\w\s-]+$/i, '')).filter(x => /^[\w/+.-]+(?: [\w/+.-]+){0,3}$/.test(x) && x.length >= 3 && !/\b(?:from|that|which|described)\b/i.test(x));
       const keywordWords = v && v.id === 'software' ? [] : vocabOk && ctx.model !== 'investment' ? v!.vocabulary.filter(w => !MEASURE_WORD.test(w)).slice(0, 4) : [];
       const searchProduct = clauseHead(productWords(args.product_category, args.company), 80);
       const phraseFirst = !!(v && v.id === 'software') || / \.\.\.$/.test(searchProduct) || /\(/.test(searchProduct) || searchProduct.split(' ').length > 8;
@@ -2095,7 +2096,7 @@ ${checklist.join('\n\n')}
 
 **This tool generates targeting CRITERIA, not actual data.**
 
-${needs.length ? `${SOFTWARE_REFERRAL}
+${needs.length && wanted.length ? `${SOFTWARE_REFERRAL}
 
 ` : ''}${missing.length
   ? `The criteria above are built only from your inputs. Not supplied, so left out of the searches: ${missing.map(readerLabel).join(', ')}. Add them for a tighter search before you copy the criteria into each platform.`

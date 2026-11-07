@@ -50,7 +50,7 @@ export function computeAccountPrioritization(args: AccountArgs) {
     const tf = timingFact(account.timing || 'unknown');
     const values: Record<keyof typeof weights, number | undefined> = {fit: account.fit_score, intent: account.intent_signals, relationship: account.relationship, timing: tf.state === 'affirmed' ? tf.score : undefined};
     const keys = Object.keys(weights) as Array<keyof typeof weights>;
-    const unknown = keys.filter(k => values[k] == null);
+    const unknown = keys.filter(k => values[k] == null && weights[k] > 0);
     const low = keys.reduce((n,k) => n + (values[k] ?? 0) * weights[k] / 100, 0);
     const high = low + unknown.reduce((n,k) => n + weights[k], 0);
     return {inputIndex, account, values, unknown, low: Math.round(low), high: Math.round(high)};
@@ -127,7 +127,7 @@ export function computeAccountPrioritization(args: AccountArgs) {
     const [wk, wv] = weakestOf(a);
     const focus = a.tier === 'C' || a.tier === 'D' ? `the weakest factor is ${(([['fit', a.fit], ['intent', a.intent], ['relationship', a.relationship]] as Array<[string, number]>).sort((x, y) => x[1] - y[1]).map(([k, n]) => `${k} (${cleanNum1(n)})`)[0])}, so spend sales time only when it changes`
       : wk === 'fit' ? `fit is ${cleanNum1(wv)}, so confirm the buyer has the problem and the budget before you spend time on a proposal`
-      : wk === 'relationship' ? `relationship is ${cleanNum1(wv)}, so ask your champion or a mutual contact for an introduction to the budget owner`
+      : wk === 'relationship' ? (wv === 0 ? 'relationship is 0, so map the buying group and earn a first contact through a relevant trigger or peer reference before pitching the budget owner' : `relationship is ${cleanNum1(wv)}, so ask your champion or a mutual contact for an introduction to the budget owner`)
       : wk === 'intent' ? `intent is ${cleanNum1(wv)}, so share something relevant to their situation and watch who responds`
       : a.timing.toLowerCase() === 'later' ? 'timing is later, so agree a date to revisit rather than push for a decision' : a.timing.toLowerCase() === 'now' ? 'timing is now, so ask for the next two meeting dates' : 'the scores are strong, so verify the timing with the budget owner';
     return `${base}; ${focus}`;
