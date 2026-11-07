@@ -156,6 +156,79 @@
     if (result.focus) { try { result.focus({ preventScroll: true }); } catch (err) { result.focus(); } }
   }
 
+  // Link prefill (7 Nov 2026, Offbeat AI Watch): a link such as /tools/x/?your_product=...&category=... fills the form
+  // fields with the same names, so a reader can check the inputs and press Run. It never runs the tool on its own.
+  // The address part after # works the same way (#your_product=...). Every value is set as plain text through the
+  // field's value (never as HTML), control and direction-override characters are removed, and lengths are capped.
+  var LINK_MAX_ADDRESS = 12000, LINK_MAX_FIELDS = 40, LINK_MAX_VALUE = 6000;
+  function linkParams() {
+    var parts = [];
+    if (location.search.length > 1) parts.push(location.search.slice(1));
+    if (location.hash.length > 1 && location.hash.indexOf("=") > 0) parts.push(location.hash.slice(1));
+    var raw = parts.join("&");
+    if (!raw || raw.length > LINK_MAX_ADDRESS || !window.URLSearchParams) return [];
+    var out = [];
+    try { new URLSearchParams(raw).forEach(function (v, k) { out.push([k, v]); }); } catch (err) { return []; }
+    return out.slice(0, LINK_MAX_FIELDS * 4);
+  }
+  function cleanText(v, max) {
+    v = String(v).replace(/\r\n?/g, "\n").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F‎‏‪-‮⁦-⁩]/g, "");
+    return v.length > max ? v.slice(0, max) : v;
+  }
+  function prefillFromLink(form) {
+    var pairs = linkParams();
+    if (!pairs.length) return false;
+    var fields = {};
+    form.querySelectorAll("[data-kind]").forEach(function (el) { if (el.name && el.name !== "leave_this_empty") fields[el.name] = el; });
+    var got = {}, order = [];
+    pairs.forEach(function (p) {
+      if (!Object.prototype.hasOwnProperty.call(fields, p[0])) return;
+      if (!got[p[0]]) { got[p[0]] = []; order.push(p[0]); }
+      got[p[0]].push(p[1]);
+    });
+    var filled = 0;
+    order.slice(0, LINK_MAX_FIELDS).forEach(function (name) {
+      var el = fields[name], vals = got[name], kind = el.getAttribute("data-kind");
+      var max = el.maxLength > 0 ? Math.min(el.maxLength, LINK_MAX_VALUE) : LINK_MAX_VALUE;
+      if (el.type === "checkbox") { el.checked = /^(1|true|yes|on)$/i.test(String(vals[0]).trim()); filled++; return; }
+      // a list field takes one item per line, or the same name repeated in the link
+      var v = cleanText(kind === "lines" || kind === "rows" ? vals.join("\n") : vals[0], max).trim();
+      if (v === "") return;
+      if (el.tagName === "SELECT") {
+        var want = v.toLowerCase(), hit = null;
+        Array.prototype.forEach.call(el.options, function (o) {
+          if (!hit && o.value && (o.value.toLowerCase() === want || o.text.trim().toLowerCase() === want)) hit = o;
+        });
+        if (hit) { el.value = hit.value; filled++; }
+        return;
+      }
+      if (el.type === "number") {
+        var n = Number(v.replace(/,/g, ""));
+        if (isFinite(n)) { el.value = String(n); filled++; }
+        return;
+      }
+      el.value = v;
+      filled++;
+    });
+    if (!filled) return false;
+    form.setAttribute("data-from-link", "1");
+    var note = document.createElement("p");
+    note.className = "hx9-example-note";
+    note.setAttribute("role", "status");
+    note.textContent = "The link you opened filled in " + filled + (filled === 1 ? " field" : " fields") +
+      ". Check them, change anything you like, then press Run. Nothing runs until you press it.";
+    form.insertBefore(note, form.firstChild);
+    // bring the filled form into view once the page has finished loading (instant, below the sticky header)
+    var toForm = function () {
+      var pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      var box = (form.closest && form.closest(".win")) || form;
+      var y = Math.max(0, box.getBoundingClientRect().top + window.pageYOffset - pad - 8);
+      try { window.scrollTo({ top: y, left: 0, behavior: "instant" }); } catch (err) { window.scrollTo(0, y); }
+    };
+    if (document.readyState === "complete") toForm(); else window.addEventListener("load", toForm);
+    return true;
+  }
+
   document.querySelectorAll("form.hx-form").forEach(function (form) {
     var section = document.getElementById("result");
     var body = section && section.querySelector("[data-result]");
@@ -211,6 +284,7 @@
       }).then(function () { btn.disabled = false; btn.textContent = label; });
     });
 
+    var fromLink = prefillFromLink(form);
     var fill = form.querySelector("[data-fill-example]");
     var exEl = form.parentNode.querySelector("script[data-example]");
     if (fill && exEl) {
@@ -237,7 +311,7 @@
         form.setAttribute("data-from-example", "1");
         if (form.requestSubmit) form.requestSubmit(); else form.querySelector('[type="submit"]').click();
       });
-      if (/(^|[?&])example=1(&|$)/.test(location.search) && Object.keys(example).length) fill.click();
+      if (!fromLink && /(^|[?&])example=1(&|$)/.test(location.search) && Object.keys(example).length) fill.click();
     }
     var copy = section && section.querySelector("[data-copy]");
     if (copy) {
