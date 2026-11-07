@@ -50,7 +50,7 @@ export function computeAccountPrioritization(args: AccountArgs) {
     const tf = timingFact(account.timing || 'unknown');
     const values: Record<keyof typeof weights, number | undefined> = {fit: account.fit_score, intent: account.intent_signals, relationship: account.relationship, timing: tf.state === 'affirmed' ? tf.score : undefined};
     const keys = Object.keys(weights) as Array<keyof typeof weights>;
-    const unknown = keys.filter(k => values[k] == null && weights[k] > 0);
+    const unknown = keys.filter(k => values[k] == null);
     const low = keys.reduce((n,k) => n + (values[k] ?? 0) * weights[k] / 100, 0);
     const high = low + unknown.reduce((n,k) => n + weights[k], 0);
     return {inputIndex, account, values, unknown, low: Math.round(low), high: Math.round(high)};

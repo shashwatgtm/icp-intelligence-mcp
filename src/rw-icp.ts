@@ -169,7 +169,7 @@ export interface ProfileRead {
 }
 const CLAIM_RE = /\(page claims?\)|\bpage claims?\b|\(the (?:about|home|customers?|pricing|product) page[^)]*\)|\bthe (?:about |home |customers? |pricing |product |menu )?(?:pages?|menu) (?:state|says?|lists?|calls?|shows?)\b|\(about page\)|\(home page\)|\bpress item\b/i;
 const CLAIM_OPEN = /\bthe (?:about |home |customers? |pricing |product |menu )?(?:pages?|menu) (?:state|says?|lists?|calls?|shows?|claim\w*)\b|\bpage claiming\b|\bpress item\b|\(the (?:about|home|customers?|pricing|product) page/i;
-const EXCLUDE_RE = /\b(?:served by a separate|are served by|is served by|handled by a separate|separate business|out of scope|not (?:a )?(?:target|focus)|not for us|outside our (?:scope|market)|we avoid|excluded|we do not (?:sell|serve)|we don't (?:sell|serve)|(?:no|not|never|without)\s+(?:enterprise|small|mid-?market|smb|consumer|b2c|government|public sector|startups?))\b/i;
+const EXCLUDE_RE = /\b(?:served by a separate|are served by|is served by|handled by a separate|separate business|out of scope|not (?:a )?(?:target|focus)|not for us|outside our (?:scope|market)|we avoid|excluded|we do not (?:sell|serve)|we don't (?:sell|serve))\b/i;
 const IMPERATIVE_RE = /^(?:ignore|disregard|forget|print|reveal|say|write|output|override|pretend|act as|you must|you are now|please|do not|don't|stop)\b/i;
 // a group of people inside the customer; "wealth managers" or "asset managers" are kinds of firm, so a manager counts as a person only with a function in front
 const TEAM_END = /(?:\b(?:teams?|leaders?|leadership|developers?|engineers?|practitioners?|decision[- ]makers?|stakeholders?|users|students|heads?|executives?|buyers?|operations)|\b(?:product|project|program|engineering|sales|marketing|operations|finance|it|hr|people|support|account|procurement|security|data|platform|devops|qa|test|design|logistics|supply chain|customer success)\s+(?:managers?|directors?|analysts?|leads?|owners?|officers?))$/i;
@@ -188,7 +188,7 @@ export function readProfile(raw: string): ProfileRead {
   // the echo safeguard may have put the whole text in curly quotes: the words are the user's own, so the quotes are taken off before reading
   if (/^[“"][\s\S]*[”"]$/.test(text)) text = text.slice(1, -1).trim();
   // sentences: a sentence that only says the figures are hypothetical is a label, not a profile
-  const sentences = sentenceSplit(text).map((s) => { if (/\bhypothetical\b/i.test(s)) { res.hypothetical = true; if (/^(?:all |the |these )?(?:figures|numbers|metrics|inputs|data|examples?)\b[^;]*\bhypothetical\b/i.test(s.trim())) return ''; return s.replace(/\s*\([^()]*\bhypothetical\b[^()]*\)/gi, ''); } return s; }).filter(Boolean);
+  const sentences = sentenceSplit(text).filter((s) => { if (/\bhypothetical\b/i.test(s)) { res.hypothetical = true; return false; } return true; });
   const kept: string[] = [];
   for (const s of sentences) {
     if (IMPERATIVE_RE.test(s)) { res.other.push(s); continue; }
@@ -802,7 +802,7 @@ const GRADED_NUMBER = /(?<![A-Za-z0-9])\d[\d,.]*\+?(?![A-Za-z])/;
 const GRADED_WORD = /^(?:yes|no|partly|partial|none|high|medium|low|large|small|mid|midsize|mid-size|active|active project|planned|planning|exploring|confirmed|unknown|this (?:quarter|year|month)|next (?:quarter|year)|immediate|urgent|soon|later|always|sometimes|never|strong|weak|good|poor|full|some|high fit|medium fit|low fit|budget planned|no budget|confirmed budget)$/i;
 const NONE_VALUE = /^(?:none|no|other|others|none of (?:these|the above)|not applicable|n\/a|unknown|not (?:sure|known|listed))\b/i;
 // Host review 30 Oct 2026: a value that says the thing is missing ("Not documented", "Absent", "Without a sponsor") never scores points.
-const NEGATIVE_VALUE = /^(?:not|no|non|without|absent|missing|lacking|never|none|undocumented|unconfirmed|unqualified|unknown)\b|\b(?:churn\w*|attrition|cancel\w*|disqualif\w*|out of scope|poor fit|low fit|bad fit|no budget|no authority|incompatible|locked in)\b/i;
+const NEGATIVE_VALUE = /^(?:not|no|non|without|absent|missing|lacking|never|none|undocumented|unconfirmed|unqualified|unknown)\b/i;
 
 export type PointKind = 'single' | 'graded' | 'named';
 // The example points for the values of one criterion. A list that is ordered by nature keeps the preset steps (first value full weight, last 0,
@@ -815,7 +815,7 @@ export function pointsFor(criterion: string, values: string[], weight: number, u
   const negative = values.map((v) => NEGATIVE_VALUE.test(v.trim()));
   if (values.length === 2 && negative.filter(Boolean).length === 1) return { kind: 'graded', points: negative.map((n) => (n ? 0 : weight)), closing: false };
   const graded = GRADED_NAME.test(criterion) || values.filter((v) => GRADED_NUMBER.test(v) || GRADED_WORD.test(v.trim())).length * 2 >= values.length;
-  if (graded) return { kind: 'graded', points: values.map((v, i) => (negative[i] ? 0 : values.length === 2 && i === 1 && !NONE_VALUE.test(v.trim()) && !/^(?:low|small|none|no|never|later|exploring|poor|weak|under|fewer|less|<)\b/i.test(v.trim()) ? Math.round(weight * 0.6) : Math.round(weight * (values.length - 1 - i) / (values.length - 1)))), closing: false };
+  if (graded) return { kind: 'graded', points: values.map((_v, i) => Math.round(weight * (values.length - 1 - i) / (values.length - 1))), closing: false };
   const last = values.length - 1;
   const closing = NONE_VALUE.test(values[last].trim());
   return { kind: 'named', points: values.map((_v, i) => ((closing && i === last) || negative[i] ? 0 : weight)), closing };
