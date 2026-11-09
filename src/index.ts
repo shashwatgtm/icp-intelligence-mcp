@@ -1704,6 +1704,7 @@ ${SUGGESTED}
       };
       // D38 (run 15): a count that rounds to 0 from a positive value says so. The count itself is unchanged.
       const countText = (n: number, raw: number, prefix = '') => (n === 0 && raw > 0 ? 'fewer than 1 (rounds to 0)' : `${prefix}${n.toLocaleString('en-US')}`);
+      const growthShare = (share: number) => `${sharePct(share)}${share > 1 ? ' (exceeds SAM)' : ''}`;
 
       // Labels only: an ICP match rate or market share the user did not supply is a preset example,
       // and so is every value computed with it.
@@ -1797,12 +1798,12 @@ ${somEx ? `Values computed with a preset rate you did not supply are examples.\n
 - **Pipeline Required**: ${formatCurrency(som * 3)} (SOM × 3, a 1 in 3 win rate) ${EXAMPLE}
 
 ### Growth Path
-Later years assume your market share doubles each year.
+Later years assume your market share doubles each year.${marketSharePercent * 4 > 1 ? " The rows marked as exceeding SAM are arithmetic scenarios, not attainable market shares: a share of the same market cannot exceed 100%. Their revenue and customer figures are retained to show the calculation; reduce the growth assumption or validate a larger market before using them as targets." : ''}
 | Year | Market Share | Revenue Target | Customers |
 |------|--------------|----------------|-----------|
 | Year 1 | ${sharePct(marketSharePercent)}${shareEx} | ${formatCurrency(som)}${shareGiven ? somEx : ''} | ${countText(targetDeals, som / acv)} |
-| Year 2 | ${sharePct(marketSharePercent * 2)} ${EXAMPLE} | ${formatCurrency(som * 2)} | ${countText(targetDeals * 2, (som * 2) / acv)} |
-| Year 3 | ${sharePct(marketSharePercent * 4)} ${EXAMPLE} | ${formatCurrency(som * 4)} | ${countText(targetDeals * 4, (som * 4) / acv)} |
+| Year 2 | ${growthShare(marketSharePercent * 2)} ${EXAMPLE} | ${formatCurrency(som * 2)} | ${countText(targetDeals * 2, (som * 2) / acv)} |
+| Year 3 | ${growthShare(marketSharePercent * 4)} ${EXAMPLE} | ${formatCurrency(som * 4)} | ${countText(targetDeals * 4, (som * 4) / acv)} |
 
 ---
 
