@@ -2565,6 +2565,24 @@ ${SUGGESTED}
       company?: string;
     }) => {
       const period = args.time_period || 'Recent Quarter';
+      let periodReading = '';
+      const quarterPair = period.trim().match(/^Q([1-4])\s+(\d{4})\s+(?:vs\.?|versus|compared (?:with|to))\s+Q([1-4])\s+(\d{4})$/i);
+      if (quarterPair) {
+        const quarter = (q: string, year: string) => {
+          const starts = ['01-01','04-01','07-01','10-01'];
+          const ends = ['03-31','06-30','09-30','12-31'];
+          return `Q${q} ${year} (${year}-${starts[Number(q)-1]} to ${year}-${ends[Number(q)-1]})`;
+        };
+        periodReading = `Compare ${quarter(quarterPair[1],quarterPair[2])} with ${quarter(quarterPair[3],quarterPair[4])}. Keep the deal cohorts and outcome definitions consistent; intervening quarters are not included in this comparison.`;
+      } else {
+        const duration = period.trim().match(/^(?:last|past|previous)\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+months?$/i);
+        if (duration) {
+          const words = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
+          const months = /^\d+$/.test(duration[1]) ? Number(duration[1]) : words.indexOf(duration[1].toLowerCase());
+          if (months > 0 && Number.isSafeInteger(months)) periodReading = `Review the last ${months} ${months === 1 ? 'month' : 'months'} as a rolling window. Calendar boundaries require a supplied assessment date and an agreed calendar-month or elapsed-month convention; no dates are inferred from the current clock.`;
+        }
+      }
+
       const prof0 = parseProfile(args.current_icp);
       const ctx = readContext(undefined, { seller: [productWords(args.product_category, args.company)], context: [args.company, args.recent_wins, args.recent_losses, args.market_changes], role: agreedRoles(prof0.roles, [args.current_icp]), buyer: [args.current_icp] });
       const v = ctx.v;
@@ -2663,7 +2681,7 @@ This review reads your notes against your current ICP and states candidate chang
 > ${shortText(args.current_icp)}
 
 ## Analysis Period: ${period}
-
+${periodReading ? `\n${periodReading}\n` : ''}
 ---
 
 ## Win/Loss Pattern Analysis
