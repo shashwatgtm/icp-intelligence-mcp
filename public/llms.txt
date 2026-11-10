@@ -85,3 +85,10 @@ Email shashwat@gtmhelix.com or open an issue at https://github.com/shashwatgtm/i
 Connectors work in Claude, ChatGPT, Cursor, VS Code and Windsurf. The Helix GTM Suite skills package supports Claude Code, ChatGPT, Gemini CLI, Antigravity, Cursor and VS Code, and is available through skills.sh.
 Setup: https://github.com/shashwatgtm/helix-gtm-suite
 Individual plugin install instructions remain specific to the plugin.
+
+## Buyer routes
+
+- [All Helix tools](https://tools.gtmhelix.com/tools/): 49 tools and 37 different skills, 86 in all, in six connectors and nine plugins.
+- [Build a B2B ICP scoring model](https://icp-intelligence.gtmhelix.com/tools/icp-scoring-model/): Build a B2B account fit scoring model from the customers and deals you know. Describe the segment, buying roles and fit signals, then review the proposed criteria and weights with sales. Test those choices against won and lost accounts before using the model to decide which leads receive attention.
+- [Tam Sam Som Calculator](https://icp-intelligence.gtmhelix.com/tools/tam-sam-som-calculator/): Size one B2B market from the accounts that could buy and their annual contract value. Apply your fit and expected share assumptions to see TAM, SAM and SOM, then compare the result with the target. Replace example rates with your own evidence and check whether sales can reach and win those accounts.
+- [Market Sizing Lab](https://helix-gtm-consulting-market-sizing-lab.shashwat-helix-gtm.chatgpt.site/): Compare team assumptions, then continue in ICP Intelligence.
