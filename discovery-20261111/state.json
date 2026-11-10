@@ -1,14 +1,14 @@
 {
-  "status": "in_progress",
-  "current_item": "Final verification",
+  "status": "closed",
+  "current_item": null,
   "items_done": [
-    "Static source changes prepared",
-    "Build passed"
+    "Static discovery source changes",
+    "Build",
+    "Full suite run and baseline comparison",
+    "Static, crawler and browser gates",
+    "REPORT.md"
   ],
-  "items_left": [
-    "Final suite comparison",
-    "Browser review",
-    "Final report"
-  ],
-  "updated_at": "2026-11-11T01:16:37+05:30"
+  "items_left": [],
+  "updated_at": "2026-11-11T01:36:39+05:30",
+  "deployments": []
 }
