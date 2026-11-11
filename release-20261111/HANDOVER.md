@@ -1,9 +1,13 @@
-# Release work in progress
+# Release handover
 
-The owner approved production release on 11 November. Source is on codex/release-20261111, based on discovery. MCP implementation, names, descriptions, schemas and assistant JSON are preserved. CRAFT also merges the specifically approved Scale Site route.
+Read REPORT.md, RELEASE-LOG.md and OWNER-QUESTIONS.md first. The owner approved release; do not ask for that approval again.
 
-Paper assets, history scripts, privacy wording and CSP grants are applied. The hub includes the supplied All tools redesign, its two subpages, sitemap and llms entries, and legacy fragment targets. GTM Alpha has static sample head and footer snapshots so its generator preserves discovery content. Its no-script sample guard remains; history is injected by the existing edge launcher.
+Scale Paid Check is public at https://helix-scale-paid-check.shashwat-helix-gtm.chatgpt.site, version 2. Deployment succeeded. Exact live, source and rollback IDs and public-access receipt are in evidence/scale-publication.json. It runs the shared calculation on its own origin. No MCP contract was changed.
 
-Five TypeScript builds and Alpha static build pass. Scale upload and 41 browser checks pass. Full connector suites and the 1440/375 page sweep are running. Read the hub release evidence and final REPORT.md when available.
+The hub and six connector repos have checked and pushed codex/release-20261111 branches. Source includes the discovery fixes, current Paper assets, All tools redesign, history lines, CSP and privacy changes, and the public Scale links. The separate positioning-static overlay is prepared; it is not a complete deployment. Full suites ran, build and dist checks pass, and all named baseline failures are retained. The source guard passes and 212 browser views pass, with final focused receipts for subsequent small presentation and public-link edits.
 
-Netlify release is blocked: explicit proxy CONNECT 403 for api.netlify.com and tools.gtmhelix.com; no Netlify token or connected Netlify deployment tool exists. Do not merge a production branch before draft and live contract checks and rollback capture. Production approval is already given; missing access is the issue. Next: complete QA, publish the self-contained Scale Worker through Sites, push checked branches, then finish release receipts and report.
+Nothing is half edited. Eight Netlify sites are not released. The proxy refuses Netlify and Helix, and CLI authentication is missing. No production branch merge or Netlify release happened. Do not label them released or guess rollback IDs.
+
+Exact next step: configure the network destinations and Netlify credential listed in OWNER-QUESTIONS.md, identify sites by custom domain, read their current production deploy IDs, assemble full positioning live source, then draft and check each prepared branch. Set the CRAFT function runtime allowed origin and publish its new route with matching dist. Release each tested draft, merge into its verified production branch, smoke test MCP and history, and fill actual live and rollback IDs into RELEASE-LOG.md. Production approval is already given.
+
+The run is closed for the work possible with current access, with a partial release outcome and all blocked items preserved in state.json. Updated: 2026-11-11T11:38:05+05:30

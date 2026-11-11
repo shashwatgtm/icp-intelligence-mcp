@@ -1,17 +1,21 @@
 {
-  "status": "in_progress",
-  "current_item": "Source checkpoint: static guards pass, 212 page views pass; Site deployment in progress",
+  "status": "closed",
+  "outcome": "partial_release_with_access_blockers",
+  "current_item": "Netlify release blocked on network and credentials",
   "items_done": [
-    "Read release brief and design inputs",
-    "Preserved discovery baseline",
-    "Applied approved Paper assets",
-    "Added history privacy and CSP changes"
+    "Helix Paper and discovery source prepared and pushed",
+    "All tools redesign and legacy links preserved",
+    "History source lines, available CSP and privacy changes",
+    "Build, dist, full suites and browser QA recorded",
+    "Scale Site published publicly with rollback version",
+    "REPORT.md, HANDOVER.md and RELEASE-LOG.md written"
   ],
   "items_left": [
-    "Finish browser and suite checks",
-    "Publish Scale Site",
-    "Netlify previews and production releases require network access and credentials",
-    "Live MCP and cross-site history verification"
+    "Eight Netlify drafts and production releases with live and rollback IDs",
+    "Production branch merges after verified releases",
+    "Craft function runtime allowed origin and route release",
+    "Positioning full live copy, CSP and privacy integration",
+    "Live MCP comparisons and cross-site history smoke test"
   ],
-  "updated_at": "2026-11-11T11:26:01+05:30"
+  "updated_at": "2026-11-11T11:40:59+05:30"
 }
