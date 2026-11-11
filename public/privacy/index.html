@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="hx-look">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,10 +25,11 @@
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/Archivo-latin-1.woff2?v=8f704806db" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/VT323-latin-400.woff2?v=8ddbebcc10" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fraunces-normal-latin.woff2?v=7234ed860a" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrumentsans-normal-latin.woff2?v=2ee17598a9" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts.css?v=a7f7495a4f">
 <link rel="stylesheet" href="/assets/helix.css?v=5a5090e11c">
+<link rel="stylesheet" href="/assets/helix-look.css?v=a433d954b5">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -198,6 +199,8 @@
 }
 </script>
 <script src="/assets/analytics.js?v=2eb2d1413a" data-privacy="/privacy/" defer></script>
+<script src="/assets/look.js?v=c79f7e788f" defer></script>
+<script src="https://gtmhelix.com/journey/history.js" defer></script>
 </head>
 <body>
 <a class="hx-skip" href="#main">Skip to content</a>
@@ -208,7 +211,7 @@
     <p class="eyebrow"><span class="tag">No accounts · no advertising · analytics cookies only if you accept</span></p>
     <div class="crop"><span class="cm tl" aria-hidden="true"></span><span class="cm tr" aria-hidden="true"></span><span class="cm bl" aria-hidden="true"></span><span class="cm br" aria-hidden="true"></span><h1 id="h1">Privacy policy</h1></div>
     <div class="hx-hero-text"><div class="hx10-split-text">
-      <p class="sub">What the web forms and AI assistants send us, and what happens to it. Short version: your inputs are used once and never stored. We only count tool calls.</p>
+      <p class="sub">What the web forms and AI assistants send us, and what happens to it. Short version: your inputs are used once and never stored on our servers; if you turn on Helix history, your own browser keeps your runs for 30 days. We only count tool calls.</p>
       <p class="hx-byline">By <a href="https://gtmhelix.com/about/" rel="author">Shashwat Ghosh</a>, Co-Founder and Fractional CMO, Helix&nbsp;GTM&nbsp;Consulting · Last updated <time datetime="2026-11-02">2 November 2026</time></p>
     </div></div>
   </div>
@@ -228,7 +231,7 @@
 <h2>How it is used and stored</h2>
 <ul>
 <li>The inputs are used once, inside that request, to build the answer. The web form and the MCP address are two small functions that call the same tool code.</li>
-<li>Inputs and answers are not stored: there is no database, file storage or cache for them. Web and MCP answers are sent with <code>Cache-Control: no-store</code>.</li>
+<li>Inputs and answers are not stored on our servers: there is no database, file storage or cache for them. Web and MCP answers are sent with <code>Cache-Control: no-store</code>.</li>
 <li>Our code does not log your inputs or the answers.</li>
 <li>The page does not save what you type in your browser either. It is gone when you close or reload the page.</li>
 <li>There are no accounts and no advertising. Pages count visits with Google Analytics and Ahrefs Web Analytics. Google Analytics sets cookies only if you select Accept in the cookie choice, and Ahrefs sets none. Neither receives what you type into a tool. The usage count below is separate. Fonts are served from this site.</li>
@@ -258,7 +261,7 @@
 <p>We do not sell or share data with anyone else.</p>
 
 <h2>Retention and your rights</h2>
-<p>We keep no inputs or answers, so there is nothing of yours for us to find, correct or delete. Usage counts have no set end date. They cannot be linked to you, so we cannot find or delete one person's records. Netlify's platform logs are kept by Netlify under its policy. Questions: <a href="mailto:shashwat@gtmhelix.com">shashwat@gtmhelix.com</a>.</p>
+<p>We keep no inputs or answers on our servers, so there is nothing of yours for us to find, correct or delete. Usage counts have no set end date. They cannot be linked to you, so we cannot find or delete one person's records. Netlify's platform logs are kept by Netlify under its policy. Questions: <a href="mailto:shashwat@gtmhelix.com">shashwat@gtmhelix.com</a>.</p>
 
 <h2>Local version</h2>
 <p>The npm package (@shashwatgtmalpha/icp-intelligence-mcp) runs entirely on your own computer and sends nothing to us.</p>
@@ -269,6 +272,7 @@
 </div>
 
 <section class="hx-section hx-app-section" aria-labelledby="helix-apps-heading"><h2 id="helix-apps-heading">Choose your app</h2><p>Run a Helix tool in your browser, then take the result to ChatGPT, Claude or Gemini. Connectors work with supported plans in Claude, ChatGPT, Cursor, VS Code and Windsurf. The Helix GTM Suite skills package supports Claude Code, Gemini CLI, Antigravity, Cursor and VS Code, and is available through skills.sh. Each plugin has its own installation steps, below or on its own page.</p><p><a href="https://tools.gtmhelix.com/connectors/">Connector setup guides</a> · <a href="https://github.com/shashwatgtm/helix-gtm-suite">Skills package setup guide</a> · <a href="https://skills.sh/shashwatgtm/helix-gtm-suite">Find the skills on skills.sh</a></p></section>
+<section class="hx-section hx-prose-block" aria-labelledby="helix-history"><h2 id="helix-history">Helix history</h2><p>Helix history is optional. If you turn it on in the cookie bar, your own browser keeps the Helix pages and guides you visit and your tool runs, including inputs and the start of the answer, for 30 days. Inputs and answers are never stored or logged on our servers; if you turn on Helix history, your own browser keeps your runs for 30 days.</p><p>On <a href="https://gtmhelix.com/lets-get-started/">Work with Shashwat</a>, you can review or remove entries, delete your history or turn it off. Nothing is attached to an enquiry unless you tick Attach. If you attach it and submit the form, the form privacy terms apply.</p></section>
 </main>
 <footer class="hx-footer">
         <div class="hx-wrap">

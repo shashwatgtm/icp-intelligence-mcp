@@ -5,7 +5,7 @@
   X-Frame-Options: DENY
   Strict-Transport-Security: max-age=31536000
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://analytics.ahrefs.com; style-src 'self'; font-src 'self'; img-src 'self' data: https://*.google-analytics.com https://*.g.doubleclick.net; connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.google.com https://*.g.doubleclick.net https://analytics.ahrefs.com; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://analytics.ahrefs.com https://gtmhelix.com; style-src 'self'; font-src 'self'; img-src 'self' data: https://*.google-analytics.com https://*.g.doubleclick.net; connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.google.com https://*.g.doubleclick.net https://analytics.ahrefs.com; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; frame-src 'self' https://gtmhelix.com
   Cache-Control: public, max-age=0, must-revalidate
 
 /assets/*

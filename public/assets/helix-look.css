@@ -1,0 +1,948 @@
+/* helix-look.css: the look layer, 11 Nov 2026. Loaded last, only by pages that carry class="hx-look" on <html>. */
+/* Look layer fonts, 10 Nov 2026: Fraunces (headlines) and Instrument Sans (text), latin, variable, self-hosted. Both are under the SIL Open Font License. */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url(/assets/fonts/fraunces-italic-latin.woff2?v=bceec2ef4d) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(/assets/fonts/fraunces-normal-latin.woff2?v=7234ed860a) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: italic;
+  font-weight: 400 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/assets/fonts/instrumentsans-italic-latin.woff2?v=77210cdde0) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/assets/fonts/instrumentsans-normal-latin.woff2?v=2ee17598a9) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* =====================================================================================================
+   LOOK LAYER, 10 Nov 2026 (owner: "Look-only option"). Built into helix-look.css; helix.css and the other live stylesheets are not changed.
+   It changes type, colour, spacing, movement and the phone layout of the gtmhelix.com home only.
+   It changes no word, no link, no section order and no behaviour. Every rule sits under html.hx-look,
+   a class that only the home page carries, so about, services and the tools hub keep today's look.
+   Type: Fraunces (headlines, numbers) with Instrument Sans (text, labels, buttons).
+   Colour: warm paper, oxblood on every action, navy as the second colour. Light only.
+   ===================================================================================================== */
+html.hx-look {
+  color-scheme: light;
+  --paper: #FBF7F1; --white: #FFFDF9; --ink: #1D1416; --muted: #5A4B4E; --clay: #F3EADF;
+  --ox: #641220; --ox-d: #4A0C17; --signal: #C1121F; --rose: #F6E1DD; --rose-mid: #F3EADF; --sky: #E6EAF2; --navy: #14213D;
+  --line: rgba(29, 20, 22, .14); --edge: rgba(29, 20, 22, .16); --shadow: transparent; --link: var(--ink);
+  --bar-1: #641220; --bar-2: #A85660; --bar-3: rgba(29, 20, 22, .38);
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --display: "Instrument Sans", system-ui, "Segoe UI", Arial, sans-serif; --mono: var(--display); --pixel: var(--display);
+  --maxw: 1240px; --gut: clamp(16px, 4vw, 48px);
+  --h1-home: clamp(42px, 6.4vw, 90px); --h1: var(--h1-home); --h2: clamp(31px, 3.5vw, 48px);
+  --stat: clamp(46px, 5.2vw, 74px); --tile: clamp(30px, 2.9vw, 42px); --card: clamp(21px, 1.7vw, 25px);
+  --body: 17.5px; --lead: clamp(19px, 1.5vw, 22px);
+  --hx-wash: none; --hx-wash-top: none; --hx-gap: clamp(44px, 5vw, 72px);
+  --hx-ink-55: rgba(29, 20, 22, .55); --hx-paper-80: rgba(251, 247, 241, .8);
+  --soft: 0 1px 2px rgba(29, 20, 22, .05), 0 16px 44px rgba(100, 18, 32, .07);
+  --r: 14px;
+  scroll-padding-top: 86px;
+}
+.hx-look body { background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
+.hx-look a { text-decoration-color: rgba(100, 18, 32, .45); text-decoration-thickness: 1px; }
+.hx-look :focus-visible { outline: 2px solid var(--ox); outline-offset: 3px; border-radius: 4px; }
+
+/* ---- type ---- */
+.hx-look h1, .hx-look h2, .hx-look h3 { font-family: var(--serif); font-weight: 560; }
+.hx-look h1 { line-height: 1.02; letter-spacing: -.026em; }
+.hx-look h2 { line-height: 1.06; letter-spacing: -.022em; }
+.hx-look h3 { line-height: 1.16; letter-spacing: -.012em; }
+.hx-look #story h2 { font-size: var(--h2); line-height: 1.14; }
+.hx-look .hx-mono, .hx-look .idx { font: 600 14px/1.2 var(--display); letter-spacing: 0; text-transform: none; color: var(--ox); font-variant-numeric: tabular-nums; }
+.hx-look .sh .idx { display: block; margin-bottom: 12px; }
+.hx-look .hx-section > h2, .hx-look .sh h2 { max-width: 22ch; margin-bottom: clamp(18px, 2vw, 26px); }
+.hx-look .sh .lede { margin-top: -6px; margin-bottom: clamp(20px, 2.4vw, 30px); color: var(--muted); max-width: 56ch; }
+.hx-look .hx-lead, .hx-look .lede, .hx-look .sub { line-height: 1.5; }
+.hx-look .tag { font: italic 480 clamp(17px, 1.4vw, 20px)/1.3 var(--serif); letter-spacing: 0; padding: 0; background: none; color: var(--ox); }
+.hx-look .chip, .hx-look .hx11-chip { font: 600 13px/1.25 var(--display); letter-spacing: 0; padding: 5px 11px; border-radius: 999px; background: var(--rose); color: var(--ox-d); }
+.hx-look .hx11-chip { background: transparent; border: 1px solid var(--line); color: var(--muted); font-weight: 500; }
+
+/* ---- actions: oxblood, always ---- */
+.hx-look .hx-btn, .hx-look button.hx-btn, .hx-look a.hx-btn { min-height: 50px; padding: 12px 22px; background: var(--ox); border: 1.5px solid var(--ox); border-radius: 8px; color: #FFF8F4; font: 600 16px/1.2 var(--display); letter-spacing: 0; text-transform: none; transition: background .2s, border-color .2s, transform .2s, box-shadow .2s; }
+.hx-look .hx-btn:hover, .hx-look .hx-btn:focus-visible { background: var(--ox-d); border-color: var(--ox-d); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(100, 18, 32, .22); }
+.hx-look .btn-sm, .hx-look .hx9-cta { min-height: 44px; padding: 9px 16px; font-size: 15px; }
+.hx-look .tlink, .hx-look .slink, .hx-look .hx9-all a, .hx-look .hx7-links a, .hx-look .hx-plainqa-more a { color: var(--ox); font: 600 16.5px/1.3 var(--display); text-decoration: underline; text-decoration-color: rgba(100, 18, 32, .4); text-decoration-thickness: 1.5px; text-underline-offset: 5px; transition: text-decoration-color .2s, color .2s; }
+.hx-look .slink { font-size: 15.5px; }
+.hx-look .tlink:hover, .hx-look .slink:hover, .hx-look .hx9-all a:hover, .hx-look .hx7-links a:hover, .hx-look .hx-plainqa-more a:hover { color: var(--ox-d); text-decoration-color: var(--ox); }
+.hx-look .ctas, .hx-look .hx10-actions { gap: 12px 24px; margin-top: 24px; }
+
+/* ---- header ---- */
+.hx-look .hx9-gh { background: var(--paper); transition: box-shadow .25s; }
+.hx-look.lk-scrolled .hx9-gh { box-shadow: 0 8px 28px rgba(29, 20, 22, .08); }
+.hx-look .hx9-row1 { min-height: 68px; }
+.hx-look .hx9-mark { border-radius: 9px; color: #fff; }
+.hx-look .hx9-word, .hx-look .hx-lock2 .hx-lock-b { font: 600 20px/1 var(--serif); letter-spacing: -.01em; text-transform: none; }
+.hx-look .hx9-nav { gap: 6px; }
+.hx-look .hx9-nav a { font: 500 15.5px/1 var(--display); letter-spacing: 0; text-transform: none; }
+.hx-look .hx9-nav a:hover { text-decoration-color: var(--ox); }
+.hx-look .hx9-menu > summary { border: 1.5px solid var(--line); border-radius: 8px; font: 600 15px/1 var(--display); letter-spacing: 0; text-transform: none; }
+.hx-look .hx9-menu-nav { border-radius: 10px; box-shadow: 0 14px 40px rgba(29, 20, 22, .14); background: var(--white); }
+.hx-look .hx9-menu-nav a { font: 500 16px/1 var(--display); letter-spacing: 0; text-transform: none; }
+
+/* ---- hero ---- */
+.hx-look .hx-hero { background: var(--paper); padding: clamp(26px, 3.6vw, 52px) 0 clamp(40px, 4.6vw, 64px); }
+.hx-look .crop { padding: 0; }
+.hx-look .cm { display: none; }
+.hx-look .hx-hero .eyebrow { margin: 0 0 12px; }
+.hx-look .hero-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); align-items: center; margin-top: clamp(22px, 2.6vw, 36px); }
+.hx-look .hx-hero .hx-lead { max-width: 40ch; }
+.hx-look .hx-where { color: var(--muted); font-size: 16.5px; max-width: 52ch; }
+.hx-look .hx-fig { position: relative; margin: 0; padding-right: clamp(40px, 5vw, 68px); }
+.hx-look .hx-fig .win, .hx-look .hx-fig .figcap { position: relative; z-index: 1; }
+.hx-look .lk-helix { position: absolute; z-index: 0; top: -92px; bottom: -120px; right: -10px; width: 148px; height: calc(100% + 212px); pointer-events: none; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent); }
+.hx-look .figcap { font: 500 14px/1.5 var(--display); }
+.hx-look .aeo { background: var(--paper); }
+
+/* ---- cards that used to be fake windows ---- */
+.hx-look .win, .hx-look .hx8-sc, .hx-look .hx10-ex { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--soft); }
+.hx-look .win { overflow: hidden; }
+.hx-look .win-bar { background: none; color: var(--muted); font: 600 14px/1.3 var(--display); letter-spacing: 0; padding: 16px 22px 0; }
+.hx-look .wb, .hx-look .cur { display: none; }
+.hx-look .win-body { padding: 14px 22px 20px; }
+.hx-look .win-foot { border-top: 1px solid var(--line); background: #F8F2E9; font: 400 14px/1.45 var(--display); }
+.hx-look .win .hx8-sc, .hx-look .win .hx10-ex, .hx-look .card .win { box-shadow: none; }
+.hx-look .chat .who { font: 600 13.5px/1.3 var(--display); color: var(--muted); }
+.hx-look .chat .q { font: italic 480 clamp(20px, 1.7vw, 23px)/1.3 var(--serif); letter-spacing: -.008em; margin: 3px 0 16px; }
+.hx-look .chat .res { font-size: 17px; font-variant-numeric: tabular-nums; }
+.hx-look .chat .res li { padding: 7px 0; border-top: 1px solid var(--line); }
+.hx-look .chat .ex { font: 500 14px/1.4 var(--display); color: var(--ox); }
+
+/* ---- backgrounds, one rhythm ---- */
+.hx-look .hx-wash-top { background: none; }
+.hx-look .hx-wash { background: var(--clay); }
+.hx-look .band-rose { background: var(--sky); }
+.hx-look .numbers.band-rose { background: var(--ox); color: #FFF4EE; }
+.hx-look .band-rose .hx-wrap, .hx-look .band-rose > .hx-wrap { padding-top: var(--hx-gap); padding-bottom: var(--hx-gap); }
+.hx-look .numbers.band-rose > .hx-wrap { padding-top: clamp(34px, 3.6vw, 48px); padding-bottom: clamp(30px, 3.2vw, 42px); }
+
+/* ---- [01] the decision list ---- */
+.hx-look .hx-decide { border-top: 1px solid var(--line); column-gap: clamp(28px, 5vw, 72px); }
+.hx-look .hx-decide li { border-bottom: 1px solid var(--line); padding: 14px 0 10px; gap: 2px; transition: background .25s; }
+.hx-look .hx-decide .q { font: 540 clamp(20px, 1.75vw, 24px)/1.22 var(--serif); letter-spacing: -.012em; text-decoration: none; transition: color .2s, transform .25s cubic-bezier(.2, .7, .2, 1); }
+.hx-look .hx-decide li:hover .q { color: var(--ox); transform: translateX(6px); }
+.hx-look .hx-decide .for { font: 400 15px/1.45 var(--display); }
+.hx-look .hx-decide .go { font-size: 15.5px; gap: 0 22px; }
+.hx-look .hx-decide .go a { color: var(--ox); font-weight: 600; text-decoration-color: rgba(100, 18, 32, .35); }
+.hx-look .hx-decide .go a:hover { text-decoration-color: var(--ox); }
+.hx-look .hx-decide-more { margin-top: 26px; }
+.hx-look .hx-enough { border-left: 3px solid var(--ox); padding: 2px 0 2px 16px; margin-top: 26px; }
+.hx-look .hx-enough a { color: var(--ox); text-decoration-color: rgba(100, 18, 32, .4); }
+
+/* ---- the numbers, on the one oxblood band ---- */
+.hx-look .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; }
+.hx-look .stat, .hx-look .hx-calm .numbers .stat { border-left: 1px solid rgba(255, 244, 238, .28); padding: 2px 20px 4px 22px; }
+.hx-look .stat .idx { color: #EDBEB4; margin-bottom: 10px; }
+.hx-look .stat b { font: 500 var(--stat)/1 var(--serif); letter-spacing: -.035em; color: #FFF8F4; font-variant-numeric: lining-nums; }
+.hx-look .stat .cap { font-size: 16px; line-height: 1.4; margin-top: 10px; color: #F6D9D2; }
+.hx-look .numbers .srcnote { font: 400 13.5px/1.5 var(--display); color: #EBC6BE; margin-top: 22px; max-width: 96ch; }
+
+/* ---- [02] who runs it ---- */
+.hx-look .sh-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(28px, 5vw, 72px); }
+.hx-look #story .win.photo { max-width: 360px; overflow: visible; background: none; border: 0; box-shadow: none; }
+.hx-look #story .win.photo .win-bar { padding: 0 0 8px; font: 500 13px/1.3 var(--display); }
+.hx-look #story .win.photo .win-body { padding: 0; }
+.hx-look .photo img, .hx-look .hx9-photo img { border-radius: var(--r); border: 1px solid var(--line); box-shadow: 14px 14px 0 var(--rose); }
+.hx-look .who-name { font: 560 28px/1.15 var(--serif); letter-spacing: -.012em; margin: 22px 0 4px; }
+.hx-look .who-role { font: 600 14.5px/1.6 var(--display); color: var(--ox); }
+.hx-look #story .who-role { gap: 0; margin-bottom: 8px; }
+.hx-look .who-sup { margin: 0; }
+.hx-look .statement { font-size: clamp(19px, 1.5vw, 22px); line-height: 1.45; margin-top: 16px; }
+.hx-look .hx-calm .hx-who-lines li { font-size: 16.5px; color: var(--muted); }
+.hx-look .hx-calm .hx-who-lines b { color: var(--ink); }
+.hx-look .hx7-links { margin-top: 12px; }
+.hx-look .hx8-tiles { gap: 0 clamp(24px, 4vw, 56px); margin-top: clamp(30px, 3.4vw, 46px); }
+.hx-look .hx8-tiles li { background: none; border: 0; border-top: 1px solid rgba(29, 20, 22, .22); padding: 16px 0 18px; }
+.hx-look .hx8-tile-co { font: 600 14px/1.2 var(--display); letter-spacing: 0; text-transform: none; color: var(--muted); }
+.hx-look .hx8-tiles b { font: 540 var(--tile)/1 var(--serif); letter-spacing: -.03em; color: var(--ox); margin: 8px 0 8px; }
+.hx-look .hx8-tiles p { font-size: 15.5px; line-height: 1.45; }
+.hx-look .recog-wrap { margin-top: 10px; padding-top: 20px; border-top: 1px solid rgba(29, 20, 22, .22); }
+.hx-look .hx8-awards { gap: 8px; }
+.hx-look .hx8-awards li { background: var(--white); border: 1px solid var(--line); border-radius: 999px; font: 500 14.5px/1.35 var(--display); padding: 7px 14px; color: var(--ink); }
+
+/* ---- [03] by role ---- */
+.hx-look .chips, .hx-look .hx9-chips { gap: 8px; margin-bottom: 22px; }
+.hx-look .chip-btn, .hx-look .hx9-chip { font: 600 15.5px/1 var(--display); padding: 12px 18px; min-height: 46px; border: 1.5px solid rgba(29, 20, 22, .28); border-radius: 999px; background: var(--white); color: var(--ink); transition: background .2s, color .2s, border-color .2s, transform .2s; }
+.hx-look .hx9-chip:hover { border-color: var(--ox); color: var(--ox); transform: translateY(-1px); }
+.hx-look .chip-btn[aria-pressed="true"], .hx-look .hx9-chip[aria-pressed="true"] { background: var(--ox); border-color: var(--ox); color: #FFF8F4; }
+.hx-look .cards, .hx-look .hx9-jobs { gap: 22px; margin-top: 22px; }
+.hx-look .card, .hx-look .hx9-job { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 22px 22px 20px; box-shadow: var(--soft); gap: 12px; transition: transform .25s cubic-bezier(.2, .7, .2, 1), box-shadow .25s; }
+.hx-look .hx9-job:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(29, 20, 22, .05), 0 22px 54px rgba(100, 18, 32, .11); }
+.hx-look .hx9-job.is-hit { outline: 0; border-color: rgba(100, 18, 32, .45); }
+.hx-look .card > p, .hx-look .hx9-job > p, .hx-look .get { font-size: 16.5px; }
+.hx-look .get b { font: 600 14px/1 var(--display); letter-spacing: 0; text-transform: none; color: var(--ox); }
+.hx-look .hx-calm .hx9-job .hx10-ex, .hx-look .hx-calm .hx9-job .hx8-sc { border: 0; border-radius: 10px; background: #F8F2E9; box-shadow: none; padding: 14px 16px; }
+.hx-look .hx-calm .hx9-job .hx10-ex .hx8-sc { background: none; padding: 0; border-radius: 0; }
+.hx-look .hx10-ex { font-size: 15.5px; }
+.hx-look .hx10-ex-k { font: 500 13.5px/1.35 var(--display); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.hx-look .hx10-ex-big, .hx-look .hx8-sc-v { font: 560 20px/1.2 var(--serif); letter-spacing: -.01em; color: var(--ox); }
+.hx-look .hx8-sc-in { font: italic 440 15.5px/1.4 var(--serif); color: var(--muted); }
+.hx-look .hx8-sc-rows li b { font: 600 14px/1.3 var(--display); font-variant-numeric: tabular-nums; }
+.hx-look .hx8-sc-bar, .hx-look .hx10-bar, .hx-look .dl .bar { height: 7px; border: 0; border-radius: 4px; }
+.hx-look .hx8-sc-bar, .hx-look .dl .bar { background: rgba(29, 20, 22, .08); }
+.hx-look .hx8-sc-bar i { background-image: none; background-color: rgba(100, 18, 32, .36); border-radius: 4px; }
+.hx-look .hx8-sc-rows li.is-lead .hx8-sc-bar i { background: var(--ox); }
+.hx-look .bar i { border-radius: 4px; background-color: var(--ox); }
+.hx-look .acts, .hx-look .card .hx10-actions, .hx-look .hx9-job .hx10-actions { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0 22px; padding-top: 8px; }
+.hx-look .hx9-job .hx10-actions .hx-btn { flex: 1 1 100%; min-height: 46px; padding: 10px 18px; font-size: 15.5px; margin-bottom: 6px; }
+.hx-look .hx9-pick-note { font: 500 14.5px/1.5 var(--display); }
+
+/* ---- [04] where they run ---- */
+.hx-look .duo { align-items: stretch; }
+.hx-look .duo .win { box-shadow: var(--soft); display: flex; flex-direction: column; }
+.hx-look .duo .win-body { flex: 1; display: flex; flex-direction: column; }
+.hx-look .duo .dl { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.hx-look .duo .win-bar { color: var(--ink); font: 560 clamp(21px, 1.8vw, 25px)/1.15 var(--serif); letter-spacing: -.012em; padding: 22px 24px 0; }
+.hx-look .duo .win-body { padding: 8px 24px 16px; }
+.hx-look .duo .win-foot { padding: 12px 24px; }
+.hx-look .win-sub { font: 400 14.5px/1.45 var(--display); }
+.hx-look .dl li { border-bottom: 1px solid var(--line); padding: 10px 0; }
+.hx-look .dl li:last-child { border-bottom: 0; }
+.hx-look .dl .nm { font-weight: 600; font-size: 16.5px; }
+.hx-look .dl .nm a { color: var(--ink); }
+.hx-look .dl .nm a:hover { color: var(--ox); }
+.hx-look .dl .c { font: 500 14px/1.3 var(--display); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---- [05] honest limits, on the navy tint ---- */
+.hx-look #not-fit { color: var(--navy); }
+.hx-look #not-fit .idx { color: var(--navy); }
+.hx-look .hx-nf { border-top: 1px solid rgba(20, 33, 61, .28); }
+.hx-look .hx-nf li { grid-template-columns: 44px minmax(0, 1fr); border-bottom: 1px solid rgba(20, 33, 61, .16); padding: 14px 0; font-size: clamp(17px, 1.35vw, 19px); line-height: 1.45; }
+.hx-look .hx-nf li::before { font: 600 14px/1.3 var(--display); color: var(--navy); padding-top: 5px; font-variant-numeric: tabular-nums; }
+.hx-look .close { font-size: 19px; margin: 24px 0 14px; }
+
+/* ---- [06] questions: a ledger, question left, answer right ---- */
+.hx-look .hx-plainqa { max-width: none; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); column-gap: clamp(28px, 5vw, 72px); border-bottom: 1px solid var(--line); }
+.hx-look .hx-plainqa h3 { font: 600 clamp(18px, 1.45vw, 20px)/1.3 var(--display); letter-spacing: 0; border-top: 1px solid var(--line); padding: 20px 0 18px; margin: 0; }
+.hx-look .hx-plainqa p { border-top: 1px solid var(--line); padding: 20px 0 18px; margin: 0; font-size: 17px; max-width: none; color: var(--muted); }
+.hx-look .hx-calm > div.hx-section:last-child { padding-bottom: 28px; }
+
+/* ---- footer ---- */
+.hx-look footer.hx-footer { background: var(--clay); padding-top: clamp(36px, 4.5vw, 60px); }
+.hx-look .hx-footer .hx-foot-h { font: 600 14.5px/1.2 var(--display); letter-spacing: 0; text-transform: none; }
+.hx-look .hx-footer a:hover { color: var(--ox); text-decoration-color: var(--ox); }
+.hx-look .ft-crop, .hx-look .hx-footer .crop { padding: 0; margin-top: clamp(20px, 3vw, 36px); }
+.hx-look .giant text { font-family: var(--serif); font-weight: 560; letter-spacing: .03em; fill: var(--ox); }
+.hx-look .hx-footer-bottom { font: 400 14px/1.5 var(--display); border-top: 1px solid rgba(29, 20, 22, .18); padding-top: 14px; margin-top: 18px; }
+
+/* ---- cookie banner: same choices, same buttons, a slimmer bar that sits clear of the first buttons ---- */
+.hx-look #hx-consent { font: 15px/1.45 var(--display); left: auto; right: 16px; bottom: 16px; max-width: 400px; margin: 0; padding: 14px 16px; border-color: var(--line); background: var(--white); color: var(--ink); }
+.hx-look #hx-consent p { margin: 0 0 10px; }
+.hx-look #hx-consent a { color: var(--ox); }
+.hx-look #hx-consent button { border-radius: 8px; border-color: var(--ink); }
+.hx-look #hx-consent .hx-a { background: var(--ink); color: var(--paper); }
+.hx-look #hx-consent .hx-d { background: var(--white); color: var(--ink); }
+
+/* ---- movement (only with JavaScript and with motion allowed; look.js adds lk-anim) ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .hx-look.lk-anim .lk-rv { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+  .hx-look.lk-anim .lk-rv.lk-in { opacity: 1; transform: none; }
+  .hx-look.lk-anim .lk-bars .hx8-sc-bar i, .hx-look.lk-anim .lk-bars .bar i, .hx-look.lk-anim .lk-bars .hx10-bar { transform: scaleX(0); transform-origin: left; transition: transform 1s cubic-bezier(.6, .05, .2, 1) .15s; }
+  .hx-look.lk-anim .lk-bars.lk-in .hx8-sc-bar i, .hx-look.lk-anim .lk-bars.lk-in .bar i, .hx-look.lk-anim .lk-bars.lk-in .hx10-bar { transform: none; }
+  .hx-look.lk-anim .lk-bars.lk-in li:nth-child(2) i { transition-delay: .25s; }
+  .hx-look.lk-anim .lk-bars.lk-in li:nth-child(3) i { transition-delay: .35s; }
+  .hx-look.lk-anim .lk-bars.lk-in li:nth-child(4) i { transition-delay: .45s; }
+  .hx-look.lk-anim .lk-bars.lk-in li:nth-child(5) i { transition-delay: .55s; }
+  .hx-look.lk-anim .lk-bars.lk-in li:nth-child(6) i { transition-delay: .65s; }
+  .hx-look .hx9-jobs.has-pick .hx9-job.is-hit { animation: lk-rise .45s cubic-bezier(.2, .7, .2, 1) both; }
+  .hx-look .hx9-jobs.has-pick .hx9-job.is-hit:nth-child(even) { animation-delay: .06s; }
+}
+@keyframes lk-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ---- tablet and phone ---- */
+@media (max-width: 1023px) {
+  .hx-look .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 26px; }
+}
+@media (max-width: 900px) {
+  html.hx-look { scroll-padding-top: 76px; }
+  .hx-look .hx9-row1 { min-height: 60px; }
+  .hx-look .hx9-cta { font-size: 14px; padding: 9px 12px; }
+  .hx-look .hero-grid, .hx-look .sh-grid { grid-template-columns: minmax(0, 1fr); }
+  .hx-look .hx-fig { padding-right: 0; }
+  .hx-look .lk-helix { right: -12px; width: 92px; top: -56px; bottom: -80px; height: calc(100% + 136px); }
+  .hx-look #story .win.photo { max-width: 240px; }
+  .hx-look .hx-plainqa { grid-template-columns: minmax(0, 1fr); }
+  .hx-look .hx-plainqa h3 { padding-bottom: 4px; }
+  .hx-look .hx-plainqa p { border-top: 0; padding-top: 0; }
+}
+@media (max-width: 600px) {
+  html.hx-look { --body: 16.5px; --hx-gap: 40px; }
+  .hx-look .hx9-word { font-size: 18px; letter-spacing: -.01em; }
+  .hx-look .hx-hero .ctas .hx-btn, .hx-look .hx-decide-more .hx-btn, .hx-look #not-fit .ctas .hx-btn, .hx-look #tools > .hx-wrap > .ctas .hx-btn { flex: 1 1 100%; }
+  .hx-look .win-body { padding: 12px 16px 16px; }
+  .hx-look .win-bar { padding: 14px 16px 0; }
+  .hx-look .duo .win-bar { padding: 18px 16px 0; }
+  .hx-look .duo .win-body { padding: 6px 16px 12px; }
+  .hx-look .duo .win-foot { padding: 10px 16px; }
+  .hx-look .win, .hx-look .hx8-sc, .hx-look .hx10-ex, .hx-look .card, .hx-look .hx9-job { box-shadow: var(--soft); }
+  .hx-look .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; }
+  .hx-look .stat, .hx-look .hx-calm .numbers .stat { padding: 2px 10px 2px 14px; }
+  .hx-look .stat .cap { font-size: 14.5px; }
+  .hx-look .hx8-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+  .hx-look .hx8-tiles li { padding: 14px 0 16px; }
+  .hx-look .hx8-tiles b { font-size: 29px; }
+  .hx-look .hx8-tiles p { font-size: 14.5px; }
+  .hx-look .hx9-chip { padding: 11px 14px; font-size: 15px; }
+  .hx-look #story .who-role { flex-direction: column; }
+  .hx-look #story .who-role span:not(:last-child)::after { display: none; }
+  .hx-look .card, .hx-look .hx9-job { padding: 18px 16px 16px; }
+  .hx-look .hx-nf li { grid-template-columns: 36px minmax(0, 1fr); gap: 8px; }
+  .hx-look .photo img, .hx-look .hx9-photo img { box-shadow: 9px 9px 0 var(--rose); }
+  .hx-look #hx-consent { left: 8px; right: 8px; bottom: 8px; max-width: none; padding: 10px 12px; font-size: 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+  .hx-look #hx-consent p { margin: 0; }
+  .hx-look #hx-consent .hx-b { flex-wrap: nowrap; gap: 6px; }
+  .hx-look #hx-consent button { padding: .4rem .7rem; }
+}
+
+/* =====================================================================================================
+   ROUND 2, 10 Nov 2026, from the owner's review of round 1.
+   Blue overlay back; benefit line under the headline; helix carried through the folds; cookie bar easy
+   to see; no index numbers; the decisions as clear cards.
+   ===================================================================================================== */
+/* the hero masthead as on the live site: pink to light blue with the dot texture, a little softer and warmer
+   (live: #F4B9C0, #F8DADD, #EEF1F6, #CFE6F5; red dots at .72, ink dots at .38). Every fold below it is warm paper. */
+.hx-look .hx-hero { background: linear-gradient(165deg, #F2C6BF 0%, #F8E1DA 38%, #F3F0EB 62%, #D8E8EE 100%); }
+.hx-look .hx-hero::before { background-image: radial-gradient(circle, rgba(176, 52, 44, .42) 1.2px, transparent 1.7px); }
+.hx-look .hx-hero::after { background-image: radial-gradient(circle, rgba(60, 38, 34, .22) 1px, transparent 1.4px); }
+
+/* the benefit line under the headline */
+.hx-look .lk-benefit { margin: clamp(10px, 1.2vw, 16px) 0 0; font: italic 480 clamp(21px, 2.3vw, 31px)/1.25 var(--serif); letter-spacing: -.012em; color: var(--ox); text-wrap: balance; }
+
+/* no index numbers: the label stands alone */
+.hx-look .sh .idx { font-size: 15px; }
+.hx-look .hx-nf li { grid-template-columns: minmax(0, 1fr); }
+.hx-look .hx-nf li::before { content: none; display: none; }
+.hx-look .stat { padding-top: 6px; }
+
+
+/* [the decisions] each one its own card: the question large, the role line small, the tool as the next step */
+.hx-look #start .sh h2 { font-size: clamp(34px, 4.3vw, 58px); max-width: 16ch; }
+.hx-look #start .sh .lede { font-size: clamp(19px, 1.6vw, 23px); color: var(--ink); }
+.hx-look .hx-decide { border-top: 0; gap: clamp(14px, 1.6vw, 22px); column-gap: clamp(14px, 1.6vw, 22px); margin-top: 6px; }
+.hx-look .hx-decide li { background: var(--white); border: 1px solid rgba(20, 33, 61, .16); border-radius: var(--r); padding: 22px 24px 16px; gap: 6px; box-shadow: 0 1px 2px rgba(20, 33, 61, .06), 0 14px 36px rgba(20, 33, 61, .09); transition: transform .25s cubic-bezier(.2, .7, .2, 1), box-shadow .25s, border-color .25s; }
+.hx-look .hx-decide li:hover { transform: translateY(-4px); border-color: rgba(100, 18, 32, .5); box-shadow: 0 2px 4px rgba(20, 33, 61, .06), 0 24px 56px rgba(100, 18, 32, .14); }
+.hx-look .hx-decide .q { font: 560 clamp(22px, 2.05vw, 28px)/1.16 var(--serif); letter-spacing: -.016em; min-height: 0; color: var(--ink); text-decoration: none; }
+.hx-look .hx-decide li:hover .q { color: var(--ox); transform: none; }
+.hx-look .hx-decide .for { font: 400 15.5px/1.45 var(--display); color: var(--muted); margin-top: 4px; }
+.hx-look .hx-decide .go { margin-top: 12px; gap: 6px 20px; align-items: center; font-size: 15.5px; }
+.hx-look .hx-decide .go a:first-child { background: var(--ox); color: #FFF8F4; border-radius: 8px; padding: 9px 16px; min-height: 44px; text-decoration: none; font-weight: 600; transition: background .2s, transform .2s; }
+.hx-look .hx-decide .go a:first-child:hover { background: var(--ox-d); transform: translateY(-1px); }
+.hx-look .hx-decide .go a + a { color: var(--ox); font-weight: 600; }
+.hx-look .hx-decide-more { margin-top: 30px; }
+
+/* cookie bar: one soft pastel bar along the bottom edge with dark text; Accept and Decline look the same */
+.hx-look #hx-consent { left: 0; right: 0; bottom: 0; max-width: none; margin: 0; border: 0; border-top: 2px solid var(--ox); border-radius: 0; background: var(--paper); color: var(--ink); padding: 14px var(--gut); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 28px; font: 500 16px/1.4 var(--display); box-shadow: 0 -10px 28px rgba(100, 18, 32, .16); }
+.hx-look #hx-consent p { margin: 0; }
+.hx-look #hx-consent a { color: var(--ox); }
+.hx-look #hx-consent .hx-b { flex-wrap: nowrap; gap: 10px; }
+.hx-look #hx-consent button, .hx-look #hx-consent .hx-a, .hx-look #hx-consent .hx-d { min-height: 44px; padding: .5rem 1.3rem; border-radius: 8px; border: 1.5px solid var(--ink); background: #FFFDF9; color: var(--ink); font: 600 16px/1.2 var(--display); }
+.hx-look #hx-consent button:hover { background: var(--ink); border-color: var(--ink); color: #FFFDF9; }
+@media (max-width: 600px) {
+  .hx-look #hx-consent { display: flex; padding: 12px 16px; font-size: 15px; gap: 10px; left: 0; right: 0; bottom: 0; }
+  .hx-look #hx-consent .hx-b { width: 100%; }
+  .hx-look #hx-consent button { flex: 1; padding: .45rem .7rem; }
+  .hx-look .hx-decide li { padding: 18px 18px 14px; }
+}
+
+/* ---- Round 2, item 9: the role cards line up. In one row the cards share one height, and the label,
+   heading, "You get" line, example box and actions each start on the same line across the row.
+   The button sits on one line and the two links on the next, at the bottom of every card. ---- */
+.hx-look .card .hx10-actions, .hx-look .hx9-job .hx10-actions { margin-top: auto; }
+@supports (grid-template-rows: subgrid) {
+  .hx-look .hx9-jobs { grid-auto-rows: auto; row-gap: 22px; }
+  .hx-look .hx9-job { display: grid; grid-template-rows: subgrid; grid-row: span 5; row-gap: 12px; }
+  .hx-look .hx9-job > * { min-width: 0; }
+  .hx-look .hx9-job > .chip { justify-self: start; align-self: start; }
+  .hx-look .hx9-job > h3, .hx-look .hx9-job > .get { align-self: start; }
+  .hx-look .hx9-job > .hx10-ex, .hx-look .hx9-job > .hx8-sc { align-self: stretch; }
+  .hx-look .hx9-job > .hx10-actions { align-self: end; margin-top: 0; }
+}
+
+/* ---- Round 2 check fixes: on a phone the cookie bar and the Ask Helix pill stay clear of the hero buttons;
+   the side helix shows from 1280 px; the decision cards are a little tighter on a phone ---- */
+@media (max-width: 600px) {
+  .hx-look .hx-hero { padding-top: 20px; }
+  .hx-look .hx-hero .eyebrow { margin-bottom: 8px; }
+  .hx-look .hx-hero .tag { font-size: 16px; line-height: 1.3; }
+  .hx-look .hx9-home .hero-grid { margin-top: 14px; }
+  .hx-look .hx9-home .hx-lead { font-size: 18px; line-height: 1.45; }
+  .hx-look .hx9-home .hx-where { font-size: 15.5px; margin-top: 12px; }
+  .hx-look .hx9-home .ctas { margin-top: 16px; gap: 6px 24px; }
+  .hx-look #hx-consent { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 9px 12px; font-size: 13.5px; line-height: 1.35; }
+  .hx-look #hx-consent .hx-b { width: auto; gap: 6px; }
+  .hx-look #hx-consent button, .hx-look #hx-consent .hx-a, .hx-look #hx-consent .hx-d { flex: none; padding: .4rem .7rem; font-size: 14.5px; }
+  .hx-look .hx-decide li { padding: 16px 16px 12px; }
+  .hx-look .hx-decide { gap: 12px; }
+  .hx-look .hx-decide .q { font-size: 21px; }
+  .hx-look .hx-decide .for { font-size: 15px; margin-top: 2px; }
+  .hx-look .hx-decide .go { margin-top: 8px; }
+}
+
+/* ---- Decision cards line up like the role cards: in one row the cards share one height, and the question,
+   the role line and the button with its guide link each sit on the same line across the row ---- */
+.hx-look .hx-decide .go { margin-top: auto; padding-top: 12px; }
+@supports (grid-template-rows: subgrid) {
+  .hx-look .hx-decide { grid-auto-rows: auto; }
+  .hx-look .hx-decide li { display: grid; grid-template-rows: subgrid; grid-row: span 3; row-gap: 6px; }
+  .hx-look .hx-decide li > * { min-width: 0; }
+  .hx-look .hx-decide .q { align-self: start; justify-self: start; }
+  .hx-look .hx-decide .for { align-self: start; margin-top: 0; }
+  .hx-look .hx-decide .go { align-self: end; margin-top: 0; padding-top: 8px; }
+}
+
+/* =====================================================================================================
+   PHONE SPACING PASS, 11 Nov 2026 (owner: "the mobile version is too cluttered and needs proper spacing").
+   Phones only (600 px and narrower). No words change, and nothing above 600 px changes.
+   Each block of the hero stands on its own, the text is set for reading, side margins are 20 px.
+   ===================================================================================================== */
+@media (max-width: 600px) {
+  html.hx-look { --gut: 20px; --body: 17px; --hx-gap: 52px; }
+  .hx-look body { line-height: 1.6; }
+
+  /* header: the button and Menu keep clear of the logo */
+  .hx-look .hx9-row1 { min-height: 62px; gap: 10px; }
+  .hx-look .hx9-cta { margin-left: auto; font-size: 13.5px; padding: 8px 12px; }
+  .hx-look .hx9-menu > summary { font-size: 14px; padding: 0 12px; }
+
+  /* hero: audience line, headline, benefit line, intro, the line on where the tools run, and the buttons are six separate blocks */
+  .hx-look .hx-hero { padding: 30px 0 46px; }
+  .hx-look .hx-hero .eyebrow { margin: 0 0 16px; }
+  .hx-look .hx-hero .tag { font-size: 15.5px; line-height: 1.45; letter-spacing: -.005em; }
+  .hx-look .hx-hero h1 { font-size: 40px; line-height: 1.07; }
+  .hx-look .lk-benefit { margin-top: 18px; font-size: 21px; line-height: 1.32; }
+  .hx-look .hx9-home .hero-grid { margin-top: 28px; gap: 40px; }
+  .hx-look .hx9-home .hx-lead { font-size: 18px; line-height: 1.55; }
+  .hx-look .hx9-home .hx-where { font-size: 16px; line-height: 1.55; margin-top: 18px; }
+  .hx-look .hx9-home .ctas { margin-top: 28px; gap: 10px 24px; }
+  .hx-look .hx-hero .ctas .hx-btn { flex: 0 1 auto; min-height: 52px; }
+  .hx-look .figcap { margin-top: 14px; line-height: 1.55; }
+  .hx-look .aeo p { padding: 20px 0; font-size: 15.5px; line-height: 1.65; }
+
+  /* cookie bar: one compact row */
+  .hx-look #hx-consent { padding: 9px 14px; }
+
+  /* section openers */
+  .hx-look .hx-section > h2, .hx-look .sh h2 { margin-bottom: 14px; }
+  .hx-look .sh .idx { margin-bottom: 10px; }
+  .hx-look .sh .lede, .hx-look #start .sh .lede { margin-top: 0; margin-bottom: 26px; font-size: 18px; line-height: 1.5; }
+  .hx-look #start .sh h2 { font-size: 33px; }
+
+  /* decisions */
+  .hx-look .hx-decide { gap: 14px; }
+  .hx-look .hx-decide li { padding: 20px 18px 16px; row-gap: 8px; }
+  .hx-look .hx-decide .q { font-size: 21px; line-height: 1.22; }
+  .hx-look .hx-decide .for { font-size: 15.5px; line-height: 1.5; }
+  .hx-look .hx-decide .go { margin-top: 0; padding-top: 10px; gap: 6px 18px; }
+  .hx-look .hx-decide-more { margin-top: 30px; gap: 14px 24px; }
+  .hx-look .hx-decide-more .hx-btn { flex: 0 1 auto; }
+  .hx-look .hx-enough { margin-top: 30px; font-size: 16.5px; line-height: 1.55; }
+
+  /* numbers */
+  .hx-look .numbers.band-rose > .hx-wrap { padding-top: 42px; padding-bottom: 38px; }
+  .hx-look .stats { row-gap: 30px; }
+  .hx-look .stat b { font-size: 46px; }
+  .hx-look .stat .cap { font-size: 15px; line-height: 1.45; margin-top: 8px; }
+  .hx-look .numbers .srcnote { margin-top: 28px; line-height: 1.55; }
+
+  /* who runs it */
+  .hx-look .sh-grid { gap: 32px; }
+  .hx-look .who-sup { margin-top: 10px; }
+  .hx-look .statement { font-size: 18px; line-height: 1.55; margin-top: 18px; }
+  .hx-look .hx-calm .hx-who-lines { margin-top: 18px; }
+  .hx-look .hx-calm .hx-who-lines li { font-size: 16px; line-height: 1.55; padding: 8px 0; }
+  .hx-look .hx8-tiles { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 36px; }
+  .hx-look .hx8-tiles li { display: grid; grid-template-columns: 116px minmax(0, 1fr); column-gap: 16px; align-items: start; padding: 16px 0 18px; }
+  .hx-look .hx8-tile-co { grid-column: 1 / -1; margin-bottom: 6px; }
+  .hx-look .hx8-tiles b { font-size: 28px; margin: 1px 0 0; }
+  .hx-look .hx8-tiles p { font-size: 15.5px; line-height: 1.5; }
+  .hx-look .recog-wrap { margin-top: 8px; padding-top: 24px; }
+  .hx-look .hx8-awards { gap: 8px; margin-top: 14px; }
+  .hx-look .hx8-awards li { border-radius: 14px; line-height: 1.4; }
+
+  /* role cards */
+  .hx-look .hx9-chips { gap: 8px; margin-bottom: 26px; }
+  .hx-look .cards, .hx-look .hx9-jobs { gap: 18px; row-gap: 18px; }
+  .hx-look .card, .hx-look .hx9-job { padding: 20px 18px 18px; row-gap: 14px; }
+  .hx-look .hx9-all { margin-top: 26px; }
+
+  /* where they run, limits, questions */
+  .hx-look .duo { gap: 18px; }
+  .hx-look #tools > .hx-wrap > .ctas { margin-top: 28px; gap: 8px 22px; }
+  .hx-look .hx-nf li { padding: 16px 0; font-size: 17px; line-height: 1.55; }
+  .hx-look .close { margin: 28px 0 16px; line-height: 1.5; }
+  .hx-look .hx-plainqa h3 { padding: 20px 0 6px; font-size: 18.5px; }
+  .hx-look .hx-plainqa p { padding: 0 0 20px; font-size: 16.5px; line-height: 1.6; }
+
+  /* footer */
+  .hx-look footer.hx-footer { padding-top: 46px; }
+  .hx-look .hx-footer-grid { gap: 30px 20px; }
+  .hx-look .hx-footer-bottom { gap: 6px 20px; padding-top: 16px; margin-top: 24px; line-height: 1.6; }
+}
+@media (max-width: 600px) {
+  /* the header button is smaller on a phone, so it does not crowd the logo */
+  .hx-look a.hx-btn.hx9-cta { min-height: 44px; padding: 9px 13px; font-size: 14px; }
+}
+@media (max-width: 400px) {
+  /* on the narrowest phones the audience line fits on two lines */
+  .hx-look .hx-hero .tag { font-size: 15px; }
+}
+@media (max-width: 900px) {
+  /* on a phone the hero helix shows above the example card only, and stays clear of the caption under it */
+  .hx-look .lk-helix { top: -50px; bottom: auto; height: calc(100% - 14px); }
+}
+
+/* ---- Speed, 11 Nov 2026: on one column screens the cards need no shared rows. The shared row rule (subgrid)
+   made one layout of the phone home take about 900 ms; as plain stacked cards it takes about 15 ms.
+   Nothing changes to the eye: on a phone each card already stood alone. Wider screens keep the aligned rows. ---- */
+@media (max-width: 700px) {
+  .hx-look .hx9-job { display: flex; flex-direction: column; grid-row: auto; grid-template-rows: none; }
+  .hx-look .hx9-job > * { align-self: stretch; }
+  .hx-look .hx9-job > .chip { align-self: flex-start; }
+  .hx-look .hx9-job > .hx10-actions { margin-top: auto; }
+}
+@media (max-width: 760px) {
+  .hx-look .hx-decide li { display: flex; flex-direction: column; grid-row: auto; grid-template-rows: none; }
+  .hx-look .hx-decide li > * { align-self: stretch; }
+  .hx-look .hx-decide .q { align-self: flex-start; }
+  .hx-look .hx-decide .go { margin-top: 0; }
+}
+
+/* ---- Compact cookie bar (owner, 11 Nov 2026: "it should be 30% of this size"). Same words and choices, one or two short rows. ---- */
+html.hx-look #hx-consent { padding: 8px var(--gut); gap: 6px 22px; font: 500 14px/1.35 var(--display); box-shadow: 0 -6px 18px rgba(100, 18, 32, .10); }
+html.hx-look #hx-consent p { margin: 0; }
+html.hx-look #hx-consent .hx-history-opt { font: 500 14px/1.35 var(--display); display: inline-flex; align-items: center; gap: 6px; margin: 0; color: var(--muted); }
+html.hx-look #hx-consent .hx-history-opt input { width: 16px; height: 16px; margin: 0; accent-color: var(--ox); vertical-align: middle; }
+html.hx-look #hx-consent .hx-b { gap: 8px; }
+html.hx-look #hx-consent button, html.hx-look #hx-consent .hx-a, html.hx-look #hx-consent .hx-d { min-height: 36px; padding: .3rem 1rem; font: 600 14px/1.2 var(--display); border-width: 1.5px; }
+@media (max-width: 600px) {
+  html.hx-look #hx-consent { display: flex; flex-wrap: wrap; padding: 8px 12px; gap: 6px 10px; font-size: 13px; }
+  html.hx-look #hx-consent p { flex: 1 1 100%; }
+  html.hx-look #hx-consent .hx-history-opt { flex: 1 1 auto; font-size: 13px; }
+  html.hx-look #hx-consent .hx-b { width: auto; margin-left: auto; }
+  html.hx-look #hx-consent button, html.hx-look #hx-consent .hx-a, html.hx-look #hx-consent .hx-d { min-height: 34px; padding: .25rem .8rem; font-size: 13.5px; flex: none; }
+}
+/* =====================================================================================================
+   ROLLOUT, 10 Nov 2026: the approved round 2 look on the other gtmhelix.com pages (about, services,
+   Fractional CMO, EPIC, questions, templates, the form pages, insights, writing, guides, legal, 404).
+   Same rule as the home: no words, links, sections or behaviour change. Everything under html.hx-look.
+   ===================================================================================================== */
+
+/* numbers: cream on the oxblood band (home), ink and oxblood everywhere else (for example a hero) */
+.hx-look .stat { border-left-color: rgba(29, 20, 22, .2); }
+.hx-look .stat b { color: var(--ox); }
+.hx-look .stat .cap { color: var(--muted); }
+.hx-look .numbers .stat, .hx-look .hx-calm .numbers .stat { border-left-color: rgba(255, 244, 238, .28); }
+.hx-look .numbers .stat b { color: #FFF8F4; }
+.hx-look .numbers .stat .cap { color: #F6D9D2; }
+.hx-look .hx10-split .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 26px; }
+.hx-look .hx10-split .stat b { font-size: clamp(42px, 4.4vw, 64px); }
+
+/* second header row: where you are */
+.hx-look .hx9-row2 { background: var(--paper); }
+.hx-look .hx9-row2-in { min-height: 46px; }
+.hx-look .hx9-crumbs { font: 500 14.5px/1.3 var(--display); gap: 0 8px; }
+.hx-look .hx9-crumbs a { color: var(--ox); text-decoration-color: rgba(100, 18, 32, .35); }
+.hx-look .hx9-nav a.hx9-on, .hx-look .hx9-menu-nav a.hx9-on { color: var(--ox); font-weight: 600; text-decoration-color: var(--ox); }
+
+/* inner page hero: the same blue overlay, a calmer headline */
+.hx-look .hx-hero:not(.hx9-home) { padding: clamp(24px, 3.2vw, 44px) 0 clamp(30px, 3.6vw, 48px); }
+.hx-look .hx-hero:not(.hx9-home) h1 { font-size: clamp(36px, 4.8vw, 66px); max-width: 20ch; }
+html.hx-look:has(main.gd-page) .hx-hero h1, html.hx-look:has(main.in-page) .hx-hero h1 { font-size: clamp(29px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -.018em; max-width: 34ch; }
+.hx-look .hx-hero:not(.hx9-home) .hx-lead { max-width: 60ch; margin-top: 16px; }
+.hx-look .hx-eyebrow { display: block; font: italic 480 clamp(17px, 1.4vw, 20px)/1.3 var(--serif); letter-spacing: 0; padding: 0; background: none; color: var(--ox); }
+.hx-look .hx-hero .hx-eyebrow { margin: 0 0 12px; }
+.hx-look .hx-byline { font: 500 14.5px/1.5 var(--display); color: var(--muted); }
+.hx-look .hx-byline a { color: var(--ox); }
+.hx-look .hx-sub { font-size: 19px; }
+.hx-look .hx10-answer { font-size: 15.5px; }
+.hx-look .hx10-split { align-items: center; }
+
+/* text link buttons stay text links (the live site draws these two kinds as links, not as filled buttons) */
+.hx-look .hx-btn.hx-btn-ghost, .hx-look .hx-btn.hx10-outline, .hx-look a.hx-btn.hx-btn-ghost, .hx-look a.hx-btn.hx10-outline { min-height: 44px; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; transform: none; color: var(--ox); font: 600 16.5px/1.3 var(--display); text-align: left; text-decoration: underline; text-decoration-color: rgba(100, 18, 32, .4); text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+.hx-look .hx-btn.hx-btn-ghost:hover, .hx-look .hx-btn.hx10-outline:hover, .hx-look .hx-btn.hx-btn-ghost:focus-visible, .hx-look .hx-btn.hx10-outline:focus-visible { background: none; color: var(--ox-d); text-decoration-color: var(--ox); transform: none; box-shadow: none; }
+.hx-look .hx-cta-row, .hx-look .hx-actions { gap: 12px 24px; margin-top: 24px; }
+
+/* small labels, in sentence case */
+.hx-look .hx7-label, .hx-look .gd-cap, .hx-look .in-who, .hx-look .gd-filter legend { font: 600 14px/1.3 var(--display); letter-spacing: 0; text-transform: none; }
+.hx-look .hx7-label { color: var(--ox); }
+.hx-look .hx-card-kicker { font: 600 13px/1.25 var(--display); letter-spacing: 0; padding: 5px 11px; border-radius: 999px; background: var(--rose); color: var(--ox-d); }
+.hx-look .hx8-role { font: 600 14.5px/1.5 var(--display); color: var(--ox); }
+.hx-look .gd-read, .hx-look .in-meta, .hx-look .gd-filter-note, .hx-look .hx-help { font: 500 14px/1.45 var(--display); }
+
+/* cards and panels */
+.hx-look .hx-card-static, .hx-look .hx-who, .hx-look .hx8-motions li, .hx-look .hx-form, .hx-look .hx-panel { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--soft); }
+.hx-look .hx-card-static, .hx-look .hx-who { padding: 22px 22px 20px; gap: 12px; transition: transform .25s cubic-bezier(.2, .7, .2, 1), box-shadow .25s; }
+.hx-look .hx-card-static:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(29, 20, 22, .05), 0 22px 54px rgba(100, 18, 32, .11); }
+.hx-look .hx-card-static > p, .hx-look .hx-who > p { font-size: 16.5px; }
+.hx-look .hx-cards, .hx-look .hx-whos { gap: 22px; }
+.hx-look .hx-panel { padding: 22px 24px; font-size: 18px; line-height: 1.6; border-left: 3px solid var(--ox); }
+.hx-look .hx-panel > :last-child { margin-bottom: 0; }
+.hx-look .gd-card { background: var(--white); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 1px 2px rgba(29, 20, 22, .04); padding: 16px 18px; }
+.hx-look .gd-card h3 { font-size: 20px; }
+.hx-look .gd-card li a { color: var(--ox); }
+.hx-look .gd-note { border-left: 3px solid var(--ox); }
+.hx-look .gd-tools li { border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font: 600 12.5px/1.25 var(--display); color: var(--muted); }
+.hx-look .gd-pills label { border: 1.5px solid rgba(29, 20, 22, .28); border-radius: 999px; background: var(--white); font: 600 15px/1.1 var(--display); }
+.hx-look .gd-pills label span { font: 500 12.5px/1 var(--display); }
+.hx-look .gd-pills input:checked + label { background: var(--ox); border-color: var(--ox); color: #FFF8F4; }
+.hx-look .gd-hmeta, .hx-look .in-meta { border-top: 1px solid var(--line); }
+.hx-look .h7-col { border-left: 1.5px solid var(--ox); }
+.hx-look .h7-col a, .hx-look .hx-group li a, .hx-look .hx7-list li > a:first-child { color: var(--ox); text-decoration-color: rgba(100, 18, 32, .4); }
+.hx-look .hx-group, .hx-look .hx-group:last-child { border-color: var(--line); border-width: 1px; }
+.hx-look .hx8-letter { border-radius: 10px; font: 560 24px/1 var(--serif); }
+.hx-look .hx10-fw dt { font: 560 var(--card)/1.15 var(--serif); letter-spacing: -.012em; }
+.hx-look .hx8-narr { font-size: clamp(19px, 1.5vw, 22px); line-height: 1.45; }
+.hx-look .hx7-built { border-bottom: 1px solid var(--line); }
+.hx-look .hx7-built-h { font: 560 21px/1.2 var(--serif); }
+.hx-look .hx7-built-photo img { border: 1px solid var(--line); border-radius: 10px; }
+
+/* long reading: a calm column */
+.hx-look .gd-page, .hx-look .in-page { --h2: clamp(27px, 2.6vw, 38px); }
+.hx-look .gd-page .hx-section > h2, .hx-look .in-page .hx-section > h2 { max-width: 32ch; }
+.hx-look .gd-text, .hx-look .in-text { font-size: 18px; line-height: 1.65; }
+.hx-look .gd-text > p, .hx-look .in-text > p, .hx-look .in-qa-a { font-size: 18px; line-height: 1.65; }
+.hx-look .gd-text h3 { margin-top: 30px; }
+.hx-look .hx-prose-block { --h2: clamp(26px, 2.4vw, 34px); }
+.hx-look .in-qa > li, .hx-look .in-qa > li:first-child, .hx-look .in-qa > li:last-child { border-color: var(--line); border-width: 1px; }
+.hx-look .in-qa-n { font: 600 14px/1.4 var(--display); letter-spacing: 0; color: var(--ox); }
+.hx-look .in-qa-q { font: 600 18px/1.45 var(--display); }
+.hx-look blockquote { border-left: 3px solid var(--ox); font-family: var(--serif); font-size: 1.08em; }
+.hx-look pre { border: 1px solid var(--line); border-radius: 10px; }
+.hx-look code { border-radius: 4px; }
+
+/* tables */
+.hx-look .hx-table { border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
+.hx-look .hx-table table, .hx-look main table { background: var(--white); font-size: 15.5px; }
+.hx-look .hx-table th, .hx-look .hx-table td, .hx-look main table th, .hx-look main table td { border: 0; border-bottom: 1px solid var(--line); padding: 11px 14px; }
+.hx-look .hx-table tr:last-child td, .hx-look main table tr:last-child td { border-bottom: 0; }
+.hx-look .hx-table th, .hx-look main table th { font: 600 14px/1.3 var(--display); letter-spacing: 0; text-transform: none; background: #F8F2E9; border-bottom: 1px solid rgba(29, 20, 22, .2); }
+
+/* questions that open */
+.hx-look .hx-qa details, .hx-look .faq details { border-bottom: 1px solid var(--line); }
+.hx-look .hx-qa details:first-of-type, .hx-look .faq details:first-of-type { border-top: 1px solid rgba(29, 20, 22, .22); }
+.hx-look .hx-qa summary, .hx-look .faq summary { font: 600 clamp(17px, 1.4vw, 19px)/1.35 var(--display); padding: 15px 0; transition: color .2s; }
+.hx-look .hx-qa summary:hover, .hx-look .faq summary:hover { color: var(--ox); }
+.hx-look .hx-qa summary::after, .hx-look .faq summary::after { width: 32px; height: 32px; border: 1.5px solid var(--ox); border-radius: 50%; background: none; color: var(--ox); font: 400 22px/1 var(--display); transition: background .2s, color .2s, transform .25s; }
+.hx-look .hx-qa details[open] summary::after, .hx-look .faq details[open] summary::after { background: var(--ox); color: #FFF8F4; font-size: 16px; transform: rotate(90deg); }
+.hx-look .hx-qa details p, .hx-look .faq details p { font-size: 17px; line-height: 1.6; color: var(--muted); max-width: 66ch; }
+
+/* forms */
+.hx-look .hx-form { padding: clamp(18px, 2.4vw, 28px); }
+.hx-look .hx-field label, .hx-look .hx-field legend { font-weight: 600; }
+.hx-look .hx-field input:not([type=hidden]):not([type=checkbox]):not([type=radio]), .hx-look .hx-field select, .hx-look .hx-field textarea, .hx-look .hx-form input:not([type=hidden]):not([type=checkbox]):not([type=radio]), .hx-look .hx-form textarea, .hx-look .hx-form select { border: 1.5px solid rgba(29, 20, 22, .3); border-radius: 8px; background: #fff; transition: border-color .2s, box-shadow .2s; }
+.hx-look .hx-field input:not([type=hidden]):not([type=checkbox]):not([type=radio]):focus, .hx-look .hx-field select:focus, .hx-look .hx-field textarea:focus, .hx-look .hx-form input:not([type=hidden]):not([type=checkbox]):not([type=radio]):focus, .hx-look .hx-form textarea:focus, .hx-look .hx-form select:focus { border-color: var(--ox); box-shadow: 0 0 0 3px rgba(100, 18, 32, .14); outline: 0; }
+
+@media (max-width: 900px) {
+  .hx-look .hx10-split { align-items: start; }
+}
+@media (max-width: 600px) {
+  .hx-look .hx-panel, .hx-look .hx-form { padding: 16px; }
+  .hx-look .hx-form, .hx-look .hx-panel, .hx-look .hx-card-static, .hx-look .hx-who, .hx-look .hx8-motions li { box-shadow: var(--soft); }
+  .hx-look .gd-text, .hx-look .in-text, .hx-look .gd-text > p, .hx-look .in-text > p, .hx-look .in-qa-a { font-size: 17px; }
+  .hx-look .hx10-split .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* sections that sit inside the page column: their tint runs the full width of the screen, as on the home.
+   Done with a spread shadow that is clipped top and bottom, so nothing is wider than the window (no 100vw). */
+.hx-look .hx-body > .hx-wash { background: var(--clay); box-shadow: 0 0 0 100vmax var(--clay); clip-path: inset(0 -100vmax); }
+.hx-look .hx-body > .hx-wash-top { background: none; }
+.hx-look .hx-body > .band-rose { background: var(--sky); box-shadow: 0 0 0 100vmax var(--sky); clip-path: inset(0 -100vmax); }
+.hx-look .hx-section > h2 + .hx-sub { margin-top: 0; margin-bottom: clamp(18px, 2.2vw, 28px); }
+.hx-look .hx8-awards li > a { color: var(--ink); text-decoration-color: rgba(100, 18, 32, .4); padding: 0 14px; }
+
+
+/* nothing stays hidden: three seconds after the script starts, every block that has not arrived yet is shown
+   in full and only slides into place when it arrives (for readers who jump, and for bots that do not scroll) */
+@media (prefers-reduced-motion: no-preference) {
+  .hx-look.lk-anim.lk-safe .lk-rv { opacity: 1; }
+}
+/* while the cookie bar is open, the footer keeps its last row clear of it */
+.hx-look:has(#hx-consent) footer.hx-footer { padding-bottom: 104px; }
+
+/* ---- Phone spacing pass, 11 Nov 2026: the inner page templates (phones only, 600 px and narrower) ---- */
+@media (max-width: 600px) {
+  .hx-look .hx-hero:not(.hx9-home) { padding: 26px 0 38px; }
+  .hx-look .hx-hero:not(.hx9-home) h1 { font-size: 34px; line-height: 1.1; }
+  html.hx-look:has(main.gd-page) .hx-hero h1, html.hx-look:has(main.in-page) .hx-hero h1 { font-size: 27px; line-height: 1.17; }
+  .hx-look .hx-hero .hx-eyebrow { margin-bottom: 14px; font-size: 16.5px; }
+  .hx-look .hx-hero:not(.hx9-home) .hx-lead { font-size: 18px; line-height: 1.55; margin-top: 18px; }
+  .hx-look .hx-byline { margin-top: 20px; line-height: 1.6; }
+  .hx-look .hx-cta-row, .hx-look .hx-actions { margin-top: 26px; gap: 10px 22px; }
+  .hx-look .hx10-split { gap: 30px; }
+  .hx-look .hx10-split .stats { row-gap: 24px; }
+  .hx-look .gd-page, .hx-look .in-page { --h2: 26px; }
+  .hx-look .gd-row { gap: 22px; margin-bottom: 32px; }
+  .hx-look .gd-text, .hx-look .in-text, .hx-look .gd-text > p, .hx-look .in-text > p, .hx-look .in-qa-a { font-size: 17px; line-height: 1.7; }
+  .hx-look .hx-prose { line-height: 1.65; }
+  .hx-look .gd-text h3 { margin-top: 28px; }
+  .hx-look .hx-panel { padding: 18px; font-size: 17px; line-height: 1.65; }
+  .hx-look .gd-card { padding: 16px; }
+  .hx-look .gd-card li { padding: 12px 0; }
+  .hx-look .hx-qa summary, .hx-look .faq summary { font-size: 17px; padding: 16px 0; }
+  .hx-look .hx-qa details p, .hx-look .faq details p { font-size: 16.5px; line-height: 1.65; }
+  .hx-look .hx-cards, .hx-look .hx-whos { gap: 18px; }
+  .hx-look .hx-card-static, .hx-look .hx-who { padding: 20px 18px 18px; }
+  .hx-look .hx-form { padding: 18px; }
+  .hx-look .hx-field { margin-bottom: 22px; }
+  .hx-look .in-qa > li { padding: 22px 0; }
+  .hx-look .h7-cols { gap: 24px; }
+  .hx-look .hx7-list li { padding: 14px 0; }
+}
+
+/* ---- Red team fixes, 11 Nov 2026 ---- */
+/* the form card is as wide as its fields, not the whole column */
+.hx-look .hx-form { max-width: calc(642px + 2 * clamp(18px, 2.4vw, 28px)); }
+/* phones and touch screens: links inside running text (20 px tall on live) get a 40 px tap area. Padding on an
+   inline link moves nothing, so the text looks the same. Links that live already lays out as 44 px rows are
+   left alone (second rule); both rules sit at the lowest weight so any live padding rule still wins. */
+@media (max-width: 600px), (pointer: coarse) {
+  .hx-look :where(main p > a:not([class]), main li > a:not([class]), main dd > a:not([class]), main td > a:not([class]), .hx-byline a, .aeo a) { padding-block: 10px; }
+  .hx-look :where(.hx-decide .go a, .hx7-links a, .gd-card li a, .hx-group li a, .h7-col a, .hx-plainqa-more a, .hx9-all a, .hx7-list li > a:first-child, .hx8-awards li > a, .nm > a, .hx-qa > p a, .hx-cta-row a, .ctas a, .acts a, details + p > a, .card h3 > a, .hx7-strip a, .hx-pn a, .hx9-next a) { padding-block: 0; }
+  /* the LinkedIn and About links under the author block are flex items: the same taller tap area, pulled back by the same amount so the row keeps its height */
+  .hx-look :where(.hx7-built-links > a) { margin-block: -10px; }
+}
+/* phones: room under the last footer row, so the Ask Helix pill never sits on the footer links */
+@media (max-width: 600px) {
+  .hx-look footer.hx-footer { padding-bottom: 92px; }
+}
+
+/* ---- Guides filter as three dropdowns (owner, 11 Nov 2026: "can't the search classification be made simpler drop down").
+   The same radio buttons and labels stay in the page (works with JavaScript off). Closed, each box shows its chosen
+   item or "All"/"Any"; open on hover or tap, it lists the options. Fixed height, so nothing below moves. ---- */
+html.hx-look .gd-hub .gd-filter { display: inline-block; vertical-align: top; position: relative; border: 0; padding: 0; margin: 0 14px 18px 0; width: min(280px, 100%); min-height: 78px; }
+html.hx-look .gd-hub .gd-filter legend { display: block; padding: 0; margin: 0 0 6px; color: var(--muted); }
+html.hx-look .gd-hub .gd-pills { display: block; position: relative; margin: 0; }
+html.hx-look .gd-hub .gd-pills label { display: none; }
+html.hx-look .gd-hub .gd-pills input:checked + label,
+html.hx-look .gd-hub .gd-pills:not(:has(input:checked))::before { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 48px; margin: 0; padding: 10px 44px 10px 14px; border: 1.5px solid rgba(29, 20, 22, .28); border-radius: 12px; background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23641220' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center; color: var(--ink); font: 600 15px/1.2 var(--display); cursor: pointer; }
+html.hx-look .gd-hub .gd-pills:not(:has(input:checked))::before { content: "Any"; color: var(--muted); font-weight: 500; }
+html.hx-look .gd-hub .gd-filter:nth-of-type(2) .gd-pills:not(:has(input:checked))::before { content: "Any industry"; }
+html.hx-look .gd-hub .gd-filter:nth-of-type(3) .gd-pills:not(:has(input:checked))::before { content: "Any region"; }
+html.hx-look .gd-hub .gd-pills input:checked + label span { margin-left: auto; color: var(--muted); }
+/* open: the full list floats over the page */
+html.hx-look .gd-hub .gd-filter:hover .gd-pills, html.hx-look .gd-hub .gd-filter:focus-within .gd-pills { position: absolute; left: 0; right: 0; z-index: 30; max-height: 340px; overflow: auto; padding: 6px; border: 1.5px solid rgba(100, 18, 32, .35); border-radius: 12px; background: var(--white); box-shadow: 0 16px 40px rgba(60, 20, 28, .16); }
+html.hx-look .gd-hub .gd-filter:hover .gd-pills::before, html.hx-look .gd-hub .gd-filter:focus-within .gd-pills::before { display: none; }
+html.hx-look .gd-hub .gd-filter:hover .gd-pills label, html.hx-look .gd-hub .gd-filter:focus-within .gd-pills label { display: flex; justify-content: space-between; gap: 10px; margin: 0; padding: 10px 12px; min-height: 44px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font: 500 15px/1.2 var(--display); background-image: none; cursor: pointer; }
+html.hx-look .gd-hub .gd-filter:hover .gd-pills label:hover { background: var(--clay); }
+html.hx-look .gd-hub .gd-filter:hover .gd-pills input:checked + label, html.hx-look .gd-hub .gd-filter:focus-within .gd-pills input:checked + label { background: var(--ox); color: #FFF8F4; font-weight: 600; }
+html.hx-look .gd-hub .gd-filter:hover .gd-pills input:checked + label span, html.hx-look .gd-hub .gd-filter:focus-within .gd-pills input:checked + label span { color: #FFF8F4; }
+html.hx-look .gd-hub .gd-pills input:focus-visible + label { outline: 3px solid var(--ox); outline-offset: 2px; }
+@media (max-width: 640px) { html.hx-look .gd-hub .gd-filter { width: 100%; margin-right: 0; margin-bottom: 12px; } }
+html.hx-look .gd-hub .gd-filter.lk-shut:hover .gd-pills { position: relative; max-height: none; padding: 0; border: 0; box-shadow: none; background: none; }
+html.hx-look .gd-hub .gd-filter.lk-shut:hover .gd-pills label { display: none; }
+html.hx-look .gd-hub .gd-filter.lk-shut:hover .gd-pills input:checked + label { display: flex; padding: 10px 44px 10px 14px; border: 1.5px solid rgba(29, 20, 22, .28); border-radius: 12px; background-color: var(--white); color: var(--ink); font-weight: 600; }
+html.hx-look .gd-hub .gd-filter.lk-shut:hover .gd-pills input:checked + label span { color: var(--muted); }
+/* =====================================================================================================
+   WAVE 2, 11 Nov 2026: the same look on tools.gtmhelix.com and the connector sites (CRAFT GTM, CRAFT
+   Content, ICP Intelligence, IMPACT, Revenue Enablement, GTM Alpha). Static look only: no words, links,
+   forms, tool behaviour or server files change. Everything under html.hx-look.
+   ===================================================================================================== */
+
+/* hero: these sites use .hero where gtmhelix.com uses .hx-hero */
+.hx-look .hero { background: linear-gradient(165deg, #F2C6BF 0%, #F8E1DA 38%, #F3F0EB 62%, #D8E8EE 100%); padding: clamp(24px, 3.2vw, 44px) 0 clamp(30px, 3.6vw, 48px); }
+.hx-look .hero::before { background-image: radial-gradient(circle, rgba(176, 52, 44, .42) 1.2px, transparent 1.7px); }
+.hx-look .hero::after { background-image: radial-gradient(circle, rgba(60, 38, 34, .22) 1px, transparent 1.4px); }
+.hx-look .hero h1 { font-size: clamp(36px, 4.8vw, 66px); max-width: 20ch; }
+.hx-look .hero .eyebrow { margin: 0 0 12px; }
+.hx-look .hero .hx-lead { max-width: 52ch; }
+.hx-look .hx-for { font-size: clamp(18px, 1.4vw, 21px); line-height: 1.45; margin-top: 14px; }
+.hx-look .hx-for b { color: var(--ox); font-weight: 600; }
+.hx-look .hx-hero-text { min-width: 0; }
+
+/* buttons that carry .btn */
+.hx-look .btn, .hx-look a.btn, .hx-look button.btn { min-height: 50px; padding: 12px 22px; background: var(--ox); border: 1.5px solid var(--ox); border-radius: 8px; color: #FFF8F4; font: 600 16px/1.2 var(--display); letter-spacing: 0; text-transform: none; transition: background .2s, border-color .2s, transform .2s, box-shadow .2s; }
+.hx-look .btn:hover, .hx-look .btn:focus-visible { background: var(--ox-d); border-color: var(--ox-d); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(100, 18, 32, .22); }
+.hx-look .btn[disabled], .hx-look .hx-btn[disabled] { opacity: .6; transform: none; box-shadow: none; cursor: default; }
+
+/* the site's own menu row */
+.hx-look .hx9-site { gap: 0 18px; }
+.hx-look .hx9-site a { font: 500 14.5px/1 var(--display); letter-spacing: 0; text-transform: none; }
+.hx-look .hx9-site a:hover, .hx-look .hx9-site a[aria-current="page"], .hx-look .hx9-site a.hx9-on { color: var(--ox); text-decoration-color: var(--ox); }
+.hx-look .hx9-menu-lbl { font: 600 13px/1.3 var(--display); letter-spacing: 0; text-transform: none; }
+.hx-look .hx-lock2 .hx-lock-s { font: 500 13px/1.1 var(--display); letter-spacing: 0; }
+.hx-look .hx9-row2 .tag { font-size: 18px; }
+
+/* sections */
+.hx-look .sec { padding-top: var(--hx-gap); }
+.hx-look main > .sec:last-child { padding-bottom: var(--hx-gap); }
+.hx-look .hx-divider { padding-top: var(--hx-gap); }
+
+/* drawings and their frames */
+.hx-look .hx8-vis, .hx-look .hx9-term { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--soft); overflow: hidden; }
+.hx-look .win .hx8-vis { box-shadow: none; }
+.hx-look .hx8-vis figcaption, .hx-look .hx-viz-cap { font: 500 14px/1.5 var(--display); }
+.hx-look .hx8-svg text { font-family: var(--display); }
+.hx-look .hxv-steps li::before { background: var(--ox); border-radius: 50%; font: 600 14px/1 var(--display); }
+
+/* who built it */
+.hx-look .hx7-strip { background: var(--paper); }
+.hx-look .hx7-strip-photo img { border: 1px solid var(--line); border-radius: 10px; }
+.hx-look .hx7-strip a, .hx-look .hx-pn a, .hx-look .hx9-next a { color: var(--ox); font-weight: 600; text-decoration-color: rgba(100, 18, 32, .4); }
+.hx-look .hx7-cred { background: var(--clay); }
+.hx-look .hx7-cred-photo img { border-radius: var(--r); border: 1px solid var(--line); }
+.hx-look .hx7-role { font: 600 14.5px/1.5 var(--display); color: var(--ox); }
+.hx-look .hx7-facts b, .hx-look .facts b { font: 540 clamp(32px, 3.2vw, 46px)/1 var(--serif); letter-spacing: -.03em; color: var(--ox); }
+.hx-look .hx7-results { border-top: 1px solid rgba(29, 20, 22, .22); }
+.hx-look .hx7-awards li::before { border-radius: 50%; }
+.hx-look .facts div + div { border-left: 1px solid var(--line); }
+
+/* the list of tools: one row per tool, no numbers */
+.hx-look .tools:not(.cols3) li.th, .hx-look .tools:not(.cols3) .trow { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr) minmax(0, 1.6fr) 140px; }
+.hx-look .tools:not(.cols3) li.th > span:first-child, .hx-look .trow .idx { display: none; }
+/* lists with three columns (name, what it does, open) have no number cell: their header keeps all its words */
+.hx-look .tools.cols3 li.th, .hx-look .tools.cols3 .trow { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.8fr) 140px; }
+.hx-look .tools li.th { font: 600 13.5px/1.3 var(--display); letter-spacing: 0; text-transform: none; color: var(--muted); border-bottom: 1px solid rgba(29, 20, 22, .25); }
+.hx-look .trow { border-bottom: 1px solid var(--line); transition: background .2s; }
+.hx-look .trow .nm { font: 560 20px/1.25 var(--serif); letter-spacing: -.01em; text-decoration: none; }
+.hx-look .trow .k { font: 600 13px/1.3 var(--display); letter-spacing: 0; text-transform: none; color: var(--ox); }
+.hx-look .trow .open { font: 600 15px/1 var(--display); letter-spacing: 0; text-transform: none; color: var(--ox); }
+.hx-look .trow .arr { font: 500 20px/1 var(--display); }
+.hx-look .trow:hover, .hx-look .trow:focus-visible { background: var(--rose); }
+.hx-look .trow:hover .nm, .hx-look .trow:focus-visible .nm { color: var(--ox); }
+.hx-look .trow:focus-visible { box-shadow: inset 0 0 0 2px var(--ox); }
+.hx-look .hx-moment > .tools { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.hx-look .icp-cards { gap: 22px; }
+
+/* addresses, code and notes */
+.hx-look .hx-addr, .hx-look .hx-code-block { border: 1px solid var(--line); border-radius: 10px; background: var(--white); font-family: ui-monospace, Consolas, "Courier New", monospace; }
+.hx-look pre, .hx-look code, .hx-look kbd, .hx-look samp { font-family: ui-monospace, Consolas, "Courier New", monospace; }
+.hx-look .hx-quote { border-left: 3px solid var(--ox); }
+.hx-look .hx9-example-note, .hx-look .hxr-note { background: var(--rose); border-left: 3px solid var(--ox); border-radius: 0 8px 8px 0; font-size: 16px; color: var(--ox-d); }
+.hx-look .hx9-next { border-top: 1px solid var(--line); }
+.hx-look .hx-req { color: var(--ox); }
+.hx-look .chip.sky { background: var(--sky); color: var(--navy); }
+.hx-look .hx-sample-note { font: 500 14px/1.5 var(--display); }
+.hx-look .hx-sample-body { border-left: 3px solid var(--ox); }
+
+/* the tool form and its result */
+.hx-look .hx-form-win.win, .hx-look .win.hx-form-win { overflow: visible; }
+.hx-look .win .hx-form { border: 0; box-shadow: none; background: none; border-radius: 0; }
+.hx-look .hx-form-win .win-bar { color: var(--ink); font: 560 clamp(20px, 1.7vw, 24px)/1.2 var(--serif); letter-spacing: -.012em; padding: 20px 22px 0; }
+.hx-look .hx-run { border-top: 1px solid var(--line); }
+.hx-look .hx-run > summary { font: 600 15.5px/1.3 var(--display); }
+.hx-look .hx-opt { font-size: 14.5px; }
+.hx-look .hxr { border: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--soft); }
+.hx-look .hxr * { border-radius: 0; }
+.hx-look .hxr-head { border-bottom: 1px solid var(--line); }
+.hx-look .hxr-tag { font: italic 480 18px/1.3 var(--serif); letter-spacing: 0; padding: 0; background: none; color: var(--ox); }
+.hx-look .hxr-title { font-family: var(--serif); font-weight: 560; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.08; letter-spacing: -.02em; }
+.hx-look .hxr-meta, .hx-look .hxr-foot { font: 500 13.5px/1.6 var(--display); }
+.hx-look .hxr-foot { border-top: 1px solid var(--line); }
+.hx-look .hxr-foot a { color: var(--ox); }
+.hx-look .hxr-body h2, .hx-look .hxr-body .hxr-h2 { font-family: var(--serif); font-weight: 560; font-size: clamp(25px, 2.3vw, 32px); line-height: 1.1; letter-spacing: -.018em; }
+.hx-look .hxr-body h2:not(.hxr-h3):not(.hxr-h4)::before, .hx-look .hxr-body .hxr-h2::before { width: 28px; height: 3px; background: var(--ox); }
+.hx-look .hxr-body h3, .hx-look .hxr-body .hxr-h3 { font-family: var(--serif); font-weight: 560; font-size: clamp(20px, 1.6vw, 23px); line-height: 1.15; letter-spacing: -.012em; }
+.hx-look .hxr-body h4, .hx-look .hxr-body .hxr-h4 { font-family: var(--display); font-weight: 600; }
+.hx-look .hxr-body th, .hx-look .hxr-body td { border: 0; border-bottom: 1px solid var(--line); padding: 10px 12px; }
+.hx-look .hxr-body th { font: 600 14px/1.3 var(--display); letter-spacing: 0; text-transform: none; background: #F8F2E9; border-bottom: 1px solid rgba(29, 20, 22, .2); }
+.hx-look .hxr-body blockquote { background: #F8F2E9; border-left: 3px solid var(--ox); font-family: var(--display); font-size: 1em; }
+
+@media (max-width: 900px) {
+  .hx-look .tools .trow, .hx-look .tools.cols3 .trow, .hx-look .tools:not(.cols3) .trow { grid-template-columns: minmax(0, 1fr); border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
+  .hx-look .tools .trow > * { grid-column: 1; }
+  /* GTM Alpha's own rule for a lone link in a list item made these rows a squeezed line on phones: they stack */
+  .hx-look .tools .trow { display: grid; }
+  .hx-look .tools li:last-child .trow { border-bottom: 1px solid var(--line); }
+  /* on phones live turns "Open" into a filled oxblood button: its words are light, as on live */
+  .hx-look .tools .trow .open { color: #FFF8F4; border-radius: 8px; }
+  /* the three numbers under the hero stand one under another on phones: a line between them, none beside them */
+  .hx-look .facts div + div { border-left: 0; border-top: 1px solid var(--line); }
+}
+
+/* ---- Fixes after the wave 2 browser check, 11 Nov 2026 ---- */
+/* no blue below the hero: the band that holds the tool list is sand on these sites */
+.hx-look .band-rose, .hx-look .hx-body > .band-rose { background: var(--clay); }
+.hx-look .hx-body > .band-rose { box-shadow: 0 0 0 100vmax var(--clay); }
+.hx-look .numbers.band-rose { background: var(--ox); }
+/* the small "For" label on the who cards is a pill as wide as its word, not a bar */
+.hx-look .hx-who .hx-card-kicker, .hx-look .hx-card-static .hx-card-kicker { align-self: flex-start; justify-self: start; width: auto; }
+/* leftovers of the old look: capitals on small labels */
+.hx-look .hx-lock2 .hx-lock-s, .hx-look .hx-lock2 .hx-lock-b { text-transform: none; letter-spacing: 0; }
+.hx-look .hx8-svg .v-k { text-transform: none; letter-spacing: 0; }
+.hx-look .hx-viz-tag { font: 600 12.5px/1.3 var(--display); letter-spacing: 0; text-transform: none; background: var(--rose); color: var(--ox-d); border-radius: 6px; }
+.hx-look .hxv-roles .r, .hx-look .hxv-house .cols b, .hx-look .hxv-case dt { text-transform: none; letter-spacing: 0; }
+/* drawings are not clipped, so a label that runs past the frame still shows */
+.hx-look .hx8-vis { overflow: visible; }
+/* the closing line after a quote on the plugin pages */
+.hx-look blockquote + .hx-enough { margin-top: 28px; }
+/* GTM Alpha, pages with their own inline styles: sample report and API page */
+.hx-look .report-container, .hx-look .report-container p, .hx-look .report-container li, .hx-look .report-container strong, .hx-look .epic-score, .hx-look .consultation-id { font-family: var(--display); }
+.hx-look .epic-score { font-weight: 600; }
+.hx-look .endpoint-path { font-family: ui-monospace, Consolas, "Courier New", monospace; }
+.hx-look .code-lang { font: 600 13px/1.3 var(--display); letter-spacing: 0; text-transform: none; color: var(--muted); }
+.hx-look nav.hx10-actions > a:not([class]) { min-height: 44px; padding: 0; border: 0; background: none; box-shadow: none; display: inline-flex; align-items: center; font: 600 16px/1.3 var(--display); letter-spacing: 0; text-transform: none; color: var(--ox); text-decoration: underline; text-decoration-color: rgba(100, 18, 32, .4); text-underline-offset: 4px; }
+.hx-look nav.hx10-actions { gap: 10px 24px; align-items: center; }
+
+/* ---- GTM Alpha: its own page parts (site.css) in the same look ---- */
+.hx-look .hx10-history, .hx-look .ga-sample-who h3, .hx-look .sidebar-title { font: 500 14px/1.5 var(--display); letter-spacing: 0; text-transform: none; }
+.hx-look .section-subtitle { color: var(--muted); }
+.hx-look .feature-card .feature-icon { font: 540 var(--tile)/1 var(--serif); letter-spacing: -.03em; color: var(--ox); }
+.hx-look .epic-letter { border-radius: 10px; font: 560 24px/1 var(--serif); }
+.hx-look .highlight-box, .hx-look .security-note, .hx-look .hx10-note { background: var(--rose); border-left: 3px solid var(--ox); border-radius: 0 8px 8px 0; color: var(--ox-d); }
+.hx-look .warning-box, .hx-look .tool-item, .hx-look .alert { background: var(--white); border: 1px solid var(--line); border-left: 3px solid var(--ox); border-radius: 0 10px 10px 0; }
+.hx-look .ga-band { background: var(--sky); border-radius: var(--r); }
+.hx-look .faq-item { border-bottom: 1px solid var(--line); }
+.hx-look .hx10-sec > .faq-item:first-of-type, .hx-look .faq-grid > .faq-item:first-child { border-top: 1px solid rgba(29, 20, 22, .22); }
+.hx-look .faq-question { font: 600 clamp(17px, 1.4vw, 19px)/1.35 var(--display); transition: color .2s; }
+.hx-look .faq-question:hover { color: var(--ox); }
+.hx-look .faq-question::after { width: 32px; height: 32px; border: 1.5px solid var(--ox); border-radius: 50%; background: none; color: var(--ox); font: 400 22px/1 var(--display); transition: background .2s, color .2s, transform .25s; }
+.hx-look .faq-item.open .faq-question::after, .hx-look .faq-question.active::after { background: var(--ox); color: #FFF8F4; font-size: 16px; transform: rotate(90deg); }
+.hx-look .pricing-card, .hx-look .code-container, .hx-look .report-container .epic-item, .hx-look .report-container .roadmap-item { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--soft); }
+.hx-look .pricing-card { padding: 24px; }
+.hx-look .plan-name { font: 560 clamp(21px, 1.7vw, 25px)/1.2 var(--serif); letter-spacing: -.012em; }
+.hx-look .price-amount { font-family: var(--serif); font-weight: 540; letter-spacing: -.025em; line-height: 1.05; color: var(--ox); }
+.hx-look .plan-cta, .hx-look .btn-primary, .hx-look .submit-btn, .hx-look .hx10-actions .hx10-primary { min-height: 50px; padding: 12px 22px; background: var(--ox); border: 1.5px solid var(--ox); border-radius: 8px; color: #FFF8F4; font: 600 16px/1.2 var(--display); letter-spacing: 0; text-transform: none; transition: background .2s, border-color .2s, transform .2s, box-shadow .2s; }
+.hx-look .plan-cta:hover, .hx-look .plan-cta:focus-visible, .hx-look .btn-primary:hover, .hx-look .submit-btn:hover:not(:disabled) { background: var(--ox-d); border-color: var(--ox-d); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(100, 18, 32, .22); }
+.hx-look .form-group input:not([type=checkbox]):not([type=radio]), .hx-look .form-group select, .hx-look .form-group textarea { border: 1.5px solid rgba(29, 20, 22, .3); border-radius: 8px; background: #fff; transition: border-color .2s, box-shadow .2s; }
+.hx-look .form-group input:not([type=checkbox]):not([type=radio]):focus, .hx-look .form-group select:focus, .hx-look .form-group textarea:focus { border-color: var(--ox); box-shadow: 0 0 0 3px rgba(100, 18, 32, .14); outline: 0; }
+.hx-look .tab-btn { font: 600 15.5px/1 var(--display); border: 1.5px solid rgba(29, 20, 22, .28); border-radius: 999px; background: var(--white); transition: background .2s, color .2s, border-color .2s; }
+.hx-look .tab-btn.active { background: var(--ox); border-color: var(--ox); color: #FFF8F4; }
+.hx-look .file-location, .hx-look .code-block { font-family: ui-monospace, Consolas, "Courier New", monospace; }
+.hx-look .file-location { border: 1px solid var(--line); border-radius: 10px; }
+.hx-look .code-container { overflow: hidden; }
+.hx-look .code-header { background: #F8F2E9; color: var(--muted); font: 600 14px/1.3 var(--display); letter-spacing: 0; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.hx-look .code-dots, .hx-look .code-dot { display: none; }
+.hx-look .copy-btn { border: 1.5px solid var(--ox); border-radius: 8px; color: var(--ox); font: 600 14px/1 var(--display); }
+.hx-look .copy-btn:hover { background: var(--ox); color: #FFF8F4; }
+.hx-look .sidebar-nav a { font: 500 15px/1.3 var(--display); border-left: 2px solid transparent; }
+.hx-look .sidebar-nav a:hover, .hx-look .sidebar-nav a.active { border-left-color: var(--ox); background: var(--rose); color: var(--ox-d); }
+.hx-look .docs-section h2 { font-size: clamp(27px, 2.6vw, 38px); }
+.hx-look .method-badge { border-radius: 6px; font: 600 13px/1 var(--display); }
+.hx-look .hx9-report-next { border-top: 1px solid var(--line); }
+.hx-look .hx9-report-next a { color: var(--ox); font-weight: 600; }
+.hx-look .report-container .primary-focus { border-radius: 0 8px 8px 0; }
+
+/* ---- Phone spacing pass, 11 Nov 2026: tools hub and connector sites (phones only) ---- */
+@media (max-width: 600px) {
+  .hx-look .hero { padding: 26px 0 38px; }
+  .hx-look .hero h1 { font-size: 34px; line-height: 1.1; }
+  .hx-look .hero .eyebrow { margin-bottom: 14px; }
+  .hx-look .hx-for { font-size: 18px; line-height: 1.55; margin-top: 18px; }
+  .hx-look .hero .ctas, .hx-look .hx11-tool-acts { margin-top: 26px; gap: 10px 22px; }
+  .hx-look .trow { padding: 18px 16px; gap: 8px; }
+  .hx-look .tools li + li { margin-top: 14px; }
+  .hx-look .hxr { padding: 18px 16px; }
+  .hx-look .hx7-strip-row { padding-top: 14px; padding-bottom: 14px; gap: 12px; }
+  .hx-look .pricing-card { padding: 20px 18px; }
+}
