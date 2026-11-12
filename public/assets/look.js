@@ -154,8 +154,8 @@
     for (var i = 0; i < all.length; i++) { if (!all[i].closest('header') && all[i].offsetParent) { btn = all[i]; break; } }
     if (!btn) return;
     var row = btn.parentElement; row.style.marginTop = '';
-    if (window.innerWidth > 600) return;
-    var vh = window.innerHeight, top = vh / 2 - 26, bottom = vh / 2 + 26, left = window.innerWidth - 8 - 180;
+    if (window.innerWidth > 767) return; // phones and small tablets show the pill as a 44 px tab on the right edge (phone-tab 20261112)
+    var vh = window.innerHeight, top = vh / 2 - 26, bottom = vh / 2 + 26, left = window.innerWidth - 48;
     var r = btn.getBoundingClientRect(), y = r.top + window.pageYOffset;
     if (y < bottom && y + r.height > top && r.right > left) {
       var cur = parseFloat(getComputedStyle(row).marginTop) || 0;
