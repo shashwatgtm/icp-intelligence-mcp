@@ -105,7 +105,7 @@
   //    because every answer opens in ChatGPT. The panel inside takes the same paper, fonts and soft corners as the page. The pill and panel live in the launcher's own shadow root, which page CSS
   //    cannot reach, so one style rule is added there and the label is set from here. The launcher file is not changed.
   //    "Ask Shashwat" (the booking page) keeps its own words and gets no mark.
-  var NAMES = { 'Ask Helix': 'ChatGPT assistant', 'Ask about this tool': 'ChatGPT assistant' };
+  var NAMES = { 'Ask Helix': 'ChatGPT assistant', 'Ask about this tool': 'ChatGPT assistant', 'Ask Shashwat': 'ChatGPT assistant' };
   var label = function (btn) {
     var t = (btn.textContent || '').trim();
     if (btn.querySelector('.hx-gpt')) { if (t === 'ChatGPT assistant') return; }
@@ -133,7 +133,7 @@
       var st = document.createElement('style'); st.setAttribute('data-look', '');
       st.textContent = 'button.launcher{display:inline-flex;align-items:center;gap:8px;background:#FFFDF9;border:1.5px solid #641220;color:#641220;font-weight:600;box-shadow:0 4px 16px rgba(60,20,28,.18)}button.launcher:hover{background:#F3EADF}button.launcher .hx-gpt{width:18px;height:18px;flex:none;color:#641220}@media (max-width:600px){button.launcher{padding:9px 14px;font-size:13px;gap:6px}button.launcher .hx-gpt{width:16px;height:16px}}' +
         ':host{font-family:"Instrument Sans",Arial,sans-serif;color:#1D1416}.panel{background:#FBF7F1;border:1px solid rgba(100,18,32,.28);border-top:3px solid #641220;border-radius:16px;box-shadow:0 18px 50px rgba(60,20,28,.18)}.heading{padding:14px 16px;border-bottom:1px solid #EADFD6}h2{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:21px;letter-spacing:-.01em;color:#1D1416}.close{border-radius:999px;border:1px solid rgba(100,18,32,.35);background:#FFFDF9;color:#641220;font-weight:600;padding:6px 12px}.panel-body{padding:12px 16px}.roles{gap:6px}.roles button{border-radius:999px;border:1px solid rgba(100,18,32,.3);background:#FFFDF9;color:#641220;font-weight:600;padding:5px 12px}.roles button[aria-pressed=true]{background:#641220;border-color:#641220;color:#FFFDF9}label{font-weight:600;color:#1D1416;font-size:13px}textarea,select{border-radius:12px;border:1px solid #D9CBC2;background:#FFFDF9;color:#1D1416;padding:10px 12px}.topics{gap:8px}.topics button{border-radius:12px;border:1px solid #E3D3CA;background:#F3EADF;color:#3C2622;font-weight:600;padding:8px 10px}.topics button:hover,.roles button:hover,.close:hover,.secondary:hover{background:#EFE2D4}.roles button[aria-pressed=true]:hover{background:#4d0d18}.panel-actions{background:#F3EADF;border-top:1px solid #EADFD6;padding:12px 16px}.primary{border-radius:12px;background:#641220;border-color:#641220;color:#FFFDF9;font-weight:600;min-height:46px}.primary:hover{background:#4d0d18}.consult,.secondary{border-radius:999px;background:#FFFDF9;border-color:rgba(100,18,32,.35);color:#641220}.note,.role-note{color:#5A4B4E}.text-link,.setup,.next a{color:#8A1C2B}.address,.command{background:#F3EADF;border-radius:8px}@media (max-width:480px){h2{font-size:19px}.heading{padding:10px 12px}.panel-body,.panel-actions{padding:10px 12px}}' +
-        ':host{width:min(440px,calc(100vw - 20px))}.panel{max-height:min(640px,var(--helix-panel-height,calc(100dvh - 76px)))}.heading{padding:10px 14px}h2{font-size:18px;line-height:1.2}.panel-body{min-height:200px;scrollbar-width:thin;scrollbar-color:#641220 #F3EADF;background:linear-gradient(#FBF7F1 30%,rgba(251,247,241,0)) top/100% 28px no-repeat local,linear-gradient(rgba(251,247,241,0),#FBF7F1 70%) bottom/100% 28px no-repeat local,radial-gradient(farthest-side at 50% 0,rgba(60,20,28,.22),rgba(60,20,28,0)) top/100% 10px no-repeat scroll,radial-gradient(farthest-side at 50% 100%,rgba(60,20,28,.28),rgba(60,20,28,0)) bottom/100% 12px no-repeat scroll;background-color:#FBF7F1}.panel-body::-webkit-scrollbar{width:8px}.panel-body::-webkit-scrollbar-thumb{background:#641220;border-radius:8px}.panel-body::-webkit-scrollbar-track{background:#F3EADF}.panel-actions{padding:8px 14px}.panel-actions .note{margin:4px 0;font-size:11.5px;line-height:1.35}.primary{min-height:42px}.extras{margin-top:2px}@media (max-height:760px){.panel-actions .note:first-child{display:none}}';
+        ':host{width:min(440px,calc(100vw - 20px))}.panel{max-height:min(640px,calc(100dvh - 96px))}.heading{padding:10px 14px}h2{font-size:18px;line-height:1.2}.panel-body{min-height:200px;scrollbar-width:thin;scrollbar-color:#641220 #F3EADF;background:linear-gradient(#FBF7F1 30%,rgba(251,247,241,0)) top/100% 28px no-repeat local,linear-gradient(rgba(251,247,241,0),#FBF7F1 70%) bottom/100% 28px no-repeat local,radial-gradient(farthest-side at 50% 0,rgba(60,20,28,.22),rgba(60,20,28,0)) top/100% 10px no-repeat scroll,radial-gradient(farthest-side at 50% 100%,rgba(60,20,28,.28),rgba(60,20,28,0)) bottom/100% 12px no-repeat scroll;background-color:#FBF7F1}.panel-body::-webkit-scrollbar{width:8px}.panel-body::-webkit-scrollbar-thumb{background:#641220;border-radius:8px}.panel-body::-webkit-scrollbar-track{background:#F3EADF}.panel-actions{padding:8px 14px}.panel-actions .note{margin:4px 0;font-size:11.5px;line-height:1.35}.primary{min-height:42px}.extras{margin-top:2px}@media (max-height:760px){.panel-actions .note:first-child{display:none}}';
       host.shadowRoot.appendChild(st);
     }
     label(btn);
@@ -147,6 +147,25 @@
     var mo = new MutationObserver(function () { if (tint()) mo.disconnect(); });
     mo.observe(document.body, { childList: true, subtree: true });
   }
+
+// 2a. phones: keep the hero button clear of the pill (fixes B, 12 Nov 2026). The pill is centred on the right edge, so its band is known before it shows.
+  var clearPill = function () {
+    var btn = null, all = document.querySelectorAll('.hx-hero a.hx-btn, .hx-hero a.btn, section.hero a.hx-btn, section.hero a.btn, .hero-grid a.hx-btn, .hero-grid a.btn');
+    for (var i = 0; i < all.length; i++) { if (!all[i].closest('header') && all[i].offsetParent) { btn = all[i]; break; } }
+    if (!btn) return;
+    var row = btn.parentElement; row.style.marginTop = '';
+    if (window.innerWidth > 600) return;
+    var vh = window.innerHeight, top = vh / 2 - 26, bottom = vh / 2 + 26, left = window.innerWidth - 8 - 180;
+    var r = btn.getBoundingClientRect(), y = r.top + window.pageYOffset;
+    if (y < bottom && y + r.height > top && r.right > left) {
+      var cur = parseFloat(getComputedStyle(row).marginTop) || 0;
+      row.style.marginTop = (cur + bottom + 10 - y) + 'px';
+    }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', clearPill, { once: true }); else clearPill();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(clearPill);
+  var lastW = window.innerWidth;
+  window.addEventListener('resize', function () { if (window.innerWidth !== lastW) { lastW = window.innerWidth; clearPill(); } });
 
   // 2b. guides filter dropdowns: after a choice, fold the list away
   document.addEventListener('change', function (e) {

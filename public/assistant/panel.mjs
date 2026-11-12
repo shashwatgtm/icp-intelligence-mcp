@@ -115,7 +115,7 @@ if (!document.getElementById('helix-assistant-launcher') && !excluded(path) && (
  function render(){
   const nextMode=baseMode();if(nextMode!==mode){questionsByMode[mode]=question.value;question.value=questionsByMode[nextMode]||'';}mode=nextMode;
   question.placeholder=mode==='D'?'What is stopping you from connecting?':'What decision do you need to make?';host.dataset.mode=mode;host.dataset.result=hasResult()?'ready':'empty';
-  next.hidden=mode!=='E'||!hasResult();launcher.textContent=mode==='B'?'Work with Shashwat':mode==='E'?'Use this tool':'Find your tool';
+  next.hidden=mode!=='E'||!hasResult();launcher.textContent='Ask Helix';
   heading.textContent=mode==='D'?'Which app do you use?':mode==='E'?(tool?.title||document.querySelector('h1')?.textContent||'This tool'):mode==='B'?'Work through your GTM decision':'What are you trying to work out?';
   consult.hidden=mode!=='B';usp.hidden=mode==='B'||mode==='D';findTool.hidden=mode!=='A';
   usp.textContent=mode==='E'?'This tool uses fixed rules, so the same inputs give the same result. AI then helps you act on it.':'Plain AI can change its answer each time. Helix tools use fixed rules, so the same inputs give the same result.';

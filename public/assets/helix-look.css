@@ -946,3 +946,9 @@ html.hx-look .gd-hub .gd-filter.lk-shut:hover .gd-pills input:checked + label sp
   .hx-look .hx7-strip-row { padding-top: 14px; padding-bottom: 14px; gap: 12px; }
   .hx-look .pricing-card { padding: 20px 18px; }
 }
+
+/* Phone first screen, 12 Nov 2026 (red team B): the main button sits straight under the "For ... The decision" line, above the cookie bar; the longer lede follows it. */
+@media (max-width: 600px) {
+  .hero-grid > .hx10-split-text { display: flex; flex-direction: column; }
+  .hero-grid > .hx10-split-text > .hx10-actions, .hero-grid > .hx10-split-text > .ctas { order: -1; margin-top: 4px; margin-bottom: 18px; }
+}
