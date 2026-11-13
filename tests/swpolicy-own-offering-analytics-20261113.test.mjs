@@ -26,6 +26,8 @@ test('own offering described as software or analytics is a GTM question, in ever
     'What is the best go-to-market for analytics software sold to telcos?',
     'Pick inbound or outbound for our AI app that helps ITeS firms run service desks.',
     'Which is better for a cloud security platform: channel partners or direct sales?',
+    'Which customers should we target first with our software: banks or insurers?',
+    'How do we position our software for customer success teams?',
   ]) assert.equal(classifySoftwareQuestion({notes: q}), 'none', q);
 });
 
@@ -49,6 +51,7 @@ test('choosing software for the user to buy is still referred or declined, in ev
 
 test('analytics routing: exact, same meaning and opposite, in every vertical', () => {
   assert.equal(classifySoftwareQuestion({notes: 'What is the best analytics tool for us?'}), 'gtm');
+  assert.equal(classifySoftwareQuestion({notes: 'Which customer success analytics platform should our software team buy?'}), 'gtm');
   for (const v of verticals) {
     assert.equal(classifySoftwareQuestion({notes: `What is the best analytics tool for us? We are a ${v} company.`}), 'gtm', v);
     for (const q of [
@@ -57,6 +60,7 @@ test('analytics routing: exact, same meaning and opposite, in every vertical', (
       `Recommend a customer success analytics platform for our ${v} CS team.`,
       `What is the best sales analytics software for a ${v} sales team?`,
       `Which marketing analytics tool fits our ${v} startup?`,
+      `Which customer success analytics platform should our ${v} team buy?`,
     ]) assert.equal(classifySoftwareQuestion({notes: q}), 'gtm', q);
     for (const q of [
       `What is the best data warehouse for our ${v} company?`,

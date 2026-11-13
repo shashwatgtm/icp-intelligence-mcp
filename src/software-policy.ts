@@ -51,9 +51,11 @@ function softwareQuestions(value: unknown): string[] {
     if (/\b(?:not asking|do not recommend|don't recommend|do not suggest|don't suggest|no software recommendations|do not choose|don't choose|do not compare|don't compare)\b/i.test(sentence)) return false;
     if (/\b(?:which|what) (?:(?:go[ -]to[ -]market|GTM)\s+)?(?:motion|operational\s+pain|pain|buyer|customer(?! success)|segment|audience|team|role|persona|people|employee|metric|KPI|strategy|step|action|message|campaign|report|dashboard|workflow|field)s?\b/i.test(sentence)) return false;
     if (/^\s*(?:please\s+)?(?:choose|pick|recommend|suggest|compare)\s+(?:a\s+|the\s+)?(?:(?:go[ -]to[ -]market|GTM)\s+)?(?:motion|strategy|positioning|message)\b/i.test(sentence)) return false;
+    // "customer success" names a GTM software category, not the buyers ("Which customer success analytics platform
+    // should our software team buy?" is a purchase, 13 Nov 2026).
     // These questions concern the seller's product and its market, even when
     // they mention a named competitor or use words such as "better"/"choose".
-    if (/\b(?:how|what|which|who)\b[^.!?]*\b(?:position|market|sell|message|price|differentiate|launch|improve|describe|explain|features?|buyers?|customers?)\b[^.!?]*\b(?:our|my|your) (?:own )?(?:product|solution|offering|software|platform|CRM|ERP|SIEM|TMS|HRIS|CPaaS)\b/i.test(sentence)
+    if (/\b(?:how|what|which|who)\b[^.!?]*\b(?:position|market|sell|message|price|differentiate|launch|improve|describe|explain|features?|buyers?|customers?(?!\s+success))\b[^.!?]*\b(?:our|my|your) (?:own )?(?:product|solution|offering|software|platform|CRM|ERP|SIEM|TMS|HRIS|CPaaS)\b/i.test(sentence)
       || /\b(?:what|which) features?\b[^.!?]*\b(?:our|my|your)\b[^.!?]*\b(?:product|solution|offering)\b/i.test(sentence)
       // "should our software marketing team buy" names a team, not the product.
       || /\b(?:is|does|can|should|would) (?:our|my|your) (?:own )?(?:product|solution|offering|software|platform|CRM|ERP|SIEM|TMS|HRIS|CPaaS)\b(?!\s+(?:[\w-]+\s+)?(?:teams?|departments?)\b)/i.test(sentence)
