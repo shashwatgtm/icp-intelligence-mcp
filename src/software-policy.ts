@@ -25,6 +25,14 @@ const withoutOwnOffering = (sentence: string): string => sentence.replace(OWN_OF
 const NAMED = String.raw`(?:HubSpot|Salesforce|Marketo|Clari|Gong|ZoomInfo|Apollo|6sense|Outreach|Salesloft|Demandbase|Gainsight|ChurnZero|Semrush|Ahrefs|ON24|PartnerStack|Crossbeam|Snowflake|BigQuery|Redshift|Databricks|Splunk|Sentinel|CrowdStrike|SentinelOne|Datadog|New Relic|Stripe|Adyen|Razorpay|Twilio|Zendesk|Freshdesk|ServiceNow|Workday|Rippling)`;
 const NAMED_PAIR = new RegExp(String.raw`\b${NAMED}\s+or\s+${NAMED}\b`, 'i');
 
+// Search-style requests have no question mark and no "which" or "what"
+// (red team, 14 Nov 2026): "best marketing analytics tool", "best data
+// warehouse for us", "top CRM for us", "recommended outbound software". The
+// whole sentence must be the request: a leading best, top or recommended, a few
+// words, a software noun, and at most "for us" (or our or my team). A product
+// description such as "Top route planning software for 3PLs" stays evidence.
+const SEARCH_STYLE = new RegExp(String.raw`^\s*(?:the\s+)?(?:best|top|recommended)\s+(?:[\w&-]+\s+){0,4}?(?:tools?|software|platforms?|apps?|vendors?|providers?|solutions?|suites?|systems?|stack|CRM|ERP|SIEM|SOAR|EDR|XDR|CDP|HRIS|HRMS|HCM|ATS|TMS|WMS|CPaaS|CCaaS|iPaaS|ITSM|BI|CPQ|data warehouses?|data lakes?|lakehouses?|databases?|payment gateways?|payment processors?|cloud providers?|help ?desks?|service desks?|marketing automation|sales engagement|intent data|enrichment)(?:\s+(?:for|to use for)\s+(?:us|me|(?:our|my)\s+(?:[\w-]+\s+){0,3}?(?:teams?|compan(?:y|ies)|business(?:es)?|startups?|firms?)))?(?:\s+teams?)?\s*[.!?]?\s*$`, 'i');
+
 function softwareQuestions(value: unknown): string[] {
   const texts: string[] = [];
   const visit = (x: unknown): void => {
@@ -62,12 +70,13 @@ function softwareQuestions(value: unknown): string[] {
       || /\b(?:buyers?|customers?)\b[^.!?]*\bchoose (?:our|my|your)\b/i.test(sentence)) return false;
     // Require a question or a request: past switches and supplied rival names
     // remain evidence, including "we chose the better CRM last year".
-    if (!/\?|^\s*(?:(?:please|can you|could you|help (?:me|us)(?: to)?)\s+)?(?:recommend|suggest|shortlist|choose|decide|pick|compare|which|what|should|shall|advise)\b|\b(?:any|need|want|looking for)\s+(?:a\s+)?(?:recommendations?|suggestions?|advice)\b/i.test(sentence)) return false;
+    if (!SEARCH_STYLE.test(sentence) && !/\?|^\s*(?:(?:please|can you|could you|help (?:me|us)(?: to)?)\s+)?(?:recommend|suggest|shortlist|choose|decide|pick|compare|which|what|should|shall|advise)\b|\b(?:any|need|want|looking for)\s+(?:a\s+)?(?:recommendations?|suggestions?|advice)\b/i.test(sentence)) return false;
     return /\bwhich\b/i.test(sentence)
       || /\bwhat\b[^.!?]*\b(?:buy|choose|use|adopt|switch|replace|keep|avoid|recommend|suggest|best|better|alternative|fits?|suits?)\b/i.test(sentence)
       || /\b(?:recommend(?:ations?)?|suggest(?:ions?)?|shortlist|choose|decide|pick|compare|advice|advise)\b/i.test(sentence)
       || /\b(?:better|worse|best|worst|worth|alternative|alternatives|versus|vs\.?)\b/i.test(sentence)
       || NAMED_PAIR.test(sentence)
+      || SEARCH_STYLE.test(sentence)
       || /\b(?:should|shall|can|could|would|do) (?:I|we|our team)\b[^.!?]{0,100}\b(?:buy|use|choose|adopt|switch|replace|migrate|keep|retain|stay|avoid|drop|renew|move|leave|stop|stick)\b/i.test(sentence);
   });
 }
@@ -75,7 +84,7 @@ function softwareQuestions(value: unknown): string[] {
 
 // Categories name the advice requested, independently of the seller's vertical.
 // Explicit categories take precedence over ambiguous product names (e.g. Dynamics).
-const GTM_CATEGORY = /\b(?:CRM|marketing automation|sales engagement|ABM|account.based marketing|intent data|enrichment|revenue intelligence|conversation intelligence|CPQ|customer success (?:platforms?|software|tools?)|(?:marketing|sales|revenue|pipeline|campaign|demand (?:gen|generation)|customer success|CS|go[ -]to[ -]market|GTM) analytics|analytics for (?:marketing|sales|marketing and sales|demand (?:gen|generation)|customer success|go[ -]to[ -]market|GTM)|content (?:tools?|software|platforms?)|SEO(?: tools?| software| platforms?)?|events? (?:tools?|software|platforms?)|webinar(?: tools?| software| platforms?)?|partner (?:tools?|software|platforms?|relationship management))\b/i;
+const GTM_CATEGORY = /\b(?:CRM|marketing automation|sales engagement|(?:outbound|prospecting|sales prospecting) (?:tools?|software|platforms?)|ABM|account.based marketing|intent data|enrichment|revenue intelligence|conversation intelligence|CPQ|customer success (?:platforms?|software|tools?)|(?:marketing|sales|revenue|pipeline|campaign|demand (?:gen|generation)|customer success|CS|go[ -]to[ -]market|GTM) analytics|analytics for (?:marketing|sales|marketing and sales|demand (?:gen|generation)|customer success|go[ -]to[ -]market|GTM)|content (?:tools?|software|platforms?)|SEO(?: tools?| software| platforms?)?|events? (?:tools?|software|platforms?)|webinar(?: tools?| software| platforms?)?|partner (?:tools?|software|platforms?|relationship management))\b/i;
 const OUTSIDE_CATEGORY = /\b(?:data warehouses?|data lakes?|lakehouses?|SIEM|SOAR|EDR|XDR|ERP|HRIS|HRMS|HCM|ATS|TMS|WMS|CPaaS|CCaaS|iPaaS|ITSM|BI|cloud(?: infrastructure| platforms?| providers?)?|payroll|developer tools?|security (?:tools?|tooling|software|platforms?)|payment gateways?|payment processors?|observability|APM|monitoring|accounting|help ?desks?|service desks?|project management|vector databases?|feature stores?|model serving|MLOps|LLMOps|identity providers?|API gateways?|fleet management|route planning|procurement|billing|ecommerce|e-commerce)\b/i;
 // Owner decision, 13 Nov 2026: a plain analytics tool question ("What is the
 // best analytics tool for us?") is a GTM stack question and goes to the
