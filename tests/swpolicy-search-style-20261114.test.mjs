@@ -69,3 +69,45 @@ test('through the MCP handler: the four owner sentences without "?" get the book
     assert.equal(await call(name, args(q)), expected === 'gtm' ? SOFTWARE_REFERRAL : SOFTWARE_OUTSIDE_SCOPE, name + ': ' + q);
   }
 });
+
+// Red team round 2, 14 Nov 2026, finding A: SEARCH_STYLE reads the sentence as
+// typed. Removing "for Shopify brands" first turned sellers' own taglines into
+// bare requests. "Best X for Y" is the most common SaaS tagline: it must be
+// answered, while the four owner sentences above still book or decline.
+const TAGLINES = [
+  'Best marketing analytics tool for Shopify brands. Try it free for 14 days.',
+  'Best marketing automation for SaaS startups',
+  'Best HR software for Indian startups. Our customers are 50 to 200 person tech firms in Bengaluru.',
+  'Top payroll software for Indian startups',
+  'The best HR software for growing companies',
+];
+
+test('sellers\' own "Best X for Y" taglines are answered, in every vertical', () => {
+  for (const q of TAGLINES) {
+    assert.equal(classifySoftwareQuestion({notes: q}), 'none', q);
+    assert.equal(classifySoftwareQuestion({notes: q.replace(/[.]?$/, '.')}), 'none', q + ' (full stop)');
+  }
+  for (const v of verticals) {
+    for (const q of [
+      `Best marketing analytics tool for ${v} brands. Try it free for 14 days.`,
+      `Best marketing automation for ${v} startups`,
+      `Best HR software for ${v} startups. Our customers are 50 to 200 person tech firms in Bengaluru.`,
+      `Top payroll software for ${v} startups`,
+      `The best HR software for growing ${v} companies`,
+    ]) assert.equal(classifySoftwareQuestion({notes: q}), 'none', q);
+  }
+  // The owner sentences keep their routing next to the taglines.
+  for (const [q, expected] of OWNER) {
+    assert.equal(classifySoftwareQuestion({notes: q}), expected, q);
+    assert.equal(classifySoftwareQuestion({notes: q + '?'}), expected, q + '?');
+  }
+});
+
+test('through the MCP handler: the taglines get an answer, not the booking or the decline', async () => {
+  for (const [name, args] of TOOLS) for (const q of TAGLINES) {
+    const text = await call(name, args(q));
+    assert.ok(text.length > 0, name + ': empty for ' + q);
+    assert.notEqual(text, SOFTWARE_REFERRAL, name + ': ' + q);
+    assert.notEqual(text, SOFTWARE_OUTSIDE_SCOPE, name + ': ' + q);
+  }
+});

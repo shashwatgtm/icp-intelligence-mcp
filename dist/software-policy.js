@@ -57,7 +57,10 @@ function softwareQuestions(value) {
         }
     };
     visit(value);
-    return texts.flatMap(text => text.split(/(?<=[.!?;])\s+|\n/)).map(withoutOwnOffering).filter(sentence => {
+    // SEARCH_STYLE reads the sentence as typed (red team R2 finding A, 14 Nov
+    // 2026). Removing the own-offering phrase first turned a seller's tagline
+    // ("Best HR software for Indian startups") into a bare request.
+    return texts.flatMap(text => text.split(/(?<=[.!?;])\s+|\n/)).map(original => ({ original, sentence: withoutOwnOffering(original) })).filter(({ original, sentence }) => {
         if (!SOFTWARE.test(sentence))
             return false;
         // A labelled differentiation statement is supplied positioning evidence.
@@ -81,16 +84,16 @@ function softwareQuestions(value) {
             return false;
         // Require a question or a request: past switches and supplied rival names
         // remain evidence, including "we chose the better CRM last year".
-        if (!SEARCH_STYLE.test(sentence) && !/\?|^\s*(?:(?:please|can you|could you|help (?:me|us)(?: to)?)\s+)?(?:recommend|suggest|shortlist|choose|decide|pick|compare|which|what|should|shall|advise)\b|\b(?:any|need|want|looking for)\s+(?:a\s+)?(?:recommendations?|suggestions?|advice)\b/i.test(sentence))
+        if (!SEARCH_STYLE.test(original) && !/\?|^\s*(?:(?:please|can you|could you|help (?:me|us)(?: to)?)\s+)?(?:recommend|suggest|shortlist|choose|decide|pick|compare|which|what|should|shall|advise)\b|\b(?:any|need|want|looking for)\s+(?:a\s+)?(?:recommendations?|suggestions?|advice)\b/i.test(sentence))
             return false;
         return /\bwhich\b/i.test(sentence)
             || /\bwhat\b[^.!?]*\b(?:buy|choose|use|adopt|switch|replace|keep|avoid|recommend|suggest|best|better|alternative|fits?|suits?)\b/i.test(sentence)
             || /\b(?:recommend(?:ations?)?|suggest(?:ions?)?|shortlist|choose|decide|pick|compare|advice|advise)\b/i.test(sentence)
             || /\b(?:better|worse|best|worst|worth|alternative|alternatives|versus|vs\.?)\b/i.test(sentence)
             || NAMED_PAIR.test(sentence)
-            || SEARCH_STYLE.test(sentence)
+            || SEARCH_STYLE.test(original)
             || /\b(?:should|shall|can|could|would|do) (?:I|we|our team)\b[^.!?]{0,100}\b(?:buy|use|choose|adopt|switch|replace|migrate|keep|retain|stay|avoid|drop|renew|move|leave|stop|stick)\b/i.test(sentence);
-    });
+    }).map(({ sentence }) => sentence);
 }
 // Categories name the advice requested, independently of the seller's vertical.
 // Explicit categories take precedence over ambiguous product names (e.g. Dynamics).
