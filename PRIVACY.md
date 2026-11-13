@@ -2,7 +2,7 @@
 
 The published version is at https://icp-intelligence.gtmhelix.com/privacy/.
 
-Last updated 29 October 2026
+Last updated 13 November 2026
 
 ## Who we are
 
@@ -25,7 +25,7 @@ ICP Intelligence is built and run by Shashwat Ghosh, Helix GTM Consulting. Conta
 
 Since 17 October 2026, each call to a tool adds one record to a usage count, kept in Netlify's storage for this site. It shows us which tools people use. Each record holds only:
 
-- The date and time of the call.
+- The day of the call (records made before 13 November 2026 also hold the time).
 - This site's name and the tool's name.
 - One word for the kind of app that made the call, such as `claude`, `chatgpt` or `browser`. It is read from the User-Agent header the app sends.
 - Whether the call came from a web form or an AI assistant.
@@ -46,7 +46,7 @@ We do not sell or share data with anyone else.
 
 ## Retention and your rights
 
-We keep no inputs or answers, so there is nothing of yours for us to find, correct or delete. Usage counts have no set end date. They cannot be linked to you, so we cannot find or delete one person's records. Netlify's platform logs are kept by Netlify under its policy. Questions: [shashwat@gtmhelix.com](mailto:shashwat@gtmhelix.com).
+We keep no inputs or answers, so there is nothing of yours for us to find, correct or delete. From 13 November 2026, usage count records keep only the day of the call, not the time, and every record is deleted after 90 days. They cannot be linked to you, so we cannot find or delete one person's records. Netlify's platform logs are kept by Netlify under its policy. Questions: [shashwat@gtmhelix.com](mailto:shashwat@gtmhelix.com).
 
 ## Local version
 
