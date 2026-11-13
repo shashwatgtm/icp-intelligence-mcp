@@ -50,7 +50,7 @@ In Claude, open Customize, then Connectors, select + and then Add custom connect
 
 ### Who built it?
 
-Shashwat Ghosh, Co-Founder and Fractional CMO of Helix GTM Consulting, founded in 2022 in Bengaluru. He has 24+ years in B2B and 10+ years of fractional experience, and created the EPIC, IMPACT and CRAFT frameworks and the Hub-Spoke Brand Messaging Methodology.
+Shashwat Ghosh, Co-Founder and Fractional CMO of Helix GTM Consulting, the brand he has worked under in Bengaluru since 2022. He has 24+ years in B2B and 10+ years of fractional experience, and created the EPIC, IMPACT and CRAFT frameworks and the Hub-Spoke Brand Messaging Methodology.
 
 ### Why do some answers look like templates?
 
