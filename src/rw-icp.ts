@@ -182,6 +182,17 @@ function splitRoles(text: string): string[] {
 }
 const TITLE_RE = /\b(?:chief|head|director|vp|svp|evp|vice president|president|manager|controller|treasurer|analyst|engineer|architect|officer|lead|owner|founder|coordinator|specialist|administrator|advocate|developer|designer|scientist|partner|principal|gm|ceo|cfo|cio|cto|ciso|coo|cmo|cro|cco|cpo|cdo|md)\b/i;
 
+// After a word is taken out of a phrase, a joining word can be left with nothing on one side ("with and an ERP",
+// "with , an ERP", "teams with"): the joining word goes, so every clause that stays has all its words.
+function dropDanglingJoiners(text: string): string {
+  return squash(text
+    .replace(/\b(with|having|using|running|and|or)\s*(?:,\s*)?(?:and|or)\b\s*/gi, '$1 ')
+    .replace(/\b(with|having|using|running)\s*,\s*/gi, '$1 ')
+    .replace(/\s+(?:and|or)\s*(?=[,;.]|$)/gi, '')
+    .replace(/\s+(?:with|having|using|running)\s*(?=[,;.]|$)/gi, ''))
+    .replace(/\s+([,;.])/g, '$1');
+}
+
 export function readProfile(raw: string): ProfileRead {
   const res: ProfileRead = { segments: [], subs: [], teams: [], sizes: [], segSizes: [], allSizes: false, places: [], roles: [], roleNotes: [], roleSource: 'none', problems: [], claims: [], descr: [], outside: [], other: [], hypothetical: false };
   let text = squash(raw);
@@ -246,7 +257,10 @@ export function readProfile(raw: string): ProfileRead {
   else {
     // no buyer clause: a job title mentioned in the text ("with a finance controller") is read as a role mentioned
     const found = titlesIn(body);
-    if (found.length) { res.roles.push(...found); res.roleSource = 'mention'; body = body.replace(new RegExp(`\\s*(?:and\\s+)?(?:an?\\s+|the\\s+)?(?:${found.map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'gi'), ' '); }
+    if (found.length) { res.roles.push(...found); res.roleSource = 'mention'; body = body.replace(new RegExp(`\\s*(?:and\\s+)?(?:an?\\s+|the\\s+)?(?:${found.map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'gi'), ' ');
+      // the title came out of a list ("with a finance controller and an ERP"): no joining word is left without its item,
+      // so the description reads "with an ERP", never "with and an ERP" (13 Nov 2026)
+      body = dropDanglingJoiners(body); }
   }
   // the problem clause runs to the end
   const pm = /(?:,\s*)?\b(?:who|that|which)\s+(?:currently\s+)?(?:face|facing|faces|struggle|struggling|struggles|suffer|suffering|suffers|lose|lack|lacks)\b\s*(?:with |from |:)?\s*(.+)$/i.exec(body)
@@ -542,7 +556,8 @@ export function gapAnalysis(curText: string, idlText: string, d: GapDeps): strin
   } else {
     bottom.push('Neither text names an industry or kind of customer, so the comparison below rests on size, buyer and problem.');
   }
-  if (idl.roles.length) bottom.push(`Your ideal buyer is ${listText(idl.roles.map(cleanRole))}${cur.roles.length ? `; your current base names ${listText(cur.roles.map(cleanRole))}` : '; your current base does not say who bought, so that is the first thing to check in your CRM'}.`);
+  // a job title takes "the" ("Your ideal buyer is the finance controller", not "is finance controller"); two or more take "buyers are" (13 Nov 2026)
+  if (idl.roles.length) bottom.push(`Your ideal ${idl.roles.length > 1 ? 'buyers are' : 'buyer is'} ${listText(idl.roles.map(cleanRole).map(theRole))}${cur.roles.length ? `; your current base names ${listText(cur.roles.map(cleanRole).map(theRole))}` : '; your current base does not say who bought, so that is the first thing to check in your CRM'}.`);
   if (behindRows.length) {
     const worst = [...behindRows].sort((a, b) => num(b.gap) - num(a.gap))[0];
     bottom.push(`On the figures you gave, the largest gap is ${LABEL_TEXT[worst.key] || worst.label} (${worst.gap}).`);
@@ -716,6 +731,7 @@ const num = (g: string) => { const m = /(-?\d+(?:\.\d+)?)/.exec(g); return m ? p
 // a segment as typed, with the semicolon of a list restored to a comma and a leading size word kept
 const cleanSeg = (s: string) => squash(s).replace(/\u0001/g, ',').split(/(\([^)]*\))/).map((part) => (part.startsWith('(') ? part : part.replace(/;\s*/g, ', '))).join('').replace(/\s*\([^)]*\)$/, (m) => (m.length <= 60 ? m : ''));
 const cleanRole = (r: string) => squash(r).replace(/\s*\([^)]*\)\s*$/, '');
+const theRole = (r: string) => /^(?:the|a|an|our|their|your|its|each|every|any)\b/i.test(r) ? r : `the ${r}`;
 // segments for a sentence: "construction industry" is where the other segments work, so it follows them ("owners and general contractors, in the construction industry")
 function segPhrase(segs: string[]): string {
   const clean = segs.map(cleanSeg);
