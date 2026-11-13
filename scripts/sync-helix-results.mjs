@@ -1,12 +1,13 @@
 // Regenerates src/helix-results-html.ts from the reviewed Helix results widget build.
 // Usage: node scripts/sync-helix-results.mjs <gtmhelix-tools-hub checkout>/lane-f/widgets/dist/results.html
 // The file must be byte identical to the reviewed build (sha256 below); any other file is refused.
+// 13 Nov 2026: the pin is the Helix Paper build (connA-20261113/helixpaper/make_results.mjs); rebuild the hub view to match before syncing.
 // Check out the hub with core.autocrlf=false: CRLF line ends change the file and break its CSP hashes.
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-export const RESULTS_SHA256 = '60e3a86d566ce46a452da77112663ce74781a99f7b6f7c7982a1bed98e4e4e62';
+export const RESULTS_SHA256 = '0077f6f3d1893e43de31495af67fe38f51f7cb2d450ca00ef1ba88aae23126c4';
 const source = process.argv[2];
 if (!source) throw new Error('Supply the path to lane-f/widgets/dist/results.html');
 const html = readFileSync(source, 'utf8');
