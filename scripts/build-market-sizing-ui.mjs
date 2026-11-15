@@ -13,7 +13,7 @@ function replace(before, after) {
   html = html.replace(before, () => after);
 }
 const form = '<details id="tool-editor"><summary>Edit inputs</summary><form><div data-fields></div><button type="submit" data-run>Run again</button><button type="button" data-reset>Restore inputs</button><p role="status" aria-live="polite"></p></form></details>';
-replace('</main>', form + '</main>');
+replace('</main>', '</main>' + form);
 replace('</style>', '#tool-editor textarea,#tool-editor input,#tool-editor select,#result textarea{box-sizing:border-box;width:100%;max-width:100%;padding:.55rem;font:inherit;color:inherit;background:var(--paper,#fff);border:1px solid currentColor;border-radius:.4rem}#tool-editor label{display:block;margin:.8rem 0}#tool-editor fieldset{min-width:0;margin:.6rem 0}#tool-editor button{margin:.4rem .5rem .4rem 0}</style>');
 const editorSource = read('ui/market-sizing-editor.js');
 const definition = JSON.stringify(config);
