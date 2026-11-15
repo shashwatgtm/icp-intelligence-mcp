@@ -1,4 +1,4 @@
-# Account prioritization UI review — 30 October 2026
+# Account prioritization UI review - 30 October 2026
 
 Draft source candidate only. Not deployed, not tested inside ChatGPT, and not merge ready until the dependency-dependent checks below pass.
 
@@ -14,8 +14,8 @@ Package and lockfile remain unchanged at version **1.2.26**. Runtime output and 
 
 | Check | Result | Scope and evidence |
 |---|---|---|
-| Pure model differential | PASS — 20 tests | Node 24.19.0; frozen original source Git blob `57bed3ac74874b7f0fc86b6073fca91f307a1681`; exact original formatter templates, 11 calculation/reason/first-five-action cases, neutral package arithmetic 71/B and 48/C, defaults, zero, negative and overflow behavior, literal input allowlist, exact U+00D7 punctuation |
-| Browser | PASS — 18 checks | Windows Chrome through installed playwright-core 1.55.0; local parent-host simulation calls the shared calculation, not SDK transport or ChatGPT. Empty layouts at 320/768/1280, recalculation, factors, zero, three literal round trips, stale success/error, ignored unrelated notifications, reset, keyboard activation, resize, no external requests and no uncaught errors |
+| Pure model differential | PASS - 20 tests | Node 24.19.0; frozen original source Git blob `57bed3ac74874b7f0fc86b6073fca91f307a1681`; exact original formatter templates, 11 calculation/reason/first-five-action cases, neutral package arithmetic 71/B and 48/C, defaults, zero, negative and overflow behavior, literal input allowlist, exact U+00D7 punctuation |
+| Browser | PASS - 18 checks | Windows Chrome through installed playwright-core 1.55.0; local parent-host simulation calls the shared calculation, not SDK transport or ChatGPT. Empty layouts at 320/768/1280, recalculation, factors, zero, three literal round trips, stale success/error, ignored unrelated notifications, reset, keyboard activation, resize, no external requests and no uncaught errors |
 | Source syntax / generated HTML agreement | PASS | `node --check src/index.ts`, `node --check src/account-prioritization.ts`, `node scripts/build-account-prioritization-ui.mjs --check` |
 | Full SDK content-array/metadata/resource differential | NOT_TESTED | The test file is written, but startup fails `ERR_MODULE_NOT_FOUND` for `@modelcontextprotocol/sdk` |
 | TypeScript build and full existing suite | NOT_TESTED | No candidate dependencies; `node node_modules/typescript/bin/tsc` fails `MODULE_NOT_FOUND`. Required SDK is ^1.32.2; discovered caches contain 1.30.1/1.31.0, not the required version |
