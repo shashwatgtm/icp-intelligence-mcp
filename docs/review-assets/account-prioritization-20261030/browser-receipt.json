@@ -1,0 +1,122 @@
+{
+  "runtime": "Windows Chrome with existing playwright-core1.55.0",
+  "scope": "local MCP Apps host simulation using shared model only; not SDK transport or ChatGPT",
+  "checks": [
+    {
+      "name": "empty start has no account or result",
+      "status": "PASS"
+    },
+    {
+      "name": "inline initialization",
+      "status": "PASS"
+    },
+    {
+      "name": "empty layout 320",
+      "status": "PASS"
+    },
+    {
+      "name": "empty layout 768",
+      "status": "PASS"
+    },
+    {
+      "name": "empty layout 1280",
+      "status": "PASS"
+    },
+    {
+      "name": "71 points and tier B",
+      "status": "PASS"
+    },
+    {
+      "name": "factor contributions",
+      "status": "PASS"
+    },
+    {
+      "name": "zero retained and dirty results invalidated",
+      "status": "PASS"
+    },
+    {
+      "name": "three literal round trips and inert rendering",
+      "status": "PASS"
+    },
+    {
+      "name": "delayed success preserves newer edit",
+      "status": "PASS"
+    },
+    {
+      "name": "delayed error preserves newer edit",
+      "status": "PASS"
+    },
+    {
+      "name": "uncorrelated host notification preserves local work",
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero weights refused without call",
+      "status": "PASS"
+    },
+    {
+      "name": "reset invalidates pending reply",
+      "status": "PASS"
+    },
+    {
+      "name": "keyboard add and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "no external network requests",
+      "status": "PASS"
+    },
+    {
+      "name": "no uncaught browser errors",
+      "status": "PASS"
+    },
+    {
+      "name": "natural resize reports changing height",
+      "status": "PASS"
+    }
+  ],
+  "sizes": [
+    {
+      "width": 1264,
+      "height": 1183
+    },
+    {
+      "width": 304,
+      "height": 1735
+    },
+    {
+      "width": 752,
+      "height": 1153
+    },
+    {
+      "width": 1264,
+      "height": 1183
+    },
+    {
+      "width": 1264,
+      "height": 1460
+    },
+    {
+      "width": 1264,
+      "height": 1814
+    },
+    {
+      "width": 1264,
+      "height": 1460
+    },
+    {
+      "width": 1264,
+      "height": 1814
+    },
+    {
+      "width": 1264,
+      "height": 1460
+    },
+    {
+      "width": 1264,
+      "height": 1183
+    }
+  ],
+  "external": [],
+  "errors": []
+}
