@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.shashwatgtm/icp-intelligence-mcp",
+  "title": "ICP Intelligence by Helix",
+  "description": "Build an ideal customer profile, size a B2B market and rank target accounts.",
+  "websiteUrl": "https://icp-intelligence.gtmhelix.com/",
+  "repository": {
+    "url": "https://github.com/shashwatgtm/icp-intelligence-mcp",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://icp-intelligence.gtmhelix.com/apple-touch-icon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "180x180"
+      ]
+    }
+  ],
+  "version": "1.2.27",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@shashwatgtmalpha/icp-intelligence-mcp",
+      "version": "1.2.27",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://icp-intelligence.gtmhelix.com/mcp"
+    }
+  ]
+}
