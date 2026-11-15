@@ -1,0 +1,236 @@
+{
+  "baseline": "7ccaff43c905f76c7ab0117bc7e0e37bb3aa2102",
+  "originalPr": "988f00fc3b6a6f0f6920e613b235c2ae16a38321",
+  "cases": [
+    {
+      "label": "coordinator synthetic review fixture",
+      "args": {
+        "total_potential_companies": 10000,
+        "average_contract_value": 5000,
+        "icp_percentage": 40,
+        "year1_market_share_target": 2,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "f6d31cd95cf33912b077e5fcd8c06013c579ee34295af1bc25d4d5a095a5679e",
+      "isError": false,
+      "releaseTextSha256": "f6d31cd95cf33912b077e5fcd8c06013c579ee34295af1bc25d4d5a095a5679e"
+    },
+    {
+      "label": "ordinary different values",
+      "args": {
+        "total_potential_companies": 217,
+        "average_contract_value": 2400,
+        "icp_percentage": 37.5,
+        "year1_market_share_target": 0.03,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "f0e6edec017ebd96352c3f07e7df5745e6bf4c2e38e460ac978c7be85f77df5c",
+      "isError": false,
+      "releaseTextSha256": "f0e6edec017ebd96352c3f07e7df5745e6bf4c2e38e460ac978c7be85f77df5c"
+    },
+    {
+      "label": "omitted optional rates",
+      "args": {
+        "total_potential_companies": 100,
+        "average_contract_value": 5000
+      },
+      "textSha256": "f698000aa6a6956500f9fd6e8f2ea93934b4ce62e80c6acbe5d484a76bc4b626",
+      "isError": false,
+      "releaseTextSha256": "f698000aa6a6956500f9fd6e8f2ea93934b4ce62e80c6acbe5d484a76bc4b626"
+    },
+    {
+      "label": "null optional rates",
+      "args": {
+        "total_potential_companies": 100,
+        "average_contract_value": 5000,
+        "icp_percentage": null,
+        "year1_market_share_target": null
+      },
+      "textSha256": "f698000aa6a6956500f9fd6e8f2ea93934b4ce62e80c6acbe5d484a76bc4b626",
+      "isError": false,
+      "releaseTextSha256": "f698000aa6a6956500f9fd6e8f2ea93934b4ce62e80c6acbe5d484a76bc4b626"
+    },
+    {
+      "label": "null ICP and zero share",
+      "args": {
+        "total_potential_companies": 10000,
+        "average_contract_value": 5000,
+        "icp_percentage": null,
+        "year1_market_share_target": 0,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "cc3ff89dc6ffa12b89bac5451ce7647e084190a2b6d66988ecad129d9eb69f45",
+      "isError": false,
+      "releaseTextSha256": "cc3ff89dc6ffa12b89bac5451ce7647e084190a2b6d66988ecad129d9eb69f45"
+    },
+    {
+      "label": "zero companies",
+      "args": {
+        "total_potential_companies": 0,
+        "average_contract_value": 5000,
+        "icp_percentage": 40,
+        "year1_market_share_target": 2,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "897ebc9edee0d0b2b2e891058606d27129b9f230ef6d5579793accf45ae1bb0b",
+      "isError": false,
+      "releaseTextSha256": "897ebc9edee0d0b2b2e891058606d27129b9f230ef6d5579793accf45ae1bb0b"
+    },
+    {
+      "label": "zero ICP",
+      "args": {
+        "total_potential_companies": 10000,
+        "average_contract_value": 5000,
+        "icp_percentage": 0,
+        "year1_market_share_target": 2,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "da4c69067f677da5daf9219a2e16b47813a65cc84cc67d10eceba78bf0692abe",
+      "isError": false,
+      "releaseTextSha256": "da4c69067f677da5daf9219a2e16b47813a65cc84cc67d10eceba78bf0692abe"
+    },
+    {
+      "label": "zero share",
+      "args": {
+        "total_potential_companies": 10000,
+        "average_contract_value": 5000,
+        "icp_percentage": 40,
+        "year1_market_share_target": 0,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "e907f0198971e38a7fe4a46b1255d7ccdc7abc7036465f156e136c0d14ffe845",
+      "isError": false,
+      "releaseTextSha256": "e907f0198971e38a7fe4a46b1255d7ccdc7abc7036465f156e136c0d14ffe845"
+    },
+    {
+      "label": "numeric strings accepted by core validator",
+      "args": {
+        "total_potential_companies": "10,000",
+        "average_contract_value": "5000",
+        "icp_percentage": "40",
+        "year1_market_share_target": "2",
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "f6d31cd95cf33912b077e5fcd8c06013c579ee34295af1bc25d4d5a095a5679e",
+      "isError": false,
+      "releaseTextSha256": "f6d31cd95cf33912b077e5fcd8c06013c579ee34295af1bc25d4d5a095a5679e"
+    },
+    {
+      "label": "sub-dollar values",
+      "args": {
+        "total_potential_companies": 1,
+        "average_contract_value": 0.001,
+        "icp_percentage": 40,
+        "year1_market_share_target": 2,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "34aa8367819bc7c8122df1313a6cbceacf88f70a13ac68a4c04c04c739b3ff73",
+      "isError": false,
+      "releaseTextSha256": "34aa8367819bc7c8122df1313a6cbceacf88f70a13ac68a4c04c04c739b3ff73"
+    },
+    {
+      "label": "small finite values",
+      "args": {
+        "total_potential_companies": 1e-200,
+        "average_contract_value": 1e-100,
+        "icp_percentage": 40,
+        "year1_market_share_target": 2,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "0a6c97d2e2e2ca5731b4bccd1c71778e5541256eeefdc885991b342ab9d4cc0f",
+      "isError": false,
+      "releaseTextSha256": "0a6c97d2e2e2ca5731b4bccd1c71778e5541256eeefdc885991b342ab9d4cc0f"
+    },
+    {
+      "label": "extreme finite overflow",
+      "args": {
+        "total_potential_companies": 1e+308,
+        "average_contract_value": 5000,
+        "icp_percentage": 40,
+        "year1_market_share_target": 2,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "b94031ea43bbfd9f54adca758bc80c61ee74523906ed11ad9fd5606c18055a80",
+      "isError": false,
+      "releaseTextSha256": "b94031ea43bbfd9f54adca758bc80c61ee74523906ed11ad9fd5606c18055a80"
+    },
+    {
+      "label": "overflow with zero ICP",
+      "args": {
+        "total_potential_companies": 1e+308,
+        "average_contract_value": 5000,
+        "icp_percentage": 0,
+        "year1_market_share_target": 2,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "638646744466fc574085079d85151ab7abfcc5161401c36f147897dc35ec6116",
+      "isError": false,
+      "releaseTextSha256": "638646744466fc574085079d85151ab7abfcc5161401c36f147897dc35ec6116"
+    },
+    {
+      "label": "overflow with zero share",
+      "args": {
+        "total_potential_companies": 1e+308,
+        "average_contract_value": 5000,
+        "icp_percentage": 40,
+        "year1_market_share_target": 0,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "e70eec9d7559d21ea255430d552a7960937e7e62470051854cb6525178806c9a",
+      "isError": false,
+      "releaseTextSha256": "e70eec9d7559d21ea255430d552a7960937e7e62470051854cb6525178806c9a"
+    },
+    {
+      "label": "large finite supported result",
+      "args": {
+        "total_potential_companies": 1e+300,
+        "average_contract_value": 1,
+        "icp_percentage": 40,
+        "year1_market_share_target": 2,
+        "data_sources": "Synthetic test inputs only, not company or market findings",
+        "segment_name": "B2B software test segment",
+        "product_category": "CRM software",
+        "company": "Sample supplier"
+      },
+      "textSha256": "1cde633a80aaa34aa14d71ea126d077fcefd36137e56f42c90f44122039e07b9",
+      "isError": false,
+      "releaseTextSha256": "1cde633a80aaa34aa14d71ea126d077fcefd36137e56f42c90f44122039e07b9"
+    }
+  ]
+}
