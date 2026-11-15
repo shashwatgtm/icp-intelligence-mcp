@@ -17,9 +17,8 @@ def labeled_number(s, label, expected, tolerance=0.01):
     # Require a label and its value on the same line. Reject conflicting values.
     values = []
     for line in s.replace('**', '').splitlines():
-        m = re.search(r'\b' + label + r'\b\s*[*:|=\s]*(?:USD\s*)?\$?(\d[\d,]*(?:\.\d+)?\s*(?:million|thousand|[mk])?)(?!\w)', line, re.I)
-        if m:
-            values.append(amount(m[1]))
+        for match in re.finditer(r'\b' + label + r'\b\s*[*:|=\s]*(?:USD\s*)?\$?(\d[\d,]*(?:\.\d+)?\s*(?:million|thousand|[mk])?)(?!\w)', line, re.I):
+            values.append(amount(match[1]))
     return bool(values) and all(v is not None and abs(v - expected) <= tolerance for v in values)
 
 
@@ -97,9 +96,6 @@ def invented_testimony(s, args):
     for line in s.splitlines():
         if not re.search(r'["“].+?["”]', line):
             continue
-        # Interview questions, common objections and quote requests are guidance.
-        if re.search(r'interview question|common reaction|ask for|request (?:a |one )?quote|quote to (?:request|collect)', line, re.I):
-            continue
         attributed = re.search(r'(?:customer|client|\bCEO\b|\bCFO\b|\bCTO\b|\bCHRO\b).{0,40}(?:said|says|told|reported)|(?:said|says|testimonial|customer quote)\s*:', line, re.I)
         customer = args.get('customer_name', '')
         if customer:
@@ -109,9 +105,14 @@ def invented_testimony(s, args):
             return True
     words = section(s, r'In Their Words|Customer (?:Quote|Testimonial)')
     for line in words.splitlines():
-        if re.search(r'no customer_quote|ask|request|approval|to (?:add|collect)|not (?:given|supplied)', line, re.I):
+        # A request or publication note after an asserted quote cannot qualify it.
+        quote = re.search(r'["“]([^"”]+)["”]|^\s*>\s*(.+)', line)
+        if not quote:
             continue
-        if re.search(r'["“].+?["”]|^\s*>', line) and not re.search(r'\?\s*["”]?\s*$', line):
+        prefix = line[:quote.start()]
+        guidance = re.match(r'^\s*(?:[-*]\s*)?(?:ask\b|request\b|interview question\b|quote to (?:request|collect)\b)', prefix, re.I)
+        quoted_text = (quote[1] or quote[2]).strip()
+        if not guidance and not quoted_text.endswith('?'):
             return True
     return False
 

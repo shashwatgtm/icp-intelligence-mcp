@@ -48,6 +48,20 @@ DEFECTS = {
 
 
 class GraderTests(unittest.TestCase):
+    def test_roi_contradiction_on_one_line(self):
+        response = {'content': [{'type':'text', 'text':GOOD['roi'] + '\nROI: 50%; corrected ROI: 150%'}]}
+        self.assertFalse(grade('roi', response)[0])
+
+    def test_market_contradiction_on_one_line(self):
+        response = {'content': [{'type':'text', 'text':GOOD['market'] + '\nTAM: USD 50,000,000; corrected TAM: USD 5,000,000'}]}
+        self.assertFalse(grade('market', response)[0])
+
+    def test_testimony_followed_by_approval_request(self):
+        quote = 'The customer said "We saved time." Ask for approval before publication.'
+        response = {'content': [{'type':'text', 'text':GOOD['case-study'] + '\n## In Their Words\n' + quote}]}
+        self.assertFalse(grade('case-study', response)[0])
+
+
     pass
 
 
