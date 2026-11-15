@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-tGmh9oS3NsvA2oXGFlRJpck8WHklnd0KfdntD/0LQIo='; style-src 'sha256-LJd9MSzvMtb5l8HPJ7qkHQ3toiOykXgqT1m2Vb59ykE='; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'"><title>Helix GTM Consulting result</title><style>/* Shared Helix worksheet identity and evidence presentation. */
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-SGV99XrWAeB4XQeBAh7ExGfOirSbOwvvyNvjPeiBA24='; style-src 'sha256-LJd9MSzvMtb5l8HPJ7qkHQ3toiOykXgqT1m2Vb59ykE='; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'"><title>Helix GTM Consulting result</title><style>/* Shared Helix worksheet identity and evidence presentation. */
 :root {
   --ox: #641220;
   --signal: #c1121f;
@@ -1082,6 +1082,7 @@ function createResultEditor(panel, config, bridge) {
       input = element('textarea');
       input.rows = spec.long ? 4 : 2;
     }
+    input.name = key;
     input.required = required;
     label.append(input);
     return {
@@ -1109,6 +1110,16 @@ function createResultEditor(panel, config, bridge) {
     const args = {};
     for (const [key, control] of controls) {
       const value = control.get();
+      const spec = config.fields[key];
+      if (value === undefined && config.required.includes(key)) {
+        status.textContent = 'Enter ' + spec.label.toLowerCase() + '.';
+        return;
+      }
+      if (value !== undefined && spec.type === 'number' &&
+          (!Number.isFinite(value) || value < spec.min || value > spec.max || value <= spec.exclusiveMin)) {
+        status.textContent = 'Check the value for ' + spec.label.toLowerCase() + '.';
+        return;
+      }
       if (value !== undefined) args[key] = value;
     }
     const current = ++requestNumber;
@@ -1733,7 +1744,7 @@ function marketSummary(args) {
     const lines = [...summary.figures.map(f=>f.label+': '+f.display+(f.example?' (example)':'')), 'Source: '+summary.sourceNote];
     return {_meta:{plainText:lines.join('\n'),title:'Market sizing',marketSizing:summary,sections:[],toolArguments:args}};
   }
-  const editor = createResultEditor($("tool-editor"), {"tool":"tam_sam_som_calculator","fields":{"total_potential_companies":{"label":"Potential buying companies","type":"number","min":0},"average_contract_value":{"label":"Annual contract value (USD)","type":"number"},"icp_percentage":{"label":"ICP match (%)","type":"number","min":0,"max":100},"year1_market_share_target":{"label":"Year one share (%)","type":"number","min":0,"max":100},"data_sources":{"label":"Basis for the estimate"},"segment_name":{"label":"Segment name"},"product_category":{"label":"Product category"},"company":{"label":"Company"}},"required":["total_potential_companies","average_contract_value"]}, {
+  const editor = createResultEditor($("tool-editor"), {"tool":"tam_sam_som_calculator","fields":{"total_potential_companies":{"label":"Potential buying companies","type":"number","min":0},"average_contract_value":{"label":"Annual contract value (USD)","type":"number","exclusiveMin":0},"icp_percentage":{"label":"ICP match (%)","type":"number","min":0,"max":100},"year1_market_share_target":{"label":"Year one share (%)","type":"number","min":0,"max":100},"data_sources":{"label":"Basis for the estimate"},"segment_name":{"label":"Segment name"},"product_category":{"label":"Product category"},"company":{"label":"Company"}},"required":["total_potential_companies","average_contract_value"]}, {
     available: () => window.parent === window || (bridgeReady && !!hostCapabilities.serverTools),
     call: (name, args) => window.parent === window ? standaloneMarket(args) : request("tools/call", {name, arguments: args}),
     render: res => {

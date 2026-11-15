@@ -8,7 +8,8 @@
     },
     "average_contract_value": {
       "label": "Annual contract value (USD)",
-      "type": "number"
+      "type": "number",
+      "exclusiveMin": 0
     },
     "icp_percentage": {
       "label": "ICP match (%)",

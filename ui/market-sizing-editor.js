@@ -43,6 +43,7 @@ function createResultEditor(panel, config, bridge) {
       input = element('textarea');
       input.rows = spec.long ? 4 : 2;
     }
+    input.name = key;
     input.required = required;
     label.append(input);
     return {
@@ -70,6 +71,16 @@ function createResultEditor(panel, config, bridge) {
     const args = {};
     for (const [key, control] of controls) {
       const value = control.get();
+      const spec = config.fields[key];
+      if (value === undefined && config.required.includes(key)) {
+        status.textContent = 'Enter ' + spec.label.toLowerCase() + '.';
+        return;
+      }
+      if (value !== undefined && spec.type === 'number' &&
+          (!Number.isFinite(value) || value < spec.min || value > spec.max || value <= spec.exclusiveMin)) {
+        status.textContent = 'Check the value for ' + spec.label.toLowerCase() + '.';
+        return;
+      }
       if (value !== undefined) args[key] = value;
     }
     const current = ++requestNumber;

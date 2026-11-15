@@ -48,6 +48,7 @@ test('the editor preserves supplied values including zero, omitted fields and li
 });
 test('late results, errors and unrelated host updates preserve local edits',async()=>{
   const ui=mount();
+  ui.editor.acceptInput({total_potential_companies:100, average_contract_value:1200});
   ui.submit();
   ui.edit();
   assert.equal(ui.editor.acceptInput({}),false);
