@@ -1,0 +1,64 @@
+{
+  "tool": "account_prioritization",
+  "fields": {
+    "accounts": {
+      "label": "Accounts",
+      "type": "rows",
+      "properties": {
+        "name": {
+          "label": "Name"
+        },
+        "fit_score": {
+          "label": "Fit score",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        "intent_signals": {
+          "label": "Intent score",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        "relationship": {
+          "label": "Relationship",
+          "type": "number",
+          "min": 0,
+          "max": 100
+        },
+        "timing": {
+          "label": "Timing"
+        }
+      }
+    },
+    "prioritization_weights": {
+      "label": "Factor weights",
+      "type": "object",
+      "properties": {
+        "fit": {
+          "label": "Fit",
+          "type": "number"
+        },
+        "intent": {
+          "label": "Intent",
+          "type": "number"
+        },
+        "relationship": {
+          "label": "Relationship",
+          "type": "number"
+        },
+        "timing": {
+          "label": "Timing",
+          "type": "number"
+        }
+      }
+    },
+    "product_category": {
+      "label": "Product category"
+    },
+    "company": {
+      "label": "Company"
+    }
+  },
+  "required": []
+}
