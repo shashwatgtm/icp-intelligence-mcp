@@ -12,7 +12,7 @@ function replace(before, after) {
   if (!html.includes(before)) throw new Error('The upstream view changed at ' + before.slice(0, 70));
   html = html.replace(before, () => after);
 }
-const form = '<details id="tool-editor"><summary>Edit inputs</summary><form><div data-fields></div><button type="submit" data-run>Run again</button><button type="button" data-reset>Restore inputs</button><p role="status" aria-live="polite"></p></form></details>';
+const form = '<details id="tool-editor"><summary>Edit inputs</summary><form><div data-fields></div><button type="button" data-run>Run again</button><button type="button" data-reset>Restore inputs</button><p role="status" aria-live="polite"></p></form></details>';
 replace('</main>', form + '</main>');
 replace('</style>', '#tool-editor textarea,#tool-editor input,#tool-editor select,#result textarea{box-sizing:border-box;width:100%;max-width:100%;padding:.55rem;font:inherit;color:inherit;background:var(--paper,#fff);border:1px solid currentColor;border-radius:.4rem}#tool-editor label{display:block;margin:.8rem 0}#tool-editor fieldset{min-width:0;margin:.6rem 0}#tool-editor button{margin:.4rem .5rem .4rem 0}</style>');
 const editorSource = read('ui/account-prioritization-editor.js');
@@ -47,6 +47,25 @@ replace("if(m.method==='ui/notifications/tool-result')receive", "if(m.method==='
 replace("if(m.method==='ui/resource-teardown'){clear", "if(m.method==='ui/resource-teardown'){editor.close();for(const call of calls.values()){clearTimeout(call.timer);call.reject(new Error('View closed'));}calls.clear();clear");
 replace("if(g&&Object.hasOwn(g,'toolOutput'))receive", "if(g?.toolInput)editor.acceptInput(g.toolInput);if(g&&Object.hasOwn(g,'toolOutput')&&editor.acceptResult())receive");
 
+
+// A shared resource can receive results from any Paper tool.
+replace('data={...view,sections:sectionsOf(view.text)};', "$('tool-editor').hidden = view.tool !== " + JSON.stringify(config.tool) + "; editor.sync(); data={...view,sections:sectionsOf(view.text)};");
+replace("available: () => (ready && serverTools) || (window.parent === window && typeof window.openai?.callTool === 'function')", "available: () => !$('tool-editor').hidden && ((ready && serverTools) || (window.parent === window && typeof window.openai?.callTool === 'function'))");
+const observe = `let lastHeight;
+ const sizeObserver = typeof window.ResizeObserver === 'function' ? new window.ResizeObserver(resize) : null;
+ sizeObserver?.observe(document.body);
+ function resize(){
+   if (!ready) return;
+   const height = Math.ceil(document.body.getBoundingClientRect().height);
+   if (height === lastHeight) return;
+   lastHeight = height;
+   window.parent.postMessage({jsonrpc:'2.0',method:'ui/notifications/size-changed',params:{height}},hostOrigin);
+ }`;
+const sizeStart = html.indexOf('function resize(){');
+const sizeEnd = html.indexOf('\n', sizeStart);
+if (sizeStart < 0 || sizeEnd < 0) throw new Error('Result height handler changed upstream.');
+html = html.slice(0,sizeStart) + observe + html.slice(sizeEnd);
+replace("if(m.method==='ui/resource-teardown'){editor.close();", "if(m.method==='ui/resource-teardown'){sizeObserver?.disconnect();editor.close();");
 
 for (const [tag, directive] of [['script','script-src'],['style','style-src']]) {
   const source = html.match(new RegExp('<' + tag + '>([\\s\\S]*?)</' + tag + '>'))[1];

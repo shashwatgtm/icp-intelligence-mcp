@@ -105,7 +105,7 @@ function createResultEditor(panel, config, bridge) {
     for (const [key, input] of controls) input.set(args?.[key]);
   }
   form.addEventListener('input', markEdit);
-  form.addEventListener('submit', async event => {
+  async function runTool(event) {
     event.preventDefault();
     if (busy || !bridge.available() || (form.reportValidity && !form.reportValidity())) return;
     const args = {};
@@ -137,7 +137,11 @@ function createResultEditor(panel, config, bridge) {
         run.disabled = !bridge.available();
       }
     }
-  });
+  }
+  // A sandboxed component can run scripts even when its host disables native form submissions.
+  run.addEventListener('click', runTool);
+  form.addEventListener('submit', runTool);
+
   panel.querySelector('[data-reset]').addEventListener('click', () => {
     revision++;
     requestNumber++;

@@ -65,3 +65,42 @@ test('late results, errors and unrelated host updates preserve local edits',asyn
   await new Promise(resolve=>setImmediate(resolve));
   assert.equal(ui.outputs.length,1);
 });
+
+test('the primary action works without a native form submission',()=> {
+  const ui=mount();
+  const run=ui.panel.querySelector('[data-run]');
+  assert.equal(run.getAttribute('type'),'button');
+  ui.editor.acceptInput({});
+  run.click();
+  assert.equal(ui.requests.length,1);
+});
+
+test('the shared result hides an unrelated editor and reports body height changes once',()=>{
+  const {document,window}=parseHTML(html);
+  const sent=[];
+  let resized;
+  let height=400;
+  window.parent={postMessage:message=>sent.push(message)};
+  window.openai={};
+  window.ResizeObserver=class {constructor(callback){resized=callback;} observe(){} disconnect(){}};
+  document.body.getBoundingClientRect=()=>({height});
+  vm.runInNewContext(html.match(/<script>([\s\S]*?)<\/script>/)[1],{window,document,setTimeout,clearTimeout});
+  function reply(message){
+    const e=new window.Event('message');
+    e.source=window.parent;
+    e.origin='https://host.invalid';
+    e.data={jsonrpc:'2.0',...message};
+    window.dispatchEvent(e);
+  }
+  reply({id:sent[0].id,result:{hostCapabilities:{serverTools:{}}}});
+  const changes=()=>sent.filter(m=>m.method==='ui/notifications/size-changed').map(m=>m.params.height);
+  height=660;
+  resized();
+  resized();
+  height=420;
+  resized();
+  assert.deepEqual(changes().slice(-2),[660,420]);
+  const tool=config.tool==='pmf_scorecard'?'content_repurposer':'pmf_scorecard';
+  reply({method:'ui/notifications/tool-result',params:{_meta:{helixResults:{tool,version:2,title:'Other result',text:'An independent tool answer.'}}}});
+  assert.ok(document.querySelector('#tool-editor').hidden);
+});
