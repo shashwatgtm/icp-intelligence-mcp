@@ -12,26 +12,29 @@ const WORKER = `
     // Use all samples in a fixed batch. Interleave sizes to distribute GC and JIT work.
     for (const input of inputs) { fn(input.slice(0, Math.ceil(input.length / 4))); fn(input); }
     const samples = [];
-    const measure = (input) => {
+    const measure = (input, repetitions = 1) => {
       const start = clock();
-      const output = fn(input);
+      let output;
+      for (let run = 0; run < repetitions; run++) output = fn(input);
       const cpu = clock(start);
       if (typeof output !== "string") throw new Error("expected string output");
-      return (cpu.user + cpu.system) / 1000;
+      return (cpu.user + cpu.system) / (1000 * repetitions);
     };
     for (const input of inputs) {
       const quarter = input.slice(0, Math.ceil(input.length / 4));
-      let smallCpu = 0;
-      let largeCpu = 0;
-      let peakCpu = 0;
+      // Four quarter calls cover the same number of input characters as one full
+      // call and keep a short quarter measurement above coarse CPU clock ticks.
+      const quarters = [];
+      const fullRuns = [];
       for (let round = 0; round < 3; round++) {
-        if (round % 2 === 0) smallCpu += measure(quarter);
-        const full = measure(input);
-        largeCpu += full;
-        peakCpu = Math.max(peakCpu, full);
-        if (round % 2 === 1) smallCpu += measure(quarter);
+        if (round % 2 === 0) quarters.push(measure(quarter, 4));
+        fullRuns.push(measure(input));
+        if (round % 2 === 1) quarters.push(measure(quarter, 4));
       }
-      samples.push([smallCpu / 3, largeCpu / 3, peakCpu]);
+      // A single collection can dominate a short call. Use the middle of the
+      // fixed samples for growth, while every full call must meet its CPU limit.
+      const median = runs => [...runs].sort((a, b) => a - b)[1];
+      samples.push([median(quarters), median(fullRuns), Math.max(...fullRuns)]);
     }
     parentPort.postMessage(samples);
   })().catch((error) => { throw error; });
@@ -70,5 +73,5 @@ export async function assertCpuBudget(moduleUrl, exportName, inputs, budgetMs, a
     assert.ok(large < 8 * Math.max(small, 5),
       `superlinear CPU growth on input ${index}: ${small.toFixed(2)} -> ${large.toFixed(2)} ms`);
   }
-  console.log(`timing CPU ms [mean quarter, mean full, peak full]: ${JSON.stringify(samples)}`);
+  console.log(`timing CPU ms [median quarter, median full, peak full]: ${JSON.stringify(samples)}`);
 }
