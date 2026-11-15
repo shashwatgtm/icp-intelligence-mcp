@@ -65,3 +65,21 @@ test('late results, errors and unrelated host updates preserve local edits',asyn
   await new Promise(resolve=>setImmediate(resolve));
   assert.equal(ui.outputs.length,1);
 });
+
+test('standalone and hosted pages share the live editor through a result refresh', async () => {
+  assert.equal(load('../public/lab/market-sizing/index.html'), html);
+  const {document,window} = parseHTML(html);
+  window.parent = window;
+  window.openai = {};
+  document.body.getBoundingClientRect = () => ({height:900});
+  vm.runInNewContext(html.match(/<script>([\s\S]*?)<\/script>/)[1], {document,window,setTimeout,clearTimeout});
+  const form = document.querySelector('#tool-editor form');
+  assert.ok(form);
+  const [companies, value] = form.querySelectorAll('input');
+  companies.value = '100';
+  value.value = '2000';
+  form.dispatchEvent(new window.Event('submit', {bubbles:true,cancelable:true}));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(document.querySelector('#tool-editor form'), form);
+  assert.ok(document.querySelector('[data-figure="TAM"]').textContent.includes('$200K'));
+});
