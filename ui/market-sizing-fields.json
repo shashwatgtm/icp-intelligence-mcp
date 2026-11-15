@@ -1,0 +1,43 @@
+{
+  "tool": "tam_sam_som_calculator",
+  "fields": {
+    "total_potential_companies": {
+      "label": "Potential buying companies",
+      "type": "number",
+      "min": 0
+    },
+    "average_contract_value": {
+      "label": "Annual contract value (USD)",
+      "type": "number",
+      "exclusiveMin": 0
+    },
+    "icp_percentage": {
+      "label": "ICP match (%)",
+      "type": "number",
+      "min": 0,
+      "max": 100
+    },
+    "year1_market_share_target": {
+      "label": "Year one share (%)",
+      "type": "number",
+      "min": 0,
+      "max": 100
+    },
+    "data_sources": {
+      "label": "Basis for the estimate"
+    },
+    "segment_name": {
+      "label": "Segment name"
+    },
+    "product_category": {
+      "label": "Product category"
+    },
+    "company": {
+      "label": "Company"
+    }
+  },
+  "required": [
+    "total_potential_companies",
+    "average_contract_value"
+  ]
+}

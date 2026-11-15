@@ -1,0 +1,156 @@
+{
+  "base": "80296186cd67fa6fdc610151eedcdd43f8fc329f",
+  "sourceBlob": "c7b9ffdb0fc07cc3b769caac433786555e6d4636",
+  "cases": [
+    {
+      "case": "coordinator synthetic review fixture",
+      "baseTextSha256": "6fbe35757330a8395b5883fe69b1de1166d5d3bbd0a3c16df818bc5fa273cf23",
+      "candidateTextSha256": "6fbe35757330a8395b5883fe69b1de1166d5d3bbd0a3c16df818bc5fa273cf23",
+      "hostedTextSha256": "6fbe35757330a8395b5883fe69b1de1166d5d3bbd0a3c16df818bc5fa273cf23",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "ordinary different values",
+      "baseTextSha256": "e4178e4b2492ae85a302950a5b6677f293cd5fa891b49d979314bf8e14607812",
+      "candidateTextSha256": "e4178e4b2492ae85a302950a5b6677f293cd5fa891b49d979314bf8e14607812",
+      "hostedTextSha256": "e4178e4b2492ae85a302950a5b6677f293cd5fa891b49d979314bf8e14607812",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "omitted optional rates",
+      "baseTextSha256": "9295698bdbe9e9751e2ed8ac6153966ac945d288a2a4342bbb4a54a6a949867d",
+      "candidateTextSha256": "9295698bdbe9e9751e2ed8ac6153966ac945d288a2a4342bbb4a54a6a949867d",
+      "hostedTextSha256": "9295698bdbe9e9751e2ed8ac6153966ac945d288a2a4342bbb4a54a6a949867d",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "null optional rates",
+      "baseTextSha256": "9295698bdbe9e9751e2ed8ac6153966ac945d288a2a4342bbb4a54a6a949867d",
+      "candidateTextSha256": "9295698bdbe9e9751e2ed8ac6153966ac945d288a2a4342bbb4a54a6a949867d",
+      "hostedTextSha256": "9295698bdbe9e9751e2ed8ac6153966ac945d288a2a4342bbb4a54a6a949867d",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "null ICP and zero share",
+      "baseTextSha256": "43e80c64962535b42e031f691032e9f1629499570c0120a4c19f511b5dc8e959",
+      "candidateTextSha256": "43e80c64962535b42e031f691032e9f1629499570c0120a4c19f511b5dc8e959",
+      "hostedTextSha256": "43e80c64962535b42e031f691032e9f1629499570c0120a4c19f511b5dc8e959",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "zero companies",
+      "baseTextSha256": "1c43de493393288b5aa00b57f239bbfebed0a93d96a0ac0dd268370403f97737",
+      "candidateTextSha256": "1c43de493393288b5aa00b57f239bbfebed0a93d96a0ac0dd268370403f97737",
+      "hostedTextSha256": "1c43de493393288b5aa00b57f239bbfebed0a93d96a0ac0dd268370403f97737",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "zero ICP",
+      "baseTextSha256": "c280d817911b14f3c733a22b709e7156494705fb35bb1cb6114478e7572487ca",
+      "candidateTextSha256": "c280d817911b14f3c733a22b709e7156494705fb35bb1cb6114478e7572487ca",
+      "hostedTextSha256": "c280d817911b14f3c733a22b709e7156494705fb35bb1cb6114478e7572487ca",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "zero share",
+      "baseTextSha256": "9d9795741ce7c57fa7e1ce401890f753935fb421cc7de6f5aa3f393dc32e1d92",
+      "candidateTextSha256": "9d9795741ce7c57fa7e1ce401890f753935fb421cc7de6f5aa3f393dc32e1d92",
+      "hostedTextSha256": "9d9795741ce7c57fa7e1ce401890f753935fb421cc7de6f5aa3f393dc32e1d92",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "numeric strings accepted by core validator",
+      "baseTextSha256": "6fbe35757330a8395b5883fe69b1de1166d5d3bbd0a3c16df818bc5fa273cf23",
+      "candidateTextSha256": "6fbe35757330a8395b5883fe69b1de1166d5d3bbd0a3c16df818bc5fa273cf23",
+      "hostedTextSha256": "6fbe35757330a8395b5883fe69b1de1166d5d3bbd0a3c16df818bc5fa273cf23",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "sub-dollar values",
+      "baseTextSha256": "8440ed11fe4f262fc9ca448610acb599b53d1de8d4c698fd31d3e2d1497776b2",
+      "candidateTextSha256": "8440ed11fe4f262fc9ca448610acb599b53d1de8d4c698fd31d3e2d1497776b2",
+      "hostedTextSha256": "8440ed11fe4f262fc9ca448610acb599b53d1de8d4c698fd31d3e2d1497776b2",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "small finite values",
+      "baseTextSha256": "1d4d28836dce33ee1c43147b3d1f3d9fa8285e9fd8c708903601e148fe069de1",
+      "candidateTextSha256": "1d4d28836dce33ee1c43147b3d1f3d9fa8285e9fd8c708903601e148fe069de1",
+      "hostedTextSha256": "1d4d28836dce33ee1c43147b3d1f3d9fa8285e9fd8c708903601e148fe069de1",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    },
+    {
+      "case": "extreme finite overflow",
+      "baseTextSha256": "011db66feaedc573c7bf643d31d69bac5f21417b6c60b5cc59afaa464ed7c129",
+      "candidateTextSha256": "011db66feaedc573c7bf643d31d69bac5f21417b6c60b5cc59afaa464ed7c129",
+      "hostedTextSha256": "011db66feaedc573c7bf643d31d69bac5f21417b6c60b5cc59afaa464ed7c129",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": false
+    },
+    {
+      "case": "overflow with zero ICP",
+      "baseTextSha256": "986fe74a8a932cb49e8f8d1314161a60d6cd42d97a98f7160c607c723df9b723",
+      "candidateTextSha256": "986fe74a8a932cb49e8f8d1314161a60d6cd42d97a98f7160c607c723df9b723",
+      "hostedTextSha256": "986fe74a8a932cb49e8f8d1314161a60d6cd42d97a98f7160c607c723df9b723",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": false
+    },
+    {
+      "case": "overflow with zero share",
+      "baseTextSha256": "aa70be031db89c7124ec3dd559b9fe3ede160bbcc8ea70f4aca852f10a9c2e48",
+      "candidateTextSha256": "aa70be031db89c7124ec3dd559b9fe3ede160bbcc8ea70f4aca852f10a9c2e48",
+      "hostedTextSha256": "aa70be031db89c7124ec3dd559b9fe3ede160bbcc8ea70f4aca852f10a9c2e48",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": false
+    },
+    {
+      "case": "large finite supported result",
+      "baseTextSha256": "2023036325e39882bb7f0de6b40a89e76f425011211150ced835f3648108eff8",
+      "candidateTextSha256": "2023036325e39882bb7f0de6b40a89e76f425011211150ced835f3648108eff8",
+      "hostedTextSha256": "2023036325e39882bb7f0de6b40a89e76f425011211150ced835f3648108eff8",
+      "identical": true,
+      "baseIsError": false,
+      "candidateIsError": false,
+      "rangeSupported": true
+    }
+  ]
+}

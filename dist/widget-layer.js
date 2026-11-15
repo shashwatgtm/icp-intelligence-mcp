@@ -9,6 +9,7 @@ const build_profile_ts_1 = require("./build-profile.js");
 const tam_summary_ts_1 = require("./tam-summary.js");
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
 const widget_model_ts_1 = require("./widget-model.js");
+const market_sizing_editor_html_ts_1 = require("./market-sizing-editor-html.js");
 const widget_document_ts_1 = require("./widget-document.js");
 const widget_registry_ts_1 = require("./widget-registry.js");
 // Keep the reviewed slice resource address stable while its widget document is unchanged.
@@ -91,7 +92,7 @@ function attachWidgets(server) {
                 {
                     uri: request.params.uri,
                     mimeType: "text/html;profile=mcp-app",
-                    text: widget_document_ts_1.WIDGET_HTML,
+                    text: entry[0] === "tam_sam_som_calculator" ? market_sizing_editor_html_ts_1.EDITABLE_RESULTS_HTML : widget_document_ts_1.WIDGET_HTML,
                     _meta: {
                         ui: {
                             prefersBorder: true,

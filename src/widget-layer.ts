@@ -12,6 +12,7 @@ import {
   ErrorCode,
 } from "@modelcontextprotocol/sdk/types.js";
 import { widgetPayload } from "./widget-model.ts";
+import { EDITABLE_RESULTS_HTML } from "./market-sizing-editor-html.ts";
 import { WIDGET_HTML } from "./widget-document.ts";
 import { WIDGETS } from "./widget-registry.ts";
 // Keep the reviewed slice resource address stable while its widget document is unchanged.
@@ -98,7 +99,7 @@ export function attachWidgets(server: Server): void {
         {
           uri: request.params.uri,
           mimeType: "text/html;profile=mcp-app",
-          text: WIDGET_HTML,
+          text: entry[0] === "tam_sam_som_calculator" ? EDITABLE_RESULTS_HTML : WIDGET_HTML,
           _meta: {
             ui: {
               prefersBorder: true,
