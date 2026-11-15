@@ -42,7 +42,7 @@
         "your_product": "Salesforce CRM",
         "your_sector": "saas"
       },
-      "grader": "smoke",
+      "grader": "newsletter",
       "source_case": {
         "description": "Newsletter draft",
         "prompt": "Use this synthetic review scenario, not a claim about any real company. Newsletter draft. Use these inputs:\n{\"topic\": \"CRM adoption lessons from a synthetic Salesforce rollout\", \"cta_goal\": \"Read the implementation checklist\", \"key_points\": \"Name a process owner; agree mandatory fields; review adoption weekly\", \"audience_segment\": \"practitioners\", \"newsletter_type\": \"educational\", \"your_product\": \"Salesforce CRM\", \"your_sector\": \"saas\"}",
@@ -67,7 +67,7 @@
         "your_product": "HubSpot CRM",
         "your_sector": "saas"
       },
-      "grader": "smoke",
+      "grader": "webinar",
       "source_case": {
         "description": "Webinar script",
         "prompt": "Use this synthetic review scenario, not a claim about any real company. Webinar script. Use these inputs:\n{\"topic\": \"Planning a synthetic HubSpot CRM adoption workshop\", \"target_audience\": \"Revenue operations managers\", \"webinar_type\": \"educational\", \"duration\": \"30_min\", \"key_takeaways\": \"Define the adoption problem; map the process; choose one pilot team\", \"speakers\": \"Workshop facilitator\", \"include_polls\": true, \"product_mention_level\": \"none\", \"your_product\": \"HubSpot CRM\", \"your_sector\": \"saas\"}",
@@ -108,7 +108,7 @@
         "tone_preference": "keep_same",
         "your_sector": "saas"
       },
-      "grader": "smoke",
+      "grader": "content-review",
       "source_case": {
         "description": "Review supplied content",
         "prompt": "Use this synthetic review scenario, not a claim about any real company. Review supplied content. Use these inputs:\n{\"content\": \"Synthetic HubSpot copy review. Revenue operations teams can use this checklist to agree required CRM fields. Assign one process owner. Review missing fields every Friday. Download the checklist before your next team review.\", \"content_type\": \"landing_page\", \"goal\": \"Make the checklist useful to revenue operations teams\", \"audience\": \"Revenue operations teams\", \"tone_preference\": \"keep_same\", \"your_sector\": \"saas\"}",

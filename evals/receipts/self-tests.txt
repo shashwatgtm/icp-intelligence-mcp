@@ -51,6 +51,6 @@ test_tool_error_cannot_pass (__main__.ProtocolTests.test_tool_error_cannot_pass)
 test_unsupported_protocol_rejected (__main__.ProtocolTests.test_unsupported_protocol_rejected) ... ok
 
 ----------------------------------------------------------------------
-Ran 51 tests in 0.024s
+Ran 51 tests in 0.043s
 
 OK

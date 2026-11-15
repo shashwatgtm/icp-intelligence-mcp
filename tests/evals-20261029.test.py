@@ -127,7 +127,7 @@ class ProtocolTests(unittest.TestCase):
     def test_dry_run_zero_network_and_no_passes(self):
         with patch('urllib.request.OpenerDirector.open', side_effect=AssertionError('network forbidden')), patch('run.MCP', side_effect=AssertionError('client forbidden')):
             report = evaluate(generate(), dry_run=True, factory=lambda *a, **k: self.fail('client created'))
-        self.assertEqual(report['counts'], {'pass': 0, 'fail': 0, 'skip': 71})
+        self.assertEqual(report['counts'], {'pass': 0, 'fail': 0, 'skip': 73})
         self.assertEqual(sum(r['scope'] == 'manual-host' for r in report['receipts']), 18)
 
     def test_sources_and_three_negatives_each(self):

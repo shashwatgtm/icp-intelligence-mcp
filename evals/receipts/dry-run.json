@@ -3,7 +3,7 @@
   "counts": {
     "pass": 0,
     "fail": 0,
-    "skip": 71
+    "skip": 73
   },
   "receipts": [
     {
@@ -135,6 +135,20 @@
     {
       "server": "helix-craft-gtm",
       "case": "positive-5",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "pmf-activation-supplied",
+      "status": "skip",
+      "reason": "Dry run; zero network calls",
+      "scope": "backend"
+    },
+    {
+      "server": "helix-craft-gtm",
+      "case": "pmf-activation-labelled",
       "status": "skip",
       "reason": "Dry run; zero network calls",
       "scope": "backend"
