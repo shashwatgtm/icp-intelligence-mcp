@@ -84,3 +84,12 @@ test('standalone and hosted pages share the live editor through a result refresh
   assert.equal(document.querySelector('#tool-editor form'), form);
   assert.ok(document.querySelector('[data-figure="TAM"]').textContent.includes('$200K'));
 });
+
+test('the primary action works without a native form submission',()=> {
+  const ui=mount();
+  const run=ui.panel.querySelector('[data-run]');
+  assert.equal(run.getAttribute('type'),'button');
+  ui.editor.acceptInput({"total_potential_companies": 50, "average_contract_value": 100});
+  run.click();
+  assert.equal(ui.requests.length,1);
+});
