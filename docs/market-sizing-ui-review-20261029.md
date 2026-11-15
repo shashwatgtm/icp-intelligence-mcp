@@ -1,138 +1,134 @@
 # W3 market sizing UI review
 
-Date: 29 October 2026. Draft handoff only. No PR exists.
-
-Base: 80296186cd67fa6fdc610151eedcdd43f8fc329f.
-The coordinator verified this as main at about 09:48 IST.
+Date: 29 October 2026. PR [#3](https://github.com/shashwatgtm/icp-intelligence-mcp/pull/3) remains draft.
+W3 is pending coordinator review. Nothing is deployed or marked ready.
 Branch: codex/market-sizing-ui-20261029.
-The final head and changed files are in head.txt and changed-files.txt in the evidence archive.
-Origin: https://github.com/shashwatgtm/icp-intelligence-mcp.git.
+Base: 80296186cd67fa6fdc610151eedcdd43f8fc329f.
+The final remote head and tree are recorded in the PR delivery receipt.
 
-## Design and documentation provenance
+## Review changes
 
-The cloud proxy refused connections. Direct documentation fetches failed.
-The implementation uses the coordinator's verified findings from these exact URLs:
+The legacy text executor keeps the original arithmetic, including overflow.
+The additive structured result reports rangeSupported=false for unsupported amounts.
+Nonfinite amounts become null, not zero. A separate rangeMessage explains the limit.
+The UI keeps the inputs editable and hides unsupported numeric results.
+It does not convert an accepted legacy call into an error.
+The input schema and text template are unchanged.
+
+Model-facing text and structured strings still use escapeDeep.
+Literal edit values travel as numeric character arrays in component-only result _meta.
+The UI decodes only allowlisted fields and renders them with textContent or form values.
+It never puts escaped model-facing strings back into editable fields.
+The existing escape-inputs.ts module and domain protection are unchanged.
+This avoids repeated escaping without exposing raw dangerous strings to the model.
+
+Local edits advance an edit revision. A delayed RPC result or error is ignored after another edit.
+After local editing starts, uncorrelated tool-input and tool-result notifications are ignored.
+The UI reports that it preserved the local draft. Only a matching current tools/call response updates results.
+Notifications cannot silently overwrite newer fields or restore obsolete results.
+
+The bridge sends debounced ui/notifications/size-changed messages after initialization.
+A ResizeObserver watches intrinsic main content height. It does not use the iframe's current height as a minimum.
+This lets a flexible host grow and shrink the frame without a resize loop.
+The harness applies reported heights and checks growth, shrinking after edits and mobile width changes.
+The component declares inline display support during initialization.
+
+## Documentation read directly
+
+These public pages were read through the web connector for this revision:
 
 - https://developers.openai.com/plugins/build/chatgpt-ui
 - https://developers.openai.com/plugins/deploy/app-review
+- https://developers.openai.com/plugins/reference
+- https://modelcontextprotocol.io/extensions/apps/overview
+- https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx
 
-This is coordinator supplied evidence, not a claim that this workstream read the pages.
-The component initializes with ui/initialize and ui/notifications/initialized.
-It receives tool-input and tool-result notifications. Recalculation uses tools/call.
-Only tam_sam_som_calculator gains _meta.ui.resourceUri.
-No render tool was added.
-The resource is ui://helix/market-sizing/v1.html.
-Its MIME is text/html;profile=mcp-app.
-Resource CSP has empty connectDomains, resourceDomains and frameDomains.
+The OpenAI UI page points to the MCP Apps specification for bridge behavior.
+The specification recommends size notifications when rendered content size changes.
+The OpenAI reference says result _meta is component-only, while content and structuredContent reach the model.
+Resource URI, MIME and empty CSP allowlists remain unchanged.
+The earlier implementation used coordinator supplied documentation findings. This revision uses direct readings.
+No submission, publication or deployment action from those pages was performed.
 
-The tool keeps its input schema and existing text output.
-Structured output uses the existing sanitized inputs. Domain protection stays intact.
-The same calculation function supplies tool arithmetic and the browser bundle.
-The generator embeds that function and the existing Archivo font.
-The UI uses the existing Helix h mark and brand colours from public/assets/helix.css.
-The same generated component is served at public/lab/market-sizing/index.html.
-Run node scripts/build-market-ui.mjs after editing the calculation or template.
-Generated source and dist files are included for review.
-A test checks that the bundle contains the current calculation function.
+## Compatibility evidence
 
-No example is prefilled. Omitted optional rates are labelled example assumptions.
-Zero company counts and rates are valid. Zero ACV is refused.
-Missing values, out of range values and numeric overflow are refused.
-Scenarios show half, entered and one and a half times the entered share.
-Shares are capped at 100% of SAM. The table labels them as assumptions.
-The formula trace gives annual USD units and every arithmetic step.
-Received values are untrusted. Rendering uses textContent and form values.
-The message handler checks event.source against window.parent.
+scripts/capture-market-base.mjs captured the actual base executor from git show.
+Only import paths were resolved to the original unchanged helpers.
+Base source blob: c7b9ffdb0fc07cc3b769caac433786555e6d4636.
+The captured text is in tests/fixtures/market-sizing-differential-base.json.
+Each of 15 cases compares base text with both the core and hosted candidate text.
+All content arrays are byte identical. All 15 base and candidate calls keep isError=false.
+Per-case text SHA-256 receipts are in [differential.json](review-assets/market-sizing/differential.json).
 
-## Exact review fixture
+Cases cover the exact review fixture, ordinary values, omitted rates, null rates,
+zero counts and rates, accepted numeric strings, small values, large finite values,
+and overflow with ordinary rates, zero ICP and zero share.
+The overflow case includes total_potential_companies=1e308 and average_contract_value=5000.
 
-The company name below is an explicitly labelled review fixture input only.
+The literal tests cover ampersands, entities, apostrophes, angle brackets, Markdown,
+URLs, Unicode and literal backslashes. Seven samples each survive three hosted handler round trips.
+The browser checks seven samples through three calls each. A fresh result-only hydration case
+also populates literal fields and survives three calls without relying on prior tool-input data.
+Stale browser checks cover delayed successful RPCs, delayed RPC errors and both notification types.
+All existing inert-output regressions pass.
+
+## Synthetic fixture and screenshots
+
+The exact coordinator supplied fixture is used. Its company value is a review fixture input only.
 It is not a client, prospect or observed company finding.
 
 ```json
 {"total_potential_companies":10000,"average_contract_value":5000,"icp_percentage":40,"year1_market_share_target":2,"data_sources":"Synthetic test inputs only, not company or market findings","segment_name":"B2B software test segment","product_category":"CRM software","company":"HubSpot"}
 ```
 
-Observed in both browser modes: TAM USD 50,000,000. SAM USD 20,000,000.
-SOM USD 400,000. Scenario SOM values were USD 200,000, 400,000 and 600,000.
-Changing the count to 20,000 gave SOM USD 800,000.
-The scenario table and trace both changed. The synthetic label stayed visible.
-The fixture was supplied by the coordinator. It was not inferred from market data.
+Both modes show TAM USD 50,000,000, SAM USD 20,000,000 and SOM USD 400,000.
+Changing the count to 20,000 changes SOM to USD 800,000, along with scenarios and trace.
+The screenshots below are review evidence only. They are outside public/ and the package file list.
 
-## Commands and final receipts
+| Mode | Desktop fixture | Mobile fixture |
+| --- | --- | --- |
+| Synthetic MCP host | [Desktop](review-assets/market-sizing/mcp-fixture-desktop.png) | [390px mobile](review-assets/market-sizing/mcp-fixture-mobile.png) |
+| Standalone | [Desktop](review-assets/market-sizing/standalone-fixture-desktop.png) | [390px mobile](review-assets/market-sizing/standalone-fixture-mobile.png) |
 
-All execution was in the cloud at /workspace/icp-intelligence-mcp.
-Existing dependencies were used. Nothing was installed.
+## Commands and receipts
+
+All execution was in the cloud at /workspace/icp-intelligence-mcp. Installed dependencies were used.
 
 ```sh
-git switch -c codex/market-sizing-ui-20261029
-node work/market-sizing/baseline.mjs
+git show 80296186cd67fa6fdc610151eedcdd43f8fc329f:src/index.ts > work/market-sizing/revision/base-source.ts
+node scripts/capture-market-base.mjs
 node scripts/build-market-ui.mjs
 npm run build
 node tests/market-sizing-ui.test.mjs
 npm test
 node scripts/check-market-ui.mjs
 git diff --check
-git ls-remote origin refs/heads/main
-curl -fLsS --max-time 20 https://developers.openai.com/plugins/build/chatgpt-ui -o work/market-sizing/official-ui.html
 ```
 
-- Build: pass. TypeScript exited 0.
-- Focused tests: 5 passed, 0 failed, 0 skipped.
-- Regression: 38 test files passed, 0 failed, 0 skipped. This includes the focused file.
-- Browser: 2 mode cases passed, 0 failed, 0 skipped.
-- Diff whitespace check: pass.
-- Remote read: failed, exit 128. Cloud proxy refused port 8080.
-- Documentation retry: failed, exit 7. Same proxy failure.
+Final outcomes: build passed. Focused tests: 22 passed, 0 failed, 0 skipped.
+Regression: 38 test files passed, 0 failed, 0 skipped. The focused file is included.
+Browser: 7 cases passed, 0 failed, 0 skipped, spanning both modes and focused bridge cases.
+The browser uses installed Playwright and /usr/bin/chromium with in-memory routes.
+MCP calls reach the real local handler. No live ChatGPT session is claimed.
+No external requests, page errors, cookies or user storage were observed.
 
-The focused tests compare tools/list against a captured base snapshot.
-Only the intended UI metadata differs. The exact text fixture stays identical.
-They check resource MIME, URI, CSP, bundled HTML and numerical expectations.
-They cover changed inputs, zero values, defaults, errors and overflow.
-The existing escape regressions pass with the additive structured output.
+Exact captured outputs are preserved as strings in [test-logs.json](review-assets/market-sizing/test-logs.json).
+The browser summary is in [browser.json](review-assets/market-sizing/browser.json).
 
-The browser harness uses installed Playwright and /usr/bin/chromium.
-Routes are fulfilled in memory. The MCP harness calls the real local handler.
-No remote host is contacted. This is a synthetic MCP host, not a ChatGPT session.
-Checks include the fixture, changed inputs, zero rates, defaults, validation,
-inert hostile values, source checks, host errors, keyboard tab order and mobile width.
-No page errors or external requests were observed. Browser storage and cookies stayed empty.
-The sandbox initially blocked local sockets and Chromium startup.
-The final browser run used the authorized cloud execution permission.
-No proxy or network policy was changed.
+One draft test assertion incorrectly treated an escaped angle bracket as raw markup.
+It was replaced by an exact comparison with escapeText. The production escaping stayed intact.
+The base capture script initially hit a sandbox child-process restriction.
+It now reads the source exported by the explicit git show command above.
+Cloud Chromium used the same authorized execution permission as the prior checks.
+No dependency or sandbox policy setting was changed.
 
-The first escape regression failed because structured output used raw text.
-It was fixed by using the existing sanitized arguments.
-The first completed browser run found default labels lost after MCP recalculation.
-It was fixed by retaining omitted inputs in structured output.
-Both fixes passed the final checks above.
-Initial browser setup also failed on ESM module resolution and socket permissions.
-The harness now uses installed dependency resolution and in-memory routes.
+## Boundaries
 
-Screenshots show a cream page, red Helix mark, oxblood heading and clay input panel.
-Desktop has two input columns and three USD result cards.
-Mobile has a single column and no horizontal page overflow at 390 pixels.
-The evidence archive includes fixture, changed-input and mobile screenshots for both modes.
-
-## Automation and boundary audit
-
-No AGENTS.md was found at the workspace root or in tracked repository files.
-No tracked GitHub workflows were found.
-netlify.toml defines a build and public output. It was inspected, not changed.
-Remote deployment integration settings could not be verified offline.
-No branch push or PR creation was attempted. No deployment was triggered.
-The coordinator can review the full binary patch before any remote action.
-The prescribed output directory could not be created in this cloud runtime.
-Both normal and elevated output writes were refused.
-The patch and archive are retained under work/market-sizing/handoff for retrieval.
-The patch includes every new file and generated artifact. Evidence is separate.
-
-No deployment, Netlify command, DNS change, force push, merge or main write occurred.
-No authentication, endpoint, existing tool name or package version changed.
-No challenge file or its _headers block changed. The interview field fix is preserved.
-No hosted video, legal declaration, directory submission or package upload changed.
-No skills or shell MCP tools were added. No paid calls or API agents were used.
-No secrets were read, printed or committed. Other repositories were not changed.
-No new analytics, account system, checkout or durable user storage was added.
-Existing host transport and usage-count behaviour were left unchanged.
-No work was marked ready, deployed or published.
+Only this draft branch is updated. The coordinator confirmed ICP deploys through manual CLI.
+The repository has no tracked GitHub deployment workflows. Automation is rechecked before delivery.
+No deploy, Netlify command, workflow dispatch, default branch write, force push or merge occurred.
+No auth, endpoint, existing tool name, input schema, server version or package version changed.
+No challenge file, _headers block, hosted video, deployment setting or unrelated work changed.
+No secrets, paid calls, API agents, shell MCP tools or skills were introduced.
+No analytics, accounts, checkout, storage, directory submission or package upload was added.
+The existing interview field fix, transport and usage-count behavior are preserved.

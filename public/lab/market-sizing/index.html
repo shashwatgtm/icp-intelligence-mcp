@@ -43,10 +43,12 @@ const calculateMarket = function calculateMarket(args                     ) {
     const tam = totalCompanies * acv;
     const sam = tam * icpPercent;
     const som = sam * marketSharePercent;
-    if (![tam, sam, som].every(Number.isFinite))
-        throw new Error('Calculation exceeds the supported numeric range. Use smaller inputs.');
+    // Preserve legacy arithmetic, including Infinity and NaN, for unchanged text output.
+    const rangeSupported = [tam, sam, som].every(Number.isFinite);
     return {
         inputs: { ...args, total_potential_companies: totalCompanies, average_contract_value: acv },
+        rangeSupported,
+        rangeMessage: rangeSupported ? '' : 'Calculation exceeds the supported numeric range. Use smaller inputs.',
         currency: 'USD', totalCompanies, acv, icpPercent, marketSharePercent, tam, sam, som,
         exampleAssumptions: { icp: args.icp_percentage == null, share: args.year1_market_share_target == null },
         scenarios: [0.5, 1, 1.5].map((factor, i) => {
@@ -55,41 +57,162 @@ const calculateMarket = function calculateMarket(args                     ) {
         }),
     };
 };
-const form=document.querySelector('form'), status=document.querySelector('#status'), results=document.querySelector('#results'), button=document.querySelector('button');
-const hosted=window.parent!==window; let ready=false, nextId=1, latestCall=0; const pending=new Map();
-const text=(id,value)=>{document.getElementById(id).textContent=String(value)};
-const number=value=>{const n=Number(value),s=n.toLocaleString('en-US',{maximumFractionDigits:10});return n!==0&&Number(s.replaceAll(',',''))===0?String(n):s;};
-const money=value=>value>0&&value<0.005?'under USD 0.01':'USD '+Number(value).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-text('mode',hosted?'MCP host mode. Waiting for initialization.':'Standalone mode. Fully local calculation.');
-function error(message){status.className='error';text('status',message);results.hidden=true;}
-function inputs(){const args={};for(const field of form.elements){if(!field.name)continue;const value=field.value.trim();if(field.type==='number'){if(value!=='')args[field.name]=Number(value);}else if(value!=='')args[field.name]=value;}return args;}
-function populate(args){if(!args||typeof args!=='object')return;for(const field of form.elements){if(field.name)field.value=typeof args[field.name]==='string'||typeof args[field.name]==='number'?String(args[field.name]):'';}}
-function render(data){
-  // Validate and recompute from received inputs. Never trust markup or derived values.
-  const r=calculateMarket(data.inputs);results.hidden=false;status.className='';text('status','Calculation updated.');
-  text('segment',typeof r.inputs.segment_name==='string'?r.inputs.segment_name:'Target market');text('source',typeof r.inputs.data_sources==='string'?r.inputs.data_sources:'Source: your inputs. Not independently verified.');
-  text('assumptions',r.exampleAssumptions.icp||r.exampleAssumptions.share?'Example assumptions used: '+[r.exampleAssumptions.icp?'ICP match 30%':'',r.exampleAssumptions.share?'Year 1 share 3%':''].filter(Boolean).join('; ')+'. Replace with your own.':'All calculation inputs supplied.');
-  for(const key of ['tam','sam','som'])text(key,money(r[key]));
-  const rows=document.querySelector('#scenarios');rows.replaceChildren();for(const s of r.scenarios){const row=document.createElement('tr');for(const v of [s.name,number(s.share)+'%',money(s.som)]){const cell=document.createElement('td');cell.textContent=v;row.append(cell);}rows.append(row);}
-  text('trace','TAM = '+number(r.totalCompanies)+' companies × '+money(r.acv)+' per company per year = '+money(r.tam)+'\nSAM = TAM × '+number(r.icpPercent*100)+'% = '+money(r.sam)+'\nYear 1 SOM = SAM × '+number(r.marketSharePercent*100)+'% = '+money(r.som));
+const form = document.querySelector('form');
+const status = document.querySelector('#status');
+const results = document.querySelector('#results');
+const button = document.querySelector('button');
+const hosted = window.parent !== window;
+const textFields = ['segment_name', 'data_sources', 'product_category', 'company'];
+let ready = false, nextId = 1, latestCall = 0, editRevision = 0;
+let ownsForm = false, initialToolArgs = {}, resizeScheduled = false, lastSize = '';
+const pending = new Map();
+const text = (id, value) => { document.getElementById(id).textContent = String(value); };
+const number = value => {
+  const n = Number(value), s = n.toLocaleString('en-US', { maximumFractionDigits: 10 });
+  return n !== 0 && Number(s.replaceAll(',', '')) === 0 ? String(n) : s;
+};
+const money = value => value > 0 && value < 0.005 ? 'under USD 0.01' : 'USD ' + Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+text('mode', hosted ? 'MCP host mode. Waiting for initialization.' : 'Standalone mode. Fully local calculation.');
+function error(message) {
+  status.className = 'error';
+  text('status', message);
+  results.hidden = true;
 }
-function notify(method,params){parent.postMessage({jsonrpc:'2.0',method,params},'*');}
-function request(method,params){const id=nextId++;return new Promise((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(id);reject(new Error('The MCP host did not respond. Please retry.'));},15000);pending.set(id,{resolve,reject,timer});parent.postMessage({jsonrpc:'2.0',id,method,params},'*');});}
-window.addEventListener('message',event=>{
-  if(!hosted||event.source!==window.parent)return;
-  const m=event.data;if(!m||m.jsonrpc!=='2.0')return;
-  if(pending.has(m.id)){const p=pending.get(m.id);pending.delete(m.id);clearTimeout(p.timer);m.error?p.reject(new Error('MCP host request failed.')):p.resolve(m.result);return;}
-  try{
-    if(m.method==='ui/notifications/tool-input'){populate(m.params?.arguments);results.hidden=true;text('status','Inputs received. Waiting for tool result.');}
-    if(m.method==='ui/notifications/tool-result'){
-      if(m.params?.isError)throw new Error('The calculator returned an error. Check the inputs and retry.');
-      if(!m.params?.structuredContent)throw new Error('No structured calculation was received. Recalculate to retry.');
-      populate(m.params.structuredContent.inputs);render(m.params.structuredContent);
+function inputs() {
+  const args = {};
+  for (const field of form.elements) {
+    if (!field.name) continue;
+    const raw = field.value;
+    if (field.type === 'number') {
+      if (raw.trim() !== '') args[field.name] = Number(raw);
+    } else if (raw !== '') args[field.name] = raw;
+  }
+  return args;
+}
+function populate(args) {
+  if (!args || typeof args !== 'object') return;
+  for (const field of form.elements) {
+    if (field.name) field.value = typeof args[field.name] === 'string' || typeof args[field.name] === 'number' ? String(args[field.name]) : '';
+  }
+}
+function hydrate(result, fallback = {}) {
+  if (result?.isError) throw new Error('The calculator returned an error. Check the inputs and retry.');
+  if (!result?.structuredContent?.inputs) throw new Error('No structured calculation was received. Recalculate to retry.');
+  const data = result.structuredContent;
+  const literalInputs = { ...data.inputs };
+  const codePoints = result._meta?.helixMarketSizing?.textCodePoints;
+  // Model-facing strings stay escaped. Never put them back into an editable field.
+  // Only allowlisted, bounded numeric character arrays or known local input hydrate text.
+  for (const key of textFields) {
+    delete literalInputs[key];
+    const points = codePoints?.[key];
+    if (Array.isArray(points) && points.length <= 100000 && points.every(n => Number.isInteger(n) && n >= 0 && n <= 0x10ffff)) {
+      literalInputs[key] = points.map(n => String.fromCodePoint(n)).join('');
+    } else if (typeof fallback[key] === 'string') literalInputs[key] = fallback[key];
+  }
+  return { ...data, inputs: literalInputs };
+}
+function render(data) {
+  // Independently validate received inputs. All text uses inert DOM properties.
+  const r = calculateMarket(data.inputs);
+  if (!r.rangeSupported) { error(r.rangeMessage); return; }
+  results.hidden = false;
+  status.className = '';
+  text('status', 'Calculation updated.');
+  text('segment', typeof r.inputs.segment_name === 'string' ? r.inputs.segment_name : 'Target market');
+  text('source', typeof r.inputs.data_sources === 'string' ? r.inputs.data_sources : 'Source: your inputs. Not independently verified.');
+  text('assumptions', r.exampleAssumptions.icp || r.exampleAssumptions.share ? 'Example assumptions used: ' + [r.exampleAssumptions.icp ? 'ICP match 30%' : '', r.exampleAssumptions.share ? 'Year 1 share 3%' : ''].filter(Boolean).join('; ') + '. Replace with your own.' : 'All calculation inputs supplied.');
+  for (const key of ['tam', 'sam', 'som']) text(key, money(r[key]));
+  const rows = document.querySelector('#scenarios');
+  rows.replaceChildren();
+  for (const s of r.scenarios) {
+    const row = document.createElement('tr');
+    for (const value of [s.name, number(s.share) + '%', money(s.som)]) {
+      const cell = document.createElement('td'); cell.textContent = value; row.append(cell);
     }
-  }catch(e){error(e.message);}
+    rows.append(row);
+  }
+  text('trace', 'TAM = ' + number(r.totalCompanies) + ' companies × ' + money(r.acv) + ' per company per year = ' + money(r.tam) + '\nSAM = TAM × ' + number(r.icpPercent * 100) + '% = ' + money(r.sam) + '\nYear 1 SOM = SAM × ' + number(r.marketSharePercent * 100) + '% = ' + money(r.som));
+}
+function notify(method, params) { parent.postMessage({ jsonrpc: '2.0', method, params }, '*'); }
+function request(method, params) {
+  const id = nextId++;
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => { pending.delete(id); reject(new Error('The MCP host did not respond. Please retry.')); }, 15000);
+    pending.set(id, { resolve, reject, timer });
+    parent.postMessage({ jsonrpc: '2.0', id, method, params }, '*');
+  });
+}
+function scheduleSize() {
+  if (!hosted || !ready || resizeScheduled) return;
+  resizeScheduled = true;
+  requestAnimationFrame(() => {
+    resizeScheduled = false;
+    const width = Math.ceil(document.documentElement.clientWidth);
+    const height = Math.ceil(document.querySelector('main').getBoundingClientRect().height);
+    const size = width + ':' + height;
+    if (size !== lastSize) { lastSize = size; notify('ui/notifications/size-changed', { width, height }); }
+  });
+}
+function ignoreHostUpdate() {
+  text('status', 'Incoming host update ignored. Your local inputs are preserved. Recalculate to use them.');
+}
+window.addEventListener('message', event => {
+  if (!hosted || event.source !== window.parent) return;
+  const m = event.data;
+  if (!m || m.jsonrpc !== '2.0') return;
+  if (pending.has(m.id)) {
+    const p = pending.get(m.id); pending.delete(m.id); clearTimeout(p.timer);
+    m.error ? p.reject(new Error('MCP host request failed.')) : p.resolve(m.result);
+    return;
+  }
+  try {
+    if (m.method === 'ui/notifications/tool-input') {
+      if (ownsForm) { ignoreHostUpdate(); return; }
+      initialToolArgs = m.params?.arguments || {};
+      populate(initialToolArgs); results.hidden = true;
+      text('status', 'Inputs received. Waiting for tool result.');
+    }
+    if (m.method === 'ui/notifications/tool-result') {
+      // Notifications have no request ID. Once local editing starts, only the
+      // matching tools/call response may update results. Notifications never win.
+      if (ownsForm) { ignoreHostUpdate(); return; }
+      const data = hydrate(m.params, initialToolArgs);
+      populate(data.inputs); render(data);
+    }
+  } catch (e) { error(e.message); }
 });
-form.addEventListener('input',()=>{latestCall++;results.hidden=true;text('status','Inputs changed. Recalculate to update results.');});
-form.addEventListener('submit',async event=>{event.preventDefault();const call=++latestCall;try{const args=inputs();calculateMarket(args);button.disabled=true;if(hosted){if(!ready)throw new Error('The MCP host is not ready. Please retry after initialization.');const r=await request('tools/call',{name:'tam_sam_som_calculator',arguments:args});if(call!==latestCall)return;if(r?.isError||!r?.structuredContent)throw new Error('The calculator returned no valid result. Check inputs and retry.');render(r.structuredContent);}else render({inputs:args});}catch(e){error(e.message);}finally{button.disabled=false;}});
-form.hidden=false;
-if(hosted){request('ui/initialize',{protocolVersion:'2026-01-26',appInfo:{name:'Helix market sizing',version:'1.0.0'},appCapabilities:{}}).then(()=>{ready=true;notify('ui/notifications/initialized',{});text('mode','MCP host mode. Recalculation uses the existing calculator tool.');}).catch(e=>error(e.message));}
+form.addEventListener('input', () => {
+  editRevision++; ownsForm = true; results.hidden = true;
+  text('status', 'Inputs changed. Recalculate to update results.');
+});
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+  const call = ++latestCall, revision = editRevision;
+  ownsForm = true;
+  try {
+    const args = inputs(); calculateMarket(args); button.disabled = true;
+    if (hosted) {
+      if (!ready) throw new Error('The MCP host is not ready. Please retry after initialization.');
+      const result = await request('tools/call', { name: 'tam_sam_som_calculator', arguments: args });
+      if (call !== latestCall || revision !== editRevision) return;
+      render(hydrate(result, args));
+    } else render({ inputs: args });
+  } catch (e) {
+    if (call === latestCall && revision === editRevision) error(e.message);
+  } finally {
+    if (call === latestCall) button.disabled = false;
+  }
+});
+form.hidden = false;
+if (hosted) {
+  const observer = new ResizeObserver(scheduleSize);
+  observer.observe(document.querySelector('main'));
+  window.addEventListener('resize', scheduleSize);
+  document.fonts.ready.then(scheduleSize);
+  request('ui/initialize', { protocolVersion: '2026-01-26', appInfo: { name: 'Helix market sizing', version: '1.0.0' }, appCapabilities: { availableDisplayModes: ['inline'] } }).then(() => {
+    ready = true; notify('ui/notifications/initialized', {}); scheduleSize();
+    text('mode', 'MCP host mode. Recalculation uses the existing calculator tool.');
+  }).catch(e => error(e.message));
+}
 </script></html>
