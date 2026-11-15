@@ -8,7 +8,7 @@
 // Presentation only. Original server text and calculations remain authoritative.
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { McpError, ErrorCode } from "@modelcontextprotocol/sdk/types.js";
-import { HELIX_RESULTS_HTML } from "./helix-results-html.ts";
+import { EDITABLE_RESULTS_HTML } from "./account-prioritization-editor-html.ts";
 
 type Response = { content?: Array<{ type: string; text?: string }>; structuredContent?: any; isError?: boolean; _meta?: Record<string, unknown>; [key: string]: unknown };
 
@@ -66,7 +66,7 @@ export function attachHelixResults(server: Server, domain?: string): void {
   return { ...result, resources: [...(result.resources ?? []).filter((r: any) => r.uri !== URI), resource] };
  });
  handlers.set("resources/read", async (request, extra) => {
-  if (request?.params?.uri === URI) return { contents: [{ uri: URI, mimeType: MIME, text: HELIX_RESULTS_HTML, _meta: resourceMetadata(domain) }] };
+  if (request?.params?.uri === URI) return { contents: [{ uri: URI, mimeType: MIME, text: EDITABLE_RESULTS_HTML, _meta: resourceMetadata(domain) }] };
   if (readResource) return readResource(request, extra);
   throw new McpError(ErrorCode.InvalidParams, "Unknown result resource");
  });

@@ -1,0 +1,209 @@
+{
+  "baseline": "7ccaff43c905f76c7ab0117bc7e0e37bb3aa2102",
+  "originalPr": "0140156e6710b5544388d6c1b8fceb46defd8bc6",
+  "cases": [
+    {
+      "label": "ordinary",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1",
+            "fit_score": 80,
+            "intent_signals": 60,
+            "relationship": 40,
+            "timing": "now"
+          },
+          {
+            "name": "Row 2",
+            "fit_score": 40,
+            "intent_signals": 50,
+            "relationship": 50,
+            "timing": "soon"
+          }
+        ]
+      },
+      "textSha256": "bd0bf2154396dc80dd2c50659e7d7f1fb3e6a37a8fb48179a179eee5f54ebba4",
+      "isError": false
+    },
+    {
+      "label": "defaults",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1"
+          }
+        ]
+      },
+      "textSha256": "6df106ff6fb2f2fe11be890574c8b9bb36709d882a2576b77753897935844a1c",
+      "isError": false
+    },
+    {
+      "label": "zeros",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1",
+            "fit_score": 0,
+            "intent_signals": 0,
+            "relationship": 0,
+            "timing": "later"
+          }
+        ],
+        "prioritization_weights": {
+          "fit": 0,
+          "intent": 0,
+          "relationship": 0,
+          "timing": 100
+        }
+      },
+      "textSha256": "b1fed89398589e7098046f5cc4fb12a359ce7417e932e43b82de3b1e07487911",
+      "isError": false
+    },
+    {
+      "label": "weights200",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1",
+            "fit_score": 80,
+            "intent_signals": 60,
+            "relationship": 40,
+            "timing": "now"
+          }
+        ],
+        "prioritization_weights": {
+          "fit": 80,
+          "intent": 60,
+          "relationship": 30,
+          "timing": 30
+        }
+      },
+      "textSha256": "c82c56ede16f5b9b83d5c13dc8e934b9b2d122c1cc50dfee27fac498a9e0105c",
+      "isError": false
+    },
+    {
+      "label": "fractional",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1"
+          }
+        ],
+        "prioritization_weights": {
+          "fit": 33.3,
+          "intent": 33.3,
+          "relationship": 33.3,
+          "timing": 0.1
+        }
+      },
+      "textSha256": "708cfb25c4625e543bea01016345075309e48d7fd622d5ecbdb2f87859e4a621",
+      "isError": false
+    },
+    {
+      "label": "timing",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1",
+            "timing": " now "
+          },
+          {
+            "name": "Row 2",
+            "timing": "NOW"
+          },
+          {
+            "name": "Row 3",
+            "timing": "unexpected"
+          }
+        ]
+      },
+      "textSha256": "37235887fe5c3437599b607b7114758c5ce768a6e14b0ccd97d4efb342d3cb84",
+      "isError": false
+    },
+    {
+      "label": "duplicates",
+      "args": {
+        "accounts": [
+          {
+            "name": "Same"
+          },
+          {
+            "name": "Same"
+          },
+          {
+            "name": "Same"
+          },
+          {
+            "name": "Same"
+          },
+          {
+            "name": "Same"
+          },
+          {
+            "name": "Same"
+          },
+          {
+            "name": "Same"
+          }
+        ]
+      },
+      "textSha256": "91310052383c5d3af672a45248c7b7d9cc73e603a865bd1f622017157136e7ca",
+      "isError": false
+    },
+    {
+      "label": "negative",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1"
+          }
+        ],
+        "prioritization_weights": {
+          "fit": -40,
+          "intent": 60,
+          "relationship": 30,
+          "timing": 30
+        }
+      },
+      "textSha256": "bfa56aa20a9770152755b153923c393d27a4d6d93de4c1392d1ed0fc1c502efe",
+      "isError": false
+    },
+    {
+      "label": "overflow",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1"
+          }
+        ],
+        "prioritization_weights": {
+          "fit": 1e+308,
+          "intent": 1e+308,
+          "relationship": 1e+308,
+          "timing": 1e+308
+        }
+      },
+      "textSha256": "e88b223759a584bb3cd07e65559510294e8bc57b4f92c64cbc23bebcc2c2e68e",
+      "isError": false
+    },
+    {
+      "label": "nulls",
+      "args": {
+        "accounts": [
+          {
+            "name": "Row 1",
+            "fit_score": null,
+            "intent_signals": null,
+            "relationship": null,
+            "timing": null
+          }
+        ],
+        "prioritization_weights": {
+          "fit": null
+        }
+      },
+      "textSha256": "6df106ff6fb2f2fe11be890574c8b9bb36709d882a2576b77753897935844a1c",
+      "isError": false
+    }
+  ]
+}

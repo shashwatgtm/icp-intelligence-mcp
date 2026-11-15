@@ -7,7 +7,7 @@ exports.resourceMetadata = resourceMetadata;
 exports.toolMetadata = toolMetadata;
 exports.attachHelixResults = attachHelixResults;
 const types_js_1 = require("@modelcontextprotocol/sdk/types.js");
-const helix_results_html_ts_1 = require("./helix-results-html.js");
+const account_prioritization_editor_html_ts_1 = require("./account-prioritization-editor-html.js");
 exports.names = { account_prioritization: 'Account Prioritization', pmf_scorecard: 'Product Market Fit Scorecard', content_repurposer: 'Content Repurposer' };
 exports.URI = 'ui://helix/results/v1.html';
 exports.RESOURCE_NAME = 'helix-results';
@@ -70,7 +70,7 @@ function attachHelixResults(server, domain) {
     });
     handlers.set("resources/read", async (request, extra) => {
         if (request?.params?.uri === exports.URI)
-            return { contents: [{ uri: exports.URI, mimeType: exports.MIME, text: helix_results_html_ts_1.HELIX_RESULTS_HTML, _meta: resourceMetadata(domain) }] };
+            return { contents: [{ uri: exports.URI, mimeType: exports.MIME, text: account_prioritization_editor_html_ts_1.EDITABLE_RESULTS_HTML, _meta: resourceMetadata(domain) }] };
         if (readResource)
             return readResource(request, extra);
         throw new types_js_1.McpError(types_js_1.ErrorCode.InvalidParams, "Unknown result resource");
