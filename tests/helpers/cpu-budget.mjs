@@ -7,18 +7,31 @@ const WORKER = `
   (async () => {
     const { moduleUrl, exportName, inputs } = workerData;
     const fn = (await import(moduleUrl))[exportName];
-    // Warm each size once. Measure each once. No retries or best-of selection.
+    // Exclude other V8 threads where the runtime provides a per-thread clock.
+    const clock = process.threadCpuUsage ?? process.cpuUsage;
+    // Use all samples in a fixed batch. Interleave sizes to distribute GC and JIT work.
     for (const input of inputs) { fn(input.slice(0, Math.ceil(input.length / 4))); fn(input); }
     const samples = [];
     const measure = (input) => {
-      const start = process.cpuUsage();
+      const start = clock();
       const output = fn(input);
-      const cpu = process.cpuUsage(start);
+      const cpu = clock(start);
       if (typeof output !== "string") throw new Error("expected string output");
       return (cpu.user + cpu.system) / 1000;
     };
     for (const input of inputs) {
-      samples.push([measure(input.slice(0, Math.ceil(input.length / 4))), measure(input)]);
+      const quarter = input.slice(0, Math.ceil(input.length / 4));
+      let smallCpu = 0;
+      let largeCpu = 0;
+      let peakCpu = 0;
+      for (let round = 0; round < 3; round++) {
+        if (round % 2 === 0) smallCpu += measure(quarter);
+        const full = measure(input);
+        largeCpu += full;
+        peakCpu = Math.max(peakCpu, full);
+        if (round % 2 === 1) smallCpu += measure(quarter);
+      }
+      samples.push([smallCpu / 3, largeCpu / 3, peakCpu]);
     }
     parentPort.postMessage(samples);
   })().catch((error) => { throw error; });
@@ -44,7 +57,7 @@ export async function assertCpuBudget(moduleUrl, exportName, inputs, budgetMs, a
     await worker.terminate();
   }
   assert.equal(samples.length, inputs.length);
-  const large = samples.map((pair) => pair[1]);
+  const large = samples.map((pair) => pair[2]);
   const checked = aggregate ? [large.reduce((a, b) => a + b, 0)] : large;
   for (const [index, ms] of checked.entries()) {
     assert.ok(Number.isFinite(ms) && ms < budgetMs,
@@ -57,5 +70,5 @@ export async function assertCpuBudget(moduleUrl, exportName, inputs, budgetMs, a
     assert.ok(large < 8 * Math.max(small, 5),
       `superlinear CPU growth on input ${index}: ${small.toFixed(2)} -> ${large.toFixed(2)} ms`);
   }
-  console.log(`timing CPU ms [quarter, full]: ${JSON.stringify(samples)}`);
+  console.log(`timing CPU ms [mean quarter, mean full, peak full]: ${JSON.stringify(samples)}`);
 }
