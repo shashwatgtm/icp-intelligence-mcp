@@ -38,9 +38,12 @@
     }
   ],
   "not_retested": "Historical IMPACT records are not current findings. Owner reports Positioning In review, no new version, W5b stopped.",
-  "remaining_current_findings": [
+  "targeted_capture": "evals/fixtures/pmf-incomplete-evidence-20261029.json",
+  "superseded_pmf_findings": [
     "pmf-activation-supplied: unlabelled activation rate 70% is not read; labelled Activation: 70% control passes.",
     "pmf-incomplete-retention-evidence: churn and retention absent, activation read at 70%, 3 of 5 dimensions, but Priority Actions still recommends scaling."
   ],
-  "targeted_capture": "evals/fixtures/pmf-incomplete-evidence-20261029.json"
+  "remaining_current_findings": [],
+  "pmf_refresh": "evals/fixtures/pmf-fixed-refresh-20261029.json",
+  "pmf_refresh_status": "Both prior PMF failures superseded by exact-input fresh passing observations under unchanged graders. Earlier bad captures remain negative regression inputs."
 }

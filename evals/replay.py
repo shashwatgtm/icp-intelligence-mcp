@@ -17,6 +17,15 @@ def current_replay():
     targeted_fixture = ROOT / 'fixtures' / 'pmf-incomplete-evidence-20261029.json'
     targeted_raw = targeted_fixture.read_bytes()
     calls = snapshot['calls'] + [json.loads(targeted_raw)]
+    refresh_fixture = ROOT / 'fixtures' / 'pmf-fixed-refresh-20261029.json'
+    refresh_raw = refresh_fixture.read_bytes()
+    refreshed = {c['id']: c for c in json.loads(refresh_raw)['calls']}
+    if set(refreshed) != {'pmf-activation-supplied', 'pmf-incomplete-retention-evidence'}:
+        raise ValueError('Refresh must contain exactly the two authorized PMF cases')
+    for call in calls:
+        if call['id'] in refreshed and call['arguments'] != refreshed[call['id']]['arguments']:
+            raise ValueError('Refreshed inputs differ from the historical case')
+    calls = [refreshed.get(c['id'], c) for c in calls]
     rows = []
     for call in calls:
         derived = {'case-study-four-outcomes': 'case-study-four', 'pmf-incomplete-retention-evidence': 'pmf-incomplete'}
@@ -30,7 +39,8 @@ def current_replay():
                          provenance=call['provenance']))
     return dict(mode='current-connector-capture-replay', scope='Offline replay of fresh LIVE Helix connector calls. Not evals/run.py HTTP requests. No new calls during replay.',
                 fixture='evals/fixtures/fresh-live-20261029.json', fixture_sha256=hashlib.sha256(raw).hexdigest(),
-                additional_fixtures=[dict(path='evals/fixtures/pmf-incomplete-evidence-20261029.json', sha256=hashlib.sha256(targeted_raw).hexdigest())],
+                additional_fixtures=[dict(path='evals/fixtures/pmf-incomplete-evidence-20261029.json', sha256=hashlib.sha256(targeted_raw).hexdigest(), scope='Historical bad capture, superseded for current selection'),
+                                     dict(path='evals/fixtures/pmf-fixed-refresh-20261029.json', sha256=hashlib.sha256(refresh_raw).hexdigest(), scope='Current selection for exactly two PMF cases')],
                 counts={k: sum(r['status'] == k for r in rows) for k in ['pass', 'fail', 'skip']}, receipts=rows)
 
 

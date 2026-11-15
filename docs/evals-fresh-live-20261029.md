@@ -2,14 +2,62 @@
 
 Draft PR: https://github.com/shashwatgtm/icp-intelligence-mcp/pull/4.
 Branch: `codex/mcp-evals-20261029`.
-Revision parent: `e6819fc689e1d96348e3d595be1d2e7abab2a02a`.
+Latest refresh parent: `59c1b5b4bfdbba2c497218383825e58d165452fb`.
 The delivered head is in the PR metadata. Keep this PR draft.
 
 All ten exact review fixtures and the four-outcome probe passed the prior full
-review. The current replay retains two derived PMF findings: activation parsing
-and conflicting scaling advice with incomplete evidence. Neither was hidden.
+review. Both derived PMF findings are now superseded by two fresh passing captures.
+Current replay is 14 pass, 0 fail and 0 skip. All graders are unchanged.
 
-## Targeted PMF correction
+## Owner fix refresh, 29 October 2026
+
+Exactly two fresh LIVE Helix PMF calls reused the exact earlier failing inputs.
+They ran from 21:22:56 to 21:23:04 IST. Complete inputs, returned outputs, UTC
+start/end times and connector provenance are in
+`evals/fixtures/pmf-fixed-refresh-20261029.json`. They are connected tool calls,
+not `evals/run.py` HTTP calls. No other live tool or host chat was called.
+
+| Refreshed case | Unchanged grader | Result |
+| --- | --- | --- |
+| `pmf-activation-supplied` | `pmf` | Pass: activation rate 70% is read; all five dimensions score |
+| `pmf-incomplete-retention-evidence` | `pmf-incomplete` | Pass: missing churn and retention get collection actions without scaling advice |
+
+The all-strong closing now asks for the figures to be checked against history and
+customer evidence before scaling. The incomplete case says CHURN and RETENTION
+are not given and not scored. Both earlier bad outputs are preserved unchanged.
+Current replay selects the refresh by case ID and refuses changed input arguments.
+Its other twelve selections are unchanged. Zero graders changed. Old bad outputs
+and mutations that restore either defect still fail the same assertions.
+
+The owner reports fix commit `3cfe331d0f436e5e858f02ae39b6ebc29c5c968f`, deploy
+`6ae3622e`, version 2.2.23 and eight tools. Deployment identity is owner-reported,
+not independently attested by the connector. The owner reports that later main
+`db9582491725d1765768c4c0d6566761305ebca7` adds only the protected walkthrough
+video. This work did not read, edit or change that video.
+
+Only these affected checks ran in cloud:
+
+```sh
+python tests/evals-pmf-fixed-refresh-20261029.test.py
+python tests/evals-pmf-incomplete-20261029.test.py
+python tests/evals-fresh-live-20261029.test.py FreshLiveTests.test_current_replay_is_offline_and_keeps_parsing_finding
+python evals/replay.py --current --output evals/receipts/current-connector-replay.json
+git diff --cached --check
+```
+
+Results: "Ran 8 tests ... OK", "Ran 8 tests ... OK" and "Ran 1 test ... OK".
+That is 17 targeted test executions, zero failures and zero skips. Current replay
+reports 14 pass, 0 fail and 0 skip, exit 0. The prior full suite and dry-run were
+not repeated. The selected integration test retains its old function name for
+continuity; it now verifies that current replay has no failures.
+
+Changed files are this note, the evidence index, one new capture, replay selection,
+the current receipt, three targeted test receipts, one new regression file and
+one existing replay assertion. No grader, server, source fixture, version or other
+workstream changed. Positioning, Sales Enablement and Content Studio holds remain.
+The same draft PR is the delivery. No new PR, deployment or publication is involved.
+
+## Earlier targeted PMF correction, historical
 
 One additional fresh connected PMF call reproduced W1's incomplete-evidence case.
 Its synthetic metrics are NPS 70, CAC USD 500, LTV USD 3000 and labelled
@@ -29,7 +77,7 @@ only the conflicting scaling action. Changing only that action to evidence
 collection passes. Restoring the bad action fails. Missing actions, forged full
 coverage and a wrong activation value also fail. No production file was edited.
 
-| Current added case | Grader | Result |
+| Historical added case, now superseded | Grader | Result |
 | --- | --- | --- |
 | `pmf-incomplete-retention-evidence` | `pmf-incomplete` | Fail: scaling advice conflicts with incomplete evidence |
 
@@ -43,8 +91,8 @@ git diff --cached --check
 ```
 
 The new targeted tests pass 8/8. The affected replay integration test passes 1/1.
-Current replay has 12 pass, 2 fail and 0 skip, with exit 1 preserving both real
-findings. The earlier 224-test full run and dry-run were not repeated. Their
+At that historical phase, replay had 12 pass, 2 fail and 0 skip, with exit 1
+preserving both findings. The refresh above supersedes those two observations. The earlier 224-test full run and dry-run were not repeated. Their
 receipts below remain historical validation. New receipts are
 `pmf-incomplete-self-tests.txt` and `pmf-incomplete-replay-test.txt`.
 
@@ -72,9 +120,10 @@ The tool responses do not attest their deployed commit. The deploy identifiers
 remain owner-reported provenance, not independently verified build identities.
 Real company names occur only in the authorized synthetic review fixture inputs.
 
-## Every current GTM and Content grader
+## Prior full review observations, with historical PMF failures
 
-Case IDs below refer to the fresh capture. The replay receipt records the grader,
+Case IDs below refer to the earlier capture. Its two failing PMF rows are now
+superseded by the refresh above. The current replay receipt records the grader,
 case ID, timestamps, provenance and exact failed assertions when present.
 
 | Tool | Grader | Fresh fixture ID | Result | What is checked |
@@ -93,11 +142,11 @@ case ID, timestamps, provenance and exact failed assertions when present.
 | `pmf_scorecard` | `pmf` | `pmf-activation-labelled` | Pass | `Activation: 70%` is read; all 5 dimensions score, with overall 8.6/10 |
 | `pmf_scorecard` | `pmf` | `pmf-activation-supplied` | Fail | `activation rate 70%` is reported as missing; output still scores only 4 of 5 dimensions |
 
-The last row is a real current observation. The input text explicitly supplies
+The last row was a real observation before the owner fix and is now historical. The input text explicitly supplies
 activation at 70 percent. The tool description says activation figures can be
 included in current_metrics. The output does not read this unlabelled form. The
 labelled control succeeds. Both records are preserved. This workstream does not
-change production parsing. The replay exits 1 to retain this finding.
+change production parsing. The earlier replay exited 1 to retain that finding. Current replay passes it.
 
 ## Changed graders and reasons
 
@@ -130,7 +179,7 @@ The previous 150 tests and negative inventory/protocol checks remain in place.
 
 All computation ran in cloud. No production build was needed. The broad test
 commands below belong to the prior full review and were not rerun for the targeted
-PMF correction. The current replay row includes the added PMF case.
+PMF correction. The current replay row includes both refreshed PMF captures.
 
 ```sh
 python tests/evals-20261029.test.py
@@ -147,12 +196,12 @@ git diff --cached --check
 | Prior observed-format tests | 99 | 0 | 0 | 0 |
 | Fresh capture and mutation tests | 74 | 0 | 0 | 0 |
 | Prior total offline tests, not rerun | 224 | 0 | 0 | 0 |
-| Current connector capture replay | 12 | 2 | 0 | 1 |
+| Current connector capture replay after PMF refresh | 14 | 0 | 0 | 0 |
 | Dry-run | 0 | 0 | 73 | 0 |
 | Whitespace check | 1 | 0 | 0 | 0 |
 
-Replay failures are output findings, not failing harness tests. The test suite
-expects the activation parsing failure and checks that replay keeps it. Dry-run
+Replay failures are output findings, not failing harness tests. Historical regression tests still expect the old parsing failure. Current replay
+selects the fixed captures and checks that both pass without grader changes. Dry-run
 constructs no network client and makes zero network calls. Fresh captures were
 made once through the connected tools before offline replay and testing.
 
