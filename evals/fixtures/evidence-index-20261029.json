@@ -38,5 +38,9 @@
     }
   ],
   "not_retested": "Historical IMPACT records are not current findings. Owner reports Positioning In review, no new version, W5b stopped.",
-  "remaining_current_finding": "pmf-activation-supplied: unlabelled activation rate 70% is not read; labelled Activation: 70% control passes."
+  "remaining_current_findings": [
+    "pmf-activation-supplied: unlabelled activation rate 70% is not read; labelled Activation: 70% control passes.",
+    "pmf-incomplete-retention-evidence: churn and retention absent, activation read at 70%, 3 of 5 dimensions, but Priority Actions still recommends scaling."
+  ],
+  "targeted_capture": "evals/fixtures/pmf-incomplete-evidence-20261029.json"
 }

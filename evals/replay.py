@@ -14,9 +14,13 @@ def current_replay():
     fixture = ROOT / 'fixtures' / 'fresh-live-20261029.json'
     raw = fixture.read_bytes()
     snapshot = json.loads(raw)
+    targeted_fixture = ROOT / 'fixtures' / 'pmf-incomplete-evidence-20261029.json'
+    targeted_raw = targeted_fixture.read_bytes()
+    calls = snapshot['calls'] + [json.loads(targeted_raw)]
     rows = []
-    for call in snapshot['calls']:
-        kind = 'case-study-four' if call['id'] == 'case-study-four-outcomes' else GRADERS[call['tool']]
+    for call in calls:
+        derived = {'case-study-four-outcomes': 'case-study-four', 'pmf-incomplete-retention-evidence': 'pmf-incomplete'}
+        kind = derived.get(call['id'], GRADERS[call['tool']])
         if kind == 'smoke':
             raise ValueError('Every current GTM/Content case needs a deterministic grader')
         passed, reason = grade(kind, call['result'], call['arguments'])
@@ -26,6 +30,7 @@ def current_replay():
                          provenance=call['provenance']))
     return dict(mode='current-connector-capture-replay', scope='Offline replay of fresh LIVE Helix connector calls. Not evals/run.py HTTP requests. No new calls during replay.',
                 fixture='evals/fixtures/fresh-live-20261029.json', fixture_sha256=hashlib.sha256(raw).hexdigest(),
+                additional_fixtures=[dict(path='evals/fixtures/pmf-incomplete-evidence-20261029.json', sha256=hashlib.sha256(targeted_raw).hexdigest())],
                 counts={k: sum(r['status'] == k for r in rows) for k in ['pass', 'fail', 'skip']}, receipts=rows)
 
 

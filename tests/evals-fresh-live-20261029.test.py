@@ -69,8 +69,8 @@ class FreshLiveTests(unittest.TestCase):
     def test_current_replay_is_offline_and_keeps_parsing_finding(self):
         with patch('urllib.request.OpenerDirector.open', side_effect=AssertionError('network forbidden')):
             r = current_replay()
-        self.assertEqual(r['counts'], {'pass': 12, 'fail': 1, 'skip': 0})
-        self.assertEqual([c['case'] for c in r['receipts'] if c['status'] == 'fail'], ['pmf-activation-supplied'])
+        self.assertEqual(r['counts'], {'pass': 12, 'fail': 2, 'skip': 0})
+        self.assertEqual([c['case'] for c in r['receipts'] if c['status'] == 'fail'], ['pmf-activation-supplied', 'pmf-incomplete-retention-evidence'])
 
     def test_old_pmf_scaling_and_proof_gap_is_historical_failure(self):
         c = next(c for c in PRIOR['package_fixture_calls'] if c['tool'] == 'pmf_scorecard')

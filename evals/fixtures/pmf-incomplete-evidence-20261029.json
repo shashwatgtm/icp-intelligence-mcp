@@ -1,0 +1,27 @@
+{
+  "id": "pmf-incomplete-retention-evidence",
+  "server": "helix-craft-gtm",
+  "tool": "pmf_scorecard",
+  "connector_tool": "mcp__codex_apps__helix_gtm_planning_test_pmf_scorecard",
+  "arguments": {
+    "product": "Synthetic PMF review software",
+    "target_market": "smb_saas",
+    "current_metrics": "Synthetic review figures only: NPS: 70; CAC: $500; LTV: $3000; Activation: 70%",
+    "business_model": "saas",
+    "your_sector": "saas"
+  },
+  "start_utc": "2026-10-29 13:37:32 UTC",
+  "end_utc": "2026-10-29 13:37:37 UTC",
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "# Product-Market Fit Scorecard\n## Synthetic PMF review software\n\n**Market Segment:** SMB SaaS\n**Time in Market:** 1 to 2 years (assumed, not supplied) (Example figure: replace with your own)\n**Analysis Date:** 2026-10-29\n\n*Sector: SaaS (from your choice). Business model: software subscription (from business_model).*\n\n---\n\n## Overall PMF Assessment\n\n| Stage | Score | Status |\n|-------|-------|--------|\n| **Strong PMF** | **9/10** | Yes |\n\nBased on 3 of 5 dimensions.\nThe figures you gave score strongly against the example benchmarks. Fill the missing data below before treating this as a reason to scale.\nThe score is the average of the dimensions scored below (missing data is left out), each judged against an example benchmark.\nIt is a rule score from the figures you supplied, not proof of product-market fit.\n\n---\n\n## Dimension Scores\n\nEach score and status compares your value with an example benchmark. Benchmark ranges: the example ranges for the SMB SaaS market segment.\n\n### 1. Customer Retention (Churn)\n| Metric | Your Value | Score | Benchmark (Example figures: replace with your own) | Status |\n|--------|-----------|-------|-----------|--------|\n| Monthly Churn | NOT PROVIDED | 0/10 | healthy up to 5%, excellent up to 3% | MISSING |\n\n**Analysis:** Data not provided: not scored\n\n---\n\n### 2. Customer Satisfaction (NPS)\n| Metric | Your Value | Score | Benchmark (Example figures: replace with your own) | Status |\n|--------|-----------|-------|-----------|--------|\n| NPS Score | 70 | 9/10 | healthy from 40, excellent from 60 | EXCELLENT |\n\n**Analysis:** 70 is above the excellent mark of 60 (Example figure: replace with your own)\n\n---\n\n### 3. Unit Economics (LTV:CAC)\n| Metric | Your Value | Score | Benchmark (Example figures: replace with your own) | Status |\n|--------|-----------|-------|-----------|--------|\n| LTV | $3,000 | - | - | - |\n| CAC | $500 | - | - | - |\n| LTV:CAC Ratio | 6.0x | 9/10 | healthy from 3x, excellent from 4x | EXCELLENT |\n\n**Analysis:** 6.0x is above the excellent mark of 4x (Example figure: replace with your own)\n\n---\n\n### 4. Revenue Retention\n| Metric | Your Value | Score | Benchmark (Example figures: replace with your own) | Status |\n|--------|-----------|-------|-----------|--------|\n| Retention Rate | NOT PROVIDED | 0/10 | healthy from 85%, excellent from 92% | MISSING |\n\n**Analysis:** Data not provided: not scored\n\n---\n\n### 5. Activation\n| Metric | Your Value | Score | Benchmark (Example figures: replace with your own) | Status |\n|--------|-----------|-------|-----------|--------|\n| Activation Rate | 70% | 9/10 | healthy from 50%, excellent from 70% | EXCELLENT |\n\n**Analysis:** 70% is exactly at the excellent mark of 70% (Example figure: replace with your own)\n\n---\n\n## Additional Metrics Detected\n\nNone found in your text (MRR, ARR, ACV, DAU, MAU, trial conversion or revenue growth).\n\n\n\n\n---\n\n## Priority Actions\n\nAll dimensions scoring well: focus on scaling.\n\n---\n\n## Sector Reading\n\n### Sector notes: SaaS\n- **What this sector measures:** time to value, adoption by the target team, renewal rate, expansion revenue, support load, seats in active use, time saved per user.\n- **Words this buyer uses:** onboarding, time to value, renewal, integration, admin controls, single sign on, seats, trial, usage, security review.\n- **A proof point that lands:** One team or a cohort of customers before and after, on adoption, time saved or retention, with the period and the owner named.\n\n---\n\n## Data Gaps to Fill\n\n- [ ] Churn rate (monthly or annual)\n- [ ] Retention/renewal rate\n\n---\n\n*Scorecard generated using the CRAFT GTM framework*\n*Benchmark ranges: the example ranges for the SMB SaaS market segment. Time in market does not change the benchmarks or scores.*"
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "provenance": "One fresh LIVE connected Helix PMF call for the W1 targeted incomplete-evidence case. Synthetic inputs only. Labelled Activation: 70% separates parsing. Not an evals/run.py HTTP call.",
+  "reported_source_main": "8dfee13d07bcf0deb336e5517e5b0189b21e294a"
+}
