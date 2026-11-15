@@ -2,7 +2,7 @@
   "name": "@shashwatgtmalpha/icp-intelligence-mcp",
   "mcpName": "io.github.shashwatgtm/icp-intelligence-mcp",
   "version": "1.2.27",
-  "description": "ICP Intelligence MCP server: ICP deep dives, scoring models, buyer groups, TAM/SAM/SOM, lookalike signals, account prioritization, gap analysis and interview synthesis. Runs locally over stdio (npm) or hosted over Streamable HTTP.",
+  "description": "Nine tools for ideal customer profiles, buying groups, account scoring, interview synthesis and bottom up market sizing. Available over stdio or hosted Streamable HTTP.",
   "main": "dist/index.js",
   "bin": {
     "icp-intelligence-mcp": "dist/index.js"
@@ -22,14 +22,17 @@
     "b2b",
     "gtm",
     "market-sizing",
-    "tam-sam-som"
+    "tam-sam-som",
+    "buyer-persona",
+    "account-prioritization",
+    "lead-scoring"
   ],
   "author": "Shashwat Ghosh <shashwat@gtmhelix.com> (https://gtmhelix.com/about/)",
-  "homepage": "https://tools.gtmhelix.com/connectors/",
+  "homepage": "https://icp-intelligence.gtmhelix.com/",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shashwatgtm/icp-intelligence-mcp.git"
+    "url": "git+https://github.com/shashwatgtm/icp-intelligence-mcp.git"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",
