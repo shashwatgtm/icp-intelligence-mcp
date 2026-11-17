@@ -10,56 +10,37 @@ section.hx-section.hx-app-section > p > a,
 section.hx-section.hx-prose-block > p > a { display: flex !important; width: fit-content; margin-block: .2rem; }
 }
 :where(a,button,summary,input,select):focus-visible { outline: 3px solid #a73347; outline-offset: 2px; }
-@media (prefers-color-scheme: dark) {
-a.trow,
-article.card,
-aside.hx7-strip,
-div.aeo,
-div.hx-panel,
-div.hx-table,
-div.hx9-row2,
-div.hx9-row2.hx9-row2-nocrumb,
-div.win,
-div.win-foot,
-figure.hx8-vis.hx9-diagram,
-figure.hx8-vis.hx9-term,
-footer.hx-footer,
-header.hx9-gh,
-li.hx-who,
-pre.hx-addr,
-pre.hx-code-block.hx11-in-win,
-section#account-prioritization.hx-section.hx-wash,
-section#icp-evolution-tracker.hx-section.hx-wash,
-section#icp-scoring-model.hx-section.hx-wash,
-section#not.sec.hx-wash,
-section#tam-sam-som-calculator.hx-section.hx-wash,
-section#tools.hx-section.band-rose,
-section.hx-section.hx-app-section,
-section.hx-section.hx-wash,
-section.hx7-cred,
-ul.tools { background-color: #322429 !important; background-image: none !important; color: #fff5eb !important; }
-div.hx-table > table > thead > tr > th,
-figure.hx-viz-p > h3,
-figure.hx-viz-p > p.hx-viz-in,
-li.is-key > span.r,
-li.is-key > span.t,
-ul.hxv-roles > li > span.r,
-ul.hxv-roles > li > span.t { color: #fff5eb !important; background-color: #322429 !important; }
-body :is(.hx9-gh,.hx9-row2,.hx-footer,.hx-panel,.hx-table,.hx8-vis,.card,.win,.hx-viz-p,.trow,.aeo,.hx-code-block,.hx7-strip) :is(h1,h2,h3,h4,p,small,span,strong,b,li,dt,dd,th,td,figcaption,code) { color: #fff5eb; }
-body :is(.hx9-gh,.hx-footer,.hx-panel,.hx-table,.card,.trow,.hx7-strip) a { color: #ffd0c8; }
-body :is(button,summary,input,select,textarea,[role=button],a.hx-btn,a.btn) { border-color: #b69eab; }
-:focus-visible { outline-color: #ffd699; }
-#hx-consent { background: #322429; color: #fff5eb; border-color: #b69eab; }
-#hx-consent a { color: #ffd0c8; }
+
+/* Consent occupies its own row on first visit. The page's sections keep their order. */
+html body #hx-consent { position: relative !important; inset: auto !important; transform: none !important; width: 100% !important; max-width: none !important; margin: 0 !important; border-radius: 0 !important; box-shadow: none !important; padding: 6px max(14px,calc((100% - 1120px)/2)) !important; box-sizing: border-box; }
+html body #hx-consent :is(.hx-a,.hx-d) { min-height: 44px !important; min-width: 64px !important; }
+html body #hx-consent p { margin: 0 !important; }
+html body #hx-consent .hx-b { display: flex; gap: 8px; }
+html body :is(input:not([type=checkbox],[type=radio],[type=hidden]), select, button, summary, .at-chip, .brand, .top-cta) { box-sizing: border-box; min-height: 44px !important; min-width: 44px !important; }
+html body .brand { display: inline-flex; align-items: center; }
+@media(max-width:600px) {
+ html body #hx-consent { display: flex !important; flex-wrap: wrap; gap: 3px 10px !important; font-size: 14px !important; line-height: 1.25 !important; }
+ html body #hx-consent .hx-history-opt { flex: 1 1 48% !important; }
+ html body #hx-consent .hx-b { margin-left: auto; }
+ html body .at-jump a, html body nav a[href^="#"] { min-width: 44px; }
 }
-@media (max-width: 480px) {
-  #hx-consent { box-sizing: border-box; left: 4px; right: 4px; bottom: max(4px, env(safe-area-inset-bottom)); padding: 7px 12px; font: 14px/1.25 system-ui,sans-serif; }
-  #hx-consent p { margin: 0 0 4px; }
-  #hx-consent .hx-b { display: flex; flex-wrap: nowrap; gap: 8px; }
-  #hx-consent button { flex: 1; min-height: 44px; }
-  .hx-look .hx-hero.hx9-home, .hx-look .hx-hero.at-hero-sub { padding-block: 14px; }
-  .hx-look .hx9-home h1, .hx-look .at-hero-sub h1 { font-size: clamp(32px,9vw,42px); line-height: 1.06; }
-  .hx-look .hx9-home .crop > p, .hx-look .at-hero-sub .crop > p { margin-block: 8px; }
+/* Paper, ink and rose accents have corresponding dark surfaces and foregrounds. */
+@media(prefers-color-scheme:dark) {
+ html:root { color-scheme: dark; --night-paper:#211b20; --night-panel:#30282e; --night-raised:#392d34; --night-ink:#fff4ef; --night-secondary:#e2d2d2; --night-link:#ffc6be; --night-rule:#aa959e; }
+ html:root body { background:var(--night-paper) !important; color:var(--night-ink) !important; }
+ html:root body :where(*):not(svg,svg *,img,video,canvas,iframe,picture) {
+  color:var(--night-ink) !important; background-color:transparent !important; border-color:var(--night-rule) !important; text-shadow:none !important;
+ }
+ html:root body :is(header,footer,aside,article.card,.hx-panel,.hx-table,pre,.win,.aeo,.hx-viz-p,.hx8-vis,.hx10-ex,.hx-card,.trow,.hx9-job,.obf-card,.shelf,.card,.fig,.cta-in,.hero-art,.hx7-cred,.hx7-strip,.hx-wash,.band-rose,.wrap .panel, .sp-card,.step,.well,.tile,details[open]) {
+  background-color:var(--night-panel) !important;
+ }
+ html:root body :is(.hero,.hx-hero,.hx-wash,.band-rose,header,footer,.hero-art,.hx7-cred,.hx7-strip,.hx8-vis,.win,.card,.obf-card,.hx-table,.hx-viz-p,th,.trow,summary,.hx9-row2) { background-image:none !important; }
+ html:root body :is(th,.win-bar,.hx9-row2,code,kbd,.chip,.tag) { background-color:var(--night-raised) !important; }
+ html:root body :is(small,figcaption,.eyebrow,.hx-byline,.kicker,.caption) { color:var(--night-secondary) !important; }
+ html:root body a[href], html:root body a[href] :is(span,b,strong) { color:var(--night-link) !important; }
+ html:root body :is(button,input,select,textarea,.btn,.hx-btn,.button,.at-chip,.hx10-primary,.hx9-cta), html:root body #hx-consent { background-color:var(--night-panel) !important; border-color:var(--night-rule) !important; }
+ html:root body :is(button,.btn,.hx-btn,.button,.hx10-primary,.hx9-cta):is(:hover,:focus-visible) { background-color:#553b46 !important; }
+ html:root body #hx-consent .hx-a { background:#f4e1dc !important; color:#301c23 !important; }
+ html:root body #hx-consent .hx-d { background:#352831 !important; color:#fff4ef !important; }
+ html:root body :is(button,a,summary,input,select):focus-visible { outline:3px solid #ffd699 !important; }
 }
-.install-jump { margin-block: .6rem; }
-#install-command, #connector-list { scroll-margin-top: 7rem; }
