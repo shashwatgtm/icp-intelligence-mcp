@@ -17,7 +17,8 @@ html body .brand:where(:not(#hx-consent, #hx-consent *)) { display: inline-flex;
 }
 /* Paper, ink and rose accents have corresponding dark surfaces and foregrounds. */
 @media(prefers-color-scheme:dark) {
- html:root:where(:not(#hx-consent, #hx-consent *)) { color-scheme: dark; --night-paper:#211b20; --night-panel:#30282e; --night-raised:#392d34; --night-ink:#fff4ef; --night-secondary:#e2d2d2; --night-link:#ffc6be; --night-rule:#aa959e; }
+ html:root:where(:not(#hx-consent, #hx-consent *)) { --night-paper:#211b20; --night-panel:#30282e; --night-raised:#392d34; --night-ink:#fff4ef; --night-secondary:#e2d2d2; --night-link:#ffc6be; --night-rule:#aa959e; }
+ html:root body > :not(#hx-consent) { color-scheme: dark; }
  html:root body:where(:not(#hx-consent, #hx-consent *)) { background:var(--night-paper) !important; color:var(--night-ink) !important; }
  html:root body :where(*):not(svg,svg *,img,video,canvas,iframe,picture):where(:not(#hx-consent, #hx-consent *)) {
   color:var(--night-ink) !important; background-color:transparent !important; border-color:var(--night-rule) !important; text-shadow:none !important;
