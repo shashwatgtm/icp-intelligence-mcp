@@ -1,10 +1,11 @@
 # ICP Intelligence
 
-> ICP Intelligence is a free web app and AI connector with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting, for founders and demand generation heads. Give it your best customers, deals and market numbers, and it returns an ICP, TAM, SAM and SOM, and account priorities. Add https://icp-intelligence.gtmhelix.com/mcp in Claude, ChatGPT, Cursor, VS Code and Windsurf, no sign-in.
+> ICP Intelligence is a free web app and AI connector with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting, for founders and demand generation heads. Give it your best customers, deals and market numbers, and it returns an ICP, TAM, SAM and SOM, and account priorities. Add https://icp-intelligence.gtmhelix.com/mcp in Claude, ChatGPT, Cursor, VS Code and Windsurf, no sign-in. In ChatGPT, you can also install the Helix ICP Intelligence plugin from the ChatGPT plugin directory: https://chatgpt.com/plugins/plugin_asdk_app_6ae101629eb08191b905799423725d70
 
 - Web app (no sign-in): https://icp-intelligence.gtmhelix.com/
 - MCP server URL (Streamable HTTP, no sign-in, read-only tools): https://icp-intelligence.gtmhelix.com/mcp
 - Connect to Claude, ChatGPT, Cursor, VS Code, Windsurf: https://icp-intelligence.gtmhelix.com/connect/
+- Use it in ChatGPT: install the Helix ICP Intelligence plugin from the ChatGPT plugin directory: https://chatgpt.com/plugins/plugin_asdk_app_6ae101629eb08191b905799423725d70
 - Docs (MCP and REST, every field): https://icp-intelligence.gtmhelix.com/docs/
 - FAQ: https://icp-intelligence.gtmhelix.com/faq/
 - Privacy policy: https://icp-intelligence.gtmhelix.com/privacy/
@@ -30,7 +31,7 @@
 
 ### What is ICP Intelligence?
 
-ICP Intelligence is a free web app and AI connector with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting, for founders and demand generation heads. Give it your best customers, deals and market numbers, and it returns an ICP, TAM, SAM and SOM, and account priorities. Add https://icp-intelligence.gtmhelix.com/mcp in Claude, ChatGPT, Cursor, VS Code and Windsurf, no sign-in.
+ICP Intelligence is a free web app and AI connector with nine ideal customer profile tools, by Shashwat Ghosh of Helix GTM Consulting, for founders and demand generation heads. Give it your best customers, deals and market numbers, and it returns an ICP, TAM, SAM and SOM, and account priorities. Add https://icp-intelligence.gtmhelix.com/mcp in Claude, ChatGPT, Cursor, VS Code and Windsurf, no sign-in. In ChatGPT, you can also install the Helix ICP Intelligence plugin from the ChatGPT plugin directory: https://chatgpt.com/plugins/plugin_asdk_app_6ae101629eb08191b905799423725d70
 
 ### Is ICP Intelligence free, and do I need an account?
 
