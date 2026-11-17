@@ -44,3 +44,55 @@ html body .brand { display: inline-flex; align-items: center; }
  html:root body #hx-consent .hx-d { background:#352831 !important; color:#fff4ef !important; }
  html:root body :is(button,a,summary,input,select):focus-visible { outline:3px solid #ffd699 !important; }
 }
+
+/* Measured controls on tool, install and editorial pages. */
+@layer helix-accessibility {
+p.hx-prose > a,
+p.hx-sample-more > a { box-sizing:border-box !important; min-width:44px !important; min-height:44px !important; max-width:100%; vertical-align:middle; }
+p.hx-prose > a,
+p.hx-sample-more > a { display:inline-flex !important; align-items:center; overflow-wrap:anywhere; }
+p.hx-prose > a,
+p.hx-sample-more > a { margin-inline-end:.35rem; margin-block:.15rem; }
+@media(max-width:600px){
+p.hx-prose > a,
+p.hx-sample-more > a { display:flex !important; width:fit-content; }
+}
+@media(prefers-color-scheme:light) {
+#account-prioritization > div.hx-table,
+#buyer-group-analyzer > div.hx-table,
+#icp-deep-dive > div.hx-table,
+#icp-evolution-tracker > div.hx-table,
+#icp-gap-analysis > div.hx-table,
+#icp-interview-synthesizer > div.hx-table,
+#icp-scoring-model > div.hx-table,
+#lookalike-signal-generator > div.hx-table,
+#run > div.win.hx-form-win,
+#tam-sam-som-calculator > div.hx-table,
+details.hx9-menu > summary,
+div.facts > div,
+div.hero-grid > div > div.win,
+div.hero-grid > figure.hx8-vis.hx10-split-vis,
+div.hx-moment > ul.tools,
+div.hx-panel > pre.hx-addr,
+div.hx-viz > figure.hx-viz-p,
+div.hx10-diagrams > figure.hx8-vis.hx9-diagram.hx10-dia,
+div.hx10-term-row > figure.hx8-vis.hx9-term,
+div.hxr-body.hx-result-body.hx-sample-body > div.hx-table,
+div.hxr-body.hx-result-body.hx-sample-body > pre,
+div.icp-cards > article.card,
+picture.hx7-cred-photo > img,
+picture.hx7-strip-photo > img,
+section.hx-section > article.hxr.hxr-example,
+section.hx-section > div.hx-table,
+section.hx-section > div.win,
+section.hx-section.hx-wash > div.win,
+ul.hx-whos > li.hx-who,
+ul.hxv-roles > li,
+ul.tools > li > a.trow { border-color:#746873 !important; }
+}
+@media(prefers-color-scheme:dark) {
+picture.hx7-cred-photo > img,
+picture.hx7-strip-photo > img { border-color:#baabb1 !important; }
+html body #hx-consent .hx-a { background:#783b4f !important; color:#fff5ef !important; border-color:#dec1c7 !important; }
+}
+}
