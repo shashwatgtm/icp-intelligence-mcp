@@ -322,11 +322,11 @@ function andList(items: string[]): string {
   return items.length <= 1 ? (items[0] || '') : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
 }
 // The optional company input (rule B81: the answer names the company, or says plainly that it was not given).
-const COMPANY_INPUT = { type: 'string', description: 'Optional: your company or product name, so the answer can name it' };
+const COMPANY_INPUT = { type: 'string', description: "Optional: your company or product name, so the answer can name it. Format is text. For example, \"invoice review service\"." };
 const MODEL_INPUT = {
   type: 'string',
   enum: ['saas', 'services', 'connectivity', 'transactions', 'marketplace', 'hardware_software', 'investment'],
-  description: 'Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out'
+  description: "Optional: how you charge (software subscription, services, connectivity, per transaction, marketplace, hardware plus software, or investment management). Read from your other inputs when left out. Format is text using one of the listed labels. For example, \"saas\"."
 };
 function companyLine(company: unknown): string {
   return typeof company === 'string' && company.trim()
@@ -706,7 +706,7 @@ const tools = {
   // Tool 1: ICP Deep Dive - Pattern Detection from Customer Data
   // ---------------------------------------------------------------------------
   icp_deep_dive: {
-    description: 'Helps you decide which customers to go after next. You give your best customers, as a list (industry, size, contract value, sales cycle, tech stack, buying trigger, champion title) or in your own words. You get the patterns they share, with ties named as ties, the budget shown as the contract value range seen in your customers, recommendations, and sector notes when your inputs name a supported sector. It works only from what you give and looks nothing up.',
+    description: "Helps you decide which customers to go after next. You give your best customers, as a list (industry, size, contract value, sales cycle, tech stack, buying trigger, champion title) or in your own words. You get the patterns they share, with ties named as ties, the budget shown as the contract value range seen in your customers, recommendations, and sector notes when your inputs name a supported sector. It works only from what you give and looks nothing up. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Without customers or customer_descriptions, it returns a request for customer data with example input formats. Invalid typed values return a correction error. Use this instead of icp_gap_analysis when you need patterns in supplied customers before comparing them with an ideal profile.",
     inputSchema: {
       type: 'object',
       properties: {
@@ -715,25 +715,25 @@ const tools = {
           items: {
             type: 'object',
             properties: {
-              name: { type: 'string' },
-              industry: { type: 'string' },
-              size: { type: 'string' },
-              acv: { type: 'number', minimum: 0 },
-              sales_cycle_days: { type: 'number', minimum: 0 },
-              tech_stack: { type: 'array', items: { type: 'string' } },
-              buying_trigger: { type: 'string' },
-              champion_title: { type: 'string' }
+              name: { type: 'string' , description: "Format is text. For example, \"an approved anonymous manufacturer\"." },
+              industry: { type: 'string' , description: "Format is text. For example, \"manufacturing\"." },
+              size: { type: 'string' , description: "Format is text. For example, \"200 to 500 employees\"." },
+              acv: { type: 'number', minimum: 0 , description: "Format is a JSON number. For example, 24000." },
+              sales_cycle_days: { type: 'number', minimum: 0 , description: "Format is a JSON number. For example, 12." },
+              tech_stack: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"existing accounting system\"." } , description: "Format is a JSON array. For example, [\"existing accounting system\"]." },
+              buying_trigger: { type: 'string' , description: "Format is text. For example, \"an audit review due next quarter\"." },
+              champion_title: { type: 'string' , description: "Format is text. For example, \"finance director\"." }
             }
-          },
-          description: 'List of customer objects with available attributes'
+          , description: "Format is a JSON object. For example, {\"name\":\"an approved anonymous manufacturer\",\"industry\":\"manufacturing\",\"size\":\"200 to 500 employees\"}." },
+          description: "List of customer objects with available attributes. Format is a JSON array. For example, [{\"name\":\"an approved anonymous manufacturer\",\"industry\":\"manufacturing\",\"size\":\"200 to 500 employees\"}]."
         },
         customer_descriptions: {
           type: 'string',
-          description: 'Alternative: Describe your best customers in text format'
+          description: "Alternative: Describe your best customers in text format. Format is text. For example, \"manufacturers with 200 to 500 employees\"."
         },
         product_category: {
           type: 'string',
-          description: 'What type of product you sell'
+          description: "What type of product you sell. Format is text. For example, \"invoice review service\"."
         },
         company: COMPANY_INPUT,
         business_model: MODEL_INPUT
@@ -1013,7 +1013,7 @@ This tool will analyze patterns across your customers to identify your ideal pro
   // Tool 2: ICP Scoring Model - Auto-Weighted Qualification
   // ---------------------------------------------------------------------------
   icp_scoring_model: {
-    description: 'Helps you decide which leads are worth a seller\'s time. You give the criteria that matter, how important each one is and, if you know it, what goes with success. You get a lead scoring template: example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust, with sector notes when your inputs name a supported sector. Your success pattern is matched to your criteria; it does not set the weights.',
+    description: "Helps you decide which leads are worth a seller's time. You give the criteria that matter, how important each one is and, if you know it, what goes with success. You get a lead scoring template: example point weights set by importance level, example points for each value you list, a scorecard and tier bands to adjust, with sector notes when your inputs name a supported sector. Your success pattern is matched to your criteria; it does not set the weights. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Without scoring_criteria, it returns a labelled example model. Invalid values return a correction error. Incomplete or failed held_back_test evidence holds the scoring decision. Use this instead of account_prioritization when you need a reusable scoring template before ranking named accounts.",
     inputSchema: {
       type: 'object',
       properties: {
@@ -1022,21 +1022,21 @@ This tool will analyze patterns across your customers to identify your ideal pro
           items: {
             type: 'object',
             properties: {
-              criterion: { type: 'string' },
-              importance: { type: 'string', enum: ['critical', 'important', 'nice_to_have'] },
-              values: { type: 'array', items: { type: 'string' } }
+              criterion: { type: 'string' , description: "Format is text. For example, \"company size\"." },
+              importance: { type: 'string', enum: ['critical', 'important', 'nice_to_have'] , description: "Format is text using one of the listed labels. For example, \"critical\"." },
+              values: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"200 to 500 employees\"." } , description: "Format is a JSON array. For example, [\"200 to 500 employees\"]." }
             }
-          },
-          description: 'Criteria for scoring with importance levels'
+          , description: "Format is a JSON object. For example, {\"criterion\":\"company size\",\"importance\":\"critical\",\"values\":[\"200 to 500 employees\"]}." },
+          description: "Criteria for scoring with importance levels. Format is a JSON array. For example, [{\"criterion\":\"company size\",\"importance\":\"critical\",\"values\":[\"200 to 500 employees\"]}]."
         },
-        correlation_direction: { type: 'string', enum: ['positive','negative','unknown'], description: 'Optional confirmed direction of the success pattern. Ask the user whether the named values correlate with better or worse outcomes before filling this. Overrides word reading; unknown withholds a top-points recommendation.' },
+        correlation_direction: { type: 'string', enum: ['positive','negative','unknown'], description: "Optional confirmed direction of the success pattern. Ask the user whether the named values correlate with better or worse outcomes before filling this. Overrides word reading; unknown withholds a top-points recommendation. Format is text using one of the listed labels. For example, \"positive\"." },
         success_correlation: {
           type: 'string',
-          description: 'What correlates with success? (e.g., "deals with VP Sales champion close 2x faster")'
+          description: "What correlates with success? (e.g., \"deals with VP Sales champion close 2x faster\"). Format is text."
         },
         product_category: {
           type: 'string',
-          description: 'Optional: what you sell, as a product category, so the scoring notes use your sector'
+          description: "Optional: what you sell, as a product category, so the scoring notes use your sector. Format is text. For example, \"invoice review service\"."
         },
         company: COMPANY_INPUT
       }
@@ -1317,31 +1317,31 @@ ${SUGGESTED}
   // Tool 3: Buyer Group Analyzer - Decision Dynamics Mapping
   // ---------------------------------------------------------------------------
   buyer_group_analyzer: {
-    description: 'Helps you decide who else must agree before a deal can close. You give what you sell, the deal size, the company size, your champion and any stakeholders you know. You get a buying group map with your stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role\'s concern and message prompts, an influence map and discovery questions, with sector roles and questions when your inputs name a supported sector. Roles from titles are hypotheses to confirm.',
+    description: "Helps you decide who else must agree before a deal can close. You give what you sell, the deal size, the company size, your champion and any stakeholders you know. You get a buying group map with your stakeholders placed by their titles (economic buyer, technical evaluator, reviewers, users), each role's concern and message prompts, an influence map and discovery questions, with sector roles and questions when your inputs name a supported sector. Roles from titles are hypotheses to confirm. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Missing required fields or invalid values return an error naming what to supply or correct. Use this instead of impact_identify_champions when you need a deal buying-group map covering budget, technical and review roles.",
     inputSchema: {
       type: 'object',
       properties: {
         deal_size: {
           type: 'string',
-          description: 'ACV range (e.g., "$50K-100K")'
+          description: "ACV range (e.g., \"$50K-100K\"). Format is text."
         },
         target_company_size: {
           type: 'string',
-          description: 'Company size (e.g., "500-1000 employees")'
+          description: "Company size (e.g., \"500-1000 employees\"). Format is text."
         },
         product_category: {
           type: 'string',
-          description: 'What you sell'
+          description: "What you sell. Format is text. For example, \"invoice review service\"."
         },
         known_stakeholders: {
           type: 'array',
-          items: { type: 'string' },
-          description: 'Roles you know are involved. A title suggests a role, not confirmed authority. Confirm who owns this purchase budget.'
+          items: { type: 'string' , description: "Format is text. For example, \"finance director and procurement lead\"." },
+          description: "Roles you know are involved. A title suggests a role, not confirmed authority. Confirm who owns this purchase budget. Format is a JSON array. For example, [\"finance director and procurement lead\"]."
         },
-        confirmed_budget_owner: { type: 'string', description: 'Optional confirmed fact: the person or role who owns the budget for this purchase. Ask the user; do not infer from title. Overrides candidate ordering.' },
+        confirmed_budget_owner: { type: 'string', description: "Optional confirmed fact: the person or role who owns the budget for this purchase. Ask the user; do not infer from title. Overrides candidate ordering. Format is text. For example, \"finance director\"." },
         typical_champion: {
           type: 'string',
-          description: 'Your typical champion role'
+          description: "Your typical champion role. Format is text. For example, \"finance director\"."
         },
         company: COMPANY_INPUT,
         business_model: MODEL_INPUT
@@ -1613,43 +1613,43 @@ ${SUGGESTED}
   // Tool 4: TAM/SAM/SOM Calculator - Bottom-Up Market Sizing
   // ---------------------------------------------------------------------------
   tam_sam_som_calculator: {
-    description: 'Helps you decide how big your market is, counted bottom up. You give how many companies could buy and your annual contract value in dollars, plus your ICP match rate and year 1 share if you have them. You get TAM, SAM and SOM with the arithmetic and assumptions shown and a summary for an investor deck. It is a calculator, not a data source: a rate you leave out is filled with a labelled example, and sector notes are added when your inputs name a supported sector.',
+    description: "Helps you decide how big your market is, counted bottom up. You give how many companies could buy and your annual contract value in dollars, plus your ICP match rate and year 1 share if you have them. You get TAM, SAM and SOM with the arithmetic and assumptions shown and a summary for an investor deck. It is a calculator, not a data source: a rate you leave out is filled with a labelled example, and sector notes are added when your inputs name a supported sector. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Missing required fields or invalid values return an error naming what to supply or correct. Use this instead of impact_anchor_market when you have a chosen market and need bottom-up market arithmetic.",
     inputSchema: {
       type: 'object',
       properties: {
         total_potential_companies: {
           type: 'number',
           minimum: 0,
-          description: 'Estimated total companies that could buy (from LinkedIn, industry reports)'
+          description: "Estimated total companies that could buy (from LinkedIn, industry reports). Format is a JSON number. For example, 12."
         },
         average_contract_value: {
           type: 'number',
           exclusiveMinimum: 0,
-          description: 'Your average ACV in dollars'
+          description: "Your average ACV in dollars. Format is a JSON number. For example, 12."
         },
         icp_percentage: {
           type: 'number',
           minimum: 0,
           maximum: 100,
-          description: 'Percentage of those companies that match your ICP, from 0 to 100. Left out, 30 is used and marked as an example'
+          description: "Percentage of those companies that match your ICP, from 0 to 100. Left out, 30 is used and marked as an example. Format is a JSON number."
         },
         year1_market_share_target: {
           type: 'number',
           minimum: 0,
           maximum: 100,
-          description: 'Assumed Year 1 share percentage, from 0 to 100. This is a planning assumption, not evidence of attainable share. Left out, 3 is used and marked as an example'
+          description: "Assumed Year 1 share percentage, from 0 to 100. This is a planning assumption, not evidence of attainable share. Left out, 3 is used and marked as an example. Format is a JSON number."
         },
         data_sources: {
           type: 'string',
-          description: 'Where you got your numbers (for documentation)'
+          description: "Where you got your numbers (for documentation). Format is text. For example, \"internal customer records reviewed in October 2026\"."
         },
         segment_name: {
           type: 'string',
-          description: 'Name of the market segment'
+          description: "Name of the market segment. Format is text. For example, \"manufacturers with 200 to 500 employees\"."
         },
         product_category: {
           type: 'string',
-          description: 'Optional: what you sell (for example "spend management software"), used for sector notes. The arithmetic does not use it'
+          description: "Optional: what you sell (for example \"spend management software\"), used for sector notes. The arithmetic does not use it. Format is text."
         },
         company: COMPANY_INPUT
       },
@@ -1845,43 +1845,43 @@ ${ctx.v ? `${sideNotes(ctx.v, ['committee', 'roles', 'metrics', 'vocabulary', 'p
   // Tool 5: Lookalike Signal Generator - Platform-Specific Targeting Criteria
   // ---------------------------------------------------------------------------
   lookalike_signal_generator: {
-    description: 'Helps you decide how to find more accounts like your best ones. You give your ICP\'s company profile, technologies, champion titles and buying triggers, and optionally what you sell and the platforms you use. You get targeting criteria and search queries for each platform, one signal for each trigger, and search keywords from what you sell and the sector. It writes criteria, not data: it finds no companies or contacts.',
+    description: "Helps you decide how to find more accounts like your best ones. You give your ICP's company profile, technologies, champion titles and buying triggers, and optionally what you sell and the platforms you use. You get targeting criteria and search queries for each platform, one signal for each trigger, and search keywords from what you sell and the sector. It writes criteria, not data: it finds no companies or contacts. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Missing required fields or invalid values return an error naming what to supply or correct. Use this instead of icp_deep_dive when you already have an ICP and need search criteria and trigger signals.",
     inputSchema: {
       type: 'object',
       properties: {
         icp_firmographics: {
           type: 'object',
           properties: {
-            industries: { type: 'array', items: { type: 'string' } },
-            company_sizes: { type: 'array', items: { type: 'string' } },
-            locations: { type: 'array', items: { type: 'string' } },
-            funding_stages: { type: 'array', items: { type: 'string' } }
+            industries: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"manufacturing\"." } , description: "Format is a JSON array. For example, [\"manufacturing\"]." },
+            company_sizes: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"200 to 500 employees\"." } , description: "Format is a JSON array. For example, [\"200 to 500 employees\"]." },
+            locations: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"India\"." } , description: "Format is a JSON array. For example, [\"India\"]." },
+            funding_stages: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"series-a\"." } , description: "Format is a JSON array. For example, [\"series-a\"]." }
           },
-          description: 'Firmographic criteria'
+          description: "Firmographic criteria. Format is a JSON object. For example, {\"industries\":[\"manufacturing\"],\"company_sizes\":[\"200 to 500 employees\"],\"locations\":[\"India\"]}."
         },
         icp_technographics: {
           type: 'array',
-          items: { type: 'string' },
-          description: 'Technologies your ICP typically uses'
+          items: { type: 'string' , description: "Format is text. For example, \"existing accounting system\"." },
+          description: "Technologies your ICP typically uses. Format is a JSON array. For example, [\"existing accounting system\"]."
         },
         champion_titles: {
           type: 'array',
-          items: { type: 'string' },
-          description: 'Job titles of your champions'
+          items: { type: 'string' , description: "Format is text. For example, \"finance director\"." },
+          description: "Job titles of your champions. Format is a JSON array. For example, [\"finance director\"]."
         },
         buying_triggers: {
           type: 'array',
-          items: { type: 'string' },
-          description: 'Events that trigger buying'
+          items: { type: 'string' , description: "Format is text. For example, \"upcoming audit\"." },
+          description: "Events that trigger buying. Format is a JSON array. For example, [\"upcoming audit\"]."
         },
         platforms: {
           type: 'array',
-          items: { type: 'string' },
-          description: 'Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included'
+          items: { type: 'string' , description: "Format is text. For example, \"linkedin\"." },
+          description: "Optional: the sections to include (linkedin, google_ads, 6sense, zoominfo). Left out, every section is included. Format is a JSON array. For example, [\"linkedin\"]."
         },
         product_category: {
           type: 'string',
-          description: 'Optional: what you sell (for example "spend management software"), used for search keywords and sector notes'
+          description: "Optional: what you sell (for example \"spend management software\"), used for search keywords and sector notes. Format is text."
         },
         company: COMPANY_INPUT
       },
@@ -2113,7 +2113,7 @@ ${SUGGESTED}
   // Tool 6: Account Prioritization - Multi-Dimensional Ranking
   // ---------------------------------------------------------------------------
   account_prioritization: {
-    description: 'Helps you decide which accounts to work first. You give your accounts with fit, intent and relationship scores from 0 to 100 and a timing, plus optional weights. You get a ranked list from a weighted score, with a tier for each account, the points its timing earned and the factor that added the most points.',
+    description: "Helps you decide which accounts to work first. You give your accounts with fit, intent and relationship scores from 0 to 100 and a timing, plus optional weights. You get a ranked list from a weighted score, with a tier for each account, the points its timing earned and the factor that added the most points. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Without accounts, it returns the scoring framework and an example input. Missing account scores default to 50. Invalid ranges or all-zero weights return an error. Use this instead of icp_scoring_model when you have accounts and numeric scores ready to rank.",
     inputSchema: {
       type: 'object',
       properties: {
@@ -2122,28 +2122,28 @@ ${SUGGESTED}
           items: {
             type: 'object',
             properties: {
-              name: { type: 'string' },
-              fit_score: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100. Left out, 50 is used' },
-              intent_signals: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100 (0 scores zero). Left out, 50 is used' },
-              relationship: { type: 'number', minimum: 0, maximum: 100, description: '0 to 100, based on existing connections. Left out, 50 is used' },
-              timing: { type: 'string', description: 'Buying horizon: now, soon, later or unknown (100, 70, 40 and 50 points respectively). Equivalent phrases are read by clause; denied or conflicting horizons remain unknown. Confirm the horizon with the user.' }
+              name: { type: 'string' , description: "Format is text. For example, \"an approved anonymous manufacturer\"." },
+              fit_score: { type: 'number', minimum: 0, maximum: 100, description: "0 to 100. Left out, 50 is used. Format is a JSON number. For example, 30." },
+              intent_signals: { type: 'number', minimum: 0, maximum: 100, description: "0 to 100 (0 scores zero). Left out, 50 is used. Format is a JSON number. For example, 30." },
+              relationship: { type: 'number', minimum: 0, maximum: 100, description: "0 to 100, based on existing connections. Left out, 50 is used. Format is a JSON number. For example, 30." },
+              timing: { type: 'string', description: "Buying horizon: now, soon, later or unknown (100, 70, 40 and 50 points respectively). Equivalent phrases are read by clause; denied or conflicting horizons remain unknown. Confirm the horizon with the user. Format is text. For example, \"soon\"." }
             }
-          },
-          description: 'List of accounts to prioritize. Each account: name, fit score (0 to 100), intent signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown)'
+          , description: "Format is a JSON object. For example, {\"name\":\"an approved anonymous manufacturer\",\"fit_score\":30,\"intent_signals\":30}." },
+          description: "List of accounts to prioritize. Each account: name, fit score (0 to 100), intent signals (0 to 100), relationship (0 to 100), timing (now, soon, later or unknown). Format is a JSON array. For example, [{\"name\":\"an approved anonymous manufacturer\",\"fit_score\":30,\"intent_signals\":30}]."
         },
         prioritization_weights: {
           type: 'object',
           properties: {
-            fit: { type: 'number' },
-            intent: { type: 'number' },
-            relationship: { type: 'number' },
-            timing: { type: 'number' }
+            fit: { type: 'number' , description: "Format is a JSON number. For example, 30." },
+            intent: { type: 'number' , description: "Format is a JSON number. For example, 30." },
+            relationship: { type: 'number' , description: "Format is a JSON number. For example, 30." },
+            timing: { type: 'number' , description: "Format is a JSON number. For example, 30." }
           },
-          description: 'Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100'
+          description: "Optional custom weights in percent for fit, intent, relationship and timing. A missing weight uses its default (40, 30, 15, 15); the tool does not check that the weights sum to 100. Format is a JSON object. For example, {\"fit\":30,\"intent\":30,\"relationship\":30}."
         },
         product_category: {
           type: 'string',
-          description: 'Optional: what you sell (for example "spend management software"), used for sector notes. The arithmetic does not use it'
+          description: "Optional: what you sell (for example \"spend management software\"), used for sector notes. The arithmetic does not use it. Format is text."
         },
         company: COMPANY_INPUT
       }
@@ -2353,43 +2353,43 @@ ${SUGGESTED}
   // Tool 7: ICP Gap Analysis - Current vs Ideal
   // ---------------------------------------------------------------------------
   icp_gap_analysis: {
-    description: 'Helps you decide whether you are selling to the customers you meant to. You give your current customer base, your ideal customer profile and, if you have them, current and target metrics. You get what the ideal profile has that the current base lacks, metric gaps from your own figures, causes to check and actions that fit your business model, with sector notes when your inputs name a supported sector.',
+    description: "Helps you decide whether you are selling to the customers you meant to. You give your current customer base, your ideal customer profile and, if you have them, current and target metrics. You get what the ideal profile has that the current base lacks, metric gaps from your own figures, causes to check and actions that fit your business model, with sector notes when your inputs name a supported sector. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Missing required fields or invalid values return an error naming what to supply or correct. Use this instead of icp_evolution_tracker when you need to compare the current customer base with a stated ideal profile.",
     inputSchema: {
       type: 'object',
       properties: {
         current_customers: {
           type: 'string',
-          description: 'Description of your current customer base'
+          description: "Description of your current customer base. Format is text. For example, \"manufacturers with 200 to 500 employees\"."
         },
         ideal_icp: {
           type: 'string',
-          description: 'Description of your ideal customer profile'
+          description: "Description of your ideal customer profile. Format is text. For example, \"manufacturers with 200 to 500 employees\"."
         },
         current_metrics: {
           type: 'object',
           properties: {
-            avg_acv: { type: 'number', minimum: 0 },
-            avg_sales_cycle: { type: 'number', minimum: 0 },
-            win_rate: { type: 'number' },
-            churn_rate: { type: 'number' },
-            nps: { type: 'number' }
+            avg_acv: { type: 'number', minimum: 0 , description: "Format is a JSON number. For example, 24000." },
+            avg_sales_cycle: { type: 'number', minimum: 0 , description: "Format is a JSON number. For example, 12." },
+            win_rate: { type: 'number' , description: "Format is a JSON number. For example, 30." },
+            churn_rate: { type: 'number' , description: "Format is a JSON number. For example, 30." },
+            nps: { type: 'number' , description: "Format is a JSON number. For example, 12." }
           },
-          description: 'Current performance metrics'
+          description: "Current performance metrics. Format is a JSON object. For example, {\"avg_acv\":24000,\"avg_sales_cycle\":12,\"win_rate\":30}."
         },
         target_metrics: {
           type: 'object',
           properties: {
-            avg_acv: { type: 'number', minimum: 0 },
-            avg_sales_cycle: { type: 'number', minimum: 0 },
-            win_rate: { type: 'number' },
-            churn_rate: { type: 'number' },
-            nps: { type: 'number' }
+            avg_acv: { type: 'number', minimum: 0 , description: "Format is a JSON number. For example, 24000." },
+            avg_sales_cycle: { type: 'number', minimum: 0 , description: "Format is a JSON number. For example, 12." },
+            win_rate: { type: 'number' , description: "Format is a JSON number. For example, 30." },
+            churn_rate: { type: 'number' , description: "Format is a JSON number. For example, 30." },
+            nps: { type: 'number' , description: "Format is a JSON number. For example, 12." }
           },
-          description: 'Target performance metrics'
+          description: "Target performance metrics. Format is a JSON object. For example, {\"avg_acv\":24000,\"avg_sales_cycle\":12,\"win_rate\":30}."
         },
         product_category: {
           type: 'string',
-          description: 'Optional: what you sell, used for sector notes'
+          description: "Optional: what you sell, used for sector notes. Format is text. For example, \"invoice review service\"."
         },
         company: COMPANY_INPUT,
         business_model: MODEL_INPUT
@@ -2523,33 +2523,33 @@ ${SUGGESTED}
   // Tool 8: ICP Evolution Tracker - Dynamic ICP Monitoring
   // ---------------------------------------------------------------------------
   icp_evolution_tracker: {
-    description: 'Helps you decide whether your ICP should change after recent wins and losses. You give your current ICP, recent wins, recent losses and market changes. You get a candidate change for each (an addition to test, a disqualifier to test, an implication to check), a draft of the updated ICP, the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM.',
+    description: "Helps you decide whether your ICP should change after recent wins and losses. You give your current ICP, recent wins, recent losses and market changes. You get a candidate change for each (an addition to test, a disqualifier to test, an implication to check), a draft of the updated ICP, the roles your ICP does not name, the loss reasons to tag and what to pull from your CRM. It does not compute win rates; check each candidate against your CRM. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Missing required fields or invalid values return an error naming what to supply or correct. Use this instead of icp_gap_analysis when you need candidate ICP changes from recent wins, losses and market shifts.",
     inputSchema: {
       type: 'object',
       properties: {
         current_icp: {
           type: 'string',
-          description: 'Your current ICP definition'
+          description: "Your current ICP definition. Format is text. For example, \"manufacturers with 200 to 500 employees\"."
         },
         recent_wins: {
           type: 'string',
-          description: 'Description of recent successful customers'
+          description: "Description of recent successful customers. Format is text. For example, \"finance teams chose the documented exception process\"."
         },
         recent_losses: {
           type: 'string',
-          description: 'Description of recent lost deals'
+          description: "Description of recent lost deals. Format is text. For example, \"two deals paused after budget review\"."
         },
         market_changes: {
           type: 'string',
-          description: 'Recent market or competitive changes'
+          description: "Recent market or competitive changes. Format is text. For example, \"buyers added procurement review this quarter\"."
         },
         time_period: {
           type: 'string',
-          description: 'Time period you are reviewing, in your own words (for example "last quarter")'
+          description: "Time period you are reviewing, in your own words (for example \"last quarter\"). Format is text."
         },
         product_category: {
           type: 'string',
-          description: 'Optional: what you sell, used for sector notes'
+          description: "Optional: what you sell, used for sector notes. Format is text. For example, \"invoice review service\"."
         },
         company: COMPANY_INPUT
       },
@@ -2731,7 +2731,7 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
   // Tool 9: ICP Interview Synthesizer - Pattern Extraction from Interviews
   // ---------------------------------------------------------------------------
   icp_interview_synthesizer: {
-    description: 'Helps you decide what your customer interviews mean for your ICP. You give structured notes, one per interview: the customer, the role, pain points, buying triggers, value realized and key quotes. You get the pain points, objections, buying triggers, value realized and champion roles across the interviews, quotes kept word for word, discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed.',
+    description: "Helps you decide what your customer interviews mean for your ICP. You give structured notes, one per interview: the customer, the role, pain points, buying triggers, value realized and key quotes. You get the pain points, objections, buying triggers, value realized and champion roles across the interviews, quotes kept word for word, discovery questions and sector notes. It does not take full transcripts; give only the points and quotes you want analyzed. Read-only for business data. It needs no sign-in and stores no inputs or outputs. Hosted usage metadata is recorded. Without interview_notes, it returns the structured-notes format to supply. Invalid typed values return a correction error. Use this instead of customer_interview_kit when you already have structured interview notes to analyze.",
     inputSchema: {
       type: 'object',
       properties: {
@@ -2740,19 +2740,19 @@ For ${segs.length ? andList(segs.slice(0, 6)) : 'each part of your ICP'}: the de
           items: {
             type: 'object',
             properties: {
-              customer: { type: 'string' },
-              role: { type: 'string' },
-              key_quotes: { type: 'array', items: { type: 'string' } },
-              pain_points: { type: 'array', items: { type: 'string' } },
-              buying_triggers: { type: 'array', items: { type: 'string' } },
-              value_realized: { type: 'array', items: { type: 'string' } }
+              customer: { type: 'string' , description: "Format is text. For example, \"an approved anonymous manufacturer\"." },
+              role: { type: 'string' , description: "Format is text. For example, \"finance director\"." },
+              key_quotes: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"Approval handoffs take too long.\"." } , description: "Format is a JSON array. For example, [\"Approval handoffs take too long.\"]." },
+              pain_points: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"invoice exceptions delay close\"." } , description: "Format is a JSON array. For example, [\"invoice exceptions delay close\"]." },
+              buying_triggers: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"upcoming audit\"." } , description: "Format is a JSON array. For example, [\"upcoming audit\"]." },
+              value_realized: { type: 'array', items: { type: 'string' , description: "Format is text. For example, \"200 to 500 employees\"." } , description: "Format is a JSON array. For example, [\"200 to 500 employees\"]." }
             }
-          },
-          description: 'Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze'
+          , description: "Format is a JSON object. For example, {\"customer\":\"an approved anonymous manufacturer\",\"role\":\"finance director\",\"key_quotes\":[\"Approval handoffs take too long.\"]}." },
+          description: "Structured interview notes: one object per interview with the customer (company or segment), the role of the person interviewed and the points and quotes to analyze. Format is a JSON array. For example, [{\"customer\":\"an approved anonymous manufacturer\",\"role\":\"finance director\",\"key_quotes\":[\"Approval handoffs take too long.\"]}]."
         },
         product_category: {
           type: 'string',
-          description: 'Optional: what you sell, used for sector notes'
+          description: "Optional: what you sell, used for sector notes. Format is text. For example, \"invoice review service\"."
         },
         company: COMPANY_INPUT
       }
@@ -3055,7 +3055,7 @@ This tool will identify patterns across interviews to refine your ICP.
 // =============================================================================
 
 export const SERVER_NAME = 'icp-intelligence-mcp';
-export const SERVER_VERSION = '1.2.27';
+export const SERVER_VERSION = '1.2.28';
 
 // Every tool only builds text from its inputs: no storage, no network, no side effects.
 const TOOL_TITLES: Record<string, string> = {
