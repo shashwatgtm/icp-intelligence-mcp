@@ -30,7 +30,7 @@
     var r = d.createElement("div"); r.className = "hx-b";
     var y = d.createElement("button"); y.type = "button"; y.className = "hx-a"; y.textContent = "Accept"; y.addEventListener("click", function () { choose("granted"); });
     var n = d.createElement("button"); n.type = "button"; n.className = "hx-d"; n.textContent = "Decline"; n.addEventListener("click", function () { choose("denied"); });
-    r.appendChild(y); r.appendChild(n); b.appendChild(p); b.appendChild(r); if (d.querySelector('link[href*="/assets/site-access.css"]')) { d.body.insertBefore(b, d.body.firstChild); } else { d.body.appendChild(b); }
+    r.appendChild(y); r.appendChild(n); b.appendChild(p); b.appendChild(r); d.body.appendChild(b);
   }
   w.helixCookieChoice = banner;
   d.addEventListener("click", function (e) { var t = e.target && e.target.closest ? e.target.closest("[data-cookie-settings]") : null; if (t) { e.preventDefault(); banner(); } });
