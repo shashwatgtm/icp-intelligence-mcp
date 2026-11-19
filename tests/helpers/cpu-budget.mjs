@@ -1,0 +1,77 @@
+// Keep the parent responsive so even a synchronous hang has a hard wall bound.
+import assert from "node:assert/strict";
+import { Worker } from "node:worker_threads";
+
+const WORKER = `
+  const { parentPort, workerData } = require("node:worker_threads");
+  (async () => {
+    const { moduleUrl, exportName, inputs } = workerData;
+    const fn = (await import(moduleUrl))[exportName];
+    // Exclude other V8 threads where the runtime provides a per-thread clock.
+    const clock = process.threadCpuUsage ?? process.cpuUsage;
+    // Use all samples in a fixed batch. Interleave sizes to distribute GC and JIT work.
+    for (const input of inputs) { fn(input.slice(0, Math.ceil(input.length / 4))); fn(input); }
+    const samples = [];
+    const measure = (input, repetitions = 1) => {
+      const start = clock();
+      let output;
+      for (let run = 0; run < repetitions; run++) output = fn(input);
+      const cpu = clock(start);
+      if (typeof output !== "string") throw new Error("expected string output");
+      return (cpu.user + cpu.system) / (1000 * repetitions);
+    };
+    for (const input of inputs) {
+      const quarter = input.slice(0, Math.ceil(input.length / 4));
+      // Four quarter calls cover the same number of input characters as one full
+      // call and keep a short quarter measurement above coarse CPU clock ticks.
+      const quarters = [];
+      const fullRuns = [];
+      for (let round = 0; round < 3; round++) {
+        if (round % 2 === 0) quarters.push(measure(quarter, 4));
+        fullRuns.push(measure(input));
+        if (round % 2 === 1) quarters.push(measure(quarter, 4));
+      }
+      // A single collection can dominate a short call. Use the middle of the
+      // fixed samples for growth, while every full call must meet its CPU limit.
+      const median = runs => [...runs].sort((a, b) => a - b)[1];
+      samples.push([median(quarters), median(fullRuns), Math.max(...fullRuns)]);
+    }
+    parentPort.postMessage(samples);
+  })().catch((error) => { throw error; });
+`;
+
+export async function assertCpuBudget(moduleUrl, exportName, inputs, budgetMs, aggregate = false) {
+  const worker = new Worker(WORKER, {
+    eval: true,
+    workerData: { moduleUrl: String(moduleUrl), exportName, inputs },
+  });
+  let timer;
+  let samples;
+  try {
+    samples = await new Promise((resolve, reject) => {
+      // Includes import, warmup and measurement. Parent stays idle while measuring.
+      timer = setTimeout(() => reject(new Error("timing worker exceeded 15000 ms wall bound")), 15000);
+      worker.once("message", resolve);
+      worker.once("error", reject);
+      worker.once("exit", (code) => reject(new Error(`timing worker exited without samples: ${code}`)));
+    });
+  } finally {
+    clearTimeout(timer);
+    await worker.terminate();
+  }
+  assert.equal(samples.length, inputs.length);
+  const large = samples.map((pair) => pair[2]);
+  const checked = aggregate ? [large.reduce((a, b) => a + b, 0)] : large;
+  for (const [index, ms] of checked.entries()) {
+    assert.ok(Number.isFinite(ms) && ms < budgetMs,
+      `CPU budget exceeded: ${ms.toFixed(2)} ms >= ${budgetMs} ms (${aggregate ? "all inputs" : `input ${index}`})`);
+  }
+  for (const [index, [small, large]] of samples.entries()) {
+    // Four times the input allows up to eight times the CPU. A 5 ms floor
+    // avoids dividing by timer noise for very cheap inputs. Quadratic growth
+    // tends toward sixteen times and fails once the workload exceeds that floor.
+    assert.ok(large < 8 * Math.max(small, 5),
+      `superlinear CPU growth on input ${index}: ${small.toFixed(2)} -> ${large.toFixed(2)} ms`);
+  }
+  console.log(`timing CPU ms [median quarter, median full, peak full]: ${JSON.stringify(samples)}`);
+}
