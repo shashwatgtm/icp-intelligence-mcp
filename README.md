@@ -1,4 +1,7 @@
 # ICP Intelligence MCP v1.2.28
+
+By Helix GTM Consulting (https://gtmhelix.com), built by Shashwat Ghosh, Co-Founder and Fractional CMO.
+
 **Deep ICP Analysis with Pattern Detection**: 9 tools for ideal customer profiling, market sizing, buyer mapping, and account prioritization.
 
 ## Use it hosted (no install)
