@@ -8,12 +8,14 @@ By Helix GTM Consulting (https://gtmhelix.com), built by Shashwat Ghosh, Co-Foun
 
 Add `https://icp-intelligence.gtmhelix.com/mcp` to Claude or ChatGPT as a custom connector, or to Codex or Gemini CLI as an MCP server. It needs no sign-in and always runs the newest version (1.2.28). The same tools run as a free web app with a form per tool at https://icp-intelligence.gtmhelix.com/, and the setup steps are at https://icp-intelligence.gtmhelix.com/connect/.
 
-The npm package below is an older version (1.0.0 on npm on 27 September 2026) until the next npm release. Use it only if you need a local stdio server.
+The npm package below can lag behind the hosted server between releases; compare its version with the one the hosted server reports. Use it only if you need a local stdio server.
 
 
 [![NPM Version](https://img.shields.io/npm/v/@shashwatgtmalpha/icp-intelligence-mcp)](https://www.npmjs.com/package/@shashwatgtmalpha/icp-intelligence-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP Registry](https://img.shields.io/badge/MCP-Registry-blue)](https://registry.modelcontextprotocol.io)
+[![icp-intelligence-mcp MCP server](https://glama.ai/mcp/servers/shashwatgtm/icp-intelligence-mcp/badges/score.svg)](https://glama.ai/mcp/servers/shashwatgtm/icp-intelligence-mcp)
+[![ICP Intelligence MCP connector](https://glama.ai/mcp/connectors/io.github.shashwatgtm/icp-intelligence-mcp/badges/score.svg)](https://glama.ai/mcp/connectors/io.github.shashwatgtm/icp-intelligence-mcp)
 
 ## Quick Start
 
