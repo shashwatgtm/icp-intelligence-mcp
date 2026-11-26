@@ -1,3 +1,4 @@
+import { readLimitedText } from "../lib/read-limited-text.mjs";
 import { readerLabel, readerIssue } from "../../dist/text-signals.js";
 // Hosted MCP endpoint: Streamable HTTP, stateless, JSON responses.
 // Follows Netlify's guide "How to build and deploy an MCP server on Netlify" (2026-09-12):
@@ -156,13 +157,13 @@ export default async (req, context) => {
     if (declared > MAX_BODY) {
       return rpcError(null, -32600, "Invalid request: the request body is larger than 256 KB (262,144 bytes).", 413);
     }
-    const bytes = new Uint8Array(await req.arrayBuffer());
-    if (bytes.byteLength > MAX_BODY) {
+    const raw = await readLimitedText(req, MAX_BODY);
+    if (raw === null) {
       return rpcError(null, -32600, "Invalid request: the request body is larger than 256 KB (262,144 bytes).", 413);
     }
     let body;
     try {
-      body = JSON.parse(new TextDecoder().decode(bytes));
+      body = JSON.parse(raw);
     } catch {
       return rpcError(null, -32700, "Parse error: the request body is not valid JSON.", 400);
     }

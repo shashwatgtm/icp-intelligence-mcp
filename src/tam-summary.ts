@@ -72,15 +72,8 @@ export function marketSummary(args: MarketInputs) {
     total_potential_companies: companies,
     average_contract_value: acv,
   };
-  for (const key of [
-    "icp_percentage",
-    "year1_market_share_target",
-    "data_sources",
-    "segment_name",
-    "product_category",
-    "company",
-  ])
-    if (args[key] != null) toolArguments[key] = args[key];
+  if (args.icp_percentage != null) toolArguments.icp_percentage = icp;
+  if (args.year1_market_share_target != null) toolArguments.year1_market_share_target = share;
   return {
     kind: "market-sizing",
     toolArgumentsEncoded: encodeURIComponent(JSON.stringify(toolArguments)),
