@@ -5,3 +5,9 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# Match the reviewed Job H hosted profile when Netlify rebuilds this source.
+[build.environment]
+  HELIX_PROFILE = "current"
+  WAVE_PAYLOAD = "meta"
+  WIDGET_UI_DOMAIN = "off"

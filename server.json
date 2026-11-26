@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.shashwatgtm/icp-intelligence-mcp",
+  "description": "ICP profiling, scoring, buying groups, account prioritization and market sizing.",
+  "websiteUrl": "https://tools.gtmhelix.com/connectors/",
+  "repository": {
+    "url": "https://github.com/shashwatgtm/icp-intelligence-mcp.git",
+    "source": "github"
+  },
+  "version": "1.2.28",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@shashwatgtmalpha/icp-intelligence-mcp",
+      "version": "1.2.28",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

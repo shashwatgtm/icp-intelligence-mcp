@@ -1,0 +1,87 @@
+/* Standalone controls and adjacent links measured on the weekly pages. */
+div.hx-panel > p > a:where(:not(#hx-consent, #hx-consent *)),
+p.hx-who-tools > a:where(:not(#hx-consent, #hx-consent *)),
+section.hx-section.hx-app-section > p > a,
+section.hx-section.hx-prose-block > p > a { box-sizing: border-box; min-inline-size: 44px !important; min-block-size: 44px !important; max-inline-size: 100%; display: inline-flex; align-items: center; vertical-align: middle; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+div.hx-panel > p > a:where(:not(#hx-consent, #hx-consent *)),
+p.hx-who-tools > a:where(:not(#hx-consent, #hx-consent *)),
+section.hx-section.hx-app-section > p > a,
+section.hx-section.hx-prose-block > p > a { display: flex !important; width: fit-content; margin-block: .2rem; }
+}
+:where(a,button,summary,input,select):focus-visible:where(:not(#hx-consent, #hx-consent *)) { outline: 3px solid #a73347; outline-offset: 2px; }
+html body :is(input:not([type=checkbox],[type=radio],[type=hidden]), select, button, summary, .at-chip, .brand, .top-cta):where(:not(#hx-consent, #hx-consent *)) { box-sizing: border-box; min-height: 44px !important; min-width: 44px !important; }
+html body .brand:where(:not(#hx-consent, #hx-consent *)) { display: inline-flex; align-items: center; }
+@media(max-width:600px) {
+ html body .at-jump a:where(:not(#hx-consent, #hx-consent *)), html body nav a[href^="#"]:where(:not(#hx-consent, #hx-consent *)) { min-width: 44px; }
+}
+/* Paper, ink and rose accents have corresponding dark surfaces and foregrounds. */
+@media(prefers-color-scheme:dark) {
+ html:root:where(:not(#hx-consent, #hx-consent *)) { --night-paper:#211b20; --night-panel:#30282e; --night-raised:#392d34; --night-ink:#fff4ef; --night-secondary:#e2d2d2; --night-link:#ffc6be; --night-rule:#aa959e; }
+ html:root body > :not(#hx-consent) { color-scheme: dark; }
+ html:root body:where(:not(#hx-consent, #hx-consent *)) { background:var(--night-paper) !important; color:var(--night-ink) !important; }
+ html:root body :where(*):not(svg,svg *,img,video,canvas,iframe,picture):where(:not(#hx-consent, #hx-consent *)) {
+  color:var(--night-ink) !important; background-color:transparent !important; border-color:var(--night-rule) !important; text-shadow:none !important;
+ }
+ html:root body :is(header,footer,aside,article.card,.hx-panel,.hx-table,pre,.win,.aeo,.hx-viz-p,.hx8-vis,.hx10-ex,.hx-card,.trow,.hx9-job,.obf-card,.shelf,.card,.fig,.cta-in,.hero-art,.hx7-cred,.hx7-strip,.hx-wash,.band-rose,.wrap .panel, .sp-card,.step,.well,.tile,details[open]):where(:not(#hx-consent, #hx-consent *)) {
+  background-color:var(--night-panel) !important;
+ }
+ html:root body :is(.hero,.hx-hero,.hx-wash,.band-rose,header,footer,.hero-art,.hx7-cred,.hx7-strip,.hx8-vis,.win,.card,.obf-card,.hx-table,.hx-viz-p,th,.trow,summary,.hx9-row2):where(:not(#hx-consent, #hx-consent *)) { background-image:none !important; }
+ html:root body :is(th,.win-bar,.hx9-row2,code,kbd,.chip,.tag):where(:not(#hx-consent, #hx-consent *)) { background-color:var(--night-raised) !important; }
+ html:root body :is(small,figcaption,.eyebrow,.hx-byline,.kicker,.caption):where(:not(#hx-consent, #hx-consent *)) { color:var(--night-secondary) !important; }
+ html:root body a[href]:where(:not(#hx-consent, #hx-consent *)), html:root body a[href] :is(span,b,strong):where(:not(#hx-consent, #hx-consent *)) { color:var(--night-link) !important; }
+ html:root body :is(button,input,select,textarea,.btn,.hx-btn,.button,.at-chip,.hx10-primary,.hx9-cta):where(:not(#hx-consent, #hx-consent *)) { background-color:var(--night-panel) !important; border-color:var(--night-rule) !important; }
+ html:root body :is(button,.btn,.hx-btn,.button,.hx10-primary,.hx9-cta):is(:hover,:focus-visible):where(:not(#hx-consent, #hx-consent *)) { background-color:#553b46 !important; }
+ html:root body :is(button,a,summary,input,select):focus-visible:where(:not(#hx-consent, #hx-consent *)) { outline:3px solid #ffd699 !important; }
+}
+
+/* Measured controls on tool, install and editorial pages. */
+@layer helix-accessibility {
+p.hx-prose > a:where(:not(#hx-consent, #hx-consent *)),
+p.hx-sample-more > a:where(:not(#hx-consent, #hx-consent *)) { box-sizing:border-box !important; min-width:44px !important; min-height:44px !important; max-width:100%; vertical-align:middle; }
+p.hx-prose > a:where(:not(#hx-consent, #hx-consent *)),
+p.hx-sample-more > a:where(:not(#hx-consent, #hx-consent *)) { display:inline-flex !important; align-items:center; overflow-wrap:anywhere; }
+p.hx-prose > a:where(:not(#hx-consent, #hx-consent *)),
+p.hx-sample-more > a:where(:not(#hx-consent, #hx-consent *)) { margin-inline-end:.35rem; margin-block:.15rem; }
+@media(max-width:600px){
+p.hx-prose > a:where(:not(#hx-consent, #hx-consent *)),
+p.hx-sample-more > a:where(:not(#hx-consent, #hx-consent *)) { display:flex !important; width:fit-content; }
+}
+@media(prefers-color-scheme:light) {
+#account-prioritization > div.hx-table,
+#buyer-group-analyzer > div.hx-table,
+#icp-deep-dive > div.hx-table,
+#icp-evolution-tracker > div.hx-table,
+#icp-gap-analysis > div.hx-table,
+#icp-interview-synthesizer > div.hx-table,
+#icp-scoring-model > div.hx-table,
+#lookalike-signal-generator > div.hx-table,
+#run > div.win.hx-form-win,
+#tam-sam-som-calculator > div.hx-table,
+details.hx9-menu > summary,
+div.facts > div:where(:not(#hx-consent, #hx-consent *)),
+div.hero-grid > div > div.win:where(:not(#hx-consent, #hx-consent *)),
+div.hero-grid > figure.hx8-vis.hx10-split-vis:where(:not(#hx-consent, #hx-consent *)),
+div.hx-moment > ul.tools:where(:not(#hx-consent, #hx-consent *)),
+div.hx-panel > pre.hx-addr:where(:not(#hx-consent, #hx-consent *)),
+div.hx-viz > figure.hx-viz-p:where(:not(#hx-consent, #hx-consent *)),
+div.hx10-diagrams > figure.hx8-vis.hx9-diagram.hx10-dia:where(:not(#hx-consent, #hx-consent *)),
+div.hx10-term-row > figure.hx8-vis.hx9-term:where(:not(#hx-consent, #hx-consent *)),
+div.hxr-body.hx-result-body.hx-sample-body > div.hx-table:where(:not(#hx-consent, #hx-consent *)),
+div.hxr-body.hx-result-body.hx-sample-body > pre:where(:not(#hx-consent, #hx-consent *)),
+div.icp-cards > article.card:where(:not(#hx-consent, #hx-consent *)),
+picture.hx7-cred-photo > img,
+picture.hx7-strip-photo > img,
+section.hx-section > article.hxr.hxr-example,
+section.hx-section > div.hx-table,
+section.hx-section > div.win,
+section.hx-section.hx-wash > div.win,
+ul.hx-whos > li.hx-who,
+ul.hxv-roles > li,
+ul.tools > li > a.trow { border-color:#746873 !important; }
+}
+@media(prefers-color-scheme:dark) {
+picture.hx7-cred-photo > img,
+picture.hx7-strip-photo > img { border-color:#baabb1 !important; }
+}
+}
