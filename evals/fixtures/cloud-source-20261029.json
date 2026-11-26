@@ -1,0 +1,361 @@
+{
+  "provenance": "Offline in-process tools/list and tools/call from cloud checkout sources. Not live endpoint calls.",
+  "inventories": [
+    {
+      "repo": "revenue-enablement-mcp",
+      "sha": "740897982e3807aa43aa5420336eaf6804eeda5d",
+      "names": [
+        "account_plan_builder",
+        "deal_strategy_coach",
+        "discovery_question_bank",
+        "roi_business_case_builder",
+        "mutual_action_plan_generator",
+        "win_loss_analyzer",
+        "proposal_section_writer",
+        "email_sequence_generator",
+        "demo_script_builder",
+        "pricing_negotiation_guide",
+        "champion_enablement_kit",
+        "competitive_trap_setter"
+      ]
+    },
+    {
+      "repo": "craft-gtm-mcp",
+      "sha": "13a2f363118bd678ac8c9b8794e678945653a2bf",
+      "names": [
+        "pmf_scorecard",
+        "launch_commander",
+        "customer_interview_kit",
+        "retention_playbook",
+        "partner_architect",
+        "crisis_planner",
+        "competitive_intel",
+        "craft_gtm_analyzer"
+      ]
+    },
+    {
+      "repo": "impact-mcp",
+      "sha": "765730ad684365b1da444d77768b9803c8d49491",
+      "names": [
+        "impact_get_framework",
+        "impact_identify_champions",
+        "impact_map_alternatives",
+        "impact_pinpoint_value",
+        "impact_anchor_market",
+        "impact_craft_message",
+        "impact_translate_execution",
+        "impact_full_audit"
+      ]
+    },
+    {
+      "repo": "craft-content-mcp",
+      "sha": "9a0f26af11167f7a31e3d51c72bab816b9c30e10",
+      "names": [
+        "case_study_generator",
+        "newsletter_builder",
+        "webinar_script",
+        "content_repurposer",
+        "thought_leadership_series",
+        "testimonial_capture",
+        "sales_enablement_content",
+        "craft_content_improver"
+      ]
+    },
+    {
+      "repo": "icp-intelligence-mcp",
+      "sha": "fcaced470ed47caef8f25b46fe49b50da47bd127",
+      "names": [
+        "icp_deep_dive",
+        "icp_scoring_model",
+        "buyer_group_analyzer",
+        "tam_sam_som_calculator",
+        "lookalike_signal_generator",
+        "account_prioritization",
+        "icp_gap_analysis",
+        "icp_evolution_tracker",
+        "icp_interview_synthesizer"
+      ]
+    },
+    {
+      "repo": "gtm-alpha-secure",
+      "sha": "e9b5a61786ab84b4405017b2726231432a8e4d5d",
+      "names": [
+        "gtm_consultation",
+        "epic_audit",
+        "generate_roadmap"
+      ]
+    }
+  ],
+  "impact": [
+    {
+      "id": "original",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "Revenue operations directors at B2B software firms",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "No verified interviews supplied",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: Revenue operations directors at B2B software firms\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n**Customer Feedback**: No verified interviews supplied\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 59/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 70/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 65/100 | Partial | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 55/100 | Partial | High |\n\n---\n\n## Most detailed inputs\n\n### Pinpoint (70/100)\nYour differentiation (\"Synthetic assumption: shared lifecycle view\") is long enough for a high score in this area.\n\n### Identify (70/100)\nYour target customer (\"Revenue operations directors at B2B software firms\") is long and specific enough for a high score in this area.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (55/100)\n\n**Input**: Your customer feedback is short. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +15 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** revenue operations directors at B2B software firms\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for revenue operations directors\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: Head of Sales Operations or Revenue Operations and Chief Revenue Officer (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (pipeline, win rate, quota attainment, sales cycle, CRM hygiene, forecast call)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track pipeline coverage, win rate, sales cycle length\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| pipeline coverage | | |\n| win rate | | |\n| sales cycle length | | |\n| rep ramp time | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "empty",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "Revenue operations directors at B2B software firms",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: Revenue operations directors at B2B software firms\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 56/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 70/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 65/100 | Partial | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Pinpoint (70/100)\nYour differentiation (\"Synthetic assumption: shared lifecycle view\") is long enough for a high score in this area.\n\n### Identify (70/100)\nYour target customer (\"Revenue operations directors at B2B software firms\") is long and specific enough for a high score in this area.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** revenue operations directors at B2B software firms\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for revenue operations directors\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: Head of Sales Operations or Revenue Operations and Chief Revenue Officer (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (pipeline, win rate, quota attainment, sales cycle, CRM hygiene, forecast call)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track pipeline coverage, win rate, sales cycle length\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| pipeline coverage | | |\n| win rate | | |\n| sales cycle length | | |\n| rep ramp time | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "size500",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "Revenue operations directors at B2B software firms with 500 employees",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: Revenue operations directors at B2B software firms with 500 employees\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 61/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 85/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 80/100 | Detailed | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Identify (85/100)\nYour target customer (\"Revenue operations directors at B2B software firms with 500 employees\") is long and specific enough for a high score in this area.\n\n### Anchor (80/100)\nYour target customer mentions employees, revenue or a funding series.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** revenue operations directors at B2B software firms with 500 employees\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for revenue operations directors\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: Head of Sales Operations or Revenue Operations and Chief Revenue Officer (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (pipeline, win rate, quota attainment, sales cycle, CRM hygiene, forecast call)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track pipeline coverage, win rate, sales cycle length\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| pipeline coverage | | |\n| win rate | | |\n| sales cycle length | | |\n| rep ramp time | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "size5000",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "Revenue operations directors at B2B software firms with 5000 employees",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: Revenue operations directors at B2B software firms with 5000 employees\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 61/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 85/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 80/100 | Detailed | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Identify (85/100)\nYour target customer (\"Revenue operations directors at B2B software firms with 5000 employees\") is long and specific enough for a high score in this area.\n\n### Anchor (80/100)\nYour target customer mentions employees, revenue or a funding series.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** revenue operations directors at B2B software firms with 5000 employees\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for revenue operations directors\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: Head of Sales Operations or Revenue Operations and Chief Revenue Officer (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (pipeline, win rate, quota attainment, sales cycle, CRM hygiene, forecast call)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track pipeline coverage, win rate, sales cycle length\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| pipeline coverage | | |\n| win rate | | |\n| sales cycle length | | |\n| rep ramp time | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "operations-no-size",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "Operations team at synthetic firms",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: Operations team at synthetic firms\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 56/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 70/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 65/100 | Partial | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Pinpoint (70/100)\nYour differentiation (\"Synthetic assumption: shared lifecycle view\") is long enough for a high score in this area.\n\n### Identify (70/100)\nYour target customer (\"Operations team at synthetic firms\") is long and specific enough for a high score in this area.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** operations team at synthetic firms\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for operations team at synthetic firms\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: Head of Operations and COO (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (cycle time, error rate, throughput, handover, service level)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track cycle time, error rate, cost per transaction handled\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| cycle time | | |\n| error rate | | |\n| cost per transaction handled | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "operations-size500",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "Operations team at synthetic firms with 500 employees",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: Operations team at synthetic firms with 500 employees\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 61/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 85/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 80/100 | Detailed | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Identify (85/100)\nYour target customer (\"Operations team at synthetic firms with 500 employees\") is long and specific enough for a high score in this area.\n\n### Anchor (80/100)\nYour target customer mentions employees, revenue or a funding series.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** operations team at synthetic firms with 500 employees\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for operations team\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: Head of Operations and COO (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (cycle time, error rate, throughput, handover, service level)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track cycle time, error rate, cost per transaction handled\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| cycle time | | |\n| error rate | | |\n| cost per transaction handled | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "operations-size5000",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "Operations team at synthetic firms with 5000 employees",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: Operations team at synthetic firms with 5000 employees\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 61/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 85/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 80/100 | Detailed | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Identify (85/100)\nYour target customer (\"Operations team at synthetic firms with 5000 employees\") is long and specific enough for a high score in this area.\n\n### Anchor (80/100)\nYour target customer mentions employees, revenue or a funding series.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** operations team at synthetic firms with 5000 employees\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for operations team\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: Head of Operations and COO (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (cycle time, error rate, throughput, handover, service level)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track cycle time, error rate, cost per transaction handled\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| cycle time | | |\n| error rate | | |\n| cost per transaction handled | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "neutral-no-size",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "B2B software firms",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: B2B software firms\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 48/100 (Grade: F)\n**Inputs**: Very thin: most inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 45/100 | Thin | High |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 45/100 | Thin | High |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Pinpoint (70/100)\nYour differentiation (\"Synthetic assumption: shared lifecycle view\") is long enough for a high score in this area.\n\n### Map (65/100)\nYou named 1 competitor; this area counts how many you name, not who they are.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** B2B software firms\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for B2B software firms\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: revenue operations lead and chief revenue officer or head of sales or marketing (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (pipeline, lead, contact, campaign, lead scoring, sales stage)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track pipeline created, lead to opportunity conversion, sales cycle length\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| pipeline created | | |\n| lead to opportunity conversion | | |\n| sales cycle length | | |\n| forecast accuracy | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "neutral-size500",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "B2B software firms with 500 employees",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: B2B software firms with 500 employees\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 58/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 70/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 80/100 | Detailed | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Anchor (80/100)\nYour target customer mentions employees, revenue or a funding series.\n\n### Pinpoint (70/100)\nYour differentiation (\"Synthetic assumption: shared lifecycle view\") is long enough for a high score in this area.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** B2B software firms with 500 employees\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for B2B software firms\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: revenue operations lead and chief revenue officer or head of sales or marketing (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (pipeline, lead, contact, campaign, lead scoring, sales stage)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track pipeline created, lead to opportunity conversion, sales cycle length\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| pipeline created | | |\n| lead to opportunity conversion | | |\n| sales cycle length | | |\n| forecast accuracy | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "neutral-size5000",
+      "tool": "impact_full_audit",
+      "args": {
+        "company_name": "HubSpot",
+        "product_description": "CRM software in a synthetic review scenario",
+        "target_customer": "B2B software firms with 5000 employees",
+        "problem_solved": "Disconnected customer activity records",
+        "key_differentiation": "Synthetic assumption: shared lifecycle view",
+        "competitors": [
+          "Salesforce"
+        ],
+        "customer_feedback": "",
+        "business_model": "saas",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# IMPACT Positioning Audit\n\n## Company Overview\n**Company**: HubSpot\n**Product**: CRM software in a synthetic review scenario\n**Target**: B2B software firms with 5000 employees\n**Problem**: Disconnected customer activity records\n**Differentiation**: Synthetic assumption: shared lifecycle view\n**Competitors**: Salesforce\n\n\n*Sector: set by your_sector as SaaS, CRM and marketing. Business model: software subscription (from business_model).*\n\n---\n\n## IMPACT Scorecard\n\n### Input completeness score: 58/100 (Grade: D)\n**Inputs**: Thin: many inputs are short or missing\n**What this score measures**: how complete and specific your inputs are, not whether your positioning is right. Longer inputs and certain words (such as only, unique, unlike, employees, revenue and Series) raise it.\n\n| Phase | Score | Input detail | Priority |\n|-------|-------|--------|----------|\n| **I**: Identify Champions | 70/100 | Detailed | Low |\n| **M**: Map Alternatives | 65/100 | Partial | Low |\n| **P**: Pinpoint Value | 70/100 | Detailed | Low |\n| **A**: Anchor Market | 80/100 | Detailed | Low |\n| **C**: Craft Message | 30/100 | Thin | High |\n| **T**: Translate Execution | 35/100 | Thin | High |\n\n---\n\n## Most detailed inputs\n\n### Anchor (80/100)\nYour target customer mentions employees, revenue or a funding series.\n\n### Pinpoint (70/100)\nYour differentiation (\"Synthetic assumption: shared lifecycle view\") is long enough for a high score in this area.\n\n\n---\n\n## Areas to work on next\n\n### Craft (30/100)\n\n**Input**: You supplied no current positioning statement. How do you articulate your unique value?\n\n**Action**: Run `impact_craft_message` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n### Translate (35/100)\n\n**Input**: You supplied no customer feedback. How does positioning show up in your channels?\n\n**Action**: Run `impact_translate_execution` to add this detail.\n\n**Possible input score change**: +17 points to this area when you add the detail above (Example figure: replace with your own)\n\n\n---\n\n## Proof You Already Have\n\nNo customer feedback was supplied, so there is no proof to list. Add customer_feedback (what customers say, or results they report).\n\n---\n\n## Your Current Positioning, Checked in Words\n\nThese checks read your words only. They are not part of the score above.\n\nNo current positioning was supplied, so there is nothing to check in words. Add current_positioning.\n\n---\n\n## Recommended Positioning\n\nBased on your inputs, here's a generated positioning statement:\n\n> **For** B2B software firms with 5000 employees\n> **Who** face this problem (Disconnected customer activity records)\n> **What HubSpot is** \"CRM software in a synthetic review scenario\"\n> **That** delivers a result you still have to state: write it with impact_pinpoint_value\n> **Unlike** Salesforce\n> **We** stand behind this: Synthetic assumption: shared lifecycle view\n\n### Tagline Options\n1. [Only if true and provable: \"Disconnected customer activity records, solved.\"]\n2. \"Synthetic assumption: shared lifecycle view\"\n3. \"Built for B2B software firms\"\n4. \"CRM software in a synthetic review scenario\"\n\n---\n\n## 30-Day Action Plan\n\n### Week 1: Foundation\n- [ ] Confirm who champions and who signs: revenue operations lead and chief revenue officer or head of sales or marketing (this sector's usual committee)\n- [ ] Document 5+ weaknesses of Salesforce from customer research\n- [ ] Turn the proof you already have into 3 quantified proof points\n\n### Week 2: Positioning\n- [ ] Finalize positioning statement (3 variations)\n- [ ] Test with 5 existing customers\n- [ ] Refine based on feedback\n\n### Week 3: Execution\n- [ ] Update your hero section, sales deck and LinkedIn page, in the words this sector's buyers use (pipeline, lead, contact, campaign, lead scoring, sales stage)\n- [ ] Prepare answers to this sector's usual objections: \"Our team lives in the current CRM\"; \"Reps will not keep records up to date\"; \"Contact data quality and migration\"; \"Too many tools in the sales and marketing stack\"\n- [ ] Be ready to discuss what buyers weigh in a business like yours: term length, users or usage, and how the price grows\n\n### Week 4: Validation\n- [ ] A/B test messaging in outreach\n- [ ] Track pipeline created, lead to opportunity conversion, sales cycle length\n- [ ] Gather qualitative feedback from prospects\n\n---\n\n## Measures To Track\n\nFill the cells with your own numbers; this tool adds none.\n\n| Measure | Baseline (yours) | Target (yours) |\n|---------|------------------|----------------|\n| pipeline created | | |\n| lead to opportunity conversion | | |\n| sales cycle length | | |\n| forecast accuracy | | |\n\n**Investment**: decide how many hours your team can give to positioning work; this tool does not estimate it.\n\n---\n\n## Tools to Use Next\n\nBased on your scores, prioritize these tools:\n\n1. **`impact_craft_message`**: Address your lowest-scoring area first\n2. **`impact_translate_execution`**: Then the second-lowest-scoring area\n\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "champions-original",
+      "tool": "impact_identify_champions",
+      "args": {
+        "company_name": "Salesforce",
+        "product_description": "Synthetic scenario: CRM workflow management software",
+        "problem_solved": "Revenue operations teams spend time reconciling inconsistent pipeline records",
+        "target_company_type": "B2B software firms with 200 to 1000 employees",
+        "price_point": "USD 25000 annually, synthetic assumption",
+        "your_sector": "saas"
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "# Champion Identification Analysis\n\n## Company Context\n**Company**: Salesforce\n**Product**: Synthetic scenario: CRM workflow management software\n**Problem Solved**: Revenue operations teams spend time reconciling inconsistent pipeline records\n**Target Market**: B2B software firms with 200 to 1000 employees\n**Price Point**: USD 25000 annually, synthetic assumption\n\n*Sector: set by your_sector as SaaS.*\n*This sector's committee is general, so the roles come from the team your problem text names (sales). If the problem sits with another team, say so in problem_solved and run it again.*\n\n---\n\n## Champion Hypothesis\n\n### Primary Champion (Your Internal Advocate)\n**Most Likely Role**: Head of Sales Operations or Revenue Operations (read from the team your problem text names: sales)\n\n**Why This Role**:\n- Owns the problem: the problem you described, in your words: \"Revenue operations teams spend time reconciling inconsistent pipeline records\"\n- Personal motivation: a visible win on pipeline coverage, win rate, sales cycle length\n- Has organizational credibility to advocate for change\n\n**Champion Validation Questions**:\n1. \"Who is responsible for this problem today?\"\n2. \"Who brought this initiative to leadership's attention?\"\n3. \"Who would be promoted/recognized if this problem was solved?\"\n4. \"Who's actively researching solutions in this space?\"\n\n### Economic Buyer (Budget Authority)\n**Most Likely Role**: Chief Revenue Officer\n\n**Why This Role**:\n- Primary concern: pipeline coverage and win rate, and the cost of leaving the problem unsolved\n- Buying trigger: an event that releases budget (a renewal, an audit, a season or a target): ask what the event is\n\n**Economic Buyer Discovery Questions**:\n1. \"Which of these would this move for you: pipeline coverage, win rate, sales cycle length?\"\n2. \"How does this tie to company strategic priorities?\"\n3. \"What's the cost of not solving this problem?\"\n\n### Technical Influencer (Implementation Voice)\n**Most Likely Role**: The CRM administrator and sales operations\n\n**Why This Role**:\n- Evaluation criteria: fit with the systems they run today and the effort to implement\n- Potential blocker: rep adoption and CRM data quality\n\n**Technical Influencer Discovery Questions**:\n1. \"What would a successful implementation look like?\"\n2. \"What's failed before and why?\"\n3. \"What systems does this need to integrate with?\"\n\n---\n\n## Using Your Price Point and Target Companies\n\n- **Price point**: you gave \"USD 25000 annually, synthetic assumption\". Ask the champion early whether that sits inside a budget they control or needs the economic buyer's sign-off; the answer tells you how many people you must reach.\n- **Target companies**: you target \"B2B software firms with 200 to 1000 employees\". Check how each role above is titled in those companies. In smaller ones one person often holds two of the roles; in larger ones procurement or finance usually joins the committee.\n\n### Team view: sales\n- **Words buyers in this team use:** pipeline, win rate, quota attainment, sales cycle, CRM hygiene, forecast call.\n- **What this team measures:** pipeline coverage, win rate, sales cycle length, rep ramp time.\n- **A proof point that lands:** Win rate or sales cycle length for one team before and after, from the CRM, with the sales head signing it off.\n- **Discovery questions in this team's language:**\n  1. How is the pipeline reviewed today, and how late is the view?\n  2. Where do reps lose time between a lead and a first call?\n  3. Which number does the sales head answer for each quarter?\n\n---\n\n## Anti-Champion Warning Signs\n\nWatch for these red flags that indicate you're talking to the wrong person:\n\n| Warning Sign | What It Means | Action |\n|--------------|---------------|--------|\n| \"Let me check with my team\" | No decision authority | Ask: \"Who else should be in this conversation?\" |\n| Only discusses features | No business pain ownership | Pivot: \"What happens if this doesn't get solved?\" |\n| Delegates to junior staff | Not a priority for them | Ask: \"Who's driving this initiative?\" |\n| No timeline urgency | Nice-to-have, not must-have | Probe: \"What changed that made this a priority now?\" |\n\n---\n\n## Champion Development Path\n\nIf you're starting without an identified champion:\n\n**Week 1**: Map the organization\n- Identify 3-5 potential champions based on hypotheses above\n- Research their LinkedIn, recent posts, company news\n- Find mutual connections for warm introductions\n\n**Week 2**: Multi-thread outreach\n- Contact Head of Sales Operations or Revenue Operations with a problem-focused message\n- Contact the CRM administrator and sales operations with a solution-focused message\n- See who engages first → likely champion\n\n**Week 3**: Validate and align\n- Confirm champion's pain matches your value prop\n- Understand their buying process\n- Map the decision-making unit together\n\n---\n\n## Champion Enablement Hypothesis\n\nOnce you identify your champion, they'll need:\n\n1. **Internal Business Case**: ROI data to share with Chief Revenue Officer\n2. **Technical Validation**: Proof points for the CRM administrator and sales operations\n3. **Competitive Comparison**: Why not alternatives (status quo, competitors)\n4. **Risk Mitigation**: Implementation plan, support structure, success metrics\n\n**Next Step**: Use `impact_map_alternatives` to analyze competitive landscape\n\nSuggested timings, lengths and counts: adjust them to your own.\n"
+          }
+        ]
+      }
+    }
+  ]
+}

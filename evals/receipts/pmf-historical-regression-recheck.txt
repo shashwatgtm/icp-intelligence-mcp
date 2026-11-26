@@ -1,0 +1,13 @@
+test_activation_is_separate_from_scaling_defect (__main__.IncompletePMFTests.test_activation_is_separate_from_scaling_defect) ... ok
+test_complete_provenance_is_saved (__main__.IncompletePMFTests.test_complete_provenance_is_saved) ... ok
+test_forged_complete_evidence_cannot_pass (__main__.IncompletePMFTests.test_forged_complete_evidence_cannot_pass) ... ok
+test_fresh_observation_fails_only_conflicting_action (__main__.IncompletePMFTests.test_fresh_observation_fails_only_conflicting_action) ... ok
+test_missing_priority_section_cannot_pass (__main__.IncompletePMFTests.test_missing_priority_section_cannot_pass) ... ok
+test_only_correcting_action_passes (__main__.IncompletePMFTests.test_only_correcting_action_passes) ... ok
+test_restoring_bad_action_fails (__main__.IncompletePMFTests.test_restoring_bad_action_fails) ... ok
+test_wrong_activation_cannot_pass_corrected_action (__main__.IncompletePMFTests.test_wrong_activation_cannot_pass_corrected_action) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.003s
+
+OK
